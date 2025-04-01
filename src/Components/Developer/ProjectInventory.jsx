@@ -21,14 +21,13 @@ const fetchLoansData = async () => {
   return response.json();
 };
 
-// Dropdown Options
+
 const statusOptions = ["Approved", "Unapproved"];
 const owners = ["Landowner", "Developer", "Investor"];
 const configurations = ["1 BHK", "1.5 BHK", "2 BHK", "2.5 BHK", "3 BHK", "3.5 BHK", "4 BHK", "4.5 BHK", "Flat", "Shop"];
 const unitTypes = ["Residential", "Commercial"];
 
 
-// Sidebar Sections
 const sections = [
   { label: "Display Inventory", icon: <FaEye size={20} /> },
   { label: "Sample CSV", icon: <FaFileCsv size={20}/> },
@@ -88,18 +87,7 @@ const ProjectInventory = () => {
   };
 
 
-  // const downloadSampleCsv = () => {
-  //   const sampleData = "Name,Email,Phone\nJohn Doe,john@example.com,1234567890";
-  //   const blob = new Blob([sampleData], { type: "text/csv" });
-  //   const url = URL.createObjectURL(blob);
-
-  //   const a = document.createElement("a");
-  //   a.href = url;
-  //   a.download = "inventory_template.csv";
-  //   document.body.appendChild(a);
-  //   a.click();
-  //   document.body.removeChild(a);
-  // };
+  
   const downloadSampleCsv = () => {
     const sampleData = `Project Name,Wing,Floor,Flat No,RERA Carpet Area (Sq m),RERA Carpet Area (Sq ft),Total Saleable Area,Saleable Ratio,Unit Type,Configuration,Status,Ownership,Att Terrace Carpet Area,Balcony Area,Porch Area, Top Terrace Carpet Area,Super BuiltUp,Open /Enclosed balcony as sanctioned,Podium Garde\n`;
   
