@@ -29,21 +29,13 @@ const sections = [
 ];
 
 
-// const sections = [
-//   { label: "Firm Display", icon: <FaProjectDiagram size={20} />, createLabel: "Create Firm" },
-//   { label: "Project Display", icon: <FaHome size={20} />, createLabel: "Create Project" },
-//   { label: "LandOwner Display", icon: <FaUserTie size={20} />, createLabel: "Create Landowner Info" },
-//   { label: "Flat Allotment Display", icon: <FaBuilding size={20} />, createLabel: "Create Flat Allotment Info" },
-//   { label: "Download PDF", icon: <FaFileDownload size={20} />, createLabel: "" }
-// ];
-
 const tabNames = [ "firm", "display", "landowner","allotement"]; 
   
 const BasicInfo = () => {
   const [loans, setLoans] = useState([]);
-  const [expandedSection, setExpandedSection] = useState(0); // Ensure expandedSection is defined here
+  const [expandedSection, setExpandedSection] = useState(0); 
   const [showFirmForm, setShowFirmForm] = useState(false);
-  // const [partners, setPartners] = useState([]);
+ 
   const [showProjectForm, setShowProjectForm] = useState(false);
   const [phases, setPhases] = useState([]);
   const [showLandownerForm, setShowLandownerForm] = useState(false); 
@@ -73,7 +65,8 @@ const [emailError, setEmailError] = useState("");
   // const [age, setAge] = useState("");
   const [ageError, setAgeError] = useState("");
   const [occupationError, setOccupationError] = useState(""); 
-
+ const [aadhaarError, setAadhaarError] = useState(false);
+const [aadhaarErrorMessage, setAadhaarErrorMessage] = useState("");
 
   const [accountNo, setAccountNo] = useState(""); // Initialize the account number state
 const [accountNoError, setAccountNoError] = useState("");
@@ -95,34 +88,28 @@ const [ifscCodeError, setIfscCodeError] = useState("");
     flatNumber: "",
     flatType: "",
   });
-  // const handleFirmNameChange = (e) => {
-  //   const value = e.target.value;
-  //   setFirmName(value);
-  //   // Firm name should only contain letters (no numbers or special characters)
-  //   const nameRegex = /^[A-Za-z\s]+$/;
-  //   if (!nameRegex.test(value)) {
-  //     setFirmNameError("Firm Name should only contain letters");
-  //   } else {
-  //     setFirmNameError("");  // Clear error if valid
-  //   }
-  // };
+ 
 
-  // Handle Firm PAN No Change
+
   const handleFirmPanChange = (e) => {
     const value = e.target.value;
     setFirmPan(value);
-    // PAN Number should follow the format: XXXXX1234X (5 letters, 4 digits, 1 letter)
+ 
     const panRegex = /^[A-Za-z]{5}\d{4}[A-Za-z]{1}$/;
     if (!panRegex.test(value)) {
       setFirmPanError("Invalid PAN format. Format should be: AAAAA1234A");
     } else {
-      setFirmPanError("");  // Clear error if valid
+      setFirmPanError("");  
     }
   };
-
-   // Handle file selection and update the state with the file name
+  
+ 
+  const validateAadhaar = (aadhaar) => {
+    const aadhaarRegex = /^[0-9]{12}$/; // Regex to check if it's exactly 12 digits
+    return aadhaarRegex.test(aadhaar);
+  };
    const handleFileChange = (e, key) => {
-    const file = e.target.files[0]; // Get the selected file
+    const file = e.target.files[0]; 
     if (file) {
       setFileNames((prevState) => ({
         ...prevState,
@@ -216,39 +203,32 @@ const handleTabClick = (index) => {
   });
 
   
-   {/* Table Section */}
+ 
    {selectedTab === "firm" && <FirmTable />}
    {selectedTab === "display" && <DisplayTable />}
    {selectedTab === "landowner" && <LandownerTable />}
    {selectedTab === "allotement" && <FlatAllotement/>}
 
-  // const handleDownloadPDF = () => {
-  //   const link = document.createElement("a");
-  //   link.href = "/path/to/demand_letter.pdf";
-  //   link.download = "flat_allotement_info.pdf";
-  //   document.body.appendChild(link);
-  //   link.click();
-  //   document.body.removeChild(link);
-  // };
+
 
   
     const handleDownloadPDF = () => {
-      // Create a new jsPDF instance
+    
       const doc = new jsPDF();
     
-      // Data you want to add to the PDF
-      const timestamp = new Date().toLocaleDateString();  // Current date (e.g., "3/29/2025")
+   
+      const timestamp = new Date().toLocaleDateString();  
   
       const projectName = "";
       const name = "";
       const mobileNo = "";
-      const flatsAlloted = "";  // Example number of flats allotted
-      const reraCarpetArea = "";  // Example RERA Carpet Area
+      const flatsAlloted = "";  
+      const reraCarpetArea = ""; 
       const wing = "";
       const flatNo = "";
       const typeOfFlat = "";
     
-      // Column headers and data
+      
       const columns = [
         "Timestamp", "Project Name", "Name", "Mobile No", 
         "No of Flats Allotted", "RERA Carpet Area", "Wing", "Flat No", "Type of Flat"
@@ -259,52 +239,50 @@ const handleTabClick = (index) => {
         flatsAlloted, reraCarpetArea, wing, flatNo, typeOfFlat
       ];
     
-      // Add title to the PDF
+      
       doc.setFontSize(18);
       doc.text("Flat Allotment Information", 10, 10);
-    
-      // Set font for table
+  
       doc.setFontSize(12);
     
-      // Set column widths (adjust to fit the page width)
-      const columnWidths = [25, 30, 20, 20, 20, 20, 20, 20, 20]; // Adjust these to fit your content
-    
-      // Function to split text into multiple lines if it exceeds column width
+   
+      const columnWidths = [25, 30, 20, 20, 20, 20, 20, 20, 20]; 
+   
       const splitTextToFit = (text, maxWidth) => {
         const lines = doc.splitTextToSize(text, maxWidth);
         return lines;
       };
-      const rowHeight = 15;  // Row height, increase to add padding inside rows
+      const rowHeight = 15;  
   
-    // Extra padding between rows
+  
     const extraRowSpacing = 5; 
     
-      // Draw column headers
+    
       let xPos = 10;
       let yPos = 40;
     
      
       columns.forEach((col, index) => {
-        doc.rect(xPos, yPos, columnWidths[index], 20); // Draw a rectangle for header
-        let headerLines = splitTextToFit(col, columnWidths[index] - 4); // Adjusting padding
-        doc.text(headerLines, xPos + 2, yPos + 7); // Add column header text (split if necessary)
-        xPos += columnWidths[index]; // Move x position for next column
+        doc.rect(xPos, yPos, columnWidths[index], 20); 
+        let headerLines = splitTextToFit(col, columnWidths[index] - 4); 
+        doc.text(headerLines, xPos + 2, yPos + 7); 
+        xPos += columnWidths[index]; 
       });
     
-      // Draw data rows
+     
       xPos = 10;
       yPos += 20;
     
       data.forEach((value, index) => {
-        doc.rect(xPos, yPos, columnWidths[index], 10); // Draw a rectangle for data
-        let dataLines = splitTextToFit(value, columnWidths[index] - 4); // Adjusting padding
-        doc.text(dataLines, xPos + 2, yPos + 7); // Add data text (split if necessary)
-        xPos += columnWidths[index]; // Move x position for next column
+        doc.rect(xPos, yPos, columnWidths[index], 10); 
+        let dataLines = splitTextToFit(value, columnWidths[index] - 4); 
+        doc.text(dataLines, xPos + 2, yPos + 7); 
+        xPos += columnWidths[index]; 
       });
     
-         // Add extra spacing between rows
+         
          yPos += rowHeight + extraRowSpacing;
-      // Save or download the generated PDF
+     
       doc.save("Flat_Allotment_Info.pdf");
     };
 
@@ -314,12 +292,14 @@ const handleTabClick = (index) => {
     setPartners([...partners, { name: "", age: "", occupation: "", mobile: "", email: "", address: "", pan: "", aadhaar: "" }]);
   };
 
-  const handleRemovePartner = (index) => {
-    setPartners(partners.filter((_, i) => i !== index));
+  
+  
+  const handleRemovePartner = () => {
+    setPartners(partners.slice(0, partners.length - 1)); // Remove the last partner
   };
-
+  
   const handleAddPhase = () => {
-    setPhases([...phases, { phaseNo: "", wingNo: "", mahareraNo: "" }]); // Add default empty phase
+    setPhases([...phases, { phaseNo: "", wingNo: "", mahareraNo: "" }]); 
   };
 
   const handleRemovePhase = (index) => {
@@ -390,29 +370,20 @@ const handleTabClick = (index) => {
     setName(value);
   };
 
-  // const handleMobileNoChange = (event) => {
-  //   const value = event.target.value;
-    
-  //   if (/[^0-9]/.test(value)) {
-  //     toast.error('Mobile number should only contain digits.');
-  //   } else if (value.length > 10) {
-  //     toast.error('Mobile number cannot exceed 10 digits.');
-  //   }
-  //   setMobileNo(value);
-  // };
+ 
   const handleMobileNoChange = (event) => {
     const value = event.target.value;
   
-    // Validate the input value
+
     if (/[^0-9]/.test(value)) {
       setMobileError('Mobile number should only contain digits.');
     } else if (value.length > 10) {
       setMobileError('Mobile number cannot exceed 10 digits.');
     } else {
-      setMobileError(''); // Clear the error when it's valid
+      setMobileError(''); 
     }
   
-    // Update the mobile number value
+   
     setMobileNo(value);
   };
   
@@ -462,31 +433,17 @@ const handleTabClick = (index) => {
   const handleFirmNameChange = (e) => {
     const value = e.target.value;
 
-    // Regex to check if the value contains any numbers
+
     if (/\d/.test(value)) {
-      setFirmNameError("Firm Name should only contain letters"); // Error message if numbers are present
+      setFirmNameError("Firm Name should only contain letters"); 
     } else {
-      setFirmNameError(""); // Clear error message if the value is valid
+      setFirmNameError(""); 
     }
 
-    // Update the firm name in the state
+    
     setFirmName(value);
   };
 
-
-  // const handleMobileChange = (event, partnerIndex) => {
-  //   const value = event.target.value;
-
-  //   // If the value exceeds 10 digits, show a toast and prevent the change
-  //   if (value.length > 10) {
-  //     toast.error("Mobile number cannot exceed 10 digits!");
-  //   } else {
-  //     // Update the partner state or handle other changes here
-  //     const updatedPartners = [...partners];
-  //     updatedPartners[partnerIndex].mobile = value;
-  //     setPartners(updatedPartners);
-  //   }
-  // };
 
   const validateFirmName = () => {
     if (!firmName.trim()) {
@@ -616,21 +573,7 @@ const handleTabClick = (index) => {
 
 
   const validateForm = () => {
-    // let isValid = true;
-  
-    // // Validate firm name
-    // if (!validateFirmName()) {
-    //   isValid = false;
-    // }
-  
-    // // Validate age
-    // if (!validateAge(age)) {
-    //   isValid = false;
-    // }
-  
-    // // You can add other validations here as needed (e.g., for PAN, Mobile No, etc.)
-  
-    // return isValid;
+ 
   };
   
   
@@ -644,19 +587,7 @@ const handleTabClick = (index) => {
 
 
       <div className="d-flex align-items-center mb-3">
-        {/* {sections.map((section, index) => (
-          <Button
-            key={index}
-            onClick={() => handleToggleSection(index)}
-            variant="outlined"
-            color="success"
-            className='m-3'
-            style={{ borderRadius: '20px' }}
-            startIcon={<FaEye size={20} color="#28a745" />}
-          >
-            {expandedSection === index ? section.label : null}
-          </Button>
-        ))} */}
+      
 {sections.map((section, index) => (
   <div 
     key={index} 
@@ -665,11 +596,11 @@ const handleTabClick = (index) => {
       alignItems: 'center', 
       backgroundColor: '#3621a9', 
       padding: '8px', 
-      borderRadius: '20px',  // borderRadius changed to 20px from 10%
+      borderRadius: '20px',  
       margin: '5px',
-      cursor: 'pointer',    // Add pointer cursor for better UX
+      cursor: 'pointer',    
       transition: "width 0.3s ease, background 0.3s ease",
-      width: expandedSection === index ? "250px" : "50px", // Toggle width based on expanded state
+      width: expandedSection === index ? "250px" : "50px", 
       minWidth: "50px",
       overflow: "hidden",
       whiteSpace: "nowrap",
@@ -721,191 +652,9 @@ const handleTabClick = (index) => {
 
       </div>
 
-      {/* {expandedSection === 0 &&  selectedTab === "firm" && (
-        <div className="content-container mt-3">
-          {!showFirmForm ? (
-            <>
-            <div className='button-container'>
-           
-<Button 
-  variant="contained" 
-  color="primary" 
-  style={{ background: '#272ba8' }} className='fw-bold'
-  onClick={() => setShowFirmForm(true)}
->
-  + Create Firm
-</Button>
-
-            
+      
  
- <div className="right-buttons">
-      <Button variant="contained" color="secondary" onClick={handlePrevious}>
-        Previous
-      </Button>
-      <Button variant="contained" color="secondary" onClick={handleNext}>
-        Next
-      </Button>
-    </div>
-</div>
 
-             <div className="mt-3">
-           
-             <FirmTable firms={loans} />
-           </div>
-           </>
-          ) : (
-   
-
-
-
-
-
-          
-    <div className="firm-form mt-4 p-3" style={{ maxHeight: "500px", overflowY: "auto", paddingRight: "10px" }}>
-    <Paper className="p-4" elevation={4} style={{ borderRadius: "12px", paddingBottom: "20px" }}>
-      <Typography variant="h5" gutterBottom>
-        Firm Details
-      </Typography>
-
-      <Grid container spacing={2}>
-        {["Firm Name", "Firm Address", "Firm PAN No", "Firm GST No"].map((label, index) => (
-          <Grid item xs={6} key={index}>
-            <TextField label={label} fullWidth variant="outlined" />
-          </Grid>
-        ))}
-
-        {[
-          { label: "Firm PAN No Document", key: "firmPanNoDocument" },
-          { label: "Firm GST No Document", key: "firmGstNoDocument" },
-          { label: "Firm Light Bill for Address Proof", key: "firmLightBillForAddressProof" },
-        ].map((item, index) => (
-          <Grid item xs={6} key={index}>
-            <Typography variant="body2" gutterBottom>
-              {item.label}
-            </Typography>
-            <label>
-              <Input
-                type="file"
-                style={{ display: "none" }} // Hide the default input
-                id={`file-input-${index}`} // Unique ID for each input
-                onChange={(e) => handleFileChange(e, item.key)} // Handle file change
-              />
-              <Button variant="contained" color="light" component="span">
-                Choose File
-              </Button>
-            </label>
-
-          
-            {fileNames[item.key] && (
-              <Typography variant="body2" color="textSecondary" style={{ marginTop: "8px" }}>
-                {fileNames[item.key]}
-              </Typography>
-            )}
-          </Grid>
-        ))}
-      </Grid>
-
-      <Typography variant="h5" className="mt-4" gutterBottom>
-        Partner Details
-      </Typography>
-
-      {partners.map((partner, index) => (
-        <Paper key={index} className="p-3 mb-3" elevation={2} style={{ borderRadius: "10px" }}>
-          <Grid container spacing={2}>
-            {["Name", "Age", "Occupation", "Mobile No.", "Mail ID", "Residential Address", "PAN No.", "Aadhaar No."].map(
-              (label, i) => (
-                <Grid item xs={6} key={i}>
-                  <TextField
-                    label={label}
-                    fullWidth
-                    variant="outlined"
-                    type={label === "Age" ? "number" : "text"}
-                    value={partner[label.toLowerCase().replace(/ /g, "")]} // Dynamically map to partner data
-                    onChange={(e) => {
-                      if (label === "Mobile No.") {
-                        handleMobileChange(e, index); // Handle Mobile No. validation
-                      } else {
-                        // Handle other field changes
-                      }
-                    }}
-                    error={label === "Name" && !!nameError} // Show error for Name field
-                    helperText={label === "Name" && nameError} // Show error message for Name
-                  />
-                </Grid>
-              )
-            )}
-
-            {[
-              "Firm PAN No Document",
-              "Firm GST No Document",
-              "Firm Light Bill for Address Proof",
-            ].map((label, i) => (
-              <Grid item xs={6} key={i}>
-                <Typography variant="body2" gutterBottom>
-                  {label}
-                </Typography>
-                <label>
-                  <Input
-                    type="file"
-                    style={{ display: "none" }} // Hide the default input
-                    id={`file-input-${i}`} // Unique ID for each input
-                    onChange={(e) => handleFileChange(e, label)} // Handle file change
-                  />
-                  <Button variant="contained" color="light" component="span">
-                    Choose File
-                  </Button>
-                </label>
-
-             
-                {fileNames[label] && (
-                  <Typography variant="body2" color="textSecondary" style={{ marginTop: "8px" }}>
-                    {fileNames[label]}
-                  </Typography>
-                )}
-              </Grid>
-            ))}
-
-            {partners.length > 1 && (
-              <Grid item xs={12} className="text-right">
-                <Button variant="contained" color="error" onClick={() => handleRemovePartner(index)}>
-                  <FaTrash /> Remove Partner
-                </Button>
-              </Grid>
-            )}
-          </Grid>
-        </Paper>
-      ))}
-
-      <Button className="m-3 m-2" variant="contained" color="primary" onClick={handleAddPartner}>
-        <FaPlus /> Add Partner
-      </Button>
-
-      <Button
-        variant="contained"
-        className="m-3"
-        color="success"
-        onClick={() => {
-          if (validateForm()) {
-            setShowFirmForm(false);
-            toast.success("Details are submitted!", { position: "top-right", autoClose: 3000 });
-          }
-        }}
-      >
-        Submit
-      </Button>
-    </Paper>
-  </div>
-          
-);
-};
-    
-
-          {/* )} */}
-
-
-{/*          
-        </div>
-      )} */} 
 
      
 {expandedSection === 0 && selectedTab === "firm" && (
@@ -1077,6 +826,15 @@ const handleTabClick = (index) => {
                     handleEmailChange(e, index); // Handle Mail ID change
                   } else if (label === "PAN No.") {
                     handlePANChange(e, index); // Handle PAN No. change
+                  } else if (label === "Aadhaar No.") {
+                    const aadhaar = e.target.value;
+                    if (validateAadhaar(aadhaar)) {
+                      setAadhaarError(false); // Reset error if valid
+                      handleAadhaarChange(e, index); // Custom handler for Aadhaar field
+                    } else {
+                      setAadhaarError(true); // Set error if invalid
+                      setAadhaarErrorMessage("Aadhaar number should be exactly 12 digits.");
+                    }
                   }
                 }}
                 error={ 
@@ -1085,7 +843,8 @@ const handleTabClick = (index) => {
                   (label === "Mail ID" && !!emailError) ||
                   (label === "PAN No." && !!panError) ||
                   (label === "Age" && !!ageError) ||
-                  (label === "Occupation" && !!occupationError) // Check for Occupation error
+                  (label === "Occupation" && !!occupationError)  || // Check for Occupation error
+                  (label === "Aadhaar No." && aadhaarError)
                 }
                 helperText={ 
                   (label === "Name" && nameError) ||
@@ -1093,7 +852,8 @@ const handleTabClick = (index) => {
                   (label === "Mail ID" && emailError) ||
                   (label === "PAN No." && panError) ||
                   (label === "Age" && ageError) ||
-                  (label === "Occupation" && occupationError) // Show Occupation error
+                  (label === "Occupation" && occupationError)  || // Show Occupation error
+                  (label === "Aadhaar No." && aadhaarError && aadhaarErrorMessage)
                 }
               />
             )}
@@ -1107,6 +867,21 @@ const handleTabClick = (index) => {
       <Button className="m-3 m-2" variant="contained" color="primary" onClick={() => setPartners([...partners, {}])}>
         <FaPlus /> Add Partner
       </Button>
+
+      
+<Button
+  variant="contained"
+  sx={{
+    backgroundColor: 'red', // Red background
+    '&:hover': {
+      backgroundColor: '#d32f2f', // Darker red on hover
+    }
+  }}
+  onClick={handleRemovePartner} // Pass the index to remove the partner
+  className="m-2"
+>
+  Remove Partner
+</Button>
 
       <Button
         variant="contained"
@@ -1179,40 +954,7 @@ onClick={() => {
       Project Details
     </Typography>
 
-    {/* <Grid container spacing={2}>
-      {[
-        "FIRM Name",
-        "Project Name",
-        "Project Address",
-        "Old Survey Number",
-        "New Survey Number",
-        "Village",
-        "Taluka",
-        "District",
-        "Sanction Authority",
-        "East",
-        "West",
-        "North",
-        "South",
-        "Latitude",
-        "Longitude",
-        "Landmark",
-      ].map((label, index) => (
-       
-      <Grid item xs={4} key={index}>
-      <TextField
-        label={label}
-        fullWidth
-        variant="outlined"
-        name={label} // Directly use the label as the name (or use a custom name if needed)
-        value={formValues[label]} // Bind to the correct value
-        onChange={(e) => handleChange(e, label)} // Pass the label for validation
-        error={!!errors[label]} // Show error if validation failed
-        helperText={errors[label]} // Display error message
-      />
-    </Grid>
-      ))}
-    </Grid> */}
+   
 
 <Grid container spacing={2}>
           <Grid item xs={6}>

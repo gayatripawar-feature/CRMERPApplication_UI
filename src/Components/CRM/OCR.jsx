@@ -15,6 +15,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
 import InputAdornment from "@mui/material/InputAdornment";
+import Ocrtable from './Ocrtable';
 
 
 
@@ -58,6 +59,8 @@ const OCR = () => {
 
   const [editingFlatNo, setEditingFlatNo] = useState(null); 
   const [editingHistoryCashWithAV, setEditingHistoryCashWithAV] = useState('');
+const [expandedCashWithAV, setExpandedCashWithAV] = useState(false);
+const [expandedCashWithoutAV, setExpandedCashWithoutAV] = useState(false);
 
   const [historyCashValues, setHistoryCashValues] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(null); // Add this in your state initialization
@@ -72,7 +75,7 @@ const OCR = () => {
   const [editingIndex, setEditingIndex] = useState(null);
   const [inputValue, setInputValue] = useState("");
 
-
+ 
   // const [loanData, setLoanData] = useState(filteredLoans);
 
 
@@ -151,6 +154,17 @@ const OCR = () => {
     setCurrentPage(1); 
   };
 
+const handleEditValue = (index) => {
+
+    setEditingIndex(index);
+    setInputValue(historyCashValues[index]);
+    setExpanded(true);
+  
+    // Parent logic for handling the edit value
+    const updatedHistoryValues = [...historyCashValues];
+    updatedHistoryValues[index] = updatedHistoryValues[index] ; // Example logic to increment the value
+    setHistoryCashValues(updatedHistoryValues);
+  };
 
 
   // Handle change in History Cash With AV value
@@ -176,11 +190,11 @@ const handleAddClick = () => {
   setExpanded(true);
 };
 
-const handleEditValue = (index) => {
-  setEditingIndex(index);
-  setInputValue(historyCashValues[index]);
-  setExpanded(true);
-};
+// const handleEditValue = (index) => {
+//   setEditingIndex(index);
+//   setInputValue(historyCashValues[index]);
+//   setExpanded(true);
+// };
 
 const handleSave = () => {
   if (editingIndex === null) {
@@ -445,7 +459,7 @@ const handleToggle = () => {
      
     
 
-
+{/* 
 <TableContainer component={Paper} sx={{ mt: 2, boxShadow: 3, borderRadius: 2 }}>
       <Table style={{ tableLayout: 'auto', width: '100%' }}>
         <TableHead>
@@ -544,12 +558,11 @@ const handleToggle = () => {
 
 <TableCell>
       <div style={{ display: "flex", alignItems: "center", flexDirection: "column" }}>
-        {/* Add Button */}
+       
         <IconButton onClick={handleAddClick} style={{ marginBottom: "8px" }}>
           <AddIcon />
         </IconButton>
 
-        {/* Display History Cash Values */}
         {historyCashValues.map((value, index) => (
           <TextField
             key={index}
@@ -576,7 +589,7 @@ const handleToggle = () => {
           />
         ))}
 
-        {/* Collapsible Input for Adding/Editing */}
+        
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <div style={{ marginTop: "10px", display: "flex", flexDirection: "column", gap: "8px" }}>
             <TextField
@@ -709,9 +722,22 @@ const handleToggle = () => {
           ))}
         </TableBody>
       </Table>
-    </TableContainer>
+    </TableContainer> */}
 
 
+<Ocrtable
+        loans={loans}
+        handleCashWithAVChange={handleCashWithAVChange}
+        historyCashValues={historyCashValues}
+        handleAddClick={handleAddClick}
+        expanded={expanded}
+        setExpanded={setExpanded}
+        inputValue={inputValue}
+        setInputValue={setInputValue}
+        handleSave={handleSave}
+        editingIndex={editingIndex}
+        handleEditValue={handleEditValue}
+      />
       <div className="d-flex justify-content-between align-items-center">
               <Button style={{backgroundColor:"#800080"}} className="text-white mt-3" onClick={handlePagination} disabled={currentPage === 1}>Previous</Button>
               <Button style={{backgroundColor:"#800080"}} className='text-white mt-3' onClick={handlePagination} disabled={currentPage === totalPages}>Next</Button>

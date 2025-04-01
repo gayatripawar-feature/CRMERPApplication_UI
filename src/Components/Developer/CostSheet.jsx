@@ -41,7 +41,7 @@ const CostSheet = () => {
   borderRadius: "10px", 
   margin: "auto",  
   backgroundColor: "#f8f9fa",  
-  width: "350px",  
+  width: "550px",  
   display: "flex",
   flexDirection: "column",
   alignItems: "center",  
@@ -71,17 +71,18 @@ const CostSheet = () => {
   />
 
   <div style={{ display: "flex", justifyContent: "space-between", width: "90%" }}>
-    <Button onClick={handleCloseForm} variant="contained" color="error">
-      Cancel
-    </Button>
- 
-    <Button 
+  <Button className=""
     onClick={() => toast.success("Form details submitted successfully!", { position: "top-right", autoClose: 3000 })} 
     variant="contained" 
     color="primary"
   >
     Save
   </Button>
+    <Button onClick={handleCloseForm} variant="contained" color="error">
+      Cancel
+    </Button>
+ 
+ 
   </div>
 </div>
 
