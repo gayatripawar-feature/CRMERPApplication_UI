@@ -83,9 +83,9 @@ import { TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Paper
 const FollowupHistoryTable = ({ data }) => {
   return (
     <>
-      <Typography variant="h5" sx={{ marginBottom: "16px", fontWeight: "bold" }}>
+      {/* <Typography variant="h5" sx={{ marginBottom: "16px", fontWeight: "bold" }}>
         Enquiry History
-      </Typography>
+      </Typography> */}
 
       <TableContainer component={Paper}>
         <Table>

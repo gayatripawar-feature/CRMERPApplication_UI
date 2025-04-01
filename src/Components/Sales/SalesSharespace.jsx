@@ -72,9 +72,7 @@ const [isExpanded, setIsExpanded] = useState(false);
     setSelectedRow(row);
 }
 
-// const handleToggle = () => {
-//   setIsExpanded((prev) => !prev);
-// };
+
 
   const handleCancel = () => {
     setShowForm(false); 
@@ -114,13 +112,26 @@ const [isExpanded, setIsExpanded] = useState(false);
     },
   };
 
-
-  // Function to handle edit button click
+  const handleUpdate = () => {
+    
+    
+    setShowForm(false);     
+    setIsEditing(false);    
+        
+  };
+  
+ 
   const handleEdit = () => {
-    setShowForm(true); // Show form when clicking the edit button
+    setShowForm(true); 
     setIsEditing(true);
     setSelectedRow(row);
   };
+
+  const handleAddShare = () => {
+    setIsEditing(false);
+    setShowForm(true);
+  };
+  
   // Handle file change
   const handleFileChange = (e, index) => {
     const newRows = [...rows];
@@ -170,52 +181,18 @@ const [isExpanded, setIsExpanded] = useState(false);
     <div className="container my-4">
       <h2 className="fs-6 mb-3">Developer Module / Share Space</h2>
 
-      {/* <div className="d-flex align-items-center gap-4">
-        <div
-          className="d-flex align-items-center gap-2 p-2"
-          onClick={() => handleToggle('project')}
-          style={{
-            cursor: 'pointer',
-            borderRadius: '20px',
-            background: activeIcon === 'project' ? '#f8f9fa' : 'transparent',
-            
-          }}
-        >
-         
-          <div className="d-flex justify-content-center align-items-center rounded-circle bg-white p-2 shadow">
-  <FaEye size={26} color="#28a745" />  
-</div>
-          {activeIcon === 'project' && <span>Out Share Display</span>}
-        </div>
-        
-
-        <div
-          className="d-flex align-items-center gap-2 p-2"
-          onClick={() => handleToggle('shared')}
-          style={{
-            cursor: 'pointer',
-            borderRadius: '20px',
-            background: activeIcon === 'shared' ? '#f8f9fa' : 'transparent',
-          }}
-        >
-         
-          <div className="d-flex justify-content-center align-items-center rounded-circle bg-white p-2 shadow">
-  <FaArrowRight size={26} color="#28a745" />  
-</div>
-          {activeIcon === 'shared' && <span>Collect Docs</span>}
-        </div>
-      </div> */}
+    
 
      
 <div className="d-flex align-items-center gap-4">
-  {/* Project Section */}
+ 
   <div
     className="d-flex align-items-center gap-2 p-2"
     onClick={() => handleToggle('project')}
     style={{
       cursor: 'pointer',
       borderRadius: '20px',
-      width: activeIcon === 'project' ? "190px" : "50px", // Similar width change as in the button
+      width: activeIcon === 'project' ? "190px" : "50px", 
       minWidth: "50px",
       overflow: 'hidden',
       whiteSpace: 'nowrap',
@@ -236,13 +213,7 @@ const [isExpanded, setIsExpanded] = useState(false);
       transition: "width 0.3s ease, background 0.3s ease",
     }}
   >
-    {/* Icon Container */}
-    {/* <div
-      className="d-flex justify-content-center align-items-center rounded-circle bg-white p-2 shadow"
-      style={{
-        background: activeIcon === 'project' ? "#3621a9" : "transparent", // White background when active
-      }}
-    > */}
+    
   <div
   className="d-flex justify-content-center align-items-center rounded-circle p-2 shadow"
   style={{
@@ -250,55 +221,14 @@ const [isExpanded, setIsExpanded] = useState(false);
     padding: '12px', 
   }}
 >
-      {/* <FaRegClipboard size={26} color={activeIcon === 'project' ? "#fff" : "#333"} />  */}
+     
       <FaRegClipboard size={26} color="#fff" />
     </div>
     
     {activeIcon === 'project' && <span className='text-white fs-6 fw-bold'>Out Share Display</span>}
   </div>
 
-  {/* Shared Section */}
-  {/* <div
-    className="d-flex align-items-center gap-2 p-2"
-    onClick={() => handleToggle('shared')}
-    style={{
-      cursor: 'pointer',
-      borderRadius: '20px',
-      width: activeIcon === 'shared' ? "160px" : "50px", // Similar width change as in the button
-      minWidth: "50px",
-      overflow: 'hidden',
-      whiteSpace: 'nowrap',
-      padding: '10px 15px',
-      marginTop: '20px',
-      marginBottom: '28px',
-      fontSize: '14px',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      textTransform: 'none',
-      position: 'relative',
-      background: activeIcon === 'shared'
-        ? "linear-gradient(0deg, #4b2ac2 0%, #5c39d3 100%)"
-        : 'transparent', // Linear gradient on active
-      boxShadow:
-        "inset 2px 2px 2px 0px rgba(255,255,255,.5), 7px 7px 20px 0px rgba(0,0,0,.1), 4px 4px 5px 0px rgba(0,0,0,.1)",
-      transition: "width 0.3s ease, background 0.3s ease",
-    }}
-  >
-    
-  <div
-          className="d-flex justify-content-center align-items-center rounded-circle p-2 shadow"
-          style={{
-            backgroundColor: activeIcon === 'shared' ? "#3621a9" : "transparent", 
-            padding: '12px', 
-          }}
-        >
-          <FaRegShareSquare size={26} color={activeIcon === 'shared' ? "white" : "#333"} />
-        </div>
-      
-        {activeIcon === 'shared' && <span className='text-white fs-6 fw-bold'>Collect Docs</span>}
-      </div>
-     */}
+  
    
   <div
   className="d-flex align-items-center gap-2 p-2"
@@ -306,26 +236,26 @@ const [isExpanded, setIsExpanded] = useState(false);
   style={{
     cursor: 'pointer',
     borderRadius: '20px',
-    // background: activeIcon === 'shared' ? '#f8f9fa' : 'transparent',
+   
     backgroundColor: activeIcon === 'shared' || isCollapsed ? "#3621a9" : "transparent",
     transition: "all 0.3s ease",
-    // padding: '10px 15px',
-    padding: '5px 10px',  // Reduced padding
+  
+    padding: '5px 10px',  
     height: '58px', 
   }}
 >
-  {/* Icon and Text Group */}
+ 
   <div
     className="d-flex align-items-center gap-2"
     style={{
-      backgroundColor: activeIcon === 'shared' ? "#3621a9" : "transparent",  // Background color for active state
-      borderRadius: '20px',  // Rounded corners for both icon and text
-      padding: '8px 12px', // Padding to make both icon and text visible
-      transition: 'all 0.3s ease', // Smooth transition
+      backgroundColor: activeIcon === 'shared' ? "#3621a9" : "transparent",  
+      borderRadius: '20px',  
+      padding: '8px 12px', 
+      transition: 'all 0.3s ease', 
       alignItems: 'center',
     }}
   >
-    {/* Icon Container */}
+    
     <div
       className="d-flex justify-content-center align-items-center rounded-circle p-2 shadow"
       style={{
@@ -334,14 +264,14 @@ const [isExpanded, setIsExpanded] = useState(false);
       }}
     >
       {/* Icon */}
-      <FaRegShareSquare size={26} color="white" /> {/* White icon */}
+      <FaRegShareSquare size={26} color="white" /> 
     </div>
 
-    {/* Text with Background */}
+ 
     {activeIcon === 'shared' && (
       <span
         style={{
-          color: "white", // White text when active
+          color: "white", 
           padding: '2px 8px',
           borderRadius: '8px',
         }}
@@ -367,7 +297,7 @@ const [isExpanded, setIsExpanded] = useState(false);
   )}
 </div>
 
-      {showForm && activeIcon === 'project' && (
+      {/* {showForm && activeIcon === 'project' && (
         <div className="mt-4">
           <h4>Add Share Information</h4>
           <form>
@@ -439,9 +369,88 @@ const [isExpanded, setIsExpanded] = useState(false);
           <button className="btn btn-success me-2 mt-3" onClick={handleSubmit}>Submit</button>
           <button className="btn btn-secondary mt-3" onClick={handleCancel}>Cancel</button>
         </div>
-      )}
+      )} */}
 
-    
+{showForm && activeIcon === 'project' && (
+  <div className="mt-4">
+    <h4>{isEditing ? "Edit Share Information" : "Add Share Information"}</h4>
+    <form>
+      <table className="table-bordered table-sm">
+        <thead>
+          <tr>
+            <th className="fw-bold bg-primary text-center fs-5">Share To</th>
+            <th className="fw-bold bg-primary text-center fs-5">Type of Document</th>
+            <th className="fw-bold bg-primary text-center fs-5">Document</th>
+            <th className="fw-bold bg-primary text-center fs-5">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row, index) => (
+            <tr key={index}>
+              <td>
+                <FormControl sx={{ m: 1, width: 300 }}>
+                  <InputLabel id="select-share-to-label">Share To</InputLabel>
+                  <Select
+                    labelId="select-share-to-label"
+                    id="select-share-to"
+                    multiple
+                    value={selectedItems}
+                    onChange={(e) => handleChange(e, index)}
+                    input={<OutlinedInput label="Share To" />}
+                    renderValue={(selected) => selected.join(', ')}
+                    MenuProps={MenuProps}
+                  >
+                    {options.map((option) => (
+                      <MenuItem key={option} value={option}>
+                        <Checkbox checked={selectedItems.includes(option)} />
+                        <ListItemText primary={option} />
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </td>
+              <td>
+                <select
+                  className="form-control"
+                  value={row.documentType || ''}
+                  onChange={(e) => handleDocumentTypeChange(e, index)}
+                >
+                  <option value="">Select Type</option>
+                  <option value="MCA certificate">MCA certificate</option>
+                  <option value="PAN Card">PAN Card</option>
+                </select>
+              </td>
+              <td>
+                <input
+                  type="file"
+                  className="form-control"
+                  onChange={(e) => handleFileChange(e, index)}
+                />
+              </td>
+              <td>
+                <button className="btn btn-sm btn-danger" onClick={() => handleRemoveRow(index)}>
+                  Remove
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </form>
+
+    <button className="btn btn-secondary me-2 mt-3" onClick={addRow}>Add Row</button>
+
+    {/* Conditionally render Submit or Update button */}
+    {isEditing ? (
+      <button className="btn btn-warning me-2 mt-3" onClick={handleUpdate}>Update</button>
+    ) : (
+      <button className="btn btn-success me-2 mt-3" onClick={handleSubmit}>Submit</button>
+    )}
+
+    <button className="btn btn-secondary mt-3" onClick={handleCancel}>Cancel</button>
+  </div>
+)}
+
 
 
 {showProjectTable && activeIcon === 'project' && !showForm && ( 
@@ -487,7 +496,9 @@ const [isExpanded, setIsExpanded] = useState(false);
         rel="noopener noreferrer"
         style={{ pointerEvents: row.document ? "auto" : "none" }} // Disable click if no document
     >
-        <FaEye size={20} color={row.document ? "blue" : "gray"} style={{ cursor: "pointer" }} />
+        {/* <FaEye size={20} color={row.document ? "blue" : "gray"} style={{ cursor: "pointer" }} /> */}
+        <FaEye size={20} color="blue" style={{ cursor: "pointer" }} />
+
     </a>
 </TableCell>
 

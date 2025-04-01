@@ -105,19 +105,42 @@ const Leads = () => {
   };
 
 
-  const downloadSampleCsv = () => {
-    const sampleData = "Name,Email,Phone\nJohn Doe,john@example.com,1234567890";
-    const blob = new Blob([sampleData], { type: "text/csv" });
-    const url = URL.createObjectURL(blob);
+  // const downloadSampleCsv = () => {
+  //   const sampleData = "Name,Email,Phone\nJohn Doe,john@example.com,1234567890";
+  //   const blob = new Blob([sampleData], { type: "text/csv" });
+  //   const url = URL.createObjectURL(blob);
 
+  //   const a = document.createElement("a");
+  //   a.href = url;
+  //   a.download = "lead_template.csv";
+  //   document.body.appendChild(a);
+  //   a.click();
+  //   document.body.removeChild(a);
+  // };
+  const downloadSampleCsv = () => {
+    // Define the headers and sample data
+    const headers = "Name,Mobile No.,Source Name,Location,Are You Looking For\n";
+    const sampleData = "\n";
+    
+    // Create a Blob with the CSV content
+    const blob = new Blob([headers + sampleData], { type: "text/csv" });
+  
+    // Create a temporary URL for the Blob
+    const url = URL.createObjectURL(blob);
+  
+    // Create an anchor element for the download
     const a = document.createElement("a");
     a.href = url;
-    a.download = "sample.csv";
+    a.download = "lead_template.csv"; // The file name
+  
+    // Trigger the download
     document.body.appendChild(a);
     a.click();
+  
+    // Clean up
     document.body.removeChild(a);
   };
-
+  
   const handleChange = (e) => {
     const value = e.target.value;
     

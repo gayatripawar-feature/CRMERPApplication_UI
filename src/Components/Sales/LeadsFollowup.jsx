@@ -710,6 +710,16 @@ const LeadsFollowUp = () => {
       />
     </Grid>
 
+
+    <Grid item xs={6}>
+      <TextField
+        label="Name"
+        fullWidth
+        variant="outlined"
+        value={firmPan}
+             />
+    </Grid>
+
     <Grid item xs={6}>
   <FormControl fullWidth variant="outlined">
     <InputLabel id="status-label">Status</InputLabel>
@@ -775,16 +785,18 @@ const LeadsFollowUp = () => {
 
 
 
-    <Grid item xs={6}>
-      <TextField
-      type="date"
-        label="
+<Grid item xs={6}>
+  <TextField
+    type="date"
+    label="Next Follow Up"
+    fullWidth
+    variant="outlined"
+    InputLabelProps={{
+      shrink: true, // This will shrink the label when the field is focused or has a value
+    }}
+  />
+</Grid>
 
-"
-        fullWidth
-        variant="outlined"
-      />
-    </Grid>
   </Grid>
   
   
