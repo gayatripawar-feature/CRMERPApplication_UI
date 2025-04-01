@@ -142,11 +142,11 @@ const ProjectInventory = () => {
         alignItems: 'center', 
         backgroundColor: '#3621a9', 
         padding: '8px', 
-        borderRadius: '20px',  // borderRadius changed to 20px from 10%
+        borderRadius: '20px',  
         margin: '5px',
-        cursor: 'pointer',    // Add pointer cursor for better UX
+        cursor: 'pointer',    
         transition: "width 0.3s ease, background 0.3s ease",
-        width: expandedSection === index ? "250px" : "50px", // Toggle width based on expanded state
+        width: expandedSection === index ? "250px" : "50px", 
         minWidth: "50px",
         overflow: "hidden",
         whiteSpace: "nowrap",
@@ -156,11 +156,11 @@ const ProjectInventory = () => {
         justifyContent: "center",
         textTransform: "none",
         position: "relative",
-        background: "linear-gradient(0deg, #4b2ac2 0%, #5c39d3 100%)", // Gradient background
+        background: "linear-gradient(0deg, #4b2ac2 0%, #5c39d3 100%)", 
         boxShadow:
           "inset 2px 2px 2px 0px rgba(255,255,255,.5), 7px 7px 20px 0px rgba(0,0,0,.1), 4px 4px 5px 0px rgba(0,0,0,.1)",
       }}
-      onClick={() => handleToggleSection(index)}  // onClick function for handling clicks
+      onClick={() => handleToggleSection(index)} 
     >
       {React.cloneElement(section.icon, { style: { marginRight: '8px',color: 'white' } })}  {/* Add some margin to separate icon from label */}
       
@@ -169,7 +169,6 @@ const ProjectInventory = () => {
         <span className="fw-bold text-white p-2 fs-6" style={{ color: 'white', marginLeft: '10px' }}>{section.label}</span>
       ) : null}
   
-      {/* Hover effects */}
       <div style={{
         position: "absolute",
         top: 0,

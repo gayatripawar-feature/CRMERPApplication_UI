@@ -229,7 +229,7 @@ const [aadhaarErrorMessage, setAadhaarErrorMessage] = useState("");
     const value = e.target.value;
     const partnerCopy = [...partners];
   
-    // Regular expression to validate Gmail email format
+   
     const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
   
     if (value && !emailRegex.test(value)) {
