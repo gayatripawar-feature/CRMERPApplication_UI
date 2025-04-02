@@ -202,7 +202,7 @@
 // } from 'react-icons/fa';
 
 
-import React, { useState, useCallback } from "react"; 
+import React, { useState, useCallback,useRef,useEffect } from "react"; 
 import { 
   FaBars, FaTachometerAlt, FaUserShield, FaCode, FaChartLine, FaCogs, FaSignOutAlt,
   FaUsers, FaUserCheck, FaHome, FaFileAlt, FaFileSignature, FaStamp, FaDraftingCompass, FaBell,
@@ -221,6 +221,16 @@ import VoiceNavigation from "./VoiceNavigation";
 
 const Dashboard = () => {
   const [searchQuery, setSearchQuery] = useState("");
+
+  const [query, setQuery] = useState("");
+
+  const [listening, setListening] = useState(false);
+  const recognitionRef = useRef(null);
+
+// const [showVoiceRecognition, setShowVoiceRecognition] = useState(false);
+
+
+
   const [results, setResults] = useState([]);
   const [collapsed, setCollapsed] = useState(false);
   const [sections, setSections] = useState({
@@ -230,7 +240,7 @@ const Dashboard = () => {
     crm: false,
   });
   const [showVoiceRecognition, setShowVoiceRecognition] = useState(false);
-  const [query, setQuery] = useState("");
+  // const [query, setQuery] = useState("");
 
   const navigate = useNavigate();
 
@@ -361,6 +371,70 @@ const handleRedirect = (path) => {
   setResults([]); 
 };
 
+
+useEffect(() => {
+  if (!recognitionRef.current && ("webkitSpeechRecognition" in window || "SpeechRecognition" in window)) {
+    recognitionRef.current = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    const recognition = recognitionRef.current;
+
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.lang = "en-US";
+
+    recognition.onstart = () => {
+      setListening(true); // 🔴 Mic turns red
+    };
+
+    recognition.onend = () => {
+      setListening(false); // ✅ Mic turns green after listening
+    };
+    
+
+    recognition.onresult = (event) => {
+      let command = event.results[0][0].transcript.trim().toLowerCase();
+      console.log("Recognized command:", command);
+      
+      // Process command (Navigate or Speak)
+      setTimeout(() => {
+        setListening(false); // ✅ Ensure mic turns green after execution
+      }, 1000);
+    };
+
+    recognition.onerror = () => {
+      setListening(false); // Reset in case of error
+    };
+  }
+}, []);
+// 🎤 Speak Function
+const speak = (message) => {
+  const speech = new SpeechSynthesisUtterance(message);
+  speech.lang = "en-US";
+  speech.rate = 1;
+
+  speech.onstart = () => {
+    if (recognitionRef.current) {
+      recognitionRef.current.stop();
+    }
+  };
+
+  speech.onend = () => {
+    if (!listening) {
+      setTimeout(() => startListening(), 500);
+    }
+  };
+
+  window.speechSynthesis.speak(speech);
+};
+
+
+ // 🎤 Start Listening
+ const startListening = () => {
+  if (recognitionRef.current && !listening) {
+    console.log("🎤 Starting recognition...");
+    recognitionRef.current.start();
+  }
+};
+
   return (
     <div className="d-flex flex-column vh-100 ">
      
@@ -390,13 +464,33 @@ const handleRedirect = (path) => {
       className="form-control ps-5" // Add left padding to make space for the icon
       placeholder="Search..."
       onChange={handleSearch}
-    />
-    <FaMicrophone
+    /> 
+     {/* <FaMicrophone
       size={30}
       className="position-absolute top-50 end-0 translate-middle-y text-black p-1"
       style={{ cursor: "pointer", paddingLeft: "10px"}}
       onClick={() => setShowVoiceRecognition(true)}
+    />  */}
+    <FaMicrophone
+  size={30}
+  className={`position-absolute top-50 end-0 translate-middle-y p-1 ${listening ? "text-danger" : "text-success"}`} 
+  style={{ cursor: "pointer", marginRight: "10px" }}
+  onClick={startListening} 
+/> 
+
+{/* <input
+      type="text"
+      className="form-control ps-5"
+      placeholder="Search..."
+      onChange={handleSearch}
     />
+    <FaMicrophone
+  size={30}
+  className={`position-absolute top-50 end-0 translate-middle-y p-1 ${listening ? "text-danger" : "text-success"}`} 
+  style={{ cursor: "pointer", marginRight: "10px" }}
+  onClick={startListening} 
+/> */}
+
   </div>
 
 
@@ -441,7 +535,7 @@ const handleRedirect = (path) => {
   </div>
 </nav>
 {/* {showVoiceRecognition && <VoiceNavigation />} */}
-{showVoiceRecognition && <VoiceNavigation onClose={handleClose} />}
+{/* {showVoiceRecognition && <VoiceNavigation onClose={handleClose} />} */}
 
        <div className="d-flex w-100">
  

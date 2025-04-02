@@ -35,7 +35,7 @@ const BasicInfo = () => {
   const [loans, setLoans] = useState([]);
   const [expandedSection, setExpandedSection] = useState(0); 
   const [showFirmForm, setShowFirmForm] = useState(false);
- 
+  
   const [showProjectForm, setShowProjectForm] = useState(false);
   const [phases, setPhases] = useState([]);
   const [showLandownerForm, setShowLandownerForm] = useState(false); 
@@ -662,7 +662,8 @@ const handleTabClick = (index) => {
     {!showFirmForm ? (
       <>
         <div className='button-container'>
-          <Button 
+    {/* <div className='d-flex '>
+    <Button 
             variant="contained" 
             color="primary" 
             style={{ background: '#272ba8' }} 
@@ -671,7 +672,59 @@ const handleTabClick = (index) => {
           >
             + Create Firm
           </Button>
+          <Button className=''
+  variant="contained"
+  sx={{
+    background: "linear-gradient(45deg, #ff6b6b, #ff8e53)",
+    color: "white",
+    fontWeight: "bold",
+    textTransform: "none",
+    padding: "8px 16px",
+    borderRadius: "8px",
+    "&:hover": {
+      background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+    },
+  }}
+>
+  Download PDF
+</Button>
 
+
+    </div> */}
+
+<div className="d-flex gap-3">  {/* Added gap between buttons */}
+  <Button 
+    variant="contained" 
+    color="primary" 
+    style={{ background: "#272ba8" }} 
+    className="fw-bold"
+    onClick={() => setShowFirmForm(true)}
+  >
+    + Create Firm
+  </Button>
+
+  <Button
+    variant="contained"
+    sx={{
+      background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+      color: "white",
+      fontWeight: "bold",
+      textTransform: "none",
+      padding: "8px 16px",
+      borderRadius: "8px",
+      display: "flex",
+      alignItems: "center",  // Align icon and text
+      gap: "8px",  // Space between icon and text
+      "&:hover": {
+        background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+      },
+    }}
+  >
+    <FaFileDownload size={18} />  {/* Added download icon */}
+    Download PDF
+  </Button>
+</div>
+    
           {/* Previous and Next buttons on the right */}
           <div className="right-buttons">
             <Button variant="contained" color="secondary" onClick={handlePrevious}>
@@ -913,7 +966,8 @@ const handleTabClick = (index) => {
        <>
       
 <div className='button-container'>
-<Button variant="contained" color="primary" style={{ background: '#272ba8' }} className='fw-bold'
+  <div className='d-flex gap-3'>
+  <Button variant="contained" color="primary" style={{ background: '#272ba8' }} className='fw-bold'
 onClick={() => {
    console.log("Before:", showProjectForm);
    setShowProjectForm(true);
@@ -921,6 +975,28 @@ onClick={() => {
 }}>
 + Create Project
 </Button>
+  <Button
+    variant="contained"
+    sx={{
+      background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+      color: "white",
+      fontWeight: "bold",
+      textTransform: "none",
+      padding: "8px 16px",
+      borderRadius: "8px",
+      display: "flex",
+      alignItems: "center",  // Align icon and text
+      gap: "8px",  // Space between icon and text
+      "&:hover": {
+        background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+      },
+    }}
+  >
+    <FaFileDownload size={18} />  {/* Added download icon */}
+    Download PDF
+  </Button>
+  </div>
+
 
 
  <div className="right-buttons">
@@ -1112,10 +1188,39 @@ onClick={() => {
     {!showLandownerForm ? (
        <>
        <div className='button-container'>
-      <Button variant="contained" color="primary" style={{ background: '#272ba8' }} className='fw-bold'
-      onClick={() => setShowLandownerForm(true)}>
-        + Create Landowner Info
-      </Button>
+        <div className='d-flex gap-3'>
+
+        <Button variant="contained" color="primary" style={{ background: '#272ba8' }} className='fw-bold'
+onClick={() => {
+   console.log("Before:", showProjectForm);
+   setShowProjectForm(true);
+   console.log("After:", showProjectForm);
+}}>
++ Create Project
+</Button>
+
+<Button
+    variant="contained"
+    sx={{
+      background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+      color: "white",
+      fontWeight: "bold",
+      textTransform: "none",
+      padding: "8px 16px",
+      borderRadius: "8px",
+      display: "flex",
+      alignItems: "center",  // Align icon and text
+      gap: "8px",  // Space between icon and text
+      "&:hover": {
+        background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+      },
+    }}
+  >
+    <FaFileDownload size={18} />  {/* Added download icon */}
+    Download PDF
+  </Button>
+        </div>
+      
   
   <div className="right-buttons">
       <Button variant="contained" color="secondary" onClick={handlePrevious}>
@@ -1457,15 +1562,35 @@ Submit Landowner Info
   <div className="content-container mt-3">
     {!showFlatForm ? (
       <>
-      
         
         <div className="button-container">
  
+        <div className='d-flex gap-3'>
     <Button variant="contained" color="primary" style={{ background: '#272ba8' }} className='fw-bold'
     onClick={() => setShowFlatForm(true)}>
       + Flat Allotment Info
     </Button>
-
+    <Button
+    variant="contained"
+    sx={{
+      background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+      color: "white",
+      fontWeight: "bold",
+      textTransform: "none",
+      padding: "8px 16px",
+      borderRadius: "8px",
+      display: "flex",
+      alignItems: "center",  // Align icon and text
+      gap: "8px",  // Space between icon and text
+      "&:hover": {
+        background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+      },
+    }}
+  >
+    <FaFileDownload size={18} />  {/* Added download icon */}
+    Download PDF
+  </Button>
+  </div>
 
     <div className="right-buttons">
       <Button variant="contained" color="secondary" onClick={handlePrevious}>

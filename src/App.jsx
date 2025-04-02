@@ -48,7 +48,9 @@ import Parkingreport from "./Components/CRM/Parkingreport";
 import MISReport from "./Components/CRM/MISReport";
 import GeneratePdf from "./Components/Sales/GeneratePdf";
 // import Temp from "./Components/Sales/Temp";
-import Temp2 from "./Components/Sales/Temp2";
+// import Temp2 from "./Components/Sales/Temp2";
+
+import Temp3 from "./Components/Sales/Temp3";
 const App = () => {
 
   useEffect(() => {
@@ -70,6 +72,8 @@ const App = () => {
       <Routes>
       
         <Route path="/" element={<Dashboard />}>
+      
+
         {/* <Route path="admin/salesperson" element={<SalesModule />} /> */}
         {/* <Route path="admin/banker" element={<Banker />} /> */}
 
@@ -100,7 +104,9 @@ const App = () => {
         <Route path ="/sales/saleslostvisits" element={<SalesLostVisits/>} />
         {/* <Route path = "/sales/salestemplates" element={<Templates/>} /> */}
         {/* <Route path = "/sales/salestemplates" element={<Temp/>} /> */}
-        <Route path = "/sales/salestemplates" element={<Temp2/>} />
+        {/* <Route path = "/sales/salestemplates" element={<Temp2/>} /> */}
+
+        <Route path = "/sales/salestemplates" element={<Temp3/>} />
         <Route path = "/sales/bookingform" element={<BookingForm/>} />
         <Route path = "/sales/channelpartner" element={<ChannelPartner/>} />
          <Route path ="/sales/salescalander" element={< SalesCalendar/>} />
