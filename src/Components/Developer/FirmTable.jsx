@@ -24,11 +24,17 @@ const FirmTable = () => {
             const [occupationError, setOccupationError] = useState(""); 
             const [mobileError, setMobileError] = useState("");
             const [emailError, setEmailError] = useState("");
-      
+            const [firmData, setFirmData] = useState([]); 
       
             const [aadhaarError, setAadhaarError] = useState(false);
 const [aadhaarErrorMessage, setAadhaarErrorMessage] = useState("");
 
+
+
+// useEffect(() => {
+//   console.log("Firm Data Updated:", firms);
+//   setFirmData(firms);
+// }, [firms])
        
         const [fileNames, setFileNames] = useState({
           firmPanNoDocument: "",
@@ -85,6 +91,8 @@ const [aadhaarErrorMessage, setAadhaarErrorMessage] = useState("");
     },
   ]);
 
+
+  
   const [editFirm, setEditFirm] = useState(null);
 
   const handleEdit = (firm) => {
@@ -250,7 +258,8 @@ const [aadhaarErrorMessage, setAadhaarErrorMessage] = useState("");
   };
   return (
 
-    // padding: 2
+
+
     <TableContainer component={Paper} sx={{  }}>
       {editFirm ? (
      
@@ -373,60 +382,7 @@ const [aadhaarErrorMessage, setAadhaarErrorMessage] = useState("");
 
                   </>
                 ) : (
-                  // <TextField
-                  //   label={label}
-                  //   fullWidth
-                  //   variant="outlined"
-                  //   type={label === "Age" ? "text" : "text"} 
-                  //   value={partner[label.toLowerCase().replace(/ /g, "")]} 
-                  //   onChange={(e) => {
-                  //     if (label === "Age") {
-                  //       handleAgeChange(e, index);  
-                  //     } else if (label === "Occupation") {
-                  //       handleOccupationChange(e, index); 
-                  //     } else if (label === "Name") {
-                  //       handlePartnerNameChange(e, index); 
-                  //     } else if (label === "Mobile No.") {
-                  //       handleMobileChange(e, index); 
-                  //     } else if (label === "Mail ID") {
-                  //       handleEmailChange(e, index); 
-                  //     } else if (label === "PAN No.") {
-                  //       handlePANChange(e, index); 
-                  //     } else if (label === "Aadhaar No.") {
-                  //       const aadhaar = e.target.value;
-                  //       if (validateAadhaar(aadhaar)) {
-                  //         setAadhaarError(false); // Reset error if valid
-                  //         handleAadhaarChange(e, index); // Custom handler for Aadhaar field
-                  //       } else {
-                  //         setAadhaarError(true); // Set error if invalid
-                  //         setAadhaarErrorMessage("Aadhaar number should be exactly 12 digits.");
-                  //       }
-                  //     }
-                  //   }}
                  
-                   
-                      
-                    
-                
-                  //   error={ 
-                  //     (label === "Name" && !!nameError) ||
-                  //     (label === "Mobile No." && !!mobileError) ||
-                  //     (label === "Mail ID" && !!emailError) ||
-                  //     (label === "PAN No." && !!panError) ||
-                  //     (label === "Age" && !!ageError) ||
-                  //     (label === "Occupation" && !!occupationError)  ||
-                  //     (label === "Aadhaar No." && aadhaarError)
-                  //   }
-                  //   helperText={ 
-                  //     (label === "Name" && nameError) ||
-                  //     (label === "Mobile No." && mobileError) ||
-                  //     (label === "Mail ID" && emailError) ||
-                  //     (label === "PAN No." && panError) ||
-                  //     (label === "Age" && ageError) ||
-                  //     (label === "Occupation" && occupationError) 
-                  //     (label === "Aadhaar No." && aadhaarError && aadhaarErrorMessage)// Show Occupation error
-                    
-                  //   }
 
                   <TextField
   label={label}
@@ -580,28 +536,28 @@ const [aadhaarErrorMessage, setAadhaarErrorMessage] = useState("");
         </IconButton>
       </Tooltip>
     </TableCell>
-    <TableCell sx={{ color: "white", fontWeight: "bold" }}>{firm.timestamp}</TableCell>
-    <TableCell sx={{ color: "white", fontWeight: "bold" }}>{firm.name}</TableCell>
-    <TableCell sx={{ color: "white", fontWeight: "bold" }}>{firm.address}</TableCell>
-    <TableCell sx={{ color: "white", fontWeight: "bold" }}>{firm.firmPanNo}</TableCell>
-    <TableCell sx={{ color: "white", fontWeight: "bold" }}>{firm.firmGstNo}</TableCell>
+    <TableCell sx={{ color: "black", fontWeight: "bold" }}>{firm.timestamp}</TableCell>
+    <TableCell sx={{ color: "black", fontWeight: "bold" }}>{firm.name}</TableCell>
+    <TableCell sx={{ color: "black", fontWeight: "bold" }}>{firm.address}</TableCell>
+    <TableCell sx={{ color: "black", fontWeight: "bold" }}>{firm.firmPanNo}</TableCell>
+    <TableCell sx={{ color: "black", fontWeight: "bold" }}>{firm.firmGstNo}</TableCell>
 
   
-    <TableCell sx={{ color: "white", fontWeight: "bold" }}>
+    <TableCell sx={{ color: "black", fontWeight: "bold" }}>
       <IconButton onClick={() => handleView(firm.firmPan)} 
          sx={{ backgroundColor: "blue", borderRadius: "50%", padding: "3px" }}>
         <Visibility sx={{ color: "white" }} />
       </IconButton>
     </TableCell>
 
-    <TableCell sx={{ color: "white", fontWeight: "bold" }}>
+    <TableCell sx={{ color: "black", fontWeight: "bold" }}>
       <IconButton onClick={() => handleView(firm.firmGst)} 
          sx={{ backgroundColor: "blue", borderRadius: "50%", padding: "3px" }}>
         <Visibility sx={{ color: "white" }} />
       </IconButton>
     </TableCell>
 
-    <TableCell sx={{ color: "white", fontWeight: "bold" }}>
+    <TableCell sx={{ color: "black", fontWeight: "bold" }}>
       <IconButton onClick={() => handleView(firm.firmLightBill)}
          sx={{ backgroundColor: "blue", borderRadius: "50%", padding: "3px" }}>
         <Visibility sx={{ color: "white" }} />
@@ -613,35 +569,35 @@ const [aadhaarErrorMessage, setAadhaarErrorMessage] = useState("");
 <TableCell></TableCell>
 <TableCell></TableCell>
 
-    <TableCell sx={{ color: "white", fontWeight: "bold" }}>
+    <TableCell sx={{ color: "black", fontWeight: "bold" }}>
       <IconButton onClick={() => handleView(firm.residentialAddress)} 
          sx={{ backgroundColor: "blue", borderRadius: "50%", padding: "3px" }}>
         <Visibility sx={{ color: "white" }} />
       </IconButton>
     </TableCell>
 
-    <TableCell sx={{ color: "white", fontWeight: "bold" }}>
+    <TableCell sx={{ color: "black", fontWeight: "bold" }}>
       <IconButton onClick={() => handleView(firm.panNo)} 
          sx={{ backgroundColor: "blue", borderRadius: "50%", padding: "3px" }}>
         <Visibility sx={{ color: "white" }} />
       </IconButton>
     </TableCell>
 
-    <TableCell sx={{ color: "white", fontWeight: "bold" }}>
+    <TableCell sx={{ color: "black", fontWeight: "bold" }}>
       <IconButton onClick={() => handleView(firm.aadhaarNo)} 
          sx={{ backgroundColor: "blue", borderRadius: "50%", padding: "3px" }}>
         <Visibility sx={{ color: "white" }} />
       </IconButton>
     </TableCell>
 
-    <TableCell sx={{ color: "white", fontWeight: "bold" }}>
+    <TableCell sx={{ color: "black", fontWeight: "bold" }}>
       <IconButton onClick={() => handleView(firm.photo)}
         sx={{ backgroundColor: "blue", borderRadius: "50%", padding: "3px" }}>
         <Visibility sx={{ color: "white" }} />
       </IconButton>
     </TableCell>
 
-    <TableCell sx={{ color: "white", fontWeight: "bold" }}>
+    <TableCell sx={{ color: "black", fontWeight: "bold" }}>
       <IconButton onClick={() => handleView(firm.lightBill)}
         sx={{ backgroundColor: "blue", borderRadius: "50%", padding: "3px" }}>
         <Visibility sx={{ color: "white" }} />
@@ -654,6 +610,8 @@ const [aadhaarErrorMessage, setAadhaarErrorMessage] = useState("");
         </Table>
       )}
     </TableContainer>
+
+   
   );
 };
 

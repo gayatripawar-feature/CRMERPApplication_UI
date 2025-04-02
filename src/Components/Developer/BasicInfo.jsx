@@ -8,13 +8,14 @@ import DisplayTable from "./DisplayTable";
 import LandownerTable from "./LandownerTable";
 import FlatAllotment from './FlatAllotement';
 import { ToastContainer, toast } from 'react-toastify';
-
+import { useRef } from "react";
 import {  FaProjectDiagram, FaUserTie, FaHome, } from 'react-icons/fa';
 import { jsPDF } from "jspdf";
-
+// import "jspdf-autotable";
+import autoTable from "jspdf-autotable"; // Import autoTable plugin
 import { GetApp as GetAppIcon } from '@mui/icons-material';
 import { PictureAsPdf as PictureAsPdfIcon } from '@mui/icons-material';
-
+import html2canvas from "html2canvas";
 const fetchLoansData = async () => {
   const response = await fetch('/api/getOCRCollection');
   return response.json();
@@ -73,14 +74,68 @@ const [accountNoError, setAccountNoError] = useState("");
 
 const [ifscCode, setIfscCode] = useState(""); 
 const [ifscCodeError, setIfscCodeError] = useState("");
+const [selectedLandowner, setSelectedLandowner] = useState("");
+const [noOfFlats, setNoOfFlats] = useState(0);
+const [tableRows, setTableRows] = useState([]);
 
 
+ // ✅ Initialize as an empty array
+
+const projects = ["Project A", "Project B", "Project C"];
+const landowners = {
+  "Project A": [{ name: "John Doe", mobile: "9876543210", flats: 2 }],
+  "Project B": [{ name: "Jane Smith", mobile: "8765432109", flats: 3 }],
+  "Project C": [{ name: "Mike Johnson", mobile: "7654321098", flats: 1 }]
+};
+
+const handleProjectChange = (event) => {
+  setSelectedProject(event.target.value);
+  setSelectedLandowner("");
+  setMobileNo("");
+  setNoOfFlats(0);
+  setTableRows([]);
+};
+
+// Handles landowner selection and auto-fills data
+const handleLandownerChange = (event) => {
+  const landowner = landowners[selectedProject].find(l => l.name === event.target.value);
+  setSelectedLandowner(event.target.value);
+  setMobileNo(landowner?.mobile || "");
+  setNoOfFlats(landowner?.flats || 0);
+  generateTableRows(landowner?.flats || 0);
+};
+
+// Generates rows dynamically based on No. of Flats Allotted
+const generateTableRows = (num) => {
+  setTableRows(new Array(num).fill({
+    area: "",
+    wing: "",
+    flatNo: "",
+    flatType: ""
+  }));
+};
+
+// Handles changes in the dropdown fields inside the table
+const handleRowChange = (index, field, value) => {
+  const updatedRows = [...tableRows];
+  updatedRows[index][field] = value;
+  setTableRows(updatedRows);
+};
+useEffect(() => {
+  console.log("Loans updated:", loans);
+}, [loans]);
+
+  // const [fileNames, setFileNames] = useState({
+  //   firmPanNoDocument: "",
+  //   firmGstNoDocument: "",
+  //   firmLightBillForAddressProof: "",
+  // });
   const [fileNames, setFileNames] = useState({
-    firmPanNoDocument: "",
-    firmGstNoDocument: "",
-    firmLightBillForAddressProof: "",
+    firmPanNoDocument: [], // ✅ Change from "" to []
+    firmGstNoDocument: [],
+    firmLightBillForAddressProof: [],
   });
-
+  
 
   const [formData, setFormData] = useState({
     area: "",
@@ -108,15 +163,30 @@ const [ifscCodeError, setIfscCodeError] = useState("");
     const aadhaarRegex = /^[0-9]{12}$/; // Regex to check if it's exactly 12 digits
     return aadhaarRegex.test(aadhaar);
   };
-   const handleFileChange = (e, key) => {
-    const file = e.target.files[0]; 
-    if (file) {
-      setFileNames((prevState) => ({
-        ...prevState,
-        [key]: file.name, // Update the file name for the corresponding key
-      }));
-    }
+  //  const handleFileChange = (e, key) => {
+  //   const file = e.target.files[0]; 
+  //   if (file) {
+  //     setFileNames((prevState) => ({
+  //       ...prevState,
+  //       [key]: file.name, // Update the file name for the corresponding key
+  //     }));
+  //   }
+  // };
+
+  // const handleFileChange = (event, key) => {
+  //   const files = Array.from(event.target.files).map(file => file.name); // ✅ Convert FileList to array
+  //   setFileNames((prev) => ({ ...prev, [key]: files })); // ✅ Store as an array
+  // };
+  
+  const handleFileChange = (event, key) => {
+    const newFiles = Array.from(event.target.files).map(file => file.name);
+  
+    setFileNames((prev) => ({
+      ...prev,
+      [key]: prev[key] ? [...prev[key], ...newFiles] : newFiles, // ✅ Append new files
+    }));
   };
+  
 
   const handleAgeChange = (e, index) => {
     const value = e.target.value;
@@ -202,7 +272,7 @@ const handleTabClick = (index) => {
     mahareraNo: ''
   });
 
-  
+  const pdfRef = useRef(); 
  
    {selectedTab === "firm" && <FirmTable />}
    {selectedTab === "display" && <DisplayTable />}
@@ -287,7 +357,231 @@ const handleTabClick = (index) => {
     };
 
  
+
+   
     
+    const handleDownloadPDFFirm = () => {
+      console.log("Loans data before mapping:", loans); // Use loans instead of firms
+    
+     
+    
+      const doc = new jsPDF("landscape");
+      doc.setFontSize(14);
+      doc.text("Firm Details Report", 14, 15);
+    
+      const tableColumn = [
+        "Timestamp", "Firm Name", "Firm Address", "Firm PAN No",
+        "Firm GST No", "Residential Address", "PAN No", "Aadhaar No",
+        "Photo", "Light Bill"
+      ];
+    
+      const tableRows = loans.map(row => [
+        row.timestamp || "-",
+        row.name || "-",
+        row.address || "-",
+        row.firmPanNo || "-",
+        row.firmGstNo || "-",
+        row.residentialAddress || "-",
+        row.panNo || "-",
+        row.aadhaarNo || "-",
+        row.photo || "-",
+        row.lightBill || "-"
+      ]);
+    
+      console.log("Formatted Table Rows:", tableRows);
+    
+      autoTable(doc, {
+        startY: 25,
+        head: [tableColumn],
+        body: tableRows,
+        styles: { fontSize: 10, cellPadding: 3 },
+        headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+      });
+    
+      doc.save("Firm_Details_Report.pdf");
+    };
+    
+
+    const displayref = useRef();
+    
+    const handleDownloadPDFProject = () => {
+      if (!displayref.current) {
+        console.error("DisplayTable ref is not available.");
+        return;
+      }
+      console.log("Loans data before mapping:", loans); // Use loans instead of firms
+    
+      const doc = new jsPDF("landscape");
+      doc.setFontSize(14);
+      doc.text("Project Display Report", 14, 15);
+    
+      const tableColumn = [
+        "Timestamp", "Firm Name", "Project Name", "Project Address",
+        "Old Survey No", "New Survey No", "Village", "Taluka",
+        "District", "Sanction Authority", "East", "West",
+        "North", "South", "Latitude", "Longitude",
+        "Landmark", "Phase No", "Wing No", "MahaRERA No"
+      ];
+    
+      const tableRows = loans.map(row => [
+        row.timestamp || "-",
+        row.firmName || "-",
+        row.projectName || "-",
+        row.projectAddress || "-",
+        row.oldSurveyNo || "-",
+        row.newSurveyNo || "-",
+        row.village || "-",
+        row.taluka || "-",
+        row.district || "-",
+        row.sanctionAuthority || "-",
+        row.east || "-",
+        row.west || "-",
+        row.north || "-",
+        row.south || "-",
+        row.latitude || "-",
+        row.longitude || "-",
+        row.landmark || "-",
+        row.phaseNo || "-",
+        row.wingNo || "-",
+        row.mahareraNo || "-"
+      ]);
+    
+      console.log("Formatted Table Rows:", tableRows);
+    
+      
+    
+      autoTable(doc, {
+        startY: 25,
+        head: [tableColumn],
+        body: tableRows,
+        margin: { top: 20 },
+        styles: { overflow: 'linebreak' },
+        didDrawPage: (data) => {
+          doc.text("Project Display Report", 14, 10);
+        }
+      });
+      doc.save("Project_Display_Report.pdf");
+     
+    };
+    
+
+    const landowner_pdf =useRef();
+
+
+    const handleDownloadPDFLandowner = () => {
+      if (!landowner_pdf.current) {
+        console.error("LandownerTable ref is not available.");
+        return;
+      }
+    
+      console.log("Project Data:", projectData);
+    
+      
+    
+      const doc = new jsPDF("landscape");
+      doc.setFontSize(14);
+      doc.text("Landowner Display Report", 14, 15);
+    
+      // ✅ Columns that match the actual data
+      const tableColumn = [
+        "Timestamp", "Project Name", "Landowner Name", "Age", "Occupation",
+        "Mobile No", "Mail ID", "Village", "Taluka", "District",
+        "Bank Name", "Bank Address", "Account No.", "IFSC Code"
+      ];
+    
+      // ✅ Ensure column mapping is correct
+      const tableRows = projectData.map(row => [
+        row.timestamp || "-",
+        row.projectName || "-",
+        row.landownerName || "-",
+        row.age || "-",
+        row.occupation || "-",
+        row.mobileNo || "-",
+        row.mailId || "-",
+        row.village || "-",
+        row.taluka || "-",
+        row.district || "-",
+        row.bankName || "-",
+        row.bankAddress || "-",
+        row.accountNo || "-",
+        row.ifscCode || "-"
+      ]);
+    
+      console.log("Formatted Table Rows:", tableRows); // Debugging
+    
+      autoTable(doc, {
+        startY: 25,
+        head: [tableColumn],
+        body: tableRows,
+        margin: { top: 20 },
+        styles: { overflow: 'linebreak' },
+        didDrawPage: (data) => {
+          doc.text("Landowner Display Report", 14, 10);
+        }
+      });
+    
+      // ✅ Save the PDF
+      doc.save("Landowner_Display_Report.pdf");
+    };
+
+
+    const allotement_pdf = useRef();
+    
+    const handleDownloadPDFAllotement = () => {
+      if (!allotement_pdf.current) {
+          console.error("LandownerTable ref is not available.");
+          return;
+      }
+  
+      console.log("Project Data:", projectData);
+  
+      const doc = new jsPDF("landscape");
+      doc.setFontSize(14);
+      // doc.text("Flat Allotment Display Report", 14, 15);
+  
+      // ✅ Columns as per the new requirement
+      const tableColumn = [
+          "Timestamp", 
+          "Project Name", 
+          "Flat Allottee Name", 
+          "Mobile No.", 
+          "No. of Flats Allotted", 
+          "RERA Carpet Area (SQ FT)", 
+          "Wing", 
+          "Flat No.", 
+          "Type of Flat"
+      ];
+  
+      // ✅ Mapping data correctly to the new columns
+      const tableRows = projectData.map(row => [
+          row.timestamp || "-",
+          row.projectName || "-",
+          row.flatAllotteeName || "-",  // Ensure this key exists in your data
+          row.mobileNo || "-",
+          row.noOfFlatsAllotted || "-", // Ensure this key exists in your data
+          row.reraCarpetArea || "-",    // Ensure this key exists in your data
+          row.wing || "-",
+          row.flatNo || "-",
+          row.typeOfFlat || "-"         // Ensure this key exists in your data
+      ]);
+  
+      console.log("Formatted Table Rows:", tableRows); // Debugging
+  
+      autoTable(doc, {
+          startY: 25,
+          head: [tableColumn],
+          body: tableRows,
+          margin: { top: 20 },
+          styles: { overflow: 'linebreak' },
+          didDrawPage: (data) => {
+              doc.text("Flat Allotment Display Report", 14, 10);
+          }
+      });
+  
+      // ✅ Save the PDF with the updated name
+      doc.save("flat_allotment_display.pdf");
+  };
+  
   const handleAddPartner = () => {
     setPartners([...partners, { name: "", age: "", occupation: "", mobile: "", email: "", address: "", pan: "", aadhaar: "" }]);
   };
@@ -573,9 +867,10 @@ const handleTabClick = (index) => {
 
 
   const validateForm = () => {
- 
-  };
+ };
   
+
+ 
   
   return (
     <div className="main-content">
@@ -662,37 +957,9 @@ const handleTabClick = (index) => {
     {!showFirmForm ? (
       <>
         <div className='button-container'>
-    {/* <div className='d-flex '>
-    <Button 
-            variant="contained" 
-            color="primary" 
-            style={{ background: '#272ba8' }} 
-            className='fw-bold'
-            onClick={() => setShowFirmForm(true)}
-          >
-            + Create Firm
-          </Button>
-          <Button className=''
-  variant="contained"
-  sx={{
-    background: "linear-gradient(45deg, #ff6b6b, #ff8e53)",
-    color: "white",
-    fontWeight: "bold",
-    textTransform: "none",
-    padding: "8px 16px",
-    borderRadius: "8px",
-    "&:hover": {
-      background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
-    },
-  }}
->
-  Download PDF
-</Button>
+   
 
-
-    </div> */}
-
-<div className="d-flex gap-3">  {/* Added gap between buttons */}
+<div className="d-flex gap-3">  
   <Button 
     variant="contained" 
     color="primary" 
@@ -718,7 +985,10 @@ const handleTabClick = (index) => {
       "&:hover": {
         background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
       },
+     
     }}
+    // onClick={() => handledow(firms)}
+    onClick={handleDownloadPDFFirm}
   >
     <FaFileDownload size={18} />  {/* Added download icon */}
     Download PDF
@@ -737,7 +1007,11 @@ const handleTabClick = (index) => {
         </div>
 
         <div className="mt-3">
+        <div ref={pdfRef} className="mt-3">
           <FirmTable firms={loans} />
+          {/* <FirmTable firms={loans} onGeneratePDF={handleDownloadPDFFirm} /> */}
+
+          </div>
         </div>
       </>
     ) : (
@@ -803,6 +1077,7 @@ const handleTabClick = (index) => {
         <label>
           <Input
             type="file"
+            multiple
             style={{ display: "none" }} // Hide the default input
             id={`file-input-${index}`} // Unique ID for each input
             onChange={(e) => handleFileChange(e, item.key)} // Handle file change
@@ -991,6 +1266,11 @@ onClick={() => {
         background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
       },
     }}
+    onClick={() => {
+      console.log("Download PDF button clicked");
+      handleDownloadPDFProject();
+    }}
+
   >
     <FaFileDownload size={18} />  {/* Added download icon */}
     Download PDF
@@ -1009,7 +1289,7 @@ onClick={() => {
     </div>
     </div>
 
-<div className='mt-3'>
+<div className='mt-3' ref={displayref}>
 <DisplayTable data={projectData} />
 </div>
    </>
@@ -1191,12 +1471,15 @@ onClick={() => {
         <div className='d-flex gap-3'>
 
         <Button variant="contained" color="primary" style={{ background: '#272ba8' }} className='fw-bold'
+
+
 onClick={() => {
-   console.log("Before:", showProjectForm);
-   setShowProjectForm(true);
-   console.log("After:", showProjectForm);
+  console.log("Before:", showLandownerForm);
+  setShowLandownerForm(true);
+  console.log("After:", showLandownerForm);
 }}>
-+ Create Project
+
++ Create Landowner Info
 </Button>
 
 <Button
@@ -1215,6 +1498,8 @@ onClick={() => {
         background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
       },
     }}
+    onClick={handleDownloadPDFLandowner}
+    
   >
     <FaFileDownload size={18} />  {/* Added download icon */}
     Download PDF
@@ -1231,7 +1516,7 @@ onClick={() => {
       </Button>
     </div>
     </div>
-<div className='mt-3'>
+<div className='mt-3' ref={landowner_pdf}>
 <LandownerTable data={projectData} />
 </div>
 </>
@@ -1269,52 +1554,36 @@ onClick={() => {
           </Select>
         </FormControl>
       </Grid>
-          {/* <Grid item xs={4}><TextField label="Mobile No." fullWidth value={mobileNo}
-            onChange={handleMobileChange}
-            error={!!mobileError} // Show error state if there is a mobile error
-                helperText={mobileError}
-                /></Grid> */}
-
-
-                {/* Mobile No. with Validation */}
+          
                 <Grid item xs={4}>
       <TextField
         label="Mobile No."
         fullWidth
         value={mobileNo}
         onChange={handleMobileNoChange}
-        error={!!mobileError} // Show error if there is a mobileError
-        helperText={mobileError} // Display error message if any
+        error={!!mobileError} 
+        helperText={mobileError} 
       />
     </Grid>
 
 
           <Grid item xs={4}><TextField label="Landowner Name" fullWidth value={name} onChange={handleNameChange}
-           error={!!error} // Show error if there is an error message
+           error={!!error} 
            helperText={error}
           /></Grid>
           <Grid item xs={4}><TextField type="number" label="Age" fullWidth /></Grid>
           <Grid item xs={4}><TextField label="Occupation" fullWidth /></Grid>
-          {/* <Grid item xs={4}><TextField label="Mail ID" fullWidth   onChange={handleEmailChange}/></Grid> */}
+         
 
-          {/* <Grid item xs={4}>
-  <TextField
-    label="Mail ID"
-    fullWidth
-    value={email}
-    onChange={(e) => handleEmailChange(e)} // pass the correct index if needed
-    error={!!emailError} // Show error if there's an error message
-    helperText={emailError} // Display error message if any
-  />
-</Grid> */}
+          
 <Grid item xs={4}>
   <TextField
     label="Mail ID"
     fullWidth
-    // Bind the input value to the `email` state
-    onChange={handleEmailChange} // Trigger the handleEmailChange function on input change
-    error={!!emailError} // Show error if `emailError` is not an empty string
-    helperText={emailError} // Display the error message if there is one
+   
+    onChange={handleEmailChange} 
+    error={!!emailError} 
+    helperText={emailError} 
   />
 </Grid>
 
@@ -1322,7 +1591,7 @@ onClick={() => {
           <Grid item xs={4}><TextField label="Village" fullWidth /></Grid>
           <Grid item xs={4}><TextField label="District" fullWidth /></Grid>
           <Grid item xs={4}><TextField label="Taluka" fullWidth /></Grid>
-          {/* <Grid item xs={4}><TextField label="Name of Bank" fullWidth /></Grid> */}
+        
           <Grid item xs={4}>
         <FormControl fullWidth variant="outlined">
           <InputLabel id="bank-name-label">Name of Bank</InputLabel>
@@ -1371,21 +1640,15 @@ onClick={() => {
   <TextField
     label="IFSC Code"
     fullWidth
-    value={ifscCode} // Bind the state value for the IFSC code
-    onChange={handleIfscCodeChange} // Handle change and validation
-    error={!!ifscCodeError} // Show error if there's an error
-    helperText={ifscCodeError} // Display error message if any
+    value={ifscCode} 
+    onChange={handleIfscCodeChange} 
+    error={!!ifscCodeError} 
+    helperText={ifscCodeError} 
   />
 </Grid>
 
-          {/* <Grid item xs={4}><TextField label="Aadhaar No." fullWidth /></Grid>
-          <Grid item xs={4}><TextField label="Residential Address" fullWidth /></Grid>
-          <Grid item xs={4}><TextField label="PAN No." fullWidth /></Grid>
-          <Grid item xs={4}><TextField label="Light Bill" fullWidth /></Grid> */}
-          {/* <Grid item xs={4}>
-            <TextField type="file" accept="image/*" />
-          </Grid> */}
-
+      
+{/* 
 <Grid item xs={4}>
             <Typography variant="body2" gutterBottom>
               Aadhaar No.
@@ -1393,9 +1656,9 @@ onClick={() => {
             <label>
               <Input
                 type="file"
-                style={{ display: "none" }} // Hide the default input
-                id="file-input-aadhaar" // Unique ID for the file input
-                onChange={(e) => handleFileChange(e, "aadhaarFile")} // Handle file selection
+                style={{ display: "none" }} 
+                id="file-input-aadhaar" 
+                onChange={(e) => handleFileChange(e, "aadhaarFile")} 
               />
               <Button
                 variant="contained"
@@ -1408,12 +1671,77 @@ onClick={() => {
             </label>
             {fileNames.aadhaarFile && (
               <Typography variant="body2" color="textSecondary" style={{ marginTop: "8px" }}>
-                {fileNames.aadhaarFile} {/* Display the selected file name */}
+                {fileNames.aadhaarFile} 
               </Typography>
             )}
-          </Grid>
+          </Grid> */}
 
+{/* <Grid item xs={4}>
+  <Typography variant="body2" gutterBottom>
+    Aadhaar No.
+  </Typography>
+  
+  <label>
+    <Input
+      type="file"
+      style={{ display: "none" }}
+      id="file-input-aadhaar"
+      multiple  // ✅ Allow multiple file selection
+      onChange={(e) => handleFileChange(e, "aadhaarFile")}
+    />
+    
+    <Button
+      variant="contained"
+      color="light"
+      component="span"
+    >
+      Choose Files
+    </Button>
+  </label>
 
+ 
+  {Array.isArray(fileNames.firmPanNoDocument) && fileNames.firmPanNoDocument.length > 0 && (
+  <Typography variant="body2" color="textSecondary" style={{ marginTop: "8px" }}>
+    {fileNames.firmPanNoDocument.map((file, index) => (
+      <div key={index}>{file}</div> // ✅ Display each file name
+    ))}
+  </Typography>
+)}
+
+</Grid> */}
+
+<Grid item xs={4}>
+  <Typography variant="body2" gutterBottom>
+    Aadhaar No.
+  </Typography>
+
+  <label>
+    <Input
+      type="file"
+      style={{ display: "none" }}
+      id="file-input-aadhaar"
+      multiple  // ✅ Allow multiple file selection
+      onChange={(e) => handleFileChange(e, "aadhaarFile")} // ✅ Correct key
+    />
+    
+    <Button
+      variant="contained"
+      color="light"
+      component="span"
+    >
+      Choose Files
+    </Button>
+  </label>
+
+  {/* ✅ Corrected the key to aadhaarFile */}
+  {Array.isArray(fileNames.aadhaarFile) && fileNames.aadhaarFile.length > 0 && (
+    <Typography variant="body2" color="textSecondary" style={{ marginTop: "8px" }}>
+      {fileNames.aadhaarFile.map((file, index) => (
+        <div key={index}>{file}</div> // ✅ Keeps adding new files
+      ))}
+    </Typography>
+  )}
+</Grid>
 
           <Grid item xs={4}>
             <Typography variant="body2" gutterBottom>
@@ -1431,20 +1759,18 @@ onClick={() => {
                 variant="contained"
                 color="light"
                 component="span"
-                // onClick={() => document.getElementById("file-input-image").click()} // Trigger the file input
               >
                 Choose File
               </Button>
             </label>
             {fileNames.imageFile && (
               <Typography variant="body2" color="textSecondary" style={{ marginTop: "8px" }}>
-                {fileNames.imageFile} {/* Display the selected file name */}
+                {fileNames.imageFile} 
               </Typography>
             )}
           </Grid>
 
 
-          {/* Residential Address File Upload */}
           <Grid item xs={4} sx={{ marginTop: "6px"}}>
             <Typography variant="body2" gutterBottom>
               Residential Address
@@ -1508,6 +1834,7 @@ onClick={() => {
             <label>
               <Input
                 type="file"
+                multiple
                 style={{ display: "none" }}
                 id="file-input-lightbill"
                 onChange={(e) => handleFileChange(e, "lightBillFile")}
@@ -1531,13 +1858,7 @@ onClick={() => {
         
         </Grid>
 
-        {/* <h5 className="mt-4">Bank Details</h5> */}
-        {/* <Grid container spacing={2}>
-          <Grid item xs={4}><TextField label="Select a Bank" fullWidth /></Grid>
-          <Grid item xs={4}><TextField label="Bank Address" fullWidth /></Grid>
-          <Grid item xs={4}><TextField label="Account No." fullWidth /></Grid>
-          
-        </Grid> */}
+        
 
        
         
@@ -1586,6 +1907,7 @@ Submit Landowner Info
         background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
       },
     }}
+    onClick={handleDownloadPDFAllotement}
   >
     <FaFileDownload size={18} />  {/* Added download icon */}
     Download PDF
@@ -1603,215 +1925,237 @@ Submit Landowner Info
   </div>
 
 
-        <div className="mt-3">
+        <div className="mt-3" ref={allotement_pdf}>
           <FlatAllotment data={Flatdata} />
         </div>
       </>
     ) : (
-      <div className="landowner-form mt-4 p-3 border rounded" style={{
-        backgroundColor: "#f8f9fa", 
-        border: "1px solid #ccc", 
-      }}>
-        <h5>Flat Allotement Display </h5>
-        <Grid container spacing={2}>
-          <Grid item xs={4}><TextField label="Project Name" fullWidth /></Grid>
-          {/* <Grid item xs={4}><TextField label="Name" fullWidth /></Grid> */}
-          {/* <Grid item xs={4}>
-        <TextField
-          label="Name"
-          fullWidth
-          value={name}
-          onChange={handleNameChange}
-          error={!!nameError}
-          helperText={nameError}
-        />
-      </Grid> */}
-        <Grid item xs={4}><TextField label="Landowner Name" fullWidth value={name} onChange={handleNameChange}
-           error={!!error} // Show error if there is an error message
-           helperText={error}
-          /></Grid>
-          {/* <Grid item xs={4}><TextField label="Mobile No." fullWidth /></Grid> */}
-          {/* <Grid item xs={4}>
-        <TextField
-          label="Mobile No."
-          fullWidth
-          value={mobileNo}
-          onChange={handleMobileNoChange}
-          error={!!mobileNoError}
-          helperText={mobileNoError}
-        />
-      </Grid> */}
+//       <div className="landowner-form mt-4 p-3 border rounded" style={{
+//         backgroundColor: "#f8f9fa", 
+//         border: "1px solid #ccc", 
+//       }}>
+//         <h5>Flat Allotement Display </h5>
+//         <Grid container spacing={2}>
+//           <Grid item xs={4}><TextField label="Project Name" fullWidth /></Grid>
+         
+         
+//         <Grid item xs={4}><TextField label="Landowner Name" fullWidth value={name} onChange={handleNameChange}
+//            error={!!error} 
+//            helperText={error}
+//           /></Grid>
+      
 
-<Grid item xs={4}>
-      <TextField
-        label="Mobile No."
-        fullWidth
-        value={mobileNo}
-        onChange={handleMobileNoChange}
-        error={!!mobileError} // Show error if there is a mobileError
-        helperText={mobileError} // Display error message if any
-      />
-    </Grid>
+// <Grid item xs={4}>
+//       <TextField
+//         label="Mobile No."
+//         fullWidth
+//         value={mobileNo}
+//         onChange={handleMobileNoChange}
+//         error={!!mobileError} // Show error if there is a mobileError
+//         helperText={mobileError} // Display error message if any
+//       />
+//     </Grid>
 
-          <Grid item xs={4}><TextField type="number" label="No. of Flats Alloted" fullWidth /></Grid>
-        </Grid>
-        <h4 className="pt-3">Flat Details</h4>
-        <TableContainer component={Paper}>
-          <Table>
-            <TableHead>
-              <TableRow sx={{ bgcolor: "primary.main" }}>
-                <TableCell  sx={{ color: "white", fontWeight: "bold" }}>RERA CARPET AREA (SQ FT)</TableCell>
-                <TableCell  sx={{ color: "white", fontWeight: "bold" }}>WING</TableCell>
-                <TableCell  sx={{ color: "white", fontWeight: "bold" }}>FLAT NO.</TableCell>
-                <TableCell  sx={{ color: "white", fontWeight: "bold" }}> TYPE OF FLAT</TableCell>
-              </TableRow>
+//           <Grid item xs={4}><TextField type="number" label="No. of Flats Alloted" fullWidth /></Grid>
+//         </Grid>
+//         <h4 className="pt-3">Flat Details</h4>
+//         <TableContainer component={Paper}>
+//           <Table>
+//             <TableHead>
+//               <TableRow sx={{ bgcolor: "primary.main" }}>
+//                 <TableCell  sx={{ color: "white", fontWeight: "bold" }}>RERA CARPET AREA (SQ FT)</TableCell>
+//                 <TableCell  sx={{ color: "white", fontWeight: "bold" }}>WING</TableCell>
+//                 <TableCell  sx={{ color: "white", fontWeight: "bold" }}>FLAT NO.</TableCell>
+//                 <TableCell  sx={{ color: "white", fontWeight: "bold" }}> TYPE OF FLAT</TableCell>
+//               </TableRow>
 
-{/* <TableRow sx={{ bgcolor: "primary.main" }}>
-            <TableCell sx={{ color: "white", fontWeight: "bold" }}>
-              <FormControl fullWidth>
-                <InputLabel>RERA CARPET AREA</InputLabel>
-                <Select
-                  name="area"
-                  value={formData.area}
-                  onChange={handleChange}
-                  sx={{ color: "white" }}
-                >
-                  <MenuItem value="500">500 SQ FT</MenuItem>
-                  <MenuItem value="1000">1000 SQ FT</MenuItem>
-                  <MenuItem value="1500">1500 SQ FT</MenuItem>
-                </Select>
-              </FormControl>
-            </TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold" }}>
-              <FormControl fullWidth>
-                <InputLabel>WING</InputLabel>
-                <Select
-                  name="wing"
-                  value={formData.wing}
-                  onChange={handleChange}
-                  sx={{ color: "white" }}
-                >
-                  <MenuItem value="A">A</MenuItem>
-                  <MenuItem value="B">B</MenuItem>
-                  <MenuItem value="C">C</MenuItem>
-                </Select>
-              </FormControl>
-            </TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold" }}>
-              <FormControl fullWidth>
-                <InputLabel>FLAT NO.</InputLabel>
-                <Select
-                  name="flatNumber"
-                  value={formData.flatNumber}
-                  onChange={handleChange}
-                  sx={{ color: "white" }}
-                >
-                  <MenuItem value="101">101</MenuItem>
-                  <MenuItem value="102">102</MenuItem>
-                  <MenuItem value="103">103</MenuItem>
-                </Select>
-              </FormControl>
-            </TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold" }}>
-              <FormControl fullWidth>
-                <InputLabel>TYPE OF FLAT</InputLabel>
-                <Select
-                  name="flatType"
-                  value={formData.flatType}
-                  onChange={handleChange}
-                  sx={{ color: "white" }}
-                >
-                  <MenuItem value="2 BHK">2 BHK</MenuItem>
-                  <MenuItem value="3 BHK">3 BHK</MenuItem>
-                  <MenuItem value="4 BHK">4 BHK</MenuItem>
-                </Select>
-              </FormControl>
-            </TableCell>
-          </TableRow> */}
-            </TableHead>
-            <TableBody>
-            {/* <TableRow>
-            <TableCell><TextField fullWidth variant="outlined" /></TableCell>
-        <TableCell><TextField fullWidth variant="outlined" /></TableCell>
-        <TableCell><TextField fullWidth variant="outlined" /></TableCell>
-        <TableCell><TextField fullWidth variant="outlined" /></TableCell>
-      </TableRow> */}
-      <TableRow >
-      <TableCell sx={{ color: "black", fontWeight: "bold" }}>
-              <FormControl fullWidth>
-                <InputLabel>RERA CARPET AREA (SQ FT)</InputLabel>
-                <Select
-                  name="area"
-                  value={formData.area}
-                  onChange={handleChange}
-                  label="RERA CARPET AREA (SQ FT)"
-                >
-                  <MenuItem value="">RERA CARPET AREA (SQ FT)</MenuItem>
+//             </TableHead>
+//             <TableBody>
+            
+//       <TableRow >
+//       <TableCell sx={{ color: "black", fontWeight: "bold" }}>
+//               <FormControl fullWidth>
+//                 <InputLabel>RERA CARPET AREA (SQ FT)</InputLabel>
+//                 <Select
+//                   name="area"
+//                   value={formData.area}
+//                   onChange={handleChange}
+//                   label="RERA CARPET AREA (SQ FT)"
+//                 >
+//                   <MenuItem value="">RERA CARPET AREA (SQ FT)</MenuItem>
                  
-                </Select>
-              </FormControl>
-            </TableCell>
-            <TableCell sx={{ color: "black", fontWeight: "bold" }}>
-              <FormControl fullWidth>
-                <InputLabel>WING</InputLabel>
-                <Select
-                  name="wing"
-                  value={formData.wing}
-                  onChange={handleChange}
-                  label="WING"
-                >
-                  <MenuItem value="A">Wing</MenuItem>
+//                 </Select>
+//               </FormControl>
+//             </TableCell>
+//             <TableCell sx={{ color: "black", fontWeight: "bold" }}>
+//               <FormControl fullWidth>
+//                 <InputLabel>WING</InputLabel>
+//                 <Select
+//                   name="wing"
+//                   value={formData.wing}
+//                   onChange={handleChange}
+//                   label="WING"
+//                 >
+//                   <MenuItem value="A">Wing</MenuItem>
                 
-                </Select>
-              </FormControl>
-            </TableCell>
-            <TableCell sx={{ color: "black", fontWeight: "bold" }}>
-              <FormControl fullWidth>
-                <InputLabel>FLAT NO.</InputLabel>
-                <Select
-                  name="flatNumber"
-                  value={formData.flatNumber}
-                  onChange={handleChange}
-                  label="FLAT NO."
-                >
-                  <MenuItem value="101">Flat No</MenuItem>
+//                 </Select>
+//               </FormControl>
+//             </TableCell>
+//             <TableCell sx={{ color: "black", fontWeight: "bold" }}>
+//               <FormControl fullWidth>
+//                 <InputLabel>FLAT NO.</InputLabel>
+//                 <Select
+//                   name="flatNumber"
+//                   value={formData.flatNumber}
+//                   onChange={handleChange}
+//                   label="FLAT NO."
+//                 >
+//                   <MenuItem value="101">Flat No</MenuItem>
                 
-                </Select>
-              </FormControl>
-            </TableCell>
-            <TableCell sx={{ color: "black", fontWeight: "bold" }}>
-              <FormControl fullWidth>
-                <InputLabel>TYPE OF FLAT</InputLabel>
-                <Select
-                  name="flatType"
-                  value={formData.flatType}
-                  onChange={handleChange}
-                  label="TYPE OF FLAT"
-                >
-                  <MenuItem value="2 BHK">TYPE OF FLAT</MenuItem>
+//                 </Select>
+//               </FormControl>
+//             </TableCell>
+//             <TableCell sx={{ color: "black", fontWeight: "bold" }}>
+//               <FormControl fullWidth>
+//                 <InputLabel>TYPE OF FLAT</InputLabel>
+//                 <Select
+//                   name="flatType"
+//                   value={formData.flatType}
+//                   onChange={handleChange}
+//                   label="TYPE OF FLAT"
+//                 >
+//                   <MenuItem value="2 BHK">TYPE OF FLAT</MenuItem>
                  
-                </Select>
-              </FormControl>
-            </TableCell>
-          </TableRow>
-            </TableBody>
-          </Table>
-        </TableContainer>
+//                 </Select>
+//               </FormControl>
+//             </TableCell>
+//           </TableRow>
+//             </TableBody>
+//           </Table>
+//         </TableContainer>
 
        
 
-<Button
-  variant="contained"
-  className="mt-3"
-  color="success"
-  onClick={() => {
-    setShowFirmForm(false);
-    toast.success("details are submitted!", { position: "top-right", autoClose: 3000 });
-  }}
->
-Submit Flat Allotement Info
-</Button>
-      </div>
+// <Button
+//   variant="contained"
+//   className="mt-3"
+//   color="success"
+//   onClick={() => {
+//     setShowFirmForm(false);
+//     toast.success("details are submitted!", { position: "top-right", autoClose: 3000 });
+//   }}
+// >
+// Submit Flat Allotement Info
+// </Button>
+//       </div>
+
+
+<div className="landowner-form mt-4 p-3 border rounded" style={{ backgroundColor: "#f8f9fa", border: "1px solid #ccc" }}>
+      <h5>Flat Allotment Display</h5>
+      <Grid container spacing={2}>
+        <Grid item xs={4}>
+          <FormControl fullWidth>
+            <InputLabel>Project Name</InputLabel>
+            <Select value={selectedProject} onChange={handleProjectChange}>
+              {projects.map((proj) => <MenuItem key={proj} value={proj}>{proj}</MenuItem>)}
+            </Select>
+          </FormControl>
+        </Grid>
+
+        <Grid item xs={4}>
+          <FormControl fullWidth disabled={!selectedProject}>
+            <InputLabel>Landowner Name</InputLabel>
+            <Select value={selectedLandowner} onChange={handleLandownerChange}>
+              {selectedProject && landowners[selectedProject]?.map((owner) => (
+                <MenuItem key={owner.name} value={owner.name}>{owner.name}</MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
+
+        <Grid item xs={4}>
+          <TextField label="Mobile No." fullWidth value={mobileNo} disabled />
+        </Grid>
+
+        <Grid item xs={4}>
+  <TextField
+    type="number"
+    label="No. of Flats Allotted"
+    fullWidth
+    value={noOfFlats}
+    onChange={(e) => {
+      const value = Math.max(1, parseInt(e.target.value, 10) || 0); // Ensure at least 1
+      setNoOfFlats(value);
+      generateTableRows(value); // Update table rows dynamically
+    }}
+  />
+</Grid>
+
+      </Grid>
+
+      <h4 className="pt-3">Flat Details</h4>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableRow sx={{ bgcolor: "primary.main" }}>
+              {["RERA CARPET AREA (SQ FT)", "WING", "FLAT NO.", "TYPE OF FLAT"].map((col) => (
+                <TableCell key={col} sx={{ color: "white", fontWeight: "bold" }}>{col}</TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {tableRows.map((row, index) => (
+              <TableRow key={index}>
+                <TableCell>
+                  <FormControl fullWidth>
+                    <InputLabel>RERA CARPET AREA (SQ FT)</InputLabel>
+                    <Select value={row.area} onChange={(e) => handleRowChange(index, "area", e.target.value)}>
+                      
+                    </Select>
+                  </FormControl>
+                </TableCell>
+                <TableCell>
+                  <FormControl fullWidth>
+                    <InputLabel>WING</InputLabel>
+                    <Select value={row.wing} onChange={(e) => handleRowChange(index, "wing", e.target.value)}>
+                      {/* <MenuItem value="A">A</MenuItem> */}
+                     
+                    </Select>
+                  </FormControl>
+                </TableCell>
+                <TableCell>
+                  <FormControl fullWidth>
+                    <InputLabel>FLAT NO.</InputLabel>
+                    <Select value={row.flatNo} onChange={(e) => handleRowChange(index, "flatNo", e.target.value)}>
+                     
+                    </Select>
+                  </FormControl>
+                </TableCell>
+                <TableCell>
+                  <FormControl fullWidth>
+                    <InputLabel>TYPE OF FLAT</InputLabel>
+                    <Select value={row.flatType} onChange={(e) => handleRowChange(index, "flatType", e.target.value)}>
+                     
+                    </Select>
+                  </FormControl>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+
+      <Button
+        variant="contained"
+        className="mt-3"
+        color="success"
+        onClick={() => {
+          toast.success("Details are submitted!", { position: "top-right", autoClose: 3000 });
+        }}
+      >
+        Submit Flat Allotment Info
+      </Button>
+    </div>
     )}
   </div>
 )}
