@@ -13,7 +13,9 @@ import { ToastContainer, toast } from 'react-toastify';
 import FollowupHistoryTable from './FollowupHistoryTable';
 import UndefinedTable from './UndefinedTable';
 import BookedTable from './BookedTable';
+import autoTable from "jspdf-autotable";
 
+import { jsPDF } from "jspdf";
 import Lostleadstable from "./Lostleadstable";
 const sections = [
     { label: "Pending Follow Up", icon: <FaBuilding size={20} />, createLabel: "Create Firm" },
@@ -485,6 +487,49 @@ const LostLeads = () => {
         setClosingExecutive(event.target.value);
       };
     
+
+    
+      const handleDownloadPDFNew = () => {
+        console.log("Loans data before mapping:", loans);
+    
+        const doc = new jsPDF("landscape");
+        doc.setFontSize(14);
+        doc.text("Follow-up Report", 14, 15);
+    
+        // Updated columns as per the request
+        const tableColumn = [
+            "LAST FOLLOW UP", "STATUS", "REMARK", "NEXT FOLLOW UP", "ASSIGN TO",
+            "LEAD NO.", "NAME", "MOBILE NO.", "YOU ARE LOOKING FOR?", "EMAIL", "SOURCE NAME"
+        ];
+    
+        // Map data into table rows
+        const tableRows = loans.map(row => [
+            row.lastFollowUp || "-",
+            row.status || "-",
+            row.remark || "-",
+            row.nextFollowUp || "-",
+            row.assignTo || "-",
+            row.leadNo || "-",
+            row.name || "-",
+            row.mobile || "-",
+            row.lookingFor || "-",
+            row.email || "-",
+            row.sourceName || "-"
+        ]);
+    
+        console.log("Formatted Table Rows:", tableRows);
+    
+        autoTable(doc, {
+            startY: 25,
+            head: [tableColumn],
+            body: tableRows,
+            styles: { fontSize: 10, cellPadding: 3 },
+            headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+        });
+    
+        doc.save("FollowUP_Report.pdf");
+    };
+    
     return (
       <div className="main-content">
         <h6>Sales Module / Lost Leads Follow Up Management</h6>
@@ -495,19 +540,7 @@ const LostLeads = () => {
   
   
         <div className="d-flex align-items-center mb-3">
-          {/* {sections.map((section, index) => (
-            <Button
-              key={index}
-              onClick={() => handleToggleSection(index)}
-              variant="outlined"
-              color="success"
-              className='m-3'
-              style={{ borderRadius: '20px' }}
-              startIcon={<FaEye size={20} color="#28a745" />}
-            >
-              {expandedSection === index ? section.label : null}
-            </Button>
-          ))} */}
+        
 {sections.map((section, index) => (
   <Button
     key={index}
@@ -545,6 +578,7 @@ const LostLeads = () => {
       {!showFirmForm ? (
         <>
           <div className='button-container'>
+            <div className='d-flex gap-3'>
             <Button 
               variant="contained" 
               color="primary" 
@@ -555,6 +589,33 @@ const LostLeads = () => {
               + New Follow UP
             </Button>
   
+            <Button
+    variant="contained"
+    sx={{
+      background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+      color: "white",
+      fontWeight: "bold",
+      textTransform: "none",
+      padding: "8px 16px",
+      borderRadius: "8px",
+      display: "flex",
+      alignItems: "center",  // Align icon and text
+      gap: "8px",  // Space between icon and text
+      "&:hover": {
+        background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+      },
+     
+    }}
+    // onClick={() => handledow(firms)}
+    onClick={handleDownloadPDFNew}
+  >
+    <FaFileDownload size={18} />  {/* Added download icon */}
+    Download PDF
+  </Button>
+
+            </div>
+          
+
           
             <div className="right-buttons">
               <Button variant="contained" color="secondary" onClick={handlePrevious}>

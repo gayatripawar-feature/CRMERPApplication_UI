@@ -558,19 +558,19 @@ const LeadsFollowUp = () => {
   
       const doc = new jsPDF("landscape");
       doc.setFontSize(14);
-      doc.text("Pending Follow-up Report", 14, 15);
+      doc.text("Pending Follow-up Report", 14, 15); 
   
       // Columns for the first page
       const firstPageColumns = [
           "STATUS HISTORY", "REMARK HISTORY", "ASSIGN TO HISTORY", "LEAD DAYS", "TIMESTAMP", 
-          "ENQUIRY NO", "LEAD NO.", "SALES EXECUTIVE NAME", "NAME", "MOBILE"
+          "ENQUIRY NO", "LEAD NO.", "SALES EXECUTIVE NAME", "NAME", "MOBILE","WHATSAPP NO."
       ];
   
       // Columns for the second page
       const secondPageColumns = [
-          "WHATSAPP NO.", "ALTERNATE CONTACT NO.", "EMAIL", "ADDRESS", "OCCUPATION", "COMPANY", 
+         "EMAIL", "ADDRESS", "OCCUPATION", "COMPANY", 
           "INTERESTED IN", "BUDGET (APPROX.)", "REASON FOR PURCHASE", "REFERENCE BY / SOURCE", 
-          "NAME OF CP (IF CHANNEL PARTNER)", "PLANNING TO BUY WITHIN?", "CUSTOMER FEEDBACK & COMPLETE FOLLOWUP DETAILS"
+          "NAME OF CP ", "PLANNING TO BUY WITHIN?", "CUSTOMER FEEDBACK"
       ];
   
       // Limit the number of rows to fit within 2 pages
@@ -638,8 +638,92 @@ const LeadsFollowUp = () => {
       doc.save("Followup_History_Report.pdf");
   };
   
-  
-  
+
+ 
+
+  const handleDownloadPDFUndefined = () => {
+    const doc = new jsPDF("landscape");
+    doc.setFontSize(14);
+    doc.text("Pending Follow-up Report", 14, 15); 
+
+    // Merged columns for a single page
+    const tableColumns = [
+        "STATUS HISTORY", "REMARK HISTORY", "LEAD NO", "NAME", "MOBILE NO.",
+        "YOU ARE LOOKING FOR?", "EMAIL", "SOURCE NAME"
+    ];
+
+    // Limit the number of rows to fit within one page
+    const maxRowsPerPage = 15;
+    const totalRows = Math.min(loans.length, maxRowsPerPage);
+
+    // Mapping data for the table
+    const tableRows = loans.slice(0, totalRows).map(row => [
+        row.statusHistory || "-",
+        row.remarkHistory || "-",
+        row.leadNo || "-",
+        row.name || "-",
+        row.mobile || "-",
+        row.lookingFor || "-",
+        row.email || "-",
+        row.sourceName || "-"
+    ]);
+
+    console.log("Formatted Table Rows:", tableRows);
+
+    // Generate the table on a single page
+    autoTable(doc, {
+        startY: 25,
+        head: [tableColumns],
+        body: tableRows,
+        styles: { fontSize: 10, cellPadding: 3 },
+        headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+        margin: { top: 20 }
+    });
+
+    doc.save("Undefined_Report.pdf");
+};
+
+const handleDownloadPDFVisit = () => {
+  const doc = new jsPDF("landscape");
+  doc.setFontSize(14);
+  doc.text("Pending Follow-up Report", 14, 15); 
+
+  // Merged columns for a single page
+  const tableColumns = [
+      "TIMESTAMP", "LEAD NO.",  "NAME", "MOBILE NO.",
+      "YOU ARE LOOKING FOR?", "EMAIL", "SOURCE NAME", "LOCATION"
+  ];
+
+  // Limit the number of rows to fit within one page
+  const maxRowsPerPage = 15;
+  const totalRows = Math.min(loans.length, maxRowsPerPage);
+
+  // Mapping data for the table
+  const tableRows = loans.slice(0, totalRows).map(row => [
+      row.statusHistory || "-",
+      row.remarkHistory || "-",
+      row.leadNo || "-",
+      row.name || "-",
+      row.mobile || "-",
+      row.lookingFor || "-",
+      row.email || "-",
+      row.sourceName || "-"
+  ]);
+
+  console.log("Formatted Table Rows:", tableRows);
+
+  // Generate the table on a single page
+  autoTable(doc, {
+      startY: 25,
+      head: [tableColumns],
+      body: tableRows,
+      styles: { fontSize: 10, cellPadding: 3 },
+      headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+      margin: { top: 20 }
+  });
+
+  doc.save("VisitScheduled_Report.pdf");
+};
   
     
     return (
@@ -1000,6 +1084,10 @@ const LeadsFollowUp = () => {
   
   <div className='mt-3'>
  
+ <div>
+ 
+
+ </div>
   <FollowupHistoryTable data={projectData} />
 
   </div>
@@ -1037,6 +1125,32 @@ const LeadsFollowUp = () => {
   <div className='mt-3'>
   {/* <LandownerTable data={projectData} /> */}
   {/* <BookedTable data ={projectData} /> */}
+
+  <div>
+  <Button className='m-2'
+    variant="contained"
+    sx={{
+      background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+      color: "white",
+      fontWeight: "bold",
+      textTransform: "none",
+      padding: "8px 16px",
+      borderRadius: "8px",
+      display: "flex",
+      alignItems: "center",  // Align icon and text
+      gap: "8px",  // Space between icon and text
+      "&:hover": {
+        background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+      },
+     
+    }}
+    // onClick={() => handledow(firms)}
+    onClick={handleDownloadPDFUndefined}
+  >
+    <FaFileDownload size={18} />  
+    Download PDF
+  </Button>
+  </div>
   <UndefinedTable data= {Flatdata} />
   </div>
   </>
@@ -1058,7 +1172,29 @@ const LeadsFollowUp = () => {
         
           
           <div className="button-container">
-
+          <Button
+    variant="contained"
+    sx={{
+      background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+      color: "white",
+      fontWeight: "bold",
+      textTransform: "none",
+      padding: "8px 16px",
+      borderRadius: "8px",
+      display: "flex",
+      alignItems: "center",  // Align icon and text
+      gap: "8px",  // Space between icon and text
+      "&:hover": {
+        background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+      },
+     
+    }}
+    // onClick={() => handledow(firms)}
+    onClick={handleDownloadPDFVisit}
+  >
+    <FaFileDownload size={18} />  {/* Added download icon */}
+    Download PDF
+  </Button>
     </div>
   
   

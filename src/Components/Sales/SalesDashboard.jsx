@@ -34,6 +34,8 @@ const SalesDashboard = () => {
   const [endDate, setEndDate] = useState("");
   const [selectedEmployee, setSelectedEmployee] = useState(""); // Added missing state
   const employeeOptions = ["Shubham Taware ", "Ashwini Khot", "Amol Pawar","Sachin Awale"]; 
+
+  const [dateFilter, setDateFilter] = useState('thisMonth');
   const handleFilter = () => {
     console.log("Filtering from:", startDate, "to", endDate);
   };
@@ -120,8 +122,33 @@ const barData = [
   { name: "Cold", count: 8, color: COLORS[5] },
   { name: "Undefined", count: 6, color: COLORS[6] },
 ];
+const filterEvents = () => {
+  const today = new Date();
+  const filterStart = new Date();
+
+  switch (dateFilter) {
+    case 'today':
+      return events.filter(event => event.date === today.toISOString().split('T')[0]);
+    case 'last7Days':
+      filterStart.setDate(today.getDate() - 7);
+      break;
+    case 'last30Days':
+      filterStart.setDate(today.getDate() - 30);
+      break;
+    case 'thisMonth':
+      filterStart.setDate(1);
+      break;
+    default:
+      return events;
+  }
+
+  return events.filter(event => new Date(event.date) >= filterStart && new Date(event.date) <= today);
+};
 
 
+const handleFilterChange = (filter) => {
+  setDateFilter(filter);
+};
   return (
     <div>
      
@@ -132,37 +159,6 @@ const barData = [
         
 
 
-{/* <Button
-  onClick={() => setSelectedTab(btn.label)}
-  variant="outlined"
-  color={selectedTab === btn.label ? "primary" : "success"}
-  className="m-2"
-  style={{
-    borderRadius: "20px",
-    minWidth: "150px",
-    padding: "6px",
-    display: "flex",  
-    alignItems: "center",  
-    gap: "8px",  
-    backgroundColor: "transparent",
-    border: "none",
-  }}
->
-   <div
-    style={{
-      width: "35px",
-      height: "35px",
-      borderRadius: "50%",
-      backgroundColor: btn.bgColor,
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-    }}
-  >
-    {btn.icon}
-  </div>
-  {btn.label}   
-</Button> */}
 
 <Button
   onClick={() => setSelectedTab(btn.label)}
@@ -207,6 +203,14 @@ const barData = [
       <Box mt={3} p={3} style={{ border: "1px solid #ddd", borderRadius: "10px", maxHeight: "80vh", overflowY: "auto", padding: "10px" }}>
     
 
+      <div className="d-flex justify-content-start gap-2 mb-3 pb-3">
+        <button className={`btn ${dateFilter === 'today' ? 'btn-dark' : 'btn-primary'}`} onClick={() => handleFilterChange('today')}>Today</button>
+        <button className={`btn ${dateFilter === 'last7Days' ? 'btn-dark' : 'btn-primary'}`} onClick={() => handleFilterChange('last7Days')}>Last 7 Days</button>
+        <button className={`btn ${dateFilter === 'last30Days' ? 'btn-dark' : 'btn-primary'}`} onClick={() => handleFilterChange('last30Days')}>Last 30 Days</button>
+        <button className={`btn ${dateFilter === 'thisMonth' ? 'btn-dark' : 'btn-primary'}`} onClick={() => handleFilterChange('thisMonth')}>This Month</button>
+      </div>
+
+
         {selectedTab === "Lead Conversion" && (
           <Box>
          
@@ -244,9 +248,12 @@ const barData = [
             <Box mt={4}>
               
               <TimeSeriesChart />
+           
             </Box>
           </Box>
         )}
+
+
 
 
 
@@ -404,19 +411,16 @@ const barData = [
     </FormControl>
 
     <Box sx={{ maxHeight: '600px', overflowY: 'auto', mb: 2 }}>
-      {/* Denotation (colored boxes above the Pie Chart) */}
+      
       <Box display="flex" justifyContent="space-between" mb={2}>
      
       </Box>
 
-      {/* Pie and Bar Charts */}
       <Box display="flex" justifyContent="space-between" alignItems="center" mt={4}>
        
 
 <Box width="50%">
-        {/* <Typography variant="h6" align="center" gutterBottom>
-          Lead Distribution Overview
-        </Typography> */}
+      
         <Typography variant="h6" align="center" gutterBottom sx={{ fontWeight: 'bold' }}>
   Lead Distribution Overview
 </Typography>
@@ -441,82 +445,6 @@ const barData = [
 
 
 
-
-{/* 
-
- <Box width="50%">
-  <Typography variant="h6" align="center" gutterBottom>
-   Complete Source Metrics Overview
-  </Typography>
-  <ResponsiveContainer width="100%" height={300}>
-    <BarChart
-      data={data}
-      margin={{
-        top: 5,
-        right: 30,
-        left: 20,
-        bottom: 5,
-      }}
-      layout="horizontal"
-    >
-      <XAxis
-        type="number"
-        tick={{ fontSize: 10 }}
-        domain={[0, 'dataMax']}
-      />
-      <YAxis dataKey="name" type="category" tick={{ fontSize: 10 }} />
-      <Tooltip />
-      <Legend />
-
-      
-      <Bar
-        dataKey="Visit Assigned"
-        stackId="stack"
-        fill={COLORS[0]}
-      >
-        <LabelList dataKey="Visit Assigned" position="inside" fill="white" />
-      </Bar>
-
-      <Bar
-        dataKey="Visit Postponed"
-        stackId="stack"
-        fill={COLORS[1]}
-      >
-        <LabelList dataKey="Visit Postponed" position="inside" fill="white" />
-      </Bar>
-
-      <Bar
-        dataKey="Visit Cancelled"
-        stackId="stack"
-        fill={COLORS[2]}
-      >
-        <LabelList dataKey="Visit Cancelled" position="inside" fill="white" />
-      </Bar>
-
-      <Bar
-        dataKey="Re-scheduled"
-        stackId="stack"
-        fill={COLORS[3]}
-      >
-        <LabelList dataKey="Re-scheduled" position="inside" fill="white" />
-      </Bar>
-
-      <Bar
-        dataKey="Visit Done"
-        stackId="stack"
-        fill={COLORS[4]}
-      >
-        <LabelList dataKey="Visit Done" position="inside" fill="white" />
-      </Bar>
-    </BarChart>
-  </ResponsiveContainer>
-  <Box sx={{ mt: 3 }} />
-</Box>  */}
-
-{/* 
-<Box>
-  <SourceMatrics/>
-      </Box> */}
       <Box width="50%">
         <SourceMetrics />
         </Box>

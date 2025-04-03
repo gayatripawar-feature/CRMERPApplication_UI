@@ -16,7 +16,8 @@ import NewLeads from './NewLeads';
 import DisplayEnquiryTable from './DisplayEnquiryTable';
 import {  FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { jsPDF } from "jspdf";
-
+import {  FaFileDownload } from "react-icons/fa";
+import autoTable from "jspdf-autotable";
 
 // API Call Function
 const fetchLoansData = async () => {
@@ -224,6 +225,87 @@ const handleBudgetChange = (event) => {
   };
 
 
+  const handleDownloadPDFLeads = () => {
+    console.log("Loans data before mapping:", loans);
+
+    const doc = new jsPDF("landscape");
+    doc.setFontSize(14);
+    doc.text("Leads Report", 14, 15);
+
+    // Columns for the first page
+    const firstPageColumns = [
+        "Timestamp", "ENQUIRY NO.", "LEAD NO.", "ASSIGN TO", "SALES EXE.",
+        "NAME", "MOBILE No", "EMAIL", "ADDRESS", "OCCUPATION"
+    ];
+
+    // Columns for the second page
+    const secondPageColumns = [
+        "COMPANY", "INTERESTED", "BUDGET", "REASON", "REFERENCE",
+        "NAME OF CP", "PLANNING TO BUY?", "FOLLOWUP DETAILS"
+    ];
+
+    // Limit the number of rows per page
+    const maxRowsPerPage = 15;
+    const totalRows = Math.min(loans.length, maxRowsPerPage * 2);
+
+    // Mapping data for the first page
+    const firstPageRows = loans.slice(0, totalRows).map(row => [
+        row.timestamp || "-",
+        row.enquiryNo || "-",
+        row.leadNo || "-",
+        row.assignTo || "-",
+        row.salesExecutive || "-",
+        row.name || "-",
+        row.mobile || "-",
+        row.email || "-",
+        row.address || "-",
+        row.occupation || "-"
+    ]);
+
+    // Mapping data for the second page
+    const secondPageRows = loans.slice(0, totalRows).map(row => [
+        row.company || "-",
+        row.interested || "-",
+        row.budget || "-",
+        row.reason || "-",
+        row.reference || "-",
+        row.nameOfCP || "-",
+        row.planningToBuy || "-",
+        row.followupDetails || "-"
+    ]);
+
+    console.log("Formatted Table Rows for First Page:", firstPageRows);
+    console.log("Formatted Table Rows for Second Page:", secondPageRows);
+
+    // Generate the first page
+    autoTable(doc, {
+        startY: 25,
+        head: [firstPageColumns],
+        body: firstPageRows,
+        styles: { fontSize: 10, cellPadding: 3 },
+        headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+        margin: { top: 20 }
+    });
+
+    // Add a new page for the remaining columns
+    doc.addPage();
+    doc.text("Leads Report (Continued)", 14, 15);
+
+    // Generate the second page
+    autoTable(doc, {
+        startY: 25,
+        head: [secondPageColumns],
+        body: secondPageRows,
+        styles: { fontSize: 10, cellPadding: 3 },
+        headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+        margin: { top: 20 }
+    });
+
+    doc.save("Leads_Report.pdf");
+};
+
+
+
 
   return (
     <div className="main-content">
@@ -338,10 +420,38 @@ const handleBudgetChange = (event) => {
         <div className="content-container mt-3">
           {!showFirmForm ? (
             <>
+            
               <div className="button-container">
+                <div className='d-flex gap-3'>
                 <Button variant="contained" color="primary" style={{ background: '#272ba8' }} onClick={() => setShowFirmForm(true)}>
                   + New Enquiry
                 </Button>
+
+                <Button
+    variant="contained"
+    sx={{
+      background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+      color: "white",
+      fontWeight: "bold",
+      textTransform: "none",
+      padding: "8px 16px",
+      borderRadius: "8px",
+      display: "flex",
+      alignItems: "center",  // Align icon and text
+      gap: "8px",  // Space between icon and text
+      "&:hover": {
+        background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+      },
+     
+    }}
+    // onClick={() => handledow(firms)}
+    onClick={handleDownloadPDFLeads}
+  >
+    <FaFileDownload size={18} />  {/* Added download icon */}
+    Download PDF
+  </Button>
+                </div>
+              
                 {/* Pagination Buttons */}
                 <div className="right-buttons">
                   <Button variant="contained" color="secondary"  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}>
