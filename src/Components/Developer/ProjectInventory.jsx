@@ -12,7 +12,10 @@ import { Inventory } from '@mui/icons-material';
 import InventoryTable from './InventoryTable';
 // import { toast } from "react-toastify";
 import { ToastContainer, toast } from "react-toastify";
-
+import { FaFileDownload } from "react-icons/fa";
+import { jsPDF } from "jspdf";
+// import "jspdf-autotable";
+import autoTable from "jspdf-autotable";
 
 
 // API Call Function
@@ -35,6 +38,8 @@ const sections = [
 ];
 
 const ProjectInventory = () => {
+
+  const inventoryRef = useRef();
   const [loans, setLoans] = useState([]);
   const [expandedSection, setExpandedSection] = useState(0);
   const [showFirmForm, setShowFirmForm] = useState(false);
@@ -103,6 +108,133 @@ const ProjectInventory = () => {
   };
   
  
+  // const handleDownloadPDFInventory = () => {
+  //   if (!inventoryData || inventoryData.length === 0) {
+  //     console.error("No data available for PDF generation");
+  //     return;
+  //   }
+  
+  //   const doc = new jsPDF({ orientation: "landscape" }); // Landscape mode for more width
+  //   doc.text("Inventory Report", 14, 15);
+  
+  //   const tableColumn = [
+  //     "TIMESTAMP", "PROJECT NAME", "WING", "FLOOR", "FLAT NO",
+  //     "RERA CARPET AREA (Sq Mtr)", "RERA CARPET AREA (Sq Ft)", "TOTAL SALEABLE AREA (Sq. Fts)",
+  //     "SALEABLE RATIO", "UNIT TYPE", "CONFIGURATION", "STATUS", "OWNERSHIP",
+  //     "ATT. TERRACE CARPET AREA", "BALCONY AREA/SITOUT CARPET AREA", "PORCH AREA",
+  //     "TOP TERRACE CARPET AREA", "SUPER BUILTUP AREA", "OPEN/ENCLOSED BALCONY AS SANCTIONED",
+  //     "PODIUM GRADE"
+  //   ];
+  
+  //   const tableRows = inventoryData.map((item) => [
+  //     item.timestamp, item.projectName, item.wing, item.floor, item.flatNo,
+  //     item.reraCarpetAreaSqMtr, item.reraCarpetAreaSqFt, item.totalSaleableAreaSqFt,
+  //     item.saleableRatio, item.unitType, item.configuration, item.status, item.ownership,
+  //     item.attTerraceCarpetArea, item.balconySitoutCarpetArea, item.porchArea,
+  //     item.topTerraceCarpetArea, item.superBuiltupArea, item.openEnclosedBalconySanctioned,
+  //     item.podiumGrade
+  //   ]);
+  
+  //   autoTable(doc, {
+  //     startY: 25,
+  //     head: [tableColumn],
+  //     body: tableRows,
+  //     styles: { fontSize: 6, cellPadding: 1 }, // Reduce font size & padding
+  //     headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+  //     columnStyles: {
+  //       0: { cellWidth: 20 },  // Adjust column widths as needed
+  //       1: { cellWidth: 30 },
+  //       2: { cellWidth: 15 },
+  //       3: { cellWidth: 15 },
+  //       4: { cellWidth: 15 },
+  //       5: { cellWidth: 20 },
+  //       6: { cellWidth: 20 },
+  //       7: { cellWidth: 25 },
+  //       8: { cellWidth: 20 },
+  //       9: { cellWidth: 20 },
+  //       10: { cellWidth: 20 },
+  //       11: { cellWidth: 20 },
+  //       12: { cellWidth: 20 },
+  //       13: { cellWidth: 25 },
+  //       14: { cellWidth: 25 },
+  //       15: { cellWidth: 20 },
+  //       16: { cellWidth: 20 },
+  //       17: { cellWidth: 25 },
+  //       18: { cellWidth: 30 },
+  //       19: { cellWidth: 20 },
+  //     }
+  //   });
+  
+  //   doc.save("Inventory_Report.pdf");
+  // };
+  
+  
+  const handleDownloadPDFInventory = () => {
+    if (!inventoryData || inventoryData.length === 0) {
+      console.error("No data available for PDF generation");
+      return;
+    }
+  
+    const doc = new jsPDF({ orientation: "landscape", unit: "mm", format: "a3" });
+  
+    doc.text("Inventory Report", 14, 15);
+  
+    // Split columns into two groups for better visibility
+    const firstTableColumn = [
+      "TIMESTAMP", "PROJECT NAME", "WING", "FLOOR", "FLAT NO",
+      "RERA CARPET AREA (Sq Mtr)", "RERA CARPET AREA (Sq Ft)", "TOTAL SALEABLE AREA (Sq. Fts)",
+      "SALEABLE RATIO", "UNIT TYPE"
+    ];
+  
+    const secondTableColumn = [
+      "CONFIGURATION", "STATUS", "OWNERSHIP", "ATT. TERRACE CARPET AREA", 
+      "BALCONY AREA/SITOUT CARPET AREA", "PORCH AREA", "TOP TERRACE CARPET AREA", 
+      "SUPER BUILTUP AREA", "OPEN/ENCLOSED BALCONY AS SANCTIONED", "PODIUM GRADE"
+    ];
+  
+    // Create two separate sets of rows
+    const firstTableRows = inventoryData.map((item) => [
+      item.timestamp, item.projectName, item.wing, item.floor, item.flatNo,
+      item.reraCarpetAreaSqMtr, item.reraCarpetAreaSqFt, item.totalSaleableAreaSqFt,
+      item.saleableRatio, item.unitType
+    ]);
+  
+    const secondTableRows = inventoryData.map((item) => [
+      item.configuration, item.status, item.ownership, item.attTerraceCarpetArea,
+      item.balconySitoutCarpetArea, item.porchArea, item.topTerraceCarpetArea,
+      item.superBuiltupArea, item.openEnclosedBalconySanctioned, item.podiumGrade
+    ]);
+  
+    // First Table (First 10 columns)
+    autoTable(doc, {
+      startY: 25,
+      head: [firstTableColumn],
+      body: firstTableRows,
+      styles: { fontSize: 8, cellPadding: 2 },
+      headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+      margin: { top: 20, left: 5, right: 5 }
+    });
+  
+    // Add a page for the next set of columns
+    doc.addPage();
+    doc.text("Inventory Report - Part 2", 14, 15);
+  
+    // Second Table (Remaining 10 columns)
+    autoTable(doc, {
+      startY: 25,
+      head: [secondTableColumn],
+      body: secondTableRows,
+      styles: { fontSize: 8, cellPadding: 2 },
+      headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+      margin: { top: 20, left: 5, right: 5 }
+    });
+  
+    doc.save("Inventory_Report.pdf");
+  };
+   
+  
+
+
   return (
     <div className="main-content">
       <h6>Dashboard / Developer Module / Project Inventory</h6>
@@ -224,9 +356,38 @@ const ProjectInventory = () => {
           {!showFirmForm ? (
             <>
               <div className="button-container">
+                <div className='d-flex gap-3'>
                 <Button variant="contained" color="primary" style={{ background: '#272ba8' }} onClick={() => setShowFirmForm(true)}>
                   + Inventory Info
                 </Button>
+                <Button
+                   variant="contained"
+                   sx={{
+                     background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+                     color: "white",
+                     fontWeight: "bold",
+                     textTransform: "none",
+                     padding: "8px 16px",
+                     borderRadius: "8px",
+                     display: "flex",
+                     alignItems: "center",  // Align icon and text
+                     gap: "8px",  // Space between icon and text
+                     "&:hover": {
+                       background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+                     },
+                   }}
+                   onClick={() => {
+                     console.log("Download PDF button clicked");
+                     handleDownloadPDFInventory();
+                   }}
+               
+                 >
+                   <FaFileDownload size={18} />  {/* Added download icon */}
+                   Download PDF
+                 </Button>
+                </div>
+               
+              
                 {/* Pagination Buttons */}
                 <div className="right-buttons">
                   <Button variant="contained" color="secondary"  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}>
@@ -238,7 +399,8 @@ const ProjectInventory = () => {
                 </div>
               </div>
               <div className="mt-3">
-              <InventoryTable inventoryData={inventoryData} handleDelete={handleDelete} />
+              {/* <InventoryTable inventoryData={inventoryData} handleDelete={handleDelete} /> */}
+              <InventoryTable ref={inventoryRef} inventoryData={inventoryData} handleDelete={handleDelete} />
            </div>
             </>
           ) : (
@@ -368,10 +530,15 @@ const ProjectInventory = () => {
         <div className="content-container mt-3">
           {!showFirmForm ? (
             <>
-              <div className="button-container">
+              <div className="button-container ">
                 <Button variant="contained" color="primary" onClick={() => setShowFirmForm(true)}>
                   + Inventory Info
                 </Button>
+
+                <Button variant="contained" color="primary" onClick={() => setShowFirmForm(true)}>
+                  + Download PDF
+                </Button>
+
                 {/* Pagination Buttons */}
                 <div className="right-buttons">
                   <Button variant="contained" color="secondary" onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}>
@@ -383,7 +550,7 @@ const ProjectInventory = () => {
                 </div>
               </div>
               <div className="mt-3">
-              <InventoryTable inventoryData={inventoryData} handleDelete={handleDelete} />
+              <InventoryTable inventoryData={inventoryData} handleDelete={handleDelete} InventoryRef={InventoryRef}/>
            </div>
             </>
           ) : (

@@ -14,6 +14,11 @@ import {
   TextField,
 } from "@mui/material";
 import { FaEye } from "react-icons/fa";
+import { FaFileDownload } from "react-icons/fa";
+import { jsPDF } from "jspdf";
+
+import autoTable from "jspdf-autotable";
+
 
 const CostSheet = () => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -27,6 +32,92 @@ const CostSheet = () => {
     { reraCarpetArea: "1000", config: "2 BHK" },
     { reraCarpetArea: "1200", config: "3 BHK" },
   ];
+
+
+  const handleDownloadPDFCostSheet = () => {
+    if (!data || data.length === 0) {
+        console.error("No data available to generate the PDF.");
+        return;
+    }
+
+    console.log("Data:", data); // Debugging step to verify the data structure
+
+    const doc = new jsPDF({ orientation: "landscape", unit: "mm", format: "a3" });
+
+    doc.text("Inventory Report", 14, 15);
+
+    // Only the required columns
+    const tableColumns = ["RERA CARPET AREA (SQ FT)", "CONFIG (2 BHK, 3 BHK, 4 BHK)"];
+
+    const tableRows = data.map(item => {
+        console.log("Row Data:", item.reraCarpetArea, item.config); // Debugging step
+        return [item.reraCarpetArea || "N/A", item.config || "N/A"];
+    });
+
+    // Generate table
+    autoTable(doc, {
+        startY: 25,
+        head: [tableColumns],
+        body: tableRows,
+        styles: { fontSize: 10, cellPadding: 2 }, // Increased font size
+        headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+        margin: { top: 20, left: 10, right: 10 }
+    });
+
+    // Generate dynamic filename
+    const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, "_");
+    doc.save(`CostSheet_Report_${timestamp}.pdf`);
+};
+
+const handleDownloadPDFDeveloper = () => {
+  if (!data || data.length === 0) {
+      console.error("No data available to generate the PDF.");
+      return;
+  }
+
+  console.log("Data:", data); // Debugging step to verify the data structure
+
+  const doc = new jsPDF({ orientation: "landscape", unit: "mm", format: "a3" });
+
+  doc.text("Developer Information Report", 14, 15);
+
+  // Updated table columns
+  const tableColumns = [
+      "TIMESTAMP", 
+     
+      "VISIT RATE", 
+      "BOOKING RATE", 
+      "STAMP DUTY"
+  ];
+
+  const tableRows = data.map(item => {
+      console.log("Row Data:", item.timestamp, item.reraCarpetArea, item.config, item.visitRate, item.bookingRate, item.stampDuty); // Debugging step
+      return [
+          item.timestamp || "N/A",
+          item.visitRate || "N/A",
+          item.bookingRate || "N/A",
+          item.stampDuty || "N/A",
+       
+      ];
+  });
+
+  // Generate table
+  autoTable(doc, {
+      startY: 25,
+      head: [tableColumns],
+      body: tableRows,
+      styles: { fontSize: 10, cellPadding: 2 }, // Increased font size
+      headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+      margin: { top: 20, left: 10, right: 10 }
+  });
+
+  // Generate dynamic filename
+  const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, "_");
+  doc.save(`Developer_Report_${timestamp}.pdf`);
+};
+
+
+
 
   return (
     <div className="cost-sheet">
@@ -90,23 +181,7 @@ const CostSheet = () => {
       ) : (
         <>
        
-          {/* <div className="d-flex align-items-center mb-3">
-            <Button
-              onClick={handleToggle}
-              variant="outlined"
-              color="success"
-              className="m-3"
-              style={{
-                borderRadius: "20px",
-                minWidth: isExpanded ? "auto" : "50px",
-                padding: isExpanded ? "6px 16px" : "6px",
-                
-              }}
-              startIcon={<FaEye size={20} color="#28a745" />}
-            >
-              {isExpanded && <span className="text-success">Cost Sheet</span>}
-            </Button>
-          </div> */}
+         
 
 
 <div className="d-flex align-items-center mb-3">
@@ -165,6 +240,7 @@ const CostSheet = () => {
             <h3 style={{ margin: 0 }}>Cost Information</h3>
 
             <div>
+             
               <Button variant="contained" sx={{ mr: 1, backgroundColor: "#6a0dad", color: "white", "&:hover": { backgroundColor: "#4b0082" } }}>
                 Previous
               </Button>
@@ -183,6 +259,33 @@ const CostSheet = () => {
             </div>
           </div>
 
+
+
+            <Button
+                             variant="contained"
+                             sx={{
+                               background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+                               color: "white",
+                               fontWeight: "bold",
+                               textTransform: "none",
+                               padding: "8px 16px",
+                               borderRadius: "8px",
+                               display: "flex",
+                               alignItems: "center",  // Align icon and text
+                               gap: "8px",  // Space between icon and text
+                               "&:hover": {
+                                 background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+                               },
+                             }}
+                             onClick={() => {
+                               console.log("Download PDF button clicked");
+                               handleDownloadPDFCostSheet();
+                             }}
+                         
+                           >
+                             <FaFileDownload size={18} />  {/* Added download icon */}
+                             Download PDF
+                           </Button>
           {/* Table Display */}
           <TableContainer component={Paper} sx={{ mt: 2, boxShadow: 3, borderRadius: 2 }}>
             <Table sx={{ tableLayout: "auto", width: "100%" }}>
@@ -214,6 +317,7 @@ const CostSheet = () => {
 
 <h3 className="pt-5 pb-3">Developer Entries</h3>
 <div className="button-container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+  <div className="d-flex gap-3">
   <Button 
     onClick={handleShowForm} 
     variant="contained" 
@@ -222,6 +326,32 @@ const CostSheet = () => {
   >
    +  Create Developer Info
   </Button>
+  <Button
+                             variant="contained"
+                             sx={{
+                               background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+                               color: "white",
+                               fontWeight: "bold",
+                               textTransform: "none",
+                               padding: "8px 16px",
+                               borderRadius: "8px",
+                               display: "flex",
+                               alignItems: "center",  // Align icon and text
+                               gap: "8px",  // Space between icon and text
+                               "&:hover": {
+                                 background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+                               },
+                             }}
+                             onClick={() => {
+                               console.log("Download PDF button clicked");
+                               handleDownloadPDFDeveloper();
+                             }}
+                         
+                           >
+                             <FaFileDownload size={18} />  {/* Added download icon */}
+                             Download PDF
+                           </Button>
+                           </div>
 
   <div className="right-buttons" style={{ display: 'flex', alignItems: 'center' }}>
     <Button 

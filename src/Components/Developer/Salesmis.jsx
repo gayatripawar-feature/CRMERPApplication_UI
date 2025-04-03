@@ -11,8 +11,11 @@ import {
     TextField,
   } from "@mui/material";
   import { FaEye } from "react-icons/fa";
-
-const Salesmis = () => {
+  import { FaFileDownload } from "react-icons/fa";
+  import { jsPDF } from "jspdf";
+  // import "jspdf-autotable";
+  import autoTable from "jspdf-autotable";
+const Salesmis = (Data) => {
       const [isExpanded, setIsExpanded] = useState(false);
     const [selectedProject, setSelectedProject] = useState("");
     const [selectedWing, setSelectedWing] = useState("");
@@ -44,6 +47,73 @@ const Salesmis = () => {
     
   ];
 
+  const handleDownloadPDFSales_MIS = () => {
+    if (!Data || Data.length === 0) {
+      console.error("No data available for PDF generation");
+      return;
+    }
+  
+    const doc = new jsPDF({ orientation: "landscape", unit: "mm", format: "a3" });
+  
+    doc.text("Sales MIS Report - Page 1", 14, 15);
+  
+    // First set of columns
+    const firstTableColumns = [
+      "TIMESTAMP", "PROJECT NAME", "WING", "FLOOR", "FLAT NO.",
+      "RERA CARPET AREA (SQ MTR)", "RERA CARPET AREA (SQ FT)", "TOTAL SALEABLE AREA (SQ. FTS)",
+      "SALEABLE TO CARPET AREA RATIO (SQ. FTS)", "TYPE OF UNITS (RESIDENTIAL / COMMERCIAL)"
+    ];
+  
+    // Second set of columns
+    const secondTableColumns = [
+      "CONFIG (2 BHK, 3 BHK, 4 BHK)", "STATUS", "CHOOSE OWNER", "SOLD/UNSOLD",
+      "NAME OF THE BUYER", "DATE OF BOOKING", "AGREEMENT VALUE", "AMOUNT RECEIVED",
+      "BALANCE", "% COLLECTIONS"
+    ];
+  
+    // Map data for first table
+    const firstTableRows = Data.map((item) => [
+      item.timestamp, item.projectName, item.wing, item.floor, item.flatNo,
+      item.reraCarpetAreaSqMtr, item.reraCarpetAreaSqFt, item.totalSaleableAreaSqFt,
+      item.saleableToCarpetAreaRatio, item.typeOfUnits
+    ]);
+  
+    // Map data for second table
+    const secondTableRows = Data.map((item) => [
+      item.config, item.status, item.chooseOwner, item.soldUnsold,
+      item.buyerName, item.bookingDate, item.agreementValue, item.amountReceived,
+      item.balance, item.percentageCollections
+    ]);
+  
+    // Generate first table
+    autoTable(doc, {
+      startY: 25,
+      head: [firstTableColumns],
+      body: firstTableRows,
+      styles: { fontSize: 8, cellPadding: 2 },
+      headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+      margin: { top: 20, left: 5, right: 5 }
+    });
+  
+    // Add a second page
+    doc.addPage();
+    doc.text("Sales MIS Report - Page 2", 14, 15);
+  
+    // Generate second table
+    autoTable(doc, {
+      startY: 25,
+      head: [secondTableColumns],
+      body: secondTableRows,
+      styles: { fontSize: 8, cellPadding: 2 },
+      headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+      margin: { top: 20, left: 5, right: 5 }
+    });
+  
+    // Generate dynamic filename
+    const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, "_");
+    doc.save(`SalesMIS_Report_${timestamp}.pdf`);
+  };
+  
 
   const totalPages = Math.ceil(data.length / rowsPerPage);
 
@@ -93,26 +163,43 @@ const Salesmis = () => {
             </select>
           </div>
 
-          
-<Button
-  onClick={handleDownloadPDF}
-  variant="outlined"
-  color="success"
-  className="m-3"
-  style={{ borderRadius: "20px", minWidth: "50px", padding: "6px 16px" }}
-  startIcon={<FaEye size={20} color="#28a745" />}
->
-  <span className="text-success">Download PDF</span>
-</Button>
 
+
+<Button
+  variant="contained"
+  sx={{
+    background: "linear-gradient(45deg, rgb(139, 107, 255), rgb(178, 83, 255))",
+    color: "white",
+    fontWeight: "bold",
+    textTransform: "none",
+    marginTop :"20px",
+    padding: "4px 10px", // Reduced padding
+    fontSize: "12px", // Smaller font size
+    minWidth: "auto", // Prevents extra width
+    height: "30px", // Adjusts button height
+    borderRadius: "6px", // Slightly smaller border radius
+    display: "flex",
+    alignItems: "center", 
+    gap: "4px", // Reduced space between icon and text
+    "&:hover": {
+      background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+    },
+  }}
+  onClick={() => {
+    console.log("Download PDF button clicked");
+    handleDownloadPDFSales_MIS();
+  }}
+>
+  <FaFileDownload size={14} /> {/* Reduced icon size */}
+  Download PDF
+</Button>
 
         </div>
 
         <TableContainer component={Paper} className="pt-2">
     <Table>
         <TableHead>
-            {/* <TableRow sx={{ bgcolor: "primary.main" }}> */}
-            {/* <TableRow sx={{ background: "linear-gradient(180deg, #3621a9 0%,rgb(139, 115, 243) 100%)" }}> */}
+          
              <TableRow sx={{background:"#3621a9"}}>
                 <TableCell  sx={{ color: "white", fontWeight: "bold",whiteSpace: "nowrap" }}>TIMESTAMP</TableCell>
                 <TableCell  sx={{ color: "white", fontWeight: "bold",whiteSpace: "nowrap" }}>PROJECT NAME</TableCell>
@@ -136,6 +223,40 @@ const Salesmis = () => {
                 <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>% COLLECTIONS</TableCell>
             </TableRow>
         </TableHead>
+        <TableBody>
+  {Array.isArray(Data) && Data.length > 0 ? (
+    Data.map((row, index) => (
+      <TableRow key={index}>
+        <TableCell>{row.timestamp || "-"}</TableCell>
+        <TableCell>{row.projectName || "-"}</TableCell>
+        <TableCell>{row.wing || "-"}</TableCell>
+        <TableCell>{row.floor || "-"}</TableCell>
+        <TableCell>{row.flatNo || "-"}</TableCell>
+        <TableCell>{row.reraCarpetAreaSqMtr || "-"}</TableCell>
+        <TableCell>{row.reraCarpetAreaSqFt || "-"}</TableCell>
+        <TableCell>{row.totalSaleableAreaSqFt || "-"}</TableCell>
+        <TableCell>{row.saleableToCarpetAreaRatio || "-"}</TableCell>
+        <TableCell>{row.typeOfUnits || "-"}</TableCell>
+        <TableCell>{row.config || "-"}</TableCell>
+        <TableCell>{row.status || "-"}</TableCell>
+        <TableCell>{row.chooseOwner || "-"}</TableCell>
+        <TableCell>{row.soldUnsold || "-"}</TableCell>
+        <TableCell>{row.buyerName || "-"}</TableCell>
+        <TableCell>{row.bookingDate || "-"}</TableCell>
+        <TableCell>{row.agreementValue || "-"}</TableCell>
+        <TableCell>{row.amountReceived || "-"}</TableCell>
+        <TableCell>{row.balance || "-"}</TableCell>
+        <TableCell>{row.percentageCollections || "-"}</TableCell>
+      </TableRow>
+    ))
+  ) : (
+    <TableRow>
+      <TableCell colSpan={20} align="center">No data available</TableCell>
+    </TableRow>
+  )}
+</TableBody>
+
+  
     </Table>
 </TableContainer>
 

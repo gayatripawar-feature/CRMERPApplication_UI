@@ -61,6 +61,7 @@ const App = () => {
      link.type = "image/png";
      link.rel = "icon";
      link.href = "/unnamed.png"; 
+    
      document.head.appendChild(link);  
    }, []);
   

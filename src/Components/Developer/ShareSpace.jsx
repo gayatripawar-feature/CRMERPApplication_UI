@@ -3,7 +3,7 @@
 
 
 
-import React, { useState } from 'react';
+import React, { useState,useRef } from 'react';
 import { FaProjectDiagram, FaShareAlt, FaEdit, FaEye } from 'react-icons/fa';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
@@ -12,7 +12,9 @@ import FormControl from '@mui/material/FormControl';
 import ListItemText from '@mui/material/ListItemText';
 import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
-
+import { jsPDF } from "jspdf";
+import autoTable from "jspdf-autotable";
+import { FaFileDownload } from "react-icons/fa";
 
 import { Table, TableContainer, TableHead, TableBody, TableRow, TableCell, Paper,IconButton ,Button,Tooltip} from '@mui/material';
 
@@ -73,6 +75,8 @@ const ShareSpace = () => {
     }
   };
 
+  const project_pdf = useRef();
+  const shared_with = useRef();
 
   const handleEdit = (row) => {
     setEditData(row);  
@@ -190,46 +194,82 @@ const MenuProps = {
     pageNumbers.push(i);
   }
 
+
+
+  const handleDownloadPDFProject = () => {
+    if (!currentRows || currentRows.length === 0) {
+        console.error("No data available for PDF generation");
+        return;
+    }
+
+    const doc = new jsPDF("landscape");
+    doc.setFontSize(14);
+    doc.text("Project Share Details Report", 14, 15);
+
+    const tableColumn = [
+        "Timestamp", "Share To", "Type of Document", "Document"
+    ];
+
+    const tableRows = currentRows.map(row => [
+        row.timestamp || "-",
+        row.shareTo || "-",
+        row.documentType || "-",
+        row.document || "-"
+    ]);
+
+    autoTable(doc, {
+        startY: 25,
+        head: [tableColumn],
+        body: tableRows,
+        styles: { fontSize: 10, cellPadding: 3 },
+        headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+    });
+
+    doc.save("Project_Share_Details_Report.pdf");
+};
+
+
+const handleDownloadPDFShared = () => {
+  if (!currentRows || currentRows.length === 0) {
+      console.error("No data available for PDF generation");
+      return;
+  }
+
+  const doc = new jsPDF("landscape");
+  doc.setFontSize(14);
+  doc.text("Project Share Details Report", 14, 15);
+
+  const tableColumn = [
+      "Shared From", "Timestamp", "Share To", "Type of Document", "Document"
+  ];
+
+  const tableRows = currentRows.map(row => [
+      row.sharedFrom || "-",
+      row.timestamp || "-",
+      row.shareTo || "-",
+      row.documentType || "-",
+      row.document || "-"
+  ]);
+
+  autoTable(doc, {
+      startY: 25,
+      head: [tableColumn],
+      body: tableRows,
+      styles: { fontSize: 10, cellPadding: 3 },
+      headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+  });
+
+  doc.save("Project_Share_Details_Report.pdf");
+};
+
   return (
     <div className="container my-4">
       <h2 className="fs-6 mb-3">Developer Module / Share Space</h2>
 
     
-      {/* <div className="d-flex align-items-center gap-4">
-        
-        <div
-          className="d-flex align-items-center gap-2 p-2"
-          onClick={() => handleToggle('project')}
-          style={{
-            cursor: 'pointer',
-            borderRadius: '20px',
-            background: activeIcon === 'project' ? '#f8f9fa' : 'transparent',
-          }}
-        >
-          <div className="d-flex justify-content-center align-items-center rounded-circle bg-white p-2 shadow">
-            <FaProjectDiagram size={26} color="#ff5733" />
-          </div>
-          {activeIcon === 'project' && <span>Project Display</span>}
-        </div>
-
       
-        <div
-          className="d-flex align-items-center gap-2 p-2"
-          onClick={() => handleToggle('shared')}
-          style={{
-            cursor: 'pointer',
-            borderRadius: '20px',
-            background: activeIcon === 'shared' ? '#f8f9fa' : 'transparent',
-          }}
-        >
-          <div className="d-flex justify-content-center align-items-center rounded-circle bg-white p-2 shadow">
-            <FaShareAlt size={26} color="#28a745" />
-          </div>
-          {activeIcon === 'shared' && <span>Shared With Me</span>}
-        </div>
-      </div> */}
       <div className="d-flex align-items-center gap-4">
-  {/* Project Display Button */}
+ 
   <div
     className="d-flex align-items-center gap-2 p-2"
     onClick={() => handleToggle('project')}
@@ -298,6 +338,7 @@ const MenuProps = {
   
 
 {activeIcon === "project" && (
+  <div className='d-flex gap-2'>
   <Button 
     variant="contained" 
     onClick={handleOutShare} 
@@ -305,7 +346,55 @@ const MenuProps = {
   >
     Out Share
   </Button>
+  <Button
+      variant="contained"
+      sx={{
+        background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+        color: "white",
+        fontWeight: "bold",
+        textTransform: "none",
+        padding: "8px 16px",
+        borderRadius: "8px",
+        display: "flex",
+        alignItems: "center",  // Align icon and text
+        gap: "8px",  // Space between icon and text
+        "&:hover": {
+          background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+        },
+       
+      }}
+      // onClick={() => handledow(firms)}
+      onClick={handleDownloadPDFProject}
+    >
+      <FaFileDownload size={18} />  {/* Added download icon */}
+      Download PDF
+    </Button>
+</div>
 )}
+
+{activeIcon === "shared" && (
+  <Button
+    variant="contained"
+    sx={{
+      background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+      color: "white",
+      fontWeight: "bold",
+      textTransform: "none",
+      padding: "8px 16px",
+      borderRadius: "8px",
+      display: "flex",
+      alignItems: "center", // Align icon and text
+      gap: "8px", // Space between icon and text
+      "&:hover": {
+        background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+      },
+    }}
+    onClick={handleDownloadPDFShared} // Corrected onClick syntax
+  >
+    Download PDF
+  </Button>
+)}
+
 
 
         {/* Pagination Controls */}
@@ -559,7 +648,7 @@ const MenuProps = {
 )} */}
 
 {showProjectTable && activeIcon === 'project' && !isEditing && (
-  <div className='mt-4'>
+  <div className='mt-4' ref={project_pdf}>
     <TableContainer component={Paper} className="mt-4">
       <Table>
         <TableHead style={{ backgroundColor: '#3621a9' }}>
@@ -763,8 +852,18 @@ const MenuProps = {
 
 
 {activeIcon === 'shared' && (
-  <div className="mt-4">
-   
+
+  <div className="mt-4" useRef = {shared_with}>
+      {/* <Button
+            variant="contained"
+            color="primary"
+            startIcon={<FaFileDownload />}
+            onClick={handleDownloadPDFShared}
+            sx={{ marginBottom: 2 }}
+          >
+            Download PDF
+          </Button> */}
+
 <TableContainer component={Paper}>
       <Table>
         <TableHead>
