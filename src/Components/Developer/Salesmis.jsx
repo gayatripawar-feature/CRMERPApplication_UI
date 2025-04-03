@@ -21,7 +21,7 @@ const Salesmis = (Data) => {
     const [selectedWing, setSelectedWing] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const [rowsPerPage, setRowsPerPage] = useState(10);
- 
+    // const [data, setData] = useState([]);
     const projects = [
         "Shubh Arambh", "Shubh Elara", "Infini", "Serenity", 
         "Prime", "PYB", "Onella Tower", "Aradhyam", "Stella"
@@ -42,48 +42,116 @@ const Salesmis = (Data) => {
       };
 
    
+  // const data = [
+  //   { id: 1, timestamp: "2025-03-01", project: "Shubh Arambh", wing: "Wing 1", floor: 5, flatNo: "501", reraCarpetAreaMtr: 100, reraCarpetAreaFt: 1076, totalSaleableArea: 1500, saleableToCarpetAreaRatio: 1.4, type: "Residential", config: "2 BHK", status: "Sold", owner: "John Doe", soldStatus: "Sold", buyerName: "John Doe", bookingDate: "2025-01-15", agreementValue: 5000000, amountReceived: 2000000, balance: 3000000, percentCollections: 40 },
+    
+  // ];
+
   const data = [
     { id: 1, timestamp: "2025-03-01", project: "Shubh Arambh", wing: "Wing 1", floor: 5, flatNo: "501", reraCarpetAreaMtr: 100, reraCarpetAreaFt: 1076, totalSaleableArea: 1500, saleableToCarpetAreaRatio: 1.4, type: "Residential", config: "2 BHK", status: "Sold", owner: "John Doe", soldStatus: "Sold", buyerName: "John Doe", bookingDate: "2025-01-15", agreementValue: 5000000, amountReceived: 2000000, balance: 3000000, percentCollections: 40 },
-    
-  ];
+    { id: 2, timestamp: "2025-03-02", project: "Skyline Heights", wing: "Wing 2", floor: 3, flatNo: "302", reraCarpetAreaMtr: 90, reraCarpetAreaFt: 968, totalSaleableArea: 1400, saleableToCarpetAreaRatio: 1.45, type: "Residential", config: "3 BHK", status: "Available", owner: "N/A", soldStatus: "Unsold", buyerName: "N/A", bookingDate: "-", agreementValue: 0, amountReceived: 0, balance: 0, percentCollections: 0 },
+    { id: 3, timestamp: "2025-03-03", project: "Urban Nest", wing: "Wing A", floor: 6, flatNo: "604", reraCarpetAreaMtr: 85, reraCarpetAreaFt: 915, totalSaleableArea: 1300, saleableToCarpetAreaRatio: 1.52, type: "Residential", config: "2 BHK", status: "Sold", owner: "Emma Watson", soldStatus: "Sold", buyerName: "Emma Watson", bookingDate: "2025-02-01", agreementValue: 4500000, amountReceived: 2500000, balance: 2000000, percentCollections: 55 },
+    { id: 4, timestamp: "2025-03-04", project: "Sunrise Residency", wing: "Wing B", floor: 4, flatNo: "402", reraCarpetAreaMtr: 110, reraCarpetAreaFt: 1184, totalSaleableArea: 1600, saleableToCarpetAreaRatio: 1.35, type: "Residential", config: "3 BHK", status: "Available", owner: "N/A", soldStatus: "Unsold", buyerName: "N/A", bookingDate: "-", agreementValue: 0, amountReceived: 0, balance: 0, percentCollections: 0 },
+    { id: 5, timestamp: "2025-03-05", project: "Emerald Towers", wing: "Wing C", floor: 2, flatNo: "203", reraCarpetAreaMtr: 95, reraCarpetAreaFt: 1022, totalSaleableArea: 1450, saleableToCarpetAreaRatio: 1.4, type: "Residential", config: "2 BHK", status: "Sold", owner: "Michael Smith", soldStatus: "Sold", buyerName: "Michael Smith", bookingDate: "2025-02-10", agreementValue: 4200000, amountReceived: 3000000, balance: 1200000, percentCollections: 71 },
+  ,
+  { id: 5, timestamp: "2025-03-05", project: "Emerald Towers", wing: "Wing C", floor: 2, flatNo: "203", reraCarpetAreaMtr: 95, reraCarpetAreaFt: 1022, totalSaleableArea: 1450, saleableToCarpetAreaRatio: 1.4, type: "Residential", config: "2 BHK", status: "Sold", owner: "Michael Smith", soldStatus: "Sold", buyerName: "Michael Smith", bookingDate: "2025-02-10", agreementValue: 4200000, amountReceived: 3000000, balance: 1200000, percentCollections: 71 },
+  ]
+  
+  // Generate 15 more entries dynamically
+  for (let i = 6; i <= 20; i++) {
+    data.push({
+      id: i,
+      timestamp: `2025-03-${i < 10 ? "0" + i : i}`,
+      project: `Project ${i}`,
+      wing: `Wing ${String.fromCharCode(64 + (i % 4) + 1)}`, // A, B, C, D looping
+      floor: (i % 10) + 1,
+      flatNo: `${i}0${i % 5}`,
+      reraCarpetAreaMtr: 80 + (i % 20),
+      reraCarpetAreaFt: 860 + (i % 200),
+      totalSaleableArea: 1300 + (i % 300),
+      saleableToCarpetAreaRatio: (1.3 + (i % 5) * 0.1).toFixed(2),
+      type: "Residential",
+      config: `${(i % 3) + 2} BHK`,
+      status: i % 2 === 0 ? "Sold" : "Available",
+      owner: i % 2 === 0 ? `Owner ${i}` : "N/A",
+      soldStatus: i % 2 === 0 ? "Sold" : "Unsold",
+      buyerName: i % 2 === 0 ? `Buyer ${i}` : "N/A",
+      bookingDate: i % 2 === 0 ? `2025-02-${i < 10 ? "0" + (i - 1) : i - 1}` : "-",
+      agreementValue: i % 2 === 0 ? 4000000 + i * 10000 : 0,
+      amountReceived: i % 2 === 0 ? 2000000 + i * 5000 : 0,
+      balance: i % 2 === 0 ? 2000000 - i * 5000 : 0,
+      percentCollections: i % 2 === 0 ? Math.min(100, 50 + i) : 0,
+    });
+  }
+  
+  console.log(data); // Check the generated data
+  
+
+  const addSerialNumbers = (data) => {
+    return data.map((item, index) => ({
+      serialNo: index + 1, // Add Serial Number
+      ...item, // Spread existing data
+    }));
+  };
+
+  
 
   const handleDownloadPDFSales_MIS = () => {
-    if (!Data || Data.length === 0) {
+    if (!data || data.length === 0) {
       console.error("No data available for PDF generation");
       return;
     }
+
+  const dataWithSerialNo = addSerialNumbers(data);
   
     const doc = new jsPDF({ orientation: "landscape", unit: "mm", format: "a3" });
   
     doc.text("Sales MIS Report - Page 1", 14, 15);
   
-    // First set of columns
+  
     const firstTableColumns = [
-      "TIMESTAMP", "PROJECT NAME", "WING", "FLOOR", "FLAT NO.",
+      "S.No","TIMESTAMP", "PROJECT NAME", "WING", "FLOOR", "FLAT NO.",
       "RERA CARPET AREA (SQ MTR)", "RERA CARPET AREA (SQ FT)", "TOTAL SALEABLE AREA (SQ. FTS)",
       "SALEABLE TO CARPET AREA RATIO (SQ. FTS)", "TYPE OF UNITS (RESIDENTIAL / COMMERCIAL)"
     ];
   
-    // Second set of columns
+   
     const secondTableColumns = [
-      "CONFIG (2 BHK, 3 BHK, 4 BHK)", "STATUS", "CHOOSE OWNER", "SOLD/UNSOLD",
+     "S.No", "CONFIG (2 BHK, 3 BHK, 4 BHK)", "STATUS", "CHOOSE OWNER", "SOLD/UNSOLD",
       "NAME OF THE BUYER", "DATE OF BOOKING", "AGREEMENT VALUE", "AMOUNT RECEIVED",
       "BALANCE", "% COLLECTIONS"
     ];
   
-    // Map data for first table
-    const firstTableRows = Data.map((item) => [
-      item.timestamp, item.projectName, item.wing, item.floor, item.flatNo,
-      item.reraCarpetAreaSqMtr, item.reraCarpetAreaSqFt, item.totalSaleableAreaSqFt,
-      item.saleableToCarpetAreaRatio, item.typeOfUnits
-    ]);
-  
-    // Map data for second table
-    const secondTableRows = Data.map((item) => [
-      item.config, item.status, item.chooseOwner, item.soldUnsold,
-      item.buyerName, item.bookingDate, item.agreementValue, item.amountReceived,
-      item.balance, item.percentageCollections
-    ]);
+   // Map data for first table (including S.No)
+const firstTableRows = dataWithSerialNo.map((item) => [
+  item.serialNo, // Use serial number here
+  item.timestamp, 
+  item.projectName, 
+  item.wing, 
+  item.floor, 
+  item.flatNo,
+  item.reraCarpetAreaSqMtr, 
+  item.reraCarpetAreaSqFt, 
+  item.totalSaleableAreaSqFt,
+  item.saleableToCarpetAreaRatio, 
+  item.typeOfUnits
+]);
+
+// Map data for second table
+const secondTableRows = dataWithSerialNo.map((item) => [
+  item.serialNo, 
+  item.config, 
+  item.status, 
+  item.chooseOwner, 
+  item.soldUnsold,
+  item.buyerName, 
+  item.bookingDate, 
+  item.agreementValue, 
+  item.amountReceived,
+  item.balance, 
+  item.percentageCollections
+]);
+
   
     // Generate first table
     autoTable(doc, {
@@ -196,69 +264,89 @@ const Salesmis = (Data) => {
 
         </div>
 
-        <TableContainer component={Paper} className="pt-2">
-    <Table>
-        <TableHead>
+        {/* <TableContainer component={Paper} className="pt-2" sx={{ maxHeight: "400px", overflowY: "auto" }}> */}
+        <TableContainer
+  component={Paper}
+  className="pt-2 hide-scrollbar" // Keep only one className
+  sx={{
+    maxHeight: "400px",
+    overflowY: "auto", // Allows vertical scrolling
+    overflowX: "auto", // Allows horizontal scrolling
+    scrollbarWidth: "none", // Hides scrollbar in Firefox
+    msOverflowStyle: "none" // Hides scrollbar in IE/Edge
+  }}
+>
+
+
+    <Table stickyHeader>
+        <TableHead 
+         
+         sx={{
+           position: "sticky",
+           top: 0, // Sticks the header to the top
+           zIndex: 2, // Ensures the header is above table rows
+           backgroundColor: "#3621a9", // Keeps background color visible
+         }}
+        >
           
              <TableRow sx={{background:"#3621a9"}}>
-                <TableCell  sx={{ color: "white", fontWeight: "bold",whiteSpace: "nowrap" }}>TIMESTAMP</TableCell>
-                <TableCell  sx={{ color: "white", fontWeight: "bold",whiteSpace: "nowrap" }}>PROJECT NAME</TableCell>
-                <TableCell  sx={{ color: "white", fontWeight: "bold",whiteSpace: "nowrap" }}>WING</TableCell>
-                <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>FLOOR</TableCell>
-                <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>FLAT NO.</TableCell>
-                <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>RERA CARPET AREA (SQ MTR)</TableCell>
-                <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>RERA CARPET AREA (SQ FT)</TableCell>
-                <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>TOTAL SALEABLE AREA (SQ. FTS)</TableCell>
-                <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>SALEABLE TO CARPET AREA RATIO (SQ. FTS)</TableCell>
-                <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>TYPE OF UNITS (RESIDENTIAL / COMMERCIAL)</TableCell>
-                <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>CONFIG ( 2 BHK, 3 BHK, 4 BHK)</TableCell>
-                <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>STATUS</TableCell>
-                <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>CHOOSE OWNER</TableCell>
-                <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>SOLD/UNSOLD</TableCell>
-                <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>NAME OF THE BUYER</TableCell>
-                <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>DATE OF BOOKING</TableCell>
-                <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>AGREEMENT VALUE</TableCell>
-                <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>AMOUNT RECEIVED</TableCell>
-                <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>BALANCE</TableCell>
-                <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>% COLLECTIONS</TableCell>
+                <TableCell  sx={{ color: "white", fontWeight: "bold",whiteSpace: "nowrap", backgroundColor: "#3621a9 !important"  }}>TIMESTAMP</TableCell>
+                <TableCell  sx={{ color: "white", fontWeight: "bold",whiteSpace: "nowrap", backgroundColor: "#3621a9 !important" }}>PROJECT NAME</TableCell>
+                <TableCell  sx={{ color: "white", fontWeight: "bold",whiteSpace: "nowrap", backgroundColor: "#3621a9 !important" }}>WING</TableCell>
+                <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap", backgroundColor: "#3621a9 !important"}}>FLOOR</TableCell>
+                <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap", backgroundColor: "#3621a9 !important"}}>FLAT NO.</TableCell>
+                <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap", backgroundColor: "#3621a9 !important"}}>RERA CARPET AREA (SQ MTR)</TableCell>
+                <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap", backgroundColor: "#3621a9 !important"}}>RERA CARPET AREA (SQ FT)</TableCell>
+                <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap", backgroundColor: "#3621a9 !important"}}>TOTAL SALEABLE AREA (SQ. FTS)</TableCell>
+                <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap", backgroundColor: "#3621a9 !important"}}>SALEABLE TO CARPET AREA RATIO (SQ. FTS)</TableCell>
+                <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap", backgroundColor: "#3621a9 !important"}}>TYPE OF UNITS (RESIDENTIAL / COMMERCIAL)</TableCell>
+                <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap", backgroundColor: "#3621a9 !important"}}>CONFIG ( 2 BHK, 3 BHK, 4 BHK)</TableCell>
+                <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap", backgroundColor: "#3621a9 !important"}}>STATUS</TableCell>
+                <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap", backgroundColor: "#3621a9 !important"}}>CHOOSE OWNER</TableCell>
+                <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap", backgroundColor: "#3621a9 !important"}}>SOLD/UNSOLD</TableCell>
+                <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap", backgroundColor: "#3621a9 !important"}}>NAME OF THE BUYER</TableCell>
+                <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap", backgroundColor: "#3621a9 !important"}}>DATE OF BOOKING</TableCell>
+                <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap", backgroundColor: "#3621a9 !important"}}>AGREEMENT VALUE</TableCell>
+                <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap", backgroundColor: "#3621a9 !important"}}>AMOUNT RECEIVED</TableCell>
+                <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap", backgroundColor: "#3621a9 !important"}}>BALANCE</TableCell>
+                <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap", backgroundColor: "#3621a9 !important"}}>% COLLECTIONS</TableCell>
             </TableRow>
         </TableHead>
+       
         <TableBody>
-  {Array.isArray(Data) && Data.length > 0 ? (
-    Data.map((row, index) => (
-      <TableRow key={index}>
-        <TableCell>{row.timestamp || "-"}</TableCell>
-        <TableCell>{row.projectName || "-"}</TableCell>
-        <TableCell>{row.wing || "-"}</TableCell>
-        <TableCell>{row.floor || "-"}</TableCell>
-        <TableCell>{row.flatNo || "-"}</TableCell>
-        <TableCell>{row.reraCarpetAreaSqMtr || "-"}</TableCell>
-        <TableCell>{row.reraCarpetAreaSqFt || "-"}</TableCell>
-        <TableCell>{row.totalSaleableAreaSqFt || "-"}</TableCell>
-        <TableCell>{row.saleableToCarpetAreaRatio || "-"}</TableCell>
-        <TableCell>{row.typeOfUnits || "-"}</TableCell>
-        <TableCell>{row.config || "-"}</TableCell>
-        <TableCell>{row.status || "-"}</TableCell>
-        <TableCell>{row.chooseOwner || "-"}</TableCell>
-        <TableCell>{row.soldUnsold || "-"}</TableCell>
-        <TableCell>{row.buyerName || "-"}</TableCell>
-        <TableCell>{row.bookingDate || "-"}</TableCell>
-        <TableCell>{row.agreementValue || "-"}</TableCell>
-        <TableCell>{row.amountReceived || "-"}</TableCell>
-        <TableCell>{row.balance || "-"}</TableCell>
-        <TableCell>{row.percentageCollections || "-"}</TableCell>
-      </TableRow>
-    ))
-  ) : (
-    <TableRow>
-      <TableCell colSpan={20} align="center">No data available</TableCell>
+  {data.map((row, index) => (
+    <TableRow key={index}>
+      <TableCell>{row.timestamp || "-"}</TableCell>
+      <TableCell>{row.project || "-"}</TableCell>
+      <TableCell>{row.wing || "-"}</TableCell>
+      <TableCell>{row.floor || "-"}</TableCell>
+      <TableCell>{row.flatNo || "-"}</TableCell>
+      <TableCell>{row.reraCarpetAreaMtr || "-"}</TableCell>
+      <TableCell>{row.reraCarpetAreaFt || "-"}</TableCell>
+      <TableCell>{row.totalSaleableArea || "-"}</TableCell>
+      <TableCell>{row.saleableToCarpetAreaRatio || "-"}</TableCell>
+      <TableCell>{row.type || "-"}</TableCell>
+      <TableCell>{row.config || "-"}</TableCell>
+      <TableCell>{row.status || "-"}</TableCell>
+      <TableCell>{row.owner || "-"}</TableCell>
+      <TableCell>{row.soldStatus || "-"}</TableCell>
+      <TableCell>{row.buyerName || "-"}</TableCell>
+      <TableCell>{row.bookingDate || "-"}</TableCell>
+      <TableCell>{row.agreementValue || "-"}</TableCell>
+      <TableCell>{row.amountReceived || "-"}</TableCell>
+      <TableCell>{row.balance || "-"}</TableCell>
+      <TableCell>{row.percentCollections || "-"}</TableCell>
     </TableRow>
-  )}
+  ))}
 </TableBody>
+
+
 
   
     </Table>
+   
 </TableContainer>
+
 
 
 

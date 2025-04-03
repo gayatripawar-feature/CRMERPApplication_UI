@@ -437,6 +437,12 @@ import { FaRegAddressCard } from 'react-icons/fa';
 import EditIcon from '@mui/icons-material/Edit';
 import { toast } from 'react-toastify';
 
+import { FaFileDownload } from "react-icons/fa";
+import jsPDF from "jspdf";
+
+import autoTable from "jspdf-autotable";
+
+
 const MarketingModule = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [showForm, setShowForm] = useState(false);
@@ -506,6 +512,50 @@ const MarketingModule = () => {
     setShowForm(true); // Show the form
   };
 
+
+  
+      
+  const handleDownloadPDFMarketing = () => {
+    const doc = new jsPDF("landscape");
+    doc.setFontSize(14);
+    doc.text("Marketing Details Report", 14, 15);
+
+    const tableColumn = [
+        "Timestamp", "Source Name", "Start Date", "End Date",
+        "Expense", "Target", "No. of Leads", "Cost per Lead",
+        "No. of Visit", "Cost per Visit", "No. of Bookings", "Cost per Booking"
+    ];
+
+    const tableRows = marketingData.map(row => [
+        row.timestamp || "-",
+        row.sourceName || "-",
+        row.startDate || "-",
+        row.endDate || "-",
+        row.expense || "-",
+        row.target || "-",
+        row.noOfLeads || "-",
+        row.costPerLead || "-",
+        row.noOfVisit || "-",
+        row.costPerVisit || "-",
+        row.noOfBookings || "-",
+        row.costPerBooking || "-"
+    ]);
+
+    console.log("Formatted Table Rows:", tableRows);
+
+    autoTable(doc, {
+        startY: 25,
+        head: [tableColumn],
+        body: tableRows,
+        styles: { fontSize: 10, cellPadding: 3 },
+        headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+    });
+
+    doc.save("Marketing_Details_Report.pdf");
+};
+
+
+      
   return (
     <div className="p-4 border rounded-lg shadow-md w-96 bg-white">
       <h2 className="fs-6 mb-4">Developer Module / Marketing Management</h2>
@@ -560,7 +610,7 @@ const MarketingModule = () => {
       </div>
 
       {!showForm && (
-        <div>
+        <div className='d-flex gap-3'>
           <button
             className="text-white fw-bold py-2 px-4 rounded border border-info"
             style={{ background: '#272ba8' }}
@@ -568,52 +618,87 @@ const MarketingModule = () => {
           >
             + Create Marketing Info
           </button>
+<Button
+    variant="contained"
+    sx={{
+      background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+      color: "white",
+      fontWeight: "bold",
+      textTransform: "none",
+      padding: "8px 16px",
+      borderRadius: "8px",
+      display: "flex",
+      alignItems: "center",  // Align icon and text
+      gap: "8px",  // Space between icon and text
+      "&:hover": {
+        background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+      },
+     
+    }}
+    // onClick={() => handledow(firms)}
+    onClick={handleDownloadPDFMarketing}
+  >
+    <FaFileDownload size={18} />  {/* Added download icon */}
+    Download PDF
+  </Button>
+        
         </div>
       )}
 
       {!showForm && (
         <div className="mt-4">
+         
           <TableContainer component={Paper} sx={{ mt: 2, boxShadow: 3, borderRadius: 2 }}>
-            <Table>
+          <div 
+  style={{ 
+    maxHeight: "400px", 
+    overflowY: "auto", 
+    overflowX:"auto",
+    scrollbarWidth: "none",  // Firefox: Hide scrollbar
+    msOverflowStyle: "none"  // IE/Edge: Hide scrollbar
+  }} 
+  className="hide-scrollbar"
+>
+            <Table stickyHeader>
               <TableHead>
-                <TableRow sx={{ background: '#3621a9' }}>
-                  <TableCell className="fw-bold" sx={{ color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap' }}>
+                <TableRow sx={{ background: '#3621a9 !important' }}>
+                  <TableCell className="fw-bold" sx={{ color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap' ,   backgroundColor: "#3621a9 !important",}}>
                     ACTION
                   </TableCell>
-                  <TableCell className="fw-bold" sx={{ color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap' }}>
+                  <TableCell className="fw-bold" sx={{ color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap',   backgroundColor: "#3621a9 !important", }}>
                     TIMESTAMP
                   </TableCell>
-                  <TableCell className="fw-bold" sx={{ color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap' }}>
+                  <TableCell className="fw-bold" sx={{ color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap',   backgroundColor: "#3621a9 !important", }}>
                     SOURCE NAME
                   </TableCell>
-                  <TableCell className="fw-bold" sx={{ color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap' }}>
+                  <TableCell className="fw-bold" sx={{ color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap',   backgroundColor: "#3621a9 !important", }}>
                     START DATE
                   </TableCell>
-                  <TableCell className="fw-bold" sx={{ color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap' }}>
+                  <TableCell className="fw-bold" sx={{ color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap' ,   backgroundColor: "#3621a9 !important",}}>
                     END DATE
                   </TableCell>
-                  <TableCell className="fw-bold" sx={{ color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap' }}>
+                  <TableCell className="fw-bold" sx={{ color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap',   backgroundColor: "#3621a9 !important", }}>
                     EXPENSE
                   </TableCell>
-                  <TableCell className="fw-bold" sx={{ color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap' }}>
+                  <TableCell className="fw-bold" sx={{ color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap' ,   backgroundColor: "#3621a9 !important",}}>
                     TARGET
                   </TableCell>
-                  <TableCell className="fw-bold" sx={{ color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap' }}>
+                  <TableCell className="fw-bold" sx={{ color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap',   backgroundColor: "#3621a9 !important", }}>
                     NO. OF LEADS
                   </TableCell>
-                  <TableCell className="fw-bold" sx={{ color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap' }}>
+                  <TableCell className="fw-bold" sx={{ color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap' ,   backgroundColor: "#3621a9 !important",}}>
                     COST PER LEAD
                   </TableCell>
-                  <TableCell className="fw-bold" sx={{ color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap' }}>
+                  <TableCell className="fw-bold" sx={{ color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap',   backgroundColor: "#3621a9 !important", }}>
                     NO OF VISIT
                   </TableCell>
-                  <TableCell className="fw-bold" sx={{ color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap' }}>
+                  <TableCell className="fw-bold" sx={{ color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap' ,   backgroundColor: "#3621a9 !important",}}>
                     COST PER VISIT
                   </TableCell>
-                  <TableCell className="fw-bold" sx={{ color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap' }}>
+                  <TableCell className="fw-bold" sx={{ color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap' ,   backgroundColor: "#3621a9 !important",}}>
                     NO OF BOOKINGS
                   </TableCell>
-                  <TableCell className="fw-bold" sx={{ color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap' }}>
+                  <TableCell className="fw-bold" sx={{ color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap' ,   backgroundColor: "#3621a9 !important",}}>
                     COST PER BOOKING
                   </TableCell>
                 </TableRow>
@@ -653,8 +738,11 @@ const MarketingModule = () => {
                 ))}
               </TableBody>
             </Table>
+
+            </div>
           </TableContainer>
-        </div>
+          </div>
+       
       )}
 
       {showForm && (
