@@ -21,13 +21,10 @@ import { GiHouseKeys } from 'react-icons/gi';      // House keys icon
 import { FaUsers } from 'react-icons/fa';           // Users icon
 
 
-// const sections = [
-//     { label: "Pending Follow Up", icon: <FaBuilding size={20} />, createLabel: "Create Firm" },
-//     { label: "Follow Up History", icon: <FaBuilding size={20} />, createLabel: "Create Project" },
-//     { label: "Undefined", icon: <FaBuilding size={20} />, createLabel: "Create Landowner Info" },
-//     { label: "Visit Scheduled", icon: <FaBuilding size={20} />, createLabel: "Create Flat Allotment Info" },
- 
-//   ];
+import autoTable from "jspdf-autotable";
+
+import { jsPDF } from "jspdf";
+
 
 
 
@@ -512,6 +509,138 @@ const LeadsFollowUp = () => {
     const handleClosingExecutiveChange = (event) => {
         setClosingExecutive(event.target.value);
       };
+
+
+      const handleDownloadPDFPending = () => {
+        console.log("Loans data before mapping:", loans); 
+    
+        const doc = new jsPDF("landscape");
+        doc.setFontSize(14);
+        doc.text("Pending Follow-up Report", 14, 15);
+    
+        // Define new table columns
+        const tableColumn = [
+            "Last Follow Up", "Status", "Remark", "Next Follow Up", 
+            "Assign To", "Lead No.", "Name", "Mobile No. / WhatsApp No.", 
+            "You Are Looking For?", "Email", "Source Name"
+        ];
+    
+        // Map data into rows
+        const tableRows = loans.map(row => [
+            row.lastFollowUp || "-",
+            row.status || "-",
+            row.remark || "-",
+            row.nextFollowUp || "-",
+            row.assignTo || "-",
+            row.leadNo || "-",
+            row.name || "-",
+            row.mobile || "-",
+            row.lookingFor || "-",
+            row.email || "-",
+            row.sourceName || "-"
+        ]);
+    
+        console.log("Formatted Table Rows:", tableRows);
+    
+        autoTable(doc, {
+            startY: 25,
+            head: [tableColumn],
+            body: tableRows,
+            styles: { fontSize: 10, cellPadding: 3 },
+            headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+        });
+    
+        doc.save("PendingFollowup_Report.pdf");
+    };
+    
+    const handleDownloadPDFHistory = () => {
+      console.log("Loans data before mapping:", loans); 
+  
+      const doc = new jsPDF("landscape");
+      doc.setFontSize(14);
+      doc.text("Pending Follow-up Report", 14, 15);
+  
+      // Columns for the first page
+      const firstPageColumns = [
+          "STATUS HISTORY", "REMARK HISTORY", "ASSIGN TO HISTORY", "LEAD DAYS", "TIMESTAMP", 
+          "ENQUIRY NO", "LEAD NO.", "SALES EXECUTIVE NAME", "NAME", "MOBILE"
+      ];
+  
+      // Columns for the second page
+      const secondPageColumns = [
+          "WHATSAPP NO.", "ALTERNATE CONTACT NO.", "EMAIL", "ADDRESS", "OCCUPATION", "COMPANY", 
+          "INTERESTED IN", "BUDGET (APPROX.)", "REASON FOR PURCHASE", "REFERENCE BY / SOURCE", 
+          "NAME OF CP (IF CHANNEL PARTNER)", "PLANNING TO BUY WITHIN?", "CUSTOMER FEEDBACK & COMPLETE FOLLOWUP DETAILS"
+      ];
+  
+      // Limit the number of rows to fit within 2 pages
+      const maxRowsPerPage = 15;
+      const totalRows = Math.min(loans.length, maxRowsPerPage * 2);
+  
+      // Mapping data for the first page
+      const firstPageRows = loans.slice(0, totalRows).map(row => [
+          row.statusHistory || "-",
+          row.remarkHistory || "-",
+          row.assignToHistory || "-",
+          row.leadDays || "-",
+          row.timestamp || "-",
+          row.enquiryNo || "-",
+          row.leadNo || "-",
+          row.salesExecutiveName || "-",
+          row.name || "-",
+          row.mobile || "-"
+      ]);
+  
+      // Mapping data for the second page
+      const secondPageRows = loans.slice(0, totalRows).map(row => [
+          row.whatsappNo || "-",
+          row.alternateContactNo || "-",
+          row.email || "-",
+          row.address || "-",
+          row.occupation || "-",
+          row.company || "-",
+          row.interestedIn || "-",
+          row.budgetApprox || "-",
+          row.reasonForPurchase || "-",
+          row.referenceBySource || "-",
+          row.nameOfCP || "-",
+          row.planningToBuyWithin || "-",
+          row.customerFeedback || "-"
+      ]);
+  
+      console.log("Formatted Table Rows for First Page:", firstPageRows);
+      console.log("Formatted Table Rows for Second Page:", secondPageRows);
+  
+      // Generate the first page
+      autoTable(doc, {
+          startY: 25,
+          head: [firstPageColumns],
+          body: firstPageRows,
+          styles: { fontSize: 10, cellPadding: 3 },
+          headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+          margin: { top: 20 }
+      });
+  
+      // Add a new page for the remaining columns
+      doc.addPage();
+      doc.text("Pending Follow-up Report (Continued)", 14, 15);
+  
+      // Generate the second page
+      autoTable(doc, {
+          startY: 25,
+          head: [secondPageColumns],
+          body: secondPageRows,
+          styles: { fontSize: 10, cellPadding: 3 },
+          headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+          margin: { top: 20 }
+      });
+  
+      doc.save("Followup_History_Report.pdf");
+  };
+  
+  
+  
+  
     
     return (
       <div className="main-content">
@@ -523,19 +652,7 @@ const LeadsFollowUp = () => {
   
   
         <div className="d-flex align-items-center mb-3">
-          {/* {sections.map((section, index) => (
-            <Button
-              key={index}
-              onClick={() => handleToggleSection(index)}
-              variant="outlined"
-              color="success"
-              className='m-3'
-              style={{ borderRadius: '20px' }}
-              startIcon={<FaEye size={20} color="#28a745" />}
-            >
-              {expandedSection === index ? section.label : null}
-            </Button>
-          ))} */}
+        
 
 {sections.map((section, index) => (
   <div 
@@ -616,7 +733,8 @@ const LeadsFollowUp = () => {
       {!showFirmForm ? (
         <>
           <div className='button-container'>
-            <Button 
+           <div className='d-flex gap-3'>
+           <Button 
               variant="contained" 
               color="primary" 
               style={{ background: '#272ba8' }} 
@@ -625,6 +743,30 @@ const LeadsFollowUp = () => {
             >
               + New Follow UP
             </Button>
+            <Button
+    variant="contained"
+    sx={{
+      background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+      color: "white",
+      fontWeight: "bold",
+      textTransform: "none",
+      padding: "8px 16px",
+      borderRadius: "8px",
+      display: "flex",
+      alignItems: "center",  // Align icon and text
+      gap: "8px",  // Space between icon and text
+      "&:hover": {
+        background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+      },
+     
+    }}
+    // onClick={() => handledow(firms)}
+    onClick={handleDownloadPDFPending}
+  >
+    <FaFileDownload size={18} />  {/* Added download icon */}
+    Download PDF
+  </Button>
+           </div>
   
             {/* Previous and Next buttons on the right */}
             <div className="right-buttons">
@@ -665,14 +807,7 @@ const LeadsFollowUp = () => {
         helperText={firmNameError} 
       />
     </Grid>
-    {/* <Grid item xs={6}>
-      <TextField
-        label="Closing Executive"
-        fullWidth
-        variant="outlined"
-      />
-       <Grid container spacing={3}>
-      {/* Closing Executive Field */}
+   
       <Grid item xs={6}>
         <FormControl fullWidth variant="outlined">
           <InputLabel id="closing-executive-label">Closing Executive</InputLabel>
@@ -833,7 +968,31 @@ const LeadsFollowUp = () => {
      
       {!showProjectForm ? (
          <>
+     <div>
+     <Button
+    variant="contained"
+    sx={{
+      background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+      color: "white",
+      fontWeight: "bold",
+      textTransform: "none",
+      padding: "8px 16px",
+      borderRadius: "8px",
+      display: "flex",
+      alignItems: "center",  // Align icon and text
+      gap: "8px",  // Space between icon and text
+      "&:hover": {
+        background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+      },
      
+    }}
+    // onClick={() => handledow(firms)}
+    onClick={handleDownloadPDFHistory}
+  >
+    <FaFileDownload size={18} />  {/* Added download icon */}
+    Download PDF
+  </Button>
+     </div>
   
   
   
@@ -886,299 +1045,7 @@ const LeadsFollowUp = () => {
         <div>
 
         </div>
-  //       <div
-  //         className="landowner-form mt-4 p-3 border rounded"
-         
-  //         style={{
-  //           maxHeight: "500px",
-  //           overflowY: "auto",
-  //           backgroundColor: "#f8f9fa", 
-  //           border: "1px solid #ccc", 
-  //         }}
-  //       >
-  //         <h5>Landowner Details</h5>
-  //         <Grid container spacing={2}>
-           
-  //           <Grid item xs={4}>
-  //         <FormControl fullWidth variant="outlined">
-  //           <InputLabel id="project-name-label">Project Name</InputLabel>
-  //           <Select
-  //             labelId="project-name-label"
-  //             id="project-name-select"
-  //             value={selectedProject}
-  //             onChange={handleChange}
-  //             label="Project Name"
-  //           >
-  //             <MenuItem value="Project Name 1">Project Name 1</MenuItem>
-  //             <MenuItem value="Project Name 121">Project Name 121</MenuItem>
-  //             <MenuItem value="11">11</MenuItem>
-  //             <MenuItem value="PROJECT NAME">PROJECT NAME</MenuItem>
-  //             <MenuItem value="Shubh Elara">Shubh Elara</MenuItem>
-  //             <MenuItem value="Sohan Enterprised">Sohan Enterprised</MenuItem>
-  //           </Select>
-  //         </FormControl>
-  //       </Grid>
-           
-  //                 <Grid item xs={4}>
-  //       <TextField
-  //         label="Mobile No."
-  //         fullWidth
-  //         value={mobileNo}
-  //         onChange={handleMobileNoChange}
-  //         error={!!mobileError} 
-  //         helperText={mobileError} 
-  //       />
-  //     </Grid>
   
-  
-  //           <Grid item xs={4}><TextField label="Landowner Name" fullWidth value={name} onChange={handleNameChange}
-  //            error={!!error} 
-  //            helperText={error}
-  //           /></Grid>
-  //           <Grid item xs={4}><TextField type="number" label="Age" fullWidth /></Grid>
-  //           <Grid item xs={4}><TextField label="Occupation" fullWidth /></Grid>
-       
-  
-           
-  // <Grid item xs={4}>
-  //   <TextField
-  //     label="Mail ID"
-  //     fullWidth
-      
-  //     onChange={handleEmailChange} 
-  //     error={!!emailError} 
-  //     helperText={emailError} 
-  //   />
-  // </Grid>
-  
-  
-  //           <Grid item xs={4}><TextField label="Village" fullWidth /></Grid>
-  //           <Grid item xs={4}><TextField label="District" fullWidth /></Grid>
-  //           <Grid item xs={4}><TextField label="Taluka" fullWidth /></Grid>
-  //           {/* <Grid item xs={4}><TextField label="Name of Bank" fullWidth /></Grid> */}
-  //           <Grid item xs={4}>
-  //         <FormControl fullWidth variant="outlined">
-  //           <InputLabel id="bank-name-label">Name of Bank</InputLabel>
-  //           <Select
-  //             labelId="bank-name-label"
-  //             id="bank-name-select"
-  //             value={selectedBank}
-  //             onChange={handleBankChange}
-  //             label="Name of Bank"
-  //           >
-  //             <MenuItem value="SBI Bank">SBI Bank</MenuItem>
-  //             <MenuItem value="Bank Of Baroda">Bank Of Baroda</MenuItem>
-  //             <MenuItem value="Canara Bank">Canara Bank</MenuItem>
-  //             <MenuItem value="Axis Bank">Axis Bank</MenuItem>
-  //             <MenuItem value="Bank of India">Bank of India</MenuItem>
-  //             <MenuItem value="ICICI Bank">ICICI Bank</MenuItem>
-  //             <MenuItem value="HDFC Bank">HDFC Bank</MenuItem>
-  //             <MenuItem value="Bank of Maharashtra">Bank of Maharashtra</MenuItem>
-  //             <MenuItem value="Central Bank of India">Central Bank of India</MenuItem>
-  //             <MenuItem value="Punjab National Bank">Punjab National Bank</MenuItem>
-  //             <MenuItem value="Bandhan Bank">Bandhan Bank</MenuItem>
-  //             <MenuItem value="Indian Bank">Indian Bank</MenuItem>
-  //             <MenuItem value="IDBI Bank">IDBI Bank</MenuItem>
-  //           </Select>
-  //         </FormControl>
-  //       </Grid>
-  //           <Grid item xs={4}><TextField label="Bank Address" fullWidth /></Grid>
-            
-  //           {/* <Grid item xs={4}><TextField label="Account No." fullWidth /></Grid> */}
-  //           <Grid item xs={4}>
-  //   <TextField
-  //     label="Account No."
-  //     fullWidth
-  //     value={accountNo} // Bind the value of the account number state
-  //     onChange={handleAccountNoChange} // Trigger onChange handler
-  //     error={!!accountNoError} // Show error if there's an accountNoError
-  //     helperText={accountNoError} // Display error message if any
-  //   />
-  // </Grid>
-  
-  //           {/* <Grid item xs={4}><TextField label="IFSC Code" sx={{
-  //       marginTop: "13px",
-        
-  //     }} fullWidth /></Grid> */}
-  //     <Grid item xs={4}>
-  //   <TextField
-  //     label="IFSC Code"
-  //     fullWidth
-  //     value={ifscCode} // Bind the state value for the IFSC code
-  //     onChange={handleIfscCodeChange} // Handle change and validation
-  //     error={!!ifscCodeError} // Show error if there's an error
-  //     helperText={ifscCodeError} // Display error message if any
-  //   />
-  // </Grid>
-  
-  //           {/* <Grid item xs={4}><TextField label="Aadhaar No." fullWidth /></Grid>
-  //           <Grid item xs={4}><TextField label="Residential Address" fullWidth /></Grid>
-  //           <Grid item xs={4}><TextField label="PAN No." fullWidth /></Grid>
-  //           <Grid item xs={4}><TextField label="Light Bill" fullWidth /></Grid> */}
-  //           {/* <Grid item xs={4}>
-  //             <TextField type="file" accept="image/*" />
-  //           </Grid> */}
-  
-  // <Grid item xs={4}>
-  //             <Typography variant="body2" gutterBottom>
-  //               Aadhaar No.
-  //             </Typography>
-  //             <label>
-  //               <Input
-  //                 type="file"
-  //                 style={{ display: "none" }} // Hide the default input
-  //                 id="file-input-aadhaar" // Unique ID for the file input
-  //                 onChange={(e) => handleFileChange(e, "aadhaarFile")} // Handle file selection
-  //               />
-  //               <Button
-  //                 variant="contained"
-  //                 color="light"
-  //                 component="span"
-  //                 // onClick={() => document.getElementById("file-input-aadhaar").click()} // Trigger the file input
-  //               >
-  //                 Choose File
-  //               </Button>
-  //             </label>
-  //             {fileNames.aadhaarFile && (
-  //               <Typography variant="body2" color="textSecondary" style={{ marginTop: "8px" }}>
-  //                 {fileNames.aadhaarFile} {/* Display the selected file name */}
-  //               </Typography>
-  //             )}
-  //           </Grid>
-  
-  
-  
-  //           <Grid item xs={4}>
-  //             <Typography variant="body2" gutterBottom>
-  //             Photo
-  //             </Typography>
-  //             <label>
-  //               <Input
-  //                 type="file"
-  //                 accept="image/*"
-  //                 style={{ display: "none" }} // Hide the default input
-  //                 id="file-input-image" // Unique ID for the file input
-  //                 onChange={(e) => handleFileChange(e, "imageFile")} // Handle file selection
-  //               />
-  //               <Button
-  //                 variant="contained"
-  //                 color="light"
-  //                 component="span"
-  //                 // onClick={() => document.getElementById("file-input-image").click()} // Trigger the file input
-  //               >
-  //                 Choose File
-  //               </Button>
-  //             </label>
-  //             {fileNames.imageFile && (
-  //               <Typography variant="body2" color="textSecondary" style={{ marginTop: "8px" }}>
-  //                 {fileNames.imageFile} {/* Display the selected file name */}
-  //               </Typography>
-  //             )}
-  //           </Grid>
-  
-  
-  //           <Grid item xs={4} sx={{ marginTop: "6px"}}>
-  //             <Typography variant="body2" gutterBottom>
-  //               Residential Address
-  //             </Typography>
-  //             <label>
-  //               <Input
-  //                 type="file"
-  //                 style={{ display: "none" }}
-  //                 id="file-input-address"
-  //                 onChange={(e) => handleFileChange(e, "addressFile")}
-  //               />
-  //               <Button
-  //                 variant="contained"
-  //                 color="light"
-  //                 component="span"
-                 
-  //               >
-  //                 Choose File
-  //               </Button>
-  //             </label>
-  //             {fileNames.addressFile && (
-  //               <Typography variant="body2" color="textSecondary" style={{ marginTop: "8px" }}>
-  //                 {fileNames.addressFile}
-  //               </Typography>
-  //             )}
-  //           </Grid>
-  
-  //           {/* PAN No. File Upload */}
-  //           <Grid item xs={4} sx={{ marginTop: "6px"}}>
-  //             <Typography variant="body2" gutterBottom>
-  //               PAN No.
-  //             </Typography>
-  //             <label>
-  //               <Input
-  //                 type="file"
-  //                 style={{ display: "none" }}
-  //                 id="file-input-pan"
-  //                 onChange={(e) => handleFileChange(e, "panFile")}
-  //               />
-  //               <Button
-  //                 variant="contained"
-  //                 color="light"
-  //                 component="span"
-  //                 // onClick={() => document.getElementById("file-input-pan").click()}
-  //               >
-  //                 Choose File
-  //               </Button>
-  //             </label>
-  //             {fileNames.panFile && (
-  //               <Typography variant="body2" color="textSecondary" style={{ marginTop: "8px" }}>
-  //                 {fileNames.panFile}
-  //               </Typography>
-  //             )}
-  //           </Grid>
-  
-  //           {/* Light Bill File Upload */}
-  //           <Grid item xs={4} sx={{ marginTop: "6px"}}>
-  //             <Typography variant="body2" gutterBottom>
-  //               Light Bill
-  //             </Typography>
-  //             <label>
-  //               <Input
-  //                 type="file"
-  //                 style={{ display: "none" }}
-  //                 id="file-input-lightbill"
-  //                 onChange={(e) => handleFileChange(e, "lightBillFile")}
-  //               />
-  //               <Button
-  //                 variant="contained"
-  //                 color="light"
-  //                 component="span"
-  //                 // onClick={() => document.getElementById("file-input-lightbill").click()}
-  //               >
-  //                 Choose File
-  //               </Button>
-  //             </label>
-  //             {fileNames.lightBillFile && (
-  //               <Typography variant="body2" color="textSecondary" style={{ marginTop: "8px" }}>
-  //                 {fileNames.lightBillFile}
-  //               </Typography>
-  //             )}
-  //           </Grid>
-  
-          
-  //         </Grid>
-  
-     
-  
-         
-          
-  // <Button
-  //   variant="contained"
-  //   className="mt-3"
-  //   color="success"
-  //   onClick={() => {
-  //     setShowFirmForm(false);
-  //     toast.success("details are submitted!", { position: "top-right", autoClose: 3000 });
-  //   }}
-  // >
-  // Submit Landowner Info
-  // </Button>
-  //       </div>
       )}
     </div>
   )}
@@ -1191,21 +1058,7 @@ const LeadsFollowUp = () => {
         
           
           <div className="button-container">
-{/*    
-      <Button variant="contained" color="primary" style={{ background: '#272ba8' }} className='fw-bold'
-      onClick={() => setShowFlatForm(true)}>
-        + Flat Allotment Info
-      </Button> */}
-  
-  
-      {/* <div className="right-buttons">
-        <Button variant="contained" color="secondary" onClick={handlePrevious}>
-          Previous
-        </Button>
-        <Button variant="contained" color="secondary" onClick={handleNext}>
-          Next
-        </Button>
-      </div> */}
+
     </div>
   
   
@@ -1220,69 +1073,7 @@ const LeadsFollowUp = () => {
         <div>
 
         </div>
-  //       <div className="landowner-form mt-4 p-3 border rounded" style={{
-  //         backgroundColor: "#f8f9fa", 
-  //         border: "1px solid #ccc", 
-  //       }}>
-  //         <h5>Flat Allotement Display </h5>
-  //         <Grid container spacing={2}>
-  //           <Grid item xs={4}><TextField label="Project Name" fullWidth /></Grid>
-          
-  //         <Grid item xs={4}><TextField label="Landowner Name" fullWidth value={name} onChange={handleNameChange}
-  //            error={!!error}
-  //            helperText={error}
-  //           /></Grid>
-            
   
-  // <Grid item xs={4}>
-  //       <TextField
-  //         label="Mobile No."
-  //         fullWidth
-  //         value={mobileNo}
-  //         onChange={handleMobileNoChange}
-  //         error={!!mobileError} 
-  //         helperText={mobileError} 
-  //       />
-  //     </Grid>
-  
-  //           <Grid item xs={4}><TextField type="number" label="No. of Flats Alloted" fullWidth /></Grid>
-  //         </Grid>
-  //         <h4 className="pt-3">Flat Details</h4>
-  //         <TableContainer component={Paper}>
-  //           <Table>
-  //             <TableHead>
-  //               <TableRow sx={{ bgcolor: "primary.main" }}>
-  //                 <TableCell  sx={{ color: "white", fontWeight: "bold" }}>RERA CARPET AREA (SQ FT)</TableCell>
-  //                 <TableCell  sx={{ color: "white", fontWeight: "bold" }}>WING</TableCell>
-  //                 <TableCell  sx={{ color: "white", fontWeight: "bold" }}>FLAT NO.</TableCell>
-  //                 <TableCell  sx={{ color: "white", fontWeight: "bold" }}> TYPE OF FLAT</TableCell>
-  //               </TableRow>
-  //             </TableHead>
-  //             <TableBody>
-  //             <TableRow>
-  //             <TableCell><TextField fullWidth variant="outlined" /></TableCell>
-  //         <TableCell><TextField fullWidth variant="outlined" /></TableCell>
-  //         <TableCell><TextField fullWidth variant="outlined" /></TableCell>
-  //         <TableCell><TextField fullWidth variant="outlined" /></TableCell>
-  //       </TableRow>
-  //             </TableBody>
-  //           </Table>
-  //         </TableContainer>
-  
-         
-  
-  // <Button
-  //   variant="contained"
-  //   className="mt-3"
-  //   color="success"
-  //   onClick={() => {
-  //     setShowFirmForm(false);
-  //     toast.success("details are submitted!", { position: "top-right", autoClose: 3000 });
-  //   }}
-  // >
-  // Submit Flat Allotement Info
-  // </Button>
-  //       </div>
       )}
     </div>
   )}

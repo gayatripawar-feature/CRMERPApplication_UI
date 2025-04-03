@@ -15,8 +15,9 @@ import { ToastContainer, toast } from "react-toastify";
 import NewLeads from './NewLeads';
 
 import {  FaChevronDown, FaChevronUp } from "react-icons/fa";
-
-
+import { jsPDF } from "jspdf";
+import { FaFileDownload } from "react-icons/fa";
+import autoTable from "jspdf-autotable";
 
 // API Call Function
 const fetchLoansData = async () => {
@@ -192,6 +193,48 @@ const Leads = () => {
     validateEmail(value);
   };
 
+  const handleDownloadPDFLeads = () => {
+    console.log("Loans data before mapping:", loans);
+  
+    const doc = new jsPDF("landscape");
+    doc.setFontSize(14);
+    doc.text("Leads Report", 14, 15);
+  
+    // Define new table columns
+    const tableColumn = [
+      "Timestamp", "Assign To", "Lead No", "Name", "Mobile / WhatsApp",
+      "Looking For", "Email", "Source Name", "Location"
+    ];
+  
+    // Map data into rows
+    const tableRows = loans.map(row => [
+      row.timestamp || "-",
+      row.assignTo || "-",
+      row.leadNo || "-",
+      row.name || "-",
+      row.mobile || "-",
+      row.lookingFor || "-",
+      row.email || "-",
+      row.sourceName || "-",
+      row.location || "-"
+    ]);
+  
+    console.log("Formatted Table Rows:", tableRows);
+  
+    autoTable(doc, {
+      startY: 25,
+      head: [tableColumn],
+      body: tableRows,
+      styles: { fontSize: 10, cellPadding: 3 },
+      headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+    });
+  
+    doc.save("Leads_Report.pdf");
+  };
+  
+
+
+
 
 
   return (
@@ -330,9 +373,34 @@ const Leads = () => {
           {!showFirmForm ? (
             <>
               <div className="button-container">
+                <div className='d-flex gap-3'>
                 <Button variant="contained" color="primary" style={{ background: '#272ba8' }} onClick={() => setShowFirmForm(true)}>
                   + New Leads
                 </Button>
+                <Button
+    variant="contained"
+    sx={{
+      background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+      color: "white",
+      fontWeight: "bold",
+      textTransform: "none",
+      padding: "8px 16px",
+      borderRadius: "8px",
+      display: "flex",
+      alignItems: "center",  // Align icon and text
+      gap: "8px",  // Space between icon and text
+      "&:hover": {
+        background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+      },
+     
+    }}
+    // onClick={() => handledow(firms)}
+    onClick={handleDownloadPDFLeads}
+  >
+    <FaFileDownload size={18} />  {/* Added download icon */}
+    Download PDF
+  </Button>
+  </div>
                 {/* Pagination Buttons */}
                 <div className="right-buttons">
                   <Button variant="contained" color="secondary"  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}>

@@ -15,7 +15,10 @@ import EditIcon from "@mui/icons-material/Edit";
 import PersonIcon from "@mui/icons-material/Person";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper ,IconButton,Button} from '@mui/material';
 import { FaRegClipboard, FaRegShareSquare } from 'react-icons/fa';
+import { FaFileDownload } from "react-icons/fa";
+import autoTable from "jspdf-autotable";
 
+import { jsPDF } from "jspdf";
 
 const SalesSharespace = () => {
   const [activeIcon, setActiveIcon] = useState('project');
@@ -177,6 +180,67 @@ const [isExpanded, setIsExpanded] = useState(false);
     pageNumbers.push(i);
   }
 
+
+
+
+  
+  const handleDownloadPDFProject = () => {
+    const doc = new jsPDF("landscape");
+    doc.setFontSize(14);
+    doc.text("Firm Details Report", 14, 15);
+  
+    const tableColumn = ["Timestamp", "Share To", "Type of Document"];
+  
+    const tableRows = rows.map(row => [
+      row.timestamp || "",
+      row.shareTo || "",
+      row.typeOfDocument || ""
+    ]);
+  
+    console.log("Formatted Table Rows:", tableRows);
+  
+    autoTable(doc, {
+      startY: 25,
+      head: [tableColumn],
+      body: tableRows,
+      styles: { fontSize: 10, cellPadding: 3 },
+      headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+    });
+  
+    doc.save("Out_Share_displayReport.pdf");
+  };
+  
+
+    
+  const handleDownloadPDFCollect = () => {
+    const doc = new jsPDF("landscape");
+    doc.setFontSize(14);
+    doc.text("Firm Details Report", 14, 15);
+  
+    // Updated column names
+    const tableColumn = ["Shared From", "Timestamp", "Share To", "Type of Document"];
+  
+    const tableRows = rows.map(row => [
+      row.sharedFrom || "",
+      row.timestamp || "",
+      row.shareTo || "",
+      row.typeOfDocument || ""
+    ]);
+  
+    console.log("Formatted Table Rows:", tableRows);
+  
+    autoTable(doc, {
+      startY: 25,
+      head: [tableColumn],
+      body: tableRows,
+      styles: { fontSize: 10, cellPadding: 3 },
+      headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+    });
+  
+    doc.save("Collect_Document_Report.pdf");
+  };
+  
+
   return (
     <div className="container my-4">
       <h2 className="fs-6 mb-3">Developer Module / Share Space</h2>
@@ -222,7 +286,7 @@ const [isExpanded, setIsExpanded] = useState(false);
   }}
 >
      
-      <FaRegClipboard size={26} color="#fff" />
+      <FaRegClipboard size={26} color="black" />
     </div>
     
     {activeIcon === 'project' && <span className='text-white fs-6 fw-bold'>Out Share Display</span>}
@@ -264,7 +328,7 @@ const [isExpanded, setIsExpanded] = useState(false);
       }}
     >
       {/* Icon */}
-      <FaRegShareSquare size={26} color="white" /> 
+      <FaRegShareSquare size={26} color="black" /> 
     </div>
 
  
@@ -287,6 +351,7 @@ const [isExpanded, setIsExpanded] = useState(false);
 
 <div className="d-flex justify-content-between align-items-center mt-4">
   {activeIcon !== 'shared' && (
+    <div className='d-flex gap-3'>
     <button
       className="btn"
       onClick={handleOutShare}
@@ -294,6 +359,30 @@ const [isExpanded, setIsExpanded] = useState(false);
     >
       Out Share
     </button>
+     <Button
+        variant="contained"
+        sx={{
+          background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+          color: "white",
+          fontWeight: "bold",
+          textTransform: "none",
+          padding: "8px 16px",
+          borderRadius: "8px",
+          display: "flex",
+          alignItems: "center",  // Align icon and text
+          gap: "8px",  // Space between icon and text
+          "&:hover": {
+            background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+          },
+         
+        }}
+        // onClick={() => handledow(firms)}
+        onClick={handleDownloadPDFProject}
+      >
+        <FaFileDownload size={18} />  {/* Added download icon */}
+        Download PDF
+      </Button>
+</div>
   )}
 </div>
 
@@ -515,7 +604,36 @@ const [isExpanded, setIsExpanded] = useState(false);
       
       
 {activeIcon === 'shared' && (
+
+<div>
+  
+<Button
+    variant="contained"
+    sx={{
+      background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+      color: "white",
+      fontWeight: "bold",
+      textTransform: "none",
+      padding: "8px 16px",
+      borderRadius: "8px",
+      display: "flex",
+      alignItems: "center",  // Align icon and text
+      gap: "8px",  // Space between icon and text
+      "&:hover": {
+        background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+      },
+     
+    }}
+    // onClick={() => handledow(firms)}
+    onClick={handleDownloadPDFCollect}
+  >
+    <FaFileDownload size={18} />  {/* Added download icon */}
+    Download PDF
+  </Button>
+
+
     <TableContainer component={Paper} className="mt-4">
+
         <Table size="small" aria-label="shared table">
             {/* Table Head */}
             <TableHead>
@@ -553,11 +671,14 @@ const [isExpanded, setIsExpanded] = useState(false);
             </TableBody>
         </Table>
     </TableContainer>
+    </div>
 )}
 
 
       <ToastContainer />
-    </div>
+      </div>
+   
+    
   );
 };
 

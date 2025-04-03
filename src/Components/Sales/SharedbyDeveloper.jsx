@@ -18,7 +18,8 @@ import { jsPDF } from "jspdf";
 // import { FaUsers, FaHome } from 'react-icons/fa'; // FontAwesome
 // import { AiOutlineFileSearch } from 'react-icons/ai'; // AntDesign
 // import { IoIosBuild } from 'react-icons/io'; // Ionicons
-
+import { FaFileDownload } from "react-icons/fa";
+import autoTable from "jspdf-autotable";
 
 import { FaBuilding, FaHome, FaUsers } from 'react-icons/fa';
 import { AiOutlineFileSearch } from 'react-icons/ai'; 
@@ -55,7 +56,7 @@ const sections = [
   { label: "Flat Allotment Display", icon: <MdApartment size={30} color="blue" />, createLabel: "Create Flat Allotment Info" },
 
   // Updated icon for "Download PDF"
-  { label: "Download PDF", icon: <HiOutlineDocumentDownload size={30} color="red" />, createLabel: "" }
+  // { label: "Download PDF", icon: <HiOutlineDocumentDownload size={30} color="red" />, createLabel: "" }
 ];
 
 const tabNames = [ "display", "firm", "landowner","allotement"]; 
@@ -205,80 +206,80 @@ setShowFlatForm(false); // Ensure this is not reset elsewhere if you want the ta
  
 
 
-  const handleDownloadPDF = () => {
-    // Create a new jsPDF instance
-    const doc = new jsPDF();
+  // const handleDownloadPDF = () => {
+  //   // Create a new jsPDF instance
+  //   const doc = new jsPDF();
   
-    // Data you want to add to the PDF
-    const timestamp = new Date().toLocaleDateString();  // Current date (e.g., "3/29/2025")
+  //   // Data you want to add to the PDF
+  //   const timestamp = new Date().toLocaleDateString();  // Current date (e.g., "3/29/2025")
 
-    const projectName = "";
-    const name = "";
-    const mobileNo = "";
-    const flatsAlloted = "";  // Example number of flats allotted
-    const reraCarpetArea = "";  // Example RERA Carpet Area
-    const wing = "";
-    const flatNo = "";
-    const typeOfFlat = "";
+  //   const projectName = "";
+  //   const name = "";
+  //   const mobileNo = "";
+  //   const flatsAlloted = "";  // Example number of flats allotted
+  //   const reraCarpetArea = "";  // Example RERA Carpet Area
+  //   const wing = "";
+  //   const flatNo = "";
+  //   const typeOfFlat = "";
   
-    // Column headers and data
-    const columns = [
-      "Timestamp", "Project Name", "Name", "Mobile No", 
-      "No of Flats Allotted", "RERA Carpet Area", "Wing", "Flat No", "Type of Flat"
-    ];
+  //   // Column headers and data
+  //   const columns = [
+  //     "Timestamp", "Project Name", "Name", "Mobile No", 
+  //     "No of Flats Allotted", "RERA Carpet Area", "Wing", "Flat No", "Type of Flat"
+  //   ];
   
-    const data = [
-      timestamp, projectName, name, mobileNo, 
-      flatsAlloted, reraCarpetArea, wing, flatNo, typeOfFlat
-    ];
+  //   const data = [
+  //     timestamp, projectName, name, mobileNo, 
+  //     flatsAlloted, reraCarpetArea, wing, flatNo, typeOfFlat
+  //   ];
   
-    // Add title to the PDF
-    doc.setFontSize(18);
-    doc.text("Flat Allotment Information", 10, 10);
+  //   // Add title to the PDF
+  //   doc.setFontSize(18);
+  //   doc.text("Flat Allotment Information", 10, 10);
   
-    // Set font for table
-    doc.setFontSize(12);
+  //   // Set font for table
+  //   doc.setFontSize(12);
   
-    // Set column widths (adjust to fit the page width)
-    const columnWidths = [25, 30, 20, 20, 20, 20, 20, 20, 20]; // Adjust these to fit your content
+  //   // Set column widths (adjust to fit the page width)
+  //   const columnWidths = [25, 30, 20, 20, 20, 20, 20, 20, 20]; // Adjust these to fit your content
   
-    // Function to split text into multiple lines if it exceeds column width
-    const splitTextToFit = (text, maxWidth) => {
-      const lines = doc.splitTextToSize(text, maxWidth);
-      return lines;
-    };
-    const rowHeight = 15;  // Row height, increase to add padding inside rows
+  //   // Function to split text into multiple lines if it exceeds column width
+  //   const splitTextToFit = (text, maxWidth) => {
+  //     const lines = doc.splitTextToSize(text, maxWidth);
+  //     return lines;
+  //   };
+  //   const rowHeight = 15;  // Row height, increase to add padding inside rows
 
-  // Extra padding between rows
-  const extraRowSpacing = 5; 
+  // // Extra padding between rows
+  // const extraRowSpacing = 5; 
   
-    // Draw column headers
-    let xPos = 10;
-    let yPos = 40;
+  //   // Draw column headers
+  //   let xPos = 10;
+  //   let yPos = 40;
   
-    columns.forEach((col, index) => {
-      doc.rect(xPos, yPos, columnWidths[index], 20); // Draw a rectangle for header
-      let headerLines = splitTextToFit(col, columnWidths[index] - 4); // Adjusting padding
-      doc.text(headerLines, xPos + 2, yPos + 7); // Add column header text (split if necessary)
-      xPos += columnWidths[index]; // Move x position for next column
-    });
+  //   columns.forEach((col, index) => {
+  //     doc.rect(xPos, yPos, columnWidths[index], 20); // Draw a rectangle for header
+  //     let headerLines = splitTextToFit(col, columnWidths[index] - 4); // Adjusting padding
+  //     doc.text(headerLines, xPos + 2, yPos + 7); // Add column header text (split if necessary)
+  //     xPos += columnWidths[index]; // Move x position for next column
+  //   });
   
-    // Draw data rows
-    xPos = 10;
-    yPos += 20;
+  //   // Draw data rows
+  //   xPos = 10;
+  //   yPos += 20;
   
-    data.forEach((value, index) => {
-      doc.rect(xPos, yPos, columnWidths[index], 10); // Draw a rectangle for data
-      let dataLines = splitTextToFit(value, columnWidths[index] - 4); // Adjusting padding
-      doc.text(dataLines, xPos + 2, yPos + 7); // Add data text (split if necessary)
-      xPos += columnWidths[index]; // Move x position for next column
-    });
+  //   data.forEach((value, index) => {
+  //     doc.rect(xPos, yPos, columnWidths[index], 10); // Draw a rectangle for data
+  //     let dataLines = splitTextToFit(value, columnWidths[index] - 4); // Adjusting padding
+  //     doc.text(dataLines, xPos + 2, yPos + 7); // Add data text (split if necessary)
+  //     xPos += columnWidths[index]; // Move x position for next column
+  //   });
   
-       // Add extra spacing between rows
-       yPos += rowHeight + extraRowSpacing;
-    // Save or download the generated PDF
-    doc.save("Flat_Allotment_Info.pdf");
-  };
+  //      // Add extra spacing between rows
+  //      yPos += rowHeight + extraRowSpacing;
+  //   // Save or download the generated PDF
+  //   doc.save("Flat_Allotment_Info.pdf");
+  // };
   
   const handleAddPartner = () => {
     setPartners([...partners, { name: "", age: "", occupation: "", mobile: "", email: "", address: "", pan: "", aadhaar: "" }]);
@@ -392,8 +393,321 @@ setShowFlatForm(false); // Ensure this is not reset elsewhere if you want the ta
     }
   };
   
+  
+      
+  const handleDownloadPDFFirm = () => {
+    console.log("Loans data before mapping:", loans);
+  
+    const doc = new jsPDF("landscape");
+    doc.setFontSize(14);
+    doc.text("Firm Details Report", 14, 15);
+  
+    // Define columns for the first page
+    const firstPageColumns = [
+      "S.No", "Timestamp", "Firm Name", "Project Name", "Project Address",
+      "Old Survey No", "New Survey No", "Village", "Taluka", "District"
+    ];
+  
+    // Define columns for the second page
+    const secondPageColumns = [
+      "S.No", "Sanction Authority", "East", "West", "North", "South",
+      "Latitude", "Longitude", "Landmark", "Phase No", "Wing No", "MahaRERA No"
+    ];
+  
+    // Map data for first page
+    const firstPageRows = loans.map((row, index) => [
+      index + 1, // Serial Number
+      row.timestamp || "-",
+      row.name || "-",
+      row.projectName || "-",
+      row.projectAddress || "-",
+      row.oldSurveyNumber || "-",
+      row.newSurveyNumber || "-",
+      row.village || "-",
+      row.taluka || "-",
+      row.district || "-"
+    ]);
+  
+    // Map data for second page
+    const secondPageRows = loans.map((row, index) => [
+      index + 1, // Serial Number
+      row.sanctionAuthority || "-",
+      row.east || "-",
+      row.west || "-",
+      row.north || "-",
+      row.south || "-",
+      row.latitude || "-",
+      row.longitude || "-",
+      row.landmark || "-",
+      row.phaseNo || "-",
+      row.wingNo || "-",
+      row.mahaRERANo || "-"
+    ]);
+  
+    console.log("Formatted First Page Rows:", firstPageRows);
+    console.log("Formatted Second Page Rows:", secondPageRows);
+  
+    // Generate first page table
+    autoTable(doc, {
+      startY: 25,
+      head: [firstPageColumns],
+      body: firstPageRows,
+      styles: { fontSize: 10, cellPadding: 3 },
+      headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+    });
+  
+    // Add a new page for additional columns
+    doc.addPage();
+  
+    // Generate second page table
+    autoTable(doc, {
+      startY: 25,
+      head: [secondPageColumns],
+      body: secondPageRows,
+      styles: { fontSize: 10, cellPadding: 3 },
+      headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+    });
+  
+    // Save the PDF
+    doc.save("Project_Display_Report.pdf");
+  };
+  
+  const handleDownloadPDFProject = () => {
+    console.log("Loans data before mapping:", loans);
+  
+    const doc = new jsPDF("landscape");
+    doc.setFontSize(14);
+    doc.text("Project Display Report", 14, 15);
+  
+    // Define columns for the first page
+    const firstPageColumns = [
+      "S.No", "Timestamp", "Firm Name", "Firm Address", "Firm PAN No", "Firm GST No",
+      "Name", "Age", "Occupation"
+    ];
+  
+    // Define columns for the second page
+    const secondPageColumns = [
+      "S.No", "Mobile No.", "Mail ID", "Residential Address", "PAN No", "Aadhaar No"
+    ];
+  
+    // Function to map data into table format
+    const mapLoanData = (row, index, columns) => {
+      return columns.map(column => {
+        if (column === "S.No") return index + 1; // Serial Number
+        return row[getKeyFromColumn(column)] || "-";
+      });
+    };
+  
+    // Helper function to map column names to object keys
+    const getKeyFromColumn = (column) => {
+      const mapping = {
+        "Timestamp": "timestamp",
+        "Firm Name": "firmName",
+        "Firm Address": "firmAddress",
+        "Firm PAN No": "firmPanNo",
+        "Firm GST No": "firmGstNo",
+        "Name": "name",
+        "Age": "age",
+        "Occupation": "occupation",
+        "Mobile No.": "mobileNo",
+        "Mail ID": "mailId",
+        "Residential Address": "residentialAddress",
+        "PAN No": "panNo",
+        "Aadhaar No": "aadhaarNo"
+      };
+      return mapping[column] || column; // Return key from mapping or the same value if not found
+    };
+  
+    const firstPageRows = loans.map((row, index) => mapLoanData(row, index, firstPageColumns));
+    const secondPageRows = loans.map((row, index) => mapLoanData(row, index, secondPageColumns));
+  
+    console.log("Formatted First Page Rows:", firstPageRows);
+    console.log("Formatted Second Page Rows:", secondPageRows);
+  
+    // Generate first page table
+    autoTable(doc, {
+      startY: 25,
+      head: [firstPageColumns],
+      body: firstPageRows,
+      styles: { fontSize: 10, cellPadding: 3 },
+      headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+    });
+  
+    doc.addPage();
+  
+    // Generate second page table
+    autoTable(doc, {
+      startY: 25,
+      head: [secondPageColumns],
+      body: secondPageRows,
+      styles: { fontSize: 10, cellPadding: 3 },
+      headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+    });
+  
+    doc.save("Firm_Display_Report.pdf");
+  };
 
- 
+
+  const handleDownloadPDFLandowner = () => {
+    console.log("Loans data before mapping:", loans);
+  
+    const doc = new jsPDF("landscape");
+    doc.setFontSize(14);
+    doc.text("Landowner Display Report", 14, 15);
+  
+    // Define balanced columns for the first page
+    const firstPageColumns = [
+      "Sr.No", "Timestamp", "Project Name", "Name", "Age", "Occupation", "Mobile No", "Mail ID"
+    ];
+  
+    // Define balanced columns for the second page
+    const secondPageColumns = [
+      "Sr.No", "Village", "Taluka", "District", "Name of Bank", "Bank Address", "Account No", "IFSC Code"
+    ];
+  
+    // Function to map data into table format
+    const mapLoanData = (row, index, columns) => {
+      return columns.map(column => {
+        if (column === "S.No") return index + 1; // Serial Number
+        return row[getKeyFromColumn(column)] || "-";
+      });
+    };
+  
+    // Helper function to map column names to object keys
+    const getKeyFromColumn = (column) => {
+      const mapping = {
+        "Timestamp": "timestamp",
+        "Project Name": "projectName",
+        "Name": "name",
+        "Age": "age",
+        "Occupation": "occupation",
+        "Mobile No": "mobileNo",
+        "Mail ID": "mailId",
+        "Village": "village",
+        "Taluka": "taluka",
+        "District": "district",
+        "Name of Bank": "bankName",
+        "Bank Address": "bankAddress",
+        "Account No": "accountNo",
+        "IFSC Code": "ifscCode"
+      };
+      return mapping[column] || column; // Return key from mapping or the same value if not found
+    };
+  
+    const firstPageRows = loans.map((row, index) => mapLoanData(row, index, firstPageColumns));
+    const secondPageRows = loans.map((row, index) => mapLoanData(row, index, secondPageColumns));
+  
+    console.log("Formatted First Page Rows:", firstPageRows);
+    console.log("Formatted Second Page Rows:", secondPageRows);
+  
+    // Generate first page table
+    autoTable(doc, {
+      startY: 25,
+      head: [firstPageColumns],
+      body: firstPageRows,
+      styles: { fontSize: 10, cellPadding: 3 },
+      headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+    });
+  
+    doc.addPage();
+  
+    // Generate second page table
+    autoTable(doc, {
+      startY: 25,
+      head: [secondPageColumns],
+      body: secondPageRows,
+      styles: { fontSize: 10, cellPadding: 3 },
+      headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+    });
+  
+    // Save the PDF
+    doc.save("Landowner_Display_Report.pdf");
+  };
+  
+  
+  const handleDownloadPDFFlatAllotement = () => {
+    console.log("Loans data before mapping:", loans);
+  
+    const doc = new jsPDF("landscape");
+    doc.setFontSize(14);
+    doc.text("Flat Allotment Display Report", 14, 15);
+  
+    // Define balanced columns for the first page
+    const firstPageColumns = [
+      "Sr.No", "Timestamp", "Project Name", "Landowner Name", "Age", "Occupation", "Mobile No", "Mail ID", 
+      "Village", "Taluka", "District", "Residential Address"
+    ];
+  
+    // Define balanced columns for the second page
+    const secondPageColumns = [
+      "Sr.No", "PAN No", "Aadhaar", "Photo", "Light Bill", "Name of Bank", "Bank Address", "Account No", "IFSC Code"
+    ];
+  
+    // Function to map data into table format
+    const mapLoanData = (row, index, columns) => {
+      return columns.map(column => {
+        if (column === "Sr.No") return index + 1; // Serial Number
+        return row[getKeyFromColumn(column)] || "-";
+      });
+    };
+  
+    // Helper function to map column names to object keys
+    const getKeyFromColumn = (column) => {
+      const mapping = {
+        "Timestamp": "timestamp",
+        "Project Name": "projectName",
+        "Landowner Name": "landownerName",
+        "Age": "age",
+        "Occupation": "occupation",
+        "Mobile No": "mobileNo",
+        "Mail ID": "mailId",
+        "Village": "village",
+        "Taluka": "taluka",
+        "District": "district",
+        "Residential Address": "residentialAddress",
+        "PAN No": "panNo",
+        "Aadhaar": "aadhaar",
+        "Photo": "photo",
+        "Light Bill": "lightBill",
+        "Name of Bank": "bankName",
+        "Bank Address": "bankAddress",
+        "Account No": "accountNo",
+        "IFSC Code": "ifscCode"
+      };
+      return mapping[column] || column; // Return key from mapping or the same value if not found
+    };
+  
+    const firstPageRows = loans.map((row, index) => mapLoanData(row, index, firstPageColumns));
+    const secondPageRows = loans.map((row, index) => mapLoanData(row, index, secondPageColumns));
+  
+    console.log("Formatted First Page Rows:", firstPageRows);
+    console.log("Formatted Second Page Rows:", secondPageRows);
+  
+    // Generate first page table
+    autoTable(doc, {
+      startY: 25,
+      head: [firstPageColumns],
+      body: firstPageRows,
+      styles: { fontSize: 10, cellPadding: 3 },
+      headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+    });
+  
+    doc.addPage();
+  
+    // Generate second page table
+    autoTable(doc, {
+      startY: 25,
+      head: [secondPageColumns],
+      body: secondPageRows,
+      styles: { fontSize: 10, cellPadding: 3 },
+      headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+    });
+  
+    // Save the PDF
+    doc.save("FlatAllotment_Display_Report.pdf");
+  };
+  
+  
   
   return (
 
@@ -408,26 +722,7 @@ setShowFlatForm(false); // Ensure this is not reset elsewhere if you want the ta
 
 
    <div className="d-flex align-items-center mb-3">
-        {/* {sections.map((section, index) => (
-            
-
-          <Button
-            key={index}
-            onClick={() => handleToggleSection(index)}
-            variant="outlined"
-            color="success"
-            className='m-3'
-            // style={{ borderRadius: '20px' }}
-            style={{
-                borderRadius: '20px',
-                border: 'none' 
-              }}
-            startIcon={section.icon}
-            
-          >
-            {expandedSection === index ? section.label : null}
-          </Button>
-        ))} */}
+      
 
 {sections.map((section, index) => (
   <div 
@@ -511,6 +806,29 @@ setShowFlatForm(false); // Ensure this is not reset elsewhere if you want the ta
       <>
         <div className='button-container'>
      
+        <Button
+    variant="contained"
+    sx={{
+      background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+      color: "white",
+      fontWeight: "bold",
+      textTransform: "none",
+      padding: "8px 16px",
+      borderRadius: "8px",
+      display: "flex",
+      alignItems: "center",  // Align icon and text
+      gap: "8px",  // Space between icon and text
+      "&:hover": {
+        background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+      },
+     
+    }}
+    // onClick={() => handledow(firms)}
+    onClick={handleDownloadPDFFirm}
+  >
+    <FaFileDownload size={18} />  {/* Added download icon */}
+    Download PDF
+  </Button>
 
           
         </div>
@@ -535,7 +853,29 @@ setShowFlatForm(false); // Ensure this is not reset elsewhere if you want the ta
     {!showProjectForm ? (
       <>
         <div className="button-container">
-         
+        <Button
+    variant="contained"
+    sx={{
+      background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+      color: "white",
+      fontWeight: "bold",
+      textTransform: "none",
+      padding: "8px 16px",
+      borderRadius: "8px",
+      display: "flex",
+      alignItems: "center",  // Align icon and text
+      gap: "8px",  // Space between icon and text
+      "&:hover": {
+        background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+      },
+     
+    }}
+    // onClick={() => handledow(firms)}
+    onClick={handleDownloadPDFProject}
+  >
+    <FaFileDownload size={18} />  {/* Added download icon */}
+    Download PDF
+  </Button>
         </div>
 
         {/* Only display the table */}
@@ -559,7 +899,29 @@ setShowFlatForm(false); // Ensure this is not reset elsewhere if you want the ta
     {!showLandownerForm ? (
       <>
         <div className="button-container">
-         
+        <Button
+    variant="contained"
+    sx={{
+      background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+      color: "white",
+      fontWeight: "bold",
+      textTransform: "none",
+      padding: "8px 16px",
+      borderRadius: "8px",
+      display: "flex",
+      alignItems: "center",  // Align icon and text
+      gap: "8px",  // Space between icon and text
+      "&:hover": {
+        background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+      },
+     
+    }}
+    // onClick={() => handledow(firms)}
+    onClick={handleDownloadPDFLandowner}
+  >
+    <FaFileDownload size={18} />  {/* Added download icon */}
+    Download PDF
+  </Button>
         </div>
 
     
@@ -577,7 +939,31 @@ setShowFlatForm(false); // Ensure this is not reset elsewhere if you want the ta
   <div className="content-container mt-3">
     {!showFlatForm ? (
       <>
-        
+        <div>
+        <Button
+    variant="contained"
+    sx={{
+      background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+      color: "white",
+      fontWeight: "bold",
+      textTransform: "none",
+      padding: "8px 16px",
+      borderRadius: "8px",
+      display: "flex",
+      alignItems: "center",  // Align icon and text
+      gap: "8px",  // Space between icon and text
+      "&:hover": {
+        background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+      },
+     
+    }}
+    // onClick={() => handledow(firms)}
+    onClick={handleDownloadPDFFlatAllotement}
+  >
+    <FaFileDownload size={18} />  {/* Added download icon */}
+    Download PDF
+  </Button>
+        </div>
         <div className="mt-3">
           <FlatAllotment data={Flatdata} /> 
         </div>
