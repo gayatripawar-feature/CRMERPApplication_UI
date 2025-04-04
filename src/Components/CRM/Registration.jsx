@@ -17,7 +17,11 @@ import { FaRegUser } from 'react-icons/fa';
 import EditIcon from "@mui/icons-material/Edit";
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import { Typography } from '@mui/material';
-
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+import { HomeIcon } from 'lucide-react';
+import { FaFileDownload } from "react-icons/fa";
+import autoTable from "jspdf-autotable";
 
 const fetchLoansData = async () => {
   const response = await fetch('/api/getOCRCollection');
@@ -357,13 +361,55 @@ const handleUpload = (index) => {
     setIsCollapsed(prev => !prev);
   };
 
+
+  const handleDownloadPDFRegistration = () => {
+    console.log("Loans data before mapping:", loans); // Use loans instead of firms
+  
+   
+  
+    const doc = new jsPDF("landscape");
+    doc.setFontSize(14);
+    doc.text("Firm Details Report", 14, 15);
+  
+    const tableColumn = [
+      "Timestamp", "Firm Name", "Firm Address", "Firm PAN No",
+      "Firm GST No", "Residential Address", "PAN No", "Aadhaar No",
+      "Photo", "Light Bill"
+    ];
+  
+    const tableRows = loans.map(row => [
+      row.timestamp || "-",
+      row.name || "-",
+      row.address || "-",
+      row.firmPanNo || "-",
+      row.firmGstNo || "-",
+      row.residentialAddress || "-",
+      row.panNo || "-",
+      row.aadhaarNo || "-",
+      row.photo || "-",
+      row.lightBill || "-"
+    ]);
+  
+    console.log("Formatted Table Rows:", tableRows);
+  
+    autoTable(doc, {
+      startY: 25,
+      head: [tableColumn],
+      body: tableRows,
+      styles: { fontSize: 10, cellPadding: 3 },
+      headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+    });
+  
+    doc.save("Registration_Report.pdf");
+  };
+
   return (
     <div className="main-content">
       <h6 className='mb-3'>Sales Module / Registration Management</h6>
 
      
      
-   
+   <div className='d-flex gap-3'>
 
 
      
@@ -416,6 +462,36 @@ const handleUpload = (index) => {
       {isExpanded && "Registration"}
     </Button>
 
+       <Button
+       variant="contained"
+       sx={{
+         background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+         color: "white",
+         fontWeight: "bold",
+         fontWeight: "900",
+         textTransform: "none",
+         marginTop :"24px",
+        
+         minHeight: "unset", // Removes fixed height  
+         height: "39px", // Explicitly set a smaller height  
+         fontSize: "12px",
+         borderRadius: "20px",
+         display: "inline-flex", // Ensures compact size  
+         alignItems: "center",
+         gap: "6px",
+         lineHeight: "1", // Reduces text spacing  
+         "&:hover": {
+           background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+         },
+       }}
+       disableElevation // Removes shadow that might add visual space  
+       disableRipple // Removes ripple effect padding  
+       onClick={handleDownloadPDFRegistration}
+     >
+       <FaFileDownload size={14} />
+       Download PDF
+     </Button>
+</div>
 
 <div className="d-flex align-items-center justify-content-between mb-3">
   <div className="d-flex align-items-center gap-3">

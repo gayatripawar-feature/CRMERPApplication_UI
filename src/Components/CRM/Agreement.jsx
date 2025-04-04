@@ -26,6 +26,14 @@ import CloseIcon from "@mui/icons-material/Close";
 import { FaFileSignature } from 'react-icons/fa';
 
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
+import { FaFileDownload } from "react-icons/fa";
+
+
+import "jspdf-autotable";
+
+import autoTable from "jspdf-autotable";
+
+
 
 const fetchLoansData = async () => {
   const response = await fetch('/api/getOCRCollection');
@@ -140,17 +148,6 @@ const Agreement = () => {
   };
   
   
-  // useEffect(() => {
-  //   if (loan) {
-  //     setUpdatedChecklist(loan.checklistBeforeAgreement || "");
-  //   }
-  // }, [loan]);
-
-  // useEffect(() => {
-  //   if (loan) {
-  //     setUpdatedChecklist(loan.checklistBeforeAgreement || "");
-  //   }
-  // }, [loan]);
 
 
   useEffect(() => {
@@ -396,6 +393,89 @@ const generatePDF = () => {
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
   const currentRows = filteredLoans.slice(indexOfFirstRow, indexOfLastRow);
 
+
+ 
+
+
+  const handleDownloadPDFAgreement = () => {
+    console.log("Loans data before mapping:", loans); 
+  
+    const doc = new jsPDF("landscape");
+    doc.setFontSize(14);
+    doc.text("Agreement Report", 14, 15);
+  
+    // First set of columns (Page 1)
+    const firstPageColumns = [
+      "S.No.", "Flat No.", "Name Of Allotee", "NAME OF CO-ALLOTEE", "TYPE", "FLOOR", 
+      "EMAIL ID", "WHATSAPP MOBILE NO.", "RATE", "AGREEMENT VALUE", "DATE OF BOOKING", "PARKING"
+    ];
+  
+    // Second set of columns (Page 2)
+    const secondPageColumns = [
+      "S.No.", "AGGREMENT DRAFT GENERATION", "AGREEMENT STATUS", "AGREEMENT DATE"
+    ];
+  
+    // Extracting data for the first set of columns with serial numbers
+    const firstPageRows = loans.map((row, index) => [
+      index + 1, // Serial Number
+      row.flatNo || "-",
+      row.nameOfAllotee || "-",
+      row.nameOfCoAllotee || "-",
+      row.type || "-",
+      row.floor || "-",
+      row.emailId || "-",
+      row.whatsappMobileNo || "-",
+      row.rate || "-",
+      row.agreementValue || "-",
+      row.dateOfBooking || "-",
+      row.parking || "-"
+    ]);
+  
+    // Extracting data for the second set of columns with serial numbers
+    const secondPageRows = loans.map((row, index) => [
+      index + 1, // Serial Number
+      row.agreementDraftGeneration || "-",
+      row.agreementStatus || "-",
+      row.agreementDate || "-"
+    ]);
+  
+    console.log("First Page Rows:", firstPageRows);
+    console.log("Second Page Rows:", secondPageRows);
+  
+    // Generate the first table (Page 1)
+    autoTable(doc, {
+      startY: 25,
+      head: [firstPageColumns],
+      body: firstPageRows,
+      styles: { fontSize: 10, cellPadding: 3 },
+      headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+    });
+  
+    // Add a new page
+    doc.addPage();
+  
+    // Generate the second table (Page 2)
+    doc.setFontSize(14);
+    doc.text("Agreement Report - Continued", 14, 15);
+    
+    autoTable(doc, {
+      startY: 25,
+      head: [secondPageColumns],
+      body: secondPageRows,
+      styles: { fontSize: 10, cellPadding: 3 },
+      headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+    });
+  
+    // Save the PDF
+    doc.save("Agreement_Report.pdf");
+  };
+  
+  
+  
+
+
+
+
   return (
     <div className="main-content">
           {!openModal ? (
@@ -403,7 +483,7 @@ const generatePDF = () => {
       <h6>CRM Module / Agreement Management</h6>
 
 
-
+<div className='d-flex gap-3'>
          
 <Button
       variant="contained"
@@ -453,7 +533,38 @@ const generatePDF = () => {
     >
       {isExpanded && "Agreement"}
     </Button>
+      <Button
+   variant="contained"
+   sx={{
+     background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+     color: "white",
+     fontWeight: "bold",
+     fontWeight: "900",
+     textTransform: "none",
+     marginTop :"24px",
+    
+     minHeight: "unset", // Removes fixed height  
+     height: "39px", // Explicitly set a smaller height  
+     fontSize: "12px",
+     borderRadius: "20px",
+     display: "inline-flex", // Ensures compact size  
+     alignItems: "center",
+     gap: "6px",
+     lineHeight: "1", // Reduces text spacing  
+     "&:hover": {
+       background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+     },
+   }}
+   disableElevation // Removes shadow that might add visual space  
+   disableRipple // Removes ripple effect padding  
+   onClick={handleDownloadPDFAgreement}
+ >
+   <FaFileDownload size={14} />
+   Download PDF
+ </Button>
 
+
+</div>
 
 
       <div className="d-flex align-items-center gap-3 my-3 pt-4 pb-3">
