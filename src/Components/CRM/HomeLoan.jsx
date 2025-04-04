@@ -344,7 +344,14 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
 import { FaEye} from 'react-icons/fa';
 import { toast, ToastContainer } from 'react-toastify';
 import AccountCircle from '@mui/icons-material/AccountCircle'; 
+import { Link } from "@mui/material";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 import { HomeIcon } from 'lucide-react';
+import { FaFileDownload } from "react-icons/fa";
+import autoTable from "jspdf-autotable";
+
+
 const HomeLoan = () => {
   const [loansData, setLoansData] = useState([
     { 
@@ -357,6 +364,12 @@ const HomeLoan = () => {
     },
    
   ]);
+
+  const [openMailPopup, setOpenMailPopup] = useState(null);
+  const [selectedEmail, setSelectedEmail] = useState("");
+
+
+  
   const [filteredLoans, setFilteredLoans] = useState(loansData);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -589,407 +602,31 @@ const handleToggle = () => {
   const start = (currentPage - 1) * rowsPerPage;
   const end = Math.min(start + rowsPerPage, filteredLoans.length);
 
-//   const displayLoans = () => {
-//     return filteredLoans.slice(start, end).map((loan) => (
-//       <TableRow key={loan.id} sx={{  }}>
-//         <TableCell>{loan.flatNo}</TableCell>
-//         <TableCell>{loan.nameOfAllotee}</TableCell>
-//         <TableCell>{loan.nameOfCoAllotee}</TableCell>
-//         <TableCell>{loan.type}</TableCell>
-//         <TableCell>{loan.floor}</TableCell>
-//         <TableCell>{loan.emailId}</TableCell>
-//         <TableCell>{loan.whatsappMobileNo}</TableCell>
-//         <TableCell>{loan.rate}</TableCell>
-//         <TableCell>{loan.agreementValue}</TableCell>
-//         <TableCell>{loan.dateOfBooking}</TableCell>
-//         <TableCell>{loan.parking}</TableCell>
-//         <TableCell>
-//           <Select
-//             value={loan.homeLoanApplicability}
-//             onChange={(e) => handleHomeLoanApplicabilityChange(loan.id, e.target.value)}
-//             variant="outlined"
-//             size="small"
-//             sx={{ width: '100px' }}
-//           >
-//             <MenuItem value="Yes">Yes</MenuItem>
-//             <MenuItem value="No">No</MenuItem>
-//           </Select>
-//         </TableCell>
 
-//  <TableCell>
-//           <IconButton onClick={() => handleOpenDialog(loan.id)} color="primary">
-//             <AccountCircle fontSize="medium" />
-//           </IconButton>
-//         </TableCell>
+  const handleOpenMailPopup = (loanId, email) => {
+    setOpenMailPopup(loanId);
+    setSelectedEmail(email);
+  };
 
-  
+  const handleCloseMailPopup = () => {
+    setOpenMailPopup(null);
+    setSelectedEmail("");
+  };
 
-// <Dialog open={isDialogOpen} onClose={handleCloseDialog}>
-//   <DialogTitle>Edit Loan Details</DialogTitle>
-//   <DialogContent>
-    
-// <TextField
-//     value={editingLoan?.flatNo || ''}
-//     onChange={handleFlatNoChange} 
-//     label="Flat No."
-//     variant="outlined"
-//     size="small"
-//     fullWidth
-//     error={editingLoan?.flatNo && !/^[0-9]*$/.test(editingLoan?.flatNo)} 
-//     helperText={editingLoan?.flatNo && !/^[0-9]*$/.test(editingLoan?.flatNo) ? 'Only numbers allowed' : ''} 
-//     sx={{ mb: 2 }}
-//   />
+  const handleSendMail = () => {
+    console.log(`Sending email to ${selectedEmail}...`);
+    setOpenMailPopup(null);
+  };
 
-    
-
-
-// <TextField
-//   value={editingLoan?.nameOfAllotee || ''}
-//   onChange={(e) => handleNameChange(e)}
-//   label="Name of Allotee"
-//   variant="outlined"
-//   size="small"
-//   fullWidth
-//   error={!!editingLoan?.error}  
-//   helperText={editingLoan?.error || ''}  
-//   sx={{ mb: 2 }}
-// />
-//     <div style={{ marginBottom: '8px' }}>Bank Name</div>
-//     <Select
-//       value={editingLoan?.bankName || ''}
-//       onChange={(e) => handleInputChange(e, 'bankName')}
-//       fullWidth
-//       size="small"
-//       sx={{ mb: 2 }} 
-//     >
-//       <MenuItem value="Loan Approved">Loan Approved</MenuItem>
-//       <MenuItem value="HDFC Bank">HDFC Bank</MenuItem>
-//       <MenuItem value="State Bank of India">State Bank of India</MenuItem>
-//       <MenuItem value="IDBI Bank">IDBI Bank</MenuItem>
-//       <MenuItem value="Axis Bank">Axis Bank</MenuItem>
-//       <MenuItem value="Bank of Maharashtra">Bank of Maharashtra</MenuItem>
-//     </Select>
-
-   
-//     <div style={{ marginBottom: '8px' }}>Banker Name</div>
-//     <Select
-//       value={editingLoan?.bankerName || ''}
-//       onChange={(e) => handleInputChange(e, 'bankerName')}
-//       fullWidth
-//       size="small"
-//       sx={{ mb: 2 }} 
-//     >
-     
-//     </Select>
-
-//     <TextField
-//   value={editingLoan?.mobileNo || ''}
-//   onChange={(e) => handleMobileNoChange(e)} 
-//   label="Mobile No."
-//   variant="outlined"
-//   size="small"
-//   fullWidth
-//   type="tel" 
-//   error={!!editingLoan?.errorMobileNo} 
-//   helperText={editingLoan?.errorMobileNo || ''} 
-//   sx={{ mb: 2 }} 
-// />
-
-
-   
-//     <TextField
-//       value={editingLoan?.loanAccountNo || ''}
-//       onChange={(e) => handleLoanAccountChange(e)} 
-//       label="Loan Account No."
-//       variant="outlined"
-//       size="small"
-//       fullWidth
-//       type="text"
-//       sx={{ mb: 2 }} 
-//     />
-
-   
-//     <TextField
-//       value={editingLoan?.loanAmount || ''}
-//       onChange={(e) => handleLoanAmountChange(e)} 
-//       label="Loan Amount"
-//       variant="outlined"
-//       size="small"
-//       fullWidth
-//       type="number"
-//       InputProps={{
-//         inputMode: 'numeric', 
-//         pattern: '[0-9]*', 
-//       }}
-//       sx={{ mb: 2 }} 
-//     />
-
-// <div style={{ marginBottom: '8px', fontWeight: '' }}>Sanction Letter</div>
-//     <Button
-//       variant="contained"
-//       color=""
-//       component="span"
-//       sx={{ mb: 2 }}
-//       onClick={() => document.getElementById('sanction-letter-input').click()} 
-//     >
-//       Choose File
-//     </Button>
-//     <input
-//       id="sanction-letter-input"
-//       type="file"
-//       onChange={(e) => handleFileChange(e)}
-//       style={{ display: 'none' }} 
-//     />
-      
-//       {selectedFileName && (
-//           <Typography variant="body2" sx={{ mt: 1 }}>
-//             Selected File: {selectedFileName}
-//           </Typography>
-//         )}
-//   </DialogContent>
-//   <DialogActions>
-//     <Button onClick={handleCloseDialog} color="secondary">
-//       Cancel
-//     </Button>
-//     <Button onClick={handleSave} color="primary" variant="contained">
-//       Save
-//     </Button>
-//   </DialogActions>
-// </Dialog>
-// <ToastContainer />
-
-
-
-
-//         <TableCell>{loan.bankerName}</TableCell>
-//         <TableCell>{loan.mobileNo}</TableCell>
-//         <TableCell>{loan.loanAccountNo}</TableCell>
-//         <TableCell>{loan.loanAmount}</TableCell>
-       
- 
-      
-//         <TableCell>
-//             {loan.sanctionLetter ? (
-//               <IconButton
-//                 onClick={() => handleOpenDocument(loan.id)} 
-//                 color="primary"
-//               >
-//                 <FaEye fontSize="large" />
-//               </IconButton>
-//             ) : (
-//               <Typography variant="body2">No Document</Typography>
-//             )}
-//           </TableCell>
-
-//         <TableCell>{loan.homeLoanSanctionCertificateCollected}</TableCell>
-       
-//         <TableCell>{loan.bookingCancellationReason}</TableCell>
-//         <TableCell>{loan.bookingConfirmationMailSent}</TableCell>
-//       </TableRow>
-//     ));
-//   };
 
 
 const displayLoans = () => {
   return filteredLoans.slice(start, end).map((loan) => (
-//     <TableRow key={loan.id}>
-//       <TableCell>{loan.flatNo}</TableCell>
-//       <TableCell>{loan.nameOfAllotee}</TableCell>
-//       <TableCell>{loan.nameOfCoAllotee}</TableCell>
-//       <TableCell>{loan.type}</TableCell>
-//       <TableCell>{loan.floor}</TableCell>
-//       <TableCell>{loan.emailId}</TableCell>
-//       <TableCell>{loan.whatsappMobileNo}</TableCell>
-//       <TableCell>{loan.rate}</TableCell>
-//       <TableCell>{loan.agreementValue}</TableCell>
-//       <TableCell>{loan.dateOfBooking}</TableCell>
-//       <TableCell>{loan.parking}</TableCell>
-//       {/* <TableCell>{loan.homeLoanApplicability}</TableCell> */}
-//       <TableCell>
-//            <Select 
-//             value={loan.homeLoanApplicability}
-//             onChange={(e) => handleHomeLoanApplicabilityChange(loan.id, e.target.value)}
-//             variant="outlined"
-//             size="small"
-//             sx={{ width: '100px' }}
-//           >
-//             <MenuItem value="Yes">Yes</MenuItem>
-//             <MenuItem value="No">No</MenuItem>
-//           </Select>
-//         </TableCell> 
 
     
-//       {/* <TableCell>
-//            <IconButton onClick={() => handleOpenDialog(loan.id)} color="primary">
-//              <AccountCircle fontSize="medium" />
-//           </IconButton>
-//         </TableCell> */}
-// <TableCell>{loan.bankName}</TableCell>  {/* This is where Bank Name is shown */}
-// <TableCell>
-//   <IconButton onClick={() => handleOpenDialog(loan.id)} color="primary">
-//     <AccountCircle fontSize="medium" />
-//   </IconButton>
-// </TableCell>  {/* Icon Button in Bank Name Column */}
-
-  
-
-//  <Dialog open={isDialogOpen} onClose={handleCloseDialog}>
-//    <DialogTitle>Edit Loan Details</DialogTitle>
-//    <DialogContent>
-    
-// <TextField
-//     value={editingLoan?.flatNo || ''}
-//     onChange={handleFlatNoChange} 
-//     label="Flat No."
-//     variant="outlined"
-//     size="small"
-//     fullWidth
-//     error={editingLoan?.flatNo && !/^[0-9]*$/.test(editingLoan?.flatNo)} 
-//     helperText={editingLoan?.flatNo && !/^[0-9]*$/.test(editingLoan?.flatNo) ? 'Only numbers allowed' : ''} 
-//     sx={{ mb: 2 }}
-//   />
-
-    
-
-
-// <TextField
-//   value={editingLoan?.nameOfAllotee || ''}
-//   onChange={(e) => handleNameChange(e)}
-//   label="Name of Allotee"
-//   variant="outlined"
-//   size="small"
-//   fullWidth
-//   error={!!editingLoan?.error}  
-//   helperText={editingLoan?.error || ''}  
-//   sx={{ mb: 2 }}
-// />
-//     <div style={{ marginBottom: '8px' }}>Bank Name</div>
-//     <Select
-//       value={editingLoan?.bankName || ''}
-//       onChange={(e) => handleInputChange(e, 'bankName')}
-//       fullWidth
-//       size="small"
-//       sx={{ mb: 2 }} 
-//     >
-//       <MenuItem value="Loan Approved">Loan Approved</MenuItem>
-//       <MenuItem value="HDFC Bank">HDFC Bank</MenuItem>
-//       <MenuItem value="State Bank of India">State Bank of India</MenuItem>
-//       <MenuItem value="IDBI Bank">IDBI Bank</MenuItem>
-//       <MenuItem value="Axis Bank">Axis Bank</MenuItem>
-//       <MenuItem value="Bank of Maharashtra">Bank of Maharashtra</MenuItem>
-//     </Select>
-
-   
-//     <div style={{ marginBottom: '8px' }}>Banker Name</div>
-//     <Select
-//       value={editingLoan?.bankerName || ''}
-//       onChange={(e) => handleInputChange(e, 'bankerName')}
-//       fullWidth
-//       size="small"
-//       sx={{ mb: 2 }} 
-//     >
-     
-//     </Select>
-
-//     <TextField
-//   value={editingLoan?.mobileNo || ''}
-//   onChange={(e) => handleMobileNoChange(e)} 
-//   label="Mobile No."
-//   variant="outlined"
-//   size="small"
-//   fullWidth
-//   type="tel" 
-//   error={!!editingLoan?.errorMobileNo} 
-//   helperText={editingLoan?.errorMobileNo || ''} 
-//   sx={{ mb: 2 }} 
-// />
-
-
-   
-//     <TextField
-//       value={editingLoan?.loanAccountNo || ''}
-//       onChange={(e) => handleLoanAccountChange(e)} 
-//       label="Loan Account No."
-//       variant="outlined"
-//       size="small"
-//       fullWidth
-//       type="text"
-//       sx={{ mb: 2 }} 
-//     />
-
-   
-//     <TextField
-//       value={editingLoan?.loanAmount || ''}
-//       onChange={(e) => handleLoanAmountChange(e)} 
-//       label="Loan Amount"
-//       variant="outlined"
-//       size="small"
-//       fullWidth
-//       type="number"
-//       InputProps={{
-//         inputMode: 'numeric', 
-//         pattern: '[0-9]*', 
-//       }}
-//       sx={{ mb: 2 }} 
-//     />
-
-// <div style={{ marginBottom: '8px', fontWeight: '' }}>Sanction Letter</div>
-//     <Button
-//       variant="contained"
-//       color=""
-//       component="span"
-//       sx={{ mb: 2 }}
-//       onClick={() => document.getElementById('sanction-letter-input').click()} 
-//     >
-//       Choose File
-//     </Button>
-//     <input
-//       id="sanction-letter-input"
-//       type="file"
-//       onChange={(e) => handleFileChange(e)}
-//       style={{ display: 'none' }} 
-//     />
-      
-//       {selectedFileName && (
-//           <Typography variant="body2" sx={{ mt: 1 }}>
-//             Selected File: {selectedFileName}
-//           </Typography>
-//         )}
-//   </DialogContent>
-//   <DialogActions>
-//     <Button onClick={handleCloseDialog} color="secondary">
-//       Cancel
-//     </Button>
-//     <Button onClick={handleSave} color="primary" variant="contained">
-//       Save
-//     </Button>
-//   </DialogActions>
-// </Dialog>
-// <ToastContainer />
-
-//       <TableCell>{loan.bankerName}</TableCell>
-//       <TableCell>{loan.mobileNo}</TableCell>
-//       <TableCell>{loan.loanAccountNo}</TableCell>
-//       <TableCell>{loan.loanAmount}</TableCell>
-
-//       {/* Sanction Letter column with edit icon */}
-//       <TableCell>
-//         {loan.sanctionLetter ? (
-//           <IconButton onClick={() => handleOpenDocument(loan.id)} color="primary">
-//             <FaEye fontSize="large" /> {/* Edit Icon */}
-//           </IconButton>
-//         ) : (
-//           <Typography variant="body2">No Document</Typography> 
-//         )}
-//       </TableCell>
-
-//       <TableCell>{loan.homeLoanSanctionCertificateCollected}</TableCell>
-//       <TableCell>{loan.bookingCancellationReason}</TableCell>
-//       <TableCell>{loan.bookingConfirmationMailSent}</TableCell>
-//     </TableRow>
 
 <TableRow key={loan.id}>
-  {/* Other columns */}
+ 
   <TableCell>{loan.flatNo}</TableCell>
   <TableCell>{loan.nameOfAllotee}</TableCell>
   <TableCell>{loan.nameOfCoAllotee}</TableCell>
@@ -1002,7 +639,6 @@ const displayLoans = () => {
   <TableCell>{loan.dateOfBooking}</TableCell>
   <TableCell>{loan.parking}</TableCell>
 
-  {/* Home Loan Applicability */}
   <TableCell>
     <Select
       value={loan.homeLoanApplicability}
@@ -1161,28 +797,87 @@ const displayLoans = () => {
     </Button>
   </DialogActions>
 </Dialog>
-<ToastContainer /> 
+
   
   <TableCell>{loan.bankerName}</TableCell>
   <TableCell>{loan.mobileNo}</TableCell>
   <TableCell>{loan.loanAccountNo}</TableCell>
   <TableCell>{loan.loanAmount}</TableCell>
 
-  {/* Sanction Letter Column with Edit Icon */}
-  <TableCell>
+
+
+   <TableCell>
     {loan.sanctionLetter ? (
       <IconButton onClick={() => handleOpenDocument(loan.id)} color="primary">
-        <FaEye fontSize="large" /> {/* Eye Icon for Viewing */}
+        <FaEye fontSize="large" />
       </IconButton>
     ) : (
-      <Typography variant="body2">No Document</Typography> // If no document, show "No Document"
+      <Typography variant="body2">No Document</Typography>
     )}
   </TableCell>
 
-  {/* Other columns */}
-  <TableCell>{loan.homeLoanSanctionCertificateCollected}</TableCell>
-  <TableCell>{loan.bookingCancellationReason}</TableCell>
-  <TableCell>{loan.bookingConfirmationMailSent}</TableCell>
+  
+  <TableCell>
+    <select className='p-2 bg-light'
+      value={loan?.homeLoanSanctionCertificateCollected || ""} 
+      onChange={(e) => handleStatusChange(e, loan.id)}
+    >
+      <option value="Collected">Collected</option>
+      <option value="In Process">In Process</option>
+      <option value="Self Funding">Self Funding</option>
+    </select>
+  </TableCell>
+ 
+  <TableCell>
+  <Select
+    value={loan.bookingConfirmation || ""}
+    onChange={(e) => handleBookingConfirmationChange(loan.id, e.target.value)}
+    variant="outlined"
+    size="small"
+    sx={{ width: "120px" }} // Adjust width if needed
+  >
+    <MenuItem value="Booked">Booked</MenuItem>
+    <MenuItem value="Cancelled">Cancelled</MenuItem>
+  </Select>
+</TableCell>
+
+<TableCell>
+  <Select
+    value={loan.bookingCancellationReason || ""}
+    onChange={(e) => handleBookingCancellationChange(loan.id, e.target.value)}
+    variant="outlined"
+    size="small"
+    sx={{ width: "150px" }} // Adjust width if needed
+  >
+   
+    <MenuItem value="Loan Issue">Loan Issue</MenuItem>
+    <MenuItem value="Not Satisfied">Not Satisfied</MenuItem>
+  </Select>
+</TableCell>
+
+<TableCell>
+  <Link 
+    component="button"
+    variant="body2"
+    onClick={() => handleOpenMailPopup(loan.id, loan.emailId)} 
+    sx={{ color: "blue", cursor: "pointer", textDecoration: "underline" }}
+  >
+    Send Mail
+  </Link>
+
+  {/* Confirmation Popup */}
+  <Dialog open={openMailPopup === loan.id} onClose={handleCloseMailPopup}>
+    <DialogTitle>Send Mail Confirmation</DialogTitle>
+    <DialogContent>
+      <Typography>Do you want to send the mail to {selectedEmail}?</Typography>
+    </DialogContent>
+    <DialogActions>
+      <Button onClick={handleCloseMailPopup} color="secondary">No</Button>
+      <Button onClick={handleSendMail} color="primary" variant="contained">Yes</Button>
+    </DialogActions>
+  </Dialog>
+</TableCell>
+
 </TableRow>
 
   ));
@@ -1198,7 +893,86 @@ const displayLoans = () => {
     setFilteredLoans(updatedLoans);
   };
 
- 
+  const handleDownloadPDFHomeLoan = () => {
+    const doc = new jsPDF("landscape");
+  
+    doc.setFontSize(14);
+    doc.text("Home Loan Report", 14, 15);
+  
+    // Split columns into two sets for two pages
+    const firstTableColumns = [
+      "S.No", "Flat No.", "Name Of Allotee", "Name Of Co-Allotee", 
+      "Type", "Floor", "Email ID", "WHATSAPP MOBILE NO", "Rate", "Agreement Value"
+    ];
+  
+    const secondTableColumns = [
+      "S.No", "DATE OF BOOKING", "Parking", "Home Loan Applicability", 
+      "Banker Name", "Mobile No", "LOAN ACCOUNT NO.", "HOME LOAN SANCTION CERTIFICATE COLLECTED",
+      "BOOKING CONFIRMATION", "BOOKING CANCELATION REASON"
+    ];
+  
+    // Prepare table rows for both tables
+    const firstTableRows = filteredLoans.map((loan, index) => [
+      index + 1,
+      loan.flatNo || "-",
+      loan.nameOfAllotee || "-",
+      loan.nameOfCoAllotee || "-",
+      loan.type || "-",
+      loan.floor || "-",
+      loan.emailId || "-",
+      loan.whatsappMobileNo || "-",
+      loan.rate || "-",
+      loan.agreementValue || "-"
+    ]);
+  
+    const secondTableRows = filteredLoans.map((loan, index) => [
+      index + 1,
+      loan.dateOfBooking || "-",
+      loan.parking || "-",
+      loan.homeLoanApplicability || "-",
+      loan.bankerName || "-",
+      loan.mobileNo || "-",
+      loan.loanAccountNo || "-",
+      loan.homeLoanSanctionCertificateCollected || "-",
+      loan.bookingConfirmation || "-",
+      loan.bookingCancelationReason || "-"
+    ]);
+  
+    // Generate first table (first page)
+    autoTable(doc, {
+      startY: 25,
+      head: [firstTableColumns],
+      body: firstTableRows,
+      styles: { fontSize: 10, cellPadding: 3 },
+      headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+      didDrawPage: () => {
+        doc.setFontSize(10);
+        doc.text(`Page 1`, 280, 200); // Page Number
+      }
+    });
+  
+    // Add a new page for the second table
+    doc.addPage();
+  
+    // Generate second table (second page)
+    doc.text("Home Loan Report (Page 2)", 14, 15);
+    autoTable(doc, {
+      startY: 25,
+      head: [secondTableColumns],
+      body: secondTableRows,
+      styles: { fontSize: 10, cellPadding: 3 },
+      headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+      didDrawPage: () => {
+        doc.setFontSize(10);
+        doc.text(`Page 2`, 280, 200); // Page Number
+      }
+    });
+  
+    // Save the PDF
+    doc.save("HomeLoan_Report.pdf");
+  };
+  
+
 
   
   return (
@@ -1206,19 +980,8 @@ const displayLoans = () => {
       <h6 className="mb-3">Sales Module / Home Loan Management</h6>
   
   
-      {/* <div className="d-flex align-items-center mb-3">
-        <Button
-          onClick={handleCollapseToggle}
-          variant="outlined"
-          color="success"
-          className='m-3'
-          style={{ borderRadius: '20px' }}
-          startIcon={<FaEye size={20} color="#28a745" />}
-        >
-          {!isCollapsed && <span className="text-success">Home Loan </span>}
-        </Button>
-      </div>  */}
-      
+     
+      <div className='d-flex gap-3'>
       <Button
         variant="contained"
         color="success"
@@ -1227,9 +990,10 @@ const displayLoans = () => {
           transition: "width 0.3s ease, background 0.3s ease",
           width: isExpanded ? "160px" : "50px",
           minWidth: "50px",
+          fontWeight: "700",
           overflow: "hidden",
           whiteSpace: "nowrap",
-          padding: "10px 15px",
+          padding: "10px 10px",
           marginTop: "20px",
           marginBottom: "12px", // Updated margin-bottom
           fontSize: "14px",
@@ -1265,6 +1029,41 @@ const displayLoans = () => {
       >
         {isExpanded && "Home Loan"}
       </Button>
+      <Button
+  variant="contained"
+  sx={{
+    background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+    color: "white",
+    fontWeight: "bold",
+    fontWeight: "900",
+    textTransform: "none",
+    marginTop :"24px",
+   
+    minHeight: "unset", // Removes fixed height  
+    height: "39px", // Explicitly set a smaller height  
+    fontSize: "12px",
+    borderRadius: "20px",
+    display: "inline-flex", // Ensures compact size  
+    alignItems: "center",
+    gap: "6px",
+    lineHeight: "1", // Reduces text spacing  
+    "&:hover": {
+      background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+    },
+  }}
+  disableElevation // Removes shadow that might add visual space  
+  disableRipple // Removes ripple effect padding  
+  onClick={handleDownloadPDFHomeLoan}
+>
+  <FaFileDownload size={14} />
+  Download PDF
+</Button>
+
+
+
+      </div>
+      
+     
 
       <div className="pt-5" style={{ display: 'flex', gap: '20px', marginBottom: '20px' }}>
         <TextField

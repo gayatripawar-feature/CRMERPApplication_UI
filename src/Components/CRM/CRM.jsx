@@ -22,7 +22,10 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
 import { Dialog, DialogActions, DialogContent, DialogTitle} from '@mui/material';
+import jsPDF from "jspdf";
 
+import { FaFileDownload } from "react-icons/fa";
+import autoTable from "jspdf-autotable";
 const fetchLoansData = async () => {
   const response = await fetch('/api/getOCRCollection');
   return response.json();
@@ -36,7 +39,7 @@ const CRM = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
-  
+ 
 
   const [flatType, setFlatType] = useState('');
   const [parking, setParking] = useState('');
@@ -367,23 +370,91 @@ const loansData = [
 ];
 
 
+const handleDownloadPDFCRM = () => {
+  console.log("Loans data before mapping:", loans); // Ensure 'loans' contains the correct data
+
+  const doc = new jsPDF("landscape");
+  doc.setFontSize(14);
+  doc.text("CRM Report", 14, 15);
+
+  // Define the columns for the first and second pages
+  const tableColumnPage1 = [
+    "TIMESTAMP", "ENQUIRY NO.", "PROJECT NAME", "DATE OF FLAT BOOKING", "NAME OF ALOTEE",
+    "SOURCE NAME", "DATE OF BIRTH", "OCCUPATION", "PAN NO.", "AADHAR NO."
+  ];
+
+  const tableColumnPage2 = [
+    "MOBILE NO.", "EMAIL ID", "ADDRESS", "NAME OF CO-ALOTEE", "DATE OF BIRTH (CO-ALOTEE)",
+    "OCCUPATION (CO-ALOTEE)", "PAN NO. (CO-ALOTEE)", "AADHAR NO. (CO-ALOTEE)",
+    "MOBILE NO. & EMAIL (CO-ALOTEE)", "FLAT NO.", "TYPE"
+  ];
+
+  // Extract data for the first page
+  const tableRowsPage1 = loans.map(row => [
+    row.timestamp || "-",
+    row.enquiryNo || "-",
+    row.projectName || "-",
+    row.dateOfFlatBooking || "-",
+    row.nameOfAllotee || "-",
+    row.sourceName || "-",
+    row.dateOfBirth || "-",
+    row.occupation || "-",
+    row.panNo || "-",
+    row.aadharNo || "-"
+  ]);
+
+  // Extract data for the second page
+  const tableRowsPage2 = loans.map(row => [
+    row.mobileNo || "-",
+    row.emailId || "-",
+    row.address || "-",
+    row.nameOfCoAllotee || "-",
+    row.dateOfBirthCoAllotee || "-",
+    row.occupationCoAllotee || "-",
+    row.panNoCoAllotee || "-",
+    row.aadharNoCoAllotee || "-",
+    row.mobileEmailCoAllotee || "-",
+    row.flatNo || "-",
+    row.type || "-"
+  ]);
+
+  console.log("Formatted Table Rows (Page 1):", tableRowsPage1);
+  console.log("Formatted Table Rows (Page 2):", tableRowsPage2);
+
+  // Generate first table
+  autoTable(doc, {
+    startY: 25,
+    head: [tableColumnPage1],
+    body: tableRowsPage1,
+    styles: { fontSize: 10, cellPadding: 3 },
+    headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+  });
+
+  // Add a new page for the second table
+  doc.addPage();
+  doc.setFontSize(14);
+  doc.text("CRM Report (Continued)", 14, 15);
+
+  // Generate second table
+  autoTable(doc, {
+    startY: 25,
+    head: [tableColumnPage2],
+    body: tableRowsPage2,
+    styles: { fontSize: 10, cellPadding: 3 },
+    headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+  });
+
+  // Save the PDF
+  doc.save("CRM_Report.pdf");
+};
+
+
   return (
     <div className="main-content">
-      <h6 className='mb-5'>Sales Module / CRM Display</h6>
+      <h6 className='mb-3'>Sales Module / CRM Display</h6>
 
   
-      {/* <div className="d-flex align-items-center mb-3">
-        <Button
-          onClick={handleCollapseToggle}
-          variant="outlined"
-          color="success"
-          className='m-3'
-          style={{ borderRadius: '20px' }}
-          startIcon={<FaEye size={20} color="#28a745" />}
-        >
-          {!isCollapsed && <span className="text-success">CRM Display</span>}
-        </Button>
-      </div> */}
+    <div className='d-flex gap-3'>
 
 <Button
       variant="contained"
@@ -433,6 +504,37 @@ const loansData = [
     >
       {isExpanded && "CRM Display"}
     </Button>
+
+         <Button
+      variant="contained"
+      sx={{
+        background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+        color: "white",
+        fontWeight: "bold",
+        fontWeight: "900",
+        textTransform: "none",
+        marginTop :"24px",
+       
+        minHeight: "unset", // Removes fixed height  
+        height: "39px", // Explicitly set a smaller height  
+        fontSize: "12px",
+        borderRadius: "20px",
+        display: "inline-flex", // Ensures compact size  
+        alignItems: "center",
+        gap: "6px",
+        lineHeight: "1", // Reduces text spacing  
+        "&:hover": {
+          background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+        },
+      }}
+      disableElevation // Removes shadow that might add visual space  
+      disableRipple // Removes ripple effect padding  
+      onClick={handleDownloadPDFCRM}
+    >
+      <FaFileDownload size={14} />
+      Download PDF
+    </Button>
+</div>
 
       
       <div className="d-flex align-items-center justify-content-between mb-3">
@@ -567,328 +669,7 @@ const loansData = [
       </TableRow>
     </TableHead>
 
-    {/* <TableBody>
-      {displayLoans()}
-    </TableBody> */}
-{/* <TableBody>
-  {displayLoans().map((item, index) => (
-    <TableRow key={index}>
-     
-      <TableCell>
-       
-        <EditIcon sx={{ cursor: 'pointer', marginRight: 1 }} onClick={() => handleEdit(item)} />
-        <WhatsAppIcon sx={{ cursor: 'pointer', marginRight: 1 }} onClick={() => handleWhatsapp(item)} />
-        <EmailIcon sx={{ cursor: 'pointer' }} onClick={() => handleEmail(item)} />
-      </TableCell>
-    </TableRow>
-  ))}
-</TableBody> */}
-
-
-{/* 
-<TableBody>
-      {loansData.map((item, index) => (
-        <TableRow key={index}>
-         
-          <TableCell>
-          
-            <div style={{ display: 'flex', gap: '', justifyContent: 'flex-start' }}>
-              <Tooltip title="Edit" arrow>
-                <IconButton 
-                  sx={{ color: 'primary.main', fontSize: '18px' }} 
-                  onClick={() => handleEdit(item)}
-                >
-                  <EditIcon />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="WhatsApp" arrow>
-                <IconButton 
-                  sx={{ color: 'success.main', fontSize: '18px' }} 
-                  onClick={() => handleWhatsapp(item)}
-                >
-                  <WhatsAppIcon />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="Email" arrow>
-                <IconButton 
-                  sx={{ color: 'primary.main', fontSize: '18px' }} 
-                  onClick={() => handleEmail(item)}
-                >
-                  <EmailIcon />
-                </IconButton>
-              </Tooltip>
-            </div>
-          </TableCell>
-
-          
-          <TableCell>{item.timestamp}</TableCell>
-
-          
-          <TableCell>{item.enquiryNo}</TableCell>
-
-          
-          <TableCell>{item.projectName}</TableCell>
-
-          
-          <TableCell>{item.bookingDate}</TableCell>
-
-        
-          <TableCell>{item.aloteeName}</TableCell>
-
-          <TableCell>{item.sourceName}</TableCell>
-
-      
-          <TableCell>{item.dob}</TableCell>
-
-          <TableCell>{item.occupation}</TableCell>
-
-          <TableCell>{item.panNo}</TableCell>
-
-          <TableCell>{item.aadharNo}</TableCell>
-
-          
-          <TableCell>{item.mobileNo}</TableCell>
-
-          
-          <TableCell>{item.alternateMobileNo}</TableCell>
-
-        
-          <TableCell>{item.whatsappNo}</TableCell>
-
-        
-          <TableCell>{item.emailId}</TableCell>
-
-          
-          <TableCell>{item.address}</TableCell>
-
-          <TableCell>{item.coAloteeName}</TableCell>
-
-         
-          <TableCell>{item.coAloteeDob}</TableCell>
-
-        
-          <TableCell>{item.coAloteeOccupation}</TableCell>
-
-       
-          <TableCell>{item.coAloteePanNo}</TableCell>
-
-         
-          <TableCell>{item.coAloteeAadharNo}</TableCell>
-
-          
-          <TableCell>{item.coAloteeContact}</TableCell>
-
-     
-          <TableCell>{item.flatNo}</TableCell>
-
-         
-          <TableCell>{item.flatType}</TableCell>
-
-          <TableCell>{item.wing}</TableCell>
-
-         
-          <TableCell>{item.soldRate}</TableCell>
-
-          
-          <TableCell>{item.carpetArea}</TableCell>
-
-        
-          <TableCell>{item.enclosedBalcony}</TableCell>
-
-          
-          <TableCell>{item.openBalcony}</TableCell>
-
-     
-          <TableCell>{item.terrace}</TableCell>
-
-       
-          <TableCell>{item.parking}</TableCell>
-
-          
-          <TableCell>{item.floor}</TableCell>
-
-        
-          <TableCell>{item.totalConsideration}</TableCell>
-
-          <TableCell>{item.bookingAmount}</TableCell>
-
-        
-          <TableCell>{item.stampDuty}</TableCell>
-
-        
-          <TableCell>{item.registrationFee}</TableCell>
-
-      
-          <TableCell>{item.gstAmount}</TableCell>
-
-       
-          <TableCell>{item.panCard}</TableCell>
-
-        
-          <TableCell>{item.aadharCard}</TableCell>
-
-          
-          <TableCell>{item.marriageCertificate}</TableCell>
-
-          <TableCell>{item.passportSizePhoto}</TableCell>
-
-
-          <TableCell>{item.anyOther}</TableCell>
-
-          <TableCell>{item.paymentMode}</TableCell>
-
-         
-          <TableCell>{item.chequeTrnNo}</TableCell>
-
-      
-          <TableCell>{item.chequeTrnDate}</TableCell>
-
-          <TableCell>{item.bankName}</TableCell>
-
-        
-          <TableCell>{item.bankDetails}</TableCell>
-        </TableRow>
-      ))}
-    </TableBody> */}
-
-{/* 
-<TableBody>
-  {loansData.map((item, index) => (
-    <TableRow key={index}>
-    
-      <TableCell sx={{ whiteSpace: 'nowrap' }}> 
-       
-        <div style={{ display: 'flex', gap: '', justifyContent: 'flex-start' }}>
-          <Tooltip title="Edit" arrow>
-            <IconButton
-              sx={{ color: 'primary.main', fontSize: '18px' }}
-              onClick={() => handleEdit(item)}
-            >
-              <EditIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="WhatsApp" arrow>
-            <IconButton
-              sx={{ color: 'success.main', fontSize: '18px' }}
-              onClick={() => handleWhatsapp(item)}
-            >
-              <WhatsAppIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Email" arrow>
-            <IconButton
-              sx={{ color: 'primary.main', fontSize: '18px' }}
-              onClick={() => handleEmail(item)}
-            >
-              <EmailIcon />
-            </IconButton>
-          </Tooltip>
-        </div>
-      </TableCell>
-
-      
-      <TableCell>{item.timestamp}</TableCell>
-      <TableCell>{item.enquiryNo}</TableCell>
-      <TableCell>{item.projectName}</TableCell>
-      <TableCell>{item.bookingDate}</TableCell>
-      <TableCell>{item.aloteeName}</TableCell>
-      <TableCell>{item.sourceName}</TableCell>
-      <TableCell>{item.dob}</TableCell>
-      <TableCell>{item.occupation}</TableCell>
-      {
-    </TableRow>
-  ))}
-</TableBody> */}
-
-{/* <TableBody>
-  {loansData.map((item, index) => (
-    <TableRow key={index}>
-     
-      <TableCell sx={{ whiteSpace: 'nowrap' }}>
-      
-        <div
-          style={{
-            display: 'flex',
-            gap: '0px', 
-            justifyContent: 'flex-start',
-            flexWrap: 'nowrap',
-          }}
-        >
-          <Tooltip title="Edit" arrow>
-            <IconButton
-              sx={{ color: 'primary.main', fontSize: '18px' }}
-              onClick={() => handleEdit(item)}
-            >
-              <EditIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="WhatsApp" arrow>
-            <IconButton
-              sx={{ color: 'success.main', fontSize: '18px' }}
-              onClick={() => handleWhatsapp(item)}
-            >
-              <WhatsAppIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Email" arrow>
-            <IconButton
-              sx={{ color: 'primary.main', fontSize: '18px' }}
-              onClick={() => handleEmail(item)}
-            >
-              <EmailIcon />
-            </IconButton>
-          </Tooltip>
-        </div>
-      </TableCell>
-
-     
-      <TableCell sx={{ whiteSpace: 'nowrap' }}>{item.timestamp}</TableCell>
-      <TableCell sx={{ whiteSpace: 'nowrap' }}>{item.enquiryNo}</TableCell>
-      <TableCell sx={{ whiteSpace: 'nowrap' }}>{item.projectName}</TableCell>
-      <TableCell sx={{ whiteSpace: 'nowrap' }}>{item.bookingDate}</TableCell>
-      <TableCell sx={{ whiteSpace: 'nowrap' }}>{item.aloteeName}</TableCell>
-      <TableCell sx={{ whiteSpace: 'nowrap' }}>{item.sourceName}</TableCell>
-      <TableCell sx={{ whiteSpace: 'nowrap' }}>{item.dob}</TableCell>
-      <TableCell sx={{ whiteSpace: 'nowrap' }}>{item.occupation}</TableCell>
-      <TableCell sx={{ whiteSpace: 'nowrap' }}>{item.occupation}</TableCell>
-      <TableCell sx={{ whiteSpace: 'nowrap' }}>{item.occupation}</TableCell>
-      <TableCell sx={{ whiteSpace: 'nowrap' }}>{item.occupation}</TableCell>
-      <TableCell sx={{ whiteSpace: 'nowrap' }}>{item.occupation}</TableCell>
-      <TableCell sx={{ whiteSpace: 'nowrap' }}>{item.occupation}</TableCell>
-      <TableCell sx={{ whiteSpace: 'nowrap' }}>{item.occupation}</TableCell>
-      <TableCell sx={{ whiteSpace: 'nowrap' }}>{item.occupation}</TableCell>
-      <TableCell sx={{ whiteSpace: 'nowrap' }}>{item.occupation}</TableCell>
-      <TableCell sx={{ whiteSpace: 'nowrap' }}>{item.occupation}</TableCell>
-      <TableCell sx={{ whiteSpace: 'nowrap' }}>{item.occupation}</TableCell>
-      <TableCell sx={{ whiteSpace: 'nowrap' }}>{item.occupation}</TableCell>
-      <TableCell sx={{ whiteSpace: 'nowrap' }}>{item.occupation}</TableCell>
-      <TableCell sx={{ whiteSpace: 'nowrap' }}>{item.occupation}</TableCell>
-      <TableCell sx={{ whiteSpace: 'nowrap' }}>{item.occupation}</TableCell>
-      <TableCell sx={{ whiteSpace: 'nowrap' }}>{item.occupation}</TableCell>
-      <TableCell sx={{ whiteSpace: 'nowrap' }}>{item.occupation}</TableCell>
-      <TableCell sx={{ whiteSpace: 'nowrap' }}>{item.occupation}</TableCell>
-      <TableCell sx={{ whiteSpace: 'nowrap' }}>{item.occupation}</TableCell>
-      <TableCell sx={{ whiteSpace: 'nowrap' }}>{item.occupation}</TableCell>
-      <TableCell sx={{ whiteSpace: 'nowrap' }}>{item.occupation}</TableCell>
-
-      <TableCell sx={{ whiteSpace: 'nowrap' }}>{item.occupation}</TableCell>
-      <TableCell sx={{ whiteSpace: 'nowrap' }}>{item.occupation}</TableCell>
-      <TableCell sx={{ whiteSpace: 'nowrap' }}>{item.occupation}</TableCell>
-      <TableCell sx={{ whiteSpace: 'nowrap' }}>{item.occupation}</TableCell>
-      <TableCell sx={{ whiteSpace: 'nowrap' }}>{item.occupation}</TableCell>
-      <TableCell sx={{ whiteSpace: 'nowrap' }}>{item.occupation}</TableCell>
-      <TableCell sx={{ whiteSpace: 'nowrap' }}>{item.occupation}</TableCell>
-     
-      <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap", display: "flex", alignItems: "center" }}>
-  PAN CARD (OF BOTH)
-  <IconButton onClick={handleOpenDocument} sx={{ marginLeft: "8px", color: "white" }}>
-    <EditIcon />
-  </IconButton>
-</TableCell>
-
-    </TableRow>
-  ))}
-</TableBody> */}
+  
 
 <TableBody>
   {loansData.map((item, index) => (
@@ -910,7 +691,7 @@ const loansData = [
         backgroundColor: 'rgba(0, 0, 0, 0.12)',
       },
     }}
-    onClick={() => setShowForm(true)} // Set form visibility to true
+    onClick={() => setShowForm(true)} 
   >
     <EditIcon />
   </IconButton>
@@ -927,8 +708,7 @@ const loansData = [
           >
           
 
-            {/* <div className="firm-form mt-4 p-3" style={{ maxHeight: "500px", overflowY: "auto", paddingRight: "10px" }}> */}
-      {/* <Paper className="p-4" elevation={4} style={{ borderRadius: "12px", paddingBottom: "20px" }}> */}
+          
         <Typography variant="h5" gutterBottom sx={{ paddingTop: 3 }}>
         Section 1: Personal Information
         </Typography>

@@ -326,12 +326,12 @@ const handleToggle = () => {
         justifyContent: "center",
         textTransform: "none",
         position: "relative",
-        // background: "linear-gradient(0deg, rgba(22,9,240,1) 0%, rgba(49,110,244,1) 100%)",
+      
         background: "linear-gradient(0deg, #4b2ac2 0%, #5c39d3 100%)",
         boxShadow:
           "inset 2px 2px 2px 0px rgba(255,255,255,.5), 7px 7px 20px 0px rgba(0,0,0,.1), 4px 4px 5px 0px rgba(0,0,0,.1)",
         "&:hover": {
-          // background: "linear-gradient(0deg, rgba(2,126,251,1) 0%, rgba(0,3,255,1) 100%)",
+       
           background: "linear-gradient(0deg, rgb(230, 4, 255) 0%, rgb(245, 182, 24) 100%)",
         },
         "&::after": {
@@ -459,7 +459,7 @@ const handleToggle = () => {
      
     
 
-{/* 
+
 <TableContainer component={Paper} sx={{ mt: 2, boxShadow: 3, borderRadius: 2 }}>
       <Table style={{ tableLayout: 'auto', width: '100%' }}>
         <TableHead>
@@ -722,9 +722,9 @@ const handleToggle = () => {
           ))}
         </TableBody>
       </Table>
-    </TableContainer> */}
+    </TableContainer> 
 
-
+{/* 
 <Ocrtable
         loans={loans}
         handleCashWithAVChange={handleCashWithAVChange}
@@ -737,7 +737,7 @@ const handleToggle = () => {
         handleSave={handleSave}
         editingIndex={editingIndex}
         handleEditValue={handleEditValue}
-      />
+      /> */}
       <div className="d-flex justify-content-between align-items-center">
               <Button style={{backgroundColor:"#800080"}} className="text-white mt-3" onClick={handlePagination} disabled={currentPage === 1}>Previous</Button>
               <Button style={{backgroundColor:"#800080"}} className='text-white mt-3' onClick={handlePagination} disabled={currentPage === totalPages}>Next</Button>
