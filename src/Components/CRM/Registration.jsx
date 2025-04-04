@@ -363,45 +363,74 @@ const handleUpload = (index) => {
 
 
   const handleDownloadPDFRegistration = () => {
-    console.log("Loans data before mapping:", loans); // Use loans instead of firms
-  
-   
+    console.log("Loans data before mapping:", loans);
   
     const doc = new jsPDF("landscape");
     doc.setFontSize(14);
-    doc.text("Firm Details Report", 14, 15);
+    doc.text("Registration Report", 14, 15);
   
-    const tableColumn = [
-      "Timestamp", "Firm Name", "Firm Address", "Firm PAN No",
-      "Firm GST No", "Residential Address", "PAN No", "Aadhaar No",
-      "Photo", "Light Bill"
+    // Define the first-page columns
+    const firstPageColumns = [
+      "S.No.", "FLAT NO.", "NAME OF ALLOTEE", "NAME OF CO-ALLOTEE", "TYPE", "FLOOR"
     ];
   
-    const tableRows = loans.map(row => [
-      row.timestamp || "-",
-      row.name || "-",
-      row.address || "-",
-      row.firmPanNo || "-",
-      row.firmGstNo || "-",
-      row.residentialAddress || "-",
-      row.panNo || "-",
-      row.aadhaarNo || "-",
-      row.photo || "-",
-      row.lightBill || "-"
+    // Define the second-page columns
+    const secondPageColumns = [
+      "S.No.", "EMAIL ID", "WHATSAPP MOBILE NO.", "RATE", "AGREEMENT VALUE", "DATE OF BOOKING", "PARKING"
+    ];
+  
+    // Extracting data for the first set of columns with serial numbers
+    const firstPageRows = loans.map((row, index) => [
+      index + 1, // Serial Number
+      row.flatNo || "-",
+      row.nameOfAllotee || "-",
+      row.nameOfCoAllotee || "-",
+      row.type || "-",
+      row.floor || "-"
     ]);
   
-    console.log("Formatted Table Rows:", tableRows);
+    // Extracting data for the second set of columns with serial numbers
+    const secondPageRows = loans.map((row, index) => [
+      index + 1, // Serial Number
+      row.emailId || "-",
+      row.whatsappMobileNo || "-",
+      row.rate || "-",
+      row.agreementValue || "-",
+      row.dateOfBooking || "-",
+      row.parking || "-"
+    ]);
   
+    console.log("First Page Rows:", firstPageRows);
+    console.log("Second Page Rows:", secondPageRows);
+  
+    // Generate the first table (Page 1)
     autoTable(doc, {
       startY: 25,
-      head: [tableColumn],
-      body: tableRows,
+      head: [firstPageColumns],
+      body: firstPageRows,
       styles: { fontSize: 10, cellPadding: 3 },
       headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
     });
   
+    // Add a new page
+    doc.addPage();
+  
+    // Generate the second table (Page 2)
+    doc.setFontSize(14);
+    doc.text("Registration Report - Continued", 14, 15);
+  
+    autoTable(doc, {
+      startY: 25,
+      head: [secondPageColumns],
+      body: secondPageRows,
+      styles: { fontSize: 10, cellPadding: 3 },
+      headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+    });
+  
+    // Save the PDF
     doc.save("Registration_Report.pdf");
   };
+  
 
   return (
     <div className="main-content">
@@ -620,7 +649,7 @@ const handleUpload = (index) => {
   {sampleLoans.map((item, index) => (
     <TableRow key={index}>
       {/* Other columns */}
-      <TableCell></TableCell>
+      <TableCell className='text-black'></TableCell>
       <TableCell></TableCell>
       <TableCell></TableCell>
       <TableCell></TableCell>

@@ -9,6 +9,10 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
 import { FaEye } from "react-icons/fa";
 import FoundationIcon from '@mui/icons-material/Foundation';
 
+import jsPDF from "jspdf";
+
+import { FaFileDownload } from "react-icons/fa";
+import autoTable from "jspdf-autotable";
 
 const fetchLoansData = async () => {
   const response = await fetch('/api/getOCRCollection');
@@ -108,6 +112,38 @@ const handleToggle = () => {
     }
   };
 
+  const handleDownloadPDFArchitect = () => {
+    console.log("Loans data before mapping:", loans);
+
+    const doc = new jsPDF("landscape");
+    doc.setFontSize(14);
+    doc.text("Firm Details Report", 14, 15);
+
+    // Updated column names
+    const tableColumn = ["ACTION", "TIMESTAMP", "SLAB", "LETTER TYPE", "DOCUMENT"];
+
+    const tableRows = loans.map(row => [
+      row.action || "-",
+      row.timestamp || "-",
+      row.slab || "-",
+      row.letterType || "-",
+      row.document || "-"
+    ]);
+
+    console.log("Formatted Table Rows:", tableRows);
+
+    autoTable(doc, {
+      startY: 25,
+      head: [tableColumn],
+      body: tableRows,
+      styles: { fontSize: 10, cellPadding: 3 },
+      headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+    });
+
+    doc.save("EngineerArchitect_Report.pdf");
+};
+
+
   return (
     <div className="main-content">
        {!openModal ? (
@@ -115,18 +151,6 @@ const handleToggle = () => {
       <h6>Letter Module / Engineer & Architect Letters</h6>
 
 
-      {/* <div className="d-flex align-items-center mb-3">
-        <Button
-          onClick={handleCollapseToggle}
-          variant="outlined"
-          color="success"
-          className='m-3'
-          style={{ borderRadius: '20px' }}
-          startIcon={<FaEye size={20} color="#28a745" />}
-        >
-          {!isCollapsed && <span className="text-success">Engineer & Architect Letter</span>}
-        </Button>
-      </div> */}
 
 
          
@@ -181,10 +205,35 @@ const handleToggle = () => {
 
       {/* {isCollapsed && (
         <> */}
+        <div className='d-flex gap-3'>
       <div className="d-flex align-items-center justify-content-between my-3 pt-4 pb-3">
-        <Button variant="contained" className="text-nowrap" style={{ minWidth: "180px", background:"#272ba8"}} color="primary" onClick={() => handleOpenModal(null)}>
+        <Button variant="contained" className="text-nowrap m-1" style={{ minWidth: "180px", background:"#272ba8"}} color="primary" onClick={() => handleOpenModal(null)}>
           Add Letter
         </Button>
+        <Button
+    variant="contained"
+    sx={{
+      background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+      color: "white",
+      fontWeight: "bold",
+      textTransform: "none",
+      padding: "8px 16px",
+      borderRadius: "8px",
+      display: "flex",
+      alignItems: "center",  // Align icon and text
+      gap: "8px",  // Space between icon and text
+      "&:hover": {
+        background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+      },
+     
+    }}
+    // onClick={() => handledow(firms)}
+    onClick={handleDownloadPDFArchitect}
+  >
+    <FaFileDownload size={18} />  {/* Added download icon */}
+    Download PDF
+  </Button>
+        </div>
 
        
         

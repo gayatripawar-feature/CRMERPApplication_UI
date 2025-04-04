@@ -21,6 +21,7 @@ import { IconButton } from "@mui/material";
 import InfoIcon from '@mui/icons-material/Info';  // Using InfoIcon
 
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
+import { FaFileDownload } from "react-icons/fa";
 
 
 // import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -180,16 +181,7 @@ const handleToggle = () => {
     }
   };
 
-  // const handleChange = (e) => {
-  //   const value = e.target.value;
-
-  //   // ✅ Allow only numbers
-  //   if (/^\d*$/.test(value)) {
-  //     setSelectedLoan({ ...selectedLoan, flatNo: value });
-  //     setSelectedLevel(event.target.value);
-  //   }
-  // };
-
+ 
 
   const handleChange = (e) => {
     const value = e.target.value;
@@ -295,6 +287,49 @@ const handleToggle = () => {
  
 
 
+  const handleDownloadPDFDailyCollection= () => {
+    console.log("Loans data before mapping:", loans); // Use loans instead of firms
+  
+   
+  
+    const doc = new jsPDF("landscape");
+    doc.setFontSize(14);
+    doc.text("Firm Details Report", 14, 15);
+  
+    const tableColumn = [
+      "Timestamp", "Firm Name", "Firm Address", "Firm PAN No",
+      "Firm GST No", "Residential Address", "PAN No", "Aadhaar No",
+      "Photo", "Light Bill"
+    ];
+  
+    const tableRows = loans.map(row => [
+      row.timestamp || "-",
+      row.name || "-",
+      row.address || "-",
+      row.firmPanNo || "-",
+      row.firmGstNo || "-",
+      row.residentialAddress || "-",
+      row.panNo || "-",
+      row.aadhaarNo || "-",
+      row.photo || "-",
+      row.lightBill || "-"
+    ]);
+  
+    console.log("Formatted Table Rows:", tableRows);
+  
+    autoTable(doc, {
+      startY: 25,
+      head: [tableColumn],
+      body: tableRows,
+      styles: { fontSize: 10, cellPadding: 3 },
+      headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+    });
+  
+    doc.save("DailyCollection_Report.pdf");
+  };
+
+
+
   return (
     <div className="main-content">
        {!openModal ? (
@@ -355,9 +390,43 @@ const handleToggle = () => {
       
 
 <div className="d-flex align-items-center justify-content-between my-3 pt-4 pb-3">
-  <Button variant="contained" className="text-nowrap" style={{ minWidth: "150px" ,background:"#272ba8"}} color="primary" onClick={() => handleOpenModal(null)}>
+  <div>
+  <Button variant="contained" className="text-nowrap  m-2" style={{ minWidth: "150px" ,background:"#272ba8"}} color="primary" onClick={() => handleOpenModal(null)}>
    Add Collection
   </Button>
+
+          <Button
+        variant="contained"
+        sx={{
+          background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+          color: "white",
+          fontWeight: "bold",
+          fontWeight: "900",
+          textTransform: "none",
+          marginTop :"px",
+         
+          minHeight: "unset", // Removes fixed height  
+          height: "39px", // Explicitly set a smaller height  
+          fontSize: "12px",
+          borderRadius: "20px",
+          display: "inline-flex", // Ensures compact size  
+          alignItems: "center",
+          gap: "6px",
+          lineHeight: "1", // Reduces text spacing  
+          "&:hover": {
+            background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+          },
+        }}
+        disableElevation // Removes shadow that might add visual space  
+        disableRipple // Removes ripple effect padding  
+        onClick={handleDownloadPDFDailyCollection}
+      >
+        <FaFileDownload size={14} />
+        Download PDF
+      </Button>
+      
+  </div>
+ 
 
  
              

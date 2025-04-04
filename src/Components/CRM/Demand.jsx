@@ -7,9 +7,14 @@
 import React, { useState, useEffect } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, TextField, Modal, Box, MenuItem, Select, InputLabel, FormControl } from '@mui/material';
 import { FaEye } from "react-icons/fa";
-import { jsPDF } from "jspdf";
+
 import { ToastContainer, toast } from 'react-toastify';
 import { MonetizationOn } from "@mui/icons-material";
+import { FaFileDownload } from "react-icons/fa";
+
+
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -185,7 +190,83 @@ const handleToggle = () => {
     doc.save("demand-letter.pdf");
   };
   
- 
+  const handleDownloadPDFDemand = () => {
+    console.log("Loans data before mapping:", loans);
+
+    const doc = new jsPDF("landscape");
+    doc.setFontSize(14);
+    doc.text("Demand Report", 14, 15);
+
+    // Column headers split into two pages
+    const firstPageColumns = [
+        "S.No", "FLAT NO.", "NAME OF ALLOTEE", "NAME OF CO-ALLOTEE",
+        "TYPE", "FLOOR", "EMAIL ID", "WHATSAPP MOBILE NO."
+    ];
+
+    const secondPageColumns = [
+        "S.No", "RATE", "AGREEMENT VALUE", "DATE OF BOOKING",
+        "PARKING", "Date of Demand Raised", "Demand Level",
+        "Demand Stage (In %)", "Demand Amount",
+        "Received Against Agreement Value", "Total Received",
+        "Balance Against Agreement Value"
+    ];
+
+    // Split data for both pages
+    const firstPageRows = loans.map((row, index) => [
+        index + 1, // Serial Number
+        row.flatNo || "-",
+        row.allotteeName || "-",
+        row.coAllotteeName || "-",
+        row.type || "-",
+        row.floor || "-",
+        row.email || "-",
+        row.whatsappMobileNo || "-"
+    ]);
+
+    const secondPageRows = loans.map((row, index) => [
+        index + 1, // Serial Number
+        row.rate || "-",
+        row.agreementValue || "-",
+        row.dateOfBooking || "-",
+        row.parking || "-",
+        row.dateOfDemandRaised || "-",
+        row.demandLevel || "-",
+        row.demandStage || "-",
+        row.demandAmount || "-",
+        row.receivedAgainstAgreementValue || "-",
+        row.totalReceived || "-",
+        row.balanceAgainstAgreementValue || "-"
+    ]);
+
+    console.log("First Page Rows:", firstPageRows);
+    console.log("Second Page Rows:", secondPageRows);
+
+    // First Page Table
+    autoTable(doc, {
+        startY: 25,
+        head: [firstPageColumns],
+        body: firstPageRows,
+        styles: { fontSize: 10, cellPadding: 3 },
+        headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+    });
+
+    // Add new page
+    doc.addPage();
+
+    // Second Page Table
+    autoTable(doc, {
+        startY: 25,
+        head: [secondPageColumns],
+        body: secondPageRows,
+        styles: { fontSize: 10, cellPadding: 3 },
+        headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+    });
+
+    doc.save("Demand_Report.pdf");
+};
+  
+
+
 
 
   return (
@@ -248,9 +329,42 @@ const handleToggle = () => {
       
 
 <div className="d-flex align-items-center justify-content-between my-3 pt-4 pb-3">
+  <div className='d-flex gap-3'>
   <Button variant="contained" className="text-nowrap" style={{ minWidth: "150px" ,background:"#272ba8"}} color="primary" onClick={() => handleOpenModal(null)}>
     Demand Letter
   </Button>
+        <Button
+    variant="contained"
+    sx={{
+      background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+      color: "white",
+      fontWeight: "bold",
+      fontWeight: "900",
+      textTransform: "none",
+      marginTop :"px",
+     
+      minHeight: "unset", // Removes fixed height  
+      height: "39px", // Explicitly set a smaller height  
+      fontSize: "12px",
+      borderRadius: "20px",
+      display: "inline-flex", // Ensures compact size  
+      alignItems: "center",
+      gap: "6px",
+      lineHeight: "1", // Reduces text spacing  
+      "&:hover": {
+        background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+      },
+    }}
+    disableElevation // Removes shadow that might add visual space  
+    disableRipple // Removes ripple effect padding  
+    onClick={handleDownloadPDFDemand}
+  >
+    <FaFileDownload size={14} />
+    Download PDF
+  </Button>
+  
+  </div>
+  
 
   <div className="d-flex align-items-center justify-content-between mb-3 m-3">
            <div className="d-flex align-items-center gap-3">
@@ -336,7 +450,7 @@ const handleToggle = () => {
 
            
            {/* Rows per page */}
-           <div className="d-flex align-items-center gap-3">
+           {/* <div className="d-flex align-items-center gap-3">
              <label className="me-2">Rows per page:</label>
              <input
                type="number"
@@ -345,7 +459,7 @@ const handleToggle = () => {
                onChange={handleRowsPerPageChange}
                style={{ width: '80px' }}
              />
-           </div>
+           </div> */}
          </div>
              
 

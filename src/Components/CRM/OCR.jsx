@@ -357,7 +357,7 @@ const handleToggle = () => {
     console.log("Formatted Table Rows (Page 1):", tableRowsPage1);
     console.log("Formatted Table Rows (Page 2):", tableRowsPage2);
   
-    // Generate first table
+   
     autoTable(doc, {
       startY: 25,
       head: [tableColumnPage1],
@@ -366,12 +366,12 @@ const handleToggle = () => {
       headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
     });
   
-    // Add a new page for the second table
+    
     doc.addPage();
     doc.setFontSize(14);
     doc.text("OCR Details Report (Continued)", 14, 15);
   
-    // Generate second table
+    
     autoTable(doc, {
       startY: 25,
       head: [tableColumnPage2],
