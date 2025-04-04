@@ -40,7 +40,7 @@ const data = [
 
 
 
-const LostVisitTable = () => {
+const LostVisitTable = ({data}) => {
   console.log(data);
   return (
     <TableContainer component={Paper}>

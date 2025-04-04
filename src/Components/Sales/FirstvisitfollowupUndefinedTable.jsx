@@ -7,9 +7,9 @@ import { TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Paper
 const FirstvisitfollowupUndefinedTable = ({ data }) => {
   return (
     <>
-      <Typography variant="h5" component="h2" sx={{ marginBottom: "16px", color: "", fontWeight: "bold" }}>
+      {/* <Typography variant="h5" component="h2" sx={{ marginBottom: "16px", color: "", fontWeight: "bold" }}>
       Lost Enquiries
-      </Typography>
+      </Typography> */}
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
@@ -34,9 +34,9 @@ const FirstvisitfollowupUndefinedTable = ({ data }) => {
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>BUDGET (APPROX.)</TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>REASON FOR PURCHASE</TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>REFERENCE BY / SOURCE</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>RNAME OF CP (IF CHANNEL PARTNER)</TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>NAME OF CP (IF CHANNEL PARTNER)</TableCell>
 
-              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>RPLANNING TO BY WITHIN ?</TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>PLANNING TO BY WITHIN ?</TableCell>
 
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>CUSTOMER FEEDBACK & COMPLETE FOLLOWUP DETAILS
 														

@@ -12,9 +12,14 @@ import FormControl from '@mui/material/FormControl';
 import ListItemText from '@mui/material/ListItemText';
 import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
+import { Button } from '@mui/material';
 import { ToastContainer, toast } from 'react-toastify';
 import BookingStatus from './BookingStatus';
 import RevisitStatusTable from './RevisitStatusTable';
+
+import { jsPDF } from "jspdf";
+import {  FaFileDownload } from "react-icons/fa";
+import autoTable from "jspdf-autotable";
 const FirstVisitSteps = () => {
   const [activeIcon, setActiveIcon] = useState('project');
   const [showForm, setShowForm] = useState(false);
@@ -168,129 +173,114 @@ const MenuProps = {
     pageNumbers.push(i);
   }
 
+
+
+  const handleDownloadPDFBooking = () => {
+    const doc = new jsPDF("landscape");
+    doc.setFontSize(14);
+    doc.text("Firm Details Report", 14, 15);
+  
+    const tableColumn = [
+      "PLANNED", "ACTUAL", "STATUS", "LOAN SECURITY", "TIME DELAY",
+      "ENQUIRY NO.", "SALES EXECUTIVE NAME", "NAME", "MOBILE", "EMAIL",
+      "OCCUPATION", "COMPANY", "INTERESTED IN", "BUDGET (APPROX.)",
+      "REASON FOR PURCHASE", "REFERENCE BY / SOURCE", "NAME OF CP",
+      "PLANNING TO BUY WITHIN ?", "CUSTOMER FEEDBACK"
+    ];
+  
+    const tableRows = loans.map(row => [
+      row.planned || "-",
+      row.actual || "-",
+      row.status || "-",
+      row.loanSecurity || "-",
+      row.timeDelay || "-",
+      row.enquiryNo || "-",
+      row.salesExecutiveName || "-",
+      row.name || "-",
+      row.mobile || "-",
+      row.email || "-",
+      row.occupation || "-",
+      row.company || "-",
+      row.interestedIn || "-",
+      row.budget || "-",
+      row.reasonForPurchase || "-",
+      row.referenceBy || "-",
+      row.cpName || "-",
+      row.planningToBuyWithin || "-",
+      row.customerFeedback || "-"
+    ]);
+  
+    console.log("Formatted Table Rows:", tableRows);
+  
+    autoTable(doc, {
+      startY: 25,
+      head: [tableColumn],
+      body: tableRows,
+      styles: { fontSize: 9, cellPadding: 3 },
+      headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+    });
+  
+    doc.save("Booking_Status_Report.pdf");
+  };
+
+  // const handleDownloadPDFRevisit = () => {
+  //   const doc = new jsPDF("landscape");
+  //   doc.setFontSize(14);
+  //   doc.text("Firm Details Report", 14, 15);
+  
+  //   const tableColumn = [
+  //     "PLANNED", "ACTUAL", "STATUS", "LOAN SECURITY", "TIME DELAY",
+  //     "ENQUIRY NO.", "SALES EXECUTIVE NAME", "NAME", "MOBILE", "EMAIL",
+  //     "OCCUPATION", "COMPANY", "INTERESTED IN", "BUDGET (APPROX.)",
+  //     "REASON FOR PURCHASE", "REFERENCE BY / SOURCE", "NAME OF CP",
+  //     "PLANNING TO BUY WITHIN ?", "CUSTOMER FEEDBACK"
+  //   ];
+  
+  //   const tableRows = loans.map(row => [
+  //     row.planned || "-",
+  //     row.actual || "-",
+  //     row.status || "-",
+  //     row.loanSecurity || "-",
+  //     row.timeDelay || "-",
+  //     row.enquiryNo || "-",
+  //     row.salesExecutiveName || "-",
+  //     row.name || "-",
+  //     row.mobile || "-",
+  //     row.email || "-",
+  //     row.occupation || "-",
+  //     row.company || "-",
+  //     row.interestedIn || "-",
+  //     row.budget || "-",
+  //     row.reasonForPurchase || "-",
+  //     row.referenceBy || "-",
+  //     row.cpName || "-",
+  //     row.planningToBuyWithin || "-",
+  //     row.customerFeedback || "-"
+  //   ]);
+  
+  //   console.log("Formatted Table Rows:", tableRows);
+  
+  //   autoTable(doc, {
+  //     startY: 25,
+  //     head: [tableColumn],
+  //     body: tableRows,
+  //     styles: { fontSize: 9, cellPadding: 3 },
+  //     headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+  //   });
+  
+  //   doc.save("Revisit_Report.pdf");
+  // };
+  
+
+
+
   return (
     <div className="container my-4">
       <h2 className="fs-6 mb-3">Developer Module / Share Space</h2>
 
-{/*     
-      <div className="d-flex align-items-center gap-4">
-        
-        <div
-          className="d-flex align-items-center gap-2 p-2"
-          onClick={() => handleToggle('project')}
-          style={{
-            cursor: 'pointer',
-            borderRadius: '20px',
-            background: activeIcon === 'project' ? '#f8f9fa' : 'transparent',
-          }}
-        >
-          <div className="d-flex justify-content-center align-items-center rounded-circle bg-white p-2 shadow">
-            <FaProjectDiagram size={26} color="#ff5733" />
-          </div>
-          {activeIcon === 'project' && <span>Booking Status</span>}
-        </div>
-
-      
-        <div
-          className="d-flex align-items-center gap-2 p-2"
-          onClick={() => handleToggle('shared')}
-          style={{
-            cursor: 'pointer',
-            borderRadius: '20px',
-            background: activeIcon === 'shared' ? '#f8f9fa' : 'transparent',
-          }}
-        >
-          <div className="d-flex justify-content-center align-items-center rounded-circle bg-white p-2 shadow">
-            <FaShareAlt size={26} color="#28a745" />
-          </div>
-          {activeIcon === 'shared' && <span>Revisit Status</span>}
-        </div>
-      </div> */}
-
-{/* <div className="d-flex align-items-center gap-4">
- 
-  <div
-    className="d-flex align-items-center gap-2 p-2"
-    onClick={() => handleToggle('project')}
-    style={{
-      cursor: 'pointer',
-      borderRadius: '20px',
-      background: activeIcon === 'project' ? '#f8f9fa' : 'transparent',  // Active state background color
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'flex-start',
-      transition: 'background 0.3s ease', // Smooth background transition
-    }}
-  >
-    <div
-      className="d-flex justify-content-center align-items-center rounded-circle bg-white p-2 shadow"
-      style={{
-        background: activeIcon === 'project' ? '#f8f9fa' : '#3621a9', // Background color changes based on active state
-        padding: '10px', // Increase padding
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        boxShadow: 'inset 2px 2px 2px 0px rgba(255,255,255,.5), 7px 7px 20px 0px rgba(0,0,0,.1), 4px 4px 5px 0px rgba(0,0,0,.1)',
-      }}
-    >
-      <FaProjectDiagram size={26} color="white" /> 
-    </div>
-    {activeIcon === 'project' && (
-      <span
-        style={{
-          color: 'white',
-          fontSize: '16px',
-          marginLeft: '8px', // Space between icon and label
-        }}
-      >
-        Booking Status
-      </span>
-    )}
-  </div>
-
-
-  <div
-    className="d-flex align-items-center gap-2 p-2"
-    onClick={() => handleToggle('shared')}
-    style={{
-      cursor: 'pointer',
-      borderRadius: '20px',
-      background: activeIcon === 'shared' ? '#f8f9fa' : 'transparent',  // Active state background color
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'flex-start',
-      transition: 'background 0.3s ease', // Smooth background transition
-    }}
-  >
-    <div
-      className="d-flex justify-content-center align-items-center rounded-circle bg-white p-2 shadow"
-      style={{
-        background: activeIcon === 'shared' ? '#f8f9fa' : '#3621a9', // Background color changes based on active state
-        padding: '10px', // Increase padding
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        boxShadow: 'inset 2px 2px 2px 0px rgba(114, 10, 252, 0.5), 7px 7px 20px 0px rgba(0,0,0,.1), 4px 4px 5px 0px rgba(0,0,0,.1)',
-      }}
-    >
-      <FaShareAlt size={26} color="white" /> 
-    </div>
-    {activeIcon === 'shared' && (
-      <span
-        style={{
-          color: 'white',
-          fontSize: '16px',
-          marginLeft: '8px', // Space between icon and label
-        }}
-      >
-        Revisit Status
-      </span>
-    )}
-  </div>
-</div> */}
 
 <div className="d-flex align-items-center gap-4">
-  {/* Project Icon and Label Together */}
+  
   <div
     className="d-flex align-items-center gap-2 p-2"
     onClick={() => handleToggle('project')}
@@ -300,10 +290,10 @@ const MenuProps = {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'flex-start',
-      transition: 'background 0.3s ease', // Smooth background transition
-      background: activeIcon === 'project' ? '#3621a9' : '#f8f9fa', // Same background color for both
+      transition: 'background 0.3s ease', 
+      background: activeIcon === 'project' ? '#3621a9' : '#f8f9fa', 
       padding: '8px 16px', // Padding to space out icon and label
-      // borderRadius: '20px', // Rounded corners for the entire container
+     
     }}
   >
     <div
@@ -318,6 +308,7 @@ const MenuProps = {
     >
       <FaProjectDiagram size={26} color={activeIcon === 'project' ? '#3621a9' : 'white'} /> {/* Icon color changes based on active state */}
     </div>
+    <div className=''>
     <span
       style={{
         color: activeIcon === 'project' ? '#fff' : '#3621a9', // Text color changes based on active state
@@ -327,7 +318,12 @@ const MenuProps = {
     >
       Booking Status
     </span>
+    </div>
+  
+
+  
   </div>
+
 
   {/* Share Icon and Label Together */}
   <div
@@ -372,253 +368,38 @@ const MenuProps = {
 
 
 
-      {/* Out Share Button and Pagination Controls in One Row */}
-      {/* <div className="d-flex justify-content-between align-items-center mt-4">
-      
-        <button className="btn btn-primary" onClick={handleOutShare}>Out Share</button>
-
-       
-        <div className="d-flex align-items-center">
-          <label className="me-2">Rows per page:</label>
-          <input
-            type="number"
-            className="form-control"
-            value={rowsPerPage}
-            onChange={handleRowsPerPageChange}
-            style={{ width: '80px' }}
-          />
-
+<div className='p-1 pt-3'>
+    <Button
+    variant="contained"
+    sx={{
+      background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+      color: "white",
+      fontWeight: "bold",
+      textTransform: "none",
+      padding: "8px 16px",
+      borderRadius: "8px",
+      display: "flex",
+      alignItems: "center",  // Align icon and text
+      gap: "8px",  // Space between icon and text
+      "&:hover": {
+        background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+      },
      
-     
-
-<button
-  className="btn btn-secondary ms-2" style ={{backgroundColor:"#800080"}}
-  disabled={currentPage === 1}
-  onClick={() => handlePageChange(currentPage - 1)}
->
-  Previous
-</button>
-
-<span className="ms-2">
-  {currentPage} of {totalPages}
-</span>
-
-
-
-
-<button
-  className="btn btn-secondary ms-2" style ={{backgroundColor:"#800080"}}
-  disabled={currentPage === totalPages}
-  onClick={() => handlePageChange(currentPage + 1)}
->
-  Next
-</button>
-</div>  
-</div>  */}
-
-{/* 
-      {showForm && (
-        <div className="mt-4">
-          <h4>Add Share Information</h4>
-          <form>
-            
-            <table className="table table-bordered table-sm">
-              <thead>
-                <tr>
-                  <th className='fw-bold bg-primary text-center fs-5 '>Share To</th>
-                  <th className='fw-bold bg-primary text-center fs-5 '>Type of Document</th>
-                  <th className='fw-bold bg-primary text-center fs-5 '>Document</th>
-                  <th className='fw-bold bg-primary text-center fs-5 '>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {rows.map((row, index) => (
-                  <tr key={index}>
-                    <td>
-                
-                    
-<div className="d-flex flex-column gap-2">
-      <FormControl sx={{ m: 1, width: 300 }}>
-        <InputLabel id="select-share-to-label">Share To</InputLabel>
-        <Select
-          labelId="select-share-to-label"
-          id="select-share-to"
-          multiple
-          value={selectedItems}
-          onChange={handleChange}
-          input={<OutlinedInput label="Share To" />}
-          renderValue={(selected) => selected.join(', ')}
-          MenuProps={MenuProps}
-        >
-          {options.map((option) => (
-            <MenuItem key={option} value={option}>
-              <Checkbox checked={selectedItems.includes(option)} />
-              <ListItemText primary={option} />
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+    }}
+    // onClick={() => handledow(firms)}
+    onClick={handleDownloadPDFBooking}
+  >
+    <FaFileDownload size={18} />  {/* Added download icon */}
+    Download PDF
+  </Button>
     </div>
-                    </td>
-                    <td>
-                     
-                      <select
-                        className="form-control"
-                        value={row.documentType || ''}
-                        onChange={(e) => handleDocumentTypeChange(e, index)}
-                      >
-                       <option value="">Select Type</option>
-                          <option value="MCA certificate">MCA certificate</option>
-                          <option value="PAN Card">PAN Card</option>
-                          <option value="Shop Act (Form G)">Shop Act (Form G)</option>
-                          <option value="Shop Act (Form F)">Shop Act (Form F)</option>
-                          <option value="Udhyam Aadhar">Udhyam Aadhar</option>
-                          <option value="TAN Certificate">TAN Certificate</option>
-                          <option value="GST Certifiacte">GST Certifiacte</option>
-                          <option value="RERA Bank Account Details">RERA Bank Account Details</option>
-                          <option value="7/12">7/12</option>
-                          <option value="Paper Notice">Paper Notice</option>
-                          <option value="Sale Deed">Sale Deed</option>
-                          <option value="POA">POA</option>
-                          <option value="Mutation Entry">Mutation Entry</option>
-                          <option value="Development Agreement">Development Agreement</option>
-                          <option value="Power of Attorney">Power of Attorney</option>
-                          <option value="Garden NOC">Garden NOC</option>
-                          <option value="Water NOC<">Water NOC</option>
-                          <option value="Drainage  NOC">Drainage  NOC</option>
-                          <option value="Fire NOC">Fire NOC</option>
-                          <option value="Pollution NOC">Pollution NOC</option>
-                          <option value="Highway Authority">Highway Authority</option>
-                          <option value="EC (IA)">EC (IA)</option>
-                          <option value="Aviation NOC">Aviation NOC</option>
-                          <option value=">NA Order">NA Order</option>
-                          <option value="Brouchure">Brouchure</option>
-                          <option value="Google Location">Google Location</option>
-                          <option value="Demarcation Plan">Demarcation Plan</option>
-                          <option value="Sanctioned Plan">Sanctioned Plan</option>
-                          <option value="Draft Agreement">Draft Agreement</option>
-                          <option value="TAX NOC<">TAX NOC</option>
-                          <option value="Soil Testing Report">Soil Testing Report</option>
-                        <option value="DP Opinion">DP Opinion</option>                         <option value="Zone Certificate">Zone Certificate</option>
-
-                          <option value="Rain Water Harvesting Certificate">Rain Water Harvesting Certificate</option>
-                         <option value="Solar Installation Certificate">Solar Installation Certificate</option>
-                         <option value="STP Plant Installation Certificate">STP Plant Installation Certificate</option>
-                         <option value="Plinth Level certificate">Plinth Level certificate</option>
-                          <option value="PMC Work Order">PMC Work Order</option>
-                         <option value="Certificate Of Incorporation">Certificate Of Incorporation</option>
-                          <option value="Partnership Deed">Partnership Deed</option>
-                          <option value="Supplementary Deed">Supplementary Deed</option>
-                          <option value="Search and Title Report">Search and Title Report</option>
-                              <option value="Letterhead">Letterhead</option>
-                              <option value="Commencement Certificate">Commencement Certificate</option>
-                              <option value="IOD Issue Copy">IOD Issue Copy</option>
-                             <option value="Google Plot Image">Google Plot Image</option>
-                              <option value="Rent Agreement">Rent Agreement</option>
-                              <option value="Table F">Table F</option>
-                              <option value="Old Legal Documents SD">Old Legal Documents SD</option>
-                              <option value="ITR">ITR</option>
-                              <option value="Sales MIS">Sales MIS</option>
-                              <option value="Cash flow & Schedule">Cash flow & Schedule</option>
-                             <option value="CF Data">CF Data</option>
-                              <option value="SRO Certificate">SRO Certificate</option>
-                              <option value="MOU Attach Annexure">MOU Attach Annexure</option>
-                              <option value="Cost sheet">Cost sheet</option>
-                              <option value="Mail">Mail</option>
-                              <option value="Old to New Certifiacte All">Old to New Certifiacte All</option>
-                              <option value="Architect Certificate(Quartely) ">Architect Certificate(Quartely) </option>
-                              <option value="Engineer Certificate(Quartely) ">Engineer Certificate(Quartely) </option>
-                            <option value="CA Certificate(Quartely) ">CA Certificate(Quartely) </option>
-                      </select>
-                    </td>
-                    <td>
-                    
-                      <input
-                        type="file"
-                        className="form-control"
-                        onChange={(e) => handleFileChange(e, index)}
-                      />
-                    </td>
-                    <td>
-               
-                      <button
-                        className="btn btn-sm btn-danger"
-                        onClick={() => handleRemoveRow(index)}
-                      >
-                        Remove
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </form>
-
-      
-          <button className="btn btn-secondary me-2" onClick={addRow}>Add Row</button>
-         
-          <button className="btn btn-success me-2" onClick={handleSubmit}>Submit</button>
-       
-          <button className="btn btn-secondary" onClick={handleCancel}>Cancel</button>
-         
-        </div>
-      )} */}
-
    
 
 {showProjectTable && activeIcon === 'project' && (
   <div className="mt-4">
-    {/* Table */}
-    {/* <table className="table table-bordered table-sm">
-      <thead style={{ background:"#3621a9"}}>
-        <tr >
-          <th className="fw-bold bg-primary text-center fs-5">PLANNED</th>
-          <th className="fw-bold bg-primary text-center fs-5">ACTUAL</th>
-          <th className="fw-bold bg-primary text-center fs-5">STATUS</th>
-          <th className="fw-bold bg-primary text-center fs-5">LOAN SECURITY (IF APPLICABLE)</th>
-          <th className="fw-bold bg-primary text-center fs-5">	TIME DELAY</th>
-        </tr>
-      </thead>
-      <tbody>
-        {currentRows.map((row, index) => (
-          <tr key={index}>
-            <td>
-              
-              <button
-                className="btn btn-warning btn-sm"
-                onClick={() => {
-                  // You can define the edit logic here, for example:
-                  console.log('Editing action:', row);
-                  // Maybe open an edit form or modal
-                }}
-              >
-                <FaEdit size={20} />
-              </button>
-            </td>
-            <td>{row.timestamp}</td>
-            <td>{row.shareTo}</td>
-            <td>{row.documentType}</td>
-            <td>
-              
-              <button
-                className="btn btn-info btn-sm"
-                onClick={() => {
-                  // Define the view logic here, for example:
-                  console.log('Viewing document:', row.document);
-                  // Maybe open the document in a modal or new tab
-                }}
-              >
-                <FaEye size={20} />
-              </button>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table> */}
-
-
+ 
 <div>
-{/* <BookingStatus  data= {data}/> */}
+
 <BookingStatus data={data} />
     </div>
 
@@ -627,45 +408,10 @@ const MenuProps = {
 
 
 
+
 {activeIcon === 'shared' && (
   <div className="mt-4">
-    {/* Table */}
-    {/* <table className="table table-bordered table-sm">
-      <thead>
-        <tr>
-          <th className="fw-bold bg-primary text-center fs-5">Shared From</th>
-          <th className="fw-bold bg-primary text-center fs-5">Timestamp</th>
-          <th className="fw-bold bg-primary text-center fs-5">Share To</th>
-          <th className="fw-bold bg-primary text-center fs-5">Type of Document</th>
-          <th className="fw-bold bg-primary text-center fs-5">Document</th>
-          <th className="fw-bold bg-primary text-center fs-5">Action</th> 
-        </tr>
-      </thead>
-      <tbody>
-        {currentRows.map((row, index) => (
-          <tr key={index}>
-            <td>{row.sharedFrom}</td>
-            <td>{row.timestamp}</td>
-            <td>{row.shareTo}</td>
-            <td>{row.documentType}</td>
-            <td>{row.document}</td>
-            <td>
-            
-              <button
-                className="btn btn-info btn-sm"
-                onClick={() => {
-                
-                  console.log('Viewing document:', row.document);
-                  
-                }}
-              >
-                <FaEye size={20} />
-              </button>
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table> */}
+  
 
 <RevisitStatusTable data={data} />
 

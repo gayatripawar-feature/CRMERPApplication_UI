@@ -5,8 +5,16 @@ import React, { useState } from "react";
 import { TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Paper, IconButton, Tooltip, Button } from "@mui/material";
 import { Edit, WhatsApp, Email, Visibility } from "@mui/icons-material";
 
-const ChannelPartnerTable = ({ data }) => {
+const ChannelPartnerTable = ({ data =[] }) => {
   const [status, setStatus] = useState("Active"); 
+  
+  const handleStatusChange = (id, newStatus) => {
+    const updatedData = data.map((item) =>
+      item.id === id ? { ...item, status: newStatus } : item
+    );
+    setData(updatedData);
+  };
+
 
   const dummyData = [{
     timestamp: "2025-03-24 ",
@@ -29,9 +37,9 @@ const ChannelPartnerTable = ({ data }) => {
     window.open(url, "_blank");
   };
 
-  const handleStatusChange = (newStatus) => {
-    setStatus(newStatus); // Update the status when a button is clicked
-  };
+  // const handleStatusChange = (newStatus) => {
+  //   setStatus(newStatus); // Update the status when a button is clicked
+  // };
 
   return (
     <TableContainer component={Paper}>

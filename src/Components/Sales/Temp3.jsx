@@ -3,12 +3,12 @@ import { Button, Modal, Form, Row, Col, Table } from "react-bootstrap";
 import {TableBody, TableCell, TableContainer, TableHead, TableRow, Paper,Typography } from '@mui/material';
 import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
-
+import {  FaFileDownload } from "react-icons/fa";
 // import { useReactToPrint } from "react-to-print";
 import { useReactToPrint } from "react-to-print";
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-// import { useReactToPrint } from 'react-to-print';
+
 
 
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
@@ -17,6 +17,8 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TextField, Grid, Box } from '@mui/material';
 
 
+
+import autoTable from "jspdf-autotable";
 
 const templates = [
 
@@ -95,14 +97,7 @@ const templates = [
     buttons: ["Form", "Display", "PDF"],
   }
 ,  
-  // {
-  //   id: 4,
-  //   title: "Negotiation Calculation (PACKAGE WISE)",
-  //   description: "Generate package-wise negotiation calculations and agreements.",
-  //   formtype: "Package",
-  //   displayType: "packageDisplay",
-  //   buttons: ["Form", "Display", "PDF"],
-  // },
+ 
   {
     id: 4,
     title: (
@@ -128,14 +123,7 @@ const templates = [
   },
   
  
-  // {
-  //   id: 5,
-  //   title: "Negotiation Calculation (AGREEMENT VALUE WISE)",
-  //   description: "Generate agreement value-based negotiation calculations.",
-  //   formtype: "Agreement",
-  //   displayType: "agreementDisplay",
-  //   buttons: ["Form", "Display", "PDF"],
-  // },
+ 
   {
     id: 5,
     title: (
@@ -145,7 +133,7 @@ const templates = [
         borderRadius: '6px', 
         marginBottom: '20px', 
         textAlign: 'center',
-        color: 'white', // Dark text for better contrast
+        color: 'white', 
         fontWeight: 'bold',
         fontSize: '18px',
         boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
@@ -179,7 +167,7 @@ const Template = () => {
   const displayRef = useRef();
 
 
-  const componentRef = useRef(); // ✅ Create a reference
+  const componentRef = useRef(); 
 
 
 const handlePrint = useReactToPrint({
@@ -200,14 +188,8 @@ const handleOpenModal = (content) => {
     setOpenModal(true);
   
     setTimeout(() => {
-      console.log("🟢 Checking modalContent:", modalContent); // Debugging
-    //   if (modalContent === "visitPdf") {
-    //     console.log("🟢 Triggering generatePDF() after ensuring modal content is updated...");
-    //     generatePDF();
-    //   } else {
-    //     console.error("❌ Modal content not updated yet, delaying print...");
-    //     setTimeout(() => generatePDF(), 500); // Retry after 500ms
-    //   }
+      console.log("🟢 Checking modalContent:", modalContent); 
+ 
 
     if (modalContent === content) {
         console.log("🟢 Modal is fully rendered, generating PDF...");
@@ -216,64 +198,30 @@ const handleOpenModal = (content) => {
         console.log("⏳ Modal not ready yet, retrying...");
         setTimeout(() => generatePDF(), 500);
       }
-    }, 1000); // Delay printing to allow React to update modalContent
+    }, 1000); 
   };
   
   
 
  
-  // const handleGeneratePDF = () => {
-  //   const content = document.getElementById('table-content');
-  //   if (!content) {
-  //     alert('No content to generate PDF');
-  //     return;
-  //   }
-  //   // Capture the content using html2canvas with a higher scale for better quality
-  //   html2canvas(content, { scale: 2 }).then((canvas) => {
-  //     const imgData = canvas.toDataURL('image/png');
-  //     const pdf = new jsPDF('p', 'mm', 'a4');
-  //     const pdfWidth = pdf.internal.pageSize.getWidth();
-  //     const pdfHeight = pdf.internal.pageSize.getHeight();
-      
-  //     // Calculate the image dimensions in the PDF
-  //     const imgWidth = pdfWidth;
-  //     const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      
-  //     let heightLeft = imgHeight;
-  //     let position = 0;
-      
-  //     // Add the first page
-  //     pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-  //     heightLeft -= pdfHeight;
-      
-  //     // Add extra pages if necessary
-  //     while (heightLeft > 0) {
-  //       position = heightLeft - imgHeight;
-  //       pdf.addPage();
-  //       pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-  //       heightLeft -= pdfHeight;
-  //     }
-      
-  //     pdf.save("download.pdf");
-  //   });
-  // };
 
 
 
   const handleGeneratePDF = () => {
     const content = document.getElementById('table-content');
+  
     if (!content) {
       alert('No content to generate PDF');
       return;
     }
-    // Temporarily hide the Download PDF button
+    
     const pdfButton = document.getElementById('download-pdf-button');
     if (pdfButton) {
       pdfButton.style.display = 'none';
     }
-    // Capture the content as an image using html2canvas
+   
     html2canvas(content, { scale: 2 }).then((canvas) => {
-      // Restore the button visibility
+  
       if (pdfButton) {
         pdfButton.style.display = 'block';
       }
@@ -613,7 +561,108 @@ const modalTitle = selectedTemplate ? modalTitles[selectedTemplate.displayType] 
       <h2>Sales Templates</h2>
       
       
-   
+   <div className="d-flex gap-3">
+   <Button
+  variant="contained"
+  style={{
+    background: "linear-gradient(45deg, rgb(139, 107, 255), rgb(178, 83, 255))",
+    color: "white",
+    fontWeight: "bold",
+    textTransform: "none",
+    padding: "8px 16px",
+    borderRadius: "8px",
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",
+  }}
+>
+  <FaFileDownload size={18} />
+  Visit -  PDF
+</Button>
+
+<Button
+  variant="contained"
+  id="download-pdf-button"
+  style={{
+    background: "linear-gradient(45deg, rgb(139, 107, 255), rgb(178, 83, 255))",
+    color: "white",
+    fontWeight: "bold",
+    textTransform: "none",
+    padding: "8px 16px",
+    borderRadius: "8px",
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",
+  }}
+  onClick={(e) => {
+    console.log("Button Pressed!", e);
+    handleGeneratePDF();
+  }}
+>
+  <FaFileDownload size={18} />
+  Booking - PDF
+</Button>
+
+<Button
+  variant="contained"
+  style={{
+    background: "linear-gradient(45deg, rgb(139, 107, 255), rgb(178, 83, 255))",
+    color: "white",
+    fontWeight: "bold",
+    textTransform: "none",
+    padding: "8px 16px",
+    borderRadius: "8px",
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",
+  }}
+  onClick={handleGeneratePDFRate}
+>
+  <FaFileDownload size={18} />
+  Rate Approval - PDF
+</Button>
+
+<Button
+  variant="contained"
+  style={{
+    background: "linear-gradient(45deg, rgb(139, 107, 255), rgb(178, 83, 255))",
+    color: "white",
+    fontWeight: "bold",
+    textTransform: "none",
+    padding: "8px 16px",
+    borderRadius: "8px",
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",
+  }}
+>
+  <FaFileDownload size={18} />
+  Package Negotiation PDF
+</Button>
+
+  
+<Button
+  variant="contained"
+  style={{
+    background: "linear-gradient(45deg, rgb(139, 107, 255), rgb(178, 83, 255))",
+    color: "white",
+    fontWeight: "bold",
+    textTransform: "none",
+    padding: "8px 16px",
+    borderRadius: "8px",
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",
+  }}
+  onClick={handleGeneratePDFRatePackage}
+>
+  <FaFileDownload size={18} />
+ Agreement Negotiation PDF
+</Button>
+
+
+
+   </div>
 
 
 <div className="row g-4 mt-5">
@@ -730,7 +779,7 @@ const modalTitle = selectedTemplate ? modalTitles[selectedTemplate.displayType] 
 {modalContent === "visitDisplay" && (
  
 <div id="table-content">
-<Table bordered className="visit-table">
+<Table bordered className="visit-table" >
   <tbody>
     <tr>
       <td className="label-cell">PROJECT NAME</td>
@@ -957,239 +1006,6 @@ const modalTitle = selectedTemplate ? modalTitles[selectedTemplate.displayType] 
 </div>
 )}
 
-{/* <div ref={componentRef}>
-{modalContent === "visitPdf" && (
-    <>
-
- <Table bordered className="visit-table">
-   <tbody>
-     <tr>
-       <td className="label-cell">PROJECT NAME</td>
-       <td className="value-cell"></td> 
-       <td className="label-cell"></td>
-     </tr>
- 
-     <tr>
-       <td className="label-cell">MAHARERA NO</td>
-       <td className="value-cell"></td> 
-       <td className="value-cell"></td> 
-     </tr>
- 
-     <tr>
-       <td className="label-cell">Firm Name / PROJECT NAME / WING NO E / UNIT NO 208 - fn/P</td>
-       <td className="value-cell"></td> 
-       <td className="label-cell">Date :</td>
-     </tr>
- 
-     <tr>
-       <td className="label-cell">UNIT No</td>
-       <td className="value-cell"></td> 
-       <td className="label-cell">WING:</td>
-     </tr>
- 
-     <tr>
-       <td className="label-cell">CARPET</td>
-       <td className="value-cell"></td> 
-       <td className="label-cell">UNIT TYPE:</td>
-     </tr>
- 
-     <tr>
-       <td className="label-cell">OPEN/ENCLOSED BALCONY AS SANCTIONED</td>
-       <td className="value-cell"></td> 
-       <td className="value-cell"></td> 
-     </tr>
- 
-     <tr>
-       <td className="label-cell">TERRACE</td>
-       <td className="label-cell">ATT. TERRACE CARPET AREA</td>
-       <td className="value-cell"></td> 
-     </tr>
- 
-     <tr>
-       <td className="label-cell">SITOUT</td>
-       <td className="value-cell">	BALCONY AREA/ SITOUR CARPET AREA</td> 
-       <td className="value-cell"></td> 
-     </tr>
- 
-     <tr>
-       <td className="label-cell">PODIUM GARDEN</td>
-       <td className="value-cell"></td> 
-       <td className="value-cell"></td> 
-     </tr>
- 
-     <tr>
-       <td className="label-cell">PORCH</td>
-       <td className="value-cell">	PORCH AREA</td> 
-       <td className="value-cell"></td> 
-     </tr>
- 
-     
-     <tr>
-       <td className="label-cell">TOP TERRACE</td>
-       <td className="value-cell">TOP TERRACE CARPET AREA</td> 
-       <td className="value-cell"></td> 
-     </tr>
-     
-     <tr>
-       <td className="label-cell">TOTAL USABLE AREA</td>
-       <td className="value-cell"></td> 
-       <td className="value-cell"></td> 
-     </tr>
-     
-     <tr>
-       <td className="label-cell">Agreement value</td>
-       <td className="value-cell"></td> 
-       <td className="value-cell"></td> 
-     </tr>
-     
-     <tr>
-       <td className="label-cell">STAMP DUTY (AS APPLICABLE)</td>
-       <td className="value-cell"></td> 
-       <td className="value-cell"></td> 
-     </tr>
-     
-     <tr>
-       <td className="label-cell">REGISTRATION (AS APPLICABLE)</td>
-       <td className="value-cell"></td> 
-       <td className="value-cell"></td> 
-     </tr>
-     
-     <tr>
-       <td className="label-cell">GST @%</td>
-       <td className="value-cell"></td> 
-       <td className="value-cell"></td> 
-     </tr>
- 
-     <tr>
-       <td className="label-cell">Grand Total</td>
-       <td className="value-cell"></td> 
-       <td className="value-cell"></td> 
-     </tr>
-     <tr>
-       <td className="label-cell">This Cost Sheet is valid till (15 days from the date of booking)-</td>
-       <td className="value-cell"></td> 
-       <td className="value-cell"></td> 
-     </tr>
- 
-     <tr>
-       <td className="label-cell">Booking Cheque Favouring -</td>
-       <td className="value-cell"></td> 
-       <td className="value-cell"></td> 
-     </tr>
- 
-     <tr>
-       <td className="label-cell">Taxes Cheque Favouring -</td>
-       <td className="value-cell"></td> 
-       <td className="value-cell"></td> 
-     </tr>
- 
-     <tr>
-       <td className="label-cell">STAMP DUTY AND REGISTRATION CHARGES TO BE PAID IMM</td>
-       <td className="value-cell"></td> 
-       <td className="value-cell"></td> 
-     </tr>
- 
-     <tr>
-       <td className="label-cell">Agreement should be registered within 21 days from the date of Ap</td>
-       <td className="value-cell"></td> 
-       <td className="value-cell"></td> 
-     </tr>
- 
-     <tr>
-       <td className="label-cell">Prior to agreement, the client should submit the loan sanction lette</td>
-       <td className="value-cell"></td> 
-       <td className="value-cell"></td> 
-     </tr>
-     <tr>
-       <td className="label-cell">Execution of agreement will be subject to realisation of the payme</td>
-       <td className="value-cell"></td> 
-       <td className="value-cell"></td> 
-     </tr>
- 
-     <tr>
-       <td className="label-cell">TDS (As Applicable)</td>
-       <td className="value-cell"></td> 
-       <td className="value-cell"></td> 
-     </tr>
-     <tr>
-       <td className="label-cell">Government Charges/taxes are subject to change & would be ap</td>
-       <td className="value-cell"></td> 
-       <td className="value-cell"></td> 
-     </tr>
-     <tr>
-       <td className="label-cell">Lumpsum Advance Maintenance Deposit shall be collected at the </td>
-       <td className="value-cell"></td> 
-       <td className="value-cell"></td> 
-     </tr>
-     <tr>
-       <td className="label-cell">Rates are subject to change without prior notice.</td>
-       <td className="value-cell"></td> 
-       <td className="value-cell"></td> 
-     </tr>
- 
-     <tr>
-       <td className="label-cell">Govt taxes to be paid by the buyer as per prevailing rates.</td>
-       <td className="value-cell"></td> 
-       <td className="value-cell"></td> 
-     </tr>
- 
- 
-     <tr>
-       <td className="label-cell">The above mentioned cost is based on the tentative area, the exac</td>
-       <td className="value-cell"></td> 
-       <td className="value-cell"></td> 
-     </tr>
- 
-     <tr>
-       <td className="label-cell">This is purely conceptual & not a legal offering Company reserves</td>
-       <td className="value-cell"></td> 
-       <td className="value-cell"></td> 
-     </tr>
- 
-     <tr>
-       <td className="label-cell">Source of Enquiry</td>
-       <td className="value-cell"></td> 
-       <td className="value-cell"></td> 
-     </tr>
- 
-     <tr>
-       <td className="label-cell">Agent Agent/Broker Name:</td>
-       <td className="value-cell"></td> 
-       <td className="value-cell"></td> 
-     </tr>
- 
-     <tr>
-       <td className="label-cell">If any case, for any reason the unit is cancelled after registration, t</td>
-       <td className="value-cell"></td> 
-       <td className="value-cell"></td> 
-     </tr>
-     
-     <tr>
-       <td className="label-cell">1st Applicant Name:</td>
-       <td className="value-cell"></td> 
-       <td className="value-cell">Sign :</td> 
-     </tr>
-     
-     <tr>
-       <td className="label-cell">Manager Name:</td>
-       <td className="value-cell"></td> 
-       <td className="value-cell">Sign :</td> 
-     </tr>
-     <tr>
-       <td className="label-cell">***We are concerned about accuracy and timely payment, so custo</td>
-       <td className="value-cell"></td> 
-       <td className="value-cell"></td> 
-     </tr>
-   </tbody>
- </Table>
-  
-   <Button variant="primary" onClick={handlePrint}>
-        Generate PDF
-      </Button>
-      
-</>
- )}
- </div> */}
 
 
 <Modal.Body>
@@ -1814,7 +1630,7 @@ const modalTitle = selectedTemplate ? modalTitles[selectedTemplate.displayType] 
           <Button className="btn btn-primary" variant="" onClick={handleCloseModal}>
            Submit
           </Button>
-          {/* {modalContent === "visit" && <Button variant="primary">Submit</Button>} */}
+        
         </Modal.Footer>
       </Modal>
     </div>

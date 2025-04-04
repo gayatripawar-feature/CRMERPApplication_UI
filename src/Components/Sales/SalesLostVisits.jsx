@@ -16,6 +16,10 @@ import BookedTable from './BookedTable';
 
 import Lostleadstable from "./Lostleadstable";
 import LostVisitTable from './LostVisitTable';
+import { jsPDF } from "jspdf";
+
+import autoTable from "jspdf-autotable";
+
 const sections = [
     { label: "Pending Follow Up", icon: <FaBuilding size={20} />, createLabel: "Create Firm" },
     
@@ -519,6 +523,59 @@ const SalesLostVisits = () => {
         setClosingExecutive(event.target.value);
       };
     
+      const handleDownloadPDFLost = () => {
+        const doc = new jsPDF("landscape", "pt", "a4"); // "pt" for better layout control
+      
+        doc.setFontSize(14);
+        doc.text("Lost Visit Report", 40, 30);
+      
+        const tableColumn = [
+          "LAST FOLLOW UP", "STATUS", "REMARK", "NEXT FOLLOW UP", "ENQUIRY NO.",
+          "LEAD NO.", "NAME", "SALES EXE.", "MOBILE", "EMAIL", "OCCUPATION", "COMPANY",
+          "INTERESTED", "BUDGET", "REASON", "REFERENCE", "NAME OF CP", "PLANNING TO BUY?", "FOLLOWUP DETAILS"
+        ];
+      
+        const tableRows = data.map((item) => [
+          item.lastFollowUp || "-",
+          item.status || "-",
+          item.remark || "-",
+          item.nextFollowUp || "-",
+          item.enquiryNo || "-",
+          item.leadNo || "-",
+          item.name || "-",
+          item.salesExe || "-",
+          item.mobile || "-",
+          item.email || "-",
+          item.occupation || "-",
+          item.company || "-",
+          item.interested || "-",
+          item.budget || "-",
+          item.reason || "-",
+          item.reference || "-",
+          item.nameOfCP || "-",
+          item.planningToBuy || "-",
+          item.followupDetails || "-"
+        ]);
+      
+        autoTable(doc, {
+          startY: 40,
+          head: [tableColumn],
+          body: tableRows,
+          margin: { top: 40, bottom: 30 },
+          styles: { fontSize: 8, cellPadding: 3 },
+          headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+          didDrawPage: (data) => {
+            doc.setFontSize(10);
+            doc.text(`Page ${doc.internal.getNumberOfPages()}`, doc.internal.pageSize.getWidth() - 60, 20);
+          },
+        });
+      
+        doc.save("Lost_Visit_Report.pdf");
+      };
+      
+
+      
+
     return (
       <div className="main-content">
         <h6>Sales Module / Lost Enquiry Follow Up Management</h6>
@@ -528,22 +585,7 @@ const SalesLostVisits = () => {
       
   
   
-        {/* <div className="d-flex align-items-center mb-3">
-          {sections.map((section, index) => (
-            <Button
-              key={index}
-              onClick={() => handleToggleSection(index)}
-              variant="outlined"
-              color="success"
-              className='m-3'
-              style={{ borderRadius: '20px' }}
-              startIcon={<FaEye size={20} color="#28a745" />}
-            >
-              {expandedSection === index ? section.label : null}
-            </Button>
-          ))}
-        </div>
-   */}
+      
 <div className="d-flex align-items-center mb-3">
       {sections.map((section, index) => (
         <Button
@@ -595,6 +637,7 @@ const SalesLostVisits = () => {
       {!showFirmForm ? (
         <>
           <div className='button-container'>
+            <div className='d-flex gap-3'>
             <Button 
               variant="contained" 
               color="primary" 
@@ -604,6 +647,31 @@ const SalesLostVisits = () => {
             >
               + New Follow UP
             </Button>
+
+            <Button
+    variant="contained"
+    sx={{
+      background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+      color: "white",
+      fontWeight: "bold",
+      textTransform: "none",
+      padding: "8px 16px",
+      borderRadius: "8px",
+      display: "flex",
+      alignItems: "center",  // Align icon and text
+      gap: "8px",  // Space between icon and text
+      "&:hover": {
+        background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+      },
+     
+    }}
+    // onClick={() => handledow(firms)}
+    onClick={handleDownloadPDFLost}
+  >
+    <FaFileDownload size={18} />  {/* Added download icon */}
+    Download PDF
+  </Button>
+            </div>
   
           
             <div className="right-buttons">
@@ -621,6 +689,8 @@ const SalesLostVisits = () => {
 
           {/* <LostVisitTable data={data} /> */}
           <LostVisitTable data={dummyData} />
+        
+
           </div>
         </>
       ) : (

@@ -17,6 +17,10 @@ import FirstvisitfollowupbookedTable from './FirstvisitfollowupbookedTable';
 // import { FaBuilding,    } from 'react-icons/fa'; 
 import {   FaHourglassStart,FaHistory, FaUserCheck, FaQuestionCircle } from 'react-icons/fa'; 
 
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+
+
 // const sections = [
 //     { label: "Pending Follow Up", icon: <FaBuilding size={20} />, createLabel: "Create Firm" },
 //     { label: "Follow Up History", icon: <FaBuilding size={20} />, createLabel: "Create Project" },
@@ -522,6 +526,244 @@ const FirstvisitFollowup = () => {
         setClosingExecutive(event.target.value);
       };
     
+
+      const handleDownloadPDFPending = () => {
+        const doc = new jsPDF("landscape");
+        doc.setFontSize(14);
+        doc.text("Firm Details Report", 14, 15);
+      
+        const tableColumn = [
+          "TIMESTAMP", "FIRM NAME", "FIRM ADDRESS", "FIRM PAN NO", "FIRM GST NO",
+          "NAME", "AGE", "OCCUPATION", "MOBILE NO.", "MAIL ID",
+          "RESIDENTIAL ADDRESS", "PAN NO", "AADHAAR NO"
+        ];
+      
+        const tableRows = loans.map(row => [
+          row.timestamp || "-",
+          row.name || "-",
+          row.address || "-",
+          row.firmPanNo || "-",
+          row.firmGstNo || "-",
+          row.contactName || "-",          // Assuming 'NAME' refers to a separate contact name field
+          row.age || "-",                  // Add these fields in your data source if not present
+          row.occupation || "-",
+          row.mobile || "-",
+          row.email || "-",
+          row.residentialAddress || "-",
+          row.panNo || "-",
+          row.aadhaarNo || "-"
+        ]);
+      
+        console.log("Formatted Table Rows:", tableRows);
+      
+        autoTable(doc, {
+          startY: 25,
+          head: [tableColumn],
+          body: tableRows,
+          styles: { fontSize: 10, cellPadding: 3 },
+          headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+        });
+      
+        doc.save("PendingFollowup_Details_Report.pdf");
+      };
+      
+      
+  
+      const handleDownloadPDFFollowup = () => {
+        const doc = new jsPDF("landscape");
+        doc.setFontSize(14);
+        doc.text("Followup Details Report - Page 1", 14, 15);
+      
+        // First page columns
+        const tableColumnPage1 = [
+          "STATUS HISTORY", "REMARK HISTORY", "ASSIGN TO HISTORY", "LEAD DAYS", "TIMESTAMP",
+          "ENQUIRY NO", "LEAD NO.", "SALES EXECUTIVE NAME", "NAME", "MOBILE", "WHATSAPP NO."
+        ];
+      
+        const tableRowsPage1 = loans.map(row => [
+          row.statusHistory || "-",
+          row.remarkHistory || "-",
+          row.assignToHistory || "-",
+          row.leadDays || "-",
+          row.timestamp || "-",
+          row.enquiryNo || "-",
+          row.leadNo || "-",
+          row.salesExecutiveName || "-",
+          row.name || "-",
+          row.mobile || "-",
+          row.whatsapp || "-"
+        ]);
+      
+        autoTable(doc, {
+          startY: 25,
+          head: [tableColumnPage1],
+          body: tableRowsPage1,
+          styles: { fontSize: 8, cellPadding: 2 },
+          headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+        });
+      
+        // Add a new page for the rest of the columns
+        doc.addPage("landscape");
+        doc.text("Followup Details Report - Page 2", 14, 15);
+      
+        const tableColumnPage2 = [
+          "ALTERNATE CONTACT NO.", "EMAIL", "ADDRESS", "OCCUPATION", "COMPANY", "INTERESTED IN",
+          "BUDGET (APPROX.)", "REASON FOR PURCHASE", "REFERENCE BY / SOURCE",
+          "NAME OF CP ", "PLANNING TO BUY WITHIN?", "CUSTOMER FEEDBACK & COMPLETE FOLLOWUP DETAILS"
+        ];
+      
+        const tableRowsPage2 = loans.map(row => [
+          row.alternateContact || "-",
+          row.email || "-",
+          row.address || "-",
+          row.occupation || "-",
+          row.company || "-",
+          row.interestedIn || "-",
+          row.budget || "-",
+          row.reasonForPurchase || "-",
+          row.referenceBy || "-",
+          row.cpName || "-",
+          row.planningToBuyWithin || "-",
+          row.customerFeedback || "-"
+        ]);
+      
+        autoTable(doc, {
+          startY: 25,
+          head: [tableColumnPage2],
+          body: tableRowsPage2,
+          styles: { fontSize: 8, cellPadding: 2 },
+          headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+        });
+      
+        doc.save("Followup_Details_Report.pdf");
+      };
+      
+      
+      const handleDownloadPDFBooked = () => {
+        const doc = new jsPDF("landscape");
+        doc.setFontSize(14);
+        doc.text("Followup Details Report - Page 1", 14, 15);
+      
+        // First page columns (with serial number)
+        const tableColumnPage1 = [
+          "S. NO.", "ENQUIRY NO", "LEAD NO.", "NAME", "MOBILE", "WHATSAPP NO.",
+          "INTERESTED IN", "BUDGET (APPROX.)"
+        ];
+      
+        const tableRowsPage1 = loans.map((row, index) => [
+          index + 1,
+          row.enquiryNo || "-",
+          row.leadNo || "-",
+          row.name || "-",
+          row.mobile || "-",
+          row.whatsapp || "-",
+          row.interestedIn || "-",
+          row.budget || "-"
+        ]);
+      
+        autoTable(doc, {
+          startY: 25,
+          head: [tableColumnPage1],
+          body: tableRowsPage1,
+          styles: { fontSize: 8, cellPadding: 2 },
+          headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+        });
+      
+        // Second page
+        doc.addPage("landscape");
+        doc.text("Followup Details Report - Page 2", 14, 15);
+      
+        const tableColumnPage2 = [
+          "S. NO.", "EMAIL", "ADDRESS", "REASON FOR PURCHASE", "REFERENCE BY / SOURCE",
+          "NAME OF CP", "PLANNING TO BUY WITHIN?", "CUSTOMER FEEDBACK"
+        ];
+      
+        const tableRowsPage2 = loans.map((row, index) => [
+          index + 1,
+          row.email || "-",
+          row.address || "-",
+          row.reasonForPurchase || "-",
+          row.referenceBy || "-",
+          row.cpName || "-",
+          row.planningToBuyWithin || "-",
+          row.customerFeedback || "-"
+        ]);
+      
+        autoTable(doc, {
+          startY: 25,
+          head: [tableColumnPage2],
+          body: tableRowsPage2,
+          styles: { fontSize: 8, cellPadding: 2 },
+          headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+        });
+      
+        doc.save("Booked_Details_Report.pdf");
+      };
+      
+      const handleDownloadPDFUndefined = () => {
+        const doc = new jsPDF("landscape");
+        doc.setFontSize(14);
+        doc.text("Followup Details Report - Page 1", 14, 15);
+      
+        // First page columns
+        const tableColumnPage1 = [
+          "S. NO.", "STATUS HISTORY", "REMARK HISTORY", "ASSIGN TO HISTORY",
+          "ENQUIRY NO.", "LEAD NO.", "NAME", "WHATSAPP NO."
+        ];
+      
+        const tableRowsPage1 = loans.map((row, index) => [
+          index + 1,
+          row.statusHistory || "-",
+          row.remarkHistory || "-",
+          row.assignToHistory || "-",
+          row.enquiryNo || "-",
+          row.leadNo || "-",
+          row.name || "-",
+          row.whatsapp || "-"
+        ]);
+      
+        autoTable(doc, {
+          startY: 25,
+          head: [tableColumnPage1],
+          body: tableRowsPage1,
+          styles: { fontSize: 8, cellPadding: 2 },
+          headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+        });
+      
+        // Second page
+        doc.addPage("landscape");
+        doc.text("Followup Details Report - Page 2", 14, 15);
+      
+        const tableColumnPage2 = [
+          "S. NO.", "OCCUPATION", "INTERESTED IN", "BUDGET (APPROX.)", "REASON FOR PURCHASE.",
+          "REFERENCE BY / SOURCE", "NAME OF CP (IF CHANNEL PARTNER)", "PLANNING TO BUY WITHIN ?",
+          "CUSTOMER FEEDBACK"
+        ];
+      
+        const tableRowsPage2 = loans.map((row, index) => [
+          index + 1,
+          row.occupation || "-",
+          row.interestedIn || "-",
+          row.budget || "-",
+          row.reasonForPurchase || "-",
+          row.referenceBy || "-",
+          row.cpName || "-",
+          row.planningToBuyWithin || "-",
+          row.customerFeedback || "-"
+        ]);
+      
+        autoTable(doc, {
+          startY: 25,
+          head: [tableColumnPage2],
+          body: tableRowsPage2,
+          styles: { fontSize: 8, cellPadding: 2 },
+          headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+        });
+      
+        doc.save("Undefined_Details_Report.pdf");
+      };
+      
+
     return (
       <div className="main-content">
         <h6>Sales Module / Enquiry Follow Up Management</h6>
@@ -531,39 +773,25 @@ const FirstvisitFollowup = () => {
       
   
   
-        {/* <div className="d-flex align-items-center mb-3">
-          {sections.map((section, index) => (
-            <Button
-              key={index}
-              onClick={() => handleToggleSection(index)}
-              variant="outlined"
-              color="success"
-              className='m-3'
-              style={{ borderRadius: '20px' }}
-              startIcon={<FaEye size={20} color="#28a745" />}
-            >
-              {expandedSection === index ? section.label : null}
-            </Button>
-          ))}
-        </div> */}
+       
         <div className='d-flex align-items-center mb-3'>
         {sections.map((section, index) => (
   <div
     key={index}
-    className="d-flex align-items-center"  // Added Bootstrap d-flex and align-items-center for flexbox
+    className="d-flex align-items-center"  
     style={{
       backgroundColor: '#3621a9',
       padding: '8px',
       borderRadius: '20px',
       margin: '5px',
-      cursor: 'pointer', // Add pointer cursor for better UX
+      cursor: 'pointer', 
       transition: "width 0.3s ease, background 0.3s ease",
-      width: expandedSection === index ? "220px" : "50px", // Toggle width based on expanded state
+      width: expandedSection === index ? "220px" : "50px", 
       minWidth: "50px",
       overflow: "hidden",
       whiteSpace: "nowrap",
       fontSize: "14px",
-      justifyContent: "center", // Can be overridden by Bootstrap classes
+      justifyContent: "center", 
       textTransform: "none",
       position: "relative",
       background: "linear-gradient(0deg, #4b2ac2 0%, #5c39d3 100%)", // Gradient background
@@ -624,6 +852,8 @@ const FirstvisitFollowup = () => {
       {!showFirmForm ? (
         <>
           <div className='button-container'>
+            <div className='d-flex gap-3'>
+
             <Button 
               variant="contained" 
               color="primary" 
@@ -633,6 +863,32 @@ const FirstvisitFollowup = () => {
             >
               + New Follow UP
             </Button>
+
+            <Button
+    variant="contained"
+    sx={{
+      background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+      color: "white",
+      fontWeight: "bold",
+      textTransform: "none",
+      padding: "8px 16px",
+      borderRadius: "8px",
+      display: "flex",
+      alignItems: "center",  // Align icon and text
+      gap: "8px",  // Space between icon and text
+      "&:hover": {
+        background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+      },
+     
+    }}
+    // onClick={() => handledow(firms)}
+    onClick={handleDownloadPDFPending}
+  >
+    <FaFileDownload size={18} />  {/* Added download icon */}
+    Download PDF
+  </Button>
+            </div>
+       
   
             {/* Previous and Next buttons on the right */}
             <div className="right-buttons">
@@ -822,9 +1078,36 @@ const FirstvisitFollowup = () => {
      
       {!showProjectForm ? (
          <>
+     <div>
+   
+     </div>
+  
+  <div>
+    
+  <Button
+    variant="contained"
+    sx={{
+      background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+      color: "white",
+      fontWeight: "bold",
+      textTransform: "none",
+      padding: "8px 16px",
+      borderRadius: "8px",
+      display: "flex",
+      alignItems: "center",  // Align icon and text
+      gap: "8px",  // Space between icon and text
+      "&:hover": {
+        background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+      },
      
-  
-  
+    }}
+    // onClick={() => handledow(firms)}
+    onClick={handleDownloadPDFFollowup}
+  >
+    <FaFileDownload size={18} />  {/* Added download icon */}
+    Download PDF
+  </Button>
+  </div>
   
   
   
@@ -861,6 +1144,34 @@ const FirstvisitFollowup = () => {
          <>
          <div className='button-container'>
       
+        <div className='d-flex gap-3'>
+            <Typography variant="h5" component="h2" sx={{ marginBottom: "16px", fontWeight: "bold",paddingTop:"8px" }}>
+                  Booked Enquiries
+                </Typography>
+        <Button
+    variant="contained"
+    sx={{
+      background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+      color: "white",
+      fontWeight: "bold",
+      textTransform: "none",
+      padding: "3px 10px",
+      borderRadius: "8px",
+      display: "flex",
+      alignItems: "center",  // Align icon and text
+      gap: "8px",  // Space between icon and text
+      "&:hover": {
+        background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+      },
+     
+    }}
+    // onClick={() => handledow(firms)}
+    onClick={handleDownloadPDFBooked}
+  >
+    <FaFileDownload size={18} />  {/* Added download icon */}
+    Download PDF
+  </Button>
+        </div>
     
    
       </div>
@@ -894,15 +1205,40 @@ const FirstvisitFollowup = () => {
         
           
           <div className="button-container">
+ <div className='d-flex gap-3'>
+  <Typography variant="h5" component="h2" sx={{ marginBottom: "16px", color: "", fontWeight: "bold",paddingTop:"6px" }}>
+      Lost Enquiries
+      </Typography>
 
+ <Button
+    variant="contained"
+    sx={{
+      background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+      color: "white",
+      fontWeight: "bold",
+      textTransform: "none",
+      padding: "8px 16px",
+      borderRadius: "8px",
+      display: "flex",
+      alignItems: "center",  // Align icon and text
+      gap: "8px",  // Space between icon and text
+      "&:hover": {
+        background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+      },
+     
+    }}
+    // onClick={() => handledow(firms)}
+    onClick={handleDownloadPDFUndefined}
+  >
+    <FaFileDownload size={18} />  {/* Added download icon */}
+    Download PDF
+  </Button>
+ </div>
     </div>
   
   
           <div className="mt-3">
-            {/* <FlatAllotment data={Flatdata} /> */}
-            {/* <UndefinedTable data= {Flatdata} /> */} 
-
-            {/* <BookedTable data ={projectData} /> */}
+            
 
            { <FirstvisitfollowupUndefinedTable data = {projectData} /> }
           </div>

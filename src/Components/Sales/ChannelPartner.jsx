@@ -16,9 +16,14 @@ import {  FaHandshake } from 'react-icons/fa';
 import { ToastContainer, toast } from "react-toastify";
 import ChannelPartnerTable from "./ChannelPartnerTable";
 
+import { jsPDF } from "jspdf";
+import {  FaFileDownload } from "react-icons/fa";
+import autoTable from "jspdf-autotable";
+
 const ChannelPartner = () => {
   const [isExpanded, setIsExpanded] = useState(true); // Default expanded state
   const [showBookingForm, setShowBookingForm] = useState(false);
+  const [data, setData] = useState([]);
   const [formData, setFormData] = useState({
     enquiryNo: "",
     projectName: "",
@@ -44,33 +49,53 @@ const ChannelPartner = () => {
     setShowBookingForm(false); // Hide the form after submission
   };
 
+
+  const handleDownloadPDFChannel = (data) => {
+    const doc = new jsPDF("landscape");
+    doc.setFontSize(14);
+    doc.text("Firm Details Report", 14, 15);
+  
+    const tableColumn = [
+      "TIMESTAMP", "CP Firm Name", "CP Executive Name", "Designation",
+      "Mobile No", "Email ID", "Postal Address", "Pin-code",
+      "Location", "City", "Zone", "Status"
+    ];
+  
+    const tableRows = data.map(row => [
+      row.timestamp || "-",
+      row.cpFirmName || "-",
+      row.cpExecutiveName || "-",
+      row.designation || "-",
+      row.mobileNo || "-",
+      row.email || "-",
+      row.postalAddress || "-",
+      row.pinCode || "-",
+      row.location || "-",
+      row.city || "-",
+      row.zone || "-",
+      row.status || "-"
+    ]);
+  
+    console.log("Formatted Table Rows:", tableRows);
+  
+    autoTable(doc, {
+      startY: 25,
+      head: [tableColumn],
+      body: tableRows,
+      styles: { fontSize: 10, cellPadding: 3 },
+      headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+    });
+  
+    doc.save("ChannelPartner_Report.pdf");
+  };
+  
+  
+
   return (
     <Box className="main-content" sx={{ padding: 3 }}>
       <Typography variant="h6">Sales Module / Channel Partner</Typography>
 
-      {/* Toggle Icon and Name Display */}
-      {/* <Button
-        variant="contained"
-        color="primary"
-        className="mt-3 mb-3"
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: 1,
-          borderRadius: "20px",
-          width: isExpanded ? "200px" : "50px",
-          minWidth: "50px",
-          padding: "10px 15px",
-          textTransform: "none",
-          transition: "width 0.3s ease",
-          marginBottom: 2,
-        }}
-        onClick={handleToggleSidebar}
-        startIcon={<FaBuilding />}
-      >
-        {isExpanded && "Channel Partner"}
-      </Button> */}
+     
       <Button
   variant="contained"
   color="primary"
@@ -99,23 +124,15 @@ const ChannelPartner = () => {
 </Button>
 
 
-      {/* This section is always visible */}
       <Box className="content-container mt-4">
-        {/* <Box className="button-container" sx={{ display: "flex", justifyContent: "space-between", marginBottom: 2 }}>
-          <Button
-            variant="contained"
-            color="primary"
-            sx={{ background: "#272ba8" }}
-            onClick={() => setShowBookingForm(true)}
-          >
-            + CP Details Form
-          </Button>
-        </Box> */}
+      
 
 <Box className="content-container mt-4">
-  {/* Conditionally Render the Button for Form and the Table */}
+ 
   {!showBookingForm && (
-    <Box className="button-container" sx={{ display: "flex", justifyContent: "space-between", marginBottom: 2 }}>
+   
+       <Box className="button-container" sx={{ display: "flex", justifyContent: "space-between", marginBottom: 2 }}>
+         <div className="d-flex gap-3">
       <Button
         variant="contained"
         color="primary"
@@ -124,7 +141,35 @@ const ChannelPartner = () => {
       >
         + CP Details Form
       </Button>
-    </Box>
+   
+    <Button
+    variant="contained"
+    sx={{
+      background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+      color: "white",
+      fontWeight: "bold",
+      textTransform: "none",
+      padding: "8px 16px",
+      borderRadius: "8px",
+      display: "flex",
+      alignItems: "center",  // Align icon and text
+      gap: "8px",  // Space between icon and text
+      "&:hover": {
+        background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+      },
+     
+    }}
+    // onClick={() => handledow(firms)}
+    onClick={() => handleDownloadPDFChannel(data)}
+
+  >
+    <FaFileDownload size={18} />  {/* Added download icon */}
+    Download PDF
+  </Button>
+  </div>
+  </Box>
+    
+   
   )}
   </Box>
 

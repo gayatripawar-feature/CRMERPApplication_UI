@@ -17,14 +17,12 @@ import BookedTable from './BookedTable';
 import Lostleadstable from "./Lostleadstable";
 import LostVisitTable from './LostVisitTable';
 import BookingFormTable from './BookingFormTable';
-// import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-// import AdapterDateFns from '@mui/x-date-pickers/AdapterDateFns'; 
-// import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+
 
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { FaRegUser } from "react-icons/fa";
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'; // Named import
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'; 
 
 const sections = [
     { label: "Booking Display", icon: <FaBuilding size={20} />, createLabel: "Create Firm" },
@@ -177,21 +175,18 @@ const [coAllotteeOccupation, setCoAllotteeOccupation] = useState('');
 const [coAllotteePan, setCoAllotteePan] = useState(""); 
 const [coAllotteeAadhar, setCoAllotteeAadhar] = useState("");
 const [coAllotteeAadharError, setCoAllotteeAadharError] = useState("");
-// const [emailError, setEmailError] = useState('');
+
 const [expandedSection, setExpandedSection] = useState(null);
 const [isExpanded, setIsExpanded] = useState(false);
-  // const [dateOfBirth, setDateOfBirth] = useState(null);
+ 
   const calculateStampDuty = () => {
-  //   return totalConsideration ? (totalConsideration * 0.07).toFixed(2) : 0;
-  };
+   };
 
   const calculateRegistrationFee = () => {
-  //   return totalConsideration ? (totalConsideration * 0.02).toFixed(2) : 0;
   };
 
   const calculateGstAmount = () => {
-  //   return totalConsideration ? (totalConsideration * 0.18).toFixed(2) : 0;
-  };
+ };
 
   const handleAadharChange = (e) => {
     const value = e.target.value;
@@ -211,18 +206,7 @@ const [isExpanded, setIsExpanded] = useState(false);
     }
     setWhatsAppNo(value);
   };
-  // const handleEmailChange = (e) => {
-  //   const value = e.target.value;
-  //   setEmailId(value);
-  
-  //   // Basic email validation regex
-  //   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-  //   if (!emailRegex.test(value)) {
-  //     setEmailError('Please enter a valid email address');
-  //   } else {
-  //     setEmailError('');
-  //   }
-  // };
+ 
   
     const handleFirmPanChange = (e) => {
       const value = e.target.value;
@@ -237,25 +221,15 @@ const [isExpanded, setIsExpanded] = useState(false);
     };
   
     const handleChangeDateOfBirth = (e) => {
-        setDateOfBirth(e.target.value);  // Update the state with the new value
+        setDateOfBirth(e.target.value);  
       };
-      // const handleAlternateMobileChange = (e) => {
-      //   const value = e.target.value;
-        
-      //   // Allow only numbers and restrict length to 10 digits
-      //   if (/^\d{0,10}$/.test(value)) {
-      //     setAlternateMobileNo(value);
-      //     setAlternateMobileError('');
-      //   } else if (value.length > 10) {
-      //     setAlternateMobileError('Mobile number cannot exceed 10 digits');
-      //   }
-      // };
+     
 
 
       const handleAlternateMobileChange = (e) => {
         const value = e.target.value;
     
-        // Check if the value is a number and limit it to 10 digits
+       
         if (/^\d{0,10}$/.test(value)) {
           setAlternateMobileNo(value);
           setAlternateMobileError('');
@@ -264,17 +238,7 @@ const [isExpanded, setIsExpanded] = useState(false);
         }
       };
     
-      // const handleMobileChange = (e) => {
-      //   const value = e.target.value;
-        
-      //   // Allow only numbers and limit to 10 digits
-      //   if (/^\d{0,10}$/.test(value)) {
-      //     setMobileNumber(value);
-      //     setMobileError('');
-      //   } else {
-      //     setMobileError('Mobile number should be 10 digits');
-      //   }
-      // };
+     
      const handleFileChange = (e, key) => {
       const file = e.target.files[0]; 
       if (file) {
@@ -376,6 +340,9 @@ const handleCoAllotteeAadharChange = (e) => {
       setShowFlatForm(false);
     };
   
+
+  
+  
     const [newPhase, setNewPhase] = useState({
       phaseNo: '',
       wingNo: '',
@@ -418,14 +385,12 @@ const handleCoAllotteeAadharChange = (e) => {
       }
     };
   
-    // const handlePanChange = (e) => {
-    //   setPanNumber(e.target.value); // Updates only PAN field
-    // };
+   
     
     const handlePanChange = (e) => {
-      const value = e.target.value.toUpperCase(); // Convert input to uppercase
+      const value = e.target.value.toUpperCase(); 
     
-      // PAN regex pattern: First 5 letters, 4 numbers, last 1 letter
+
       const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
     
       if (value.length > 10) {
@@ -433,14 +398,12 @@ const handleCoAllotteeAadharChange = (e) => {
       } else if (value.length === 10 && !panRegex.test(value)) {
         setPanError("Invalid PAN No. format");
       } else {
-        setPanError(""); // Clear error if valid
+        setPanError(""); 
       }
     
       setPanNumber(value);
     };
-    // const handleAadharChange = (e) => {
-    //   setAadharNumber(e.target.value); // Updates only AADHAR field
-    // };
+ 
     
     const handleNext = () => {
       setCurrentPage(currentPage + 1);
@@ -532,31 +495,18 @@ const handleCoAllotteeAadharChange = (e) => {
         setAccountNoError(""); // Clear the error if valid
       }
     
-      // Update the account number in the state
+      
       setAccountNo(value);
     };
   
     
    
     const validatePAN = (pan) => {
-      const panPattern = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/; // PAN format: 5 letters, 4 digits, 1 letter
+      const panPattern = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/; 
       return panPattern.test(pan);
     };
   
-    // const handleMobileChange = (e) => {
-    //   const value = e.target.value;
-    
-    //   // Ensure only numbers are entered and max length is respected
-    //   if (value.length > 10) {
-    //     setMobileError("Mobile number cannot exceed 10 digits");
-    //   } else if (!/^\d*$/.test(value)) {
-    //     setMobileError("Only numbers are allowed");
-    //   } else {
-    //     setMobileError(""); // Clear error if input is valid
-    //   }
-    
-    //   setMobileNumber(value); // Update the state with the entered value
-    // };
+   
   
     const handlePartnerNameChange = (e, index) => {
       const value = e.target.value;
@@ -630,14 +580,13 @@ const handleCoAllotteeAadharChange = (e) => {
     const handleChange = (e, label, partnerIndex) => {
       const { value } = e.target;
     
-      // Update the partners array with the new value for the specific field
+    
       const updatedPartners = [...partners];
       updatedPartners[partnerIndex][label.toLowerCase().replace(/ /g, "")] = value;
       setPartners(updatedPartners);
     
-      // Apply validation for the 'firmName' field
       if (label === 'Firm Name') {
-        // Check if the input contains only letters and spaces
+      
         if (!/^[A-Za-z\s]*$/.test(value)) {
           setErrors((prev) => ({
             ...prev,
@@ -646,7 +595,7 @@ const handleCoAllotteeAadharChange = (e) => {
         } else {
           setErrors((prev) => ({
             ...prev,
-            firmName: '', // Clear the error if valid
+            firmName: '', 
           }));
         }
       }
@@ -666,17 +615,17 @@ const handleCoAllotteeAadharChange = (e) => {
     const handleIfscCodeChange = (e) => {
       const value = e.target.value;
     
-      // Regular expression to validate IFSC code format
+     
       const ifscRegex = /^[A-Z]{4}0[A-Z0-9]{6}$/;
     
       if (value && !ifscRegex.test(value)) {
         setIfscCodeError("Invalid IFSC code. It should be in the format: XXXX0XXXXX.");
       } else {
-        setIfscCodeError(""); // Clear the error if valid
+        setIfscCodeError(""); 
       }
     
-      // Update the IFSC code in the state
-      setIfscCode(value); // Assuming you have a state for the IFSC code
+      
+      setIfscCode(value); 
     };
     
   
@@ -684,16 +633,15 @@ const handleCoAllotteeAadharChange = (e) => {
       const value = e.target.value;
       const partnerCopy = [...partners];
     
-      // Validate Mobile No. to ensure it doesn't exceed 10 digits
+   
       if (/[^0-9]/.test(value)) {
         setMobileError("Mobile number should only contain digits");
       } else if (value.length > 10) {
         setMobileError("Mobile number cannot exceed 10 digits");
       } else {
-        setMobileError(""); // Clear the error if the value is valid
+        setMobileError(""); 
       }
     
-      // Update the partner's mobile number in the state
       partnerCopy[index] = { ...partnerCopy[index], mobileNo: value };
       setPartners(partnerCopy);
     };
@@ -702,17 +650,16 @@ const handleCoAllotteeAadharChange = (e) => {
       const value = e.target.value;
       const partnerCopy = [...partners];
     
-      // Regular expression to validate Gmail email format
+      
       const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
     
       if (value && !emailRegex.test(value)) {
         setEmailError("Invalid Gmail address");
         console.log("invalid email");
       } else {
-        setEmailError(""); // Clear the error if the value is valid
+        setEmailError(""); 
       }
     
-      // Update the partner's email in the state
       partnerCopy[index] = { ...partnerCopy[index], email: value };
       setPartners(partnerCopy);
     };
@@ -736,28 +683,84 @@ const handleCoAllotteeAadharChange = (e) => {
 
   };
 
+  const handleDownloadPDFBooking = () => {
+    console.log("Loans data before mapping:", loans); // Use loans instead of firms
+  
+   
+  
+    const doc = new jsPDF("landscape");
+    doc.setFontSize(14);
+    doc.text("Firm Details Report", 14, 15);
+  
+    const tableColumn = [
+      "Timestamp", "Firm Name", "Firm Address", "Firm PAN No",
+      "Firm GST No", "Residential Address", "PAN No", "Aadhaar No",
+      "Photo", "Light Bill"
+    ];
+  
+    const tableRows = loans.map(row => [
+      row.timestamp || "-",
+      row.name || "-",
+      row.address || "-",
+      row.firmPanNo || "-",
+      row.firmGstNo || "-",
+      row.residentialAddress || "-",
+      row.panNo || "-",
+      row.aadhaarNo || "-",
+      row.photo || "-",
+      row.lightBill || "-"
+    ]);
+  
+    console.log("Formatted Table Rows:", tableRows);
+  
+    autoTable(doc, {
+      startY: 25,
+      head: [tableColumn],
+      body: tableRows,
+      styles: { fontSize: 10, cellPadding: 3 },
+      headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+    });
+  
+    doc.save("Booking_Details_Report.pdf");
+  };
   
     return (
       <div className="main-content">
         <h6>Sales Module / Booking Management</h6>
        
   
-          <div className="d-flex align-items-center mb-3">
-            {sections.map((section, index) => (
-              <Button
-                key={index}
-                onClick={() => handleToggleSection(index)}
-                variant="outlined"
-                color="success"
-                className='m-3'
-                style={{ borderRadius: '20px' }}
-                startIcon={<FaEye size={20} color="#28a745" />}
-              >
-                {expandedSection === index ? section.label : null}
-              </Button>
-            ))}
-          </div> 
-    
+      
+
+        <div className="d-flex align-items-center mb-3">
+  {sections.map((section, index) => (
+    <Button
+      key={index}
+      onClick={() => handleToggleSection(index)}
+      variant="contained"
+      color="primary"
+      className="m-3"
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "flex-start",
+        gap: 1,
+        borderRadius: "20px",
+        width: "200px",  // Always expanded
+        minWidth: "200px", 
+        padding: "10px 15px",
+        textTransform: "none",
+        transition: "background 0.3s ease",
+        background: "linear-gradient(0deg, #4b2ac2 0%, #5c39d3 100%)",
+        boxShadow:
+          "inset 2px 2px 2px 0px rgba(255,255,255,.5), 7px 7px 20px 0px rgba(0,0,0,.1), 4px 4px 5px 0px rgba(0,0,0,.1)",
+        cursor: "pointer",
+      }}
+      startIcon={<FaEye size={20} color="white" />}
+    >
+      <span style={{ color: "white", fontSize: "16px" }}>{section.label}</span> 
+    </Button>
+  ))}
+</div>
 
 
 
@@ -765,10 +768,12 @@ const handleCoAllotteeAadharChange = (e) => {
        
   {expandedSection === 0 && selectedTab === "firm" && (
     <div className="content-container mt-3">
-      {!showFirmForm ? (
-        <>
-          <div className='button-container'>
-            <Button 
+
+<div className="mt-3">
+          
+<div className='button-container'>
+  <div className='d-flex gap-3'>
+  <Button 
               variant="contained" 
               color="primary" 
               style={{ background: '#272ba8' }} 
@@ -777,6 +782,32 @@ const handleCoAllotteeAadharChange = (e) => {
             >
               + New Booking
             </Button>
+            <Button
+    variant="contained"
+    sx={{
+      background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+      color: "white",
+      fontWeight: "bold",
+      textTransform: "none",
+      padding: "8px 16px",
+      borderRadius: "8px",
+      display: "flex",
+      alignItems: "center",  // Align icon and text
+      gap: "8px",  // Space between icon and text
+      "&:hover": {
+        background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+      },
+     
+    }}
+    // onClick={() => handledow(firms)}
+    onClick={handleDownloadPDFBooking}
+  >
+    <FaFileDownload size={18} />  {/* Added download icon */}
+    Download PDF
+  </Button>
+    </div>
+
+         
   
           
             <div className="right-buttons">
@@ -788,14 +819,20 @@ const handleCoAllotteeAadharChange = (e) => {
               </Button>
             </div>
           </div>
-  
-          <div className="mt-3">
-          
-
-          {/* <LostVisitTable data={data} /> */}
-          {/* <LostVisitTable data={dummyData} /> */}
-          <BookingFormTable data ={dummyData} />
+       
+          {/* <BookingFormTable data ={dummyData} /> */}
+          {!showFirmForm && (
+    <div className="mt-3">
+      <BookingFormTable data={dummyData} />
+    </div>
+  )}
           </div>
+
+      {!showFirmForm ? (
+        <>
+         
+  
+          
         </>
       ) : (
      
@@ -877,32 +914,16 @@ const handleCoAllotteeAadharChange = (e) => {
     
     <Grid item xs={6}>
   <TextField
-    type="datetime-local" // Use datetime-local for date and time input
+    type="datetime-local" 
     label="Source Name"
     fullWidth
     variant="outlined"
-    required // Correct way to add required prop
+    required 
     InputLabelProps={{
-      shrink: true, // Ensures label is above the input
+      shrink: true, 
     }}
   />
 </Grid>
-{/* <Grid item xs={6}>
-  <LocalizationProvider dateAdapter={AdapterDateFns}>
-    <DatePicker
-      label="Date Of Birth"
-      value={dateOfBirth}
-      onChange={(newValue) => setDateOfBirth(newValue)}
-      renderInput={(params) => (
-        <TextField 
-          {...params} 
-          fullWidth 
-          variant="outlined" 
-        />
-      )}
-    />
-  </LocalizationProvider>
-</Grid> */}
 
 
 <Grid item xs={6}>
@@ -936,26 +957,17 @@ const handleCoAllotteeAadharChange = (e) => {
   </FormControl>
 </Grid>
 
-{/* <Grid item xs={6}>
-  <FormControl fullWidth variant="outlined">
-    <TextField
-      label="PAN No."
-      variant="outlined"
-      value={panNumber} // Uses PAN-specific state
-      onChange={(e) => setPanNumber(e.target.value)} // Updates only PAN field
-    />
-  </FormControl>
-</Grid> */}
+
 <Grid item xs={6}>
   <FormControl fullWidth variant="outlined">
     <TextField
       label="PAN No."
       variant="outlined"
       value={panNumber}
-      onChange={handlePanChange} // Apply validation
-      error={!!panError} // Show red border if error exists
-      helperText={panError} // Show validation message below field
-      inputProps={{ maxLength: 10 }} // Prevent entering more than 10 characters
+      onChange={handlePanChange} 
+      error={!!panError} 
+      helperText={panError} 
+      inputProps={{ maxLength: 10 }} 
     />
   </FormControl>
 </Grid>
@@ -964,44 +976,13 @@ const handleCoAllotteeAadharChange = (e) => {
     <TextField
       label="AADHAR No."
       variant="outlined"
-      value={aadharNumber} // Uses AADHAR-specific state
-      onChange={(e) => setAadharNumber(e.target.value)} // Updates only AADHAR field
+      value={aadharNumber} 
+      onChange={(e) => setAadharNumber(e.target.value)} 
     />
   </FormControl>
 </Grid>
 
-{/* 
-<Grid item xs={6}>
-  <TextField
-    label="Mobile No."
-    fullWidth
-    variant="outlined"
-    value={mobileNumber}
-    onChange={handleMobileChange}
-    error={!!mobileError} // Show error styling if there's an error
-    helperText={mobileError} // Display the error message
-    inputProps={{
-      maxLength: 10, // Ensure max length
-      pattern: "[0-9]*", // Allow only numbers
-    }}
-  />
-</Grid> */}
-{/* <Grid item xs={6}>
-  <TextField
-    label="Mobile No."
-    fullWidth
-    variant="outlined"
-    value={mobileNumber}
-    onChange={handleMobileChange}
-    error={!!mobileError} // Show error if there's an error
-    helperText={mobileError} // Display the error message
-    inputProps={{
-      maxLength: 10, // Limit input to 10 characters
-      pattern: "[0-9]*", // Allows only numbers
-      inputMode: "numeric", // Opens the numeric keyboard on mobile
-    }}
-  />
-</Grid> */}
+
 <Grid item xs={6}>
   <TextField
     label="Mobile No"
@@ -1011,18 +992,18 @@ const handleCoAllotteeAadharChange = (e) => {
     onChange={(e) => {
       const value = e.target.value;
 
-      // Check if the value length exceeds 10
+      
       if (value.length <= 10) {
-        setAlternateMobileNo(value); // Update value if it's less than or equal to 10
-        setAlternateMobileError(""); // Clear error message
+        setAlternateMobileNo(value); 
+        setAlternateMobileError(""); 
       } else {
-        setAlternateMobileError("Mobile number cannot exceed 10 digits"); // Set error if length exceeds 10
+        setAlternateMobileError("Mobile number cannot exceed 10 digits"); 
       }
     }}
-    error={!!alternateMobileError} // Show error if there's an error
-    helperText={alternateMobileError} // Display error message
+    error={!!alternateMobileError} 
+    helperText={alternateMobileError} 
     inputProps={{
-      maxLength: 10, // Limit to 10 digits in the input field
+      maxLength: 10, 
     }}
   />
 </Grid>
@@ -1035,18 +1016,18 @@ const handleCoAllotteeAadharChange = (e) => {
     onChange={(e) => {
       const value = e.target.value;
 
-      // Check if the value length exceeds 10
+     
       if (value.length <= 10) {
-        setAlternateMobileNo(value); // Update value if it's less than or equal to 10
-        setAlternateMobileError(""); // Clear error message
+        setAlternateMobileNo(value);
+        setAlternateMobileError(""); 
       } else {
-        setAlternateMobileError("Mobile number cannot exceed 10 digits"); // Set error if length exceeds 10
+        setAlternateMobileError("Mobile number cannot exceed 10 digits"); 
       }
     }}
-    error={!!alternateMobileError} // Show error if there's an error
-    helperText={alternateMobileError} // Display error message
+    error={!!alternateMobileError} 
+    helperText={alternateMobileError} 
     inputProps={{
-      maxLength: 10, // Limit to 10 digits in the input field
+      maxLength: 10, 
     }}
   />
 </Grid>
@@ -1058,33 +1039,22 @@ const handleCoAllotteeAadharChange = (e) => {
     variant="outlined"
     value={whatsAppNo}
     onChange={handleWhatsAppChange}
-    error={!!whatsAppError} // Show error if there's a validation error
-    helperText={whatsAppError} // Display the error message
+    error={!!whatsAppError} 
+    helperText={whatsAppError} 
     inputProps={{
-      maxLength: 10, // Limit to 10 digits
+      maxLength: 10, 
     }}
   />
 </Grid>
 
-{/* 
+
 <Grid item xs={6}>
   <TextField
     label="Email ID"
     fullWidth
     variant="outlined"
-    value={emailId}
-    onChange={handleEmailChange}
-    error={!!emailError} // Show error if there's a validation error
-    helperText={emailError} // Display the error message
-  />
-</Grid> */}
-<Grid item xs={6}>
-  <TextField
-    label="Email ID"
-    fullWidth
-    variant="outlined"
-    value={emailId1} // Ensure this matches the defined state variable
-    onChange={handleEmailChange1} // Ensure this updates the correct state
+    value={emailId1} 
+    onChange={handleEmailChange1} 
     error={!!emailError}
     helperText={emailError}
   />
@@ -1096,7 +1066,7 @@ const handleCoAllotteeAadharChange = (e) => {
     label="AADHAR No."
     fullWidth
     variant="outlined"
-    value={aadharNo} // Use state for AADHAR No.
+    value={aadharNo} 
     onChange={(e) => handleAadharChange(e)} // Handle the change
     error={!!aadharError} // Show error if there's a validation error
     helperText={aadharError} // Display the error message
@@ -1163,34 +1133,6 @@ const handleCoAllotteeAadharChange = (e) => {
   />
 </Grid>
 
-{/* 
-<Grid item xs={6}>
-  <TextField
-    label="AADHAR No. (Co-Allottee)"
-    fullWidth
-    variant="outlined"
-    value={aadharNo}  // Should be 'aadharNo' and NOT 'panNumber'
-    onChange={handleAadharCoChange} // Correct function for AADHAR
-    error={!!aadharError}
-    helperText={aadharError}
-    inputProps={{ maxLength: 12 }} // Ensures AADHAR No. can't exceed 12 digits
-  />
-</Grid> */}
-
-
-
-{/* <Grid item xs={6}>
-  <FormControl fullWidth variant="outlined">
-    <InputLabel id="status-label">AADHAR No. (Co-Alotee)</InputLabel>
-    <TextField
-      id="aadhar-number"
-      label="AADHAR No. (Co-Alotee)"
-      variant="outlined"
-      value={aadharNumber} // Replace with your state value
-      onChange={(e) => setAadharNumber(e.target.value)} // Replace with your state setter function
-    />
-  </FormControl>
-</Grid> */}
 <Grid item xs={6}>
   <TextField
     label="AADHAR No. (Co-Allottee)"
@@ -1488,15 +1430,7 @@ Section 3: Consideration
       </Typography>
 
       <Grid container spacing={2}>
-  {/* PAN Card */}
-  {/* <Grid item xs={6}>
-    <Typography variant="body1">PAN Card (of both)</Typography>
-    <Button variant="contained" component="label">
-      Choose File
-      <input type="file" hidden onChange={(e) => setPanCard(e.target.files[0])}  />
-    </Button>
-    {panCard && <Typography variant="body2">{panCard.name}</Typography>}
-  </Grid> */}
+ 
   <Grid item xs={6}>
     <Typography variant="body1">PAN Card (of both)</Typography>
     <Button 

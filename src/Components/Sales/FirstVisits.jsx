@@ -318,26 +318,6 @@ const handleBudgetChange = (event) => {
 
 <div className="d-flex align-items-center mb-3">
  
-{/* 
-{sections.map((section, index) => (
-        <Tooltip key={index} title={section.label} arrow>
-          <IconButton
-            color="primary"
-         
-            onClick={() => handleToggleSection(index)}
-            sx={{
-              backgroundColor: section.bgColor,
-              padding: "10px",   
-           margin :"10px",
-              borderRadius: "50%",
-              color: "white",
-              fontSize: "24px",   
-            }}
-          >
-            {section.icon}
-          </IconButton>
-        </Tooltip>
-      ))} */}
 
 {sections.map((section, index) => (
   <Tooltip key={index} title={section.label} arrow>
