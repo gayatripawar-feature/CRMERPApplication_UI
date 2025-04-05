@@ -88,6 +88,7 @@ const [dateOfBirth, setDateOfBirth] = useState('');
 
   const [mobileEmail, setMobileEmail] = useState('');
 
+  // const [aadhaarCard, setAadhaarCard] = useState([]);
 
 
   const dummyData = [
@@ -153,7 +154,7 @@ const [dateOfBirth, setDateOfBirth] = useState('');
   const [marriageCertificate, setMarriageCertificate] = useState('');
   const [passportPhoto, setPassportPhoto] = useState('');
   const [otherDocuments, setOtherDocuments] = useState('');
-
+ 
   // State for Section 5: Booking Payment Mode
   const [paymentMode, setPaymentMode] = useState('');
   const [chequeNo, setChequeNo] = useState('');
@@ -178,6 +179,15 @@ const [coAllotteeAadharError, setCoAllotteeAadharError] = useState("");
 
 const [expandedSection, setExpandedSection] = useState(null);
 const [isExpanded, setIsExpanded] = useState(false);
+
+
+
+
+const[aadhaar,setAadhar] =useState(false);
+const [aadharNo2, setAadharNo2] = useState('');
+const [aadharNo2Error, setAadharNo2Error] = useState('');
+
+const [panCardFiles, setPanCardFiles] = useState([]); 
  
   const calculateStampDuty = () => {
    };
@@ -188,15 +198,23 @@ const [isExpanded, setIsExpanded] = useState(false);
   const calculateGstAmount = () => {
  };
 
-  const handleAadharChange = (e) => {
-    const value = e.target.value;
-    if (value.length > 12) {
-      setAadharError('AADHAR No. cannot exceed 12 digits');
-    } else {
-      setAadharError('');
-    }
-    setAadharNo(value);
+  // const handleAadharChange = (e) => {
+  //   const value = e.target.value;
+  //   if (value.length > 12) {
+  //     setAadharError('AADHAR No. cannot exceed 12 digits');
+  //   } else {
+  //     setAadharError('');
+  //   }
+  //   setAadharNo(value);
+  // };
+
+  const handlePanCardChange = (e) => {
+    const files = Array.from(e.target.files);  // Convert FileList to Array
+    // setPanCardFiles(files);
+    setPanCardFiles((prev) => [...prev, ...files]);
+
   };
+
   const handleWhatsAppChange = (e) => {
     const value = e.target.value;
     if (value.length > 10) {
@@ -453,19 +471,31 @@ const handleCoAllotteeAadharChange = (e) => {
 
     }
   
-    const handleNameChange = (event) => {
-      const value = event.target.value;
+    // const handleNameChange = (event) => {
+    //   const value = event.target.value;
   
      
+    //   if (/[^a-zA-Z\s]/.test(value)) {
+    //     setError('Name should only contain letters and spaces.');
+    //   } else {
+    //     setError('');
+    //   }
+  
+    //   setName(value);
+    // };
+    const handleNameChange = (e) => {
+      const value = e.target.value;
+    
+      // Check if input contains only alphabets and spaces
       if (/[^a-zA-Z\s]/.test(value)) {
-        setError('Name should only contain letters and spaces.');
+        setFirmPanError('Name should only contain letters and spaces.');
       } else {
-        setError('');
+        setFirmPanError('');
       }
-  
-      setName(value);
+    
+      setFirmPan(value);
     };
-  
+    
    
     const handleMobileNoChange = (event) => {
       const value = event.target.value;
@@ -506,7 +536,36 @@ const handleCoAllotteeAadharChange = (e) => {
       return panPattern.test(pan);
     };
   
-   
+
+    const handleAadharChange = (e) => {
+      const value = e.target.value;
+    
+      if (!/^\d*$/.test(value)) {
+        // If non-numeric value is entered
+        setAadharError('Only numbers are allowed');
+      } else if (value.length < 12) {
+        setAadharError('Aadhar number must be 12 digits');
+      } else {
+        setAadharError('');
+      }
+    
+      setAadharNo(value);
+    };
+    
+    const handleAadharNo2Change = (e) => {
+      const value = e.target.value;
+    
+      if (!/^\d*$/.test(value)) {
+        setAadharNo2Error('Only numbers are allowed');
+      } else if (value.length < 12) {
+        setAadharNo2Error('Aadhar number must be 12 digits');
+      } else {
+        setAadharNo2Error('');
+      }
+    
+      setAadharNo2(value);
+    };
+    
   
     const handlePartnerNameChange = (e, index) => {
       const value = e.target.value;
@@ -538,9 +597,9 @@ const handleCoAllotteeAadharChange = (e) => {
       setFirmName(value);
     };
   
-    const handleEmailChange1 = (e) => {
-      setEmailId1(e.target.value); // Update email state correctly
-    };
+    // const handleEmailChange1 = (e) => {
+    //   setEmailId1(e.target.value); // Update email state correctly
+    // };
   
     const validateFirmName = () => {
       if (!firmName.trim()) {
@@ -628,6 +687,26 @@ const handleCoAllotteeAadharChange = (e) => {
       setIfscCode(value); 
     };
     
+    // const handleAadharChange = (e) => {
+    //   const value = e.target.value;
+    
+    //   // Allow only numbers
+    //   if (!/^\d*$/.test(value)) {
+    //     return; // Skip if non-numeric
+    //   }
+    
+    //   // Set error if length is not 12
+    //   if (value.length === 12) {
+    //     setAadharError('');
+    //   } else if (value.length > 0 && value.length < 12) {
+    //     setAadharError('Aadhar number must be 12 digits');
+    //   } else {
+    //     setAadharError('');
+    //   }
+    
+    //   setAadharNumber(value);
+    // };
+    
   
     const handleMobileChange = (e, index) => {
       const value = e.target.value;
@@ -682,7 +761,21 @@ const handleCoAllotteeAadharChange = (e) => {
    
 
   };
-
+  const handleEmailChange1 = (event) => {
+    const value = event.target.value;
+  
+    // Email Regex for all domain validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  
+    if (!emailRegex.test(value)) {
+      setEmailError('Please enter a valid Email ID');
+    } else {
+      setEmailError('');
+    }
+  
+    setEmailId1(value);
+  };
+  
   const handleDownloadPDFBooking = () => {
     console.log("Loans data before mapping:", loans); // Use loans instead of firms
   
@@ -898,18 +991,19 @@ const handleCoAllotteeAadharChange = (e) => {
     />
   </LocalizationProvider>
 </Grid>
-    <Grid item xs={6}>
-      <TextField
-        label="NAME OF ALOTEE"
-        fullWidth
-        variant="outlined"
-        value={firmPan}
-              onChange={handleFirmPanChange}
-              error={!!firmPanError}  // Show error if there is an error
-              helperText={firmPanError}
-              required 
-      />
-    </Grid>
+<Grid item xs={6}>
+  <TextField
+    label="NAME OF ALOTEE"
+    fullWidth
+    variant="outlined"
+    value={firmPan}
+    onChange={handleNameChange}   // Replaced Function Name
+    error={!!firmPanError}        // Show error if there is an error
+    helperText={firmPanError}
+    required
+  />
+</Grid>
+
     
     
     <Grid item xs={6}>
@@ -964,23 +1058,41 @@ const handleCoAllotteeAadharChange = (e) => {
       label="PAN No."
       variant="outlined"
       value={panNumber}
-      onChange={handlePanChange} 
-      error={!!panError} 
-      helperText={panError} 
-      inputProps={{ maxLength: 10 }} 
+      onChange={handlePanChange}  // Validation Function
+      error={!!panError}         // Show error if invalid
+      helperText={panError}      // Show error message
+      inputProps={{ maxLength: 10 }}  // PAN has 10 characters
     />
   </FormControl>
 </Grid>
+
+{/* <Grid item xs={6}>
+  <FormControl fullWidth variant="outlined">
+    <TextField
+      label="AADHAR No."
+      variant="outlined"
+      value={aadharNumber}
+      onChange={handleAadharChange2}  // Validation Function
+      error={!!aadharError}         // Show error if invalid
+      helperText={aadharError}      // Show error message
+      inputProps={{ maxLength: 12 }} // Only 12 digits allowed
+    />
+  </FormControl>
+</Grid> */}
 <Grid item xs={6}>
   <FormControl fullWidth variant="outlined">
     <TextField
       label="AADHAR No."
       variant="outlined"
-      value={aadharNumber} 
-      onChange={(e) => setAadharNumber(e.target.value)} 
+      value={aadharNo2}
+      onChange={handleAadharNo2Change}
+      error={!!aadharNo2Error}
+      helperText={aadharNo2Error}
+      inputProps={{ maxLength: 12 }} 
     />
   </FormControl>
 </Grid>
+
 
 
 <Grid item xs={6}>
@@ -1060,7 +1172,7 @@ const handleCoAllotteeAadharChange = (e) => {
   />
 </Grid>
 
-
+{/* 
 <Grid item xs={6}>
   <TextField
     label="AADHAR No."
@@ -1074,7 +1186,24 @@ const handleCoAllotteeAadharChange = (e) => {
       maxLength: 12, // Limit to 12 digits
     }}
   />
+</Grid> */}
+
+<Grid item xs={6}>
+  <TextField
+    label="AADHAR No."
+    fullWidth
+    variant="outlined"
+    value={aadharNo}
+    onChange={handleAadharChange}  // Handle the change
+    error={!!aadharError}          // Show error if there's a validation error
+    helperText={aadharError}       // Display the error message
+    inputProps={{
+      maxLength: 12,               // Limit to 12 digits
+      inputMode: 'numeric',        // Mobile-friendly number keyboard
+    }}
+  />
 </Grid>
+
 
 <Grid item xs={6}>
   <TextField
@@ -1431,7 +1560,7 @@ Section 3: Consideration
 
       <Grid container spacing={2}>
  
-  <Grid item xs={6}>
+  {/* <Grid item xs={6}>
     <Typography variant="body1">PAN Card (of both)</Typography>
     <Button 
       variant="contained" 
@@ -1439,13 +1568,49 @@ Section 3: Consideration
       sx={{ backgroundColor: "white", color: "black", "&:hover": { backgroundColor: "#f0f0f0" } }}
     >
       Choose File
-      <input type="file" hidden onChange={(e) => setPanCard(e.target.files[0])} />
+      <input type="file" multiple hidden onChange={(e) => setPanCard(e.target.files[0])} />
     </Button>
     {panCard && <Typography variant="body2">{panCard.name}</Typography>}
-  </Grid>
+  </Grid> */}
+  <Grid item xs={6}>
+  <Typography variant="body1">PAN Card (of both)</Typography>
+
+  <Button
+    variant="contained"
+    component="label"
+    sx={{
+      backgroundColor: "white",
+      color: "black",
+      "&:hover": { backgroundColor: "#f0f0f0" },
+    }}
+  >
+    Choose File
+    <input
+      type="file"
+      multiple
+      hidden
+      onChange={handlePanCardChange}
+    />
+  </Button>
+
+  {/* Show Selected Files */}
+  {panCardFiles.length > 0 && (
+  <div>
+    <Typography variant="body2">Selected Files:</Typography>
+
+    {panCardFiles.map((file, index) => (
+      <Typography key={index} variant="body2">
+        {file.name}
+      </Typography>
+    ))}
+  </div>
+)}
+
+</Grid>
+
 
   {/* AADHAR Card */}
-  <Grid item xs={6}>
+  {/* <Grid item xs={6}>
     <Typography variant="body1">AADHAR Card (of both)</Typography>
     <Button 
       variant="contained" 
@@ -1456,10 +1621,49 @@ Section 3: Consideration
       <input type="file" hidden onChange={(e) => setAadhaarCard(e.target.files[0])} />
     </Button>
     {aadhaarCard && <Typography variant="body2">{aadhaarCard.name}</Typography>}
-  </Grid>
+  </Grid> */}
+
+<Grid item xs={6}>
+  <Typography variant="body1">AADHAR Card (of both)</Typography>
+
+  <Button
+    variant="contained"
+    component="label"
+    sx={{
+      backgroundColor: "white",
+      color: "black",
+      "&:hover": { backgroundColor: "#f0f0f0" },
+    }}
+  >
+    Choose File
+    <input
+      type="file"
+      multiple
+      hidden
+      // onChange={(e) => setAadhaarCard(Array.from(e.target.files))}
+      onChange={(e) =>
+        setAadhaarCard((prev) => [...prev, ...Array.from(e.target.files)])
+      }
+      
+    />
+  </Button>
+
+  {aadhaarCard.length > 0 && (
+    <div>
+      <Typography variant="body2">Selected Files:</Typography>
+
+      {aadhaarCard.map((file, index) => (
+        <Typography key={index} variant="body2">
+          {file.name}
+        </Typography>
+      ))}
+    </div>
+  )}
+</Grid>
+
 
   {/* Marriage Certificate */}
-  <Grid item xs={6}>
+  {/* <Grid item xs={6}>
     <Typography variant="body1">MARRIAGE CERTIFICATE (If Available)</Typography>
     <Button 
       variant="contained" 
@@ -1470,10 +1674,37 @@ Section 3: Consideration
       <input type="file" hidden onChange={(e) => setMarriageCertificate(e.target.files[0])} />
     </Button>
     {marriageCertificate && <Typography variant="body2">{marriageCertificate.name}</Typography>}
-  </Grid>
+  </Grid> */}
+  <Grid item xs={6}>
+  <Typography variant="body1">MARRIAGE CERTIFICATE (If Available)</Typography>
+  <Button
+    variant="contained"
+    component="label"
+    sx={{ backgroundColor: "white", color: "black", "&:hover": { backgroundColor: "#f0f0f0" } }}
+  >
+    Choose Files
+    <input
+      type="file"
+      multiple
+      hidden
+      // onChange={(e) => setMarriageCertificate(Array.from(e.target.files))}
+      onChange={(e) => setMarriageCertificate(prev => [...prev, ...Array.from(e.target.files)])}
+
+
+    />
+  </Button>
+
+  {marriageCertificate?.length > 0 &&
+    marriageCertificate.map((file, index) => (
+      <Typography key={index} variant="body2">
+        {file.name}
+      </Typography>
+    ))}
+</Grid>
+
 
   {/* Passport Size Photo */}
-  <Grid item xs={6}>
+  {/* <Grid item xs={6}>
     <Typography variant="body1">PASSPORT SIZE PHOTO (of both)</Typography>
     <Button 
       variant="contained" 
@@ -1484,21 +1715,65 @@ Section 3: Consideration
       <input type="file" hidden onChange={(e) => setPassportPhoto(e.target.files[0])} />
     </Button>
     {passportPhoto && <Typography variant="body2">{passportPhoto.name}</Typography>}
-  </Grid>
+  </Grid> */}
+
+<Grid item xs={6}>
+  <Typography variant="body1">PASSPORT SIZE PHOTO (of both)</Typography>
+
+  <Button 
+    variant="contained" 
+    component="label"
+    sx={{ backgroundColor: "white", color: "black", "&:hover": { backgroundColor: "#f0f0f0" } }}
+  >
+    Choose Files
+    <input 
+      type="file" 
+      multiple
+      hidden 
+      onChange={(e) => setPassportPhoto((prev) => [...prev, ...Array.from(e.target.files)])}
+
+    />
+  </Button>
+
+  {passportPhoto.length > 0 && (
+    <>
+      {passportPhoto.map((file, index) => (
+        <Typography key={index} variant="body2">
+          {file.name}
+        </Typography>
+      ))}
+    </>
+  )}
+</Grid>
 
   {/* Any Other Documents */}
   <Grid item xs={6}>
-    <Typography variant="body1">Any Other</Typography>
-    <Button 
-      variant="contained" 
-      component="label"
-      sx={{ backgroundColor: "white", color: "black", "&:hover": { backgroundColor: "#f0f0f0" } }}
-    >
-      Choose File
-      <input type="file" hidden onChange={(e) => setOtherDocuments(e.target.files[0])} />
-    </Button>
-    {otherDocuments && <Typography variant="body2">{otherDocuments.name}</Typography>}
-  </Grid>
+  <Typography variant="body1">Any Other</Typography>
+
+  <Button 
+    variant="contained" 
+    component="label"
+    sx={{ backgroundColor: "white", color: "black", "&:hover": { backgroundColor: "#f0f0f0" } }}
+  >
+    Choose Files
+    <input 
+      type="file" 
+      multiple 
+      hidden 
+      onChange={(e) => setOtherDocuments((prev) => [...prev, ...Array.from(e.target.files)])} 
+    />
+  </Button>
+
+  {otherDocuments.length > 0 && (
+    <>
+      {otherDocuments.map((file, index) => (
+        <Typography key={index} variant="body2">
+          {file.name}
+        </Typography>
+      ))}
+    </>
+  )}
+</Grid>
 </Grid>
 
 

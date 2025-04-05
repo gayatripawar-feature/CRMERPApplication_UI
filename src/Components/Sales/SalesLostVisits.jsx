@@ -330,7 +330,10 @@ const SalesLostVisits = () => {
       setMobileNo(value);
     };
     
-  
+    const handleNoChange = (e) => {
+      setFirmName(e.target.value);
+    };
+    
     const handleAccountNoChange = (e) => {
       const value = e.target.value;
       
@@ -499,8 +502,9 @@ const SalesLostVisits = () => {
       const partnerCopy = [...partners];
     
       // Regular expression to validate Gmail email format
-      const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
-    
+      // const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,6}$/i;
+
       if (value && !emailRegex.test(value)) {
         setEmailError("Invalid Gmail address");
         console.log("invalid email");
@@ -574,6 +578,7 @@ const SalesLostVisits = () => {
       };
       
 
+      
       
 
     return (
@@ -711,9 +716,9 @@ const SalesLostVisits = () => {
         fullWidth
         variant="outlined"
         value={firmName}
-        onChange={handleFirmNameChange} 
-        error={!!firmNameError} 
-        helperText={firmNameError} 
+        onChange={handleNoChange}   // Calling function
+        error={!!firmNameError}
+        helperText={firmNameError}
         required 
       />
     </Grid>
@@ -760,10 +765,10 @@ const SalesLostVisits = () => {
         label="Name"
         fullWidth
         variant="outlined"
-        value={firmPan}
-              onChange={handleFirmPanChange}
-              error={!!firmPanError}  // Show error if there is an error
-              helperText={firmPanError}
+        value={name}
+    onChange={handleNameChange}   // using handleNameChange here
+    error={!!nameError}
+    helperText={nameError}
               required 
       />
     </Grid>

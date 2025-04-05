@@ -249,6 +249,7 @@ const DisplayEnquiryTable = () => {
       const [nameError, setNameError] = useState(false);
       const [alternateContact, setAlternateContact] = useState("");
        const [whatsappNo, setWhatsappNo] = useState("");
+       const [name, setName] = useState("");
   // Handlers for each action (Edit, Email, Assign)
   const handleEdit = (row) => {
     setSelectedItem(row); // Set the item to be edited
@@ -350,16 +351,18 @@ const handleBudgetChange = (event) => {
 
   const handleNameChange = (e) => {
     const value = e.target.value;
-    const regex = /^[A-Za-z\s]*$/;  // Only letters and spaces
+    const regex = /^[A-Za-z\s]*$/;  // Only alphabets & space
   
     if (regex.test(value)) {
       setName(value);
-      setNameError(false);
+      setNameError(false);   // No error
     } else {
-      setName(value);
-      setNameError(true);  // Show error when invalid input
+      setNameError(true);    // Show error
     }
   };
+  
+
+
  // Handle the change for 'Planning To Buy Within'
  const handlePlanningToBuyChange = (event) => {
   setPlanningToBuy(event.target.value);

@@ -206,6 +206,10 @@ const Admin_Banker = () => {
     doc.save("Banker_Details_Report.pdf");
   };
   
+  const handleFileChange = (e) => {
+    const filesArray = Array.from(e.target.files);
+    setSelectedFiles((prevFiles) => [...prevFiles, ...filesArray]);
+  };
 
   return (
     <div className="container my-4">
@@ -370,10 +374,42 @@ const Admin_Banker = () => {
                       <label className="form-label">Address</label>
                       <input type="text" className="form-control" name="email" value={formData.email} onChange={handleChange} required />
                     </div>
-                    <div className="col-md-4">
+                    {/* <div className="col-md-4">
                       <label className="form-label">APF Letter</label>
                       <input type="file" className="form-control" name="mobile" onChange={handleChange} required />
-                    </div>
+                    </div> */}
+
+
+<div className="col-md-4">
+  <label className="form-label">APF Letter :</label>
+
+  {/* File Upload Button */}
+  <Button
+    variant="contained"
+    component="label"
+    style={{
+      backgroundColor: "white",
+      color: "black",
+      border: "1px solid #ced4da",
+      borderRadius: "4px",
+      padding: "6px 12px",
+      textTransform: "none",
+    }}
+  >
+    Choose File
+    {/* Correct File Input */}
+    <input
+      type="file"
+      multiple
+      hidden  // This will hide input but make it clickable
+      onChange={handleFileChange}
+      required
+    />
+  </Button>
+</div>
+
+
+
                   </div>
 
                   {bankers.map((banker, index) => (
@@ -501,7 +537,7 @@ const Admin_Banker = () => {
         </div>
       </TableCell>
 
-      {/* Display edit form directly in the table row when edit is clicked */}
+    
       {selectedBanker === banker && (
   <div
     style={{

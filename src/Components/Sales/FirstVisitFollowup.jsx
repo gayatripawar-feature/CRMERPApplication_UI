@@ -304,16 +304,16 @@ const FirstvisitFollowup = () => {
   
     const handleNameChange = (event) => {
       const value = event.target.value;
-  
-     
+    
       if (/[^a-zA-Z\s]/.test(value)) {
-        setError('Name should only contain letters and spaces.');
+        setNameError('Name should only contain letters and spaces.');
       } else {
-        setError('');
+        setNameError('');
       }
-  
+    
       setName(value);
     };
+    
   
    
     const handleMobileNoChange = (event) => {
@@ -429,6 +429,10 @@ const FirstvisitFollowup = () => {
     const handleChange = (e, label, partnerIndex) => {
       const { value } = e.target;
     
+      // For Lead Type selection
+  if (label === 'Lead Type') {
+    setLeadType(value);
+  }
       // Update the partners array with the new value for the specific field
       const updatedPartners = [...partners];
       updatedPartners[partnerIndex][label.toLowerCase().replace(/ /g, "")] = value;
@@ -440,7 +444,7 @@ const FirstvisitFollowup = () => {
         if (!/^[A-Za-z\s]*$/.test(value)) {
           setErrors((prev) => ({
             ...prev,
-            firmName: 'Firm Name should only contain letters and spaces',
+            firmName: ' Name should only contain letters and spaces',
           }));
         } else {
           setErrors((prev) => ({
@@ -764,6 +768,12 @@ const FirstvisitFollowup = () => {
       };
       
 
+      const handleNoChange = (e) => {
+        setFirmName(e.target.value);
+      };
+      
+      
+
     return (
       <div className="main-content">
         <h6>Sales Module / Enquiry Follow Up Management</h6>
@@ -917,17 +927,19 @@ const FirstvisitFollowup = () => {
        
         
         <Grid container spacing={2}>
-    <Grid item xs={6}>
-      <TextField
-        label="Enquiry No"
-        fullWidth
-        variant="outlined"
-        value={firmName}
-        onChange={handleFirmNameChange} 
-        error={!!firmNameError} 
-        helperText={firmNameError} 
-      />
-    </Grid>
+        <Grid item xs={6}>
+  <TextField
+    label="Enquiry No"
+    fullWidth
+    variant="outlined"
+    value={firmName}
+    onChange={handleNoChange}   // Calling function
+    error={!!firmNameError}
+    helperText={firmNameError}
+  />
+</Grid>
+
+
     <Grid item xs={6}>
         <FormControl fullWidth variant="outlined">
           <InputLabel id="closing-executive-label">Sales Person</InputLabel>
@@ -958,14 +970,11 @@ const FirstvisitFollowup = () => {
         label="Remark"
         fullWidth
         variant="outlined"
-        value={firmPan}
-              onChange={handleFirmPanChange}
-              error={!!firmPanError}  // Show error if there is an error
-              helperText={firmPanError}
+       
       />
     </Grid>
 
-    <Grid item xs={6}>
+    {/* <Grid item xs={6}>
       <TextField
         label="Name"
         fullWidth
@@ -975,7 +984,20 @@ const FirstvisitFollowup = () => {
               error={!!firmPanError}  // Show error if there is an error
               helperText={firmPanError}
       />
-    </Grid>
+    </Grid> */}
+    <Grid item xs={6}>
+  <TextField
+    label="Name"
+    fullWidth
+    variant="outlined"
+    value={name}
+    onChange={handleNameChange}
+    error={!!nameError}  // show error if validation fails
+    helperText={nameError}  // show error message
+    required 
+  />
+</Grid>
+
 
     <Grid item xs={6}>
       <TextField
@@ -983,10 +1005,7 @@ const FirstvisitFollowup = () => {
         label="Next Follow Up"
         fullWidth
         variant="outlined"
-        value={firmPan}
-              onChange={handleFirmPanChange}
-              error={!!firmPanError}  // Show error if there is an error
-              helperText={firmPanError}
+        InputLabelProps={{ shrink: true }} 
       />
     </Grid>
 
@@ -1004,7 +1023,9 @@ const FirstvisitFollowup = () => {
         <InputLabel>Lead Type</InputLabel>
         <Select
           value={leadType}
-          onChange={handleChange}
+          // onChange={handleChange}
+          onChange={(e) => handleChange(e, 'Lead Type')}
+
           label="Lead Type"
         >
           <MenuItem value="hot">Hot</MenuItem>
@@ -1021,7 +1042,8 @@ const FirstvisitFollowup = () => {
         <InputLabel>Status</InputLabel>
         <Select
           value={status}
-          onChange={handleStatusChange}
+          // onChange={handleStatusChange}
+          onChange={(e) => handleStatusChange(e, 'Status')}
           label="Status"
         >
           <MenuItem value="follow_up">Follow up</MenuItem>

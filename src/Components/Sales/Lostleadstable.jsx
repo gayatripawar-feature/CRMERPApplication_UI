@@ -89,7 +89,7 @@ const Lostleadstable = () => {
            const [firmPanError, setFirmPanError] = useState("");
             const [assignedTo, setAssignedTo] = useState("");
               const [leadType, setLeadType] = useState("");
-
+              const [nameError, setNameError] = useState("");
   // Handles clicking the Edit icon
   const handleEdit = (firm) => {
     setIsEditing(true); // Set editing state to true
@@ -142,6 +142,19 @@ const Lostleadstable = () => {
     setIsEditing(false); // Hide the form when canceled
   };
 
+  const handleNameChange = (e) => {
+    const value = e.target.value;
+    const regex = /^[A-Za-z ]*$/;  // Only Alphabets & Space allowed
+  
+    if (!regex.test(value)) {
+      setNameError("Only alphabets are allowed");
+    } else {
+      setNameError("");
+    }
+  
+    setName(value);
+  };
+  
   return (
     <TableContainer component={Paper}>
       {isEditing  ? (
@@ -210,10 +223,9 @@ const Lostleadstable = () => {
                   label="Name"
                   fullWidth
                   variant="outlined"
-                  value={firmPan}
-                        onChange={handleFirmPanChange}
-                        error={!!firmPanError}  // Show error if there is an error
-                        helperText={firmPanError}
+                  onChange={handleNameChange}
+                  error={!!nameError}  // show error if validation fails
+                  helperText={nameError} 
                         required 
                 />
               </Grid>

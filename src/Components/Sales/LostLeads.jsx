@@ -71,6 +71,8 @@ const LostLeads = () => {
   const [ifscCodeError, setIfscCodeError] = useState("");
   const [status, setStatus] = useState({});
   
+
+
     const [fileNames, setFileNames] = useState({
       firmPanNoDocument: "",
       firmGstNoDocument: "",
@@ -487,7 +489,8 @@ const LostLeads = () => {
         setClosingExecutive(event.target.value);
       };
     
-
+     
+      
     
       const handleDownloadPDFNew = () => {
         console.log("Loans data before mapping:", loans);
@@ -695,25 +698,19 @@ const LostLeads = () => {
     </Grid>
 
     <Grid item xs={6}>
-      <TextField
-        label="Name"
-        fullWidth
-        variant="outlined"
-        value={firmPan}
-              onChange={handleFirmPanChange}
-              error={!!firmPanError}  // Show error if there is an error
-              helperText={firmPanError}
-              required 
-      />
-    </Grid>
-    {/* <Grid item xs={6}>
-      <TextField
-      type="date"
-        label=""
-        fullWidth
-        variant="outlined"
-      />
-    </Grid> */}
+  <TextField
+    label="Name"
+    fullWidth
+    variant="outlined"
+    value={name}
+    onChange={handleNameChange}
+    error={!!nameError}  // show error if validation fails
+    helperText={nameError}  // show error message
+    required 
+  />
+</Grid>
+
+   
     
     <Grid item xs={6}>
   <TextField
