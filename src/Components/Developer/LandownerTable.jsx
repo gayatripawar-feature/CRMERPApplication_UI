@@ -152,10 +152,12 @@ const [emailError, setEmailError] = useState("");
   
   const handleEmailChange = (e, index) => {
     const value = e.target.value;
-    const partnerCopy = [...partners];
+    // const partnerCopy = [...partners];
   
     // Regular expression to validate Gmail email format
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+    // const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+    // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,6}$/i;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
   
     if (value && !emailRegex.test(value)) {
       setEmailError("Invalid Gmail address");

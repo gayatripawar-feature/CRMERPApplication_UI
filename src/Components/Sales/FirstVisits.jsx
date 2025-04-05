@@ -66,6 +66,11 @@ const FirstVisits = () => {
   const [budget, setBudget] = useState('');
   const [reasonForPurchase, setReasonForPurchase] = useState('');
   const [emailError, setEmailError] = useState('')
+  
+  const [nameError, setNameError] = useState(false);
+  const [alternateContact, setAlternateContact] = useState("");
+  const [whatsappNo, setWhatsappNo] = useState("");
+
   useEffect(() => {
     loadLoansData();
   }, []);
@@ -133,20 +138,6 @@ const handleBudgetChange = (event) => {
     setInventoryData(inventoryData.filter((_, i) => i !== index));
   };
 
-
-  // const downloadSampleCsv = () => {
-  //   const sampleData = "Name,Email,Phone\nJohn Doe,john@example.com,1234567890";
-  //   const blob = new Blob([sampleData], { type: "text/csv" });
-  //   const url = URL.createObjectURL(blob);
-
-  //   const a = document.createElement("a");
-  //   a.href = url;
-  //   a.download = "lead_template.csv";
-  //   document.body.appendChild(a);
-  //   a.click();
-  //   document.body.removeChild(a);
-  // };
-
   const downloadSampleCsv = () => {
     const sampleData = `Sales Exp.,Name,Mobile,Alternate Mobile Number,WhatsApp No.,Email,Address,Occupation,Company,Interested In,Budget,Reason,Reference,Name of CP,Planning to Buy,Follow Up Details\n`;
   
@@ -198,11 +189,24 @@ const handleBudgetChange = (event) => {
       setMobileError('');
     }
   };
+
+  const handleNameChange = (e) => {
+    const value = e.target.value;
+    const regex = /^[A-Za-z\s]*$/;  // Only letters and spaces
   
+    if (regex.test(value)) {
+      setName(value);
+      setNameError(false);
+    } else {
+      setName(value);
+      setNameError(true);  // Show error when invalid input
+    }
+  };
 
   // Validate email format
   const validateEmail = (value) => {
-    const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;  // Basic email regex
+    // const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;  // Basic email regex
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
     if (!regex.test(value)) {
       setEmailError('Please enter a valid email address');
     } else {
@@ -323,15 +327,15 @@ const handleBudgetChange = (event) => {
   <Tooltip key={index} title={section.label} arrow>
     <div
       style={{
-        display: 'flex',               // Flexbox to arrange icon and label horizontally
-        alignItems: 'center',          // Align the icon and label vertically in the center
-        justifyContent: 'flex-start',  // Ensure the content is aligned to the left
-        backgroundColor: '#3621a9',    // Background color for the button
+        display: 'flex',              
+        alignItems: 'center',          
+        justifyContent: 'flex-start',  
+        backgroundColor: '#3621a9',    
         padding: '10px',
         margin: '10px',
-        borderRadius: '20px',          // Rounded corners for the container
+        borderRadius: '20px',          
         color: 'white',
-        fontSize: '16px',              // Font size for the label
+        fontSize: '16px',              
         width: expandedSection === index ? '200px' : '50px',  // Toggle width based on expanded state
         height: '50px',                // Make the height consistent for both collapsed and expanded
         transition: 'width 0.3s ease', // Smooth transition for the width
@@ -479,10 +483,17 @@ const handleBudgetChange = (event) => {
       </FormControl>
     </Grid>
 
-    {/* Name Field */}
     <Grid item xs={4}>
-      <TextField label="Name" fullWidth />
-    </Grid>
+  <TextField
+    label="Name"
+    fullWidth
+    value={name}
+    onChange={handleNameChange}
+    error={nameError}
+    helperText={nameError ? "Only letters are allowed" : ""}
+  />
+</Grid>
+
 
     {/* Mobile No. Field */}
     <Grid item xs={4}>
@@ -498,29 +509,59 @@ const handleBudgetChange = (event) => {
 
     {/* Alternate Contact No. Field */}
     <Grid item xs={4}>
-      <TextField
-        label="Alternate Contact No."
-        fullWidth
-        value={email}
-        onChange={handleEmailChange}
-        error={!!emailError} // Show error if validation fails
-        helperText={emailError} // Display error message
-      />
-    </Grid>
+  <TextField
+    label="Alternate Contact No."
+    fullWidth
+    value={alternateContact}
+    onChange={(e) => {
+      const value = e.target.value;
+      // Allow only numbers and limit to 10 digits
+      if (/^\d{0,10}$/.test(value)) {
+        setAlternateContact(value);
+      }
+    }}
+    error={alternateContact.length > 0 && alternateContact.length < 10}
+    helperText={
+      alternateContact.length > 0 && alternateContact.length < 10
+        ? "Mobile number must be 10 digits"
+        : ""
+    }
+  />
+</Grid>
+
 
     {/* WhatsApp No. Field */}
     <Grid item xs={4}>
-      <TextField
-        type="text"
-        label="WhatsApp No"
-        fullWidth
-        inputProps={{ step: "0.01", min: "0.01" }}
-      />
-    </Grid>
+  <TextField
+    type="text"
+    label="WhatsApp No"
+    fullWidth
+    value={whatsappNo}
+    onChange={(e) => {
+      const value = e.target.value;
+      // Allow only numbers and limit to 10 digits
+      if (/^\d{0,10}$/.test(value)) {
+        setWhatsappNo(value);
+      }
+    }}
+    error={whatsappNo.length > 0 && whatsappNo.length < 10}
+    helperText={
+      whatsappNo.length > 0 && whatsappNo.length < 10
+        ? "Mobile number must be 10 digits"
+        : ""
+    }
+  />
+</Grid>
+
 
     {/* Email Field */}
     <Grid item xs={4}>
-      <TextField label="Email" fullWidth />
+      <TextField label="Email" fullWidth 
+      value={email}
+      onChange={handleEmailChange}
+      error={!!emailError} // Show error if validation fails
+      helperText={emailError}
+      />
     </Grid>
 
     {/* Address Field */}

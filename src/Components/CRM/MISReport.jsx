@@ -4,7 +4,11 @@
 
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css'; // Ensure Bootstrap is imported
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
+import { FaFileDownload } from "react-icons/fa";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+import autoTable from "jspdf-autotable";
 const MISReport = () => {
   // Initializing state for form inputs
   const [flatNo, setFlatNo] = useState('');
@@ -179,6 +183,95 @@ const MISReport = () => {
     setPossession('');
   };
 
+  const handleDownloadPDFMIS = () => {
+    const doc = new jsPDF("landscape");
+    doc.setFontSize(14);
+    doc.text("MIS Report", 14, 15);
+  
+    // Common Table Rows
+    const tableRows = formData.map((row, index) => ([
+      index + 1,  // Serial No
+      row.flatNo || "-",
+      row.bookingDate || "-",
+      row.allotteeName || "-",
+      row.coAllotteeName || "-",
+      row.allotteePanNo || "-",
+      row.coAllotteePanNo || "-",
+      row.allotteeAadharNo || "-",
+      row.coAllotteeAadharNo || "-",
+      row.address || "-",
+      row.flatType || "-",
+      row.floor || "-",
+      row.status || "-",  // SOLD/UNSOLD
+      row.rate || "-",
+      row.agreementStatus || "-",
+      row.agreementDateTime || "-",
+      row.registrationNo || "-",
+      row.contactNo || "-",
+      row.email || "-",
+      row.carpetAreaSqm || "-",
+      row.openBalconySqm || "-",
+      row.enclosedBalconySqm || "-",
+      row.totalCarpetAreaSqm || "-",
+      row.carpetAreaSqft || "-",
+      row.saleableAreaSqft || "-",
+      row.stampDuty || "-",
+      row.registrationFee || "-",
+      row.legalFee || "-",
+      row.agreementValue || "-",
+      row.receivedAgreement || "-",
+      row.balanceAgreement || "-",
+      row.gstValue || "-",
+      row.receivedGst || "-",
+      row.balanceGst || "-",
+      row.totalDueIncludingGst || "-",
+      row.parking || "-",
+      row.banker || "-",
+      row.bookingPercent || "-",
+      row.agreementPercent || "-",
+      row.plinthPercent || "-",
+      row.firstSlabPercent || "-",
+      row.secondSlabPercent || "-",
+      row.totalPercent || "-"
+    ]));
+  
+    // Split Columns into 3 pages
+    const columnsPage1 = ["Sr No", "FLAT NO", "BOOKING DATE", "NAME OF ALLOTEE", "NAME OF CO-ALLOTEE", "ALLOTEE PAN NO.", "CO-ALLOTEE PAN NO", "ALLOTEE AADHAR NO.", "CO-ALLOTEE AADHAR NO.", "ADDRESS", "FLAT TYPE", "FLOOR", "SOLD/UNSOLD", "RATE"];
+    const columnsPage2 = ["AGREEMENT STATUS", "AGREEMENT DATE AND TIME", "REGISTRATION NUMBER", "CONTACT NO", "EMAIL ID", "CARPET AREA SQM", "OPEN BALCONY SQM", "ENCLOSED BALCONY SQM", "TOTAL CARPET AREA SQM", "CARPET AREA IN SQ FT", "SALEABLE AREA SQ. FT"];
+    const columnsPage3 = ["STAMP DUTY (7%)", "REGISTRATION FEE", "LEGAL FEE", "AGREEMENT VALUE", "RECEIVED AGAINST AGREEMENT", "BALANCE AGAINST AGREEMENT", "GST VALUE", "RECEIVED AGAINST GST", "BALANCE AGAINST GST", "TOTAL DUE INCLUDING GST", "PARKING", "BANKER", "BOOKING (10%)", "AGREEMENT (10%)", "PLINTH (15%)", "1ST SLAB (5%)", "2ND SLAB (5%)", "TOTAL"];
+  
+    autoTable(doc, {
+      startY: 25,
+      head: [columnsPage1],
+      body: tableRows.map(row => row.slice(0, columnsPage1.length)),
+      styles: { fontSize: 10 },
+      headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+    });
+  
+    doc.addPage();
+  
+    autoTable(doc, {
+      head: [columnsPage2],
+      body: tableRows.map(row => row.slice(columnsPage1.length, columnsPage1.length + columnsPage2.length)),
+      styles: { fontSize: 10 },
+      headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+    });
+  
+    doc.addPage();
+  
+    autoTable(doc, {
+      head: [columnsPage3],
+      body: tableRows.map(row => row.slice(columnsPage1.length + columnsPage2.length)),
+      styles: { fontSize: 10 },
+      headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+    });
+  
+    doc.save("MIS_Report.pdf");
+  };
+  
+  
+
+
   return (
     <div className="container mt-5 shadow p-4 rounded">
       {/* Form */}
@@ -259,9 +352,43 @@ const MISReport = () => {
         </div>
 
         {/* Submit Button */}
-        <button type="submit" className="btn btn-primary mt-3">
+        <div className='d-flex gap-3'>
+        <button type="submit" className="btn btn-primary mt-4">
           Submit
         </button>
+        <Button
+  variant="contained"
+  sx={{
+    background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+    color: "white",
+    fontWeight: "bold",
+    fontWeight: "900",
+    textTransform: "none",
+    marginTop :"24px",
+   
+    minHeight: "unset", // Removes fixed height  
+    height: "39px", // Explicitly set a smaller height  
+    fontSize: "12px",
+    borderRadius: "20px",
+    display: "inline-flex", // Ensures compact size  
+    alignItems: "center",
+    gap: "6px",
+    lineHeight: "1", // Reduces text spacing  
+    "&:hover": {
+      background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+    },
+  }}
+  disableElevation // Removes shadow that might add visual space  
+  disableRipple // Removes ripple effect padding  
+  onClick={handleDownloadPDFMIS}
+>
+  <FaFileDownload size={14} />
+  Download PDF
+</Button>
+        </div>
+        {/* <button type="submit" className="btn btn-primary mt-3">
+          Submit
+        </button> */}
       </form>
 
     

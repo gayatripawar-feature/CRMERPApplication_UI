@@ -25,7 +25,7 @@ const FirmTable = () => {
             const [mobileError, setMobileError] = useState("");
             const [emailError, setEmailError] = useState("");
             const [firmData, setFirmData] = useState([]); 
-      
+      const [showFirmForm, setShowFirmForm] = useState(false);
             const [aadhaarError, setAadhaarError] = useState(false);
 const [aadhaarErrorMessage, setAadhaarErrorMessage] = useState("");
 
@@ -238,7 +238,11 @@ const [aadhaarErrorMessage, setAadhaarErrorMessage] = useState("");
     const partnerCopy = [...partners];
   
    
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+    // const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+    // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;  - correct
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,6}$/i;
+
+
   
     if (value && !emailRegex.test(value)) {
       setEmailError("Invalid Gmail address");
@@ -467,10 +471,9 @@ const [aadhaarErrorMessage, setAadhaarErrorMessage] = useState("");
             className="m-3"
             color="success"
             onClick={() => {
-              // Simply show the toast message without calling validation functions
+             
               toast.success("Details are Updated!", { position: "top-right", autoClose: 3000 });
-              
-              // If you want to close the form (or any other logic), you can add it here
+    
               setShowFirmForm(false); // Example of hiding the form after submission
             }}
           >

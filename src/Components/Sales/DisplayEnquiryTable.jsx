@@ -196,6 +196,10 @@ import {
   IconButton,
   TextField,
   Button,
+  Grid,
+  FormControl,
+  InputLabel,Select,
+  MenuItem,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import EmailIcon from "@mui/icons-material/Email";
@@ -229,7 +233,22 @@ const data = [
 const DisplayEnquiryTable = () => {
   const [isEditing, setIsEditing] = useState(false); // To toggle between table and form
   const [selectedItem, setSelectedItem] = useState(null); // To track the item being edited
+  const [error, setError] = useState('');
 
+  const [leadNo, setLeadNo] = useState(''); 
+    const [salesExec, setSalesExec] = useState('');
+    const [mobile, setMobile] = useState('');
+    const [email, setEmail] = useState('');
+    const [mobileError, setMobileError] = useState('');
+    const [interestedIn, setInterestedIn] = useState('');
+    const [planningToBuy, setPlanningToBuy] = useState('');
+    const [occupation, setOccupation] = useState('');
+    const [budget, setBudget] = useState('');
+    const [reasonForPurchase, setReasonForPurchase] = useState('');
+    const [emailError, setEmailError] = useState('')
+      const [nameError, setNameError] = useState(false);
+      const [alternateContact, setAlternateContact] = useState("");
+       const [whatsappNo, setWhatsappNo] = useState("");
   // Handlers for each action (Edit, Email, Assign)
   const handleEdit = (row) => {
     setSelectedItem(row); // Set the item to be edited
@@ -244,6 +263,24 @@ const DisplayEnquiryTable = () => {
     console.log("Assign clicked for", row);
   };
 
+  
+  const handleChange = (e) => {
+    const value = e.target.value;
+    
+  
+    const regex = /[\d\s]/;
+
+   
+    if (regex.test(value)) {
+      setError('Name should not contain digits or spaces');
+    } else {
+      setError(''); 
+    }
+
+    setName(value); 
+  };
+
+
   const handleSave = () => {
     console.log("Form saved for", selectedItem);
     setIsEditing(false); // Close the form after saving
@@ -255,34 +292,374 @@ const DisplayEnquiryTable = () => {
     setSelectedItem(null); // Reset the selected item
   };
 
+  
+  // Validate email format
+  const validateEmail = (value) => {
+    // const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;  // Basic email regex
+
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+
+    if (!regex.test(value)) {
+      setEmailError('Please enter a valid email address');
+    } else {
+      setEmailError('');
+    }
+  };
+
+  // Handle change in mobile input
+  const handleMobileChange = (e) => {
+    const value = e.target.value;
+    setMobile(value);
+    validateMobile(value);
+  };
+
+  // Handle change in email input
+  const handleEmailChange = (e) => {
+    const value = e.target.value;
+    setEmail(value);
+    validateEmail(value);
+  };
+
+  // Handle change for Sales Executive Name
+  const handleSalesExecChange = (event) => {
+    setSalesExec(event.target.value);
+    setError(''); // Clear error on change
+  };
+ 
+  const validateMobile = (value) => {
+    const regex = /^[0-9]{10}$/;  // Only exactly 10 digits allowed
+    if (!regex.test(value)) {
+      setMobileError('Mobile number should contain exactly 10 digits');
+    } else {
+      setMobileError('');
+    }
+  };
+  
+  const handleInterestedInChange = (event) => {
+    setInterestedIn(event.target.value);
+  };
+// Handle the change for 'Budget'
+const handleBudgetChange = (event) => {
+    setBudget(event.target.value);
+  };
+
+  const loadLoansData = async () => {
+    const data = await fetchLoansData();
+    setLoans(data);
+  };
+
+  const handleNameChange = (e) => {
+    const value = e.target.value;
+    const regex = /^[A-Za-z\s]*$/;  // Only letters and spaces
+  
+    if (regex.test(value)) {
+      setName(value);
+      setNameError(false);
+    } else {
+      setName(value);
+      setNameError(true);  // Show error when invalid input
+    }
+  };
+ // Handle the change for 'Planning To Buy Within'
+ const handlePlanningToBuyChange = (event) => {
+  setPlanningToBuy(event.target.value);
+};
+
+
+   // Handle the change for 'Occupation'
+   const handleOccupationChange = (event) => {
+    setOccupation(event.target.value); // Update occupation state
+  };
+
+  const handleReasonForPurchaseChange = (event) => {
+    setReasonForPurchase(event.target.value); // Update reasonForPurchase state
+  };
+
   return (
     <div>
       {isEditing ? (
-        <div>
-          {/* Form view */}
-          <h3>Edit Enquiry</h3>
-          <TextField
-            label="Remark History"
-            value={selectedItem.remarkHistory}
-            onChange={(e) => setSelectedItem({ ...selectedItem, remarkHistory: e.target.value })}
-            fullWidth
-          />
-          <TextField
-            label="Enquiry No."
-            value={selectedItem.enquiryNo}
-            onChange={(e) => setSelectedItem({ ...selectedItem, enquiryNo: e.target.value })}
-            fullWidth
-          />
-          {/* Add more fields as necessary */}
-          <div>
-            <Button variant="contained" color="success" onClick={handleSave}>
-              Save
-            </Button>
-            <Button variant="outlined" color="error" onClick={handleCancel}>
-              Cancel
-            </Button>
-          </div>
-        </div>
+        // <div>
+        //   {/* Form view */}
+        //   <h3>Edit Enquiry</h3>
+        //   <TextField
+        //     label="Remark History"
+        //     value={selectedItem.remarkHistory}
+        //     onChange={(e) => setSelectedItem({ ...selectedItem, remarkHistory: e.target.value })}
+        //     fullWidth
+        //   />
+        //   <TextField
+        //     label="Enquiry No."
+        //     value={selectedItem.enquiryNo}
+        //     onChange={(e) => setSelectedItem({ ...selectedItem, enquiryNo: e.target.value })}
+        //     fullWidth
+        //   />
+        //   {/* Add more fields as necessary */}
+        //   <div>
+        //     <Button variant="contained" color="success" onClick={handleSave}>
+        //       Save
+        //     </Button>
+        //     <Button variant="outlined" color="error" onClick={handleCancel}>
+        //       Cancel
+        //     </Button>
+        //   </div>
+        // </div>
+
+        <div
+  className="firm-form mt-4 p-3 border rounded"
+  style={{
+    maxHeight: "500px",
+    overflowY: "auto",
+    backgroundColor: "#f8f9fa",
+    border: "1px solid #ccc",
+  }}
+>
+  <Grid container spacing={2}>
+    {/* Lead No. Field */}
+    <Grid item xs={4}>
+      <FormControl fullWidth error={!!error}>
+        <InputLabel>Lead No.</InputLabel>
+        <Select value={leadNo} onChange={handleChange} label="Lead No.">
+          <MenuItem value="Lead 9">Lead 9</MenuItem>
+          <MenuItem value="Lead 16">Lead 16</MenuItem>
+          <MenuItem value="Lead 25">Lead 25</MenuItem>
+          <MenuItem value="Lead 26">Lead 26</MenuItem>
+          <MenuItem value="Lead 27">Lead 27</MenuItem>
+          <MenuItem value="Lead 4">Lead 4</MenuItem>
+          <MenuItem value="Lead 3">Lead 3</MenuItem>
+        </Select>
+        {error && <FormHelperText>{error}</FormHelperText>}
+      </FormControl>
+    </Grid>
+
+    {/* Name Field */}
+   
+       <Grid item xs={4}>
+     <TextField
+       label="Name"
+       fullWidth
+       value={name}
+       onChange={handleNameChange}
+       error={nameError}
+       helperText={nameError ? "Only letters are allowed" : ""}
+     />
+   </Grid>
+   
+
+    {/* Mobile No. Field */}
+    <Grid item xs={4}>
+      <TextField
+        label="Mobile No."
+        fullWidth
+        value={mobile}
+        onChange={handleMobileChange}
+        error={!!mobileError}
+        helperText={mobileError}
+      />
+    </Grid>
+
+       <Grid item xs={4}>
+     <TextField
+       label="Alternate Contact No."
+       fullWidth
+       value={alternateContact}
+       onChange={(e) => {
+         const value = e.target.value;
+         // Allow only numbers and limit to 10 digits
+         if (/^\d{0,10}$/.test(value)) {
+           setAlternateContact(value);
+         }
+       }}
+       error={alternateContact.length > 0 && alternateContact.length < 10}
+       helperText={
+         alternateContact.length > 0 && alternateContact.length < 10
+           ? "Mobile number must be 10 digits"
+           : ""
+       }
+     />
+   </Grid>
+   
+
+   {/* WhatsApp No. Field */}
+      <Grid item xs={4}>
+    <TextField
+      type="text"
+      label="WhatsApp No"
+      fullWidth
+      value={whatsappNo}
+      onChange={(e) => {
+        const value = e.target.value;
+        // Allow only numbers and limit to 10 digits
+        if (/^\d{0,10}$/.test(value)) {
+          setWhatsappNo(value);
+        }
+      }}
+      error={whatsappNo.length > 0 && whatsappNo.length < 10}
+      helperText={
+        whatsappNo.length > 0 && whatsappNo.length < 10
+          ? "Mobile number must be 10 digits"
+          : ""
+      }
+    />
+  </Grid>
+  
+   {/* Email Field */}
+    <Grid item xs={4}>
+      <TextField label="Email" fullWidth 
+      value={email}
+      onChange={handleEmailChange}
+      error={!!emailError} // Show error if validation fails
+      helperText={emailError}
+      />
+    </Grid>
+
+    {/* Address Field */}
+    <Grid item xs={4}>
+      <TextField label="Address" fullWidth />
+    </Grid>
+
+    {/* Company Field */}
+    <Grid item xs={4}>
+      <TextField label="Company" fullWidth />
+    </Grid>
+
+    {/* Reference by/Source Field */}
+    <Grid item xs={4}>
+      <TextField label="Reference by / Source" fullWidth />
+    </Grid>
+
+    {/* Name of CP (if Channel Partner) Field */}
+    <Grid item xs={4}>
+      <TextField label="Name of CP (if Channel Partner)" fullWidth />
+    </Grid>
+
+    {/* Sales Executive Name Field */}
+    <Grid item xs={4}>
+      <FormControl fullWidth error={!!error}>
+        <InputLabel>Sales Executive Name</InputLabel>
+        <Select
+          value={salesExec}
+          onChange={handleSalesExecChange}
+          label="Sales Executive Name"
+        >
+          <MenuItem value="Shilpha Mewada 1">Shilpha Mewada 1</MenuItem>
+          <MenuItem value="Tic Tac Toe Sohan">Tic Tac Toe Sohan</MenuItem>
+          <MenuItem value="Shilpha Mewada">Shilpha Mewada</MenuItem>
+          <MenuItem value="Vivek Tapkir">Vivek Tapkir</MenuItem>
+          <MenuItem value="Shubham Taware">Shubham Taware</MenuItem>
+          <MenuItem value="Ashwini Khot">Ashwini Khot</MenuItem>
+          <MenuItem value="Amol Pawar">Amol Pawar</MenuItem>
+          <MenuItem value="Sachin Awale">Sachin Awale</MenuItem>
+        </Select>
+        {error && <FormHelperText>{error}</FormHelperText>}
+      </FormControl>
+    </Grid>
+
+    {/* Interested In Field */}
+    <Grid item xs={4}>
+      <FormControl fullWidth error={!!error}>
+        <InputLabel>Interested In</InputLabel>
+        <Select
+          value={interestedIn}
+          onChange={handleInterestedInChange}
+          label="Interested In"
+        >
+          <MenuItem value="2 BHK (Under construction)">
+            2 BHK (Under construction)
+          </MenuItem>
+          <MenuItem value="3 BHK (Under Construction)">
+            3 BHK (Under Construction)
+          </MenuItem>
+          <MenuItem value="2BHK">2BHK</MenuItem>
+          <MenuItem value="3BHK">3BHK</MenuItem>
+          <MenuItem value="Other">Other</MenuItem>
+        </Select>
+        {error && <FormHelperText>{error}</FormHelperText>}
+      </FormControl>
+    </Grid>
+
+
+    
+        {/* Budget Field */}
+        <Grid item xs={4}>
+          <FormControl fullWidth error={!!error}>
+            <InputLabel>Budget (Approx.)</InputLabel>
+            <Select value={budget} onChange={handleBudgetChange} label="Budget (Approx.)">
+              <MenuItem value="45 L - 50 L">45 L - 50 L</MenuItem>
+              <MenuItem value="51 L - 55 L">51 L - 55 L</MenuItem>
+              <MenuItem value="56 to 60 L">56 to 60 L</MenuItem>
+              <MenuItem value="61-65 L">61-65 L</MenuItem>
+              <MenuItem value="66 -70 L">66 - 70 L</MenuItem>
+              <MenuItem value="71L -75 L">71 L - 75 L</MenuItem>
+              <MenuItem value="Other">Other</MenuItem>
+            </Select>
+            {error && <FormHelperText>{error}</FormHelperText>}
+          </FormControl>
+        </Grid>
+    
+        {/* Planning to Buy Within Field */}
+        <Grid item xs={4}>
+          <FormControl fullWidth error={!!error}>
+            <InputLabel>Planning To Buy Within?</InputLabel>
+            <Select
+              value={planningToBuy}
+              onChange={handlePlanningToBuyChange}
+              label="Planning To Buy Within?"
+            >
+              <MenuItem value="Immediately">Immediately</MenuItem>
+              <MenuItem value="Within Week">Within Week</MenuItem>
+              <MenuItem value="Within 1 Month">Within 1 Month</MenuItem>
+            </Select>
+            {error && <FormHelperText>{error}</FormHelperText>}
+          </FormControl>
+        </Grid>
+    
+        {/* Occupation Field */}
+        <Grid item xs={4}>
+          <FormControl fullWidth error={!!error}>
+            <InputLabel>Occupation</InputLabel>
+            <Select value={occupation} onChange={handleOccupationChange} label="Occupation">
+              <MenuItem value="Service / Job">Service / Job</MenuItem>
+              <MenuItem value="Business / Self employed">Business / Self employed</MenuItem>
+              <MenuItem value="Professional">Professional</MenuItem>
+              <MenuItem value="Other">Other</MenuItem>
+            </Select>
+            {error && <FormHelperText>{error}</FormHelperText>}
+          </FormControl>
+        </Grid>
+    
+        {/* Reason For Purchase Field */}
+        <Grid item xs={4}>
+          <FormControl fullWidth error={!!error}>
+            <InputLabel>Reason For Purchase</InputLabel>
+            <Select
+              value={reasonForPurchase}
+              onChange={handleReasonForPurchaseChange}
+              label="Reason For Purchase"
+            >
+              <MenuItem value="End Use">End Use</MenuItem>
+              <MenuItem value="Investment">Investment</MenuItem>
+            </Select>
+            {error && <FormHelperText>{error}</FormHelperText>}
+          </FormControl>
+        </Grid>
+    
+        {/* Customer Feedback & Complete Followup Details Field */}
+        <Grid item xs={4}>
+          <TextField label="Customer Feedback & Complete Followup Details" fullWidth />
+        </Grid>
+  </Grid>
+
+  {/* Action Buttons */}
+  <div className="mt-3">
+    <Button variant="contained" color="success" onClick={handleSave}>
+ Update
+    </Button>
+    <Button variant="outlined" color="error" onClick={handleCancel} style={{ marginLeft: "8px" }}>
+      Cancel
+    </Button>
+  </div>
+</div>
+
       ) : (
         <TableContainer component={Paper}>
           <Table>

@@ -10,6 +10,10 @@ import { Edit as EditIcon, Delete as DeleteIcon } from "@mui/icons-material";
 import { Button, Modal } from "react-bootstrap";
 import {  toast } from "react-toastify";
 import { Visibility } from '@mui/icons-material'; // Visibility icon
+import { FaFileDownload } from 'react-icons/fa';
+import jsPDF from "jspdf";
+
+import autoTable from "jspdf-autotable";
 const Admin_Banker = () => {
   const [showForm, setShowForm] = useState(false);
   // const [bankers, setBankers] = useState([]);
@@ -171,18 +175,124 @@ const Admin_Banker = () => {
       )
     );
   };
+
+  const handleDownloadPDFBanker = () => {
+    const doc = new jsPDF("landscape");
+    doc.setFontSize(14);
+    doc.text("Banker Details Report", 14, 15);
+  
+    const tableColumn = [
+      "Timestamp", "Bank Name", "Address", "Banker Name", "Mobile No"
+    ];
+  
+    const tableRows = bankers.map(row => [
+      row.timestamp || "-",
+      row.bankName || "-",
+      row.address || "-",
+      row.bankerName || "-",
+      row.mobileNo || "-"
+    ]);
+  
+    console.log("Formatted Table Rows:", tableRows);
+  
+    autoTable(doc, {
+      startY: 25,
+      head: [tableColumn],
+      body: tableRows,
+      styles: { fontSize: 10, cellPadding: 3 },
+      headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+    });
+  
+    doc.save("Banker_Details_Report.pdf");
+  };
+  
+
   return (
     <div className="container my-4">
       <div className="row mb-3">
         <div className="col-md-6 d-flex flex-column align-items-start">
-          <h2 className="mb-2 fs-6">Admin Module / Banker Details Management</h2>
+          <h2 className="mb-2 fs-6 pb-2">Admin Module / Banker Details Management</h2>
           {!showForm && (
-            <button className="btn btn-primary d-flex align-items-center fw-bold" onClick={handleAddNew} 
-              style={{ background: '#272ba8' }} 
-            >
-              <FaPlus className="me-2" />
-              Add Banker Details
-            </button>
+
+//             <div className="d-flex gap-3">
+
+//             <button className="btn btn-primary d-flex align-items-center fw-bold" onClick={handleAddNew} 
+//               style={{ background: '#272ba8' }} 
+//             >
+//               <FaPlus className="me-2" />
+//               Add Banker Details
+//             </button>
+//             <Button
+//   variant="outlined"
+//   disableElevation
+//   disableRipple
+//   sx={{
+//     background: "linear-gradient(45deg, rgb(139, 107, 255), rgb(178, 83, 255))",
+//     color: "white",
+//     fontWeight: "bold",
+//     textTransform: "none",
+//     padding: "8px 16px",
+//     borderRadius: "8px",
+//     border: "none", // remove outline border
+//     display: "flex",
+//     alignItems: "center",
+//     gap: "8px",
+//     "&:hover": {
+//       background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+//       border: "none",
+//     },
+//   }}
+//   onClick={handleDownloadPDFBanker}
+// >
+//   <FaFileDownload size={18} />
+//   Download PDF
+// </Button>
+
+
+
+
+
+//             </div>
+
+<div className="d-flex gap-3">
+  {/* Bootstrap Button */}
+  <button
+    className="btn btn-primary d-flex align-items-center fw-bold"
+    onClick={handleAddNew}
+    style={{ background: '#272ba8' }}
+  >
+    <FaPlus className="me-2" />
+    Add Banker Details
+  </button>
+
+  {/* MUI Button with Inline Style */}
+  <Button
+    onClick={handleDownloadPDFBanker}
+    style={{
+      background: 'linear-gradient(45deg, rgb(139, 107, 255), rgb(178, 83, 255))',
+      color: 'white',
+      fontWeight: 'bold',
+      textTransform: 'none',
+      padding: '8px 16px',
+      borderRadius: '8px',
+      border: 'none',
+      display: 'flex',
+      alignItems: 'center',
+      gap: '8px',
+    }}
+    onMouseOver={(e) => {
+      e.target.style.background = 'linear-gradient(45deg, #ff8e53, #ff6b6b)';
+    }}
+    onMouseOut={(e) => {
+      e.target.style.background = 'linear-gradient(45deg, rgb(139, 107, 255), rgb(178, 83, 255))';
+    }}
+  >
+    <FaFileDownload size={18} />
+    Download PDF
+  </Button>
+</div>
+
+
           )}
         </div>
         {!showForm && (
@@ -304,9 +414,13 @@ const Admin_Banker = () => {
                   ))}
 
                   <div className="mb-3 text-center pt-3 pb-3">
+                    
                     <button type="button" className="btn btn-primary" onClick={handleAddBanker}>
                       + Add Another Banker
                     </button>
+                 
+                    {/* </div> */}
+                   
                   </div>
 
                   <div className="d-flex justify-content-center gap-3">

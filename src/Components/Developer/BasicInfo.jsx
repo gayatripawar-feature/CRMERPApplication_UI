@@ -26,7 +26,7 @@ const sections = [
   { label: "Project Display", icon: <FaHome size={20} />, createLabel: "Create Project" },
   { label: "Landowner Display", icon: <FaUserTie size={20} />, createLabel: "Create Landowner Info" },
   { label: "Flat Allotement Display", icon: <FaBuilding size={20} />, createLabel: "Create Flat Allotment Info" },
-  { label: "Download PDF", icon: <  PictureAsPdfIcon  size={20} />, createLabel: "" }
+  // { label: "Download PDF", icon: <  PictureAsPdfIcon  size={20} />, createLabel: "" }
 ];
 
 
@@ -850,7 +850,9 @@ const handleTabClick = (index) => {
     const partnerCopy = [...partners];
   
     // Regular expression to validate Gmail email format
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+    // const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+
   
     if (value && !emailRegex.test(value)) {
       setEmailError("Invalid Gmail address");

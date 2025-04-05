@@ -224,12 +224,12 @@ const Dashboard = () => {
 
   const [query, setQuery] = useState("");
 
-  const [listening, setListening] = useState(false);
+  // const [listening, setListening] = useState(false);
   const recognitionRef = useRef(null);
 
 // const [showVoiceRecognition, setShowVoiceRecognition] = useState(false);
 
-
+const [listening, setListening] = useState(false);
 
   const [results, setResults] = useState([]);
   const [collapsed, setCollapsed] = useState(false);
@@ -365,12 +365,134 @@ const handleSearch = (event) => {
     setResults([]);
   }
 };
+
+
 const handleRedirect = (path) => {
   navigate(path);
   setQuery(""); 
   setResults([]); 
 };
 
+
+// useEffect(() => {
+//   if (!recognitionRef.current && ("webkitSpeechRecognition" in window || "SpeechRecognition" in window)) {
+//     recognitionRef.current = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+//     const recognition = recognitionRef.current;
+
+//     recognition.continuous = false;
+//     recognition.interimResults = false;
+//     recognition.lang = "en-US";
+
+//     recognition.onstart = () => {
+//       setListening(true); // 🔴 Mic turns red
+//     };
+
+//     recognition.onend = () => {
+//       setListening(false); // ✅ Mic turns green after listening
+//     };
+    
+
+//     recognition.onresult = (event) => {
+//       let command = event.results[0][0].transcript.trim().toLowerCase();
+//       console.log("Recognized command:", command);
+//       console.log("redirecting");
+//       // Process command (Navigate or Speak)
+//       setTimeout(() => {
+//         setListening(false); // ✅ Ensure mic turns green after execution
+//       }, 1000);
+//     };
+
+//     recognition.onerror = () => {
+//       setListening(false); // Reset in case of error
+//     };
+//   }
+// }, []);
+
+// const speak = (message) => {
+//   const speech = new SpeechSynthesisUtterance(message);
+//   speech.lang = "en-US";
+//   speech.rate = 1;
+
+//   speech.onstart = () => {
+//     if (recognitionRef.current) {
+//       recognitionRef.current.stop();
+//     }
+//   };
+
+//   speech.onend = () => {
+//     if (!listening) {
+//       setTimeout(() => startListening(), 500);
+//     }
+//   };
+
+//   window.speechSynthesis.speak(speech);
+// };
+
+
+ 
+//  const startListening = () => {
+//   if (recognitionRef.current && !listening) {
+//     console.log("🎤 Starting recognition...");
+//     recognitionRef.current.start();
+//   }
+// };
+
+const commandRoutes = {
+//   "go to home": "/home",
+//   "open lost visit": "/lost-visit",
+//   "open dashboard": "/dashboard",
+//   "open report": "/report",
+//   "open booking": "/booking",
+// };
+
+  // Admin Module
+  "admin banker": "/admin/banker",
+  "admin sales module": "/admin/sales-module",
+
+  // CRM Module
+  "agreement": "/crm/agreement",
+  "architect": "/crm/architect",
+  "dashboard": "/crm",
+  "daily collection": "/crm/daily-collection",
+  "demand": "/crm/demand",
+  "flat allotment report": "/crm/flat-allotment-report",
+  "home loan": "/crm/home-loan",
+  "mis report": "/crm/mis-report",
+  "ocr": "/crm/ocr",
+  "parking report": "/crm/parking-report",
+  "registration": "/crm/registration",
+  "share space": "/crm/sharespacecrm",
+
+  // Developer Module
+  "share space developer": "/developer/sharespace",
+  "basic information": "/developer/basicinfo",
+  "project inventory": "/developer/projectinventory",
+  "cost sheet details": "/developer/costsheet",
+  "sales mis": "/developer/salesmis",
+  "marketing": "/developer/marketing",
+
+  // Sales Module
+  "sales": "/sales",
+  "dashboard sales": "/sales/salesdashboard",
+  "calendar": "/sales/salescalander",
+  "shared by developer": "/sales/sharedbydeveloper",
+  "leads": "/sales/leads",
+  "leads follow up": "/sales/leadsfollowup",
+  "lost leads": "/sales/lostleads",
+  "first visit": "/sales/firstvisits",
+  "first visit follow up": "/sales/firstvisitfollowup",
+  "first visit steps": "/sales/firstvisitsteps",
+  "lost visits": "/sales/saleslostvisits",
+  "templates": "/sales/salestemplates",
+  "booking form": "/sales/bookingform",
+  "channel partner": "/sales/channelpartner",
+
+  // Common Routes
+  "dashboard": "/dashboard",
+  "profile": "/profile",
+  "settings": "/settings",
+  "reports": "/reports",
+}
 
 useEffect(() => {
   if (!recognitionRef.current && ("webkitSpeechRecognition" in window || "SpeechRecognition" in window)) {
@@ -382,30 +504,35 @@ useEffect(() => {
     recognition.lang = "en-US";
 
     recognition.onstart = () => {
-      setListening(true); // 🔴 Mic turns red
+      setListening(true);
     };
 
     recognition.onend = () => {
-      setListening(false); // ✅ Mic turns green after listening
+      setListening(false);
     };
-    
 
     recognition.onresult = (event) => {
       let command = event.results[0][0].transcript.trim().toLowerCase();
       console.log("Recognized command:", command);
-      
-      // Process command (Navigate or Speak)
+
+      const path = commandRoutes[command];
+      if (path) {
+        handleRedirect(path);
+      } else {
+        speak("Command not recognized");
+      }
+
       setTimeout(() => {
-        setListening(false); // ✅ Ensure mic turns green after execution
+        setListening(false);
       }, 1000);
     };
 
     recognition.onerror = () => {
-      setListening(false); // Reset in case of error
+      setListening(false);
     };
   }
 }, []);
-// 🎤 Speak Function
+
 const speak = (message) => {
   const speech = new SpeechSynthesisUtterance(message);
   speech.lang = "en-US";
@@ -426,14 +553,17 @@ const speak = (message) => {
   window.speechSynthesis.speak(speech);
 };
 
-
- // 🎤 Start Listening
- const startListening = () => {
+const startListening = () => {
   if (recognitionRef.current && !listening) {
     console.log("🎤 Starting recognition...");
     recognitionRef.current.start();
   }
 };
+
+
+
+
+
 
   return (
     <div className="d-flex flex-column vh-100 ">

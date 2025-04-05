@@ -7,7 +7,10 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
 import { Edit as EditIcon, Delete as DeleteIcon } from "@mui/icons-material";
 import { TextField, Button, Grid, MenuItem, Select, InputLabel, FormControl,NativeSelect } from '@mui/material';
 import { toast, ToastContainer } from 'react-toastify';
+import jsPDF from "jspdf";
 
+import { FaFileDownload } from "react-icons/fa";
+import autoTable from "jspdf-autotable";
 
 const Admin_SalesModule = () => {
   const [showForm, setShowForm] = useState(false);
@@ -98,21 +101,10 @@ const handleChange = (e) => {
   }
 
  
-  // else if (name === "email") {
-  //   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;  // Basic email validation
-  //   if (emailRegex.test(value) || value === "") {
-  //     setFormData((prevData) => ({
-  //       ...prevData,
-  //       [name]: value,
-  //     }));
-  //     setEmailError('');  // Clear any previous error
-  //   } else {
-  //     setEmailError("Invalid email format: Please enter a valid email address.");
-  //   }
-  // }
 
   else if (name === "email") {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;  
+    // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;  
+    const emailRegex= /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
   
     setFormData((prevData) => ({
       ...prevData,
@@ -185,17 +177,78 @@ const handleEmailBlur = () => {
     setShowForm(false); 
   };
 
+  const handleDownloadPDFSales = () => {
+
+    const doc = new jsPDF("landscape");
+    doc.setFontSize(14);
+    doc.text("Sales Person Report", 14, 15);
+  
+    const tableColumn = [
+      "Name", "Email", "Mobile", "Designation", "Joining Date", "Status"
+    ];
+  
+    const tableRows = salesPersons.map(row => [
+      row.name || "-",
+      row.email || "-",
+      row.mobile || "-",
+      row.designation || "-",
+      row.joiningDate || "-",
+      row.status || "-"
+    ]);
+  
+    console.log("Formatted Table Rows:", tableRows);
+  
+    autoTable(doc, {
+      startY: 25,
+      head: [tableColumn],
+      body: tableRows,
+      styles: { fontSize: 10, cellPadding: 3 },
+      headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+    });
+  
+    doc.save("SalesPerson_Report.pdf");
+  };
+  
+  
+  
+
 
   return (
     <div className="container my-4">
       <div className="row mb-3">
         <div className="col-md-6 d-flex flex-column align-items-start">
-          <h2 className="mb-2 fs-6">Admin Module / Sales Person Management</h2>
+          <h2 className="mb-3 fs-6">Admin Module / Sales Person Management</h2>
           {!showForm && (
+            <div className="d-flex gap-3">
             <button className="btn btn-primary d-flex align-items-center" onClick={handleAddNew} style={{ background: '#272ba8' }} >
               <FaPlus className="me-2"  />
               Add New Sales Person
             </button>
+
+            <Button
+    variant="contained"
+    sx={{
+      background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+      color: "white",
+      fontWeight: "bold",
+      textTransform: "none",
+      padding: "8px 16px",
+      borderRadius: "8px",
+      display: "flex",
+      alignItems: "center",  // Align icon and text
+      gap: "8px",  // Space between icon and text
+      "&:hover": {
+        background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+      },
+     
+    }}
+    // onClick={() => handledow(firms)}
+    onClick={handleDownloadPDFSales}
+  >
+    <FaFileDownload size={18} />  {/* Added download icon */}
+    Download PDF
+  </Button>
+            </div>
           )}
         </div>
         {!showForm && (
@@ -368,26 +421,12 @@ const handleEmailBlur = () => {
                       </Select>
                     </FormControl>
     
-    {/* <Box sx={{padding: 1, border: "1px solid #ccc", borderRadius: 2, width: "100%" }}>
-      <FormControl fullWidth>
-        <InputLabel>Status</InputLabel>
-        <NativeSelect
-          name="status"
-          value={formData.status}
-          onChange={handleChange}
-          sx={{ marginTop: "10px" }}
-        >
-          <option value="Active">Active</option>
-          <option value="Inactive">Inactive</option>
-        </NativeSelect>
-      </FormControl>
-    </Box> */}
-
+   
 
                   </Grid>
                 </Grid>
 
-                {/* Submit and Cancel Buttons */}
+               
                 <div className="d-flex gap-2 justify-content-center mt-4">
                   <Button
                     type="submit"

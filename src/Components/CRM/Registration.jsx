@@ -497,7 +497,7 @@ const handleUpload = (index) => {
          background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
          color: "white",
          fontWeight: "bold",
-         fontWeight: "900",
+        //  fontWeight: "900",
          textTransform: "none",
          marginTop :"24px",
         

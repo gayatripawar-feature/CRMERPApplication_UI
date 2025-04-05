@@ -83,6 +83,7 @@ const LeadsFollowUp = () => {
   const [ifscCodeError, setIfscCodeError] = useState("");
   const [status, setStatus] = useState({});
   
+
     const [fileNames, setFileNames] = useState({
       firmPanNoDocument: "",
       firmGstNoDocument: "",
@@ -922,22 +923,23 @@ const handleDownloadPDFVisit = () => {
         label="Remark"
         fullWidth
         variant="outlined"
-        value={firmPan}
-              onChange={handleFirmPanChange}
-              error={!!firmPanError}  // Show error if there is an error
-              helperText={firmPanError}
+        
       />
     </Grid>
 
 
     <Grid item xs={6}>
-      <TextField
-        label="Name"
-        fullWidth
-        variant="outlined"
-        value={firmPan}
-             />
-    </Grid>
+  <TextField
+    label="Name"
+    fullWidth
+    variant="outlined"
+    value={firmPan}
+    onChange={handleNameChange}
+    error={!!nameError}
+    helperText={nameError}
+  />
+</Grid>
+
 
     <Grid item xs={6}>
   <FormControl fullWidth variant="outlined">

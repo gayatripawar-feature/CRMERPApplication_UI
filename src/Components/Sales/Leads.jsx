@@ -146,11 +146,12 @@ const Leads = () => {
     const value = e.target.value;
     
     // Regular expression to check for digits or spaces
-    const regex = /[\d\s]/;
+    // const regex = /[\d\s]/;
+    const regex = /\d/;
 
     // If value contains digits or spaces, show error
     if (regex.test(value)) {
-      setError('Name should not contain digits or spaces');
+      setError('Name should not contain digits');
     } else {
       setError(''); // Clear the error if no issue
     }
@@ -171,7 +172,8 @@ const Leads = () => {
 
   // Validate email format
   const validateEmail = (value) => {
-    const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;  // Basic email regex
+    // const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;  
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
     if (!regex.test(value)) {
       setEmailError('Please enter a valid email address');
     } else {
