@@ -1,13 +1,14 @@
 
 
 
-import React from "react";
-import { TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Paper, IconButton, Box } from "@mui/material";
+import React ,{useState} from "react";
+import { TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Paper, IconButton, MenuItem, Box,FormControl,InputLabel,Select } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import EmailIcon from '@mui/icons-material/Email';
 
 import Tooltip from '@mui/material/Tooltip';
+import { Dialog, DialogTitle, DialogContent, TextField, Button,Grid } from '@mui/material';
 
 
 const data = [
@@ -41,8 +42,69 @@ const data = [
 
 
 const LostVisitTable = ({data}) => {
+  const [open, setOpen] = useState(false);
+  const [selectedRow, setSelectedRow] = useState(null);
+  const [closingExecutive, setClosingExecutive] = useState('');
+   const [firmPan, setFirmPan] = useState("");
+      const [firmPanError, setFirmPanError] = useState("");
+          const [nameError, setNameError] = useState('');
+           const [leadType, setLeadType] = useState("");
+           const [status, setStatus] = useState("");
+
+          const [assignedTo, setAssignedTo] = useState(""); 
+      const handleFirmPanChange = (e) => {
+        const value = e.target.value;
+        setFirmPan(value);
+        
+        const panRegex = /^[A-Za-z]{5}\d{4}[A-Za-z]{1}$/;
+        if (!panRegex.test(value)) {
+          setFirmPanError("Invalid PAN format. Format should be: AAAAA1234A");
+        } else {
+          setFirmPanError(""); 
+        }
+      };
+
+      const handleNameChange = (event) => {
+        const value = event.target.value;
+    
+       
+        if (/[^a-zA-Z\s]/.test(value)) {
+          setError('Name should only contain letters and spaces.');
+        } else {
+          setError('');
+        }
+    
+        setName(value);
+      };
+
+  const handleEditClick = (row) => {
+    setSelectedRow(row);
+    setOpen(true);
+  };
+
+  const handleClosingExecutiveChange = (e, row) => {
+    // Your logic here
+    console.log('Selected Closing Executive:', e.target.value);
+    console.log('Row Data:', row);
+  }
+  
+
+  const handleClose = () => {
+    setOpen(false);
+    setSelectedRow(null);
+  };
+
+  const handleChange = (e) => {
+    setSelectedRow({ ...selectedRow, [e.target.name]: e.target.value });
+  };
+
+  const handleUpdate = () => {
+    console.log("Updated Data", selectedRow);
+    setOpen(false);
+  };
   console.log(data);
   return (
+    <>
     <TableContainer component={Paper}>
       <Table>
         <TableHead>
@@ -80,10 +142,22 @@ const LostVisitTable = ({data}) => {
               <TableCell>
                 <div style={{ display: "flex", gap: "3px", alignItems: "center" }}>
                   <Tooltip title="Edit">
-                    <IconButton 
+                    {/* <IconButton onClick={() => handleEditClick(row)}
                       size="small" 
                       sx={{ backgroundColor: "#1976D2", color: "white", borderRadius: "50%", "&:hover": { backgroundColor: "#1565C0" } }} 
-                      onClick={() => console.log("Edit clicked")}
+                  
+                    >
+                      <EditIcon sx={{ fontSize: "18px" }} />
+                    </IconButton> */}
+                    <IconButton
+                      size="small"
+                      sx={{
+                        backgroundColor: "#1976D2",
+                        color: "white",
+                        borderRadius: "50%",
+                        "&:hover": { backgroundColor: "#1565C0" },
+                      }}
+                      onClick={() => handleEditClick(item)}
                     >
                       <EditIcon sx={{ fontSize: "18px" }} />
                     </IconButton>
@@ -150,6 +224,143 @@ const LostVisitTable = ({data}) => {
         </TableBody>
       </Table>
     </TableContainer>
+
+    <Dialog open={open} onClose={handleClose} fullWidth maxWidth="md">
+  <DialogContent>
+    <div
+      className="firm-form mt-4 p-3"
+      style={{ maxHeight: "500px", overflowY: "auto", paddingRight: "10px" }}
+    >
+      <Paper className="p-4" elevation={4} style={{ borderRadius: "12px", paddingBottom: "20px" }}>
+        <Grid container spacing={2}>
+          {/* Enquiry No */}
+          <Grid item xs={6}>
+            <TextField label="Enquiry No." fullWidth variant="outlined" required />
+          </Grid>
+
+          {/* Sales Person */}
+          <Grid item xs={6}>
+            <FormControl fullWidth variant="outlined">
+              <InputLabel>Sales Person</InputLabel>
+              <Select value={closingExecutive} onChange={handleClosingExecutiveChange} label="Sales Person">
+                <MenuItem value="Shilpha Mewada 1">Shilpha Mewada 1</MenuItem>
+                <MenuItem value="Tic Tac Toe Sohan">Tic Tac Toe Sohan</MenuItem>
+                <MenuItem value="Shilpha Mewada">Shilpha Mewada</MenuItem>
+                <MenuItem value="VIVEK TAPKIR">VIVEK TAPKIR</MenuItem>
+                <MenuItem value="Shubham Taware">Shubham Taware</MenuItem>
+                <MenuItem value="Ashwini Khot">Ashwini Khot</MenuItem>
+                <MenuItem value="Amol Pawar">Amol Pawar</MenuItem>
+                <MenuItem value="Sachin Awale">Sachin Awale</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+
+          {/* Remark */}
+          <Grid item xs={6}>
+            <TextField
+              label="Remark"
+              fullWidth
+              variant="outlined"
+              value={firmPan}
+              onChange={handleFirmPanChange}
+              error={!!firmPanError}
+              helperText={firmPanError}
+            />
+          </Grid>
+
+          {/* Name */}
+          <Grid item xs={6}>
+            <TextField
+              label="Name"
+              fullWidth
+              variant="outlined"
+              value={name}
+              onChange={handleNameChange}
+              error={!!nameError}
+              helperText={nameError}
+              required
+            />
+          </Grid>
+
+          {/* Next Follow Up */}
+          <Grid item xs={6}>
+            <TextField
+              type="datetime-local"
+              label="Next Follow Up"
+              fullWidth
+              variant="outlined"
+              required
+              InputLabelProps={{ shrink: true }}
+            />
+          </Grid>
+
+          {/* Assign To */}
+          <Grid item xs={6}>
+            <FormControl fullWidth variant="outlined">
+              <InputLabel>Assign To</InputLabel>
+              <Select
+                value={assignedTo}
+                onChange={(e) => setAssignedTo(e.target.value)}
+                label="Assign To"
+                required
+              >
+                <MenuItem value="Shilpha Mewada 1">Shilpha Mewada 1</MenuItem>
+                <MenuItem value="Tic Tac Toe Sohan">Tic Tac Toe Sohan</MenuItem>
+                <MenuItem value="Shilpha Mewada">Shilpha Mewada</MenuItem>
+                <MenuItem value="VIVEK TAPKIR">VIVEK TAPKIR</MenuItem>
+                <MenuItem value="Shubham Taware">Shubham Taware</MenuItem>
+                <MenuItem value="Ashwini Khot">Ashwini Khot</MenuItem>
+                <MenuItem value="Amol Pawar">Amol Pawar</MenuItem>
+                <MenuItem value="Sachin Awale">Sachin Awale</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+
+          {/* Lead Type */}
+          <Grid item xs={6}>
+            <FormControl fullWidth variant="outlined">
+              <InputLabel>Lead Type</InputLabel>
+              <Select value={leadType} onChange={(e) => setLeadType(e.target.value)} label="Lead Type">
+                <MenuItem value="Hot">Hot</MenuItem>
+                <MenuItem value="Warm">Warm</MenuItem>
+                <MenuItem value="Lost">Lost</MenuItem>
+                <MenuItem value="Cold">Cold</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+
+          {/* Status */}
+          <Grid item xs={6}>
+  <FormControl fullWidth variant="outlined">
+    <InputLabel>Status</InputLabel>
+    <Select
+      value={status}
+      onChange={(e) => setStatus(e.target.value)}
+      label="Status"
+    >
+      <MenuItem value="Follow Up">Follow Up</MenuItem>
+      <MenuItem value="Not Interested">Not Interested</MenuItem>
+      <MenuItem value="Callback Request">Callback Request</MenuItem>
+      <MenuItem value="Unreachable">Unreachable</MenuItem>
+      <MenuItem value="Booked Property In Other Project">Booked Property In Other Project</MenuItem>
+      <MenuItem value="Not Answer">Not Answer</MenuItem>
+      <MenuItem value="Invalid Number">Invalid Number</MenuItem>
+    </Select>
+  </FormControl>
+</Grid>
+        </Grid>
+
+        <Button onClick={handleUpdate} variant="contained" sx={{ mt: 4, float: "left" }}>
+          Update
+        </Button>
+      </Paper>
+    </div>
+  </DialogContent>
+</Dialog>
+
+
+      </>
+  
   );
 };
 
