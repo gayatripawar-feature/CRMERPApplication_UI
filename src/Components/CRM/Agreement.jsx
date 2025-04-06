@@ -8,6 +8,7 @@ import React, { useState, useEffect } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, MenuItem, Select, InputLabel, FormControl, TextField, Modal, Box } from '@mui/material';
 import { Grid ,IconButton,Dialog, DialogTitle, 
   DialogContent, DialogActions,FormGroup, FormControlLabel, Checkbox} from '@mui/material';
+  import { } from "@mui/material";
 // import { Modal, Container, Row, Col } from 'react-bootstrap';
 import dayjs from 'dayjs';
 import EditIcon from "@mui/icons-material/Edit";
@@ -116,7 +117,7 @@ const Agreement = () => {
   
   // State for Modal
   const [openModal, setOpenModal] = useState(false);
-  const [selectedLoan, setSelectedLoan] = useState(null);
+  // const [selectedLoan, setSelectedLoan] = useState(null);
 
   const [open, setOpen] = useState(false);
   // const [updatedChecklist, setUpdatedChecklist] = useState(loan.checklistBeforeAgreement || "");
@@ -147,7 +148,28 @@ const Agreement = () => {
     }
   };
   
+  const [selectedLoan, setSelectedLoan] = useState({
+    date: "",
+    flatNo: "",
+    titleAllotee: "",
+    nameOfAllotee: "",
+    alloteeDOB: "",
+    alloteeAge: "",
+    a1Occupation: "",
+    a1PanNo: "",
+    a1AadharNo: "",
+    title: "",
+    nameOfCoAllotee: "",
+  });
   
+  // useEffect(() => {
+  //   if (selectedLoan.alloteeDOB) {
+  //     const dob = new Date(selectedLoan.alloteeDOB);
+  //     const diff = Date.now() - dob.getTime();
+  //     const age = new Date(diff).getUTCFullYear() - 1970;
+  //     handleInputChange("alloteeAge", age >= 0 ? age : "");
+  //   }
+  // }, [selectedLoan.alloteeDOB]);
 
 
   useEffect(() => {
@@ -1080,7 +1102,7 @@ const generatePDF = () => {
       </div>
 
    
-      <div className="modal-body">
+      {/* <div className="modal-body">
         <div className="container">
         
           <div
@@ -1088,7 +1110,7 @@ const generatePDF = () => {
             style={{
               border: "1px solid #ddd",
               borderRadius: "8px",
-              backgroundColor: "#f9f9f9",
+              backgroundColor: "white",
               overflowY: "auto",
               maxHeight: "70vh", 
               
@@ -1538,7 +1560,314 @@ const generatePDF = () => {
             
           </div>
         </div>
-      </div>
+      </div> */}
+        {/* <Box p={3} sx={{ background: "#fff", borderRadius: 2, border: "1px solid #ddd" }}> */}
+        <Box 
+  p={3} 
+  sx={{ 
+    background: "#fff", 
+    borderRadius: 2, 
+    border: "1px solid #ddd", 
+    overflowY: "auto", 
+    maxHeight: "70vh" ,
+  }}
+>
+      <Grid container spacing={2}>
+      <Grid item xs={12} md={4}>
+  <TextField
+    fullWidth
+    label="Date"
+    type="date"
+    InputLabelProps={{ shrink: true }}
+    value={selectedLoan?.date || ""}   // Safe Access
+    onChange={(e) => handleInputChange("date", e.target.value)}
+    required
+  />
+</Grid>
+
+
+<Grid item xs={12} md={4}>
+  <TextField
+    fullWidth
+    label="Flat No"
+    value={selectedLoan?.flatNo || ""}   // Safe Access
+    onChange={(e) => handleInputChange("flatNo", e.target.value)}
+    required
+  />
+</Grid>
+
+
+
+<Grid item xs={12} md={4}>
+<TextField
+  fullWidth
+  label="DOB"
+  type="date"
+  InputLabelProps={{ shrink: true }}
+  value={selectedLoan?.alloteeDOB || ""}  // safe access
+  onChange={(e) => handleInputChange("alloteeDOB", e.target.value)}
+  required
+/>
+</Grid>
+
+<Grid item xs={12} md={4}>
+<TextField
+  fullWidth
+  label="Allotee Age"
+  value={selectedLoan?.alloteeAge || ""}  // Safe access
+  InputProps={{ readOnly: true }}  // If only display
+/>
+</Grid>
+
+<Grid item xs={12} md={4}>
+<TextField
+  fullWidth
+  label="Occupation"
+  value={selectedLoan?.a1Occupation || ""}  // Safe Access
+  onChange={(e) => handleInputChange("a1Occupation", e.target.value)}
+/>
+</Grid>
+<Grid item xs={12} md={4}>
+<TextField
+  fullWidth
+  label="Pan No"
+  value={selectedLoan?.a1PanNo || ""}  
+  onChange={(e) => handleInputChange("a1PanNo", e.target.value)}
+/>
+</Grid>
+<Grid item xs={12} md={4}>
+<TextField
+  fullWidth
+  label="Aadhar No"
+  value={selectedLoan?.a1AadharNo || ""}
+  onChange={(e) => handleInputChange("a1AadharNo", e.target.value)}
+/>
+</Grid>
+<Grid container spacing={2} mt={2} mb={2}>
+  {/* Title Field */}
+  <Grid item md={4} sm={6} xs={12}>
+    <TextField
+      select
+      fullWidth
+      label="Title"
+      value={selectedLoan?.title || ""}
+      onChange={(e) => handleInputChange("title", e.target.value)}
+    >
+      <MenuItem value="Mr.">Mr.</MenuItem>
+      <MenuItem value="Mrs.">Mrs.</MenuItem>
+      <MenuItem value="Miss">Miss</MenuItem>
+    </TextField>
+  </Grid>
+
+  {/* Name of Allottee Field */}
+  <Grid item md={3} sm={6} xs={12}>
+    <TextField
+      fullWidth
+      label="Name of Allottee"
+      placeholder="Enter Name"
+      value={selectedLoan?.nameOfAllotee || ""}
+      onChange={(e) => handleInputChange("nameOfAllotee", e.target.value)}
+    />
+  </Grid>
+</Grid>
+
+
+      </Grid>
+      {/* </Grid> */}
+      
+
+      <Grid container spacing={2}>
+
+  <Grid item xs={12} md={4}>
+    <TextField
+      fullWidth
+      label="Co-Allotee Date Of Birth"
+      type="date"
+      InputLabelProps={{ shrink: true }}
+      value={selectedLoan?.coAlloteeDOB || ""}
+      onChange={(e) => handleInputChange("coAlloteeDOB", e.target.value)}
+    />
+  </Grid>
+
+  <Grid item xs={12} md={4}>
+    <TextField
+      fullWidth
+      label="Co-Allotee Age"
+      type="number"
+      value={selectedLoan?.coAlloteeAge || ""}
+      onChange={(e) => handleInputChange("coAlloteeAge", e.target.value)}
+    />
+  </Grid>
+
+  <Grid item xs={12} md={4}>
+    <TextField
+      fullWidth
+      label="Co-Occupation"
+      value={selectedLoan?.coOccupation || ""}
+      onChange={(e) => handleInputChange("coOccupation", e.target.value)}
+    />
+  </Grid>
+
+  <Grid item xs={12} md={4}>
+    <TextField
+      fullWidth
+      label="Co-Pan No"
+      value={selectedLoan?.coPanNo || ""}
+      onChange={(e) => handleInputChange("coPanNo", e.target.value)}
+    />
+  </Grid>
+
+  <Grid item xs={12} md={4}>
+    <TextField
+      fullWidth
+      label="Co-Aadhar No."
+      value={selectedLoan?.coAadharNo || ""}
+      onChange={(e) => handleInputChange("coAadharNo", e.target.value)}
+    />
+  </Grid>
+
+</Grid>
+<Grid container spacing={2}>
+  <Grid item md={4} xs={12}>
+    <TextField
+      fullWidth
+      label="Address"
+      variant="outlined"
+      value={selectedLoan?.address || ""}
+      onChange={(e) => handleInputChange("address", e.target.value)}
+    />
+  </Grid>
+
+  <Grid item md={4} xs={12}>
+    <TextField
+      fullWidth
+      label="Contact"
+      variant="outlined"
+      value={selectedLoan?.contact || ""}
+      onChange={(e) => handleInputChange("contact", e.target.value)}
+    />
+  </Grid>
+
+  <Grid item md={4} xs={12}>
+    <TextField
+      fullWidth
+      label="Floor"
+      variant="outlined"
+      value={selectedLoan?.floor || ""}
+      onChange={(e) => handleInputChange("floor", e.target.value)}
+    />
+  </Grid>
+
+  <Grid item md={4} xs={12}>
+    <TextField
+      fullWidth
+      label="Total Agreement Value"
+      variant="outlined"
+      value={selectedLoan?.totalAgreementValue || ""}
+      onChange={(e) => handleInputChange("totalAgreementValue", e.target.value)}
+    />
+  </Grid>
+
+  <Grid item md={4} xs={12}>
+    <TextField
+      fullWidth
+      label="Booking Amount"
+      variant="outlined"
+      value={selectedLoan?.bookingAmount || ""}
+      onChange={(e) => handleInputChange("bookingAmount", e.target.value)}
+    />
+  </Grid>
+
+  <Grid item md={3} xs={12}>
+    <TextField
+      fullWidth
+      label="Carpet Area"
+      variant="outlined"
+      value={selectedLoan?.carpetArea || ""}
+      onChange={(e) => handleInputChange("carpetArea", e.target.value)}
+    />
+  </Grid>
+
+  <Grid item md={4} xs={12}>
+    <TextField
+      fullWidth
+      label="Open Balcony Area"
+      variant="outlined"
+      value={selectedLoan?.openBalconyArea || ""}
+      onChange={(e) => handleInputChange("openBalconyArea", e.target.value)}
+    />
+  </Grid>
+
+  <Grid item md={4} xs={12}>
+    <TextField
+      fullWidth
+      label="Enclose Balcony Area"
+      variant="outlined"
+      value={selectedLoan?.encloseBalconyArea || ""}
+      onChange={(e) => handleInputChange("encloseBalconyArea", e.target.value)}
+    />
+  </Grid>
+
+  <Grid item md={4} xs={12}>
+    <TextField
+      fullWidth
+      label="Parking"
+      variant="outlined"
+      value={selectedLoan?.parking || ""}
+      onChange={(e) => handleInputChange("parking", e.target.value)}
+    />
+  </Grid>
+
+  <Grid item md={4} xs={12}>
+    <TextField
+      fullWidth
+      label="Booking Amount (In Words)"
+      variant="outlined"
+      value={selectedLoan?.bookingAmountInWords || ""}
+      onChange={(e) => handleInputChange("bookingAmountInWords", e.target.value)}
+    />
+  </Grid>
+
+  <Grid item md={4} xs={12}>
+    <TextField
+      fullWidth
+      label="Total Agreement Value (In Words)"
+      variant="outlined"
+      value={selectedLoan?.totalAgreementValueInWords || ""}
+      onChange={(e) => handleInputChange("totalAgreementValueInWords", e.target.value)}
+    />
+  </Grid>
+</Grid>
+<h5 className="mt-3 mb-4">Payment Schedule</h5>
+
+<div className="row">
+  {[
+    { key: "booking", label: "Booking" },
+    { key: "executionAgreement", label: "Execution Of Agreement" },
+    { key: "completionPlinth", label: "Completion Of Plinth" },
+    { key: "completion1stSlab", label: "Completion Of 1st Slab" },
+    { key: "completion2ndSlab", label: "Completion Of 2nd Slab" },
+    { key: "completion3rdSlab", label: "Completion Of 3rd Slab" },
+    { key: "completion5thSlab", label: "Completion Of 5th Slab" },
+    { key: "completion7thSlab", label: "Completion Of 7th Slab" },
+    { key: "completion9thSlab", label: "Completion Of 9th Slab" },
+    { key: "completion10thSlab", label: "Completion Of 10th Slab" },
+    { key: "completionWalls", label: "Completion Of Walls" },
+    { key: "completionInternalPlaster", label: "Completion Of Internal Plaster" },
+  ].map((item) => (
+    <div className="col-md-4 mb-4" key={item.key}>
+      <label className="form-label">{item.label}</label>
+      <input
+        type="text"
+        className="form-control"
+        value={selectedLoan?.[item.key] || ""}
+        onChange={(e) => handleInputChange(item.key, e.target.value)}
+      />
+    </div>
+  ))}
+</div>
+
+    </Box>
 
     
     <ToastContainer />
