@@ -19,6 +19,7 @@ import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { ToastContainer } from 'react-toastify';
 import { toast } from "react-toastify";
 import { jsPDF } from "jspdf";
+import { Form, FloatingLabel } from 'react-bootstrap';
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 // import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import DescriptionIcon from "@mui/icons-material/Description";
@@ -245,6 +246,14 @@ const handleCheckboxChange = (event) => {
     }
   };
   
+  const [errors, setErrors] = useState({
+    nameOfAllotee: "",
+    a1PanNo: "",
+    coPanNo: "",
+    coAadharNo: "",
+    a1AadharNo: "",
+    contact: "",
+  });
   const openChecklistDialog = (index) => {
     setSelectedIndex(index); // Set the current index of the selected row
     setOpen(true); // Open the dialog
@@ -315,9 +324,15 @@ const handleCheckboxChange = (event) => {
 
 
 
-
 const generatePDF = () => {
- 
+  if (!selectedLoan) {
+    toast.error("No data found to generate PDF!", {
+      position: "top-center",  // use string not toast.POSITION
+      autoClose: 3000,
+    });
+  
+    return;
+  }
 
   const {
     flatNo,
@@ -333,9 +348,9 @@ const generatePDF = () => {
 
   const doc = new jsPDF();
   doc.setFontSize(14);
-  doc.text("Demand Letter", 20, 20);
+  doc.text("Agreement Letter", 20, 20);
 
-  let y = 40; // Start position for text
+  let y = 40;
 
   doc.text(`Flat No: ${flatNo}`, 20, y);
   y += 10;
@@ -357,12 +372,12 @@ const generatePDF = () => {
 
   doc.save("demand-letter.pdf");
 
-  // Toast Notification
   toast.success("PDF generated successfully!", {
     position: toast.POSITION.TOP_CENTER,
     autoClose: 3000,
   });
 };
+
 
 
 
@@ -1628,39 +1643,73 @@ const generatePDF = () => {
 />
 </Grid>
 <Grid item xs={12} md={4}>
-<TextField
-  fullWidth
-  label="Pan No"
-  value={selectedLoan?.a1PanNo || ""}  
-  onChange={(e) => handleInputChange("a1PanNo", e.target.value)}
-/>
+  <TextField
+    fullWidth
+    label="Pan No"
+    placeholder="Enter PAN Number"
+    value={selectedLoan?.a1PanNo || ""}
+    onChange={(e) => {
+      const value = e.target.value.toUpperCase();  // Auto convert to uppercase
+      const regex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
+
+      handleInputChange("a1PanNo", value);
+
+      if (value === "" || regex.test(value)) {
+        setErrors((prev) => ({ ...prev, a1PanNo: "" }));
+      } else {
+        setErrors((prev) => ({ ...prev, a1PanNo: "Enter valid PAN number (ABCDE1234F)" }));
+      }
+    }}
+    error={Boolean(errors.a1PanNo)}
+    helperText={errors.a1PanNo}
+  />
 </Grid>
 <Grid item xs={12} md={4}>
-<TextField
-  fullWidth
-  label="Aadhar No"
-  value={selectedLoan?.a1AadharNo || ""}
-  onChange={(e) => handleInputChange("a1AadharNo", e.target.value)}
-/>
+  <TextField
+    fullWidth
+    label="Aadhar No"
+    placeholder="Enter Aadhar Number"
+    value={selectedLoan?.a1AadharNo || ""}
+    onChange={(e) => {
+      const value = e.target.value;
+      const regex = /^[0-9]{0,12}$/; // Only Numbers & Max 12 Digits
+
+      if (regex.test(value)) {
+        handleInputChange("a1AadharNo", value);
+      }
+
+      if (value === "" || value.length === 12) {
+        setErrors((prev) => ({ ...prev, a1AadharNo: "" }));
+      } else if (value.length > 0 && value.length < 12) {
+        setErrors((prev) => ({
+          ...prev,
+          a1AadharNo: "Aadhar number must be 12 digits",
+        }));
+      }
+    }}
+    error={Boolean(errors.a1AadharNo)}
+    helperText={errors.a1AadharNo}
+  />
 </Grid>
-<Grid container spacing={2} mt={2} mb={2}>
+<Grid container spacing={2} mt={2} mb={2} pl={2}>
   {/* Title Field */}
   <Grid item md={4} sm={6} xs={12}>
-    <TextField
-      select
-      fullWidth
-      label="Title"
+  <FloatingLabel controlId="floatingSelect" label="">
+    <Form.Select
       value={selectedLoan?.title || ""}
       onChange={(e) => handleInputChange("title", e.target.value)}
     >
-      <MenuItem value="Mr.">Mr.</MenuItem>
-      <MenuItem value="Mrs.">Mrs.</MenuItem>
-      <MenuItem value="Miss">Miss</MenuItem>
-    </TextField>
-  </Grid>
+      <option value="" >Select Title</option>
+      <option value="Mr.">Mr.</option>
+      <option value="Mrs.">Mrs.</option>
+      <option value="Miss">Miss</option>
+    </Form.Select>
+  </FloatingLabel>
+</Grid>
+
 
   {/* Name of Allottee Field */}
-  <Grid item md={3} sm={6} xs={12}>
+  {/* <Grid item md={8} sm={6} xs={12}>
     <TextField
       fullWidth
       label="Name of Allottee"
@@ -1668,7 +1717,29 @@ const generatePDF = () => {
       value={selectedLoan?.nameOfAllotee || ""}
       onChange={(e) => handleInputChange("nameOfAllotee", e.target.value)}
     />
-  </Grid>
+  </Grid> */}
+ <Grid item md={8} sm={6} xs={12}>
+  <TextField
+    fullWidth
+    label="Name of Allottee"
+    placeholder="Enter Name"
+    value={selectedLoan?.nameOfAllotee || ""}
+    onChange={(e) => {
+      const value = e.target.value;
+      const regex = /^[A-Za-z\s]*$/;  // Only Letters & Spaces
+
+      if (regex.test(value)) {
+        handleInputChange("nameOfAllotee", value);
+        setErrors((prev) => ({ ...prev, nameOfAllotee: "" }));
+      } else {
+        setErrors((prev) => ({ ...prev, nameOfAllotee: "Only letters and spaces are allowed" }));
+      }
+    }}
+    error={Boolean(errors.nameOfAllotee)}
+    helperText={errors.nameOfAllotee}
+  />
+</Grid>
+
 </Grid>
 
 
@@ -1708,26 +1779,61 @@ const generatePDF = () => {
     />
   </Grid>
 
-  <Grid item xs={12} md={4}>
-    <TextField
-      fullWidth
-      label="Co-Pan No"
-      value={selectedLoan?.coPanNo || ""}
-      onChange={(e) => handleInputChange("coPanNo", e.target.value)}
-    />
-  </Grid>
+  <Grid item xs={12} md={4} pt={2}>
+  <TextField
+    fullWidth
+    label="Co-Pan No"
+    placeholder="Enter Co-PAN Number"
+    value={selectedLoan?.coPanNo || ""}
+    onChange={(e) => {
+      const value = e.target.value.toUpperCase();  // Auto convert to uppercase
+      const regex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
 
-  <Grid item xs={12} md={4}>
-    <TextField
-      fullWidth
-      label="Co-Aadhar No."
-      value={selectedLoan?.coAadharNo || ""}
-      onChange={(e) => handleInputChange("coAadharNo", e.target.value)}
-    />
-  </Grid>
+      handleInputChange("coPanNo", value);
 
+      if (value === "" || regex.test(value)) {
+        setErrors((prev) => ({ ...prev, coPanNo: "" }));
+      } else {
+        setErrors((prev) => ({
+          ...prev,
+          coPanNo: "Enter valid PAN number (ABCDE1234F)",
+        }));
+      }
+    }}
+    error={Boolean(errors.coPanNo)}
+    helperText={errors.coPanNo}
+  />
 </Grid>
-<Grid container spacing={2}>
+
+<Grid item xs={12} md={4}>
+  <TextField
+    fullWidth
+    label="Co-Aadhar No."
+    placeholder="Enter Co-Aadhar Number"
+    value={selectedLoan?.coAadharNo || ""}
+    onChange={(e) => {
+      const value = e.target.value;
+      const regex = /^[0-9]{0,12}$/; // Only Numbers, Max 12 Digits
+
+      if (regex.test(value)) {
+        handleInputChange("coAadharNo", value);
+      }
+
+      if (value === "" || value.length === 12) {
+        setErrors((prev) => ({ ...prev, coAadharNo: "" }));
+      } else if (value.length > 0 && value.length < 12) {
+        setErrors((prev) => ({
+          ...prev,
+          coAadharNo: "Aadhar number must be 12 digits",
+        }));
+      }
+    }}
+    error={Boolean(errors.coAadharNo)}
+    helperText={errors.coAadharNo}
+  />
+</Grid>
+</Grid>
+<Grid container spacing={2} pt={2}>
   <Grid item md={4} xs={12}>
     <TextField
       fullWidth
@@ -1739,14 +1845,34 @@ const generatePDF = () => {
   </Grid>
 
   <Grid item md={4} xs={12}>
-    <TextField
-      fullWidth
-      label="Contact"
-      variant="outlined"
-      value={selectedLoan?.contact || ""}
-      onChange={(e) => handleInputChange("contact", e.target.value)}
-    />
-  </Grid>
+  <TextField
+    fullWidth
+    label="Contact"
+    variant="outlined"
+    placeholder="Enter Contact Number"
+    value={selectedLoan?.contact || ""}
+    onChange={(e) => {
+      const value = e.target.value;
+      const regex = /^[0-9]{0,10}$/; // Only Numbers & Max 10 Digits
+
+      if (regex.test(value)) {
+        handleInputChange("contact", value);
+      }
+
+      if (value === "" || value.length === 10) {
+        setErrors((prev) => ({ ...prev, contact: "" }));
+      } else if (value.length > 0 && value.length < 10) {
+        setErrors((prev) => ({
+          ...prev,
+          contact: "Contact number must be 10 digits",
+        }));
+      }
+    }}
+    error={Boolean(errors.contact)}
+    helperText={errors.contact}
+  />
+</Grid>
+
 
   <Grid item md={4} xs={12}>
     <TextField

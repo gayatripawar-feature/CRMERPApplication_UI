@@ -234,11 +234,11 @@ const VoiceNavigation = ({ onClose }) => {
     "booking form": "/sales/bookingform",
     "channel partner": "/sales/channelpartner",
 
-    // Common Routes
-    "dashboard": "/dashboard",
-    "profile": "/profile",
-    "settings": "/settings",
-    "reports": "/reports",
+    // // Common Routes
+    // "dashboard": "/dashboard",
+    // "profile": "/profile",
+    // "settings": "/settings",
+    // "reports": "/reports",
   };
 
   useEffect(() => {
