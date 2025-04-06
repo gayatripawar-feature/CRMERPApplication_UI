@@ -32,6 +32,7 @@ const Admin_Banker = () => {
 
   const [editClicked, setEditClicked] = useState(false);
   const [selectedBanker, setSelectedBanker] = useState(null);
+  const [fileNames, setFileNames] = useState([]);
   useEffect(() => {
     console.log("Modal state changed:", editClicked); // Logs whenever the state changes
   }, [editClicked]);
@@ -206,9 +207,13 @@ const Admin_Banker = () => {
     doc.save("Banker_Details_Report.pdf");
   };
   
+  // const handleFileChange = (e) => {
+  //   const filesArray = Array.from(e.target.files);
+  //   setSelectedFiles((prevFiles) => [...prevFiles, ...filesArray]);
+  // };
   const handleFileChange = (e) => {
-    const filesArray = Array.from(e.target.files);
-    setSelectedFiles((prevFiles) => [...prevFiles, ...filesArray]);
+    // const filesArray = Array.from(e.target.files).map((file) => file.name);
+    // setFileNames(filesArray);  // Only store file names
   };
 
   return (
@@ -383,29 +388,47 @@ const Admin_Banker = () => {
 <div className="col-md-4">
   <label className="form-label">APF Letter :</label>
 
-  {/* File Upload Button */}
-  <Button
-    variant="contained"
-    component="label"
-    style={{
-      backgroundColor: "white",
-      color: "black",
-      border: "1px solid #ced4da",
-      borderRadius: "4px",
-      padding: "6px 12px",
-      textTransform: "none",
-    }}
-  >
-    Choose File
-    {/* Correct File Input */}
-    <input
-      type="file"
-      multiple
-      hidden  // This will hide input but make it clickable
-      onChange={handleFileChange}
-      required
-    />
-  </Button>
+  <div>
+      {/* <Button
+        variant="contained"
+        component="label"
+        style={{
+          backgroundColor: "white",
+          color: "black",
+          border: "1px solid #ced4da",
+          borderRadius: "4px",
+          padding: "6px 12px",
+          textTransform: "none",
+        }}
+      >
+        Choose File
+        <input
+          type="file"
+          multiple
+          hidden
+          onChange={handleFileChange}
+        />
+      </Button> */}
+      <input
+  type="file"
+  multiple
+  onChange={handleFileChange}
+  style={{
+    border: "1px solid #ced4da",
+    borderRadius: "4px",
+    padding: "6px 12px",
+    cursor: "pointer",
+  }}
+/>
+
+
+      <div style={{ marginTop: "10px" }}>
+        {fileNames.length > 0 &&
+          fileNames.map((name, index) => (
+            <div key={index}>{name}</div>
+          ))}
+      </div>
+    </div>
 </div>
 
 
