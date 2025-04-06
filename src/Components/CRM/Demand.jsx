@@ -150,7 +150,14 @@ const handleToggle = () => {
 
   const generatePDF = () => {
     toast.info("PDF generation in progress...");
-    
+  
+    // Check if selectedLoan is null or undefined, and return early if it is
+    if (!selectedLoan) {
+      toast.error("No data available to generate PDF.");
+      return;
+    }
+  
+    // Now safely destructure selectedLoan properties
     const {
       flatNo,
       nameOfAllotee,
@@ -168,7 +175,9 @@ const handleToggle = () => {
     doc.text("Demand Letter", 20, 20);
   
     let y = 40; // Start position for text
+    doc.setFont("helvetica", "normal");
   
+    // Add text for each field
     doc.text(`Flat No: ${flatNo}`, 20, y);
     y += 10;
     doc.text(`Name Of Allotee: ${nameOfAllotee}`, 20, y);
@@ -187,8 +196,10 @@ const handleToggle = () => {
     y += 10;
     doc.text(`Payment Balance (In Words): ${paymentBalanceWords}`, 20, y);
   
+    // Generate the PDF
     doc.save("demand-letter.pdf");
   };
+  
   
   const handleDownloadPDFDemand = () => {
     console.log("Loans data before mapping:", loans);

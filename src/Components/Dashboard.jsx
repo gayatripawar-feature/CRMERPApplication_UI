@@ -516,8 +516,12 @@ useEffect(() => {
       console.log("Recognized command:", command);
 
       const path = commandRoutes[command];
+     
       if (path) {
-        handleRedirect(path);
+        
+        speak(`Redirecting to ${command}`, () => {
+          handleRedirect(path);
+        });
       } else {
         speak("Command not recognized");
       }
@@ -533,7 +537,7 @@ useEffect(() => {
   }
 }, []);
 
-const speak = (message) => {
+const speak = (message,callback) => {
   const speech = new SpeechSynthesisUtterance(message);
   speech.lang = "en-US";
   speech.rate = 1;
@@ -544,13 +548,19 @@ const speak = (message) => {
     }
   };
 
+  
   speech.onend = () => {
-    if (!listening) {
-      setTimeout(() => startListening(), 500);
+    if (callback) {
+      callback();  
+    } else {
+      if (!listening) {
+        setTimeout(() => startListening(), 500);
+      }
     }
   };
-
+  window.speechSynthesis.cancel(); 
   window.speechSynthesis.speak(speech);
+ 
 };
 
 const startListening = () => {

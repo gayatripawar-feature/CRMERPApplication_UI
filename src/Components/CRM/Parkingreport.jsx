@@ -1,12 +1,16 @@
 
 
 
-import React, { useState } from 'react';
+import React, { useState ,useRef} from 'react';
 import { TextField ,Button} from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { Card } from 'antd';
+import { jsPDF } from "jspdf";
+
+
+
 // import { HomeOutlined } from '@ant-design/icons';
 const Parkingreport = () => {
   const [formData, setFormData] = useState({
@@ -64,15 +68,57 @@ const Parkingreport = () => {
       flatType: "2 BHK",
       parkingType: "Parking Available",
     },
+   
     // More flat objects...
   ];
   
+  const componentRef = useRef();
 
+ 
+
+  const handleDownloadPDF= () => {
+    const doc = new jsPDF();
+    let y = 20; // Initial vertical position
+  
+    // Add the Wing Header
+    doc.setFontSize(18);
+    doc.setFont("helvetica", "bold");
+    doc.text("Wing", 20, y);
+    y += 10; // Space after the header
+  
+    // Loop through parkingData to add flat details
+    parkingData.forEach(flat => {
+      // Flat No
+      doc.setFontSize(14);
+      doc.setFont("helvetica", "normal");
+      doc.text(`Flat No: ${flat.flatNo}`, 20, y);
+      y += 10;
+  
+      // Flat Type
+      doc.text(`Flat Type: ${flat.flatType}`, 20, y);
+      y += 10;
+  
+      // Parking Type
+      doc.text(`Parking Type: ${flat.parkingType || "No Parking"}`, 20, y);
+      y += 15; // Space before next flat details
+  
+      // Check if we need to add a page (if content exceeds one page)
+      if (y > 270) {
+        doc.addPage();
+        y = 20; // Reset vertical position for new page
+      }
+    });
+  
+    // Save the PDF
+    doc.save("Parking_Report.pdf");
+  };
   return (
     <div className="container mt-3" style={{ maxHeight: '80vh', overflowY: 'auto' }}>
       <h5 className="mb-5">Reports/Parking Allotment Report</h5>
 
-     
+      <button onClick={handleDownloadPDF} className="btn btn-primary mb-3">
+        Download Parking Report PDF
+      </button>
       
 
 <div className="form-wrapper shadow-lg p-4 rounded" style={{ boxShadow: '0px 0px 15px 5px rgba(255, 255, 255, 0.7)', overflowX: 'auto', whiteSpace: 'nowrap' }}>
@@ -335,66 +381,72 @@ const Parkingreport = () => {
 
 
 <div>
-  
-<div className="wing-header p-3" style={{ background: 'linear-gradient(to right,rgb(156, 67, 252),rgb(37, 252, 238))', color: '#fff', fontSize: '1.25rem', fontWeight: 'bold' }}>
-  Wing: 
+  {/* Button to trigger PDF download via hook */}
+   {/* Button to trigger PDF download */}
+   {/* <button onClick={handleDownloadPDF} className="btn btn-primary mb-3">
+        Download Parking Report PDF
+      </button> */}
+
+
+
+{/* Section for PDF */}
+<div ref={componentRef}>
+
+{/* Wing Header */}
+<div className="wing-header p-3"
+  style={{
+    background: 'linear-gradient(to right,rgb(156, 67, 252),rgb(37, 252, 238))',
+    color: '#fff',
+    fontSize: '1.25rem',
+    fontWeight: 'bold'
+  }}>
+  Wing:
 </div>
 
-  
+{/* Card Section */}
 <div className="row mt-5">
   {parkingData.map((flat, index) => (
     <div className="col-md-4 mb-4" key={index}>
       <div className="card shadow-lg rounded">
-        <div className="card-header text-white text-left p-3" style={{ background: 'linear-gradient(to right, #6a11cb, #2575fc)' }}>
+        <div className="card-header text-white text-left p-3"
+          style={{ background: 'linear-gradient(to right, #6a11cb, #2575fc)' }}>
           Flat No: {flat.flatNo}
         </div>
 
         <div className="card-body">
-          {/* Flat Type */}
           <div className="mb-3 text-left">
             <strong>{flat.flatType}</strong>
           </div>
 
- {/* Vehicle Image */}
-{/* Vehicle Image from Pixabay */}
-<div className="text-center mb-3">
-  <img
-    src="https://cdn.pixabay.com/photo/2023/09/24/16/31/beetle-8273349_1280.jpg"  
-    alt="Volkswagen Beetle"
-    style={{ width: "100%", maxWidth: "300px", height: "auto" }} 
-  />
-</div>
+          <div className="text-center mb-3">
+            <img
+              src="https://cdn.pixabay.com/photo/2023/09/24/16/31/beetle-8273349_1280.jpg"
+              alt="Volkswagen Beetle"
+              style={{ width: "100%", maxWidth: "300px", height: "auto" }}
+            />
+          </div>
 
-
-
-
-          {/* Parking Available Section */}
           <div className="d-flex justify-content-between mb-3">
-            {/* Assuming flat.parkingType contains the type of parking available */}
-            <div className="w-100 mx-1 py-2 px-3 text-center" 
+            <div className="w-100 mx-1 py-2 px-3 text-center"
               style={{
-                backgroundColor: flat.parkingType === "Covered Car Parking" ? "#4caf50" : 
-                                 flat.parkingType === "Open Car Parking" ? "#ffeb3b" : 
-                                 flat.parkingType === "Parking availble" ? "#2196f3" : 
-                                 "#9e9e9e", 
+                backgroundColor: flat.parkingType === "Covered Car Parking" ? "#4caf50" :
+                  flat.parkingType === "Open Car Parking" ? "#ffeb3b" :
+                    flat.parkingType === "Parking availble" ? "#2196f3" :
+                      "#9e9e9e",
                 color: "#fff",
                 borderRadius: "5px"
               }}>
               {flat.parkingType || "No Parking"}
             </div>
           </div>
-
-       
-
-         
-        </div>
-      </div>
-    </div>
+          </div>
+</div>
+</div>
   ))}
-</div>
-
-</div>
-</div>
+  </div>
+  </div>
+  </div>
+  </div>
   );
 };
 
