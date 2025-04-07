@@ -263,6 +263,8 @@ useEffect(() => {
   if (dateFilter === 'today') {
     filteredData = chartData.filter((item) => {
       return item.date === today.toLocaleDateString('en-GB');
+      console.log("Item Date ===>", item.date);
+
     });
   } else if (dateFilter === 'last7Days') {
     const last7Days = new Date();
@@ -370,10 +372,21 @@ useEffect(() => {
         <button className={`btn ${dateFilter === 'thisMonth' ? 'btn-dark' : 'btn-primary'}`} onClick={() => handleFilterChange('thisMonth')}>This Month</button>
       </div> */}
 
-<Button onClick={() => handleFilterChange('today')}>Today</Button>
-<Button onClick={() => handleFilterChange('last7Days')}>Last 7 Days</Button>
-<Button onClick={() => handleFilterChange('last30Days')}>Last 30 Days</Button>
-<Button onClick={() => handleFilterChange('thisMonth')}>This Month</Button>
+<Button className="btn btn-info px-4 py-2 rounded-md" onClick={() => handleFilterChange('today')}>
+    Today
+  </Button>
+  
+  <Button className="btn btn-info px-4 py-2 rounded-md" onClick={() => handleFilterChange('last7Days')}>
+    Last 7 Days
+  </Button>
+  
+  <Button className="btn btn-info px-4 py-2 rounded-md" onClick={() => handleFilterChange('last30Days')}>
+    Last 30 Days
+  </Button>
+  
+  <Button className="btn btn-info px-4 py-2 rounded-md" onClick={() => handleFilterChange('thisMonth')}>
+    This Month
+  </Button>
 
     
       </div>
@@ -415,7 +428,9 @@ useEffect(() => {
   
             <Box mt={4}>
               
-              <TimeSeriesChart />
+              {/* <TimeSeriesChart  /> */}
+              <TimeSeriesChart data={filteredChartData} />
+
            
             </Box>
           </Box>

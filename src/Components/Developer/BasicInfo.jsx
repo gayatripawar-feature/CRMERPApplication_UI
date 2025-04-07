@@ -1090,11 +1090,18 @@ const handleTabClick = (index) => {
         </label>
 
         {/* Display selected file name */}
-        {fileNames[item.key] && (
+        {/* {fileNames[item.key] && (
           <Typography variant="body2" color="textSecondary" style={{ marginTop: "8px" }}>
             {fileNames[item.key]}
           </Typography>
-        )}
+        )} */}
+ {fileNames[item.key] && (
+          <Typography variant="body2" color="textSecondary" style={{ marginTop: "8px" , whiteSpace: "pre-line" }}>
+            {/* {fileNames[item.key]} */}
+            {fileNames[item.key].join('\n')}
+          </Typography>
+        )} 
+  
       </Grid>
     ))}
 </Grid>
@@ -1131,8 +1138,8 @@ const handleTabClick = (index) => {
                 </label>
                 {/* Display selected file name */}
                 {fileNames[label] && (
-                  <Typography variant="body2" color="textSecondary" style={{ marginTop: "8px" }}>
-                    {fileNames[label]}
+                  <Typography variant="body2" color="textSecondary" style={{ marginTop: "8px" , whiteSpace: "pre-line" }}>
+                    {fileNames[label].join('\n')}
                   </Typography>
                 )}
               </>
