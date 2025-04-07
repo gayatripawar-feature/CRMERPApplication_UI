@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { Button, TextField, Box, Typography, Select, MenuItem } from "@mui/material";
 import { FaChartLine, FaUsers, FaChartPie, FaMapMarkerAlt } from "react-icons/fa";
 import {
@@ -20,6 +20,27 @@ import TimeSeriesChart from "./TimeSerieschart";
 
 
 const SalesDashboard = () => {
+
+
+  const allData = {
+    today: [
+      { label: "Tower A", value: 2 },
+      { label: "Tower B", value: 5 },
+    ],
+    last7Days: [
+      { label: "Tower A", value: 8 },
+      { label: "Tower B", value: 15 },
+    ],
+    last30Days: [
+      { label: "Tower A", value: 20 },
+      { label: "Tower B", value: 30 },
+    ],
+    thisMonth: [
+      { label: "Tower A", value: 25 },
+      { label: "Tower B", value: 40 },
+    ],
+  };
+  
   const buttons = [
     { label: "Lead Conversion", icon: <FaChartLine size={20} />, bgColor: "#ff5733" },
     { label: "Team Performance", icon: <FaUsers size={20} />, bgColor: "#3498db" },
@@ -29,7 +50,7 @@ const SalesDashboard = () => {
 
   const [selectedTab, setSelectedTab] = useState("Lead Conversion"); 
   const [selectedSource, setSelectedSource] = useState(""); 
-
+ 
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [selectedEmployee, setSelectedEmployee] = useState(""); // Added missing state
@@ -62,6 +83,48 @@ const chartData = [
   { date: "02/04/2025", leads: 290, plannedVisits: 205, actualVisits: 185, conversions: 120 },
   { date: "09/04/2025", leads: 310, plannedVisits: 220, actualVisits: 200, conversions: 130 },
 ];
+
+
+// const [filteredChartData, setFilteredChartData] = useState(chartData);
+const [filteredChartData, setFilteredChartData] = useState(allData.today);
+
+
+// const handleFilterChange = (filter) => {
+//   setDateFilter(filter);
+// };
+
+// useEffect(() => {
+//   fetchChartData();
+// }, [dateFilter]);
+
+// useEffect(() => {
+//   let filteredData = [];
+
+//   if (dateFilter === 'today') {
+//     filteredData = allData.filter(item => item.date === today);
+//   } else if (dateFilter === 'last7Days') {
+//     filteredData = allData.filter(item => isWithinLast7Days(item.date));
+//   } else if (dateFilter === 'last30Days') {
+//     filteredData = allData.filter(item => isWithinLast30Days(item.date));
+//   }
+
+//   setFilteredChartData(filteredData);
+// }, [dateFilter, allData]);
+
+useEffect(() => {
+  if (allData && allData[dateFilter]) {
+    setFilteredChartData(allData[dateFilter]);
+  }
+}, [dateFilter, allData]);   // ✅ Only depend on allData and dateFilter
+
+
+
+const fetchChartData = async () => {
+  // Example API Call
+  const response = await fetch(`/api/flat-allotment-report?filter=${dateFilter}`);
+  const data = await response.json();
+  setChartData(data);
+};
 
 const teamData = [
   {
@@ -144,11 +207,90 @@ const filterEvents = () => {
 
   return events.filter(event => new Date(event.date) >= filterStart && new Date(event.date) <= today);
 };
+const today = new Date().toISOString().split('T')[0];
 
+// const handleFilterChange = (filter) => {
+//   setDateFilter(filter);
+//   setChartData(allData[filter]);
+// };
+
+// const handleFilterChange = (filter) => {
+//   setDateFilter(filter);
+
+//   const today = new Date();
+//   let filteredData = [];
+
+//   if (filter === 'today') {
+//     filteredData = chartData.filter((item) => {
+//       return item.date === today.toLocaleDateString('en-GB'); // format dd/mm/yyyy
+//     });
+//   } else if (filter === 'last7Days') {
+//     const last7Days = new Date();
+//     last7Days.setDate(today.getDate() - 7);
+//     filteredData = chartData.filter((item) => {
+//       return new Date(item.date.split('/').reverse().join('-')) >= last7Days;
+//     });
+//   } else if (filter === 'last30Days') {
+//     const last30Days = new Date();
+//     last30Days.setDate(today.getDate() - 30);
+//     filteredData = chartData.filter((item) => {
+//       return new Date(item.date.split('/').reverse().join('-')) >= last30Days;
+//     });
+//   } else if (filter === 'thisMonth') {
+//     const currentMonth = today.getMonth();
+//     const currentYear = today.getFullYear();
+//     filteredData = chartData.filter((item) => {
+//       const itemDate = new Date(item.date.split('/').reverse().join('-'));
+//       return (
+//         itemDate.getMonth() === currentMonth &&
+//         itemDate.getFullYear() === currentYear
+//       );
+//     });
+//   }
+
+//   setFilteredChartData(filteredData);
+// };
 
 const handleFilterChange = (filter) => {
-  setDateFilter(filter);
+  setDateFilter(filter); // Only update date filter
 };
+
+// Then this effect will handle the rest:
+useEffect(() => {
+  const today = new Date();
+  let filteredData = [];
+
+  if (dateFilter === 'today') {
+    filteredData = chartData.filter((item) => {
+      return item.date === today.toLocaleDateString('en-GB');
+    });
+  } else if (dateFilter === 'last7Days') {
+    const last7Days = new Date();
+    last7Days.setDate(today.getDate() - 7);
+    filteredData = chartData.filter((item) => {
+      return new Date(item.date.split('/').reverse().join('-')) >= last7Days;
+    });
+  } else if (dateFilter === 'last30Days') {
+    const last30Days = new Date();
+    last30Days.setDate(today.getDate() - 30);
+    filteredData = chartData.filter((item) => {
+      return new Date(item.date.split('/').reverse().join('-')) >= last30Days;
+    });
+  } else if (dateFilter === 'thisMonth') {
+    const currentMonth = today.getMonth();
+    const currentYear = today.getFullYear();
+    filteredData = chartData.filter((item) => {
+      const itemDate = new Date(item.date.split('/').reverse().join('-'));
+      return (
+        itemDate.getMonth() === currentMonth &&
+        itemDate.getFullYear() === currentYear
+      );
+    });
+  }
+
+  setFilteredChartData(filteredData);
+}, [dateFilter, chartData]);
+
   return (
     <div>
      
@@ -204,10 +346,36 @@ const handleFilterChange = (filter) => {
     
 
       <div className="d-flex justify-content-start gap-2 mb-3 pb-3">
-        <button className={`btn ${dateFilter === 'today' ? 'btn-dark' : 'btn-primary'}`} onClick={() => handleFilterChange('today')}>Today</button>
+        {/* <button className={`btn ${dateFilter === 'today' ? 'btn-dark' : 'btn-primary'}`} onClick={() => handleFilterChange('today')}>Today</button>
+        <button className={`btn ${dateFilter === 'last7Days' ? 'btn-dark' : 'btn-primary'}`} onClick={() => handleFilterChange('last7Days')}>Last 7 Days</button> */}
+          {/* <button className={`btn ${dateFilter === 'today' ? 'btn-dark' : 'btn-primary'}`} onClick={() => handleFilterChange('today')}>Today</button>
+         <button className={`btn ${dateFilter === 'last7Days' ? 'btn-dark' : 'btn-primary'}`} onClick={() => handleFilterChange('last7Days')}>Last 7 Days</button>
+      
+        <button className={`btn ${dateFilter === 'last30Days' ? 'btn-dark' : 'btn-primary'}`} onClick={() => handleFilterChange('last30Days')}>Last 30 Days</button>
+        <button className={`btn ${dateFilter === 'thisMonth' ? 'btn-dark' : 'btn-primary'}`} onClick={() => handleFilterChange('thisMonth')}>This Month</button> */}
+    {/* <div className="d-flex justify-content-start gap-2 mb-3 pb-3">
+    <button 
+  className={`btn ${dateFilter === 'today' ? 'btn-dark' : 'btn-primary'}`} 
+  onClick={() => {
+    console.log(today)
+
+    handleFilterChange('today');
+  }}
+>
+  Today
+</button>
+
         <button className={`btn ${dateFilter === 'last7Days' ? 'btn-dark' : 'btn-primary'}`} onClick={() => handleFilterChange('last7Days')}>Last 7 Days</button>
         <button className={`btn ${dateFilter === 'last30Days' ? 'btn-dark' : 'btn-primary'}`} onClick={() => handleFilterChange('last30Days')}>Last 30 Days</button>
         <button className={`btn ${dateFilter === 'thisMonth' ? 'btn-dark' : 'btn-primary'}`} onClick={() => handleFilterChange('thisMonth')}>This Month</button>
+      </div> */}
+
+<Button onClick={() => handleFilterChange('today')}>Today</Button>
+<Button onClick={() => handleFilterChange('last7Days')}>Last 7 Days</Button>
+<Button onClick={() => handleFilterChange('last30Days')}>Last 30 Days</Button>
+<Button onClick={() => handleFilterChange('thisMonth')}>This Month</Button>
+
+    
       </div>
 
 

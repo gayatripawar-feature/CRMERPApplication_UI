@@ -125,7 +125,7 @@ const App = () => {
           <Route path ="crm/Demand" element={<Demand />} />
   
           <Route path ="crm/dailycollection" element={<DailyCollection />} />
-          <Route path ="crm/flatallotementreport" element ={<FlatAllotementReport />} />
+          <Route path ="crm/flatallotmentreport" element ={<FlatAllotementReport />} />
           <Route path ="crm/parkingreport" element ={<Parkingreport />}  />
           <Route path ="crm/misreport" element ={<MISReport/>}  />
           {/* <Route path ="crm/Demand" element={<Demand />} /> */}

@@ -319,7 +319,7 @@ const [listening, setListening] = useState(false);
     { name: "Engineer & Architect Letter", path: "CRM > Engineer & Architect Letter", to: "/crm/Architect" },
     { name: "Demand Raised", path: "CRM > Demand Raised", to: "/crm/demand-raised" },
     { name: "Daily Collection", path: "CRM > Daily Collection", to: "/crm/dailycollection" },
-    { name: "Flat Allotment Report", path: "CRM > Flat Allotment Report", to: "/crm/flatallotementreport" },
+    { name: "Flat Allotment Report", path: "CRM > Flat Allotment Report", to: "/crm/flatallotmentreport" },
     { name: "Parking Report", path: "CRM > Parking Report", to: "/crm/parkingreport" },
     { name: "MIS Report", path: "CRM > MIS Report", to: "/crm/misreport" },
   
@@ -772,7 +772,7 @@ const startListening = () => {
     { to: "/crm/Architect", icon: <FaDraftingCompass />, label: "Engineer & Architect Letter" },
     { to: "/crm/Demand", icon: <FaBell />, label: "Demand Raised" },
     { to: "/crm/dailycollection", icon: <FaBell />, label: "Daily Collection" },
-    { to: "/crm/flatallotementreport", icon: <FaBell />, label: "Flat Allotement Report" },
+    { to: "/crm/flatallotmentreport", icon: <FaBell />, label: "Flat Allotement Report" },
     {to :"/crm/parkingreport" ,icon :<FaBell />, label :"Parking Report"},
     {to :"/crm/misreport" ,icon :<FaBell />, label :"MIS Report"},
       ]}
