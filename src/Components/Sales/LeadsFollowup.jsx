@@ -25,6 +25,9 @@ import autoTable from "jspdf-autotable";
 
 import { jsPDF } from "jspdf";
 
+import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
 
 
 
@@ -334,8 +337,11 @@ const LeadsFollowUp = () => {
       setAccountNo(value);
     };
   
+    const [formData, setFormData] = useState({
+      nextFollowUp: "",   // your field name
+    });
     
-   
+    const [nextFollowUp, setNextFollowUp] = useState("");
     const validatePAN = (pan) => {
       const panPattern = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/; // PAN format: 5 letters, 4 digits, 1 letter
       return panPattern.test(pan);
@@ -1005,18 +1011,32 @@ const handleDownloadPDFVisit = () => {
 </Grid>
 
 
-
 <Grid item xs={6}>
-  <TextField
-    type="date"
-    label="Next Follow Up"
-    fullWidth
-    variant="outlined"
-    InputLabelProps={{
-      shrink: true, // This will shrink the label when the field is focused or has a value
-    }}
-  />
+  <Box sx={{ width: '100%' }}>
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <DatePicker
+        label="Next Follow Up"
+        value={formData.nextFollowUp ? dayjs(formData.nextFollowUp) : null}
+        onChange={(newValue) => {
+          setFormData({
+            ...formData,
+            nextFollowUp: newValue ? newValue.format('YYYY-MM-DD') : '',
+          });
+        }}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            fullWidth
+            variant="outlined"
+            style={{ backgroundColor: '#fff', borderRadius: '8px' }}
+            InputLabelProps={{ shrink: true }}
+          />
+        )}
+      />
+    </LocalizationProvider>
+  </Box>
 </Grid>
+
 
   </Grid>
   

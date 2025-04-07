@@ -441,6 +441,9 @@ import { FaFileDownload } from "react-icons/fa";
 import jsPDF from "jspdf";
 
 import autoTable from "jspdf-autotable";
+import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
 
 
 const MarketingModule = () => {
@@ -790,7 +793,7 @@ const MarketingModule = () => {
 
             <div className="d-flex justify-content-center w-100 mb-3">
               <div className="col-6 pr-2 m-2">
-                <TextField
+                {/* <TextField
                   label="Start Date"
                   name="startDate"
                   type="date"
@@ -800,10 +803,29 @@ const MarketingModule = () => {
                   variant="outlined"
                   style={{ backgroundColor: '#fff', borderRadius: '8px' }}
                   InputLabelProps={{ shrink: true, style: { width: '100%' } }}
-                />
+                /> */}
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+  <DatePicker
+    label="Start Date"
+    value={formData.startDate ? dayjs(formData.startDate) : null}
+    onChange={(newValue) => {
+      setFormData({ ...formData, startDate: newValue ? newValue.format('YYYY-MM-DD') : '' });
+    }}
+    renderInput={(params) => (
+      <TextField
+        {...params}
+        fullWidth
+        variant="outlined"
+        style={{ backgroundColor: '#fff', borderRadius: '8px' }}
+        InputLabelProps={{ shrink: true }}
+      />
+    )}
+  />
+</LocalizationProvider>
+
               </div>
               <div className="col-6 pl-2 m-2">
-                <TextField
+                {/* <TextField
                   label="End Date"
                   name="endDate"
                   type="date"
@@ -813,7 +835,25 @@ const MarketingModule = () => {
                   variant="outlined"
                   style={{ backgroundColor: '#fff', borderRadius: '8px' }}
                   InputLabelProps={{ shrink: true, style: { width: '100%' } }}
-                />
+                /> */}
+                 <LocalizationProvider dateAdapter={AdapterDayjs}>
+  <DatePicker
+    label="End Date"
+    value={formData.startDate ? dayjs(formData.startDate) : null}
+    onChange={(newValue) => {
+      setFormData({ ...formData, startDate: newValue ? newValue.format('YYYY-MM-DD') : '' });
+    }}
+    renderInput={(params) => (
+      <TextField
+        {...params}
+        fullWidth
+        variant="outlined"
+        style={{ backgroundColor: '#fff', borderRadius: '8px' }}
+        InputLabelProps={{ shrink: true }}
+      />
+    )}
+  />
+</LocalizationProvider>
               </div>
             </div>
 

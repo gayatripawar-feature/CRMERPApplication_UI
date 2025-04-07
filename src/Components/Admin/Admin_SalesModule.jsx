@@ -311,7 +311,7 @@ const handleEmailBlur = () => {
               style={{
                 border: "1px solid #ddd",
                 borderRadius: "8px",
-                backgroundColor: "#f9f9f9",
+                backgroundColor: "white",
               }}
             >
               <form onSubmit={handleSubmit}>

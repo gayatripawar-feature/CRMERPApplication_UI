@@ -437,55 +437,98 @@ const handleRedirect = (path) => {
 //   }
 // };
 
-const commandRoutes = {
-//   "go to home": "/home",
-//   "open lost visit": "/lost-visit",
-//   "open dashboard": "/dashboard",
-//   "open report": "/report",
-//   "open booking": "/booking",
-// };
+// const commandRoutes = {
 
+  
+//   "admin banker": "/admin/banker",
+//   "admin sales module": "/admin/salesperson",
+
+//   "agreement": "/crm/agreement",
+//   "architect": "/crm/architect",
+//   "dashboard": "/crm",
+//   "daily collection": "/crm/daily-collection",
+//   "demand": "/crm/demand",
+//   "flat allotment report": "/crm/flat-allotment-report",
+//   "home loan": "/crm/home-loan",
+//   "mis report": "/crm/mis-report",
+//   "ocr": "/crm/ocr",
+//   "parking report": "/crm/parking-report",
+//   "registration": "/crm/registration",
+//   "share space": "/crm/sharespacecrm",
+
+
+//   "share space developer": "/developer/sharespace",
+//   "basic information": "/developer/basicinfo",
+//   "project inventory": "/developer/projectinventory",
+//   "cost sheet details": "/developer/costsheet",
+//   "sales mis": "/developer/salesmis",
+//   "marketing": "/developer/marketing",
+
+ 
+//   "sales": "/sales",
+//   "dashboard sales": "/sales/salesdashboard",
+//   "calendar": "/sales/salescalander",
+//   "shared by developer": "/sales/sharedbydeveloper",
+//   "leads": "/sales/leads",
+//   "leads follow up": "/sales/leadsfollowup",
+//   "lost leads": "/sales/lostleads",
+//   "first visit": "/sales/firstvisits",
+//   "first visit follow up": "/sales/firstvisitfollowup",
+//   "first visit steps": "/sales/firstvisitsteps",
+//   "lost visits": "/sales/saleslostvisits",
+//   "templates": "/sales/salestemplates",
+//   "booking form": "/sales/bookingform",
+//   "channel partner": "/sales/channelpartner",
+
+  
+//   "dashboard": "/dashboard",
+//   "profile": "/profile",
+//   "settings": "/settings",
+//   "reports": "/reports",
+// }
+
+const commandRoutes = {
   // Admin Module
-  "admin banker": "/admin/banker",
-  "admin sales module": "/admin/sales-module",
+  "admin banker": "/admin/banker",  //done
+  "admin sales module": "/admin/salesperson",   //done
 
   // CRM Module
-  "agreement": "/crm/agreement",
-  "architect": "/crm/architect",
-  "dashboard": "/crm",
-  "daily collection": "/crm/daily-collection",
-  "demand": "/crm/demand",
-  "flat allotment report": "/crm/flat-allotment-report",
-  "home loan": "/crm/home-loan",
-  "mis report": "/crm/mis-report",
-  "ocr": "/crm/ocr",
-  "parking report": "/crm/parking-report",
-  "registration": "/crm/registration",
-  "share space": "/crm/sharespacecrm",
+  "agreement": "/crm/agreement",   //done
+  "architect": "/crm/architect",   //done
+  // "dashboard": "/crm",
+  "daily collection": "/crm/dailycollection",   //done
+  "demand": "/crm/demand",          //done
+  "flat allotment report": "/crm/flatallotmentreport",  //done
+  "home loan": "/crm/HomeLoan",    //done
+  "mis report": "/crm/misreport",  //done
+  "ocr": "/crm/ocr",              //done
+  "parking report": "/crm/parkingreport",   //done
+  "registration": "/crm/registration",         //done
+  // "share space": "/crm/sharespace",
 
   // Developer Module
-  "share space developer": "/developer/sharespace",
-  "basic information": "/developer/basicinfo",
-  "project inventory": "/developer/projectinventory",
-  "cost sheet details": "/developer/costsheet",
-  "sales mis": "/developer/salesmis",
-  "marketing": "/developer/marketing",
+  "share space developer": "/developer/sharespace",  //done
+  "basic information": "/developer/basicinfo",      //done
+  "project inventory": "/developer/projectinventory",  //done
+  "cost sheet details": "/developer/costsheet",    //done
+  "sales mis": "/developer/salesmis",        //done
+  "marketing": "/developer/marketing",      //done
 
   // Sales Module
-  "sales": "/sales",
-  "dashboard sales": "/sales/salesdashboard",
-  "calendar": "/sales/salescalander",
-  "shared by developer": "/sales/sharedbydeveloper",
-  "leads": "/sales/leads",
-  "leads follow up": "/sales/leadsfollowup",
-  "lost leads": "/sales/lostleads",
-  "first visit": "/sales/firstvisits",
-  "first visit follow up": "/sales/firstvisitfollowup",
-  "first visit steps": "/sales/firstvisitsteps",
-  "lost visits": "/sales/saleslostvisits",
-  "templates": "/sales/salestemplates",
-  "booking form": "/sales/bookingform",
-  "channel partner": "/sales/channelpartner",
+  // "sales": "/sales",
+  "dashboard sales": "/sales/salesdashboard",     //done
+  "calendar": "/sales/salescalander",               //done
+  "shared by developer": "/sales/sharedbydeveloper",   //done
+  "leads": "/sales/leads",                       //done
+  "leads follow up": "/sales/leadsfollowup",     //done
+  "lost leads": "/sales/lostleads",         //done
+  "first visit": "/sales/firstvisits",       //done
+  "first visit follow up": "/sales/firstvisitfollowup",  //done
+  "first visit steps": "/sales/firstvisitsteps",     //done
+  "lost visits": "/sales/saleslostvisits",     //done
+  "templates": "/sales/salestemplates",    //done
+  "booking form": "/sales/bookingform",    //done
+  "channel partner": "/sales/channelpartner",   //done
 
   // Common Routes
   "dashboard": "/dashboard",
@@ -493,6 +536,7 @@ const commandRoutes = {
   "settings": "/settings",
   "reports": "/reports",
 }
+
 
 useEffect(() => {
   if (!recognitionRef.current && ("webkitSpeechRecognition" in window || "SpeechRecognition" in window)) {
@@ -704,7 +748,7 @@ const startListening = () => {
         isOpen={sections.admin}
         toggleOpen={() => toggleSection('admin')}
         subItems={[
-          
+         
           { to: "/admin/salesperson", icon: <FaUserTie />, label: "Sales Person" },
           { to: "/admin/banker", icon: <FaLandmark />, label: "Banker Details" }
           

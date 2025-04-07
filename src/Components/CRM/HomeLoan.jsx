@@ -383,6 +383,7 @@ const HomeLoan = () => {
   const [bankName, setBankName] = useState('');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
    const [isExpanded, setIsExpanded] = useState(true);
+   const [selectedFileNames, setSelectedFileNames] = useState([]);
   // const [editingLoan, setEditingLoan] = useState(null);
   const [editingLoan, setEditingLoan] = useState({
     flatNo: '',
@@ -570,13 +571,19 @@ const handleToggle = () => {
     }
   };
   
+  // const handleFileChange = (e) => {
+  //   const file = e.target.files[0]; 
+  //   if (file) {
+  //     setSelectedFileName(file.name);
+  //   }
+  // };
   const handleFileChange = (e) => {
-    const file = e.target.files[0]; 
-    if (file) {
-      setSelectedFileName(file.name);
-    }
+    const files = Array.from(e.target.files);
+    const fileNames = files.map((file) => file.name);
+  
+    setSelectedFileNames((prev) => [...prev, ...fileNames]);
   };
-
+  
   const handleOpenDocument = (loanId) => {
     const loan = loansData.find((loan) => loan.id === loanId);
     if (loan && loan.sanctionLetter) {
@@ -778,15 +785,21 @@ const displayLoans = () => {
     <input
       id="sanction-letter-input"
       type="file"
+      multiple
       onChange={(e) => handleFileChange(e)}
       style={{ display: 'none' }} 
     />
       
-      {selectedFileName && (
-          <Typography variant="body2" sx={{ mt: 1 }}>
-            Selected File: {selectedFileName}
-          </Typography>
-        )}
+     
+         {selectedFileNames.length > 0 && (
+        <div>
+          {selectedFileNames.map((name, index) => (
+            <Typography key={index} variant="body2" sx={{ mt: 1 }}>
+              Selected File: {name}
+            </Typography>
+          ))}
+        </div>
+      )}
   </DialogContent>
   <DialogActions>
     <Button onClick={handleCloseDialog} color="secondary">
@@ -1065,7 +1078,7 @@ const displayLoans = () => {
       
      
 
-      <div className="pt-5" style={{ display: 'flex', gap: '20px', marginBottom: '20px' }}>
+      {/* <div className="pt-5" style={{ display: 'flex', gap: '20px', marginBottom: '20px' }}>
         <TextField
           label="Start Date"
           type="date"
@@ -1099,7 +1112,7 @@ const displayLoans = () => {
           <MenuItem value="Yes">Home Loan Applicable</MenuItem>
           <MenuItem value="No">No Home Loan</MenuItem>
         </Select>
-      </div>
+      </div> */}
 
       {/* Table */}
       <TableContainer component={Paper} sx={{ mt: 2, boxShadow: 3, borderRadius: 2 }}>
