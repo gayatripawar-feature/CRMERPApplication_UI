@@ -492,21 +492,7 @@ const [aadhaarErrorMessage, setAadhaarErrorMessage] = useState("");
 </Button>
 
 
-          {/* <Button
-            variant="contained"
-            className="m-3"
-            color="primary"
-            onClick={() => {
-             
-              toast.success("Details are submitted!", { position: "top-right", autoClose: 3000 });
-              
-              // If you want to close the form (or any other logic), you can add it here
-              setShowFirmForm(false); // Example of hiding the form after submission
-            }}
-          >
-            Submit
-          </Button> */}
-
+       
         
         </Paper>
       </div>

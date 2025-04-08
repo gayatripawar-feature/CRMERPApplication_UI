@@ -681,16 +681,8 @@ const handleDownloadPDFCRM = () => {
 
 <Tooltip title="Edit" arrow>
   <IconButton
-    sx={{
-      color: 'primary.main',
-      fontSize: '1px',
-      backgroundColor: 'rgba(0, 0, 0, 0.08)',
-      borderRadius: '50%',
-      padding: '2px',
-      '&:hover': {
-        backgroundColor: 'rgba(0, 0, 0, 0.12)',
-      },
-    }}
+    size="small"
+    sx={{ backgroundColor: "#1976D2", color: "white", borderRadius: "50%", "&:hover": { backgroundColor: "#1565C0" } }} 
     onClick={() => setShowForm(true)} 
   >
     <EditIcon />
@@ -1302,20 +1294,23 @@ Section 2: Particulars of Flat
   >
     Close
   </Button>
-  <Button
-          variant="contained"
-          className="m-3"
-          color="success"
-          onClick={() => {
-            // Simply show the toast message without calling validation functions
-            toast.success("Details are submitted!", { position: "top-right", autoClose: 3000 });
-            
-            // If you want to close the form (or any other logic), you can add it here
-            setShowFirmForm(false); // Example of hiding the form after submission
-          }}
-        >
-          Submit
-        </Button>
+
+        <Button
+  variant="contained"
+  className="m-3"
+  color="success"
+  onClick={() => {
+    toast.success("Details are submitted!", { 
+      position: "top-right", 
+      autoClose: 3000 
+    });
+
+    handleClose();  // Close the form
+  }}
+>
+  Submit
+</Button>
+
 </DialogActions>
 
       </Dialog>
