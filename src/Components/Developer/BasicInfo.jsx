@@ -160,30 +160,19 @@ useEffect(() => {
   
  
   const validateAadhaar = (aadhaar) => {
-    const aadhaarRegex = /^[0-9]{12}$/; // Regex to check if it's exactly 12 digits
+    const aadhaarRegex = /^[0-9]{12}$/; 
     return aadhaarRegex.test(aadhaar);
   };
-  //  const handleFileChange = (e, key) => {
-  //   const file = e.target.files[0]; 
-  //   if (file) {
-  //     setFileNames((prevState) => ({
-  //       ...prevState,
-  //       [key]: file.name, // Update the file name for the corresponding key
-  //     }));
-  //   }
-  // };
+  
 
-  // const handleFileChange = (event, key) => {
-  //   const files = Array.from(event.target.files).map(file => file.name); // ✅ Convert FileList to array
-  //   setFileNames((prev) => ({ ...prev, [key]: files })); // ✅ Store as an array
-  // };
+  
   
   const handleFileChange = (event, key) => {
     const newFiles = Array.from(event.target.files).map(file => file.name);
   
     setFileNames((prev) => ({
       ...prev,
-      [key]: prev[key] ? [...prev[key], ...newFiles] : newFiles, // ✅ Append new files
+      [key]: prev[key] ? [...prev[key], ...newFiles] : newFiles, 
     }));
   };
   
@@ -1641,10 +1630,7 @@ onClick={() => {
   />
 </Grid>
 
-          {/* <Grid item xs={4}><TextField label="IFSC Code" sx={{
-      marginTop: "13px",
-      
-    }} fullWidth /></Grid> */}
+   
     <Grid item xs={4}>
   <TextField
     label="IFSC Code"
@@ -1656,69 +1642,7 @@ onClick={() => {
   />
 </Grid>
 
-      
-{/* 
-<Grid item xs={4}>
-            <Typography variant="body2" gutterBottom>
-              Aadhaar No.
-            </Typography>
-            <label>
-              <Input
-                type="file"
-                style={{ display: "none" }} 
-                id="file-input-aadhaar" 
-                onChange={(e) => handleFileChange(e, "aadhaarFile")} 
-              />
-              <Button
-                variant="contained"
-                color="light"
-                component="span"
-                // onClick={() => document.getElementById("file-input-aadhaar").click()} // Trigger the file input
-              >
-                Choose File
-              </Button>
-            </label>
-            {fileNames.aadhaarFile && (
-              <Typography variant="body2" color="textSecondary" style={{ marginTop: "8px" }}>
-                {fileNames.aadhaarFile} 
-              </Typography>
-            )}
-          </Grid> */}
-
-{/* <Grid item xs={4}>
-  <Typography variant="body2" gutterBottom>
-    Aadhaar No.
-  </Typography>
-  
-  <label>
-    <Input
-      type="file"
-      style={{ display: "none" }}
-      id="file-input-aadhaar"
-      multiple  // ✅ Allow multiple file selection
-      onChange={(e) => handleFileChange(e, "aadhaarFile")}
-    />
-    
-    <Button
-      variant="contained"
-      color="light"
-      component="span"
-    >
-      Choose Files
-    </Button>
-  </label>
-
  
-  {Array.isArray(fileNames.firmPanNoDocument) && fileNames.firmPanNoDocument.length > 0 && (
-  <Typography variant="body2" color="textSecondary" style={{ marginTop: "8px" }}>
-    {fileNames.firmPanNoDocument.map((file, index) => (
-      <div key={index}>{file}</div> // ✅ Display each file name
-    ))}
-  </Typography>
-)}
-
-</Grid> */}
-
 <Grid item xs={4}>
   <Typography variant="body2" gutterBottom>
     Aadhaar No.
@@ -1742,7 +1666,6 @@ onClick={() => {
     </Button>
   </label>
 
-  {/* ✅ Corrected the key to aadhaarFile */}
   {Array.isArray(fileNames.aadhaarFile) && fileNames.aadhaarFile.length > 0 && (
     <Typography variant="body2" color="textSecondary" style={{ marginTop: "8px" }}>
       {fileNames.aadhaarFile.map((file, index) => (
@@ -1835,7 +1758,7 @@ onClick={() => {
             )}
           </Grid>
 
-          {/* Light Bill File Upload */}
+          
           <Grid item xs={4} sx={{ marginTop: "6px"}}>
             <Typography variant="body2" gutterBottom>
               Light Bill
@@ -1852,7 +1775,7 @@ onClick={() => {
                 variant="contained"
                 color="light"
                 component="span"
-                // onClick={() => document.getElementById("file-input-lightbill").click()}
+                
               >
                 Choose File
               </Button>
@@ -1939,127 +1862,11 @@ Submit Landowner Info
         </div>
       </>
     ) : (
-//       <div className="landowner-form mt-4 p-3 border rounded" style={{
-//         backgroundColor: "#f8f9fa", 
-//         border: "1px solid #ccc", 
-//       }}>
-//         <h5>Flat Allotement Display </h5>
-//         <Grid container spacing={2}>
-//           <Grid item xs={4}><TextField label="Project Name" fullWidth /></Grid>
-         
-         
-//         <Grid item xs={4}><TextField label="Landowner Name" fullWidth value={name} onChange={handleNameChange}
-//            error={!!error} 
-//            helperText={error}
-//           /></Grid>
-      
 
-// <Grid item xs={4}>
-//       <TextField
-//         label="Mobile No."
-//         fullWidth
-//         value={mobileNo}
-//         onChange={handleMobileNoChange}
-//         error={!!mobileError} // Show error if there is a mobileError
-//         helperText={mobileError} // Display error message if any
-//       />
-//     </Grid>
-
-//           <Grid item xs={4}><TextField type="number" label="No. of Flats Alloted" fullWidth /></Grid>
-//         </Grid>
-//         <h4 className="pt-3">Flat Details</h4>
-//         <TableContainer component={Paper}>
-//           <Table>
-//             <TableHead>
-//               <TableRow sx={{ bgcolor: "primary.main" }}>
-//                 <TableCell  sx={{ color: "white", fontWeight: "bold" }}>RERA CARPET AREA (SQ FT)</TableCell>
-//                 <TableCell  sx={{ color: "white", fontWeight: "bold" }}>WING</TableCell>
-//                 <TableCell  sx={{ color: "white", fontWeight: "bold" }}>FLAT NO.</TableCell>
-//                 <TableCell  sx={{ color: "white", fontWeight: "bold" }}> TYPE OF FLAT</TableCell>
-//               </TableRow>
-
-//             </TableHead>
-//             <TableBody>
-            
-//       <TableRow >
-//       <TableCell sx={{ color: "black", fontWeight: "bold" }}>
-//               <FormControl fullWidth>
-//                 <InputLabel>RERA CARPET AREA (SQ FT)</InputLabel>
-//                 <Select
-//                   name="area"
-//                   value={formData.area}
-//                   onChange={handleChange}
-//                   label="RERA CARPET AREA (SQ FT)"
-//                 >
-//                   <MenuItem value="">RERA CARPET AREA (SQ FT)</MenuItem>
-                 
-//                 </Select>
-//               </FormControl>
-//             </TableCell>
-//             <TableCell sx={{ color: "black", fontWeight: "bold" }}>
-//               <FormControl fullWidth>
-//                 <InputLabel>WING</InputLabel>
-//                 <Select
-//                   name="wing"
-//                   value={formData.wing}
-//                   onChange={handleChange}
-//                   label="WING"
-//                 >
-//                   <MenuItem value="A">Wing</MenuItem>
-                
-//                 </Select>
-//               </FormControl>
-//             </TableCell>
-//             <TableCell sx={{ color: "black", fontWeight: "bold" }}>
-//               <FormControl fullWidth>
-//                 <InputLabel>FLAT NO.</InputLabel>
-//                 <Select
-//                   name="flatNumber"
-//                   value={formData.flatNumber}
-//                   onChange={handleChange}
-//                   label="FLAT NO."
-//                 >
-//                   <MenuItem value="101">Flat No</MenuItem>
-                
-//                 </Select>
-//               </FormControl>
-//             </TableCell>
-//             <TableCell sx={{ color: "black", fontWeight: "bold" }}>
-//               <FormControl fullWidth>
-//                 <InputLabel>TYPE OF FLAT</InputLabel>
-//                 <Select
-//                   name="flatType"
-//                   value={formData.flatType}
-//                   onChange={handleChange}
-//                   label="TYPE OF FLAT"
-//                 >
-//                   <MenuItem value="2 BHK">TYPE OF FLAT</MenuItem>
-                 
-//                 </Select>
-//               </FormControl>
-//             </TableCell>
-//           </TableRow>
-//             </TableBody>
-//           </Table>
-//         </TableContainer>
-
-       
-
-// <Button
-//   variant="contained"
-//   className="mt-3"
-//   color="success"
-//   onClick={() => {
-//     setShowFirmForm(false);
-//     toast.success("details are submitted!", { position: "top-right", autoClose: 3000 });
-//   }}
-// >
-// Submit Flat Allotement Info
-// </Button>
-//       </div>
+   
 
 
-<div className="landowner-form mt-4 p-3 border rounded" style={{ backgroundColor: "#f8f9fa", border: "1px solid #ccc" }}>
+<div className="landowner-form mt-4 p-3 border rounded" style={{ backgroundColor: "#f8f9fa", border: "1px solid #ccc"  }}>
       <h5>Flat Allotment Display</h5>
       <Grid container spacing={2}>
         <Grid item xs={4}>
@@ -2103,7 +1910,8 @@ Submit Landowner Info
       </Grid>
 
       <h4 className="pt-3">Flat Details</h4>
-      <TableContainer component={Paper}>
+      {/* <TableContainer component={Paper}> */}
+      <TableContainer component={Paper} style={{   maxHeight: '400px',overflowY: 'auto' }}>
         <Table>
           <TableHead>
             <TableRow sx={{ bgcolor: "primary.main" }}>
@@ -2127,7 +1935,7 @@ Submit Landowner Info
                   <FormControl fullWidth>
                     <InputLabel>WING</InputLabel>
                     <Select value={row.wing} onChange={(e) => handleRowChange(index, "wing", e.target.value)}>
-                      {/* <MenuItem value="A">A</MenuItem> */}
+                    
                      
                     </Select>
                   </FormControl>

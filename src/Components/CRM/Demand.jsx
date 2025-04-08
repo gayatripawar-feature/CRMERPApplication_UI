@@ -13,17 +13,15 @@ import { ToastContainer, toast } from 'react-toastify';
 import { MonetizationOn } from "@mui/icons-material";
 import { FaFileDownload } from "react-icons/fa";
 
-// import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
-// import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-// import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
+
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import { IconButton } from "@mui/material";
 const fetchLoansData = async () => {
@@ -464,17 +462,8 @@ const handleToggle = () => {
            </div>
 
            
-           {/* Rows per page */}
-           {/* <div className="d-flex align-items-center gap-3">
-             <label className="me-2">Rows per page:</label>
-             <input
-               type="number"
-               className="form-control"
-               value={rowsPerPage}
-               onChange={handleRowsPerPageChange}
-               style={{ width: '80px' }}
-             />
-           </div> */}
+        
+          
          </div>
              
 
@@ -482,39 +471,6 @@ const handleToggle = () => {
 </div>
 
 
-{/* 
-      <TableContainer component={Paper} className="mt-4" sx={{ mt: 2, boxShadow: 3, borderRadius: 2 }}>
-        <Table>
-          <TableHead>
-          
-                    <TableRow sx={{background:"#3621a9"}}>
-              <TableCell sx={{ color: "white", fontWeight: "bold" }}>
-              FLAT NO.</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold" }}>NAME OF ALLOTEE</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold" }}>NAME OF CO-ALLOTEE</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold" }}>TYPE</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold" }}>FLOOR</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold" }}>EMAIL ID</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold" }}>WHATSAPP NUMBER
-              </TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold" }}>Rate</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {currentRows.map((loan, index) => (
-              <TableRow key={index}>
-                <TableCell>{loan.flatNo}</TableCell>
-                <TableCell>{loan.nameOfAllotee}</TableCell>
-                <TableCell>
-                  <Button variant="contained" color="secondary" onClick={() => handleOpenModal(loan)}>
-                    Open Draft
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer> */}
 
 <TableContainer component={Paper} className="mt-4" sx={{ mt: 2, boxShadow: 3, borderRadius: 2 }}>
       <Table >
@@ -724,151 +680,8 @@ const handleToggle = () => {
     </div>
    
 
-    {/* Form Fields with two per row */}
-    {/* <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <DatePicker
-        label="Select Date"
-        value={selectedDate}
-        onChange={(newValue) => setSelectedDate(newValue)}
-        renderInput={(params) => <TextField {...params} fullWidth />}
-      />
-    </LocalizationProvider>
-
-        <TextField
-          label="Flat No"
-          fullWidth
-          value={selectedLoan?.flatNo || ""}
-          onChange={(e) => setSelectedLoan({ ...selectedLoan, flatNo: e.target.value })}
-        />
-        
-         <div style={{ display: "flex", gap: "20px" }}>
-        <TextField
-          label="Name Of Allotee"
-          fullWidth
-          value={selectedLoan?.nameOfAllotee || ""}
-          onChange={(e) => setSelectedLoan({ ...selectedLoan, nameOfAllotee: e.target.value })}
-        />
-          
-      </div>
- 
-
-
-
-<div style={{ display: "flex", gap: "20px" }}>
-
-  <FormControl sx={{ minWidth: 100 }}>
-    <InputLabel>Title</InputLabel>
-    <Select
-      value={selectedLoan?.title || ""}
-      onChange={(e) => setSelectedLoan({ ...selectedLoan, title: e.target.value })}
-    >
-      <MenuItem value="Mr">Mr</MenuItem>
-      <MenuItem value="Mrs">Mrs</MenuItem>
-      <MenuItem value="Miss">Miss</MenuItem>
-    </Select>
-  </FormControl>
-
- 
-  <TextField
-    label="Name Of Co-Allotee"
-    fullWidth
-    value={selectedLoan?.coAlloteeName || ""}
-    onChange={(e) => setSelectedLoan({ ...selectedLoan, coAlloteeName: e.target.value })}
-  />
-   <TextField
-    label="Address"
-    fullWidth
-    value={selectedLoan?.coAlloteeName || ""}
-    onChange={(e) => setSelectedLoan({ ...selectedLoan, coAlloteeName: e.target.value })}
-  />
-
-<TextField
-    label="Floor"
-    fullWidth
-    value={selectedLoan?.coAlloteeName || ""}
-    onChange={(e) => setSelectedLoan({ ...selectedLoan, coAlloteeName: e.target.value })}
-  />
-</div>
-
-
-
-
-      <div style={{ display: "flex", gap: "20px" }}>
-      <TextField
-          label="Total Agreement Value"
-          fullWidth
-          value={selectedLoan?.demandRaising || ""}
-          onChange={(e) => setSelectedLoan({ ...selectedLoan, demandRaising: e.target.value })}
-        />
-         <TextField
-          label="Stage Of Completion"
-          fullWidth
-          value={selectedLoan?.demandRaising || ""}
-          onChange={(e) => setSelectedLoan({ ...selectedLoan, demandRaising: e.target.value })}
-        />
-        <TextField
-          label="% Of Demand Raising"
-          fullWidth
-          value={selectedLoan?.demandRaising || ""}
-          onChange={(e) => setSelectedLoan({ ...selectedLoan, demandRaising: e.target.value })}
-        />
-        <TextField
-          label="Total Due Payment"
-          fullWidth
-          value={selectedLoan?.totalDuePayment || ""}
-          onChange={(e) => setSelectedLoan({ ...selectedLoan, totalDuePayment: e.target.value })}
-        />
-      </div>
-
-      <div style={{ display: "flex", gap: "20px" }}>
-        <TextField
-          label="Payment Received Till Date"
-          fullWidth
-          value={selectedLoan?.paymentReceived || ""}
-          onChange={(e) => setSelectedLoan({ ...selectedLoan, paymentReceived: e.target.value })}
-        />
-        <TextField
-          label="Payment Balance Till Date"
-          fullWidth
-          value={selectedLoan?.paymentBalance || ""}
-          onChange={(e) => setSelectedLoan({ ...selectedLoan, paymentBalance: e.target.value })}
-        />
-      </div>
-
-      <div style={{ display: "flex", gap: "20px" }}>
-        <TextField
-          label="Payment Balance (In Words)"
-          fullWidth
-          value={selectedLoan?.paymentBalanceWords || ""}
-          onChange={(e) => setSelectedLoan({ ...selectedLoan, paymentBalanceWords: e.target.value })}
-        />
-      </div>
-    </div> */}
 <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
  
-{/* 
-<div className='d-flex' style={{ gap: '20px', padding: '10px' }}>
-  <LocalizationProvider dateAdapter={AdapterDayjs}>
-    <DatePicker
-      label="Select Date"
-      value={selectedDate}
-      onChange={(newValue) => setSelectedDate(newValue)}
-      renderInput={(params) => <TextField {...params} fullWidth />}
-    />
-  </LocalizationProvider>
-
-  <TextField
-    label="Flat No"
-    fullWidth
-    value={selectedLoan?.flatNo || ""}
-    onChange={(e) =>
-      setSelectedLoan({ ...selectedLoan, flatNo: e.target.value })
-    }
-  />
-
- 
-</div> */}
 <div className='d-flex' style={{ gap: '20px', padding: '10px' }}>
   <LocalizationProvider dateAdapter={AdapterDayjs}>
     <DatePicker
@@ -894,55 +707,6 @@ const handleToggle = () => {
    
   
 
-      {/* Title, Co-Allotee Name, Address, Floor */}
-      {/* <div style={{ display: "flex", gap: "20px" }}>
-   
-     <FormControl sx={{ minWidth: 100 }}>
-          <InputLabel>Title</InputLabel>
-          <Select
-            value={selectedLoan?.title || ""}
-            onChange={(e) =>
-              setSelectedLoan({ ...selectedLoan, title: e.target.value })
-            }
-          >
-            <MenuItem value="Mr">Mr</MenuItem>
-            <MenuItem value="Mrs">Mrs</MenuItem>
-            <MenuItem value="Miss">Miss</MenuItem>
-          </Select>
-        </FormControl>
-        <TextField
-    label="Name Of Allotee"
-    fullWidth
-    value={selectedLoan?.nameOfAllotee || ""}
-    onChange={(e) =>
-      setSelectedLoan({ ...selectedLoan, nameOfAllotee: e.target.value })
-    }
-  />
-
-
-        <FormControl sx={{ minWidth: 100 }}>
-          <InputLabel>Title</InputLabel>
-          <Select
-            value={selectedLoan?.title || ""}
-            onChange={(e) =>
-              setSelectedLoan({ ...selectedLoan, title: e.target.value })
-            }
-          >
-            <MenuItem value="Mr">Mr</MenuItem>
-            <MenuItem value="Mrs">Mrs</MenuItem>
-            <MenuItem value="Miss">Miss</MenuItem>
-          </Select>
-        </FormControl>
-
-        <TextField
-          label="Name Of Co-Allotee"
-          fullWidth
-          value={selectedLoan?.coAlloteeName || ""}
-          onChange={(e) =>
-            setSelectedLoan({ ...selectedLoan, coAlloteeName: e.target.value })
-          }
-        />
-</div> */}
 
 <div className='d-flex' style={{ gap: '20px', padding: '10px' }}>
   {/* Title for Allotee */}

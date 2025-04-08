@@ -376,21 +376,7 @@ const handleEmailBlur = () => {
                     />
                   </Grid>
 
-                  {/* <Grid item xs={6}>
-                    <TextField
-                      label="Joining Date"
-                      fullWidth
-                      type="date"
-                      name="joiningDate"
-                      value={formData.joiningDate}
-                      onChange={handleChange}
-                      sx={{ marginTop: '10px' }} 
-                      InputLabelProps={{
-                        shrink: true,
-                        
-                      }}
-                    />
-                  </Grid> */}
+                 
 <Grid item xs={6}>
   <TextField
     label="Joining Date"
@@ -399,7 +385,7 @@ const handleEmailBlur = () => {
     name="joiningDate"
     value={formData.joiningDate}
     onChange={handleChange}
-    sx={{ marginTop: '10px' }} // Applied padding here
+    sx={{ marginTop: '10px' }} 
     InputLabelProps={{
       shrink: true,
     }}

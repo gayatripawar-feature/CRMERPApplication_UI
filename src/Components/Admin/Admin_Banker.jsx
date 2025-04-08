@@ -18,7 +18,7 @@ import {
 } from "@mui/material";
 import { Button, Modal } from "react-bootstrap";
 import {  toast } from "react-toastify";
-import { Visibility } from '@mui/icons-material'; // Visibility icon
+import { Visibility } from '@mui/icons-material'; 
 import { FaFileDownload } from 'react-icons/fa';
 import jsPDF from "jspdf";
 
@@ -43,24 +43,14 @@ const Admin_Banker = () => {
   const [selectedBanker, setSelectedBanker] = useState(null);
   const [fileNames, setFileNames] = useState([]);
   useEffect(() => {
-    console.log("Modal state changed:", editClicked); // Logs whenever the state changes
+    console.log("Modal state changed:", editClicked); 
   }, [editClicked]);
 
 
-  // const handleEditClick = () => {
-  //   console.log("edit clicked");
-  //   setEditClicked(true); // ✅ Now this executes correctly
-  // };
-  
-
-  // const handleClose = () => {
-  //   console.log("Modal closed");
-  //   setEditClicked(false);
-  // };
 
   const handleEditClick = (banker) => {
     console.log("edit clicked");
-    setSelectedBanker(banker); // Store selected banker
+    setSelectedBanker(banker); 
     setEditClicked(true);
     console.log("Modal state changed:", true);
   };
@@ -68,25 +58,21 @@ const Admin_Banker = () => {
   const handleClose = () => {
     console.log("Modal closed");
     setEditClicked(false);
-    setSelectedBanker(null); // Reset selected banker on close
+    setSelectedBanker(null); 
     setShowForm(false); 
   };
   
   const label = "APF Letter"; 
 
   const handleAddNew = () => setShowForm(true);
-  // const handleCancel = () => setShowForm(false);
+  
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleAddBanker = () => {
     setBankers([...bankers, { bankerName: "", bankerMobile: "" }]);
   };
 
-  // const handleBankerChange = (index, field, value) => {
-  //   const updatedBankers = [...bankers];
-  //   updatedBankers[index][field] = value;
-  //   setBankers(updatedBankers);
-  // };
+ 
 
 
   const handleBankerChange = (index, field, value) => {
@@ -97,7 +83,7 @@ const Admin_Banker = () => {
    
       if (value.length > 10) {
         setError('Invalid input: Please enter a valid 10-digit contact number.');
-        // toast.error("Invalid input: Please enter a valid 10-digit contact number.");
+      
       } else {
         setError('');
         setBankers((prevBankers) => {
@@ -128,16 +114,14 @@ const Admin_Banker = () => {
   const openModal = () => {
     
   };
-  // const closeModal = () => {
-   
-  // };
+
   const closeModal = () => {
     console.log("Modal closed");
-    setSelectedBanker(null);  // Reset the selected banker to close the modal
+    setSelectedBanker(null);  
   };
   const handleCancel = () => {
     console.log("Modal canceled");
-    setSelectedBanker(null);  // Reset the selected banker to close the modal
+    setSelectedBanker(null);  
     setShowForm(false); 
   };
   
@@ -218,16 +202,13 @@ const Admin_Banker = () => {
     doc.save("Banker_Details_Report.pdf");
   };
   
-  // const handleFileChange = (e) => {
-  //   const filesArray = Array.from(e.target.files);
-  //   setSelectedFiles((prevFiles) => [...prevFiles, ...filesArray]);
-  // };
+ 
   const handleFileChange = (e) => {
     const newFilesArray = Array.from(e.target.files).map((file) => file.name);
   
     setFileNames((prevFiles) => {
       const mergedFiles = [...prevFiles.split(', '), ...newFilesArray];
-      const uniqueFiles = Array.from(new Set(mergedFiles));  // Remove duplicates if any
+      const uniqueFiles = Array.from(new Set(mergedFiles));  
       return uniqueFiles.join(', ');
     });
   };
@@ -242,48 +223,8 @@ const Admin_Banker = () => {
           <h2 className="mb-2 fs-6 pb-2">Admin Module / Banker Details Management</h2>
           {!showForm && (
 
-//             <div className="d-flex gap-3">
-
-//             <button className="btn btn-primary d-flex align-items-center fw-bold" onClick={handleAddNew} 
-//               style={{ background: '#272ba8' }} 
-//             >
-//               <FaPlus className="me-2" />
-//               Add Banker Details
-//             </button>
-//             <Button
-//   variant="outlined"
-//   disableElevation
-//   disableRipple
-//   sx={{
-//     background: "linear-gradient(45deg, rgb(139, 107, 255), rgb(178, 83, 255))",
-//     color: "white",
-//     fontWeight: "bold",
-//     textTransform: "none",
-//     padding: "8px 16px",
-//     borderRadius: "8px",
-//     border: "none", // remove outline border
-//     display: "flex",
-//     alignItems: "center",
-//     gap: "8px",
-//     "&:hover": {
-//       background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
-//       border: "none",
-//     },
-//   }}
-//   onClick={handleDownloadPDFBanker}
-// >
-//   <FaFileDownload size={18} />
-//   Download PDF
-// </Button>
-
-
-
-
-
-//             </div>
-
 <div className="d-flex gap-3">
-  {/* Bootstrap Button */}
+ 
   <button
     className="btn btn-primary d-flex align-items-center fw-bold"
     onClick={handleAddNew}
@@ -293,7 +234,7 @@ const Admin_Banker = () => {
     Add Banker Details
   </button>
 
-  {/* MUI Button with Inline Style */}
+
   <Button
     onClick={handleDownloadPDFBanker}
     style={{
@@ -364,7 +305,7 @@ const Admin_Banker = () => {
             borderRadius: "10px",
           }}
         >
-          {/* Modal Header */}
+       
           <div
             className="modal-header bg-primary text-white"
             style={{
@@ -377,260 +318,7 @@ const Admin_Banker = () => {
      
           </div>
 
-          {/* Modal Body */}
-          {/* <div className="modal-body">
-            <div className="container">
-              <div
-                className="p-3"
-                style={{
-                  border: "1px solid #ddd",
-                  borderRadius: "8px",
-                  backgroundColor: "#f9f9f9",
-                }}
-              >
-                <form className="pt-4">
-                  <div className="row mb-3">
-                    <div className="col-md-4">
-                      <label className="form-label">Bank Name</label>
-                      <input type="text" className="form-control" name="name" value={formData.name} onChange={handleChange} required />
-                    </div>
-                    <div className="col-md-4">
-                      <label className="form-label">Address</label>
-                      <input type="text" className="form-control" name="email" value={formData.email} onChange={handleChange} required />
-                    </div>
-                    <div className="col-md-4">
-                      <label className="form-label">APF Letter</label>
-                      <input type="file" className="form-control" name="mobile" onChange={handleChange} required />
-                    </div>
-
-
-<div className="col-md-4">
-  <label className="form-label">APF Letter :</label>
-
-  <div>
-     
- <input
-    type="file"
-    multiple
-    onChange={handleFileChange}
-    style={{
-      border: "1px solid #ced4da",
-      borderRadius: "4px",
-      padding: "6px 12px",
-      cursor: "pointer",
-    }}
-  />
-
-     
-  {fileNames.length > 0 && (
-    <div style={{ marginTop: "8px" }}>
-      {fileNames.map((name, index) => (
-        <div key={index} style={{ fontSize: "14px", color: "#555" }}>
-          {name}
-        </div>
-      ))}
-    </div>
-  )}
-    </div>
-</div>
-
-
-
-
-{fileNames[label] && fileNames[label].length > 0 && (
-  <Typography
-    variant="body2"
-    color="textSecondary"
-    style={{ marginTop: "8px", whiteSpace: "pre-line" }}
-  >
-    {fileNames[label].join('\n')}
-  </Typography>
-)}
-
-
-
-
-                  </div>
-
-                  {bankers.map((banker, index) => (
-                    <div className="row mb-3" key={index}>
-                    
-                      <div className="col-md-4">
-                        <label className="form-label">Banker Name:</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          value={banker.bankerName}
-                          onChange={(e) => handleBankerName(index, "bankerName", e.target.value)}
-                          required
-                          
-                        />
-                         {bankerErrors[index] && <p style={{ color: "red", fontSize: "12px" }}>{bankerErrors[index]}</p>}
-                      </div>
-                      <div className="col-md-4">
-                        <label className="form-label">Mobile No:</label>
-                        <input
-                          type="text"
-                          className="form-control"
-                          value={banker.bankerMobile}
-                          onChange={(e) => handleBankerChange(index, "bankerMobile", e.target.value)}
-                          required
-                        />
-                        
-          {error && <p style={{ color: 'red' }}>{error}</p>}
-                      </div>
-                      {index > 0 && (
-                        <div className="col-md-4 pt-4">
-                          <button type="button" className="btn btn-danger mt-2" onClick={() => handleRemoveBanker(index)}>
-                            Remove
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  ))}
-
-                  <div className="mb-3 text-center pt-3 pb-3">
-                    
-                    <button type="button" className="btn btn-primary" onClick={handleAddBanker}>
-                      + Add Another Banker
-                    </button>
-                 
-              
-                   
-                  </div>
-
-                  <div className="d-flex justify-content-center gap-3">
-                    <button type="submit" className="btn btn-success" onClick={handleSubmit}>
-                      Submit
-                    </button>
-                    <button type="button" className="btn btn-secondary" onClick={handleCancel}>
-                      Cancel
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div> */}
-          {/* <Box className="modal-body">
-      <Box className="container">
-        <Paper elevation={3} sx={{ p: 3, backgroundColor: "white", borderRadius: "8px" }}>
-          <form onSubmit={handleSubmit}>
-            <Grid container spacing={2}>
-            <div>
-  <Grid container spacing={2} mt={1}>
-   
-    <Grid item xs={12} md={6}>
-      <TextField
-        fullWidth
-        label="Bank Name"
-        name="name"
-        value={formData.name}
-        onChange={handleChange}
-        required
-      />
-    </Grid>
-
-
-    <Grid item xs={12} md={6}>
-      <TextField
-        fullWidth
-        label="Address"
-        name="email"
-        value={formData.email}
-        onChange={handleChange}
-        required
-      />
-    </Grid>
-  </Grid>
-</div>
-
-          
-
-
-<Grid>
-  <Typography variant="body2" gutterBottom>
-    APF Letter
-  </Typography>
-
-  <input
-    type="file"
-    multiple
-    onChange={handleFileChange}
-  />
-</Grid>
-
-
-
-
-          
-              {bankers.map((banker, index) => (
-  <React.Fragment key={index}>
-    <Grid item xs={12} sx={{mt:2}}>
-      <Box display="flex" flexWrap="wrap" gap={2}>
-        <TextField
-          label="Banker Name"
-          value={banker.bankerName}
-          onChange={(e) => handleBankerName(index, "bankerName", e.target.value)}
-          required
-        />
-        <TextField
-          label="Mobile No"
-          value={banker.bankerMobile}
-          onChange={(e) => handleBankerChange(index, "bankerMobile", e.target.value)}
-          required
-        />
-        {index > 0 && (
-          <Button className="bg-danger"
-            variant="contained"
-            color="error"
-            onClick={() => handleRemoveBanker(index)}
-            sx={{ height: "56px" }}
-          >
-            Remove
-          </Button>
-        )}
-      </Box>
-    </Grid>
-  </React.Fragment>
-))}
-
-
-              
-              <Grid item xs={12} textAlign="center">
-  <Button className="bg-info"
-    variant="outlined"
-    onClick={handleAddBanker}
-    sx={{ backgroundColor: "#e0f7fa", color: "#00796b", border: "1px solid #00796b" }}
-  >
-    + Add Another Banker
-  </Button>
-</Grid>
-
-<Grid item xs={12} textAlign="center">
-  <Button className="bg-primary m-3"
-    variant="contained"
-    color="success"
-    type="submit"
-    sx={{ mr: 2, backgroundColor: "#388e3c", color: "#fff" }}
-  >
-    Submit
-  </Button>
-  <Button className="bg-danger"
-    variant="outlined"
-    color="error"
-    onClick={handleCancel}
-    sx={{ backgroundColor: "#ffcdd2", color: "#c62828", border: "1px solid #c62828" }}
-  >
-    Cancel
-  </Button>
-</Grid>
-
-            </Grid>
-          </form>
-        </Paper>
-      </Box>
-    </Box> */}
-
+      
 
 
 <Box className="modal-body">
@@ -639,7 +327,7 @@ const Admin_Banker = () => {
       <form onSubmit={handleSubmit}>
         <Grid container spacing={2}>
 
-          {/* Bank Name & Address */}
+        
           <Grid container spacing={2} mt={1}>
             <Grid item xs={12} md={6}>
               <TextField
@@ -771,132 +459,6 @@ const Admin_Banker = () => {
   </Box>
 </Box>
 
- {/* <div className="modal-body">
-  <div className="container">
-    <div
-      className="p-3"
-      style={{
-        border: "1px solid #ddd",
-        borderRadius: "8px",
-        backgroundColor: "#f9f9f9",
-      }}
-    >
-      <form className="pt-4">
-        <div className="row mb-3">
-          <div className="col-md-4">
-            <label className="form-label">Bank Name</label>
-            <input
-              type="text"
-              className="form-control"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          <div className="col-md-4">
-            <label className="form-label">Address</label>
-            <input
-              type="text"
-              className="form-control"
-              name="address"
-              value={formData.address}
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          <div className="col-md-4">
-            <label className="form-label">APF Letter</label>
-            <input
-              type="file"
-              multiple
-              onChange={handleFileChange}
-              style={{
-                border: "1px solid #ced4da",
-                borderRadius: "4px",
-                padding: "6px 12px",
-                cursor: "pointer",
-              }}
-            />
-            {fileNames.length > 0 && (
-              <div style={{ marginTop: "8px" }}>
-                {fileNames.map((name, index) => (
-                  <div key={index} style={{ fontSize: "14px", color: "#555" }}>
-                    {name}
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-       
-                
-             
-
-
-        </div>
-
-        {bankers.map((banker, index) => (
-          <div className="row mb-3" key={index}>
-            <div className="col-md-4">
-              <label className="form-label">Banker Name:</label>
-              <input
-                type="text"
-                className="form-control"
-                value={banker.bankerName}
-                onChange={(e) => handleBankerName(index, "bankerName", e.target.value)}
-                required
-              />
-              {bankerErrors[index] && (
-                <p style={{ color: "red", fontSize: "12px" }}>{bankerErrors[index]}</p>
-              )}
-            </div>
-
-            <div className="col-md-4">
-              <label className="form-label">Mobile No:</label>
-              <input
-                type="text"
-                className="form-control"
-                value={banker.bankerMobile}
-                onChange={(e) => handleBankerChange(index, "bankerMobile", e.target.value)}
-                required
-              />
-              {error && <p style={{ color: "red" }}>{error}</p>}
-            </div>
-
-            {index > 0 && (
-              <div className="col-md-4 pt-4">
-                <button
-                  type="button"
-                  className="btn btn-danger mt-2"
-                  onClick={() => handleRemoveBanker(index)}
-                >
-                  Remove
-                </button>
-              </div>
-            )}
-          </div>
-        ))}
-
-        <div className="mb-3 text-center pt-3 pb-3">
-          <button type="button" className="btn btn-primary" onClick={handleAddBanker}>
-            + Add Another Banker
-          </button>
-        </div>
-
-        <div className="d-flex justify-content-center gap-3">
-          <button type="submit" className="btn btn-success" onClick={handleSubmit}>
-            Submit
-          </button>
-          <button type="button" className="btn btn-secondary" onClick={handleCancel}>
-            Cancel
-          </button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div> */}
 
 
 
@@ -968,8 +530,8 @@ const Admin_Banker = () => {
       {selectedBanker === banker && (
   <div
     style={{
-      position: "fixed",  // Fixed positioning to overlay above the table
-      top: "40%",  // Position in the center of the viewport
+      position: "fixed",  
+      top: "40%",  
       left: "50%",
       transform: "translate(-50%, -50%)",  // Center the modal
       backgroundColor: "white",  // Background color for the modal

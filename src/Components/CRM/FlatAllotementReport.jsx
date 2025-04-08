@@ -60,7 +60,6 @@ const FlatAllotmentReport = () => {
     { flatNo: "301", floor: "3rd floor", flatType: "1.5BHK", price: "$65,000", owner: "Landowner" },
   ];
 
-  // const handleDownloadPDF = () => {
   //   const doc = new jsPDF();
   //   let y = 20; // Initial vertical position
   
@@ -128,13 +127,7 @@ const FlatAllotmentReport = () => {
       tableRows.push(rowData);
     });
   
-    // doc.autoTable({
-    //   startY: 30,  // after title
-    //   head: [tableColumn],
-    //   body: tableRows,
-    //   theme: 'grid', // optional - adds border to table
-    //   styles: { fontSize: 12 },
-    // });
+    
 
     autoTable(doc, { 
       startY: 30,

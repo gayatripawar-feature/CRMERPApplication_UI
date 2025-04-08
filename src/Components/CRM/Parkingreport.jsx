@@ -77,42 +77,7 @@ const Parkingreport = () => {
 
  
 
-  // const handleDownloadPDF= () => {
-  //   const doc = new jsPDF();
-  //   let y = 20; // Initial vertical position
-  
-  //   // Add the Wing Header
-  //   doc.setFontSize(18);
-  //   doc.setFont("helvetica", "bold");
-  //   doc.text("Wing", 20, y);
-  //   y += 10; // Space after the header
-  
-  //   // Loop through parkingData to add flat details
-  //   parkingData.forEach(flat => {
-  //     // Flat No
-  //     doc.setFontSize(14);
-  //     doc.setFont("helvetica", "normal");
-  //     doc.text(`Flat No: ${flat.flatNo}`, 20, y);
-  //     y += 10;
-  
-  //     // Flat Type
-  //     doc.text(`Flat Type: ${flat.flatType}`, 20, y);
-  //     y += 10;
-  
-  //     // Parking Type
-  //     doc.text(`Parking Type: ${flat.parkingType || "No Parking"}`, 20, y);
-  //     y += 15; // Space before next flat details
-  
-  //     // Check if we need to add a page (if content exceeds one page)
-  //     if (y > 270) {
-  //       doc.addPage();
-  //       y = 20; // Reset vertical position for new page
-  //     }
-  //   });
-  
-  //   // Save the PDF
-  //   doc.save("Parking_Report.pdf");
-  // };
+
 
 
   const handleDownloadPDF = () => {
@@ -122,10 +87,9 @@ const Parkingreport = () => {
     doc.setFont("helvetica", "bold");
     doc.text("Parking Report", 20, 20);
   
-    // Define Table Columns
     const tableColumn = ["Flat No", "Flat Type", "Parking Type"];
   
-    // Define Table Rows
+    
     const tableRows = [];
   
     parkingData.forEach(flat => {
@@ -137,7 +101,7 @@ const Parkingreport = () => {
       tableRows.push(rowData);
     });
   
-    // Generate Table
+   
     autoTable(doc, {
       startY: 30, // After title
       head: [tableColumn],

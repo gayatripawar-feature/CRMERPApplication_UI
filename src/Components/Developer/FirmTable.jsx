@@ -237,9 +237,7 @@ const [aadhaarErrorMessage, setAadhaarErrorMessage] = useState("");
     const value = e.target.value;
     const partnerCopy = [...partners];
   
-   
-    // const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
-    // const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;  - correct
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,6}$/i;
 
 
@@ -248,10 +246,10 @@ const [aadhaarErrorMessage, setAadhaarErrorMessage] = useState("");
       setEmailError("Invalid Gmail address");
       console.log("invalid email");
     } else {
-      setEmailError(""); // Clear the error if the value is valid
+      setEmailError(""); 
     }
   
-    // Update the partner's email in the state
+    
     partnerCopy[index] = { ...partnerCopy[index], email: value };
     setPartners(partnerCopy);
   };
@@ -438,7 +436,7 @@ const [aadhaarErrorMessage, setAadhaarErrorMessage] = useState("");
   }
 />
 
-                  // />
+                
                 )}
               </Grid>
             ))}
@@ -466,7 +464,7 @@ const [aadhaarErrorMessage, setAadhaarErrorMessage] = useState("");
           </Button>
     <br/>
 
-    <Button
+    {/* <Button
             variant="contained"
             className="m-3"
             color="success"
@@ -474,18 +472,32 @@ const [aadhaarErrorMessage, setAadhaarErrorMessage] = useState("");
              
               toast.success("Details are Updated!", { position: "top-right", autoClose: 3000 });
     
-              setShowFirmForm(false); // Example of hiding the form after submission
+              setShowFirmForm(false); 
             }}
           >
         Update
-          </Button>
+          </Button> */}
 
-          <Button
+<Button
+  variant="contained"
+  className="m-3"
+  color="success"
+  onClick={() => {
+    handleSave(); // First update the firm details
+    toast.success("Details are Updated!", { position: "top-right", autoClose: 3000 });
+    setShowFirmForm(false);  // Then close the form
+  }}
+>
+  Update
+</Button>
+
+
+          {/* <Button
             variant="contained"
             className="m-3"
             color="primary"
             onClick={() => {
-              // Simply show the toast message without calling validation functions
+             
               toast.success("Details are submitted!", { position: "top-right", autoClose: 3000 });
               
               // If you want to close the form (or any other logic), you can add it here
@@ -493,7 +505,7 @@ const [aadhaarErrorMessage, setAadhaarErrorMessage] = useState("");
             }}
           >
             Submit
-          </Button>
+          </Button> */}
 
         
         </Paper>

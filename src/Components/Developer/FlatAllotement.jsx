@@ -1,96 +1,4 @@
 
-// import React, { useState } from 'react';
-// import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper,Tooltip,IconButton } from '@mui/material';
-
-// import EditIcon from '@mui/icons-material/Edit';
-// const FlatAllotment = ({ data }) => {
-//   const [editFlat , setEditFlat] = useState[""];
-
-//   return (
-//     <TableContainer component={Paper}>
-//       {editFlat ? (
-//   <Table>
-//   <TableHead>
-    
-//     {/* <TableRow sx={{ background: "linear-gradient(180deg, #3621a9 0%,rgb(139, 115, 243) 100%)" }}> */}
-//      <TableRow sx={{background:"#3621a9"}}>
-//       <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>ACTION</TableCell>
-//       <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>TIMESTAMP</TableCell>
-//       <TableCell sx={{ color: "white", fontWeight: "bold",whiteSpace: "nowrap"  }}>PROJECT NAME</TableCell>
-//       <TableCell sx={{ color: "white", fontWeight: "bold",whiteSpace: "nowrap"  }}>LANDOWNER NAME</TableCell>
-//       <TableCell sx={{ color: "white", fontWeight: "bold",whiteSpace: "nowrap"  }}>AGE</TableCell>
-//       <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>OCCUPATION</TableCell>
-//       <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>MOBILE NO</TableCell>
-//       <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>MAIL ID</TableCell>
-//       <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>VILLAGE</TableCell>
-//       <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>TALUKA</TableCell>
-//       <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>DISTRICT</TableCell>
-//       <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>RESIDENTIAL ADDRESS</TableCell>
-//       <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>PAN NO</TableCell>
-//       <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>ADDHAAR</TableCell>
-//       <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>PHOTO</TableCell>
-//       <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>LIGHT BILL</TableCell>
-//       <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>NAME OF BANK</TableCell>
-//       <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>BANK ADDRESS</TableCell>
-//       <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>ACCOUNT NO</TableCell>
-//       <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>IFSC CODE</TableCell>
-//     </TableRow>
-//   </TableHead>
-//   <TableBody>
-//     {data && data.length > 0 ? (
-//       data.map((row, index) => (
-//         <TableRow key={index}>
-//           <TableCell>{row.action || 'N/A'}</TableCell>
-//           <TableCell>{row.timestamp || 'N/A'}</TableCell>
-//           <TableCell>{row.projectName || 'N/A'}</TableCell>
-//           <TableCell>{row.landownerName || 'N/A'}</TableCell>
-//           <TableCell>{row.age || 'N/A'}</TableCell>
-//           <TableCell>{row.occupation || 'N/A'}</TableCell>
-//           <TableCell>{row.mobileNo || 'N/A'}</TableCell>
-//           <TableCell>{row.mailId || 'N/A'}</TableCell>
-//           <TableCell>{row.village || 'N/A'}</TableCell>
-//           <TableCell>{row.taluka || 'N/A'}</TableCell>
-//           <TableCell>{row.district || 'N/A'}</TableCell>
-//           <TableCell>{row.residentialAddress || 'N/A'}</TableCell>
-//           <TableCell>{row.panNo || 'N/A'}</TableCell>
-//           <TableCell>{row.addhaar || 'N/A'}</TableCell>
-//           <TableCell>{row.photo || 'N/A'}</TableCell>
-//           <TableCell>{row.lightBill || 'N/A'}</TableCell>
-//           <TableCell>{row.bankName || 'N/A'}</TableCell>
-//           <TableCell>{row.bankAddress || 'N/A'}</TableCell>
-//           <TableCell>{row.accountNo || 'N/A'}</TableCell>
-//           <TableCell>{row.ifscCode || 'N/A'}</TableCell>
-//         </TableRow>
-//       ))
-//     ) : (
-//       <TableRow>
-//          <TableCell>
-//             <Tooltip title="Edit">
-//               <IconButton
-//                 size="small"
-//                 sx={{
-//                   backgroundColor: "#1976D2",
-//                   color: "white",
-//                   borderRadius: "50%",
-//                   "&:hover": { backgroundColor: "#1565C0" },
-//                 }}
-//                 onClick={() => handleEdit(item)} 
-//               >
-//                 <EditIcon sx={{ fontSize: "18px" }} />
-//               </IconButton>
-//             </Tooltip>
-//           </TableCell>
-//       </TableRow>
-//     )}
-//   </TableBody>
-// </Table>
-//       )}
-    
-//     </TableContainer>
-//   );
-// };
-
-// export default FlatAllotment;
 
 
 import React, { useState } from 'react';
@@ -273,6 +181,7 @@ const [flats, setFlats] = useState('');
    <div className="landowner-form mt-4 p-3 border rounded" style={{
     backgroundColor: "#f8f9fa", 
     border: "1px solid #ccc", 
+   
   }}>
     <Grid container spacing={2}>
       {/* Project Name Dropdown */}
@@ -406,6 +315,7 @@ const [flats, setFlats] = useState('');
       color="success"
       onClick={() => {
         toast.success("Details are updated!", { position: "top-right", autoClose: 3000 });
+        setEditFlat(null); 
       }}
     >
       Update
@@ -422,7 +332,7 @@ const [flats, setFlats] = useState('');
   </div>
 
 
-// </div>
+
       ) : (
         <Table>
           <TableHead>

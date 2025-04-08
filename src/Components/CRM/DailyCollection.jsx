@@ -8,7 +8,7 @@ import React, { useState, useEffect } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper,   Dialog, DialogActions, DialogContent, DialogTitle, Button,TextField, Modal, Box, MenuItem, Select, InputLabel, FormControl } from '@mui/material';
 import { FaEye } from "react-icons/fa";
 import { jsPDF } from "jspdf";
-import EditIcon from '@mui/icons-material/Edit'; // Importing the edit icon
+import EditIcon from '@mui/icons-material/Edit'; 
 import { ToastContainer, toast } from 'react-toastify';
 import { MonetizationOn } from "@mui/icons-material";
 
@@ -18,16 +18,13 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 // import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import { IconButton } from "@mui/material";
-import InfoIcon from '@mui/icons-material/Info';  // Using InfoIcon
+import InfoIcon from '@mui/icons-material/Info';  
 
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { FaFileDownload } from "react-icons/fa";
 
 
-// import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-// import { TextField, FormControl, InputLabel } from '@mui/material';
-// import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-// import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+
 
 const fetchLoansData = async () => {
   const response = await fetch('/api/getOCRCollection');
@@ -59,11 +56,9 @@ const [receiptNoError, setReceiptNoError] = useState(false);
 
   const rowsPerPage = 10;
   
-  // State for Modal
+ 
   const [openModal, setOpenModal] = useState(false);
-  // const [selectedLoan, setSelectedLoan] = useState({
-  //   receivedDate: null, // Initialize with null or any default date
-  // });
+  
 
   const [selectedLoan, setSelectedLoan] = useState({
     chequeNo: '', // separate field for Cheque No
@@ -224,17 +219,11 @@ const handleToggle = () => {
   };
   
   
-  // const handleSubmit = () => {
-  //   // Show success toast
-  //   toast.success("Form submitted successfully!");
-  //   setOpenForm(false);
-  //   setOpenModal(false);
-  // };
   const handleSubmit = () => {
-    // Show success toast
+    
     toast.success("Form submitted successfully!");
   
-    // Delay the modal close for a short time to allow the toast to show
+    
     setTimeout(() => {
       setOpenForm(false);  // Close the form modal
       setOpenModal(false);  // Close any other modal (if applicable)
@@ -462,18 +451,18 @@ const handleToggle = () => {
         </TableHead>
         <TableBody>
   <TableRow>
-    {/* <TableCell></TableCell> ACTION */}
+  
     <TableCell>
-  {/* Edit Icon Button with #3621a9 background and reduced size */}
+ 
   <IconButton
     onClick={handleEditClick}
     sx={{
-      backgroundColor: "#3621a9",  // Custom background color
-      color: "white",              // White icon color
-      fontSize: "14px",            // Reduced icon size
-      padding: "6px",              // Adjusted padding for smaller button
+      backgroundColor: "#3621a9",  
+      color: "white",              
+      fontSize: "14px",            
+      padding: "6px",              
       '&:hover': {
-        backgroundColor: "#2c1880",  // Darker shade for hover effect
+        backgroundColor: "#2c1880",  
       }
     }}
   >
@@ -483,28 +472,28 @@ const handleToggle = () => {
 
 
 
-    <TableCell></TableCell> {/* TIMESTAMP */}
-    <TableCell></TableCell> {/* RECEIPT NO. */}
-    <TableCell></TableCell> {/* CUSTOMER NAME */}
-    <TableCell></TableCell> {/* DEMAND LEVEL */}
-    <TableCell></TableCell> {/* CHEQUE NO. */}
-    <TableCell></TableCell> {/* BANK NAME */}
-    <TableCell></TableCell> {/* DATE RECEIVED */}
-    <TableCell></TableCell> {/* AMOUNT RECEIVED */}
-    <TableCell></TableCell> {/* TOWARDS */}
-    <TableCell></TableCell> {/* PAYMENT MODE */}
-    <TableCell></TableCell> {/* DEMAND PERCENTAGE */}
-    <TableCell></TableCell> {/* Planned */}
-    <TableCell></TableCell> {/* Actual */}
-    <TableCell></TableCell> {/* Amount Received by Account */}
-    {/* <TableCell></TableCell> Date of Received Amount (A/c) */}
+    <TableCell></TableCell> 
+    <TableCell></TableCell> 
+    <TableCell></TableCell> 
+    <TableCell></TableCell> 
+    <TableCell></TableCell> 
+    <TableCell></TableCell> 
+    <TableCell></TableCell>
+    <TableCell></TableCell> 
+    <TableCell></TableCell> 
+    <TableCell></TableCell> 
+    <TableCell></TableCell> 
+    <TableCell></TableCell> 
+    <TableCell></TableCell> 
+    <TableCell></TableCell> 
+  
     <TableCell>
-        {/* Icon for Date of Received Amount (A/c) */}
+        
         <IconButton onClick={handleOpen} style={{ backgroundColor: '#3621a9' }}>
-          <InfoIcon style={{ color: '#fff', fontSize: 18 }} />  {/* Using InfoIcon with custom color */}
+          <InfoIcon style={{ color: '#fff', fontSize: 18 }} />  
         </IconButton>
       </TableCell>
-    <TableCell></TableCell> {/* Time Delay */}
+    <TableCell></TableCell> 
   </TableRow>
 </TableBody>
 
@@ -545,28 +534,11 @@ const handleToggle = () => {
 
     <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
       <div style={{ display: "flex", gap: "20px" }}>
-        {/* <TextField
-          label="Receipt No"
-          fullWidth
-          value={selectedLoan?.flatNo || ""}
-          // onChange={(e) => setSelectedLoan({ ...selectedLoan, flatNo: e.target.value })}
-           onChange={handleChange}
-           error={error} // ✅ Shows red border if error is true
-           helperText={error ? "Only numbers are allowed" : ""} 
-        /> */}
       
-      {/* <TextField
-  label="Receipt No"
-  fullWidth
-  value={selectedLoan?.receiptNo || ""}  // bind to receiptNo
-  onChange={handleReceiptNo}  // use handleReceiptNo for Receipt No
-  error={error}  // ✅ Shows red border if error is true
-  helperText={error ? "Only numbers are allowed" : ""}
-/> */}
 <TextField
   label="Receipt No"
   fullWidth
-  value={selectedLoan?.receiptNo || ""}  // bind to receiptNo
+  value={selectedLoan?.receiptNo || ""}  
   onChange={handleReceiptNo}  // use handleReceiptNo for Receipt No
   error={receiptNoError}  // Use receiptNoError for error display
   helperText={receiptNoError ? "Only numbers are allowed" : ""}
@@ -615,23 +587,7 @@ const handleToggle = () => {
 
 <div style={{ display: "flex", gap: "20px" }}>
   
-  {/* <TextField
-    label="Cheque No."
-    fullWidth
-    value={selectedLoan?.coAlloteeName || ""}
-    onChange={handleChequeno}
-           error={error} // ✅ Shows red border if error is true
-           helperText={error ? "Only numbers are allowed" : ""} 
-  /> */}
-{/* 
-<TextField
-  label="Cheque No"
-  fullWidth
-  value={selectedLoan?.flatNo || ""}
-  onChange={handleChequeno}  // ✅ Use the updated handleChequeno
-  error={error}  // ✅ Shows red border if error is true
-  helperText={error ? "Only alphanumeric characters are allowed" : ""}
-/> */}
+ 
 
 <TextField
   label="Cheque No"
@@ -658,17 +614,7 @@ const handleToggle = () => {
           value={selectedLoan?.demandRaising || ""}
           onChange={(e) => setSelectedLoan({ ...selectedLoan, demandRaising: e.target.value })}
         />
-      
-{/* 
-<FormControl fullWidth>
-  <InputLabel shrink>Date of Received</InputLabel>
-  <TextField
-    type="date"
-    fullWidth
-    value={selectedLoan?.totalDuePayment || ""}
-    onChange={(e) => setSelectedLoan({ ...selectedLoan, totalDuePayment: e.target.value })}
-  />
-</FormControl> */}
+ 
 <FormControl fullWidth>
       <InputLabel shrink>Date of Received</InputLabel>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -931,12 +877,7 @@ Towards"
           value={selectedLoan?.flatNo || ""}
           onChange={(e) => setSelectedLoan({ ...selectedLoan, flatNo: e.target.value })}
         />
-        {/* <TextField
-          label="Name of Customer"
-          fullWidth
-          value={selectedLoan?.nameOfAllotee || ""}
-          onChange={(e) => setSelectedLoan({ ...selectedLoan, nameOfAllotee: e.target.value })}
-        /> */}
+       
 
 <FormControl fullWidth>
   <InputLabel>Name of Customer</InputLabel>
@@ -999,13 +940,7 @@ Towards"
           value={selectedLoan?.demandRaising || ""}
           onChange={(e) => setSelectedLoan({ ...selectedLoan, demandRaising: e.target.value })}
         />
-       {/* <TextField
-  type="date"
-  label="Date of Received"
-  fullWidth
-  value={selectedLoan?.totalDuePayment || ""}
-  onChange={(e) => setSelectedLoan({ ...selectedLoan, totalDuePayment: e.target.value })}
-/> */}
+     
 
 <FormControl fullWidth>
   <InputLabel shrink>Date of Received</InputLabel>

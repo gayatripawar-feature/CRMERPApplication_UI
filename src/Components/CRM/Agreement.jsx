@@ -114,6 +114,9 @@ const Agreement = () => {
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
    const [isExpanded, setIsExpanded] = useState(true);
+  //  const [currentData, setCurrentData] = useState([]);
+
+
   const rowsPerPage = 10;
   
   // State for Modal
@@ -276,10 +279,26 @@ const handleCheckboxChange = (event) => {
     console.log("Selected Date:", newValue.format("YYYY-MM-DD")); // Handle update logic here
   };
 
+  // const handleStatusChange = (event, index) => {
+  //   const newStatus = event.target.value;
+  //   console.log("Selected Status:", newStatus);
+  //   // Handle update logic here
+  // };
+  // const handleStatusChange = (event, index) => {
+  //   const newStatus = event.target.value;
+  
+  //   const updatedData = [...loanData];
+  //   updatedData[index].agreementStatus = newStatus;
+  
+  //   setLoanData(updatedData);
+  // };
+  
+
   const handleStatusChange = (event, index) => {
     const newStatus = event.target.value;
-    console.log("Selected Status:", newStatus);
-    // Handle update logic here
+    const updatedData = [...currentData];
+    updatedData[index].agreementStatus = newStatus;
+    setCurrentData(updatedData);
   };
   
 
@@ -370,7 +389,7 @@ const generatePDF = () => {
   y += 10;
   doc.text(`Payment Balance (In Words): ${paymentBalanceWords}`, 20, y);
 
-  doc.save("demand-letter.pdf");
+  doc.save("Agreement-letter.pdf");
 
   toast.success("PDF generated successfully!", {
     position: toast.POSITION.TOP_CENTER,
@@ -381,34 +400,23 @@ const generatePDF = () => {
 
 
 
-  // Open & close modal
-  // const handleOpen = () => setOpen(true);
   const handleOpen = (index) => {
-    // Set the current loan index and open the modal
-    setSelectedIndex(index); // Store the index of the current loan
-    setUpdatedChecklist(currentData[index].checklistBeforeAgreement); // Get the checklist data for the selected loan
-    setOpen(true); // Open the modal
+   
+    setSelectedIndex(index); 
+    setUpdatedChecklist(currentData[index].checklistBeforeAgreement); 
+    setOpen(true); 
   };
   
   const handleClose = () => setOpen(false);
 
   
-  // const handleSave = () => {
-  //   handleChecklistUpdate(index, updatedChecklist); // Update parent state
-  //   handleClose();
-  // };
 
 
-  // const handleSave = () => {
-  //   console.log("Data Submitted:", checkedItems); // Simulating save action
-  //   resetForm(); // Reset form
-  //   closeChecklistDialog(); // Close the dialog
-  // };
   const handleSave = () => {
     console.log("Data Submitted:", checkedItems);
     resetForm();
     setTimeout(() => {
-      closeChecklistDialog(); // Ensuring dialog closes
+      closeChecklistDialog(); 
     }, 0);
   };
   
@@ -441,18 +449,18 @@ const generatePDF = () => {
     doc.setFontSize(14);
     doc.text("Agreement Report", 14, 15);
   
-    // First set of columns (Page 1)
+    
     const firstPageColumns = [
       "S.No.", "Flat No.", "Name Of Allotee", "NAME OF CO-ALLOTEE", "TYPE", "FLOOR", 
       "EMAIL ID", "WHATSAPP MOBILE NO.", "RATE", "AGREEMENT VALUE", "DATE OF BOOKING", "PARKING"
     ];
   
-    // Second set of columns (Page 2)
+   
     const secondPageColumns = [
       "S.No.", "AGGREMENT DRAFT GENERATION", "AGREEMENT STATUS", "AGREEMENT DATE"
     ];
   
-    // Extracting data for the first set of columns with serial numbers
+    
     const firstPageRows = loans.map((row, index) => [
       index + 1, // Serial Number
       row.flatNo || "-",
@@ -468,9 +476,9 @@ const generatePDF = () => {
       row.parking || "-"
     ]);
   
-    // Extracting data for the second set of columns with serial numbers
+    
     const secondPageRows = loans.map((row, index) => [
-      index + 1, // Serial Number
+      index + 1, 
       row.agreementDraftGeneration || "-",
       row.agreementStatus || "-",
       row.agreementDate || "-"
@@ -479,7 +487,7 @@ const generatePDF = () => {
     console.log("First Page Rows:", firstPageRows);
     console.log("Second Page Rows:", secondPageRows);
   
-    // Generate the first table (Page 1)
+    
     autoTable(doc, {
       startY: 25,
       head: [firstPageColumns],
@@ -541,12 +549,12 @@ const generatePDF = () => {
         justifyContent: "center",
         textTransform: "none",
         position: "relative",
-        // background: "linear-gradient(0deg, rgba(22,9,240,1) 0%, rgba(49,110,244,1) 100%)",
+       
         background: "linear-gradient(0deg, #4b2ac2 0%, #5c39d3 100%)",
         boxShadow:
           "inset 2px 2px 2px 0px rgba(255,255,255,.5), 7px 7px 20px 0px rgba(0,0,0,.1), 4px 4px 5px 0px rgba(0,0,0,.1)",
         "&:hover": {
-          // background: "linear-gradient(0deg, rgba(2,126,251,1) 0%, rgba(0,3,255,1) 100%)",
+         
           background: "linear-gradient(0deg, rgb(230, 4, 255) 0%, rgb(245, 182, 24) 100%)",
         },
         "&::after": {
@@ -605,7 +613,7 @@ const generatePDF = () => {
 
 
       <div className="d-flex align-items-center gap-3 my-3 pt-4 pb-3">
-        {/* Button Section in One Row */}
+        
         <Button variant="contained"  className="text-nowrap "
     style={{ minWidth: "180px" ,background:"#272ba8"}}  color="primary" onClick={() => handleOpenModal(null)}>
           Agreement Draft
@@ -620,7 +628,7 @@ const generatePDF = () => {
   onChange={(e) => setStartDate(e.target.value)}
   fullWidth
   InputLabelProps={{ shrink: true }}
-  placeholder="Enter your start date" // Add placeholder
+  placeholder="Enter your start date" 
 />
 
 <TextField
@@ -681,65 +689,7 @@ const generatePDF = () => {
         </FormControl>
       </div>
 
-      {/* <TableContainer component={Paper} className="mt-4" sx={{ mt: 2, boxShadow: 3, borderRadius: 2 }}>
-        <Table>
-          <TableHead>
-         
- 
-         
-
-            <TableRow sx={{background:"#3621a9"}}>
-              <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>Flat No.</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>Name Of Allotee</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>Allotee Date Of Birth</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>Allotee Age</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>A1-Occupation</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>A1-Pan No</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>A1-Aadhar No</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>Name of Co-Allotee</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>Co-Allotee Date Of Birth</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>Co-Allotee Age</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>Co-Occupation</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>Co-Pan No.</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>Co-Aadhar No .</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>Address</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>Contact</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>Floor</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>Total Agreement Value (In words)</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>Payment Schedule</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>Booking</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>Execution Of Aggrement</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>Completion Of Plinth</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>Completion Of 1st Slab</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>Completion Of 2nd Slab</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>Completion Of 3rd Slab</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>Completion Of 5th Slab</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>Completion Of 7th Slab</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>Completion Of 9th Slab</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>Completion Of 10th Slab</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>Completion Of Walls</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>Completion Of Internal Plaster</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>Completion Of Lifts</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>Possession</TableCell>
-            </TableRow> 
-
-
-          </TableHead>
-          <TableBody>
-            {currentRows.map((loan, index) => (
-              <TableRow key={index}>
-                <TableCell>{loan.flatNo}</TableCell>
-                <TableCell>{loan.nameOfAllotee}</TableCell>
-                <TableCell>
-                  <Button variant="contained" color="secondary" onClick={() => handleOpenModal(loan)}>
-                    Open Draft
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer> */}
+    
 
 <TableContainer component={Paper} className="mt-4" sx={{ mt: 2, boxShadow: 3, borderRadius: 2 }}>
   <Table>
@@ -824,24 +774,23 @@ const generatePDF = () => {
   }}
 >
 
-  {/* <DialogTitle>
-    Before Agreement Checklist */}
+ 
     <DialogTitle 
     sx={{ 
       display: "flex", 
       justifyContent: "space-between", 
       alignItems: "center",
-      backgroundColor: "#1976d2", // Change this to any color you like
-      color: "white", // Text color
+      backgroundColor: "#1976d2", 
+      color: "white", 
       padding: "12px 16px",
     }}
   >
     Before Agreement Checklist
     <IconButton
       aria-label="close"
-      // onClick={closeChecklistDialog}
+     
       onClick={() => {
-        resetForm(); // Reset when dialog is closed
+        resetForm(); 
         closeChecklistDialog();
       }}
       sx={{ position: "absolute", right: 8, top: 8 }}
@@ -1117,466 +1066,8 @@ const generatePDF = () => {
       </div>
 
    
-      {/* <div className="modal-body">
-        <div className="container">
+      
         
-          <div
-            className="p-3"
-            style={{
-              border: "1px solid #ddd",
-              borderRadius: "8px",
-              backgroundColor: "white",
-              overflowY: "auto",
-              maxHeight: "70vh", 
-              
-            }}
-          >
-          
-            <div className="row mb-4">
-            <div className="col-md-3">
-    <label className="form-label">Date</label>
-    <input
-      type="date"
-      className="form-control"
-      value={selectedLoan?.date || ""} 
-      onChange={(e) => handleInputChange("date", e.target.value)} 
-    />
-  </div>
-  
-
-<div className="col-md-3">
-      <label className="form-label">Flat No</label>
-      <input
-        type="number"
-        className="form-control"
-        value={selectedLoan?.flatNo || ""}
-        onChange={(e) => handleInputChange("flatNo", e.target.value)} 
-      />
-    </div>
-
-
-
-<div className="col-md-3">
-  <label className="form-label">Name Of Allotee</label>
-  <div className="d-flex">
-    <select
-      className="form-control me-2"
-      style={{ width: "25%" }}
-      value={selectedLoan?.titleAllotee || ""}
-      onChange={(e) => handleInputChange("titleAllotee", e.target.value)}
-    >
-      <option value="">Select</option>
-      <option value="Mr.">Mr.</option>
-      <option value="Mrs.">Mrs.</option>
-      <option value="Miss">Miss</option>
-    </select>
-
-    <input
-      type="text"
-      className="form-control"
-      style={{ width: "75%" }}
-      value={selectedLoan?.nameOfAllotee || ""}
-      onChange={(e) => handleInputChange("nameOfAllotee", e.target.value)}
-      pattern="[A-Za-z\s]+"
-      title="Only alphabets and spaces are allowed"
-      placeholder="Enter Name"
-    />
-  </div>
-</div>
-
-
-            </div>
-
-          
-          
-            <div className="row mb-4">
-  <div className="col-md-3">
-    <label className="form-label">Allotee Date Of Birth</label>
-    <input
-      type="date"
-      className="form-control"
-      value={selectedLoan?.alloteeDOB || ""}
-      onChange={(e) => handleInputChange("alloteeDOB", e.target.value)}
-    />
-  </div>
-
-  <div className="col-md-3">
-    <label className="form-label">Allotee Age</label>
-    <input
-      type="number"
-      className="form-control"
-      value={selectedLoan?.alloteeAge || ""}
-      onChange={(e) => handleInputChange("alloteeAge", e.target.value)}
-    />
-  </div>
-
-  <div className="col-md-3">
-    <label className="form-label">A1 Occupation</label>
-    <input
-      type="text"
-      className="form-control"
-      value={selectedLoan?.a1Occupation || ""}
-      onChange={(e) => handleInputChange("a1Occupation", e.target.value)}
-    />
-  </div>
-
-  <div className="col-md-3 mb-4">
-    <label className="form-label">A1-Pan No.</label>
-    <input
-      type="text"
-      className="form-control"
-      value={selectedLoan?.a1PanNo || ""}
-      onChange={(e) => handleInputChange("a1PanNo", e.target.value)}
-      pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}"
-      title="Enter a valid PAN number (e.g., ABCDE1234F)"
-    />
-  </div>
-
-  <div className="col-md-3">
-    <label className="form-label">A1- Aadhar No.</label>
-    <input
-      type="text"
-      className="form-control"
-      value={selectedLoan?.a1AadharNo || ""}
-      onChange={(e) => handleInputChange("a1AadharNo", e.target.value)}
-      pattern="\d{12}"
-      title="Enter a valid 12-digit Aadhar number"
-    />
-  </div>
-
- 
-
-
-<div className="col-md-6">
-  <label className="form-label">Name Of Co-Allotee</label>
-  <div className="d-flex">
-    <select
-      className="form-control me-2"
-      style={{ width: "25%" }}
-      value={selectedLoan?.title || ""}
-      onChange={(e) => handleInputChange("title", e.target.value)}
-    >
-      <option value="">Select</option>
-      <option value="Mr.">Mr.</option>
-      <option value="Mrs.">Mrs.</option>
-      <option value="Miss">Miss</option>
-    </select>
-
-    <input
-      type="text"
-      className="form-control"
-      style={{ width: "75%" }}
-      value={selectedLoan?.nameOfCoAllotee || ""}
-      onChange={(e) => handleInputChange("nameOfCoAllotee", e.target.value)}
-      pattern="[A-Za-z\s]+"
-      title="Only alphabets and spaces are allowed"
-      placeholder="Enter Name"
-    />
-  </div>
-</div>
-
-
-
-  <div className="col-md-3 mb-4">
-    <label className="form-label">Co-Allotee Date Of Birth</label>
-    <input
-      type="date"
-      className="form-control"
-      value={selectedLoan?.coAlloteeDOB || ""}
-      onChange={(e) => handleInputChange("coAlloteeDOB", e.target.value)}
-    />
-  </div>
-
-  <div className="col-md-3">
-    <label className="form-label">Co-Allotee Age</label>
-    <input
-      type="number"
-      className="form-control"
-      value={selectedLoan?.coAlloteeAge || ""}
-      onChange={(e) => handleInputChange("coAlloteeAge", e.target.value)}
-    />
-  </div>
-
-  <div className="col-md-3">
-    <label className="form-label">Co-Occupation</label>
-    <input
-      type="text"
-      className="form-control"
-      value={selectedLoan?.coOccupation || ""}
-      onChange={(e) => handleInputChange("coOccupation", e.target.value)}
-    />
-  </div>
-
-  <div className="col-md-3 mb-4">
-    <label className="form-label">Co-Pan No</label>
-    <input
-      type="text"
-      className="form-control"
-      value={selectedLoan?.coPanNo || ""}
-      onChange={(e) => handleInputChange("coPanNo", e.target.value)}
-    />
-  </div>
-
-  <div className="col-md-3">
-    <label className="form-label">Co-Aadhar No.</label>
-    <input
-      type="text"
-      className="form-control"
-      value={selectedLoan?.coAadharNo || ""}
-      onChange={(e) => handleInputChange("coAadharNo", e.target.value)}
-    />
-  </div>
-
-  <div className="col-md-3">
-    <label className="form-label">Address</label>
-    <input
-      type="text"
-      className="form-control"
-      value={selectedLoan?.address || ""}
-      onChange={(e) => handleInputChange("address", e.target.value)}
-    />
-  </div>
-
-  <div className="col-md-3 mb-4">
-    <label className="form-label">Contact</label>
-    <input
-      type="text"
-      className="form-control"
-      value={selectedLoan?.contact || ""}
-      onChange={(e) => handleInputChange("contact", e.target.value)}
-    />
-  </div>
-
-  <div className="col-md-3">
-    <label className="form-label">Floor</label>
-    <input
-      type="text"
-      className="form-control"
-      value={selectedLoan?.floor || ""}
-      onChange={(e) => handleInputChange("floor", e.target.value)}
-    />
-  </div>
-
-  <div className="col-md-3">
-    <label className="form-label">Total Agreement Value</label>
-    <input
-      type="text"
-      className="form-control"
-      value={selectedLoan?.totalAgreementValue || ""}
-      onChange={(e) => handleInputChange("totalAgreementValue", e.target.value)}
-    />
-  </div>
-
-  <div className="col-md-3 mb-4">
-    <label className="form-label">Booking Amount</label>
-    <input
-      type="text"
-      className="form-control"
-      value={selectedLoan?.bookingAmount || ""}
-      onChange={(e) => handleInputChange("bookingAmount", e.target.value)}
-    />
-  </div>
-
-  <div className="col-md-3">
-    <label className="form-label">Carpet Area</label>
-    <input
-      type="text"
-      className="form-control"
-      value={selectedLoan?.carpetArea || ""}
-      onChange={(e) => handleInputChange("carpetArea", e.target.value)}
-    />
-  </div>
-
-  <div className="col-md-3">
-    <label className="form-label">Open Balcony Area</label>
-    <input
-      type="text"
-      className="form-control"
-      value={selectedLoan?.openBalconyArea || ""}
-      onChange={(e) => handleInputChange("openBalconyArea", e.target.value)}
-    />
-  </div>
-
-  <div className="col-md-3">
-    <label className="form-label">Enclose Balcony Area</label>
-    <input
-      type="text"
-      className="form-control"
-      value={selectedLoan?.encloseBalconyArea || ""}
-      onChange={(e) => handleInputChange("encloseBalconyArea", e.target.value)}
-    />
-  </div>
-
-  <div className="col-md-3">
-    <label className="form-label">Parking</label>
-    <input
-      type="text"
-      className="form-control"
-      value={selectedLoan?.parking || ""}
-      onChange={(e) => handleInputChange("parking", e.target.value)}
-    />
-  </div>
-
-  <div className="col-md-3 mt-4">
-    <label className="form-label">Booking Amount (In Words)</label>
-    <input
-      type="text"
-      className="form-control"
-      value={selectedLoan?.bookingAmountInWords || ""}
-      onChange={(e) => handleInputChange("bookingAmountInWords", e.target.value)}
-    />
-  </div>
-
-  <div className="col-md-3 mt-4">
-    <label className="form-label">Total Agreement Value (In Words)</label>
-    <input
-      type="text"
-      className="form-control"
-      value={selectedLoan?.totalAgreementValueInWords || ""}
-      onChange={(e) => handleInputChange("totalAgreementValueInWords", e.target.value)}
-    />
-  </div>
-</div>
-
-            <h5 className="mt-3 mt-3 mb-4">Payment Schedule</h5>
-<div className="row mb-3 mb-4">
-  <div className="col-md-3">
-    <label className="form-label">Booking</label>
-    <input
-      type="text"
-      className="form-control"
-      value={selectedLoan?.booking || ""}
-      onChange={(e) => handleInputChange("booking", e.target.value)}
-    />
-  </div>
-  <div className="col-md-3 mb-4">
-    <label className="form-label">Execution Of Agreement</label>
-    <input
-      type="text"
-      className="form-control"
-      value={selectedLoan?.executionAgreement || ""}
-      onChange={(e) => handleInputChange("executionAgreement", e.target.value)}
-    />
-  </div>
-  <div className="col-md-3">
-    <label className="form-label">Completion Of Plinth</label>
-    <input
-      type="text"
-      className="form-control"
-      value={selectedLoan?.completionPlinth || ""}
-      onChange={(e) => handleInputChange("completionPlinth", e.target.value)}
-    />
-  </div>
-  <div className="col-md-3">
-    <label className="form-label">Completion Of 1st Slab</label>
-    <input
-      type="text"
-      className="form-control"
-      value={selectedLoan?.completion1stSlab || ""}
-      onChange={(e) => handleInputChange("completion1stSlab", e.target.value)}
-    />
-  </div>
-  <div className="col-md-3 mb-4">
-    <label className="form-label">Completion Of 2nd Slab</label>
-    <input
-      type="text"
-      className="form-control"
-      value={selectedLoan?.completion2ndSlab || ""}
-      onChange={(e) => handleInputChange("completion2ndSlab", e.target.value)}
-    />
-  </div>
-  <div className="col-md-3">
-    <label className="form-label">Completion Of 3rd Slab</label>
-    <input
-      type="text"
-      className="form-control"
-      value={selectedLoan?.completion3rdSlab || ""}
-      onChange={(e) => handleInputChange("completion3rdSlab", e.target.value)}
-    />
-  </div>
-  <div className="col-md-3">
-    <label className="form-label">Completion Of 5th Slab</label>
-    <input
-      type="text"
-      className="form-control"
-      value={selectedLoan?.completion5thSlab || ""}
-      onChange={(e) => handleInputChange("completion5thSlab", e.target.value)}
-    />
-  </div>
-  <div className="col-md-3">
-    <label className="form-label">Completion Of 7th Slab</label>
-    <input
-      type="text"
-      className="form-control"
-      value={selectedLoan?.completion7thSlab || ""}
-      onChange={(e) => handleInputChange("completion7thSlab", e.target.value)}
-    />
-  </div>
-  <div className="col-md-3">
-    <label className="form-label">Completion Of 9th Slab</label>
-    <input
-      type="text"
-      className="form-control"
-      value={selectedLoan?.completion9thSlab || ""}
-      onChange={(e) => handleInputChange("completion9thSlab", e.target.value)}
-    />
-  </div>
-  <div className="col-md-3">
-    <label className="form-label">Completion Of 10th Slab</label>
-    <input
-      type="text"
-      className="form-control"
-      value={selectedLoan?.completion10thSlab || ""}
-      onChange={(e) => handleInputChange("completion10thSlab", e.target.value)}
-    />
-  </div>
-  <div className="col-md-3 mb-4">
-    <label className="form-label">Completion Of Walls</label>
-    <input
-      type="text"
-      className="form-control"
-      value={selectedLoan?.completionWalls || ""}
-      onChange={(e) => handleInputChange("completionWalls", e.target.value)}
-    />
-  </div>
-  <div className="col-md-3">
-    <label className="form-label">Completion Of Internal Plaster</label>
-    <input
-      type="text"
-      className="form-control"
-      value={selectedLoan?.completionInternalPlaster || ""}
-      onChange={(e) =>
-        handleInputChange("completionInternalPlaster", e.target.value)
-      }
-    />
-  </div>
-  <div className="col-md-3">
-    <label className="form-label">Completion Of Lifts</label>
-    <input
-      type="text"
-      className="form-control"
-      value={selectedLoan?.completionLifts || ""}
-      onChange={(e) => handleInputChange("completionLifts", e.target.value)}
-    />
-  </div>
-  <div className="col-md-3">
-    <label className="form-label">Possession</label>
-    <input
-      type="text"
-      className="form-control"
-      value={selectedLoan?.possession || ""}
-      onChange={(e) => handleInputChange("possession", e.target.value)}
-    />
-  </div>
-</div>
-
-           
-
-            
-          </div>
-        </div>
-      </div> */}
-        {/* <Box p={3} sx={{ background: "#fff", borderRadius: 2, border: "1px solid #ddd" }}> */}
         <Box 
   p={3} 
   sx={{ 
@@ -1594,7 +1085,7 @@ const generatePDF = () => {
     label="Date"
     type="date"
     InputLabelProps={{ shrink: true }}
-    value={selectedLoan?.date || ""}   // Safe Access
+    value={selectedLoan?.date || ""}   
     onChange={(e) => handleInputChange("date", e.target.value)}
     required
   />
@@ -1708,16 +1199,6 @@ const generatePDF = () => {
 </Grid>
 
 
-  {/* Name of Allottee Field */}
-  {/* <Grid item md={8} sm={6} xs={12}>
-    <TextField
-      fullWidth
-      label="Name of Allottee"
-      placeholder="Enter Name"
-      value={selectedLoan?.nameOfAllotee || ""}
-      onChange={(e) => handleInputChange("nameOfAllotee", e.target.value)}
-    />
-  </Grid> */}
  <Grid item md={8} sm={6} xs={12}>
   <TextField
     fullWidth

@@ -406,55 +406,16 @@ const handleToggle = () => {
       }}
     >
       
-      {/* <h5
-  id="modal-title"
-  style={{ margin: 0, fontWeight: 600 }}
-  sx={{ backgroundColor: 'primary.main', padding: '10px', color: 'white' }}
->
-  Add Letter
-</h5> */}
-{/* <h5
-  id="modal-title"
-  style={{
-    margin: 0,
-    fontWeight: 600,
-    backgroundColor: '#1976d2', // primary color (or your custom primary color)
-    padding: '10px',
-    color: 'white',
-  }}
->
-  Add Letter
-</h5> */}
-
-{/* <h5
-  id="modal-title"
-  style={{
-    margin: 0,
-    fontWeight: 600,
-    backgroundColor: '#1976d2', // primary color (or your custom primary color)
-    padding: '10px',
-    color: 'white',
-    display: 'block', // Ensures it takes the full width
-    width: '100%' // Optional if needed for full width
-  }}
->
-  Add Letter
-</h5>
-
-
-      <Button onClick={handleCloseModal} style={{ padding: '6px', fontSize: '16px', fontWeight: 'bold' }}>
-        X
-      </Button>
-    </div> */}
+    
 
 <div
   style={{
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#1976d2', // primary color (or your custom primary color)
+    backgroundColor: '#1976d2', 
     padding: '10px',
-    width: '100%', // Ensures the background spans the whole line
+    width: '100%', 
   }}
 >
   <h5
@@ -474,7 +435,7 @@ const handleToggle = () => {
       padding: '6px',
       fontSize: '16px',
       fontWeight: 'bold',
-      color: 'white', // Close button text color
+      color: 'white', 
     }}
   >
     X
@@ -482,10 +443,10 @@ const handleToggle = () => {
 </div>
 </div>
 
-    {/* Modal Body */}
+    
     <div className="modal-body" style={{ marginTop: '16px', padding: '10px', backgroundColor: '#f9f9f9', borderRadius: '8px' }}>
       
-      {/* Section: Select Slab */}
+   
       <h6 style={{ marginBottom: '8px', fontWeight: 600 }}>Select Slab</h6>
       <TextField
         select
@@ -504,7 +465,7 @@ const handleToggle = () => {
         ))}
       </TextField>
 
-      {/* Section: Letter Type */}
+      
       <h6 style={{ marginBottom: '8px', fontWeight: 600 }}>Letter Type</h6>
       <TextField
         select

@@ -81,7 +81,7 @@ const [expandedCashWithAV, setExpandedCashWithAV] = useState(false);
 const [expandedCashWithoutAV, setExpandedCashWithoutAV] = useState(false);
 
   const [historyCashValues, setHistoryCashValues] = useState([]);
-  const [selectedIndex, setSelectedIndex] = useState(null); // Add this in your state initialization
+  const [selectedIndex, setSelectedIndex] = useState(null); 
 
   const [modalOpen, setModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -89,29 +89,22 @@ const [expandedCashWithoutAV, setExpandedCashWithoutAV] = useState(false);
 
   const [expandedIndex, setExpandedIndex] = useState(null); 
 
-  const [expanded, setExpanded] = useState(false); // For collapsing
+  const [expanded, setExpanded] = useState(false); 
   const [editingIndex, setEditingIndex] = useState(null);
   const [inputValue, setInputValue] = useState("");
 
-  // const [inputValue1, setInputValue1] = useState("");
+ 
 const [editingIndex1, setEditingIndex1] = useState(null);
 const [expanded1, setExpanded1] = useState(false);
 
-// const [inputValue2, setInputValue2] = useState("");
+
 const [editingIndex2, setEditingIndex2] = useState(null);
 const [expanded2, setExpanded2] = useState(false);
 
-const [historyValues, setHistoryValues] = useState({
-  historyWithCashAV: {},   // { flatNo1: [...values], flatNo2: [...values] }
-  historyWithoutCashAV: {} // { flatNo1: [...values], flatNo2: [...values] }
-});
-
  
-  const [editableCashValues, setEditableCashValues] = useState([]); // For editing/updating values
+  const [editableCashValues, setEditableCashValues] = useState([]); 
   
-  // const [loanData, setLoanData] = useState(filteredLoans);
-//   const [leftColumnValues, setLeftColumnValues] = useState([...historyCashValues]);
-// const [rightColumnValues, setRightColumnValues] = useState([...historyCashValues]);
+  
 
 
 
@@ -183,6 +176,7 @@ const [historyValues, setHistoryValues] = useState({
   };
 
 
+
   const handlePagination = (event, newPage) => {
     setCurrentPage(newPage + 1);
   };
@@ -191,7 +185,6 @@ const [historyValues, setHistoryValues] = useState({
     setRowsPerPage(parseInt(event.target.value, 10)); 
     setCurrentPage(1); 
   };
-
 
 
 const handleEditValue = (index, column) => {
@@ -218,29 +211,17 @@ const handleEditValue = (index, column) => {
 
 
 
-// const handleAddClick = (column) => {
-//   if (column === "cash") {
-//     setEditingIndex1(null);
-//     setInputValue1("");
-//     setExpanded1(true);
-//   } else if (column === "cashWithAV") {
-//     setEditingIndex2(null);
-//     setInputValue2("");
-//     setExpanded2(true);
-//   }
-// };
-const handleAddClick = (flatNo, type) => {
-  setHistoryValues((prev) => ({
-    ...prev,
-    [type]: {
-      ...(prev[type] || {}),
-      [flatNo]: [...(prev[type]?.[flatNo] || []), inputValue],
-    },
-  }));
-  setInputValue("");
-  setExpanded1(false);
+const handleAddClick = (column) => {
+  if (column === "cash") {
+    setEditingIndex1(null);
+    setInputValue1("");
+    setExpanded1(true);
+  } else if (column === "cashWithAV") {
+    setEditingIndex2(null);
+    setInputValue2("");
+    setExpanded2(true);
+  }
 };
-
 
 
 
@@ -742,7 +723,7 @@ const handleToggle = () => {
 
 
 
-{/* {historyCashValues1.map((value, index) => (
+{historyCashValues1.map((value, index) => (
   <TextField
     key={index}
     value={value}
@@ -754,21 +735,6 @@ const handleToggle = () => {
    <EditIcon />
 </IconButton>
 
-      ),
-    }}
-  />
-))} */}
-
-{(historyValues.historyWithCashAV[loan.flatNo] || []).map((value, index) => (
-  <TextField
-    key={index}
-    value={value}
-    disabled={expandedIndex1 !== index}
-    InputProps={{
-      endAdornment: (
-        <IconButton onClick={() => handleEditValue(loan.flatNo, index, "historyWithCashAV")}>
-          <EditIcon />
-        </IconButton>
       ),
     }}
   />
@@ -833,7 +799,7 @@ const handleToggle = () => {
         </IconButton>
 
         
-{/* {historyCashValues2.map((value, index) => (
+{historyCashValues2.map((value, index) => (
   <TextField
     key={index}
     value={value}
@@ -845,22 +811,6 @@ const handleToggle = () => {
    <EditIcon />
 </IconButton>
 
-      ),
-    }}
-  />
-))} */}
-
-{/* For historyWithoutCashAV Column */}
-{(historyValues.historyWithoutCashAV[loan.flatNo] || []).map((value, index) => (
-  <TextField
-    key={index}
-    value={value}
-    disabled={expandedIndex2 !== index}
-    InputProps={{
-      endAdornment: (
-        <IconButton onClick={() => handleEditValue(loan.flatNo, index, "historyWithoutCashAV")}>
-          <EditIcon />
-        </IconButton>
       ),
     }}
   />
@@ -883,9 +833,7 @@ const handleToggle = () => {
               <Button onClick={() => setExpanded(false)} variant="outlined" size="small">
                 Cancel
               </Button>
-              {/* <Button onClick={handleSave} variant="contained" size="small">
-                {editingIndex !== null ? "Update" : "Save"}
-              </Button> */}
+             
               <Button onClick={() => handleSave("cashWithAV")} variant="contained" size="small">
   {editingIndex !== null ? "Update" : "Save"}
 </Button>
