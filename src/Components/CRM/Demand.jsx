@@ -7,6 +7,7 @@
 import React, { useState, useEffect } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, TextField, Modal, Box, MenuItem, Select, InputLabel, FormControl } from '@mui/material';
 import { FaEye } from "react-icons/fa";
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 import { ToastContainer, toast } from 'react-toastify';
 import { MonetizationOn } from "@mui/icons-material";
@@ -603,7 +604,9 @@ const handleToggle = () => {
     color="error" 
     onClick={() => window.open('URL_TO_YOUR_PDF', '_blank')}
   >
-    <PictureAsPdfIcon />
+    {/* <PictureAsPdfIcon /> */}
+    <VisibilityIcon />
+
   </IconButton>
 </TableCell>
 
@@ -613,7 +616,8 @@ const handleToggle = () => {
     color="error" 
     onClick={() => window.open('URL_TO_YOUR_PDF', '_blank')}
   >
-    <PictureAsPdfIcon />
+    {/* <PictureAsPdfIcon /> */}
+    <VisibilityIcon />
   </IconButton>
 </TableCell>
 
@@ -622,7 +626,8 @@ const handleToggle = () => {
     color="error" 
     onClick={() => window.open('URL_TO_YOUR_PDF', '_blank')}
   >
-    <PictureAsPdfIcon />
+    {/* <PictureAsPdfIcon /> */}
+    <VisibilityIcon />
   </IconButton>
 </TableCell>
 
@@ -638,18 +643,18 @@ const handleToggle = () => {
           {...params}
           variant="standard"
           InputProps={{
-            disableUnderline: true, // Removes the underline
+            disableUnderline: true, 
           }}
           sx={{
             "& .MuiInputBase-root": {
-              border: "none", // Removes any default border
+              border: "none", 
             },
             "& .MuiOutlinedInput-notchedOutline": {
-              display: "none", // Ensures no outline appears
+              display: "none", 
             },
             "& .MuiInputBase-input": {
-              backgroundColor: "transparent", // Ensures background remains clear
-              padding: "8px 0", // Optional: Adjusts padding
+              backgroundColor: "transparent", 
+              padding: "8px 0", 
             },
           }}
         />

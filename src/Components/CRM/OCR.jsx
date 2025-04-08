@@ -9,7 +9,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { Table, TableBody, TableCell, Modal,TableContainer, TableHead, TableRow, TablePagination, Paper, Button, MenuItem,IconButton, Select, InputLabel, FormControl, Box, Collapse, TextField } from '@mui/material';
-// import { FaEye } from 'react-icons/fa'; 
+
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 import EditIcon from '@mui/icons-material/Edit';
@@ -23,12 +23,27 @@ import { FaFileDownload } from "react-icons/fa";
 import autoTable from "jspdf-autotable";
 
 
+
 const fetchLoansData = async () => {
   const response = await fetch('/api/getOCRCollection');
   return response.json();
 };
 
 const OCR = () => {
+
+
+
+  const [historyCashValues1, setHistoryCashValues1] = useState([]);
+const [historyCashValues2, setHistoryCashValues2] = useState([]);
+
+const [expandedIndex1, setExpandedIndex1] = useState(null);
+const [expandedIndex2, setExpandedIndex2] = useState(null);
+
+const [inputValue1, setInputValue1] = useState("");
+const [inputValue2, setInputValue2] = useState("");
+
+
+
   const [isExpanded, setIsExpanded] = useState(true);
   const [loans, setLoans] = useState([
     {
@@ -47,7 +62,7 @@ const OCR = () => {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   
-  // State for filter options
+ 
   const [flatType, setFlatType] = useState('');
   const [parking, setParking] = useState('');
   const [floor, setFloor] = useState('');
@@ -55,10 +70,10 @@ const OCR = () => {
   
   
   const [showFilters, setShowFilters] = useState(false);
-  const [showCRM, setShowCRM] = useState(false);  // State for CRM toggle
-  const [isCollapsed, setIsCollapsed] = useState(false); // State for collapse toggle
-  const [filterType, setFilterType] = useState(''); // For the filter selection
-  const [filterValue, setFilterValue] = useState(''); // For the selected filter value
+  const [showCRM, setShowCRM] = useState(false);  
+  const [isCollapsed, setIsCollapsed] = useState(false); 
+  const [filterType, setFilterType] = useState(''); 
+  const [filterValue, setFilterValue] = useState(''); 
 
   const [editingFlatNo, setEditingFlatNo] = useState(null); 
   const [editingHistoryCashWithAV, setEditingHistoryCashWithAV] = useState('');
@@ -72,16 +87,35 @@ const [expandedCashWithoutAV, setExpandedCashWithoutAV] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
-
+  const [expandedIndex, setExpandedIndex] = useState(null); 
 
   const [expanded, setExpanded] = useState(false); // For collapsing
   const [editingIndex, setEditingIndex] = useState(null);
   const [inputValue, setInputValue] = useState("");
 
+  // const [inputValue1, setInputValue1] = useState("");
+const [editingIndex1, setEditingIndex1] = useState(null);
+const [expanded1, setExpanded1] = useState(false);
+
+// const [inputValue2, setInputValue2] = useState("");
+const [editingIndex2, setEditingIndex2] = useState(null);
+const [expanded2, setExpanded2] = useState(false);
+
+const [historyValues, setHistoryValues] = useState({
+  historyWithCashAV: {},   // { flatNo1: [...values], flatNo2: [...values] }
+  historyWithoutCashAV: {} // { flatNo1: [...values], flatNo2: [...values] }
+});
+
  
+  const [editableCashValues, setEditableCashValues] = useState([]); // For editing/updating values
+  
   // const [loanData, setLoanData] = useState(filteredLoans);
+//   const [leftColumnValues, setLeftColumnValues] = useState([...historyCashValues]);
+// const [rightColumnValues, setRightColumnValues] = useState([...historyCashValues]);
 
 
+
+  const [editMode, setEditMode] = useState(historyCashValues.map(() => false));
 
   useEffect(() => {
     loadLoansData();
@@ -148,6 +182,7 @@ const [expandedCashWithoutAV, setExpandedCashWithoutAV] = useState(false);
     setFilterValue('');
   };
 
+
   const handlePagination = (event, newPage) => {
     setCurrentPage(newPage + 1);
   };
@@ -157,20 +192,20 @@ const [expandedCashWithoutAV, setExpandedCashWithoutAV] = useState(false);
     setCurrentPage(1); 
   };
 
-const handleEditValue = (index) => {
-
-    setEditingIndex(index);
-    setInputValue(historyCashValues[index]);
-    setExpanded(true);
-  
-    // Parent logic for handling the edit value
-    const updatedHistoryValues = [...historyCashValues];
-    updatedHistoryValues[index] = updatedHistoryValues[index] ; // Example logic to increment the value
-    setHistoryCashValues(updatedHistoryValues);
-  };
 
 
-  // Handle change in History Cash With AV value
+const handleEditValue = (index, column) => {
+  if (column === "cash") {
+    setEditingIndex1(index);
+    setInputValue1(historyCashValues1[index]);
+    setExpanded1(true);
+  } else if (column === "cashWithAV") {
+    setEditingIndex2(index);
+    setInputValue2(historyCashValues2[index]);
+    setExpanded2(true);
+  }
+};
+
   const handleHistoryCashWithAVChange = (flatNo, value) => {
     setLoans((prevLoans) =>
       prevLoans.map((loan) =>
@@ -183,32 +218,59 @@ const handleEditValue = (index) => {
 
 
 
-
-
-
-
-const handleAddClick = () => {
-  setEditingIndex(null); 
-  setInputValue("");
-  setExpanded(true);
-};
-
-// const handleEditValue = (index) => {
-//   setEditingIndex(index);
-//   setInputValue(historyCashValues[index]);
-//   setExpanded(true);
+// const handleAddClick = (column) => {
+//   if (column === "cash") {
+//     setEditingIndex1(null);
+//     setInputValue1("");
+//     setExpanded1(true);
+//   } else if (column === "cashWithAV") {
+//     setEditingIndex2(null);
+//     setInputValue2("");
+//     setExpanded2(true);
+//   }
 // };
-
-const handleSave = () => {
-  if (editingIndex === null) {
-    setHistoryCashValues([...historyCashValues, parseFloat(inputValue)]);
-  } else {
-    const updatedValues = [...historyCashValues];
-    updatedValues[editingIndex] = parseFloat(inputValue);
-    setHistoryCashValues(updatedValues);
-  }
-  setExpanded(false);
+const handleAddClick = (flatNo, type) => {
+  setHistoryValues((prev) => ({
+    ...prev,
+    [type]: {
+      ...(prev[type] || {}),
+      [flatNo]: [...(prev[type]?.[flatNo] || []), inputValue],
+    },
+  }));
+  setInputValue("");
+  setExpanded1(false);
 };
+
+
+
+
+const handleSave = (column) => {
+  if (column === "cash") {
+    if (editingIndex1 !== null) {
+      const updated = [...historyCashValues1];
+      updated[editingIndex1] = inputValue1;
+      setHistoryCashValues1(updated);
+    } else {
+      setHistoryCashValues1([...historyCashValues1, inputValue1]);
+    }
+    setExpanded1(false);
+    setInputValue1("");
+    setEditingIndex1(null);
+  } else if (column === "cashWithAV") {
+    if (editingIndex2 !== null) {
+      const updated = [...historyCashValues2];
+      updated[editingIndex2] = inputValue2;
+      setHistoryCashValues2(updated);
+    } else {
+      setHistoryCashValues2([...historyCashValues2, inputValue2]);
+    }
+    setExpanded2(false);
+    setInputValue2("");
+    setEditingIndex2(null);
+  }
+};
+
+
 
 const handleToggle = () => {
   setIsExpanded((prev) => !prev);
@@ -224,13 +286,7 @@ const handleToggle = () => {
     );
   };
 
-  // const handleCashWithAVChange = (flatNo, newValue) => {
-  //   setLoanData((prevData) => {
-  //     return prevData.map((loan) => 
-  //       loan.flatNo === flatNo ? { ...loan, cashWithAV: newValue } : loan
-  //     );
-  //   });
-  // };
+ 
   
   
 
@@ -454,7 +510,7 @@ const handleToggle = () => {
        textTransform: "none",
        marginTop :"23px",
       padding:"18px",
-      fontWeight:"700",
+      // fontWeight:"700",
        minHeight: "unset", // Removes fixed height  
        height: "41px", // Explicitly set a smaller height  
        fontSize: "12px",
@@ -678,38 +734,50 @@ const handleToggle = () => {
 <TableCell>
       <div style={{ display: "flex", alignItems: "center", flexDirection: "column" }}>
        
-        <IconButton onClick={handleAddClick} style={{ marginBottom: "8px" }}>
-          <AddIcon />
-        </IconButton>
+       
 
-        {historyCashValues.map((value, index) => (
-          <TextField
-            key={index}
-            type="number"
-            value={value}
-            disabled
-            style={{
-              marginBottom: "1px",
-              backgroundColor: "white",
-              borderRadius: "4px",
-              fontSize: "14px",
-              width: "80%",
-              padding: "0px",
-            }}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton onClick={() => handleEditValue(index)}>
-                    <EditIcon />
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
-        ))}
+<IconButton onClick={() => handleAddClick("cash")} style={{ marginBottom: "8px" }}>
+  <AddIcon />
+</IconButton>
+
+
+
+{/* {historyCashValues1.map((value, index) => (
+  <TextField
+    key={index}
+    value={value}
+    disabled={expandedIndex1 !== index}
+    InputProps={{
+      endAdornment: (
+        
+        <IconButton onClick={() => handleEditValue(index, "cash")}>
+   <EditIcon />
+</IconButton>
+
+      ),
+    }}
+  />
+))} */}
+
+{(historyValues.historyWithCashAV[loan.flatNo] || []).map((value, index) => (
+  <TextField
+    key={index}
+    value={value}
+    disabled={expandedIndex1 !== index}
+    InputProps={{
+      endAdornment: (
+        <IconButton onClick={() => handleEditValue(loan.flatNo, index, "historyWithCashAV")}>
+          <EditIcon />
+        </IconButton>
+      ),
+    }}
+  />
+))}
+
+
 
         
-        <Collapse in={expanded} timeout="auto" unmountOnExit>
+        <Collapse in={expanded1} timeout="auto" unmountOnExit>
           <div style={{ marginTop: "10px", display: "flex", flexDirection: "column", gap: "8px" }}>
             <TextField
               fullWidth
@@ -725,9 +793,14 @@ const handleToggle = () => {
               <Button onClick={() => setExpanded(false)} variant="outlined" size="small">
                 Cancel
               </Button>
-              <Button onClick={handleSave} variant="contained" size="small">
+              {/* <Button onClick={handleSave} variant="contained" size="small">
                 {editingIndex !== null ? "Update" : "Save"}
-              </Button>
+              </Button> */}
+
+<Button onClick={() => handleSave("cash")} variant="contained" size="small">
+  {editingIndex !== null ? "Update" : "Save"}
+</Button>
+
             </div>
           </div>
         </Collapse>
@@ -755,38 +828,46 @@ const handleToggle = () => {
 <TableCell>
       <div style={{ display: "flex", alignItems: "center", flexDirection: "column" }}>
        
-        <IconButton onClick={handleAddClick} style={{ marginBottom: "8px" }}>
+        <IconButton onClick={() => handleAddClick("cashWithAV")} style={{ marginBottom: "8px" }}>
           <AddIcon />
         </IconButton>
 
-        {historyCashValues.map((value, index) => (
-          <TextField
-            key={index}
-            type="number"
-            value={value}
-            disabled
-            style={{
-              marginBottom: "1px",
-              backgroundColor: "white",
-              borderRadius: "4px",
-              fontSize: "14px",
-              width: "80%",
-              padding: "0px",
-            }}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton onClick={() => handleEditValue(index)}>
-                    <EditIcon />
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
-        ))}
+        
+{/* {historyCashValues2.map((value, index) => (
+  <TextField
+    key={index}
+    value={value}
+    disabled={expandedIndex2 !== index}
+    InputProps={{
+      endAdornment: (
+      
+        <IconButton onClick={() => handleEditValue(index, "cashWithAV")}>
+   <EditIcon />
+</IconButton>
+
+      ),
+    }}
+  />
+))} */}
+
+{/* For historyWithoutCashAV Column */}
+{(historyValues.historyWithoutCashAV[loan.flatNo] || []).map((value, index) => (
+  <TextField
+    key={index}
+    value={value}
+    disabled={expandedIndex2 !== index}
+    InputProps={{
+      endAdornment: (
+        <IconButton onClick={() => handleEditValue(loan.flatNo, index, "historyWithoutCashAV")}>
+          <EditIcon />
+        </IconButton>
+      ),
+    }}
+  />
+))}
 
        
-        <Collapse in={expanded} timeout="auto" unmountOnExit>
+        <Collapse in={expanded2} timeout="auto" unmountOnExit>
           <div style={{ marginTop: "10px", display: "flex", flexDirection: "column", gap: "8px" }}>
             <TextField
               fullWidth
@@ -802,9 +883,13 @@ const handleToggle = () => {
               <Button onClick={() => setExpanded(false)} variant="outlined" size="small">
                 Cancel
               </Button>
-              <Button onClick={handleSave} variant="contained" size="small">
+              {/* <Button onClick={handleSave} variant="contained" size="small">
                 {editingIndex !== null ? "Update" : "Save"}
-              </Button>
+              </Button> */}
+              <Button onClick={() => handleSave("cashWithAV")} variant="contained" size="small">
+  {editingIndex !== null ? "Update" : "Save"}
+</Button>
+
             </div>
           </div>
         </Collapse>

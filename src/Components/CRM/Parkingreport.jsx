@@ -7,9 +7,10 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { Card } from 'antd';
-import { jsPDF } from "jspdf";
+// import { jsPDF } from "jspdf";
 
-
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 // import { HomeOutlined } from '@ant-design/icons';
 const Parkingreport = () => {
@@ -76,40 +77,76 @@ const Parkingreport = () => {
 
  
 
-  const handleDownloadPDF= () => {
-    const doc = new jsPDF();
-    let y = 20; // Initial vertical position
+  // const handleDownloadPDF= () => {
+  //   const doc = new jsPDF();
+  //   let y = 20; // Initial vertical position
   
-    // Add the Wing Header
+  //   // Add the Wing Header
+  //   doc.setFontSize(18);
+  //   doc.setFont("helvetica", "bold");
+  //   doc.text("Wing", 20, y);
+  //   y += 10; // Space after the header
+  
+  //   // Loop through parkingData to add flat details
+  //   parkingData.forEach(flat => {
+  //     // Flat No
+  //     doc.setFontSize(14);
+  //     doc.setFont("helvetica", "normal");
+  //     doc.text(`Flat No: ${flat.flatNo}`, 20, y);
+  //     y += 10;
+  
+  //     // Flat Type
+  //     doc.text(`Flat Type: ${flat.flatType}`, 20, y);
+  //     y += 10;
+  
+  //     // Parking Type
+  //     doc.text(`Parking Type: ${flat.parkingType || "No Parking"}`, 20, y);
+  //     y += 15; // Space before next flat details
+  
+  //     // Check if we need to add a page (if content exceeds one page)
+  //     if (y > 270) {
+  //       doc.addPage();
+  //       y = 20; // Reset vertical position for new page
+  //     }
+  //   });
+  
+  //   // Save the PDF
+  //   doc.save("Parking_Report.pdf");
+  // };
+
+
+  const handleDownloadPDF = () => {
+    const doc = new jsPDF();
+  
     doc.setFontSize(18);
     doc.setFont("helvetica", "bold");
-    doc.text("Wing", 20, y);
-    y += 10; // Space after the header
+    doc.text("Parking Report", 20, 20);
   
-    // Loop through parkingData to add flat details
+    // Define Table Columns
+    const tableColumn = ["Flat No", "Flat Type", "Parking Type"];
+  
+    // Define Table Rows
+    const tableRows = [];
+  
     parkingData.forEach(flat => {
-      // Flat No
-      doc.setFontSize(14);
-      doc.setFont("helvetica", "normal");
-      doc.text(`Flat No: ${flat.flatNo}`, 20, y);
-      y += 10;
-  
-      // Flat Type
-      doc.text(`Flat Type: ${flat.flatType}`, 20, y);
-      y += 10;
-  
-      // Parking Type
-      doc.text(`Parking Type: ${flat.parkingType || "No Parking"}`, 20, y);
-      y += 15; // Space before next flat details
-  
-      // Check if we need to add a page (if content exceeds one page)
-      if (y > 270) {
-        doc.addPage();
-        y = 20; // Reset vertical position for new page
-      }
+      const rowData = [
+        flat.flatNo,
+        flat.flatType,
+        flat.parkingType || "No Parking"
+      ];
+      tableRows.push(rowData);
     });
   
-    // Save the PDF
+    // Generate Table
+    autoTable(doc, {
+      startY: 30, // After title
+      head: [tableColumn],
+      body: tableRows,
+      theme: 'grid', // optional
+      styles: { fontSize: 12 },
+    });
+  
+    // Save PDF
     doc.save("Parking_Report.pdf");
   };
   return (

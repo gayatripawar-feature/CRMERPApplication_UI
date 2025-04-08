@@ -7,7 +7,9 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { Card } from 'antd';
-import { jsPDF } from "jspdf";
+// import { jsPDF } from "jspdf";
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 // import { HomeOutlined } from '@ant-design/icons';
 const FlatAllotmentReport = () => {
   const [formData, setFormData] = useState({
@@ -58,50 +60,96 @@ const FlatAllotmentReport = () => {
     { flatNo: "301", floor: "3rd floor", flatType: "1.5BHK", price: "$65,000", owner: "Landowner" },
   ];
 
-  const handleDownloadPDF = () => {
-    const doc = new jsPDF();
-    let y = 20; // Initial vertical position
+  // const handleDownloadPDF = () => {
+  //   const doc = new jsPDF();
+  //   let y = 20; // Initial vertical position
   
    
+  //   doc.setFontSize(18);
+  //   doc.setFont("helvetica", "bold");
+  //   doc.text("Flat Allotement Report", 20, y);
+  //   y += 10; // Space after first header
+  
+  //   // Add Sub Header
+  //   doc.text("Wing", 20, y);
+  //   y += 10; // Space after second header
+  
+  //   // Loop through flatData to add flat details
+  //   flatData.forEach(flat => {
+  //     doc.setFontSize(14);
+  //     doc.setFont("helvetica", "normal");
+  
+  //     doc.text(`Flat No: ${flat.flatNo}`, 20, y);
+  //     y += 10;
+  
+  //     doc.text(`Flat Type: ${flat.flatType}`, 20, y);
+  //     y += 10;
+  
+  //     doc.text(`Status: ${flat.status === "approved" ? "Approved" : "Pending"}`, 20, y);
+  //     y += 10;
+  
+  //     doc.text(`Landowner: ${flat.landOwner || "N/A"}`, 20, y);
+  //     y += 10;
+  
+  //     doc.text(`Date: ${flat.date || "N/A"}`, 20, y);
+  //     y += 15; // Space before next record
+  
+  //     // Check for page break
+  //     if (y > 270) {
+  //       doc.addPage();
+  //       y = 20;
+  //     }
+  //   });
+  
+  //   doc.save("FlatAllotment_Report.pdf");
+  // };
+  
+  const handleDownloadPDF = () => {
+    const doc = new jsPDF();
+  
     doc.setFontSize(18);
     doc.setFont("helvetica", "bold");
-    doc.text("Flat Allotement Report", 20, y);
-    y += 10; // Space after first header
+    doc.text("Flat Allotment Report", 20, 20);
   
-    // Add Sub Header
-    doc.text("Wing", 20, y);
-    y += 10; // Space after second header
+   
+    const tableColumn = ["Flat No", "Flat Type", "Status", "Landowner", "Date"];
   
-    // Loop through flatData to add flat details
+    
+    const tableRows = [];
+  
     flatData.forEach(flat => {
-      doc.setFontSize(14);
-      doc.setFont("helvetica", "normal");
-  
-      doc.text(`Flat No: ${flat.flatNo}`, 20, y);
-      y += 10;
-  
-      doc.text(`Flat Type: ${flat.flatType}`, 20, y);
-      y += 10;
-  
-      doc.text(`Status: ${flat.status === "approved" ? "Approved" : "Pending"}`, 20, y);
-      y += 10;
-  
-      doc.text(`Landowner: ${flat.landOwner || "N/A"}`, 20, y);
-      y += 10;
-  
-      doc.text(`Date: ${flat.date || "N/A"}`, 20, y);
-      y += 15; // Space before next record
-  
-      // Check for page break
-      if (y > 270) {
-        doc.addPage();
-        y = 20;
-      }
+      const rowData = [
+        flat.flatNo,
+        flat.flatType,
+        flat.status === "approved" ? "Approved" : "Pending",
+        flat.landOwner || "N/A",
+        flat.date || "N/A"
+      ];
+      tableRows.push(rowData);
     });
+  
+    // doc.autoTable({
+    //   startY: 30,  // after title
+    //   head: [tableColumn],
+    //   body: tableRows,
+    //   theme: 'grid', // optional - adds border to table
+    //   styles: { fontSize: 12 },
+    // });
+
+    autoTable(doc, { 
+      startY: 30,
+      head: [tableColumn],
+      body: tableRows,
+      theme: 'grid',
+      styles: { fontSize: 12 },
+   });
+   
   
     doc.save("FlatAllotment_Report.pdf");
   };
-  
+
+
+
   return (
     <div className="container mt-3" style={{ maxHeight: '80vh', overflowY: 'auto' }}>
       <h5 className="mb-5">Reports / Flat Allotment Report</h5>

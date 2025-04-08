@@ -571,12 +571,7 @@ const handleToggle = () => {
     }
   };
   
-  // const handleFileChange = (e) => {
-  //   const file = e.target.files[0]; 
-  //   if (file) {
-  //     setSelectedFileName(file.name);
-  //   }
-  // };
+
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
     const fileNames = files.map((file) => file.name);
@@ -620,12 +615,24 @@ const handleToggle = () => {
     setSelectedEmail("");
   };
 
+  // const handleSendMail = () => {
+  //   console.log(`Sending email to ${selectedEmail}...`);
+  //   setOpenMailPopup(null);
+  // };
+
+  // const handleSendMail = () => {
+  //   const mailtoLink = `mailto:${selectedEmail}`;
+  //   window.location.href = mailtoLink;  // Redirects to mail window
+  //   handleCloseMailPopup();             // Close popup after redirect
+  // };
+
   const handleSendMail = () => {
-    console.log(`Sending email to ${selectedEmail}...`);
-    setOpenMailPopup(null);
+    const gmailLink = `https://mail.google.com/mail/?view=cm&fs=1&to=${selectedEmail}`;
+    window.open(gmailLink, '_blank');  // Open in new tab
+    handleCloseMailPopup();
   };
-
-
+  
+  
 
 const displayLoans = () => {
   return filteredLoans.slice(start, end).map((loan) => (
