@@ -17,6 +17,7 @@ import { FaEye } from "react-icons/fa";
 import { FaFileDownload } from "react-icons/fa";
 import { jsPDF } from "jspdf";
 
+
 import autoTable from "jspdf-autotable";
 
 
@@ -120,6 +121,8 @@ const handleDownloadPDFDeveloper = () => {
 
 
   return (
+ <>
+    <ToastContainer/>
     <div className="cost-sheet">
       
       {showForm ? (
@@ -162,13 +165,22 @@ const handleDownloadPDFDeveloper = () => {
   />
 
   <div style={{ display: "flex", justifyContent: "space-between", width: "90%" }}>
-  <Button className=""
-    onClick={() => toast.success("Form details submitted successfully!", { position: "top-right", autoClose: 3000 })} 
-    variant="contained" 
-    color="primary"
-  >
-    Save
-  </Button>
+
+  <Button 
+  onClick={() => {
+    toast.success("Form details submitted successfully!", { 
+      position: "top-right",
+      autoClose: 3000,
+    });
+    handleCloseForm();  
+  }} 
+  variant="contained" 
+  color="primary"
+>
+  Save
+</Button>
+
+
     <Button onClick={handleCloseForm} variant="contained" color="error">
       Cancel
     </Button>
@@ -422,8 +434,11 @@ const handleDownloadPDFDeveloper = () => {
         </>
       )}
     </div>
+
+    </>
   );
 };
+
 
 export default CostSheet;
 
