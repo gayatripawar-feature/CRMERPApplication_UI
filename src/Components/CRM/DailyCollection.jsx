@@ -744,12 +744,30 @@ Towards"
               />
               
               {/* Customer Name */}
-              <TextField
+              {/* <TextField
                 label="Customer Name"
                 fullWidth
                 value={selectedLoan?.customerName || ""}
                 onChange={(e) => setSelectedLoan({ ...selectedLoan, customerName: e.target.value })}
-              />
+              /> */}
+ <TextField
+  label="Customer Name"
+  fullWidth
+  value={selectedLoan?.customerName || ""}
+  onChange={(e) => {
+    const value = e.target.value;
+    setSelectedLoan({ ...selectedLoan, customerName: value });
+  }}
+/>
+
+{/* Show Error Message when invalid input */}
+{selectedLoan?.customerName && !/^[a-zA-Z\s]*$/.test(selectedLoan?.customerName) && (
+  <p style={{ color: "red", fontSize: "12px", marginTop: "5px" }}>
+    Only letters and spaces are allowed.
+  </p>
+)}
+
+
               
               {/* Demand Level Dropdown */}
               <FormControl fullWidth>
@@ -790,7 +808,7 @@ Towards"
 
              
               <LocalizationProvider dateAdapter={AdapterDateFns}> {/* Localization Provider wrapping the component */}
-      <div style={{ width: '00%' }}>
+      <div style={{ width: '90%' }}>
         
         <DesktopDatePicker
           label="Received Date"
@@ -806,7 +824,21 @@ Towards"
             {/* Action Buttons */}
             <div style={{ display: "flex", gap: "20px", marginTop: "20px", justifyContent: "flex-end" }}>
               <Button variant="outlined" onClick={handleClose}>Cancel</Button>
-              <Button variant="contained" color="primary" type="submit">Submit</Button>
+              {/* <Button variant="contained" color="primary" type="submit">Submit</Button> */}
+              <Button
+  variant="contained"
+  color="primary"
+  type="submit"
+  onClick={() => {
+    toast.success("Amount Received date Successfully!", {
+      position: "top-center",
+      autoClose: 2000,
+    });
+  }}
+>
+  Submit
+</Button>
+
             </div>
           </form>
         </Box>
@@ -874,6 +906,7 @@ Towards"
         <TextField
           label="Receipt No"
           fullWidth
+          required
           value={selectedLoan?.flatNo || ""}
           onChange={(e) => setSelectedLoan({ ...selectedLoan, flatNo: e.target.value })}
         />
@@ -918,25 +951,25 @@ Towards"
             <MenuItem value="Possession Level Disbursement - Amount Received">Possession Level Disbursement - Amount Received</MenuItem>
           </Select>
         </FormControl>
-
+   
 <div style={{ display: "flex", gap: "20px" }}>
-  
   <TextField
     label="Cheque No."
+    required
     fullWidth
-    value={selectedLoan?.coAlloteeName || ""}
-    onChange={(e) => setSelectedLoan({ ...selectedLoan, coAlloteeName: e.target.value })}
+    value={selectedLoan?.chequeNo || ""}
+    onChange={(e) =>
+      setSelectedLoan({ ...selectedLoan, chequeNo: e.target.value })
+    }
   />
 </div>
-
-
-
 
 
       <div style={{ display: "flex", gap: "20px" }}>
         <TextField
           label="Bank Name"
           fullWidth
+          required
           value={selectedLoan?.demandRaising || ""}
           onChange={(e) => setSelectedLoan({ ...selectedLoan, demandRaising: e.target.value })}
         />
@@ -989,17 +1022,26 @@ Towards"
 </div>
 
       
-<div style={{ display: "flex", gap: "20px" }}>
+{/* <div style={{ display: "flex", gap: "20px" }}>
   
-  
-
- 
   <TextField
   type="number"
     label="Demand Raised Percentage"
     fullWidth
     value={selectedLoan?.coAlloteeName || ""}
     onChange={(e) => setSelectedLoan({ ...selectedLoan, coAlloteeName: e.target.value })}
+  />
+</div> */}
+
+<div style={{ display: "flex", gap: "20px" }}>
+  <TextField
+    type="number"
+    label="Demand Raised Percentage"
+    fullWidth
+    value={selectedLoan?.demandRaisedPercentage || ""}
+    onChange={(e) =>
+      setSelectedLoan({ ...selectedLoan, demandRaisedPercentage: e.target.value })
+    }
   />
 </div>
     </div>

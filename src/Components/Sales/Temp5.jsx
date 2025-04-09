@@ -20,7 +20,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TextField, Grid, Box } from '@mui/material';
 
 import VisitDownloadPDF from "./VisitDownloadPDF";
-
+import RateDownloadPDF from "./RateDownloadPDF";
 const templates = [
 
   {
@@ -154,6 +154,8 @@ const projectData = {};
 const Template = () => {
   const [openModal, setOpenModal] = useState(false);
   const [modalContent, setModalContent] = useState(null);
+  const [showPdfComponent, setShowPdfComponent] = useState(false);
+
   const [formData, setFormData] = useState({
     projectName: "",
     wing: "",
@@ -440,9 +442,39 @@ const generatePDF = useReactToPrint({
 
 
 
+  const handleDownloadRatePdf = () => {
+    const input = document.getElementById("rate_pdf");
 
+    html2canvas(input, { scale: 2 }).then((canvas) => {
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("p", "mm", "a4");
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
 
+      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+      pdf.save("RateApprovalForm.pdf");
+    });
+  };
 
+const handleDownloadVisitPdf = async () => {
+    setShowPdfComponent(true);  // Render component
+  
+    setTimeout(async () => {
+      const input = document.getElementById("pdf-content");
+  
+      const canvas = await html2canvas(input, { scale: 2 });
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("p", "mm", "a3");
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+  
+      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+      pdf.save("VisitForm.pdf");
+  
+      setShowPdfComponent(false); // Hide after download
+    }, 100);  // Small delay for safe rendering
+  };
+  
 
 
 
@@ -548,7 +580,9 @@ const modalTitle = selectedTemplate ? modalTitles[selectedTemplate.displayType] 
       
       
    
-
+      {/* //  <Button variant="primary w-100" onClick={() => handleOpenModal("PDF")}>
+//       Download PDF
+//     </Button> */}
 
 <div className="row g-4 mt-5">
   {templates.map((template) => (
@@ -559,10 +593,24 @@ const modalTitle = selectedTemplate ? modalTitles[selectedTemplate.displayType] 
           <p className="card-text">{template.description}</p>
           <div className="d-flex gap-3 justify-content-start">
             {template.id === 1 ? (
-             
- <Button variant="primary w-100" onClick={() => handleOpenModal("PDF")}>
-      Download PDF
-    </Button>
+            
+<>
+{showPdfComponent && (
+    <div style={{ position: 'absolute', top: '-9999px', left: '-9999px' }}>
+      <div id="pdf-content">
+        <VisitDownloadPDF />
+      </div>
+    </div>
+  )}
+
+  
+<Button variant="primary w-100" onClick={handleDownloadVisitPdf}>
+  Download PDF
+</Button>
+
+</>
+
+
 
             ) : (
               template.buttons.map((button, index) => (
@@ -673,13 +721,13 @@ const modalTitle = selectedTemplate ? modalTitles[selectedTemplate.displayType] 
 <Table bordered className="visit-table">
   <tbody>
     <tr>
-      <td className="label-cell">PROJECT NAME</td>
+      <td className="label-cell fw-bold">PROJECT NAME</td>
       <td className="value-cell"></td> 
       <td className="label-cell"></td>
     </tr>
 
     <tr>
-      <td className="label-cell">MAHARERA NO</td>
+      <td className="label-cell fw-bold">MAHARERA NO</td>
       <td className="value-cell"></td> 
       <td className="value-cell"></td> 
     </tr>
@@ -885,7 +933,7 @@ const modalTitle = selectedTemplate ? modalTitles[selectedTemplate.displayType] 
       <td className="value-cell">Sign :</td> 
     </tr>
     <tr>
-      <td className="label-cell">***We are concerned about accuracy and timely payment, so custo Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet.</td>
+      <td className="label-cell">  ***We are concerned about accuracy and timely payment, so customer has been made aware that while making payment be sure that you have made payment only</td>
       <td className="value-cell"></td> 
       <td className="value-cell"></td> 
     </tr>
@@ -896,7 +944,7 @@ const modalTitle = selectedTemplate ? modalTitles[selectedTemplate.displayType] 
       </Button>
        {/* Hidden Component for PDF generation */}
        <div style={{ position: 'absolute', top: '-9999px', left: '-9999px' }}>
-   <div id="pdf-content">
+   <div id="pdf-content" style={{ fontSize: '28px' }}>
       <VisitDownloadPDF />
    </div>
 </div>
@@ -1238,6 +1286,9 @@ const modalTitle = selectedTemplate ? modalTitles[selectedTemplate.displayType] 
           <td style={{padding:"8px"}}></td>
 
         </tr>
+
+
+
       </tbody>
     </Table>
   </td>
@@ -1251,6 +1302,12 @@ const modalTitle = selectedTemplate ? modalTitles[selectedTemplate.displayType] 
                 <Button variant="primary" id="download-pdf-button" onClick={handleGeneratePDFRate}>
         Download PDF
       </Button>
+
+      <div style={{ position: 'absolute', top: '-9999px', left: '-9999px' }}>
+   <div id="pdf-content" style={{ fontSize: '28px' }}>
+      <RateDownloadPDF />
+   </div>
+</div>
 </div>
 
   </div>

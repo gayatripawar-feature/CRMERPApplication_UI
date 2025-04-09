@@ -5,234 +5,259 @@ import jsPDF from "jspdf";
 
 const VisitDownloadPDF = () => {
 
-  const handleGeneratePDF = () => {
+
+
+const handleGeneratePDF = () => {
     const content = document.getElementById("table-content");
-    html2canvas(content, { scale: 2 }).then((canvas) => {
+  
+    html2canvas(content, { scale: 3 }).then((canvas) => {
       const imgData = canvas.toDataURL("image/png");
+  
       const pdf = new jsPDF("p", "mm", "a4");
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const imgHeight = (canvas.height * pdfWidth) / canvas.width;
-      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, imgHeight);
+  
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+  
+      const margin = 20; // space from all sides (top, bottom, left, right)
+  
+      const imgWidth = pageWidth - margin * 2;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+  
+      pdf.addImage(imgData, "PNG", margin, margin, imgWidth, imgHeight);
+  
       pdf.save("VisitDetails.pdf");
     });
   };
+  
 
   return (
     <>
-      <div id="table-content">
-     
-   <div id="table-content" className="flex justify-center">
-  <div className="bg-secondary text-white p-1 rounded-md shadow-md text-center">
-    <h5 className="fs-6 label-cell text-base font-small mb-1">PROJECT NAME</h5>
-    <h5 className="fs-6 label-cell text-base font-small">MAHARERA NO</h5>
-  </div>
+    <div id="table-content" style={{ padding: "20px", fontSize: "14px",border: "2px solid black" }}>
+      {/* Main Table */}
+      <Table bordered>
+        <thead>
+          <tr>
+            <th className=" " style={{ border: "2px solid black" }}>Flat Type</th>
+            <th className=" " style={{ border: "2px solid black" }}>Carpet Area</th>
+            <th className=" " style={{ border: "2px solid black" }}>Agreement Value</th>
+            <th className=" "style={{ border: "2px solid black" }} >Stamp Duty</th>
+            <th className=" "style={{ border: "2px solid black" }}>Registration Charges</th>
+            <th className=" "style={{ border: "2px solid black" }}>GST</th>
+            <th className=" "style={{ border: "2px solid black" }}>Total Package</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td ></td>
+            <td ></td>
+            <td ></td>
+            <td ></td>
+            <td ></td>
+            <td ></td>
+            <td ></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td ></td>
+            <td ></td>
+            <td ></td>
+            <td ></td>
+            <td ></td>
+            <td ></td>
+          </tr>
+
+
+          <tr>
+            <td></td>
+            <td ></td>
+            <td ></td>
+            <td ></td>
+            <td ></td>
+            <td></td>
+            <td></td>
+          </tr>
+
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+
+        </tbody>
+      </Table>
+
+      <div style={{ marginTop: "40px", display: "flex", justifyContent: "space-between" }}>
+       
+        <div style={{ width: "60%",paddingTop: "150px"  }}>
+          <h6 className="fw-bold">Terms & Conditions :</h6>
+          {/* <ul style={{ paddingLeft: "16px",fontWeight:"bold" }}> */}
+          <ul style={{ 
+        paddingLeft: "16px", 
+        fontWeight: "bold", 
+        fontSize: "14px",  // Font size 4 = 14px approx
+        listStyleType: "disc"  // Bullets
+      }}>
+            <li>Booking Amount Rs.</li>
+            <li>Parking Charges Of Rs.</li>
+            <li>Taxes and required Own Contribution to be paid within 10 days from the date of booking.</li>
+            <li>Agreement should be registered within 21 days from the date of booking.</li>
+            <li>Home loan disbursement shall be done within 10 days from the date of the Agreement.</li>
+            <li>If Payment is delayed more than 10 days from the Date of demand, Interest will be applicable as per RERA.</li>
+            <li>Temporary Maintenance for 2 BHK ----- /- & 3 BHK ----- /- for 1 year to be paid before possession.</li>
+            <li>Loan Through our Executives only, Contact Details: ( Name - Contact No:___ ). Home loans from outside bankers are not allowed. If the Loan is executed from outside bankers administrative charges of Rs 25,000 shall be applicable.</li>
+            <li>Legal Charges of Rs. ----- to be paid before the Agreement.</li>
+            <li>Internal Changes or Customization not acceptable.</li>
+            <li>TDS 1% on agreement cost should be paid immediately after agreement execution and shall be payable by the home buyer.</li>
+            <li>In case of cancellation a cancellation fee will be applicable as per MahaRERA guidelines.</li>
+            <li>The Purchaser has received the floor plan & specification, of the said flat at the time of booking and has no
+            confusion whatsoever and would not change the option confirmed by us on the date of booking.</li>
+            <li>Management reserves all the rights for any changes in the above- mentioned terms and prices. The
+            decision of the Management shall be final in case of any dispute.
+            </li>
+            <li>• Cheque in favour of  (CompanyName )______________________ .
+            </li>
+<li>Contact___________________</li>
+          </ul>
+        </div>
+
+
+
+        {/* Summary Table */}
+        <div style={{ width: "35%", paddingTop: "150px" }}>
+  <Table bordered style={{ border: "2px solid black", borderCollapse: "collapse" }}>
+    <tbody>
+      <tr>
+        <th style={{ border: "2px solid black" }}>Payment Schedules : Particulars</th>
+        <th style={{ border: "2px solid black" }}>%</th>
+      </tr>
+      <tr>
+        <td style={{ border: "2px solid black" }}>ON BOOKING</td>
+        <td style={{ border: "2px solid black" }}></td>
+      </tr>
+      <tr>
+        <td style={{ border: "2px solid black" }}>ON EXECUTION OF THE AGREEMENT</td>
+        <td style={{ border: "2px solid black" }}></td>
+      </tr>
+      <tr>
+        <td style={{ border: "2px solid black" }}>ON EXECUTION OF FOOTINGS</td>
+        <td style={{ border: "2px solid black" }}></td>
+      </tr>
+      <tr>
+        <td style={{ border: "2px solid black" }}>ON COMPLETION OF PLINTH</td>
+        <td style={{ border: "2px solid black" }}></td>
+      </tr>
+      <tr>
+        <td style={{ border: "2px solid black" }}>ON COMPLETION OF 2ND RCC SLAB</td>
+        <td style={{ border: "2px solid black" }}></td>
+      </tr>
+      <tr>
+        <td style={{ border: "2px solid black" }}>ON COMPLETION OF 5TH RCC SLAB</td>
+        <td style={{ border: "2px solid black" }}></td>
+      </tr>
+      <tr>
+        <td style={{ border: "2px solid black" }}>ON COMPLETION OF 8TH RCC SLAB</td>
+        <td style={{ border: "2px solid black" }}></td>
+      </tr>
+      <tr>
+        <td style={{ border: "2px solid black" }}>ON COMPLETION OF 11TH RCC SLAB</td>
+        <td style={{ border: "2px solid black" }}></td>
+      </tr>
+      <tr>
+        <td style={{ border: "2px solid black" }}>ON COMPLETION OF 14TH RCC SLAB</td>
+        <td style={{ border: "2px solid black" }}></td>
+      </tr>
+      <tr>
+        <td style={{ border: "2px solid black" }}>ON 100% COMPLETION OF RCC SLABS</td>
+        <td style={{ border: "2px solid black" }}></td>
+      </tr>
+      <tr>
+        <td style={{ border: "2px solid black" }}>ON COMPLETION OF BRICKWORKS</td>
+        <td style={{ border: "2px solid black" }}></td>
+      </tr>
+      <tr>
+        <td style={{ border: "2px solid black" }}>ON COMPLETION OF FLOORING, DOORS</td>
+        <td style={{ border: "2px solid black" }}></td>
+      </tr>
+      <tr>
+        <td style={{ border: "2px solid black" }}>ON COMPLETION OF STAIRCASE, SANITARY</td>
+        <td style={{ border: "2px solid black" }}></td>
+      </tr>
+      <tr>
+        <td style={{ border: "2px solid black" }}>ON COMPLETION OF EXTERNAL PLUMBING</td>
+        <td style={{ border: "2px solid black" }}></td>
+      </tr>
+      <tr>
+        <td style={{ border: "2px solid black" }}>ON COMPLETION OF LIFTS & ELECTRICAL</td>
+        <td style={{ border: "2px solid black" }}></td>
+      </tr>
+      <tr>
+        <td style={{ border: "2px solid black" }}>ON POSSESSION</td>
+        <td style={{ border: "2px solid black" }}></td>
+      </tr>
+      <tr>
+        <td style={{ border: "2px solid black" }}><strong>Total</strong></td>
+        <td style={{ border: "2px solid black" }}><strong>100</strong></td>
+      </tr>
+    </tbody>
+  </Table>
 </div>
 
 
-     
        
-        <Table bordered className="visit-table fs-5">
-          <tbody>
-           
-        
-            <tr>
-              <td className="label-cell">Firm Name / PROJECT NAME / WING NO E / UNIT NO 208 - fn/P</td>
-              <td className="value-cell"></td> 
-              <td className="label-cell">Date :</td>
-            </tr>
-        
-            <tr>
-              <td className="label-cell">UNIT No</td>
-              <td className="value-cell"></td> 
-              <td className="label-cell">WING:</td>
-            </tr>
-        
-            <tr>
-              <td className="label-cell">CARPET</td>
-              <td className="value-cell"></td> 
-              <td className="label-cell">UNIT TYPE:</td>
-            </tr>
-        
-            <tr>
-              <td className="label-cell">OPEN/ENCLOSED BALCONY AS SANCTIONED</td>
-              <td className="value-cell"></td> 
-              <td className="value-cell"></td> 
-            </tr>
-        
-            <tr>
-              <td className="label-cell">TERRACE</td>
-              <td className="label-cell">ATT. TERRACE CARPET AREA</td>
-              <td className="value-cell"></td> 
-            </tr>
-        
-            <tr>
-              <td className="label-cell">SITOUT</td>
-              <td className="value-cell">	BALCONY AREA/ SITOUR CARPET AREA</td> 
-              <td className="value-cell"></td> 
-            </tr>
-        
-            <tr>
-              <td className="label-cell">PODIUM GARDEN</td>
-              <td className="value-cell"></td> 
-              <td className="value-cell"></td> 
-            </tr>
-        
-            <tr>
-              <td className="label-cell">PORCH</td>
-              <td className="value-cell">	PORCH AREA</td> 
-              <td className="value-cell"></td> 
-            </tr>
-        
-            
-            <tr>
-              <td className="label-cell">TOP TERRACE</td>
-              <td className="value-cell">TOP TERRACE CARPET AREA</td> 
-              <td className="value-cell"></td> 
-            </tr>
-            
-            <tr>
-              <td className="label-cell fw-bold fs-5">TOTAL USABLE AREA</td>
-              <td className="value-cell"></td> 
-              <td className="value-cell"></td> 
-            </tr>
-            
-            <tr>
-              <td className="label-cell">Agreement value</td>
-              <td className="value-cell"></td> 
-              <td className="value-cell"></td> 
-            </tr>
-            
-            <tr>
-              <td className="label-cell">STAMP DUTY (AS APPLICABLE)</td>
-              <td className="value-cell"></td> 
-              <td className="value-cell"></td> 
-            </tr>
-            
-            <tr>
-              <td className="label-cell">REGISTRATION (AS APPLICABLE)</td>
-              <td className="value-cell"></td> 
-              <td className="value-cell"></td> 
-            </tr>
-            
-            <tr>
-              <td className="label-cell">GST @%</td>
-              <td className="value-cell"></td> 
-              <td className="value-cell"></td> 
-            </tr>
-        
-            <tr>
-              <td className="label-cell fw-bold fs-5">Grand Total</td>
-              <td className="value-cell"></td> 
-              <td className="value-cell"></td> 
-            </tr>
-          
-              <tr className="label-cell">This Cost Sheet is valid till (15 days from the date of booking)-</tr>
-           
-           
-        
-         
-              <tr className="label-cell">Booking Cheque Favouring -</tr>
-              
-            
-        
-          
-              <tr className="label-cell">Taxes Cheque Favouring -</tr>
-             
-        
-        
-           
-              <tr className="label-cell">STAMP DUTY AND REGISTRATION CHARGES TO BE PAID IMMEDIATELY</tr>
-             
-         
-        
-            
-              <tr className="label-cell">Agreement should be registered within 21 days from the date of Applications</tr>
-          
-           
-        
-            
-              <tr className="label-cell">Prior to agreement, the client should submit the loan sanction letter from the bank,if availing any.</tr>
-             
-      
-            
-              <tr className="label-cell">Execution of agreement will be subject to realisation of the payment made by the client.</tr>
-            
-        
-          
-              <tr className="label-cell">TDS (As Applicable)</tr>
-            
-          
-            
-            <tr className="label-cell">Government Charges/taxes are subject to change & would be applicable at actuals.</tr>
-             
-            
-            
-              <tr className="label-cell">Lumpsum Advance Maintenance Deposit shall be collected at the time of Possession for initial 
-                24 months as per the agreement Rs._____________ MNGL Security Deposit Rs._________________.
-              </tr>
-             
-          
-           
-              <tr className="label-cell">Rates are subject to change without prior notice.</tr>
-             
-        
-        
-            
-              <tr className="label-cell">Govt taxes to be paid by the buyer as per prevailing rates.</tr>
-             
-       
-        
-        
-            
-              <tr className="label-cell">The above mentioned cost is based on the tentative area, the exact area & agreement cost will be reconfirmed at the time of agreement.</tr>
-           
-          
-        
-            
-              <tr className="label-cell">This is purely conceptual & not a legal offering Company reserves the right to add, delete, or alter any details in its endeavour
-              to make improvements as & when required</tr>
-            
-           
-        
-          
-              <tr className="label-cell">Source of Enquiry</tr>
-            
-           
-        
-           
-              <tr className="label-cell">Agent Agent/Broker Name:</tr>
-          
-        
-        
-            
-              <tr className="label-cell">If any case, for any reason the unit is cancelled after registration, then brokerage paid to the broker by the company will be
-deducted from the amount paid and the balance will be refunded as per terms & conditions mentioned in the application for
-allotment of the said unit,
-</tr>
-              
-           
-            
-            <tr>
-              <td className="label-cell">1st Applicant Name:</td>
-             
-              <td className="value-cell">Sign :</td> 
-            </tr>
-            
-            <tr>
-              <td className="label-cell">Manager Name:</td>
-           
-              <td className="value-cell">Sign :</td> 
-            </tr>
-          
-          </tbody>
-        </Table>
-
-        <p> ***We are concerned about accuracy and timely payment, so customer has been made aware that while making payment be
-sure that you have made payment only via bank transfer by using the correct Account number and IFSCode of the Company
-or via POS machine (either card swipe or by scanning QR code only on POS machine) or by way of DD/Cheque addressed to
-Company's name as mentioned in the demand letter. Payment received through these method will be considered as payment done by customer </p>
       </div>
 
+
+     <div className="visitpdftable">
+     <Table  bordered className=" w-50 ">
+          <thead>
+            <tr>
+              <th>Days</th>
+              <th>Particular</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style={{ border: "2px solid black" }}>Within 7 Days</td>
+              <td style={{ border: "2px solid black" }}>Bank Loan Sanction Letter</td>
+            </tr>
+            <tr>
+              <td style={{ border: "2px solid black" }}>Within 15 Days</td>
+              <td style={{ border: "2px solid black" }}>Own Contribution</td>
+            </tr>
+            <tr>
+              <td style={{ border: "2px solid black" }}>Within 21 Days</td>
+              <td style={{ border: "2px solid black" }}>Stamp Duty, Registration, GST, Agreement to be done</td>
+            </tr>
+            <tr>
+              <td style={{ border: "2px solid black" }}>Within 31 Days</td>
+              <td style={{ border: "2px solid black" }}>1st Bank Disbursement shall be done as per current construction stage</td>
+            </tr>
+          </tbody>
+        </Table>
+        </div>
+    </div>
      
     </>
   );

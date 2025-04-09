@@ -273,6 +273,8 @@ const MISReport = () => {
 
 
   return (
+<>
+    <h5 className='fs-6 mx-3'>Reports /MIS</h5>
     <div className="container mt-5 shadow p-4 rounded">
       {/* Form */}
       <form onSubmit={handleSubmit}>
@@ -331,8 +333,9 @@ const MISReport = () => {
               value={ownerType}
               onChange={(e) => setOwnerType(e.target.value)}
             >
-              <option value="">Select Owner Type</option>
-            
+          <option value="">Select Owner Type</option>
+<option value="Landowner">Landowner</option>
+
             </select>
           </div>
 
@@ -432,6 +435,8 @@ const MISReport = () => {
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>RECEIVED AGAINST GST</TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>BALANCE AGAINST GST</TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>TOTAL DUE INCLUDING GST</TableCell>
+             
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}> DUE AS PER WORK STAGE</TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>PARKING</TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>BANKER</TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>BOOKING (10%)</TableCell>
@@ -451,6 +456,30 @@ const MISReport = () => {
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>LIFT (5%)</TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>POSSESSION (5%)</TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>TOTAL</TableCell>
+
+
+
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>BOOKING (10%)</TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>AGREEMENT (10%)</TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>PLINTH (15%)</TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>1ST SLAB (5%)</TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>2ND SLAB (5%)</TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>3RD SLAB (5%)</TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>5TH SLAB (5%)</TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>7TH SLAB (5%)</TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>9TH SLAB (5%)</TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>10TH SLAB (5%)</TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>BRICK WORK (5%)</TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>EXTERNAL PLASTER (5%)</TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>FLOORING (5%)</TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>STAIRCASE (5%)</TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>LIFT (5%)</TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>POSSESSION (5%)</TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>TOTAL</TableCell>
+
+
+
+
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>OWNER TYPE</TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>APPROVED / UNAPPROVED</TableCell>
             </TableRow>
@@ -494,6 +523,7 @@ const MISReport = () => {
                 <TableCell>{data.receivedAgainstGst}</TableCell>
                 <TableCell>{data.balanceAgainstGst}</TableCell>
                 <TableCell>{data.totalDueIncludingGst}</TableCell>
+                <TableCell></TableCell>
                 <TableCell>{data.parking}</TableCell>
                 <TableCell>{data.banker}</TableCell>
                 <TableCell>{data.booking}</TableCell>
@@ -513,6 +543,26 @@ const MISReport = () => {
                 <TableCell>{data.lift}</TableCell>
                 <TableCell>{data.possession}</TableCell>
                 <TableCell>{data.total}</TableCell>
+
+
+                <TableCell></TableCell>
+                <TableCell></TableCell>
+                <TableCell></TableCell>
+                <TableCell></TableCell>
+                <TableCell></TableCell>
+                <TableCell></TableCell>
+                <TableCell></TableCell>
+                <TableCell></TableCell>
+                <TableCell></TableCell>
+                <TableCell></TableCell>
+                <TableCell></TableCell>
+                <TableCell></TableCell>
+                <TableCell></TableCell>
+                <TableCell></TableCell>
+                <TableCell></TableCell>
+                <TableCell></TableCell>
+                <TableCell></TableCell>
+
                 <TableCell>{data.ownerType}</TableCell>
                 <TableCell>{data.approvalStatus}</TableCell>
               </TableRow>
@@ -521,6 +571,7 @@ const MISReport = () => {
         </Table>
       </TableContainer>
     </div>
+    </>
   );
 };
 

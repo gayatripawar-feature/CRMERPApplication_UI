@@ -292,3 +292,16 @@ th, td {
 
 
 
+.visit-style {
+  border: 1px solid black;   /* Border from all sides */
+  padding: 10px;             /* Padding from all sides */
+}
+
+.visit-style td {
+  padding: 10px 15px;         /* Padding inside cells */
+  font-size: 38px;           /* Increase font size */
+}
+
+.visitpdftable{
+  padding-top: 20px;
+}
