@@ -9,7 +9,7 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
 import { Grid ,IconButton,Dialog, DialogTitle, 
   DialogContent, DialogActions,FormGroup, FormControlLabel, Checkbox} from '@mui/material';
   import { } from "@mui/material";
-// import { Modal, Container, Row, Col } from 'react-bootstrap';
+
 import dayjs from 'dayjs';
 import EditIcon from "@mui/icons-material/Edit";
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -21,10 +21,10 @@ import { toast } from "react-toastify";
 import { jsPDF } from "jspdf";
 import { Form, FloatingLabel } from 'react-bootstrap';
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-// import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
+
 import DescriptionIcon from "@mui/icons-material/Description";
 import CloseIcon from "@mui/icons-material/Close";
-// import ContractIcon from '@mui/icons-material/Contract';
+
 import { FaFileSignature } from 'react-icons/fa';
 
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
@@ -60,52 +60,106 @@ const getFilterOptions = (type) => {
 
 
 
-const currentData = [
-  {
-    flatNo: "101",
-    nameOfAllotee: "John Doe",
-    nameOfCoAllotee: "Jane Doe",
-    type: "2 BHK",
-    floor: "1st Floor",
-    emailId: "johndoe@example.com",
-    whatsappMobileNo: "+1234567890",
-    rate: "₹50,000",
-    agreementValue: "₹5,00,000",
-    dateOfBooking: "01/01/2023",
-    parking: "Yes",
-    agreementDraftGeneration: "Generated",
-    agreementStatus: "",
-    checklistBeforeAgreement: "",
-    addressOfAgreement: "123 Street, City, Country",
-    agreementDate: "", // Add this field for the date
-    time: "10:00:00",
-  },
-  {
-    flatNo: "102",
-    nameOfAllotee: "Alice Smith",
-    nameOfCoAllotee: "Bob Smith",
-    type: "3 BHK",
-    floor: "2nd Floor",
-    emailId: "alicesmith@example.com",
-    whatsappMobileNo: "+1987654321",
-    rate: "₹60,000",
-    agreementValue: "₹6,00,000",
-    dateOfBooking: "05/02/2023",
-    parking: "No",
-    agreementDraftGeneration: "Not Generated",
-    agreementStatus: "",
-    checklistBeforeAgreement: "",
-    addressOfAgreement: "456 Avenue, City, Country",
-    agreementDate: "", // Add this field for the date
-    time: "12:00:00",
-  },
-  // Add more rows as needed...
-];
+// const currentData = [
+//   {
+//     flatNo: "101",
+//     nameOfAllotee: "John Doe",
+//     nameOfCoAllotee: "Jane Doe",
+//     type: "2 BHK",
+//     floor: "1st Floor",
+//     emailId: "johndoe@example.com",
+//     whatsappMobileNo: "+1234567890",
+//     rate: "₹50,000",
+//     agreementValue: "₹5,00,000",
+//     dateOfBooking: "01/01/2023",
+//     parking: "Yes",
+//     agreementDraftGeneration: "Generated",
+//     agreementStatus: "",
+//     checklistBeforeAgreement: "",
+//     addressOfAgreement: "123 Street, City, Country",
+//     agreementDate: "", // Add this field for the date
+//     time: "10:00:00",
+//   },
+//   {
+//     flatNo: "102",
+//     nameOfAllotee: "Alice Smith",
+//     nameOfCoAllotee: "Bob Smith",
+//     type: "3 BHK",
+//     floor: "2nd Floor",
+//     emailId: "alicesmith@example.com",
+//     whatsappMobileNo: "+1987654321",
+//     rate: "₹60,000",
+//     agreementValue: "₹6,00,000",
+//     dateOfBooking: "05/02/2023",
+//     parking: "No",
+//     agreementDraftGeneration: "Not Generated",
+//     agreementStatus: "",
+//     checklistBeforeAgreement: "",
+//     addressOfAgreement: "456 Avenue, City, Country",
+//     agreementDate: "", // Add this field for the date
+//     time: "12:00:00",
+//   },
+//   // Add more rows as needed...
+// ];
+
+
+
+
 
 
 
 const Agreement = () => {
-  const [loans, setLoans] = useState([]);
+
+  const [currentData, setCurrentData] = useState([
+    {
+      flatNo: "101",
+      nameOfAllotee: "John Doe",
+      nameOfCoAllotee: "Jane Doe",
+      type: "2 BHK",
+      floor: "1st Floor",
+      emailId: "johndoe@example.com",
+      whatsappMobileNo: "+1234567890",
+      rate: "₹50,000",
+      agreementValue: "₹5,00,000",
+      dateOfBooking: "01/01/2023",
+      parking: "Yes",
+      agreementDraftGeneration: "Generated",
+      agreementStatus: "",
+      checklistBeforeAgreement: "",
+      addressOfAgreement: "123 Street, City, Country",
+      agreementDate: "",
+      time: "10:00:00",
+    },
+    {
+      flatNo: "102",
+      nameOfAllotee: "Alice Smith",
+      nameOfCoAllotee: "Bob Smith",
+      type: "3 BHK",
+      floor: "2nd Floor",
+      emailId: "alicesmith@example.com",
+      whatsappMobileNo: "+1987654321",
+      rate: "₹60,000",
+      agreementValue: "₹6,00,000",
+      dateOfBooking: "05/02/2023",
+      parking: "No",
+      agreementDraftGeneration: "Not Generated",
+      agreementStatus: "",
+      checklistBeforeAgreement: "",
+      addressOfAgreement: "456 Avenue, City, Country",
+      agreementDate: "",
+      time: "12:00:00",
+    },
+  ]);
+  // const [loans, setLoans] = useState([]);
+
+  
+
+
+
+  const [loans, setLoans] = useState([
+    { agreementStatus: "" },
+    // ... more loan entries
+  ]);
   const [filteredLoans, setFilteredLoans] = useState([]);
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
@@ -114,17 +168,17 @@ const Agreement = () => {
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
    const [isExpanded, setIsExpanded] = useState(true);
-  //  const [currentData, setCurrentData] = useState([]);
+ 
 
 
   const rowsPerPage = 10;
   
-  // State for Modal
+ 
   const [openModal, setOpenModal] = useState(false);
-  // const [selectedLoan, setSelectedLoan] = useState(null);
+ 
 
   const [open, setOpen] = useState(false);
-  // const [updatedChecklist, setUpdatedChecklist] = useState(loan.checklistBeforeAgreement || "");
+
   const [updatedChecklist, setUpdatedChecklist] = useState("");
 
   const [checkedItems, setCheckedItems] = useState({
@@ -134,21 +188,21 @@ const Agreement = () => {
   });
   const initialState = {
     checkedItems: {
-      item1: false,  // Checking Draft Details Once
-      item2: false,  // Parking
-      item3: false,  // Sq. Ft (All Area)
-      item4: false,  // 7/12 (Latest Three Months)
-      item5: false,  // Attach Search and Title Report
-      item6: false,  // Attach Commencement Certificate
-      item7: false,  // Attach NA Order
-      item8: false,  // Attach RERA Certificate
-      item9: false,  // Stamp Approval (1st Page Sanction Plan)
-      item10: false, // Attach Mark Flat Layout on Draw
-      item11: false, // Company PAN
-      item12: false, // Promoter KYC
-      item13: false, // Customer KYC
-      item14: false, // Attach Photos - (Customer / Promoter)
-      item15: false  // Sign, Photo and Thumb (Customer and Promoter)
+      item1: false,  
+      item2: false,  
+      item3: false,  
+      item4: false,  
+      item5: false,  
+      item6: false,  
+      item7: false,  
+      item8: false,  
+      item9: false,  
+      item10: false, 
+      item11: false, 
+      item12: false, 
+      item13: false, 
+      item14: false, 
+      item15: false  
     }
   };
   
@@ -166,14 +220,7 @@ const Agreement = () => {
     nameOfCoAllotee: "",
   });
   
-  // useEffect(() => {
-  //   if (selectedLoan.alloteeDOB) {
-  //     const dob = new Date(selectedLoan.alloteeDOB);
-  //     const diff = Date.now() - dob.getTime();
-  //     const age = new Date(diff).getUTCFullYear() - 1970;
-  //     handleInputChange("alloteeAge", age >= 0 ? age : "");
-  //   }
-  // }, [selectedLoan.alloteeDOB]);
+ 
 
 
   useEffect(() => {
@@ -192,7 +239,7 @@ const handleToggle = () => {
   setIsExpanded((prev) => !prev);
 };
  
-// Handle checkbox change
+
 const handleCheckboxChange = (event) => {
   setCheckedItems({
     ...checkedItems,
@@ -200,10 +247,10 @@ const handleCheckboxChange = (event) => {
   });
 };
   const handleInputChange = (field, value) => {
-    // Handle Age field validation
+    
     if (field === "alloteeAge") {
-      // Ensure that the value entered is a number and within an acceptable range
-      if (!isNaN(value) && value >= 0 && value <= 120) {  // Allow only numbers between 0 and 120 for age
+     
+      if (!isNaN(value) && value >= 0 && value <= 120) {  
         setSelectedLoan((prev) => ({
           ...prev,
           [field]: value,
@@ -213,22 +260,22 @@ const handleCheckboxChange = (event) => {
         console.log("Invalid input: Please enter a valid age.");
       }
     } else if (field === "nameOfAllotee" || field === "coAlloteeName") {
-      // Handle Allotee Name and Co-Allotee Name (letters and spaces only)
+     
       const regex = /^[A-Za-z\s]*$/;
   
-      if (regex.test(value) || value === "") {  // Allowing empty input initially
+      if (regex.test(value) || value === "") {  
         setSelectedLoan((prev) => ({
           ...prev,
           [field]: value,
         }));
       } else {
-        // Show error toast if the input is invalid (non-alphabetical characters)
+      
         toast.error("Invalid input: Only letters and spaces are allowed.");
         console.log("Invalid input: Only letters and spaces are allowed.");
       }
     } else if (field === "contact") {
-      // Handle Contact field (only 10 digits allowed)
-      const regex = /^[0-9]{0,10}$/;  // Allow only numbers and restrict to 10 digits
+    
+      const regex = /^[0-9]{0,10}$/;  
   
       if (regex.test(value)) {
         setSelectedLoan((prev) => ({
@@ -258,8 +305,8 @@ const handleCheckboxChange = (event) => {
     contact: "",
   });
   const openChecklistDialog = (index) => {
-    setSelectedIndex(index); // Set the current index of the selected row
-    setOpen(true); // Open the dialog
+    setSelectedIndex(index); 
+    setOpen(true);
   };
   
   const closeChecklistDialog = () => {
@@ -294,12 +341,12 @@ const handleCheckboxChange = (event) => {
   // };
   
 
-  const handleStatusChange = (event, index) => {
-    const newStatus = event.target.value;
-    const updatedData = [...currentData];
-    updatedData[index].agreementStatus = newStatus;
-    setCurrentData(updatedData);
-  };
+  // const handleStatusChange = (event, index) => {
+  //   const newStatus = event.target.value;
+  //   const updatedData = [...currentData];
+  //   updatedData[index].agreementStatus = newStatus;
+  //   setCurrentData(updatedData);
+  // };
   
 
   const filterLoans = () => {
@@ -518,6 +565,16 @@ const generatePDF = () => {
   
   
 
+  const handleStatusChange = (index, value) => {
+    const updatedData = [...currentData];
+    if (!updatedData[index]) {
+      console.error("Invalid index in handleStatusChange:", index);
+      return;
+    }
+    updatedData[index].agreementStatus = value;
+    setCurrentData(updatedData);
+  };
+  
 
 
 
@@ -695,8 +752,8 @@ const generatePDF = () => {
   <Table>
     <TableHead>
       <TableRow sx={{ background: "#3621a9" }}>
-        <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>Flat No.</TableCell>
-        <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>Name Of Allotee</TableCell>
+        <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>FLAT NO.</TableCell>
+        <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>NAME OF ALLOTEE</TableCell>
         <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>NAME OF CO-ALLOTEE</TableCell>
         <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>TYPE</TableCell>
         <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>FLOOR</TableCell>
@@ -734,7 +791,7 @@ const generatePDF = () => {
         <TableCell>{loan.parking}</TableCell>
         <TableCell>{loan.agreementDraftGeneration}</TableCell>
         {/* <TableCell>{loan.agreementStatus}</TableCell> */}
-        <TableCell>
+        {/* <TableCell>
   <FormControl fullWidth size="small">
   <Select
   value={loan.agreementStatus || ""}
@@ -751,7 +808,28 @@ const generatePDF = () => {
 </Select>
 
   </FormControl>
+</TableCell> */}
+
+
+<TableCell>
+  <FormControl fullWidth size="small">
+  <Select
+  value={loan.agreementStatus ?? ""}
+  // onChange={(event) => handleStatusChange(event, index)}
+  onChange={(event) => handleStatusChange(index, event.target.value)}
+
+  displayEmpty
+  renderValue={(selected) => (selected ? selected : "Select Status")}
+>
+  <MenuItem disabled value="">Select Status</MenuItem>
+  <MenuItem value="Yes">Yes</MenuItem>
+  <MenuItem value="No">No</MenuItem>
+</Select>
+
+  </FormControl>
 </TableCell>
+
+
        
 <TableCell>
   {loan.checklistBeforeAgreement}
