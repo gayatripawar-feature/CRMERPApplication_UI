@@ -451,8 +451,8 @@ const MISReport = () => {
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>LIFT (5%)</TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>POSSESSION (5%)</TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>TOTAL</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>Owner Type</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>Approved / Unapproved</TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>OWNER TYPE</TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>APPROVED / UNAPPROVED</TableCell>
             </TableRow>
           </TableHead>
           {/* Table Body */}

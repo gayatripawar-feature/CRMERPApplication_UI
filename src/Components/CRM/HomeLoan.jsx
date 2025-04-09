@@ -45,6 +45,8 @@ const HomeLoan = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
    const [isExpanded, setIsExpanded] = useState(true);
    const [selectedFileNames, setSelectedFileNames] = useState([]);
+  //  const [loanData, setLoanData] = useState([]);
+  
   // const [editingLoan, setEditingLoan] = useState(null);
   const [editingLoan, setEditingLoan] = useState({
     flatNo: '',
@@ -76,6 +78,9 @@ const HomeLoan = () => {
       });
     }
 
+
+
+   
    
     if (filterValue) {
       filtered = filtered.filter((loan) => loan.homeLoanApplicability === filterValue);
@@ -286,7 +291,27 @@ const handleToggle = () => {
     handleCloseMailPopup();
   };
   
+ 
+
+  // const handleStatusChange = (e, id) => {
+  //   console.log(loanData);
+
+  //   const { value } = e.target;
+  //   setLoanData((prevData) =>
+  //     prevData.map((loan) =>
+  //       loan.id === id ? { ...loan, homeLoanSanctionCertificateCollected: value } : loan
+  //     )
+  //   );
+  // };
   
+  const handleStatusChange = (e, id) => {
+    const { value } = e.target;
+    setLoansData((prevData) =>
+      prevData.map((loan) =>
+        loan.id === id ? { ...loan, homeLoanSanctionCertificateCollected: value } : loan
+      )
+    );
+  };
 
 const displayLoans = () => {
   return filteredLoans.slice(start, end).map((loan) => (
@@ -491,7 +516,7 @@ const displayLoans = () => {
   </TableCell>
 
   
-  <TableCell>
+  {/* <TableCell>
     <select className='p-2 bg-light'
       value={loan?.homeLoanSanctionCertificateCollected || ""} 
       onChange={(e) => handleStatusChange(e, loan.id)}
@@ -500,8 +525,44 @@ const displayLoans = () => {
       <option value="In Process">In Process</option>
       <option value="Self Funding">Self Funding</option>
     </select>
-  </TableCell>
- 
+  </TableCell> */}
+ {/* <TableCell>
+  <select
+    className='p-2 bg-light'
+    value={loan?.homeLoanSanctionCertificateCollected || ""}
+    onChange={(e) => handleStatusChange(e, loan.id)}
+  >
+    <option value="" disabled>Select Status</option>  
+    <option value="Collected">Collected</option>
+    <option value="In Process">In Process</option>
+    <option value="Self Funding">Self Funding</option>
+  </select>
+</TableCell> */}
+{/* <TableCell>
+  <select
+    className='p-2 bg-light'
+    value={loan?.homeLoanSanctionCertificateCollected || ""}
+    onChange={(e) => handleStatusChange(e, loan.id)}
+  >
+    <option value="" disabled>Select Status</option>
+    <option value="Collected">Collected</option>
+    <option value="In Process">In Process</option>
+    <option value="Self Funding">Self Funding</option>
+  </select>
+</TableCell> */}
+ <TableCell>
+      <select
+        className="p-2 bg-light"
+        value={loan?.homeLoanSanctionCertificateCollected || ""}
+        onChange={(e) => handleStatusChange(e, loan.id)}
+      >
+        <option value="" disabled>Select Status</option>
+        <option value="Collected">Collected</option>
+        <option value="In Process">In Process</option>
+        <option value="Self Funding">Self Funding</option>
+      </select>
+    </TableCell>
+
   <TableCell>
   <Select
     value={loan.bookingConfirmation || ""}
@@ -785,28 +846,28 @@ const displayLoans = () => {
 
 <TableHead>
   <TableRow sx={{ background: "#3621a9" }}>
-    <TableCell className="fs-6" sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>Flat No.</TableCell>
-    <TableCell className="fs-6" sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>Name Of Allotee</TableCell>
-    <TableCell className="fs-6" sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>Name Of Co-Allotee</TableCell>
-    <TableCell className="fs-6" sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>Type</TableCell>
-    <TableCell className="fs-6" sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>Floor</TableCell>
-    <TableCell className="fs-6" sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>Email ID</TableCell>
-    <TableCell className="fs-6" sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>WHATSAPP MOBILE NO.</TableCell>
-    <TableCell className="fs-6" sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>Rate</TableCell>
-    <TableCell className="fs-6" sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>Agreement Value</TableCell>
-    <TableCell className="fs-6" sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>DATE OF BOOKING</TableCell>
-    <TableCell className="fs-6" sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>Parking</TableCell>
-    <TableCell className="fs-6" sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>Home Loan Applicability</TableCell>
-    <TableCell className="fs-6" sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>Bank Name</TableCell>
-    <TableCell className="fs-6" sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>Banker Name</TableCell>
-    <TableCell className="fs-6" sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>Mobile No</TableCell>
-    <TableCell className="fs-6" sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>LOAN ACCOUNT NO.</TableCell>
-    <TableCell className="fs-6" sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>Loan Amount</TableCell>
-    <TableCell className="fs-6" sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>Sanction Letter</TableCell> 
-    <TableCell className="fs-6" sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>HOME LOAN SANCTION CERTIFICATE COLLECTED</TableCell>
-    <TableCell className="fs-6" sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>BOOKING CONFIRMATION</TableCell>
-    <TableCell className="fs-6" sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>BOOKING CANCELATION REASON</TableCell>
-    <TableCell className="fs-6" sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>BOOKING CONFIRMATION MAIL SENT</TableCell>
+    <TableCell className="" sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>FLAT NO.</TableCell>
+    <TableCell className="" sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>NAME OF ALLOTEE</TableCell>
+    <TableCell className="" sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>NAME OF CO-ALLOTEE</TableCell>
+    <TableCell className="" sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>TYPE</TableCell>
+    <TableCell className="" sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>FLOOR</TableCell>
+    <TableCell className="" sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>EMAIL ID</TableCell>
+    <TableCell className="" sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>WHATSAPP MOBILE NO.</TableCell>
+    <TableCell className="" sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>RATE</TableCell>
+    <TableCell className="" sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>AGREEMENT VALUE</TableCell>
+    <TableCell className="" sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>DATE OF BOOKING</TableCell>
+    <TableCell className="" sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>PARKING</TableCell>
+    <TableCell className="" sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>HOME LOAN APPLICABILITY</TableCell>
+    <TableCell className="" sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>BANK NAME</TableCell>
+    <TableCell className="" sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>BANKER NAME</TableCell>
+    <TableCell className="" sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>MOBILE NO</TableCell>
+    <TableCell className="" sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>LOAN ACCOUNT NO.</TableCell>
+    <TableCell className="" sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>LOAN AMOUNT</TableCell>
+    <TableCell className="" sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>SANCTION LETTER</TableCell> 
+    <TableCell className="" sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>HOME LOAN SANCTION CERTIFICATE COLLECTED</TableCell>
+    <TableCell className="" sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>BOOKING CONFIRMATION</TableCell>
+    <TableCell className="" sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>BOOKING CANCELATION REASON</TableCell>
+    <TableCell className="" sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>BOOKING CONFIRMATION MAIL SENT</TableCell>
   </TableRow>
 </TableHead>
 

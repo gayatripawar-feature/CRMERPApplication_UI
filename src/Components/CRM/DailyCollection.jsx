@@ -440,11 +440,11 @@ const handleToggle = () => {
             <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>TOWARDS</TableCell>
             <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>PAYMENT MODE</TableCell>
             <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>DEMAND PERCENTAGE</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>Planned</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>Actual</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>Amount Received by Account</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>Date of Received Amount (A/c)</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>Time Delay</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>PlANNED</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>ACTUAL</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>AMOUNT RECEIVED BY ACCOUNT</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>DATE OF RECEIVED AMOUNT (A/c)</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>TIME DELAY</TableCell>
            
            
           </TableRow>

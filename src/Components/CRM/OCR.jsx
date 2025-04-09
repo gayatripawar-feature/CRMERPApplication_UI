@@ -22,7 +22,8 @@ import jsPDF from "jspdf";
 import { FaFileDownload } from "react-icons/fa";
 import autoTable from "jspdf-autotable";
 
-
+import HistoryWithCash from './HistorywithCash';
+import HistoryWithoutCash from "./HistoryWithoutCash";
 
 const fetchLoansData = async () => {
   const response = await fetch('/api/getOCRCollection');
@@ -620,40 +621,40 @@ const handleToggle = () => {
       <Table style={{ tableLayout: 'auto', width: '100%' }}>
         <TableHead>
           <TableRow sx={{ background: "#3621a9" }}>
-            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>Flat No.</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>Name Of Allotee</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>Name Of Co-Allotee</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>Type</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>Floor</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>Email</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>Whatsapp No.</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>Rate</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>Agreement Value</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>Booking Date</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>Parking</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>Parking No</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>Loan Status</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>OCR Amount</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>OCR Received</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>OCR Balance</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>Online</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>Cash With AV</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>History Cash With AV</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>Balance Cash With AV</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>Cash Without AV</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>History Cash Without AV</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>Balance Cash Without AV</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>Received As Per Stage</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>Stamp Duty Total</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>Stamp Duty Received</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>Stamp Duty Balance</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>Reg Total</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>Reg Received</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>Reg Balance</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>GST Total</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>GST Received</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>Balance GST</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>Legal Charges Received</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>FLAT NO</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>NAME OF ALLOTEE</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>NAME OF CO-ALLOTEE</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>TYPE</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>FLOOR</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>EMAIL</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>WhatsApp NO</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>RATE</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>AGREEMENT VALUE</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>BOOKING DATE</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>PARKING</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>PARKING NO</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>LOAN STATUS</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>OCR AMOUNT</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>OCR RECEIVED</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>OCR BALANCE</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>ONLINE</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>CASH WITH AV</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>HISTORY CASH WITH AV</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>BALANCE CASH WITH AV</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>CASH WITHOUT AV</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>HISTORY CASH WITHOUT AV</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>BALANCE CASH WITHOUT AV</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>RECEIVED AS PER STAGE</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>STAMP DUTY TOTAL</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>STAMP DUTY RECEIVED</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>STAMP DUTY BALANCE</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>REG TOTAL</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>REG RECEIVED</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>REG BALANCE</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>GST TOTAL</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>GST RECEIVED</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>BALANCE GST</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>LEGAL CHARGES RECEIVED</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -711,7 +712,7 @@ const handleToggle = () => {
 
 
             
-
+{/* 
 <TableCell>
       <div style={{ display: "flex", alignItems: "center", flexDirection: "column" }}>
        
@@ -759,9 +760,7 @@ const handleToggle = () => {
               <Button onClick={() => setExpanded(false)} variant="outlined" size="small">
                 Cancel
               </Button>
-              {/* <Button onClick={handleSave} variant="contained" size="small">
-                {editingIndex !== null ? "Update" : "Save"}
-              </Button> */}
+             
 
 <Button onClick={() => handleSave("cash")} variant="contained" size="small">
   {editingIndex !== null ? "Update" : "Save"}
@@ -771,7 +770,11 @@ const handleToggle = () => {
           </div>
         </Collapse>
       </div>
-    </TableCell>
+    </TableCell> */}
+
+<TableCell>
+  <HistoryWithCash />
+</TableCell>
 <TableCell></TableCell>
   
 <TableCell>
@@ -790,8 +793,10 @@ const handleToggle = () => {
 </TableCell>
 
 
-
 <TableCell>
+  <HistoryWithoutCash />
+</TableCell>
+{/* <TableCell>
       <div style={{ display: "flex", alignItems: "center", flexDirection: "column" }}>
        
         <IconButton onClick={() => handleAddClick("cashWithAV")} style={{ marginBottom: "8px" }}>
@@ -842,7 +847,7 @@ const handleToggle = () => {
           </div>
         </Collapse>
       </div>
-    </TableCell>
+    </TableCell> */}
 
 <TableCell></TableCell>
 <TableCell></TableCell>

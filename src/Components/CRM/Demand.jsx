@@ -487,19 +487,19 @@ const handleToggle = () => {
             <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>AGREEMENT VALUE</TableCell>
             <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>DATE OF BOOKING</TableCell>
             <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>PARKING</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>Date of Demand Raised</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>Demand Level</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>Demand Stage (In %)</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>Demand Amount</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>Received Against Agreement Value</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>Total Received</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>Due as per Work Stage</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>Demand Letter</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>Certificate For Engineer</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>Certificate for Architect</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>Demand Letter Mail Sent</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>Expected Date of Demand Collection</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>Balance Against Agreement Value</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>DATE OF DEMAND RAISED</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>DEMAND LEVEL</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>DEMAND STAGE (In %)</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>DEMAND AMOUNT</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>RECEIVED AGAINST AGREEMENT VALUE</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>TOTAL RECEIVED</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>DUE AS PER WORK STAGE</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>DEMAND LETTER</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>CERTIFICATE FOR ENGINEER</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>CERTIFICATE FOR ARCHITECT</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>DEMAND LETTER MAIL SENT</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>EXPECTED DATE OF DEMAND COLLECTION</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>BALANCE AGAINST AGREEMENT VALUE</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
