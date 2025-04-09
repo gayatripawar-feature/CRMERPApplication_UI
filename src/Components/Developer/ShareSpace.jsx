@@ -653,11 +653,11 @@ const handleDownloadPDFShared = () => {
       <Table>
         <TableHead style={{ backgroundColor: '#3621a9' }}>
           <TableRow>
-            <TableCell align="center" style={{ fontWeight: 'bold', color: 'white' }}>Action</TableCell>
-            <TableCell align="center" style={{ fontWeight: 'bold', color: 'white' }}>Timestamp</TableCell>
-            <TableCell align="center" style={{ fontWeight: 'bold', color: 'white' }}>Share To</TableCell>
-            <TableCell align="center" style={{ fontWeight: 'bold', color: 'white' }}>Type of Document</TableCell>
-            <TableCell align="center" style={{ fontWeight: 'bold', color: 'white' }}>Document</TableCell>
+            <TableCell align="center" style={{ fontWeight: 'bold', color: 'white' }}>ACTION</TableCell>
+            <TableCell align="center" style={{ fontWeight: 'bold', color: 'white' }}>TIMESTAMP</TableCell>
+            <TableCell align="center" style={{ fontWeight: 'bold', color: 'white' }}>SHARE TO</TableCell>
+            <TableCell align="center" style={{ fontWeight: 'bold', color: 'white' }}>TYPE OF DOCUMENT</TableCell>
+            <TableCell align="center" style={{ fontWeight: 'bold', color: 'white' }}>DOCUMENT</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -868,12 +868,12 @@ const handleDownloadPDFShared = () => {
       <Table>
         <TableHead>
           <TableRow sx={{ background: "#3621a9" }}> 
-            <TableCell align="center" sx={{ fontWeight: "bold",color: "white" }}>Shared From</TableCell>
-            <TableCell align="center" sx={{ fontWeight: "bold",  color: "white" }}>Timestamp</TableCell>
-            <TableCell align="center" sx={{ fontWeight: "bold", color: "white" }}>Share To</TableCell>
-            <TableCell align="center" sx={{ fontWeight: "bold", color: "white" }}>Type of Document</TableCell>
-            <TableCell align="center" sx={{ fontWeight: "bold",  color: "white" }}>Document</TableCell>
-            <TableCell align="center" sx={{ fontWeight: "bold",  color: "white" }}>Action</TableCell>
+            <TableCell align="center" sx={{ fontWeight: "bold",color: "white" }}>SHARED FROM</TableCell>
+            <TableCell align="center" sx={{ fontWeight: "bold",  color: "white" }}>TIMESTAMP</TableCell>
+            <TableCell align="center" sx={{ fontWeight: "bold", color: "white" }}>SHARE TO</TableCell>
+            <TableCell align="center" sx={{ fontWeight: "bold", color: "white" }}>TYPE OF DOCUMENT</TableCell>
+            <TableCell align="center" sx={{ fontWeight: "bold",  color: "white" }}>DOCUMENT</TableCell>
+            <TableCell align="center" sx={{ fontWeight: "bold",  color: "white" }}>ACTION</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -884,7 +884,7 @@ const handleDownloadPDFShared = () => {
               <TableCell>{row.shareTo}</TableCell>
               <TableCell>{row.documentType}</TableCell>
               <TableCell>{row.document}</TableCell>
-              <TableCell align="center">
+              {/* <TableCell align="center">
                 <Button
                   variant="contained"
                   color="info"
@@ -893,7 +893,14 @@ const handleDownloadPDFShared = () => {
                 >
                   <FaEye size={20} />
                 </Button>
-              </TableCell>
+              </TableCell> */}
+              <TableCell align="center">
+  <IconButton
+    onClick={() => window.open(row.document, '_blank')}
+  >
+    <FaEye size={20} color="blue" />
+  </IconButton>
+</TableCell>
             </TableRow>
           ))}
         </TableBody>

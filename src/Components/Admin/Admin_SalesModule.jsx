@@ -447,13 +447,13 @@ const handleEmailBlur = () => {
             <TableHead >
               {/* <TableRow> */}
                <TableRow sx={{background:"#3621a9"}}>
-                <TableCell sx={{ color: "white", fontWeight: "bold" }}>Action</TableCell>
-                <TableCell sx={{ color: "white", fontWeight: "bold" }}>Name</TableCell>
-                <TableCell sx={{ color: "white", fontWeight: "bold" }}>Email</TableCell>
-                <TableCell sx={{ color: "white", fontWeight: "bold" }}>Mobile</TableCell>
-                <TableCell sx={{ color: "white", fontWeight: "bold" }}>Designation</TableCell>
-                <TableCell sx={{ color: "white", fontWeight: "bold" }}>Joining Date</TableCell>
-                <TableCell sx={{ color: "white", fontWeight: "bold" }}>Status</TableCell>
+                <TableCell sx={{ color: "white", fontWeight: "bold" }}>ACTION</TableCell>
+                <TableCell sx={{ color: "white", fontWeight: "bold" }}>NAME</TableCell>
+                <TableCell sx={{ color: "white", fontWeight: "bold" }}>EMAIL</TableCell>
+                <TableCell sx={{ color: "white", fontWeight: "bold" }}>MOBILE</TableCell>
+                <TableCell sx={{ color: "white", fontWeight: "bold" }}>DESIGNATION</TableCell>
+                <TableCell sx={{ color: "white", fontWeight: "bold" }}>JOINING DATE</TableCell>
+                <TableCell sx={{ color: "white", fontWeight: "bold" }}>STATUS</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>

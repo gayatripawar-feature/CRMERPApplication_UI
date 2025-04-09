@@ -49,7 +49,8 @@ import MISReport from "./Components/CRM/MISReport";
 import GeneratePdf from "./Components/Sales/GeneratePdf";
 // import Temp from "./Components/Sales/Temp";
 // import Temp2 from "./Components/Sales/Temp2";  
-import Temp4 from "./Components/Sales/Temp4";
+// import Temp4 from "./Components/Sales/Temp4";
+import Temp5 from "./Components/Sales/Temp5";
 
 // import Temp3 from "./Components/Sales/Temp3";
 const App = () => {
@@ -109,7 +110,8 @@ const App = () => {
         {/* <Route path = "/sales/salestemplates" element={<Temp2/>} /> */}
  {/* <Route path = "/sales/salestemplates" element={<Temp3/>} />  */}
         
-        <Route path = "/sales/salestemplates" element={<Temp4/>} />
+        {/* <Route path = "/sales/salestemplates" element={<Temp4/>} /> */}
+        <Route path = "/sales/salestemplates" element={<Temp5/>} />
         <Route path = "/sales/bookingform" element={<BookingForm/>} />
         <Route path = "/sales/channelpartner" element={<ChannelPartner/>} />
          <Route path ="/sales/salescalander" element={< SalesCalendar/>} />
