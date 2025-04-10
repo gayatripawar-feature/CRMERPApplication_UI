@@ -66,14 +66,18 @@ const Registration = () => {
  const [registrationNumber, setRegistrationNumber] = useState("");
  const [selectedFile, setSelectedFile] = useState(null);
 
- const [activeChecklist, setActiveChecklist] = useState(null); // Track open checklist dialog
-  const [checklistData, setChecklistData] = useState({});
+//  const [activeChecklist, setActiveChecklist] = useState(null); // Track open checklist dialog
+//   const [checklistData, setChecklistData] = useState({});
  
   const [isEditableRow, setIsEditableRow] = useState(null);
 
 
 
   const [registrationNumbers, setRegistrationNumbers] = useState({});
+
+  const [checklistData, setChecklistData] = useState({});
+  const [activeChecklist, setActiveChecklist] = useState(null);
+  
 
   const handleRegistrationChange = (id, value) => {
     setRegistrationNumbers((prev) => ({
@@ -155,15 +159,15 @@ const Registration = () => {
   //   setActiveChecklist(index);
   // };
   const [loansData, setLoansData] = useState(sampleLoans);
-  const openChecklist = (index) => {
-    setActiveChecklist(index);
-    setChecklistData({}); // Reset checklist when opening again
-  };
+  // const openChecklist = (index) => {
+  //   setActiveChecklist(index);
+  //   setChecklistData({}); // Reset checklist when opening again
+  // };
 
-   // Close dialog
-   const closeChecklist = () => {
-    setActiveChecklist(null);
-  };
+  //  // Close dialog
+  //  const closeChecklist = () => {
+  //   setActiveChecklist(null);
+  // };
 
   // // Close dialog
   // const closeChecklist = () => {
@@ -180,26 +184,72 @@ const Registration = () => {
 
 
 // Handle checkbox selection
-const updateChecklist = (event, index) => {
-  const { name, checked } = event.target;
-  setChecklistData((prevData) => ({
-    ...prevData,
-    [name]: checked
-  }));
-};
+// const updateChecklist = (event, index) => {
+//   const { name, checked } = event.target;
+//   setChecklistData((prevData) => ({
+//     ...prevData,
+//     [name]: checked
+//   }));
+// };
+// const updateChecklist = (e, index) => {
+//   const { name, checked } = e.target;
+  
+//   setChecklistData((prev) => ({
+//     ...prev,
+//     [index]: {
+//       ...prev[index],
+//       [name]: checked,
+//     },
+//   }));
+// };
 
 const saveChecklist = () => {
   console.log("Checklist Data Saved:", checklistData);
   closeChecklist();
 };
 
+// new
+const openChecklist = (index) => {
+  setActiveChecklist(index);
+}
+
+
+const closeChecklist = () => {
+  setActiveChecklist(null);
+}
+
+
+const updateChecklist = (e, index) => {
+  const { name, checked } = e.target;
+
+  setChecklistData((prevData) => {
+    const updatedData = {
+      ...prevData,
+      [index]: {
+        ...prevData[index],
+        [name]: checked,
+      },
+    };
+    console.log("Updated Checklist Data:", updatedData); // Always latest data
+    return updatedData;
+  });
+};
+
+
+
+
+
+  
+
 
   const openChecklistDialog = (index) => {
+    console.log("Opening Dialog for index:", index);
     setSelectedIndex(index); 
     setOpen(true); 
   };
   
   const closeChecklistDialog = () => {
+    console.log("Closing Dialog");
     setOpen(false); 
     setSelectedIndex(null); 
     
@@ -755,15 +805,19 @@ const handleFileUpload = (file, index) => {
       </TableCell>
 
       <TableCell>
-  <IconButton onClick={() => openItemDetailsModal(index)} size="small">
+  {/* <IconButton onClick={() => openItemDetailsModal(index)} size="small">
     <AssignmentTurnedInIcon color="primary" />
-  </IconButton>
+  </IconButton> */}
+  <IconButton onClick={() => openChecklist(index)} size="small">
+  <AssignmentTurnedInIcon color="primary" />
+</IconButton>
+
 </TableCell>
 
 
 
 
-<Dialog open={openModal} onClose={() => setOpenModal(false)} fullWidth maxWidth="sm">
+{/* <Dialog open={openModal} onClose={() => setOpenModal(false)} fullWidth maxWidth="sm">
  
 
 <DialogTitle 
@@ -809,8 +863,53 @@ const handleFileUpload = (file, index) => {
       Save
     </Button>
   </DialogActions>
-</Dialog>
+</Dialog> */}
 
+{/* <Dialog open={activeChecklist === index} onClose={closeChecklist} fullWidth maxWidth="sm">
+  <DialogTitle
+    sx={{
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      backgroundColor: "#1976d2",
+      color: "white",
+      padding: "12px 16px"
+    }}
+  >
+    Document Handover Checklist
+    <IconButton onClick={closeChecklist} size="small">
+      <CloseIcon style={{ color: "white" }} />
+    </IconButton>
+  </DialogTitle>
+
+  <DialogContent>
+    <Box display="flex" flexDirection="column" gap={1}>
+    <FormControlLabel
+  control={
+    <Checkbox
+    checked={checklistData[selectedIndex]?.taskOne || false}
+    onChange={(e) => updateChecklist(e, selectedIndex)}
+    name="taskOne"
+  />
+  
+  }
+  label="Agreement with Signature"
+/>
+
+      <FormControlLabel
+        control={
+          <Checkbox
+            checked={checklistData[index]?.taskTwo || false}
+            onChange={(e) => updateChecklist(e, index)}
+            name="taskTwo"
+          />
+        }
+        label="Agreement Receipt"
+      />
+     
+    </Box>
+  </DialogContent>
+</Dialog> */}
 
 
      
@@ -828,6 +927,7 @@ const handleFileUpload = (file, index) => {
               </IconButton>
             )}
           </TableCell> */}
+
 <TableCell>
   <IconButton component="label">
     <FaUpload style={{ color: "blue" }} />
@@ -859,8 +959,11 @@ const handleFileUpload = (file, index) => {
       <IconButton onClick={() => openChecklist(index)} size="small">
         <AssignmentTurnedInIcon color="primary" />
       </IconButton>
-        {/* Checklist Dialog */}
-        <Dialog open={activeChecklist === index} onClose={closeChecklist} fullWidth maxWidth="sm">
+       
+       
+    </TableCell>
+      
+    <Dialog open={activeChecklist === index} onClose={closeChecklist} fullWidth maxWidth="sm">
         <DialogTitle 
           sx={{ 
             display: "flex", justifyContent: "space-between", alignItems: "center", 
@@ -876,15 +979,106 @@ const handleFileUpload = (file, index) => {
         
         <DialogContent>
           <Box display="flex" flexDirection="column" gap={1}>  
-            <FormControlLabel control={<Checkbox checked={checklistData.taskOne || false} onChange={(e) => updateChecklist(e, index)} name="taskOne" />} label="Agreement with Signature" />
-            <FormControlLabel control={<Checkbox checked={checklistData.taskTwo || false} onChange={(e) => updateChecklist(e, index)} name="taskTwo" />} label="Agreement Receipt" />
-            <FormControlLabel control={<Checkbox checked={checklistData.taskThree || false} onChange={(e) => updateChecklist(e, index)} name="taskThree" />} label="Original Document" />
-            <FormControlLabel control={<Checkbox checked={checklistData.taskFour || false} onChange={(e) => updateChecklist(e, index)} name="taskFour" />} label="Payment Receipt" />
-            <FormControlLabel control={<Checkbox checked={checklistData.taskFive || false} onChange={(e) => updateChecklist(e, index)} name="taskFive" />} label="NOC" />
-            <FormControlLabel control={<Checkbox checked={checklistData.taskSix || false} onChange={(e) => updateChecklist(e, index)} name="taskSix" />} label="Demand Letter" />
-            <FormControlLabel control={<Checkbox checked={checklistData.taskSeven || false} onChange={(e) => updateChecklist(e, index)} name="taskSeven" />} label="GST Letter" />
-            <FormControlLabel control={<Checkbox checked={checklistData.taskEight || false} onChange={(e) => updateChecklist(e, index)} name="taskEight" />} label="Index 2" />
-            <FormControlLabel control={<Checkbox checked={checklistData.taskNine || false} onChange={(e) => updateChecklist(e, index)} name="taskNine" />} label="Document Receipt" />
+            {/* <FormControlLabel control={<Checkbox checked={checklistData.taskOne || false} onChange={(e) => updateChecklist(e, index)} name="taskOne" />} label="Agreement with Signature" /> */}
+            <FormControlLabel
+  control={
+    <Checkbox
+      checked={checklistData[index]?.taskOne || false}
+      onChange={(e) => updateChecklist(e, index)}
+      name="taskOne"
+    />
+  }
+  label="Agreement with Signature"
+/>
+
+<FormControlLabel
+  control={
+    <Checkbox
+      checked={checklistData[index]?.taskTwo || false}
+      onChange={(e) => updateChecklist(e, index)}
+      name="taskTwo"
+    />
+  }
+  label="Agreement Receipt"
+/>
+
+<FormControlLabel
+  control={
+    <Checkbox
+      checked={checklistData[index]?.taskThree || false}
+      onChange={(e) => updateChecklist(e, index)}
+      name="taskThree"
+    />
+  }
+  label="Original Document"
+/>
+
+<FormControlLabel
+  control={
+    <Checkbox
+      checked={checklistData[index]?.taskFour || false}
+      onChange={(e) => updateChecklist(e, index)}
+      name="taskFour"
+    />
+  }
+  label="Payment Receipt"
+/>
+
+<FormControlLabel
+  control={
+    <Checkbox
+      checked={checklistData[index]?.taskFive || false}
+      onChange={(e) => updateChecklist(e, index)}
+      name="taskFive"
+    />
+  }
+  label="NOC"
+/>
+
+<FormControlLabel
+  control={
+    <Checkbox
+      checked={checklistData[index]?.taskSix || false}
+      onChange={(e) => updateChecklist(e, index)}
+      name="taskSix"
+    />
+  }
+  label="Demand Letter"
+/>
+
+<FormControlLabel
+  control={
+    <Checkbox
+      checked={checklistData[index]?.taskSeven || false}
+      onChange={(e) => updateChecklist(e, index)}
+      name="taskSeven"
+    />
+  }
+  label="GST Letter"
+/>
+
+<FormControlLabel
+  control={
+    <Checkbox
+      checked={checklistData[index]?.taskEight || false}
+      onChange={(e) => updateChecklist(e, index)}
+      name="taskEight"
+    />
+  }
+  label="Index 2"
+/>
+
+<FormControlLabel
+  control={
+    <Checkbox
+      checked={checklistData[index]?.taskNine || false}
+      onChange={(e) => updateChecklist(e, index)}
+      name="taskNine"
+    />
+  }
+  label="Document Receipt"
+/>
+
           </Box>
         </DialogContent>
 
@@ -894,9 +1088,6 @@ const handleFileUpload = (file, index) => {
           </Button>
         </DialogActions>
       </Dialog>
-    </TableCell>
-      
-
 
         {/* Checklist Dialog */}
         {/* <Dialog open={activeChecklist === index} onClose={closeChecklist} fullWidth maxWidth="sm">
