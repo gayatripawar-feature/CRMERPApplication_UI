@@ -487,7 +487,7 @@ const Admin_Banker = () => {
         <TableRow sx={{ background: "#3621a9" }}>
           <TableCell sx={{ color: "white", fontWeight: "bold" }}>ACTION</TableCell>
           <TableCell sx={{ color: "white", fontWeight: "bold" }}>TIMESTAMP</TableCell>
-          <TableCell sx={{ color: "white", fontWeight: "bold" }}>Bank Name</TableCell>
+          <TableCell sx={{ color: "white", fontWeight: "bold" }}>BANK NAME</TableCell>
           <TableCell sx={{ color: "white", fontWeight: "bold" }}>ADDRESS</TableCell>
           <TableCell sx={{ color: "white", fontWeight: "bold" }}>BANKER NAME</TableCell>
           <TableCell sx={{ color: "white", fontWeight: "bold" }}>MOBILE NO</TableCell>

@@ -8,12 +8,21 @@ import { Edit as EditIcon, Delete as DeleteIcon } from "@mui/icons-material";
 import { TextField, Button, Grid, MenuItem, Select, InputLabel, FormControl,NativeSelect } from '@mui/material';
 import { toast, ToastContainer } from 'react-toastify';
 import jsPDF from "jspdf";
+import { Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 
 import { FaFileDownload } from "react-icons/fa";
 import autoTable from "jspdf-autotable";
 
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
+
 const Admin_SalesModule = () => {
   const [showForm, setShowForm] = useState(false);
+  const [openEditModal, setOpenEditModal] = useState(false);
+const [editRowData, setEditRowData] = useState({});
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -211,8 +220,73 @@ const handleEmailBlur = () => {
   
   
   
-
-
+  const handleEdit = (row) => {
+    setEditRowData(row);  // Pass that row data
+    setOpenEditModal(true); // Open Modal
+  };
+  const handleSaveEdit = () => {
+    // Update your main data here
+    const updatedData = [...yourData];  // yourData = main table data array
+    updatedData[editRowIndex] = editRowData;
+  
+    setYourData(updatedData);
+    setOpenEditModal(false);
+  };
+    
+  // const handleDelete = (id) => {
+  //   const confirmDelete = window.confirm("Are you sure you want to delete?");
+    
+  //   if (confirmDelete) {
+  //     const updatedData = salesPersons.filter((person) => person.id !== id);
+  //     setSalesPersons(updatedData);
+      
+  //     toast.success("Row deleted successfully!", {
+  //       position: "top-center",
+  //       autoClose: 1500,
+  //     });
+  //   }
+  // };
+  
+  const handleDelete = (id) => {
+    toast.info(
+      <div>
+        <p>Are you sure you want to delete?</p>
+        <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
+          <button
+            onClick={() => {
+              deleteRow(id);
+              toast.dismiss();  // Close toast after action
+            }}
+            style={{ background: "red", color: "white", border: "none", padding: "5px 10px", cursor: "pointer" }}
+          >
+            Yes
+          </button>
+          <button
+            onClick={() => toast.dismiss()}
+            style={{ background: "grey", color: "white", border: "none", padding: "5px 10px", cursor: "pointer" }}
+          >
+            No
+          </button>
+        </div>
+      </div>,
+      {
+        position: "top-center",
+        autoClose: false,
+        closeOnClick: false,
+        draggable: false,
+      }
+    );
+  };
+  
+  const deleteRow = (id) => {
+    const updatedData = salesPersons.filter((person) => person.id !== id);
+    setSalesPersons(updatedData);
+  
+    toast.success("Row deleted successfully!", {
+      position: "top-center",
+      autoClose: 1500,
+    });
+  };
   return (
     <div className="container my-4">
       <div className="row mb-3">
@@ -222,7 +296,7 @@ const handleEmailBlur = () => {
             <div className="d-flex gap-3">
             <button className="btn btn-primary d-flex align-items-center" onClick={handleAddNew} style={{ background: '#272ba8' }} >
               <FaPlus className="me-2"  />
-              Add New Sales Person
+              Add Sales Person
             </button>
 
             <Button
@@ -463,17 +537,21 @@ const handleEmailBlur = () => {
 <TableCell>
   <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
     
-    <IconButton
-      color="primary"
-      style={{
-        backgroundColor: "#1976d2", 
-        borderRadius: "50%", 
-        padding: "6px", 
-      }}
-    >
-      <EditIcon style={{ color: "white" }} /> 
-    </IconButton>
+   
+<IconButton
+  color="primary"
+  style={{
+    backgroundColor: "#1976d2",
+    borderRadius: "50%",
+    padding: "6px",
+  }}
+  onClick={() => handleEdit(person)}   // Correct this line
+>
+  <EditIcon style={{ color: "white" }} />
+</IconButton>
 
+
+{/* 
     <IconButton
       color="error"
       style={{
@@ -483,7 +561,19 @@ const handleEmailBlur = () => {
       }}
     >
       <DeleteIcon style={{ color: "white" }} /> 
-    </IconButton>
+    </IconButton> */}
+
+<IconButton
+            color="error"
+            style={{
+              backgroundColor: "#d32f2f",
+              borderRadius: "50%",
+              padding: "6px",
+            }}
+            onClick={() => handleDelete(person.id)}  // Delete
+          >
+            <DeleteIcon style={{ color: "white" }} />
+          </IconButton>
   </div>
 </TableCell>
 
@@ -499,6 +589,124 @@ const handleEmailBlur = () => {
           </Table>
         </TableContainer>
       )}
+
+
+
+<Dialog open={openEditModal} onClose={() => setOpenEditModal(false)} fullWidth maxWidth="sm">
+  <DialogTitle>Edit Details</DialogTitle>
+
+  <DialogContent>
+    <form onSubmit={handleSubmit}>
+      <Grid container spacing={2}>
+        
+        <Grid item xs={6}>
+          <TextField
+            label="Name"
+            fullWidth
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            required
+            sx={{ marginTop: '10px' }}
+          />
+          {nameError && <p style={{ color: 'red', margin: 0 }}>{nameError}</p>}
+        </Grid>
+
+        <Grid item xs={6}>
+          <TextField
+            label="Email"
+            fullWidth
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            onBlur={handleEmailBlur}
+            required
+            sx={{ marginTop: '10px' }}
+          />
+          {emailError && <p style={{ color: 'red', margin: 0 }}>{emailError}</p>}
+        </Grid>
+
+        <Grid item xs={6}>
+          <TextField
+            label="Mobile"
+            fullWidth
+            name="mobile"
+            value={formData.mobile}
+            onChange={handleChange}
+            required
+            sx={{ marginTop: '10px' }}
+          />
+          {error.mobile && <p style={{ color: 'red', margin: 0 }}>{error.mobile}</p>}
+        </Grid>
+
+        <Grid item xs={6}>
+          <TextField
+            label="Designation"
+            fullWidth
+            name="designation"
+            value={formData.designation}
+            onChange={handleChange}
+            sx={{ marginTop: '10px' }}
+          />
+        </Grid>
+                 
+       
+<LocalizationProvider dateAdapter={AdapterDayjs}>
+  <Grid item xs={6}>
+    <DatePicker
+      label="Joining Date"
+      value={dayjs(formData.joiningDate)}
+      onChange={(newValue) => {
+        setFormData({ ...formData, joiningDate: dayjs(newValue).format('YYYY-MM-DD') });
+      }}
+      renderInput={(params) => (
+        <TextField 
+          {...params} 
+          fullWidth 
+          sx={{marginTop :"20px"}}   // Top padding 8px
+          error={false}    // Red border hatane ke liye
+        />
+      )}
+    />
+  </Grid>
+</LocalizationProvider>
+
+
+
+                  <Grid item xs={6}>
+                    <FormControl fullWidth>
+                      <InputLabel>Status</InputLabel>
+                      <Select
+                        label="Status"
+                        name="status"
+                        value={formData.status}
+                        onChange={handleChange}
+                        sx={{ marginTop: '10px' }} 
+                      >
+                        <MenuItem value="Active">Active</MenuItem>
+                        <MenuItem value="Inactive">Inactive</MenuItem>
+                      </Select>
+                    </FormControl>
+    
+   
+
+                  </Grid>
+      </Grid>
+
+      <DialogActions sx={{ marginTop: '20px' }}>
+        <Button onClick={() => setOpenEditModal(false)} color="secondary">
+          Cancel
+        </Button>
+        <Button  onClick ={() => setOpenEditModal(false)} type="submit" variant="contained" color="primary">
+          Update
+        </Button>
+      </DialogActions>
+    </form>
+  </DialogContent>
+</Dialog>
+
+
 
 <ToastContainer />
 </div>

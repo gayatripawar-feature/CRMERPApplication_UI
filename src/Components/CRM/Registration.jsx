@@ -71,6 +71,7 @@ const Registration = () => {
  
   const [isEditableRow, setIsEditableRow] = useState(null);
 
+  const [selectedRowIndex, setSelectedRowIndex] = useState(null);
 
 
   const [registrationNumbers, setRegistrationNumbers] = useState({});
@@ -159,6 +160,10 @@ const Registration = () => {
   //   setActiveChecklist(index);
   // };
   const [loansData, setLoansData] = useState(sampleLoans);
+  // const [beforeAgreementChecklist, setBeforeAgreementChecklist] = useState({});
+  const [beforeAgreementChecklist, setBeforeAgreementChecklist] = useState([]);
+
+
   // const openChecklist = (index) => {
   //   setActiveChecklist(index);
   //   setChecklistData({}); // Reset checklist when opening again
@@ -208,6 +213,33 @@ const saveChecklist = () => {
   closeChecklist();
 };
 
+// const saveChecklist = () => {
+//   setChecklistData((prev) => ({
+//     ...prev,
+//     [selectedRowIndex]: beforeAgreementChecklist[selectedRowIndex],
+//   }));
+//   setOpenModal(false);
+// };
+
+
+// const handleOpenModal = (index) => {
+//   setSelectedRowIndex(index);
+//   setOpenModal(true);
+// }
+
+
+const handleOpenModal = (index) => {
+  setSelectedRowIndex(index);
+  setOpenModal(true);
+
+  // Fix: Create checklist for row if not exists
+  setBeforeAgreementChecklist((prev) => ({
+    ...prev,
+    [index]: prev[index] || { taskOne: false, taskTwo: false, taskThree: false },
+  }));
+};
+
+
 // new
 const openChecklist = (index) => {
   setActiveChecklist(index);
@@ -237,6 +269,35 @@ const updateChecklist = (e, index) => {
 
 
 
+
+const updateBeforeAgreementChecklist = (e) => {
+  const { name, checked } = e.target;
+
+  setBeforeAgreementChecklist((prev) => ({
+    ...prev,
+    [selectedRowIndex]: {
+      ...prev[selectedRowIndex],
+      [name]: checked,
+    },
+  }));
+};
+
+
+const getBeforeAgreementChecklistStatusColor = () => {
+  const totalTasks = 3;
+  
+  const checklist = beforeAgreementChecklist[selectedRowIndex] || {};
+
+  const checkedCount = Object.values(checklist).filter(Boolean).length;
+
+  if (checkedCount === 0) {
+    return "gray";
+  } else if (checkedCount === totalTasks) {
+    return "green";
+  } else {
+    return "red";
+  }
+};
 
 
   
@@ -502,6 +563,19 @@ const handleFileUpload = (file, index) => {
   
     // Save the PDF
     doc.save("Registration_Report.pdf");
+  };
+  const getChecklistStatusColor = (index) => {
+    const checklist = checklistData[index] || {};
+    const totalTasks = 9; // total number of checkboxes (tasks)
+    const checkedCount = Object.values(checklist).filter(Boolean).length;
+  
+    if (checkedCount === 0) {
+      return "gray";  // No document selected
+    } else if (checkedCount === totalTasks) {
+      return "green"; // All documents selected
+    } else {
+      return "red";   // Some documents selected
+    }
   };
   
 
@@ -808,125 +882,118 @@ const handleFileUpload = (file, index) => {
   {/* <IconButton onClick={() => openItemDetailsModal(index)} size="small">
     <AssignmentTurnedInIcon color="primary" />
   </IconButton> */}
-  <IconButton onClick={() => openChecklist(index)} size="small">
-  <AssignmentTurnedInIcon color="primary" />
+  {/* <IconButton onClick={() => setOpenModal(true)} size="small">
+  <AssignmentTurnedInIcon style={{ color: getBeforeAgreementChecklistStatusColor() }} />
+</IconButton> */}
+
+{/* <IconButton onClick={() => { 
+   setSelectedRowIndex(index);  // important
+   setOpenModal(true); 
+}} size="small"> */}
+<IconButton onClick={() => handleOpenModal(index)} size="small">
+
+  <AssignmentTurnedInIcon style={{ color: getBeforeAgreementChecklistStatusColor(index) }} />
 </IconButton>
+
+
+  {/* <IconButton onClick={() => openChecklist(index)} size="small">
+  <AssignmentTurnedInIcon color="primary" />
+</IconButton> */}
 
 </TableCell>
 
 
-
-
-{/* <Dialog open={openModal} onClose={() => setOpenModal(false)} fullWidth maxWidth="sm">
- 
-
-<DialogTitle 
-    sx={{ 
-      display: "flex", 
-      justifyContent: "space-between", 
-      alignItems: "center",
-      backgroundColor: "#1976d2", 
-      color: "white", 
-      padding: "12px 16px",
-    }}
-  >
+<Dialog open={openModal} onClose={() => setOpenModal(false)} fullWidth maxWidth="sm">
+  <DialogTitle sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", backgroundColor: "#1976d2", color: "white", padding: "12px 16px" }}>
     Before Agreement Checklist
     <IconButton onClick={() => setOpenModal(false)} size="small">
       <CloseIcon />
     </IconButton>
   </DialogTitle>
-  <DialogContent>
-    <Box>
-      <FormControlLabel
-        control={<Checkbox />}
-        label="Agreement with Signature"
-        sx={{ display: "block" }}
-      />
-      <FormControlLabel
-        control={<Checkbox />}
-        label="Agreement Receipt"
-        sx={{ display: "block" }}
-      />
-      <FormControlLabel
-        control={<Checkbox />}
-        label="Index II"
-        sx={{ display: "block" }}
-      />
-    </Box>
-  </DialogContent>
-  <DialogActions>
-  <Button 
-      variant="contained" 
-      color="primary" 
-      onClick={() => setOpenModal(false)}
-    >
-      Save
-    </Button>
-  </DialogActions>
-</Dialog> */}
-
-{/* <Dialog open={activeChecklist === index} onClose={closeChecklist} fullWidth maxWidth="sm">
-  <DialogTitle
-    sx={{
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center",
-      backgroundColor: "#1976d2",
-      color: "white",
-      padding: "12px 16px"
-    }}
-  >
-    Document Handover Checklist
-    <IconButton onClick={closeChecklist} size="small">
-      <CloseIcon style={{ color: "white" }} />
-    </IconButton>
-  </DialogTitle>
 
   <DialogContent>
-    <Box display="flex" flexDirection="column" gap={1}>
-    <FormControlLabel
-  control={
-    <Checkbox
-    checked={checklistData[selectedIndex]?.taskOne || false}
-    onChange={(e) => updateChecklist(e, selectedIndex)}
-    name="taskOne"
+    
+    {/* <Box>
+  <FormControlLabel
+    control={
+      <Checkbox 
+        checked={beforeAgreementChecklist[selectedRowIndex]?.taskOne || false}
+        onChange={updateBeforeAgreementChecklist}
+        name="taskOne"
+      />
+    }
+    label="Agreement with Signature"
+    sx={{ display: "block" }}
   />
-  
-  }
-  label="Agreement with Signature"
-/>
 
-      <FormControlLabel
-        control={
-          <Checkbox
-            checked={checklistData[index]?.taskTwo || false}
-            onChange={(e) => updateChecklist(e, index)}
-            name="taskTwo"
-          />
-        }
-        label="Agreement Receipt"
+  <FormControlLabel
+    control={
+      <Checkbox 
+        checked={beforeAgreementChecklist[selectedRowIndex]?.taskTwo || false}
+        onChange={updateBeforeAgreementChecklist}
+        name="taskTwo"
       />
-     
-    </Box>
+    }
+    label="Agreement Receipt"
+    sx={{ display: "block" }}
+  />
+
+  <FormControlLabel
+    control={
+      <Checkbox 
+        checked={beforeAgreementChecklist[selectedRowIndex]?.taskThree || false}
+        onChange={updateBeforeAgreementChecklist}
+        name="taskThree"
+      />
+    }
+    label="Index II"
+    sx={{ display: "block" }}
+  />
+</Box> */}
+<Box>
+  <FormControlLabel
+    control={
+      <Checkbox 
+        checked={beforeAgreementChecklist[selectedRowIndex]?.taskOne || false}
+        onChange={updateBeforeAgreementChecklist}
+        name="taskOne"
+      />
+    }
+    label="Agreement with Signature"
+    sx={{ display: "block" }}
+  />
+
+  <FormControlLabel
+    control={
+      <Checkbox 
+        checked={beforeAgreementChecklist[selectedRowIndex]?.taskTwo || false}
+        onChange={updateBeforeAgreementChecklist}
+        name="taskTwo"
+      />
+    }
+    label="Agreement Receipt"
+    sx={{ display: "block" }}
+  />
+
+  <FormControlLabel
+    control={
+      <Checkbox 
+        checked={beforeAgreementChecklist[selectedRowIndex]?.taskThree || false}
+        onChange={updateBeforeAgreementChecklist}
+        name="taskThree"
+      />
+    }
+    label="Index II"
+    sx={{ display: "block" }}
+  />
+</Box>
+
   </DialogContent>
-</Dialog> */}
 
-
-     
-
-
-{/* <TableCell>
-           
-            <IconButton onClick={handleUpload}>
-              <FaUpload style={{ color: "blue" }} />
-            </IconButton>
-
-            {selectedFile && (
-              <IconButton onClick={() => window.open(URL.createObjectURL(selectedFile), "_blank")}>
-                <FaEye style={{ color: "green" }} />
-              </IconButton>
-            )}
-          </TableCell> */}
+  <DialogActions>
+    <Button variant="contained" color="primary" onClick={() => setOpenModal(false)}>Save</Button>
+  </DialogActions>
+</Dialog>
 
 <TableCell>
   <IconButton component="label">
@@ -956,10 +1023,13 @@ const handleFileUpload = (file, index) => {
           />
       <TableCell>
 
-      <IconButton onClick={() => openChecklist(index)} size="small">
+      {/* <IconButton onClick={() => openChecklist(index)} size="small">
         <AssignmentTurnedInIcon color="primary" />
-      </IconButton>
-       
+      </IconButton> */}
+       <IconButton onClick={() => openChecklist(index)}>
+  <AssignmentTurnedInIcon style={{ color: getChecklistStatusColor(index) }} />
+</IconButton>
+
        
     </TableCell>
       
@@ -1089,56 +1159,7 @@ const handleFileUpload = (file, index) => {
         </DialogActions>
       </Dialog>
 
-        {/* Checklist Dialog */}
-        {/* <Dialog open={activeChecklist === index} onClose={closeChecklist} fullWidth maxWidth="sm">
-        <DialogTitle sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", backgroundColor: "#1976d2", color: "white", padding: "12px 16px" }}>
-          Task Checklist - Row {index + 1}
-          <IconButton onClick={closeChecklist} size="small">
-            <CloseIcon style={{ color: "white" }} />
-          </IconButton>
-        </DialogTitle>
-        
-        <DialogContent>
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={checklistData[index]?.taskOne || false}
-                onChange={(e) => updateChecklist(e, index)}
-                name="taskOne"
-              />
-            }
-            label="Task 1: Agreement with Signature"
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={checklistData[index]?.taskTwo || false}
-                onChange={(e) => updateChecklist(e, index)}
-                name="taskTwo"
-              />
-            }
-            label="Task 2: Agreement Receipt"
-          />
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={checklistData[index]?.taskThree || false}
-                onChange={(e) => updateChecklist(e, index)}
-                name="taskThree"
-              />
-            }
-            label="Task 3: Index II"
-          />
-        </DialogContent>
-
-        <DialogActions>
-          <Button variant="contained" color="primary" onClick={saveChecklist}>
-            Save
-          </Button>
-        </DialogActions>
-      </Dialog> */}
-
-       {/* Checklist Dialog */}
+      
        
     </TableRow>
   ))}

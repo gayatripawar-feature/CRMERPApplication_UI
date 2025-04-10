@@ -873,7 +873,7 @@ const handleDownloadPDFShared = () => {
             <TableCell align="center" sx={{ fontWeight: "bold", color: "white" }}>SHARE TO</TableCell>
             <TableCell align="center" sx={{ fontWeight: "bold", color: "white" }}>TYPE OF DOCUMENT</TableCell>
             <TableCell align="center" sx={{ fontWeight: "bold",  color: "white" }}>DOCUMENT</TableCell>
-            <TableCell align="center" sx={{ fontWeight: "bold",  color: "white" }}>ACTION</TableCell>
+            {/* <TableCell align="center" sx={{ fontWeight: "bold",  color: "white" }}>ACTION</TableCell> */}
           </TableRow>
         </TableHead>
         <TableBody>
@@ -894,13 +894,13 @@ const handleDownloadPDFShared = () => {
                   <FaEye size={20} />
                 </Button>
               </TableCell> */}
-              <TableCell align="center">
+              {/* <TableCell align="center">
   <IconButton
     onClick={() => window.open(row.document, '_blank')}
   >
     <FaEye size={20} color="blue" />
   </IconButton>
-</TableCell>
+</TableCell> */}
             </TableRow>
           ))}
         </TableBody>
