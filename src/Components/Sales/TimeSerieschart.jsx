@@ -44,6 +44,7 @@
 
 import * as React from 'react';
 import { LineChart } from '@mui/x-charts/LineChart';
+import { Button } from '@mui/material';
 
 const chartData = [
   { date: "2023-01-10", leads: 850, plannedVisits: 0, actualVisits: 480, conversions: 0 },
@@ -60,6 +61,30 @@ const chartData = [
 
 export default function LeadConversionChart() {
   return (
+
+    <>
+      <div className="d-flex justify-content-start gap-2 mb-3 pb-3">
+          
+    
+    <Button className="btn  btn-info px-4 py-2 rounded-md" onClick={() => handleFilterChange('today')}>
+        Today
+      </Button>
+      
+      <Button className="btn btn-info px-4 py-2 rounded-md" onClick={() => handleFilterChange('last7Days')}>
+        Last 7 Days
+      </Button>
+      
+      <Button className="btn btn-info px-4 py-2 rounded-md" onClick={() => handleFilterChange('last30Days')}>
+        Last 30 Days
+      </Button>
+      
+      <Button className="btn btn-info px-4 py-2 rounded-md" onClick={() => handleFilterChange('thisMonth')}>
+        This Month
+      </Button>
+    
+        
+          </div>
+    
     <LineChart
       dataset={chartData.map(item => ({
         x: new Date(item.date).getTime(),
@@ -94,6 +119,7 @@ export default function LeadConversionChart() {
         y: 'cross',
       }}
     />
+    </>
     );
   }
 

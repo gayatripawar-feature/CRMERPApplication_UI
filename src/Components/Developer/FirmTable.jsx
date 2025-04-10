@@ -517,6 +517,13 @@ const [aadhaarErrorMessage, setAadhaarErrorMessage] = useState("");
   <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>RESIDENTIAL ADDRESS</TableCell>
   <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>PAN NO</TableCell>
   <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>AADHAAR NO</TableCell>
+
+
+  <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>RESIDENTIAL ADDRESS</TableCell>
+  <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>PAN </TableCell>
+  <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>AADHAAR</TableCell>
+
+
   <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>PHOTO</TableCell>
   <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>LIGHT BILL</TableCell>
 </TableRow>
@@ -546,21 +553,21 @@ const [aadhaarErrorMessage, setAadhaarErrorMessage] = useState("");
   
     <TableCell sx={{ color: "black", fontWeight: "bold" }}>
       <IconButton onClick={() => handleView(firm.firmPan)} 
-         sx={{ backgroundColor: "blue", borderRadius: "50%", padding: "3px" }}>
+         sx={{ backgroundColor: "blue", borderRadius: "50%", padding: "2px" }}>
         <Visibility sx={{ color: "white" }} />
       </IconButton>
     </TableCell>
 
     <TableCell sx={{ color: "black", fontWeight: "bold" }}>
       <IconButton onClick={() => handleView(firm.firmGst)} 
-         sx={{ backgroundColor: "blue", borderRadius: "50%", padding: "3px" }}>
+         sx={{ backgroundColor: "blue", borderRadius: "50%", padding: "2px" }}>
         <Visibility sx={{ color: "white" }} />
       </IconButton>
     </TableCell>
 
     <TableCell sx={{ color: "black", fontWeight: "bold" }}>
       <IconButton onClick={() => handleView(firm.firmLightBill)}
-         sx={{ backgroundColor: "blue", borderRadius: "50%", padding: "3px" }}>
+         sx={{ backgroundColor: "blue", borderRadius: "50%", padding: "2px" }}>
         <Visibility sx={{ color: "white" }} />
       </IconButton>
     </TableCell>
@@ -571,36 +578,57 @@ const [aadhaarErrorMessage, setAadhaarErrorMessage] = useState("");
 <TableCell></TableCell>
 
     <TableCell sx={{ color: "black", fontWeight: "bold" }}>
-      <IconButton onClick={() => handleView(firm.residentialAddress)} 
+      {/* <IconButton onClick={() => handleView(firm.residentialAddress)} 
          sx={{ backgroundColor: "blue", borderRadius: "50%", padding: "3px" }}>
         <Visibility sx={{ color: "white" }} />
-      </IconButton>
+      </IconButton> */}
     </TableCell>
 
     <TableCell sx={{ color: "black", fontWeight: "bold" }}>
-      <IconButton onClick={() => handleView(firm.panNo)} 
+      {/* <IconButton onClick={() => handleView(firm.panNo)} 
          sx={{ backgroundColor: "blue", borderRadius: "50%", padding: "3px" }}>
         <Visibility sx={{ color: "white" }} />
-      </IconButton>
+      </IconButton> */}
     </TableCell>
 
     <TableCell sx={{ color: "black", fontWeight: "bold" }}>
-      <IconButton onClick={() => handleView(firm.aadhaarNo)} 
+      {/* <IconButton onClick={() => handleView(firm.aadhaarNo)} 
          sx={{ backgroundColor: "blue", borderRadius: "50%", padding: "3px" }}>
+        <Visibility sx={{ color: "white" }} />
+      </IconButton> */}
+    </TableCell>
+
+
+
+    <TableCell>
+    <IconButton onClick={() => handleView(firm.residentialAddress)} 
+         sx={{ backgroundColor: "blue", borderRadius: "50%", padding: "2px" }}>
         <Visibility sx={{ color: "white" }} />
       </IconButton>
     </TableCell>
+<TableCell>
+<IconButton onClick={() => handleView(firm.residentialAddress)} 
+         sx={{ backgroundColor: "blue", borderRadius: "50%", padding: "2px" }}>
+        <Visibility sx={{ color: "white" }} />
+      </IconButton>
 
+</TableCell>
+<TableCell>
+<IconButton onClick={() => handleView(firm.residentialAddress)} 
+         sx={{ backgroundColor: "blue", borderRadius: "50%", padding: "2px" }}>
+        <Visibility sx={{ color: "white" }} />
+      </IconButton>
+</TableCell>
     <TableCell sx={{ color: "black", fontWeight: "bold" }}>
       <IconButton onClick={() => handleView(firm.photo)}
-        sx={{ backgroundColor: "blue", borderRadius: "50%", padding: "3px" }}>
+        sx={{ backgroundColor: "blue", borderRadius: "50%", padding: "2px" }}>
         <Visibility sx={{ color: "white" }} />
       </IconButton>
     </TableCell>
 
     <TableCell sx={{ color: "black", fontWeight: "bold" }}>
       <IconButton onClick={() => handleView(firm.lightBill)}
-        sx={{ backgroundColor: "blue", borderRadius: "50%", padding: "3px" }}>
+        sx={{ backgroundColor: "blue", borderRadius: "50%", padding: "2px" }}>
         <Visibility sx={{ color: "white" }} />
       </IconButton>
     </TableCell>

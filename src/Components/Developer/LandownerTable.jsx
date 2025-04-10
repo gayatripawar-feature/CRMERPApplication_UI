@@ -78,6 +78,8 @@ import React, { useState } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, TextField, Button ,Typography,Input,MenuItem,Tooltip,Grid,FormControl,InputLabel,Select} from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import { toast } from 'react-toastify';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+
 const LandownerTable = ({ data }) => {
   const [editRow, setEditRow] = useState(null);
   const [formData, setFormData] = useState({});
@@ -227,11 +229,11 @@ const [emailError, setEmailError] = useState("");
       village: "Greenfield",
       taluka: "Central",
       district: "Metro",
-      residentialAddress: "123 Main St, Greenfield",
-      panNo: "ABCDE1234F",
-      aadhaar: "1234-5678-9012",
-      photo: "photo.jpg",
-      lightBill: "bill.pdf",
+      residentialAddress: "",
+      panNo: "",
+      aadhaar: "",
+      photo: "",
+      lightBill: "",
       bankName: "XYZ Bank",
       bankAddress: "456 Bank St, Metro",
       accountNo: "123456789012",
@@ -576,26 +578,26 @@ const [emailError, setEmailError] = useState("");
         <Table>
           <TableHead>
             <TableRow sx={{ background: '#3621a9' }}>
-              <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>ACTION</TableCell>
-              <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>TIMESTAMP</TableCell>
-              <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>PROJECT NAME</TableCell>
-              <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>LANDOWNER NAME</TableCell>
-              <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>AGE</TableCell>
-              <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>OCCUPATION</TableCell>
-              <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>MOBILE NO</TableCell>
-              <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>MAIL ID</TableCell>
-              <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>VILLAGE</TableCell>
-              <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>TALUKA</TableCell>
-              <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>DISTRICT</TableCell>
-              <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>RESIDENTIAL ADDRESS</TableCell>
-              <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>PAN NO</TableCell>
-              <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>AADHAAR</TableCell>
-              <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>PHOTO</TableCell>
-              <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>LIGHT BILL</TableCell>
-              <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>NAME OF BANK</TableCell>
-              <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>BANK ADDRESS</TableCell>
-              <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>ACCOUNT NO</TableCell>
-              <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>IFSC CODE</TableCell>
+              <TableCell sx={{ color: 'white', fontWeight: 'bold' ,whiteSpace: "nowrap" }}>ACTION</TableCell>
+              <TableCell sx={{ color: 'white', fontWeight: 'bold' ,whiteSpace: "nowrap" }}>TIMESTAMP</TableCell>
+              <TableCell sx={{ color: 'white', fontWeight: 'bold',whiteSpace: "nowrap"  }}>PROJECT NAME</TableCell>
+              <TableCell sx={{ color: 'white', fontWeight: 'bold' ,whiteSpace: "nowrap" }}>LANDOWNER NAME</TableCell>
+              <TableCell sx={{ color: 'white', fontWeight: 'bold' ,whiteSpace: "nowrap" }}>AGE</TableCell>
+              <TableCell sx={{ color: 'white', fontWeight: 'bold' ,whiteSpace: "nowrap" }}>OCCUPATION</TableCell>
+              <TableCell sx={{ color: 'white', fontWeight: 'bold',whiteSpace: "nowrap"  }}>MOBILE NO</TableCell>
+              <TableCell sx={{ color: 'white', fontWeight: 'bold' ,whiteSpace: "nowrap" }}>MAIL ID</TableCell>
+              <TableCell sx={{ color: 'white', fontWeight: 'bold' ,whiteSpace: "nowrap" }}>VILLAGE</TableCell>
+              <TableCell sx={{ color: 'white', fontWeight: 'bold',whiteSpace: "nowrap"  }}>TALUKA</TableCell>
+              <TableCell sx={{ color: 'white', fontWeight: 'bold' ,whiteSpace: "nowrap" }}>DISTRICT</TableCell>
+              <TableCell sx={{ color: 'white', fontWeight: 'bold' ,whiteSpace: "nowrap" }}>RESIDENTIAL ADDRESS</TableCell>
+              <TableCell sx={{ color: 'white', fontWeight: 'bold' ,whiteSpace: "nowrap" }}>PAN NO</TableCell>
+              <TableCell sx={{ color: 'white', fontWeight: 'bold' ,whiteSpace: "nowrap" }}>AADHAAR</TableCell>
+              <TableCell sx={{ color: 'white', fontWeight: 'bold' ,whiteSpace: "nowrap" }}>PHOTO</TableCell>
+              <TableCell sx={{ color: 'white', fontWeight: 'bold' ,whiteSpace: "nowrap" }}>LIGHT BILL</TableCell>
+              <TableCell sx={{ color: 'white', fontWeight: 'bold' ,whiteSpace: "nowrap" }}>NAME OF BANK</TableCell>
+              <TableCell sx={{ color: 'white', fontWeight: 'bold' ,whiteSpace: "nowrap" }}>BANK ADDRESS</TableCell>
+              <TableCell sx={{ color: 'white', fontWeight: 'bold' ,whiteSpace: "nowrap" }}>ACCOUNT NO</TableCell>
+              <TableCell sx={{ color: 'white', fontWeight: 'bold' ,whiteSpace: "nowrap" }}>IFSC CODE</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -617,21 +619,74 @@ const [emailError, setEmailError] = useState("");
                     </IconButton>
                   </Tooltip>
                 </TableCell>
-                <TableCell>{landowner.timestamp || 'N/A'}</TableCell>
-                <TableCell>{landowner.projectName || 'N/A'}</TableCell>
-                <TableCell>{landowner.landownerName || 'N/A'}</TableCell>
-                <TableCell>{landowner.age || 'N/A'}</TableCell>
-                <TableCell>{landowner.occupation || 'N/A'}</TableCell>
-                <TableCell>{landowner.mobileNo || 'N/A'}</TableCell>
-                <TableCell>{landowner.mailId || 'N/A'}</TableCell>
-                <TableCell>{landowner.village || 'N/A'}</TableCell>
-                <TableCell>{landowner.taluka || 'N/A'}</TableCell>
-                <TableCell>{landowner.district || 'N/A'}</TableCell>
-                <TableCell>{landowner.residentialAddress || 'N/A'}</TableCell>
+                <TableCell>{landowner.timestamp }</TableCell>
+                <TableCell>{landowner.projectName }</TableCell>
+                <TableCell>{landowner.landownerName }</TableCell>
+                <TableCell>{landowner.age}</TableCell>
+                <TableCell>{landowner.occupation}</TableCell>
+                <TableCell>{landowner.mobileNo }</TableCell>
+                <TableCell>{landowner.mailId }</TableCell>
+                <TableCell>{landowner.village }</TableCell>
+                <TableCell>{landowner.taluka }</TableCell>
+                <TableCell>{landowner.district }</TableCell>
+                {/* <TableCell>{landowner.residentialAddress || 'N/A'}</TableCell>
                 <TableCell>{landowner.panNo || 'N/A'}</TableCell>
                 <TableCell>{landowner.aadhaar || 'N/A'}</TableCell>
                 <TableCell>{landowner.photo || 'N/A'}</TableCell>
-                <TableCell>{landowner.lightBill || 'N/A'}</TableCell>
+                
+                <TableCell>{landowner.lightBill || 'N/A'}</TableCell> */}
+               <TableCell>
+  <IconButton
+    onClick={() => window.open(landowner.residentialAddress, '_blank')}
+    color="primary"
+  >
+    <VisibilityIcon />
+  </IconButton>
+</TableCell>
+
+
+
+<TableCell>
+<IconButton
+    onClick={() => landowner.panNo  && window.open(landowner.panNo , '_blank')}
+    color="primary"
+  >
+    <VisibilityIcon />
+  </IconButton>
+  </TableCell>
+<TableCell>
+  <IconButton
+    onClick={() => landowner.aadhaar && window.open(landowner.aadhaar, '_blank')}
+    color="primary"
+  >
+    <VisibilityIcon />
+  </IconButton>
+</TableCell>
+
+
+<TableCell>
+ 
+    <IconButton
+      onClick={() => landowner.photo && window.open(landowner.photo, '_blank')}
+      color="primary"
+    >
+      <VisibilityIcon />
+    </IconButton>
+  
+</TableCell>
+
+<TableCell>
+
+    <IconButton
+      onClick={() =>landowner.lightBill && window.open(landowner.lightBill, '_blank')}
+      color="primary"
+    >
+      <VisibilityIcon />
+    </IconButton>
+
+</TableCell>
+
+
                 <TableCell>{landowner.bankName || 'N/A'}</TableCell>
                 <TableCell>{landowner.bankAddress || 'N/A'}</TableCell>
                 <TableCell>{landowner.accountNo || 'N/A'}</TableCell>

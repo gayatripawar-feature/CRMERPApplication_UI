@@ -306,28 +306,7 @@ useEffect(() => {
       <Box mt={3} p={3} style={{ border: "1px solid #ddd", borderRadius: "10px", maxHeight: "80vh", overflowY: "auto", padding: "10px" }}>
     
 
-      <div className="d-flex justify-content-start gap-2 mb-3 pb-3">
-      
-
-<Button className="btn  btn-info px-4 py-2 rounded-md" onClick={() => handleFilterChange('today')}>
-    Today
-  </Button>
-  
-  <Button className="btn btn-info px-4 py-2 rounded-md" onClick={() => handleFilterChange('last7Days')}>
-    Last 7 Days
-  </Button>
-  
-  <Button className="btn btn-info px-4 py-2 rounded-md" onClick={() => handleFilterChange('last30Days')}>
-    Last 30 Days
-  </Button>
-  
-  <Button className="btn btn-info px-4 py-2 rounded-md" onClick={() => handleFilterChange('thisMonth')}>
-    This Month
-  </Button>
-
     
-      </div>
-
 
         {selectedTab === "Lead Conversion" && (
           <Box>
@@ -457,14 +436,14 @@ useEffect(() => {
         <Table>
           <TableHead>
          <TableRow sx={{background:"#3621a9"}}>
-              <TableCell sx={{ color: "white", fontWeight: "bold",whiteSpace: "nowrap" }}>Sales Person</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold",whiteSpace: "nowrap" }}>Total Lead Assigned</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold",whiteSpace: "nowrap" }}>Visit Assigned</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold",whiteSpace: "nowrap" }}>Lost</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold",whiteSpace: "nowrap" }}>Hot</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold",whiteSpace: "nowrap" }}>Warm</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold",whiteSpace: "nowrap" }}>Cold</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold",whiteSpace: "nowrap" }}>Undefined</TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold",whiteSpace: "nowrap" }}>SALES PERSON</TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold",whiteSpace: "nowrap" }}>TOTAL LEAD ASSIGNED</TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold",whiteSpace: "nowrap" }}>VISIT ASSIGNED</TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold",whiteSpace: "nowrap" }}>LOST</TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold",whiteSpace: "nowrap" }}>HOT</TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold",whiteSpace: "nowrap" }}>WARM</TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold",whiteSpace: "nowrap" }}>COLD</TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold",whiteSpace: "nowrap" }}>UNDEFINED</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>

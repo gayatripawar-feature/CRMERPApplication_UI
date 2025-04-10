@@ -8,6 +8,7 @@ import EditIcon from '@mui/icons-material/Edit';
 
 import { toast } from 'react-toastify'; 
 
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 
 const FlatAllotment = () => {
@@ -340,26 +341,17 @@ const [flats, setFlats] = useState('');
               <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>ACTION</TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>TIMESTAMP</TableCell>
       <TableCell sx={{ color: "white", fontWeight: "bold",whiteSpace: "nowrap"  }}>PROJECT NAME</TableCell>
-       <TableCell sx={{ color: "white", fontWeight: "bold",whiteSpace: "nowrap"  }}>LANDOWNER NAME</TableCell>
-       <TableCell sx={{ color: "white", fontWeight: "bold",whiteSpace: "nowrap"  }}>AGE</TableCell>
-       <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>OCCUPATION</TableCell>
-       <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>MOBILE NO</TableCell>
-       <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>MAIL ID</TableCell>
-       <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>VILLAGE</TableCell>
-       <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>TALUKA</TableCell>
-     <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>DISTRICT</TableCell>
-       <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>RESIDENTIAL ADDRESS</TableCell>
-       <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>PAN NO</TableCell>
-      <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>ADDHAAR</TableCell>
-       <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>PHOTO</TableCell>
-       <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>LIGHT BILL</TableCell>
-       <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>NAME OF BANK</TableCell>
-       <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>BANK ADDRESS</TableCell>
-     <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>ACCOUNT NO</TableCell>
-       <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>IFSC CODE</TableCell>
+       <TableCell sx={{ color: "white", fontWeight: "bold",whiteSpace: "nowrap"  }}>FLAT ALOTEE NAME</TableCell>
+       <TableCell sx={{ color: "white", fontWeight: "bold",whiteSpace: "nowrap"  }}>MOBILE NO</TableCell>
+       <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>NO. OF FLATS ALLOTED</TableCell>
+       <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>RERA CARPET AREA (SQ FT)</TableCell>
+       <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>WING</TableCell>
+       <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>FLAT NO.</TableCell>
+       <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>TYPE OF FLAT</TableCell>
+
             </TableRow>
           </TableHead>
-          <TableBody>
+          {/* <TableBody>
             {data && data.length > 0 ? (
               data.map((row, index) => (
                 <TableRow key={index}>
@@ -407,7 +399,46 @@ const [flats, setFlats] = useState('');
                 </TableCell>
               </TableRow>
             )}
-          </TableBody>
+          </TableBody> */}
+           <TableBody>
+  {data && data.length > 0 ? (
+    data.map((row, index) => (
+      <TableRow key={index}>
+        <TableCell>
+          <Tooltip title="Edit">
+            <IconButton
+              size="small"
+              sx={{ backgroundColor: '#1976D2', color: 'white' }}
+              onClick={() => handleEdit(row)}
+            >
+              <EditIcon />
+            </IconButton>
+          </Tooltip>
+        </TableCell>
+
+        <TableCell>{row.timestamp}</TableCell>
+        <TableCell>{row.projectName}</TableCell>
+        <TableCell>{row.flatAlloteeName}</TableCell>
+        <TableCell>{row.mobileNo}</TableCell>
+        <TableCell>{row.noOfFlatsAlloted}</TableCell>
+        <TableCell>{row.reraCarpetArea}</TableCell>
+        <TableCell>{row.wing}</TableCell>
+        <TableCell>{row.flatNo}</TableCell>
+        <TableCell>{row.typeOfFlat}</TableCell>
+
+       
+
+      </TableRow>
+    ))
+  ) : (
+    <TableRow>
+      <TableCell colSpan={11} align="center">
+        No Data Found
+      </TableCell>
+    </TableRow>
+  )}
+</TableBody>
+
         </Table>
       )}
     </TableContainer>
