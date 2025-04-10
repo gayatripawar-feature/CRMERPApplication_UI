@@ -68,7 +68,25 @@ const Registration = () => {
 
  const [activeChecklist, setActiveChecklist] = useState(null); // Track open checklist dialog
   const [checklistData, setChecklistData] = useState({});
+ 
+  const [isEditableRow, setIsEditableRow] = useState(null);
 
+
+
+  const [registrationNumbers, setRegistrationNumbers] = useState({});
+
+  const handleRegistrationChange = (id, value) => {
+    setRegistrationNumbers((prev) => ({
+      ...prev,
+      [id]: value,
+    }));
+  };
+  
+  
+  // Handle Edit Icon Click
+  const handleEditClick = (id) => {
+    setIsEditableRow(id);
+  };
 
  const fileInputRef = useRef(null);
   const sampleLoans = [
@@ -136,7 +154,7 @@ const Registration = () => {
   // const openChecklist = (index) => {
   //   setActiveChecklist(index);
   // };
-
+  const [loansData, setLoansData] = useState(sampleLoans);
   const openChecklist = (index) => {
     setActiveChecklist(index);
     setChecklistData({}); // Reset checklist when opening again
@@ -198,9 +216,9 @@ const handleToggle = () => {
 };
  
 
-const handleEditClick = () => {
-  setIsEditable(!isEditable); // Toggle editable state on clicking the edit icon
-};
+// const handleEditClick = () => {
+//   setIsEditable(!isEditable); // Toggle editable state on clicking the edit icon
+// };
 
 
 const handleCheckboxChange = (event) => {
@@ -298,6 +316,11 @@ const handleUpload = (index) => {
   if (fileInputRef.current) {
     fileInputRef.current.click();  // Trigger the hidden file input
   }
+};
+const handleFileUpload = (file, index) => {
+  const updatedData = [...loansData];
+  updatedData[index].selectedFile = file; // store file in particular row
+  setLoansData(updatedData);
 };
 
 
@@ -646,7 +669,9 @@ const handleUpload = (index) => {
     
 
 <TableBody>
-  {sampleLoans.map((item, index) => (
+  {/* {sampleLoans.map((item, index) => ( */}
+  
+  {loansData.map((item, index) => (
     <TableRow key={index}>
       {/* Other columns */}
       <TableCell className='text-black'></TableCell>
@@ -661,7 +686,7 @@ const handleUpload = (index) => {
       <TableCell></TableCell>
       <TableCell></TableCell>
 
-      <TableCell sx={{ padding: 1, position: "relative", whiteSpace: "nowrap" }}>
+      {/* <TableCell sx={{ padding: 1, position: "relative", whiteSpace: "nowrap" }}>
         {isEditable ? (
           <TextField
             value={registrationNumber}
@@ -702,6 +727,27 @@ const handleUpload = (index) => {
                 color: "blue", 
               }}
             >
+              <EditIcon />
+            </IconButton>
+          </span>
+        )}
+      </TableCell> */}
+ <TableCell>
+        {isEditableRow === index ? (
+          <TextField
+            value={item.registrationNumber}
+            onChange={(e) => {
+              const updatedData = [...loansData];
+              updatedData[index].registrationNumber = e.target.value;
+              setLoansData(updatedData);
+            }}
+            onBlur={() => setIsEditableRow(null)}
+            placeholder="Enter Registration Number"
+          />
+        ) : (
+          <span style={{ display: 'flex', alignItems: 'center' }}>
+            {item.registrationNumber || "Enter Registration Number"}
+            <IconButton onClick={() => setIsEditableRow(index)}>
               <EditIcon />
             </IconButton>
           </span>
@@ -770,7 +816,7 @@ const handleUpload = (index) => {
      
 
 
-<TableCell>
+{/* <TableCell>
            
             <IconButton onClick={handleUpload}>
               <FaUpload style={{ color: "blue" }} />
@@ -781,7 +827,25 @@ const handleUpload = (index) => {
                 <FaEye style={{ color: "green" }} />
               </IconButton>
             )}
-          </TableCell>
+          </TableCell> */}
+<TableCell>
+  <IconButton component="label">
+    <FaUpload style={{ color: "blue" }} />
+    <input
+      type="file"
+      hidden
+      onChange={(e) => handleFileUpload(e.target.files[0], index)}
+    />
+  </IconButton>
+
+  {item.selectedFile && (
+    <IconButton
+      onClick={() => window.open(URL.createObjectURL(item.selectedFile), "_blank")}
+    >
+      <FaEye style={{ color: "green" }} />
+    </IconButton>
+  )}
+</TableCell>
 
         
           <input

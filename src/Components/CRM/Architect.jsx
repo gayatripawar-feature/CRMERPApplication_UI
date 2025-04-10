@@ -5,10 +5,11 @@
 
 
 import React, { useState, useEffect } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, TextField, Modal, Box, MenuItem, Select, InputLabel, FormControl } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, IconButton,Typography,TextField, Modal, Box, MenuItem, Select, InputLabel, FormControl } from '@mui/material';
 import { FaEye } from "react-icons/fa";
 import FoundationIcon from '@mui/icons-material/Foundation';
-
+import EditIcon from '@mui/icons-material/Edit';
+import { toast } from 'react-toastify';
 import jsPDF from "jspdf";
 
 import { FaFileDownload } from "react-icons/fa";
@@ -30,7 +31,8 @@ const Architect = () => {
   const [currentPage, setCurrentPage] = useState(1);
    const [isExpanded, setIsExpanded] = useState(true);
 const [isCollapsed, setIsCollapsed] = useState(false);
-
+const [selectedRow, setSelectedRow] = useState(null);
+const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const rowsPerPage = 10;
   
@@ -58,21 +60,31 @@ const [isCollapsed, setIsCollapsed] = useState(false);
     setSelectedLoan(null);
   };
 
-  const handleFileChange = (e) => {
-    setSelectedFile(e.target.files[0]);
-  };
+  // const handleFileChange = (e) => {
+  //   setSelectedFile(e.target.files[0]);
+  // };
 
 
   const handleCollapseToggle = () => {
     setIsCollapsed((prev) => !prev);
   };
 
+  // const handleSubmit = (event) => {
+  //   event.preventDefault();
+  //   console.log("Form submitted!");
+  // };
+  
   const handleSubmit = (event) => {
     event.preventDefault();
+    
+    // Your Submit Logic
     console.log("Form submitted!");
+  
+    toast.success("Data Submitted Successfully!");
+    handleCloseModal(false);
+    
   };
   
-
    
 const handleToggle = () => {
   setIsExpanded((prev) => !prev);
@@ -92,7 +104,37 @@ const handleToggle = () => {
 
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-  const currentRows = filteredLoans.slice(indexOfFirstRow, indexOfLastRow);
+  // const currentRows = filteredLoans.slice(indexOfFirstRow, indexOfLastRow);
+  const [currentRows, setCurrentRows] = useState([]);
+ 
+  const [selectedSlab, setSelectedSlab] = useState('');
+const [letterType, setLetterType] = useState('');
+const [selectedFiles, setSelectedFiles] = useState([]);
+
+  // Dummy Data
+const rows = [
+  {
+    flatNo: "A-101",
+    nameOfAllotee: "John Doe",
+    timestamp: "2024-04-01",
+    slab: "1st Slab",
+    letterType: "Demand",
+    document: "PDF",
+  },
+  {
+    flatNo: "A-102",
+    nameOfAllotee: "Jane Doe",
+    timestamp: "2024-04-02",
+    slab: "2nd Slab",
+    letterType: "Reminder",
+    document: "PDF",
+  },
+];
+
+useEffect(() => {
+  setCurrentRows(rows);
+}, []);
+
 
   const getFilterOptions = (type) => {
     switch (type) {
@@ -141,6 +183,39 @@ const handleToggle = () => {
     });
 
     doc.save("EngineerArchitect_Report.pdf");
+};
+
+const handleOpenEditModal = (loan) => {
+  setSelectedRow(loan);
+  setIsEditModalOpen(true);
+};
+
+// const handleCloseEditModal = () => {
+//   setIsEditModalOpen(false);
+// };
+
+const handleCloseEditModal = () => {
+  setSelectedSlab('');
+  setLetterType('');
+  setSelectedFiles([]);
+  setIsEditModalOpen(false);  // Close Modal
+};
+
+const handleFileChange = (e) => {
+  const newFiles = Array.from(e.target.files);
+  setSelectedFiles((prevFiles) => [...prevFiles, ...newFiles]);
+};
+
+
+const handleUpdate = () => {
+  // Your update API call or logic here...
+
+  toast.success('Details Updated Successfully!', {
+    position: 'top-right',
+    autoClose: 2000,
+  });
+
+  handleCloseEditModal();  // Close the Modal
 };
 
 
@@ -323,21 +398,148 @@ const handleToggle = () => {
               <TableCell sx={{ color: "white", fontWeight: "bold" }}>DOCUMENT</TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
-            {currentRows.map((loan, index) => (
-              <TableRow key={index}>
-                <TableCell>{loan.flatNo}</TableCell>
-                <TableCell>{loan.nameOfAllotee}</TableCell>
-                <TableCell>
-                  <Button variant="contained" color="secondary" onClick={() => handleOpenModal(loan)}>
-                    Open Draft
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
+         
+            <TableBody>
+          {currentRows.map((loan, index) => (
+            <TableRow key={index}>
+          
+
+<TableCell>
+  <IconButton
+    onClick={() => handleOpenEditModal(loan)}
+    sx={{
+      backgroundColor: "#3621a9",  
+      color: "white",              
+      fontSize: "14px",            
+      padding: "6px",              
+      '&:hover': {
+        backgroundColor: "#2c1880",  
+      }
+    }}
+  >
+    <EditIcon />
+  </IconButton>
+</TableCell>
+
+
+              <TableCell>{loan.timestamp}</TableCell>
+              <TableCell>{loan.slab}</TableCell>
+              <TableCell>{loan.letterType}</TableCell>
+              <TableCell>{loan.document}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
         </Table>
       </TableContainer>
+
+
+
+      <Modal open={isEditModalOpen} onClose={handleCloseEditModal}>
+  <Box 
+    sx={{ 
+      width: 400, 
+      bgcolor: 'background.paper', 
+      p: 4, 
+      m: 'auto', 
+      mt: 10, 
+      borderRadius: 2 
+    }}
+  >
+    <div 
+      className="modal-body" 
+      style={{ 
+        marginTop: '16px', 
+        padding: '10px', 
+        backgroundColor: 'white', 
+        borderRadius: '8px' 
+      }}
+    >
+      <h5 className='pb-4'>Edit Details </h5>
+
+      <h6 style={{ marginBottom: '8px', fontWeight: 600 }}>Select Slab</h6>
+
+      <TextField
+        select
+        label="Select Slab"
+        fullWidth
+        variant="outlined"
+        sx={{ mb: 3, backgroundColor: 'white', borderRadius: '6px' }}
+      >
+        {[
+          'OCR', 'GST', 'Stamp Duty', 'Registration', 'Booking', 'Plinth Amount Received',
+          '1st Slab Level', '2nd Slab Level', '3rd Slab Level', '5th Slab Level',
+          '7th Slab Level', '10th Slab Level', 'Brick Level', 'External Plaster Level',
+          'Flooring Level', 'Staircase Level', 'Lift Level', 'Possession Level'
+        ].map((option) => (
+          <MenuItem key={option} value={option}>{option}</MenuItem>
+        ))}
+      </TextField>
+
+      <h6 style={{ marginBottom: '8px', fontWeight: 600 }}>Letter Type</h6>
+
+      <TextField
+        select
+        label="Letter Type"
+        fullWidth
+        variant="outlined"
+        sx={{ mb: 3, backgroundColor: 'white', borderRadius: '6px' }}
+      >
+        {['Engineer', 'Architect'].map((option) => (
+          <MenuItem key={option} value={option}>{option}</MenuItem>
+        ))}
+      </TextField>
+  
+      <h6 style={{ marginBottom: '8px', fontWeight: 600 ,}}>Upload Document</h6>
+      
+      <Button
+            variant="contained"
+            color="light"
+            component="label"
+            sx={{ mb: 2 }}
+            >
+        Choose Files
+        <input
+          type="file"
+          hidden
+          multiple
+          onChange={handleFileChange}
+        />
+      </Button>
+      
+      {/* Show Selected File Names */}
+      {selectedFiles.length > 0 && (
+        <Box sx={{ mt: 1 }}>
+          {selectedFiles.map((file, index) => (
+            <Typography key={index} variant="body2">
+              {file.name}
+            </Typography>
+          ))}
+        </Box>
+      )}
+      <div className='d-flex justify-content-between gap-2'>
+      <Button 
+        variant="contained" 
+        color="primary" 
+        fullWidth 
+        onClick={handleUpdate}
+      >
+        Update
+      </Button>
+      <Button 
+        variant="contained" 
+        color="inherit" 
+        fullWidth 
+        onClick={handleCloseEditModal}
+      >
+      cancel
+      </Button>
+      </div>
+     
+    </div>
+  </Box>
+</Modal>
+
+
 
       <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}>
         <button 
@@ -480,14 +682,41 @@ const handleToggle = () => {
       </TextField>
 
       {/* Section: Upload Document */}
-      <h6 style={{ marginBottom: '8px', fontWeight: 600 }}>Upload Document</h6>
+      {/* <h6 style={{ marginBottom: '8px', fontWeight: 600 }}>Upload Document</h6>
       <TextField
         type="file"
         fullWidth
         variant="outlined"
         onChange={handleFileChange}
         sx={{ mb: 3, backgroundColor: 'white', borderRadius: '6px' }}
-      />
+      /> */}
+      <h6 style={{ marginBottom: '8px', fontWeight: 600 ,}}>Upload Document</h6>
+      
+      <Button
+            variant="contained"
+            color="light"
+            component="label"
+            sx={{ mb: 2 }}
+            >
+        Choose Files
+        <input
+          type="file"
+          hidden
+          multiple
+          onChange={handleFileChange}
+        />
+      </Button>
+      
+      {/* Show Selected File Names */}
+      {selectedFiles.length > 0 && (
+        <Box sx={{ mt: 1 }}>
+          {selectedFiles.map((file, index) => (
+            <Typography key={index} variant="body2">
+              {file.name}
+            </Typography>
+          ))}
+        </Box>
+      )}
     </div>
 
     {/* Modal Footer */}

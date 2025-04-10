@@ -32,6 +32,7 @@ const fetchLoansData = async () => {
 
 const Demand = () => {
   const [loans, setLoans] = useState([]);
+  // const [data, setData] = useState([]);
   const [filteredLoans, setFilteredLoans] = useState([]);
    const [isExpanded, setIsExpanded] = useState(true);
   const [startDate, setStartDate] = useState('');
@@ -279,8 +280,51 @@ const handleToggle = () => {
 };
   
 
+const handleDemandLevelChange = (newLevel, index) => {
+  const updatedData = [...data];
+  updatedData[index].demandLevel = newLevel;
+  setData(updatedData);
+};
 
 
+// const data = [
+//   {
+//     flatNo: "A-101",
+//     nameOfAllotee: "John Doe",
+//     nameOfCoAllotee: "Jane Doe",
+//     type: "3BHK",
+//     floor: "1st",
+//     email: "john@example.com",
+//     whatsappNo: "9876543210",
+//     rate: "5000",
+//     agreementValue: "50 Lakhs",
+//     dateOfBooking: "2023-04-01",
+//     parking: "Yes",
+//     receivedDate: null,
+//     demandLetter: "Issued",
+//     demandLevel: 10,
+//   },
+//   // more rows...
+// ];
+const [data, setData] = useState([
+  {
+    flatNo: "A-101",
+    nameOfAllotee: "John Doe",
+    nameOfCoAllotee: "Jane Doe",
+    type: "3BHK",
+    floor: "1st",
+    email: "john@example.com",
+    whatsappNo: "9876543210",
+    rate: "5000",
+    agreementValue: "50 Lakhs",
+    dateOfBooking: "2023-04-01",
+    parking: "Yes",
+    receivedDate: null,
+    demandLetter: "Issued",
+    demandLevel: 10,
+  },
+  // more rows...
+]);
 
   return (
     <div className="main-content">
@@ -502,7 +546,7 @@ const handleToggle = () => {
             <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>BALANCE AGAINST AGREEMENT VALUE</TableCell>
           </TableRow>
         </TableHead>
-        <TableBody>
+        {/* <TableBody>
          <TableCell></TableCell>
          <TableCell></TableCell>
          <TableCell></TableCell>
@@ -524,6 +568,8 @@ const handleToggle = () => {
                 />
               </LocalizationProvider>
             </TableCell>
+          
+
 <TableCell></TableCell>
 <TableCell></TableCell>
 <TableCell></TableCell>
@@ -560,7 +606,7 @@ const handleToggle = () => {
     color="error" 
     onClick={() => window.open('URL_TO_YOUR_PDF', '_blank')}
   >
-    {/* <PictureAsPdfIcon /> */}
+   
     <VisibilityIcon />
 
   </IconButton>
@@ -572,7 +618,7 @@ const handleToggle = () => {
     color="error" 
     onClick={() => window.open('URL_TO_YOUR_PDF', '_blank')}
   >
-    {/* <PictureAsPdfIcon /> */}
+   
     <VisibilityIcon />
   </IconButton>
 </TableCell>
@@ -582,7 +628,7 @@ const handleToggle = () => {
     color="error" 
     onClick={() => window.open('URL_TO_YOUR_PDF', '_blank')}
   >
-    {/* <PictureAsPdfIcon /> */}
+    
     <VisibilityIcon />
   </IconButton>
 </TableCell>
@@ -618,9 +664,136 @@ const handleToggle = () => {
     />
   </LocalizationProvider>
 </TableCell>
-{/* <TableCell></TableCell> */}
 
-        </TableBody>
+
+        </TableBody> */}
+
+<TableBody>
+  {data.map((row, index) => (
+    <TableRow key={index}>
+      <TableCell>{row.flatNo}</TableCell>
+      <TableCell>{row.nameOfAllotee}</TableCell>
+      <TableCell>{row.nameOfCoAllotee}</TableCell>
+      <TableCell>{row.type}</TableCell>
+      <TableCell>{row.floor}</TableCell>
+      <TableCell>{row.email}</TableCell>
+      <TableCell>{row.whatsappNo}</TableCell>
+      <TableCell>{row.rate}</TableCell>
+      <TableCell>{row.agreementValue}</TableCell>
+      <TableCell>{row.dateOfBooking}</TableCell>
+      <TableCell>{row.parking}</TableCell>
+        {/* Received Date */}
+        <TableCell>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <DatePicker
+            label="Select Date"
+            value={row.receivedDate}
+            onChange={(newDate) => handleDateChange(newDate, index)}
+            renderInput={(params) => <TextField {...params} size="small" />}
+          />
+        </LocalizationProvider>
+      </TableCell>
+
+      {/* Demand Letter Column */}
+      {/* <TableCell>{row.demandLetter}</TableCell> */}
+
+      {/* Demand Level */}
+      <TableCell>
+        <FormControl fullWidth size="small">
+          <InputLabel>Demand Level</InputLabel>
+          <Select
+            value={row.demandLevel}
+            onChange={(e) => handleDemandLevelChange(e.target.value, index)}
+          >
+            <MenuItem value={10}>Booking Level (10%)</MenuItem>
+            <MenuItem value={20}>Agreement Level (20%)</MenuItem>
+            <MenuItem value={35}>Plinth Level (35%)</MenuItem>
+            <MenuItem value={40}>1st Slab Level (40%)</MenuItem>
+            <MenuItem value={45}>2nd Slab Level (45%)</MenuItem>
+            <MenuItem value={50}>3rd Slab Level (50%)</MenuItem>
+            <MenuItem value={55}>5th Slab Level (55%)</MenuItem>
+            <MenuItem value={60}>7th Slab Level (60%)</MenuItem>
+            <MenuItem value={65}>9th Slab Level (65%)</MenuItem>
+            <MenuItem value={70}>10th Slab Level (70%)</MenuItem>
+            <MenuItem value={75}>Brick Work Level (75%)</MenuItem>
+          </Select>
+        </FormControl>
+      </TableCell>
+<TableCell></TableCell>
+<TableCell></TableCell>
+<TableCell></TableCell>
+<TableCell >
+ 
+</TableCell>
+<TableCell></TableCell>
+
+<TableCell>
+  <IconButton 
+    color="error" 
+    onClick={() => window.open('URL_TO_YOUR_PDF', '_blank')}
+  >
+   
+    <VisibilityIcon />
+
+  </IconButton>
+</TableCell>
+
+
+<TableCell>
+  <IconButton 
+    color="error" 
+    onClick={() => window.open('URL_TO_YOUR_PDF', '_blank')}
+  >
+   
+    <VisibilityIcon />
+  </IconButton>
+</TableCell>
+
+<TableCell>
+  <IconButton 
+    color="error" 
+    onClick={() => window.open('URL_TO_YOUR_PDF', '_blank')}
+  >
+    
+    <VisibilityIcon />
+  </IconButton>
+</TableCell>
+
+<TableCell></TableCell>
+<TableCell>
+  <LocalizationProvider dateAdapter={AdapterDateFns}>
+    <DatePicker
+      label="Select Date"
+      value={selectedDate}
+      onChange={handleDateChange}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          variant="standard"
+          InputProps={{
+            disableUnderline: true, 
+          }}
+          sx={{
+            "& .MuiInputBase-root": {
+              border: "none", 
+            },
+            "& .MuiOutlinedInput-notchedOutline": {
+              display: "none", 
+            },
+            "& .MuiInputBase-input": {
+              backgroundColor: "transparent", 
+              padding: "8px 0", 
+            },
+          }}
+        />
+      )}
+    />
+  </LocalizationProvider>
+</TableCell>
+
+    </TableRow>
+  ))}
+</TableBody>
       </Table>
     </TableContainer>
 
