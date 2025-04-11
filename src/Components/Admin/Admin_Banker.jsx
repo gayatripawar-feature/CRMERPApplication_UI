@@ -661,7 +661,8 @@ const Admin_Banker = () => {
             {/* Submit and Cancel Buttons */}
             <div className="d-flex justify-content-center gap-3">
               <button type="submit" className="btn btn-success" onClick={handleSubmit}>
-                Submit
+                {/* Submit */}
+                Update
               </button>
               <button type="button" className="btn btn-secondary" onClick={handleCancel}>
                 Cancel

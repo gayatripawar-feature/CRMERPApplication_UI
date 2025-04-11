@@ -1880,7 +1880,7 @@ Submit Landowner Info
 
         <Grid item xs={4}>
           <FormControl fullWidth disabled={!selectedProject}>
-            <InputLabel>Landowner Name</InputLabel>
+            <InputLabel> Name</InputLabel>
             <Select value={selectedLandowner} onChange={handleLandownerChange}>
               {selectedProject && landowners[selectedProject]?.map((owner) => (
                 <MenuItem key={owner.name} value={owner.name}>{owner.name}</MenuItem>

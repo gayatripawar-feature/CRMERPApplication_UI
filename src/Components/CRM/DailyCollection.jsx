@@ -52,7 +52,10 @@ const [selectedTitle, setSelectedTitle] = useState("Mr.");
 const [error, setError] = useState(false);
 const [chequeNoError, setChequeNoError] = useState(false);
 const [receiptNoError, setReceiptNoError] = useState(false);
-
+const [dailyCollectionData, setDailyCollectionData] = useState([]);
+const [selectedDates, setSelectedDates] = useState({});
+const [selectedRowId, setSelectedRowId] = useState(null);
+const [openAmount, setOpenAmount] = useState(false);
 
   const rowsPerPage = 10;
   
@@ -75,9 +78,42 @@ const [receiptNoError, setReceiptNoError] = useState(false);
     setLoans(data);
     setFilteredLoans(data);
   };
-  const handleEdit = (row) => {
-    setSelectedLoan(row);   // This will open form with row data
-    setSetAmount(true);     // Open Modal
+ 
+
+  useEffect(() => {
+    const dummyData = [
+      {
+        timestamp: "2025-04-11 10:00 AM",
+        receiptNo: "RCPT001",
+        customerName: "John Doe",
+        demandLevel: "High",
+        chequeNo: "CHQ123",
+        bankName: "HDFC Bank",
+        dateReceived: "2025-04-11",
+        amountReceived: 10000,
+        towards: "Loan Payment",
+        paymentMode: "Cheque",
+      },
+      {
+        timestamp: "2025-04-11 11:00 AM",
+        receiptNo: "RCPT002",
+        customerName: "Ramesh Kumar",
+        demandLevel: "Medium",
+        chequeNo: "CHQ124",
+        bankName: "ICICI Bank",
+        dateReceived: "2025-04-11",
+        amountReceived: 15000,
+        towards: "EMI Payment",
+        paymentMode: "Cash",
+      },
+    ];
+  
+    setDailyCollectionData(dummyData);
+  }, []);
+  
+  const handleEdit = (loan) => {
+    setSelectedLoan(loan);  // Open Modal with data
+    setSetAmount(true);     // Open Form Modal
   };
   
 
@@ -116,12 +152,26 @@ const [receiptNoError, setReceiptNoError] = useState(false);
   //   setSelectedLevel(event.target.value);
   // };
 
-  const handleOpen = () => {
-    setSetAmount(true); // Open the modal
-    setSetAmountForm(true);  // Optionally open the form inside the modal
-  };
+ 
 
+  // const handleOpen = (rowId) => {
+  //   setSelectedRowId(rowId);  // this will store that row's ID
+  //   setSetAmount(true);
+  //   setSetAmountForm(true);
+  // };
+  
+  const handleOpen = (rowId) => {
+    console.log("Opening Modal for Row Id:", rowId);
+    setSelectedRowId(rowId);  
+  
+    // changed here 
+    // setOpenAmount(true);  
+    setSetAmount(true);
+    setSetAmountForm(true);
+  };
+  
   const handleClose = () => {
+    // setOpenAmount(false); 
     setSetAmount(false); // Close the modal
     setSetAmountForm(false);  // Optionally close the form inside the modal
   };
@@ -223,18 +273,81 @@ const handleToggle = () => {
   };
   
   
-  const handleSubmit = () => {
+  // const handleSubmit = () => {
     
-    toast.success("Form submitted successfully!");
+  //   toast.success("Form submitted successfully!");
+  //  // Assuming you have selectedDate value from TextField
+  //  const updatedDates = { ...selectedDates };
+  //  updatedDates[selectedRowId] = selectedDate; // selectedRowId is the ID of that row you clicked
+  //  setSelectedDates(updatedDates);
+ 
+  //  handleClose(); // close the modal
+    
+  //   setTimeout(() => {
+  //     setOpenForm(false);  // Close the form modal
+  //     setOpenModal(false);  // Close any other modal (if applicable)
+  //   },2000);  // Adjust the timeout (in ms) if needed to match the toast duration
+  // };
   
+  // const handleSubmit = () => {
+ 
+  
+  //   toast.success("Form submitted successfully!");
+  
+  //   const updatedDates = { ...selectedDates };
+  //   updatedDates[selectedRowId] = selectedDate;
+  //   setSelectedDates(updatedDates);
+  
+  //   setTimeout(() => {
+  //     setOpenForm(false);  // Close the form modal
+  //     setOpenModal(false);  // Close any other modal (if applicable)
+  //     handleClose();  // Close Modal Properly After Toast
+  //   }, 2000);  // Wait till toast is shown
+  // };
+
+  // const handleSubmit = () => {
+  //   if (!selectedDate) {
+  //     toast.error("Please select a date!");
+  //     return;
+  //   }
+  
+  //   console.log("SelectedRowId:", selectedRowId);
+  //   console.log("SelectedDate:", selectedDate);
+  //   console.log("SelectedDates Object:", selectedDates);
     
-    setTimeout(() => {
-      setOpenForm(false);  // Close the form modal
-      setOpenModal(false);  // Close any other modal (if applicable)
-    },2000);  // Adjust the timeout (in ms) if needed to match the toast duration
+  
+  //   const updatedDates = { ...selectedDates };
+  //   updatedDates[selectedRowId] = selectedDate;
+  
+  //   setSelectedDates(updatedDates);
+  
+  //   toast.success("Form submitted successfully!");
+  
+  //   setTimeout(() => {
+  //     handleClose();  // Close Modal after success toast
+  //     setOpenForm(false);
+  //     setOpenModal(false);
+  //   }, 1500); // small delay for better UX
+  // };
+  
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  
+    if (!selectedLoan.receivedDate) {
+      toast.error("Please select received date");
+      return;
+    }
+  
+    setSelectedDates(prev => ({
+      ...prev,
+      [selectedRowId]: selectedLoan.receivedDate,
+    }));
+  
+    handleClose();
+    toast.success("Saved Successfully");
   };
   
-
+  
   const generatePDF = () => {
     toast.info("PDF generation in progress...");
     
@@ -444,18 +557,19 @@ const handleToggle = () => {
             <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>TOWARDS</TableCell>
             <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>PAYMENT MODE</TableCell>
             <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>DEMAND PERCENTAGE</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>PlANNED</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>PLANNED</TableCell>
             <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>ACTUAL</TableCell>
             <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>AMOUNT RECEIVED BY ACCOUNT</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>DATE OF RECEIVED AMOUNT (A/c)</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>DATE OF RECEIVED AMOUNT (A/C)</TableCell>
             <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>TIME DELAY</TableCell>
            
            
           </TableRow>
         </TableHead>
         <TableBody>
-  <TableRow>
-  
+        {dailyCollectionData.map((row, index) => (
+  // <TableRow>
+  <TableRow key={row.id}>
     <TableCell>
  
   <IconButton
@@ -476,45 +590,110 @@ const handleToggle = () => {
 
 
 
-    <TableCell></TableCell> 
-    <TableCell></TableCell> 
-    <TableCell></TableCell> 
-    <TableCell></TableCell> 
-    <TableCell></TableCell> 
-    <TableCell></TableCell> 
-    <TableCell></TableCell>
-    <TableCell></TableCell> 
-    <TableCell></TableCell> 
-    <TableCell></TableCell> 
+    <TableCell>{row.timestamp}</TableCell> 
+    <TableCell>{row.receiptNo}</TableCell> 
+    <TableCell>{row.customerName}</TableCell> 
+    <TableCell>{row.demandLevel}</TableCell> 
+    <TableCell>{row.chequeNo}</TableCell> 
+    <TableCell>{row.bankName}</TableCell> 
+    <TableCell>{row.dateReceived}</TableCell>
+    <TableCell>{row.amountReceived}</TableCell> 
+    <TableCell>{row.towards}</TableCell> 
+    <TableCell>{row.paymentMode}</TableCell> 
     <TableCell></TableCell> 
     <TableCell></TableCell> 
     <TableCell></TableCell> 
     <TableCell></TableCell> 
   
-    {/* <TableCell>
+    {/* <TableCell> */}
         
-        <IconButton onClick={handleOpen} style={{ backgroundColor: '#3621a9' }}>
+        {/* <IconButton onClick={handleOpen} style={{ backgroundColor: '#3621a9' }}>
           <InfoIcon style={{ color: '#fff', fontSize: 18 }} />  
         </IconButton>
       </TableCell> */}
-      <TableCell>
+       {/* <TableCell>
+        <IconButton 
+          onClick={() => handleOpen(row.id)} 
+          style={{ backgroundColor: '#3621a9' }}
+        >
+          <InfoIcon style={{ color: '#fff', fontSize: 18 }} />
+        </IconButton>
+
+       
+        {selectedDates[row.id] && (
+          <span style={{ marginLeft: '8px', color: '#1976d2', fontWeight: 'bold' }}>
+            {selectedDates[row.id]}
+          </span>
+        )}
+      </TableCell> */}
+      {/* <TableCell>
   <IconButton 
-    color="primary" 
-    onClick={() => handleEdit(row)}   // Pass that row
+    onClick={() => handleOpen(row.id)} 
+    style={{ backgroundColor: '#3621a9' }}
   >
-    <EditIcon />
+    <InfoIcon style={{ color: '#fff', fontSize: 18 }} />
   </IconButton>
 
-  {/* Show Date Next to Icon */}
-  {row.date && (   // Assuming your date field is row.date
-    <span style={{ marginLeft: "8px", color: "#1976d2", fontWeight: "bold" }}>
-      {row.date}
+  
+  {selectedDates[row.id] ? (
+    <span style={{ marginLeft: '8px', color: '#1976d2', fontWeight: 'bold' }}>
+      {selectedDates[row.id]}
+    </span>
+  ) : (
+    <span style={{ marginLeft: '8px', color: 'gray', fontStyle: 'italic' }}>
+      Please select a date
     </span>
   )}
+</TableCell> */}
+
+<TableCell>
+  <IconButton 
+    onClick={() => handleOpen(row.id)} 
+    style={{ backgroundColor: '#3621a9' }}
+  >
+    <InfoIcon style={{ color: '#fff', fontSize: 18 }} />
+  </IconButton>
+
+ 
+
+
+{selectedDates[row.id] ? (
+  <span style={{ marginLeft: '8px', color: '#1976d2', fontWeight: 'bold' }}>
+    {new Date(selectedDates[row.id]).toLocaleDateString()}  
+   
+  </span>
+) : (
+  <span style={{ marginLeft: '8px', color: 'gray', fontStyle: 'italic' }}>
+    Please select a date
+  </span>
+)}
+
+
+
+
+
 </TableCell>
+
+
+
+ {/* <TableCell>
+       <IconButton 
+        color="primary" 
+        onClick={() => handleEdit(row)}   // Pass loan here
+      >
+        <EditIcon />
+      </IconButton> 
+
+     
+      <span style={{ marginLeft: "8px", color: "#1976d2", fontWeight: "bold" }}>
+        {row.date} 
+      </span>
+    </TableCell>  */}
 
     <TableCell></TableCell> 
   </TableRow>
+
+    ))}
 </TableBody>
 
       </Table>
@@ -725,6 +904,7 @@ Towards"
 {/* Modal for Form */}
 <Modal
         open={setAmount}
+        // open={openAmount} 
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
@@ -830,13 +1010,29 @@ Towards"
               <LocalizationProvider dateAdapter={AdapterDateFns}> {/* Localization Provider wrapping the component */}
       <div style={{ width: '90%' }}>
         
-        <DesktopDatePicker
+        {/* <DesktopDatePicker
           label="Received Date"
           inputFormat="yyyy-MM-dd" // Date format
           value={selectedLoan.receivedDate}
           onChange={(date) => setSelectedLoan({ ...selectedLoan, receivedDate: date })}
           renderInput={(params) => <TextField {...params} fullWidth />} // Use MUI TextField for input
-        />
+        /> */}
+       
+
+       <DesktopDatePicker
+  label="Received Date"
+  inputFormat="yyyy-MM-dd"
+  value={selectedLoan.receivedDate || null}
+  onChange={(date) => {
+    setSelectedLoan(prev => ({
+      ...prev,
+      receivedDate: date,
+    }))
+  }}
+  renderInput={(params) => <TextField {...params} fullWidth />}
+/>
+
+
       </div>
     </LocalizationProvider>
             </div>

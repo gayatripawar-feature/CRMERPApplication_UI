@@ -883,7 +883,7 @@ const handleDownloadPDFShared = () => {
               <TableCell>{row.timestamp}</TableCell>
               <TableCell>{row.shareTo}</TableCell>
               <TableCell>{row.documentType}</TableCell>
-              <TableCell>{row.document}</TableCell>
+              {/* <TableCell>{row.document}</TableCell> */}
               {/* <TableCell align="center">
                 <Button
                   variant="contained"
@@ -893,14 +893,14 @@ const handleDownloadPDFShared = () => {
                 >
                   <FaEye size={20} />
                 </Button>
-              </TableCell> */}
-              {/* <TableCell align="center">
+              </TableCell>  */}
+               <TableCell align="center">
   <IconButton
     onClick={() => window.open(row.document, '_blank')}
   >
     <FaEye size={20} color="blue" />
   </IconButton>
-</TableCell> */}
+</TableCell> 
             </TableRow>
           ))}
         </TableBody>

@@ -421,7 +421,7 @@ const MISReport = () => {
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>EMAIL ID</TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>CARPET AREA SQM</TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>OPEN BALCONY SQM</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>ENCLOSED BALCONY SQM</TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>ENCLOSE BALCONY SQM</TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>TOTAL CARPET AREA SQM</TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>CARPET AREA IN SQ FT</TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>SALEABLE AREA SQ. FT</TableCell>
@@ -567,6 +567,27 @@ const MISReport = () => {
                 <TableCell>{data.approvalStatus}</TableCell>
               </TableRow>
             ))}
+
+  <TableRow sx={{ background: '#2b2b2b' }}>
+  <TableCell sx={{ color: 'white', fontWeight: 'bold' }} colSpan={2}>
+    Total
+  </TableCell>
+
+  {/* <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>
+    {formData.reduce((acc, row) => acc + (Number(row.flatNo) || 0), 0)}
+  </TableCell> */}
+
+  
+  {[...Array(20)].map((_, idx) => (
+    <TableCell key={idx}></TableCell>
+  ))}
+
+ 
+  {[...Array(72- 20)].map((_, idx) => (
+    <TableCell key={idx} sx={{ color: 'white', fontWeight: 'bold' }}>0</TableCell>
+  ))}
+</TableRow>
+
           </TableBody>
         </Table>
       </TableContainer>

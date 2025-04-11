@@ -22,6 +22,7 @@ const Admin_SalesModule = () => {
   const [showForm, setShowForm] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
 const [editRowData, setEditRowData] = useState({});
+const [editIndex, setEditIndex] = useState(null);
 
   const [formData, setFormData] = useState({
     name: "",
@@ -161,15 +162,43 @@ const handleEmailBlur = () => {
         status: "Active",
       });
     }
-  }, [showForm]); // This will trigger when showForm changes (i.e., when the form opens)
+  }, [showForm]); 
 
   
+
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  
+  //   setSalesPersons([...salesPersons, formData]);
+  //   setShowForm(false); 
+  //   setFormData({
+  //     name: "",
+  //     email: "",
+  //     mobile: "",
+  //     designation: "",
+  //     joiningDate: "",
+  //     status: "",
+  //   });
+  //   console.log("toast");
+  //   toast.success("data submitted successfully");
+  // };
 
   const handleSubmit = (e) => {
     e.preventDefault();
   
-    setSalesPersons([...salesPersons, formData]);
-    setShowForm(false); 
+    if (editIndex !== null) {
+      // Update Mode
+      const updatedData = [...salesPersons];
+      updatedData[editIndex] = formData;  // Replace old data with updated formData
+      setSalesPersons(updatedData);
+      setEditIndex(null);  // Reset to Add mode
+    } else {
+      // Add Mode
+      setSalesPersons([...salesPersons, formData]);
+    }
+  
+    setShowForm(false);
+  
     setFormData({
       name: "",
       email: "",
@@ -178,10 +207,10 @@ const handleEmailBlur = () => {
       joiningDate: "",
       status: "",
     });
-    console.log("toast");
-    toast.success("data submitted successfully");
+  
+    toast.success("Data submitted successfully");
   };
-
+  
   const handleCancel = () => {
     setShowForm(false); 
   };
@@ -222,7 +251,11 @@ const handleEmailBlur = () => {
   
   const handleEdit = (row) => {
     setEditRowData(row);  // Pass that row data
+    setFormData(row);
     setOpenEditModal(true); // Open Modal
+
+
+    setEditIndex(index);   
   };
   const handleSaveEdit = () => {
     // Update your main data here
