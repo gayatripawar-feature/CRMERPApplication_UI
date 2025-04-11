@@ -434,6 +434,7 @@ const Leads = () => {
       <TextField
         label="Name"
         fullWidth
+        required
         value={name}
         onChange={handleChange}
         error={!!error}  // Display error if there is an error message
@@ -441,7 +442,7 @@ const Leads = () => {
       />
     </Grid>
                 <Grid item xs={4}><TextField label="
-You Are Looking For?" fullWidth /></Grid>
+You Are Looking For?" fullWidth required/></Grid>
                 {/* <Grid item xs={4}><TextField label="Mobile No. / WhatsApp No." fullWidth /></Grid>
                 <Grid item xs={4}><TextField label="Email." fullWidth /></Grid>
                */}
@@ -450,6 +451,7 @@ You Are Looking For?" fullWidth /></Grid>
         <TextField
           label="Mobile No. / WhatsApp No."
           fullWidth
+          required
           value={mobile}
           onChange={handleMobileChange}
           error={!!mobileError} // Show error if validation fails
@@ -459,6 +461,7 @@ You Are Looking For?" fullWidth /></Grid>
       <Grid item xs={4}>
         <TextField
           label="Email."
+          required
           fullWidth
           value={email}
           onChange={handleEmailChange}

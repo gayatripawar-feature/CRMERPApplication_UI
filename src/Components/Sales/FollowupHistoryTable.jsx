@@ -90,7 +90,7 @@ const FollowupHistoryTable = ({ data }) => {
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
-            <TableRow sx={{ background: "#3621a9" }}>
+            {/* <TableRow sx={{ background: "#3621a9" }}>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>STATUS HISTORY</TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>REMARK HISTORY</TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>ASSIGN TO HISTORY</TableCell>
@@ -114,34 +114,39 @@ const FollowupHistoryTable = ({ data }) => {
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>NAME OF CP (IF CHANNEL PARTNER)</TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>PLANNING TO BUY WITHIN?</TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>CUSTOMER FEEDBACK & COMPLETE FOLLOWUP DETAILS</TableCell>
+            </TableRow> */}
+
+<TableRow sx={{ background: "#3621a9" }}>
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>STATUS HISTORY</TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>REMARK HISTORY</TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>ASSIGN TO HISTORY</TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>LEAD DAYS</TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>TIMESTAMP</TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>ENQUIRY NO</TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>LEAD NO.</TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>NAME</TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>MOBILE/WHATSAPP NO.</TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>YOU ARE LOOKING FOR?</TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>	EMAIL</TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>SOURCE NAME</TableCell>
+            
             </TableRow>
           </TableHead>
           <TableBody>
             {data.map((item, index) => (
               <TableRow key={index}>
-                <TableCell>{item.statusHistory}</TableCell>
-                <TableCell>{item.remarkHistory}</TableCell>
-                <TableCell>{item.assignToHistory}</TableCell>
-                <TableCell>{item.leadDays}</TableCell>
-                <TableCell>{item.timestamp}</TableCell>
-                <TableCell>{item.enquiryNo}</TableCell>
-                <TableCell>{item.leadNo}</TableCell>
-                <TableCell>{item.salesExecutiveName}</TableCell>
-                <TableCell>{item.name}</TableCell>
-                <TableCell>{item.mobile}</TableCell>
-                <TableCell>{item.whatsappNo}</TableCell>
-                <TableCell>{item.alternateContactNo}</TableCell>
-                <TableCell>{item.email}</TableCell>
-                <TableCell>{item.address}</TableCell>
-                <TableCell>{item.occupation}</TableCell>
-                <TableCell>{item.company}</TableCell>
-                <TableCell>{item.interestedIn}</TableCell>
-                <TableCell>{item.budget}</TableCell>
-                <TableCell>{item.reasonForPurchase}</TableCell>
-                <TableCell>{item.referenceBySource}</TableCell>
-                <TableCell>{item.nameOfCp}</TableCell>
-                <TableCell>{item.planningToBuyWithin}</TableCell>
-                <TableCell>{item.customerFeedback}</TableCell>
+              <TableCell>{row.statusHistory || 'N/A'}</TableCell>
+        <TableCell>{row.remarkHistory || 'N/A'}</TableCell>
+        <TableCell>{row.assignToHistory || 'N/A'}</TableCell>
+        <TableCell>{row.leadDays || 'N/A'}</TableCell>
+        <TableCell>{row.timestamp || 'N/A'}</TableCell>
+        <TableCell>{row.enquiryNo || 'N/A'}</TableCell>
+        <TableCell>{row.leadNo || 'N/A'}</TableCell>
+        <TableCell>{row.name || 'N/A'}</TableCell>
+        <TableCell>{row.mobileNo || 'N/A'}</TableCell>
+        <TableCell>{row.lookingFor || 'N/A'}</TableCell>
+        <TableCell>{row.email || 'N/A'}</TableCell>
+        <TableCell>{row.sourceName || 'N/A'}</TableCell>
               </TableRow>
             ))}
           </TableBody>

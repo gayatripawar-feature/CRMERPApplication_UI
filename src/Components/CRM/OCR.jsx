@@ -626,16 +626,21 @@ const handleToggle = () => {
             <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>NAME OF CO-ALLOTEE</TableCell>
             <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>TYPE</TableCell>
             <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>FLOOR</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>EMAIL</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>WhatsApp NO</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>EMAIL ID</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>WhatsApp MOBILE NO</TableCell>
             <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>RATE</TableCell>
             <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>AGREEMENT VALUE</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>BOOKING DATE</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>DATE OF BOOKING</TableCell>
             <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>PARKING</TableCell>
             <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>PARKING NO</TableCell>
             <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>LOAN STATUS</TableCell>
+
+
+            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>10 % of Amount ( If Non Sanction) OCR</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>Loan Amount ( Sanction )	</TableCell>
+
             <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>OCR AMOUNT</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>OCR RECEIVED</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>OCR RECEIVED AMOUNT</TableCell>
             <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>OCR BALANCE</TableCell>
             <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>ONLINE</TableCell>
             <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>CASH WITH AV</TableCell>
@@ -644,12 +649,12 @@ const handleToggle = () => {
             <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>CASH WITHOUT AV</TableCell>
             <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>HISTORY CASH WITHOUT AV</TableCell>
             <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>BALANCE CASH WITHOUT AV</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>RECEIVED AS PER STAGE</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>RECEIVED AS PER STAGE OF CONSTRUCTION</TableCell>
             <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>STAMP DUTY TOTAL</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>STAMP DUTY RECEIVED</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>STAMP DUTY RECEIVE</TableCell>
             <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>STAMP DUTY BALANCE</TableCell>
             <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>REG TOTAL</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>REG RECEIVED</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>REG RECEIVE</TableCell>
             <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>REG BALANCE</TableCell>
             <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>GST TOTAL</TableCell>
             <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>GST RECEIVED</TableCell>
@@ -661,6 +666,8 @@ const handleToggle = () => {
           {loans.map((loan) => (
             <TableRow key={loan.flatNo}>
               <TableCell>{loan.flatNo}</TableCell>
+              <TableCell></TableCell>
+              <TableCell></TableCell>
               <TableCell></TableCell>
               <TableCell></TableCell>
               <TableCell></TableCell>
@@ -711,66 +718,6 @@ const handleToggle = () => {
  
 
 
-            
-{/* 
-<TableCell>
-      <div style={{ display: "flex", alignItems: "center", flexDirection: "column" }}>
-       
-       
-
-<IconButton onClick={() => handleAddClick("cash")} style={{ marginBottom: "8px" }}>
-  <AddIcon />
-</IconButton>
-
-
-
-{historyCashValues1.map((value, index) => (
-  <TextField
-    key={index}
-    value={value}
-    disabled={expandedIndex1 !== index}
-    InputProps={{
-      endAdornment: (
-        
-        <IconButton onClick={() => handleEditValue(index, "cash")}>
-   <EditIcon />
-</IconButton>
-
-      ),
-    }}
-  />
-))}
-
-
-
-        
-        <Collapse in={expanded1} timeout="auto" unmountOnExit>
-          <div style={{ marginTop: "10px", display: "flex", flexDirection: "column", gap: "8px" }}>
-            <TextField
-              fullWidth
-              type="number"
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              sx={{ width: "80%", fontSize: "14px", padding: "0px", height: "20px",marginBottom: "3px" }}
-              InputProps={{
-                sx: { height: "28px", fontSize: "12px", padding: "5px" }, 
-              }}
-            />
-            <div style={{ display: "flex", justifyContent: "flex-end", gap: "8px" }}>
-              <Button onClick={() => setExpanded(false)} variant="outlined" size="small">
-                Cancel
-              </Button>
-             
-
-<Button onClick={() => handleSave("cash")} variant="contained" size="small">
-  {editingIndex !== null ? "Update" : "Save"}
-</Button>
-
-            </div>
-          </div>
-        </Collapse>
-      </div>
-    </TableCell> */}
 
 <TableCell>
   <HistoryWithCash />

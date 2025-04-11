@@ -19,11 +19,14 @@ import ChannelPartnerTable from "./ChannelPartnerTable";
 import { jsPDF } from "jspdf";
 import {  FaFileDownload } from "react-icons/fa";
 import autoTable from "jspdf-autotable";
-
+ 
 const ChannelPartner = () => {
   const [isExpanded, setIsExpanded] = useState(true); // Default expanded state
   const [showBookingForm, setShowBookingForm] = useState(false);
   const [data, setData] = useState([]);
+  const [pincodeError, setPincodeError] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [mobileError, setMobileError] = useState('');
   const [formData, setFormData] = useState({
     enquiryNo: "",
     projectName: "",
@@ -39,8 +42,48 @@ const ChannelPartner = () => {
   };
 
   // Handle input change
+  // const handleInputChange = (e) => {
+  //   setFormData({ ...formData, [e.target.name]: e.target.value });
+  // };
+
   const handleInputChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+  
+    if (name === 'pincode') {
+      const regex = /^[0-9\b]*$/;
+  
+      if (!regex.test(value)) {
+        setPincodeError('Only numbers are allowed');
+        return;
+      } else {
+        setPincodeError('');
+      }
+    }
+    if (name === 'email') {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+      if (value && !emailRegex.test(value)) {
+        setEmailError('Please enter a valid email address');
+      } else {
+        setEmailError('');
+      }
+    }
+    if (name === 'MobileNo') {
+      const regex = /^[0-9\b]*$/; // Only numbers allowed
+  
+      if (!regex.test(value)) {
+        setMobileError('Only numbers are allowed');
+        return;
+      } else if (value.length > 10) {
+        setMobileError('Only 10 digits are allowed');
+        return;
+      } else {
+        setMobileError('');
+      }
+    }
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
   };
 
   // Handle form submission
@@ -200,10 +243,10 @@ const ChannelPartner = () => {
                 <Grid item xs={6}>
                   <TextField
                     label="CP Executive Name (as per Rera)"
-                    name="projectName"
+                    name="cpexecutivename"
                     fullWidth
                     variant="outlined"
-                    value={formData.projectName}
+                    value={formData.cpexecutivename}
                     onChange={handleInputChange}
                     
                   />
@@ -212,10 +255,10 @@ const ChannelPartner = () => {
                 <Grid item xs={6}>
                   <TextField
                     label="Designation"
-                    name="projectName"
+                    name="Designation"
                     fullWidth
                     variant="outlined"
-                    value={formData.projectName}
+                    value={formData.Designation}
                     onChange={handleInputChange}
                    
                   />
@@ -223,43 +266,59 @@ const ChannelPartner = () => {
                 <Grid item xs={6}>
                   <TextField
                     label="Mobile No"
-                    name="projectName"
+                    name="MobileNo"
                     fullWidth
                     variant="outlined"
-                    value={formData.projectName}
+                    value={formData.MobileNo}
                     onChange={handleInputChange}
+                    error={Boolean(mobileError)}
+                    helperText={mobileError}
                    
                   />
                 </Grid>
                 <Grid item xs={6}>
                   <TextField
                     label="Website Address"
-                    name="projectName"
+                    name="website"
                     fullWidth
                     variant="outlined"
-                    value={formData.projectName}
+                    value={formData.website}
                     onChange={handleInputChange}
                     
                   />
                 </Grid>
-                <Grid item xs={6}>
+                {/* <Grid item xs={6}>
                   <TextField
                     label="Email ID"
-                    name="projectName"
+                    name="emailId"
                     fullWidth
                     variant="outlined"
-                    value={formData.projectName}
+                    value={formData.emailId}
                     onChange={handleInputChange}
+                    error={Boolean(emailError)}
+                    helperText={emailError}
                    
+                  />
+                </Grid> */}
+                   <Grid item xs={6}>
+                  <TextField
+                    label="Email ID"
+                    name="email"
+                    fullWidth
+                    variant="outlined"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    error={Boolean(emailError)}
+                    helperText={emailError}
                   />
                 </Grid>
                 <Grid item xs={6}>
                   <TextField
                     label="Postal Address"
-                    name="projectName"
+                    name="postal"
                     fullWidth
                     variant="outlined"
-                    value={formData.projectName}
+                    value={formData.postal}
                     onChange={handleInputChange}
                    
                   />
@@ -267,21 +326,23 @@ const ChannelPartner = () => {
                 <Grid item xs={6}>
                   <TextField
                     label="Pin-code"
-                    name="projectName"
+                    name="pincode"
                     fullWidth
                     variant="outlined"
-                    value={formData.projectName}
+                    value={formData.pincode}
                     onChange={handleInputChange}
+                    error={Boolean(pincodeError)}
+                    helperText={pincodeError}
                  
                   />
                 </Grid>
                 <Grid item xs={6}>
                   <TextField
                     label="Location"
-                    name="projectName"
+                    name="location"
                     fullWidth
                     variant="outlined"
-                    value={formData.projectName}
+                    value={formData.location}
                     onChange={handleInputChange}
                     
                   />
@@ -289,10 +350,10 @@ const ChannelPartner = () => {
                 <Grid item xs={6}>
                   <TextField
                     label="City"
-                    name="projectName"
+                    name="city"
                     fullWidth
                     variant="outlined"
-                    value={formData.projectName}
+                    value={formData.city}
                     onChange={handleInputChange}
                    
                   />
@@ -302,8 +363,8 @@ const ChannelPartner = () => {
     <InputLabel>Zone</InputLabel>
     <Select
       label="Zone"
-      name="projectName"
-      value={formData.projectName}
+      name="zone"
+      value={formData.zone}
       onChange={handleInputChange}
     >
       <MenuItem value="East">East</MenuItem>

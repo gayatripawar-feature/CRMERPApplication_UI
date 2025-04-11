@@ -75,7 +75,11 @@ const [receiptNoError, setReceiptNoError] = useState(false);
     setLoans(data);
     setFilteredLoans(data);
   };
-
+  const handleEdit = (row) => {
+    setSelectedLoan(row);   // This will open form with row data
+    setSetAmount(true);     // Open Modal
+  };
+  
 
   const handleEditClick = () => {
     setOpenForm(true); // Open the form
@@ -487,12 +491,28 @@ const handleToggle = () => {
     <TableCell></TableCell> 
     <TableCell></TableCell> 
   
-    <TableCell>
+    {/* <TableCell>
         
         <IconButton onClick={handleOpen} style={{ backgroundColor: '#3621a9' }}>
           <InfoIcon style={{ color: '#fff', fontSize: 18 }} />  
         </IconButton>
-      </TableCell>
+      </TableCell> */}
+      <TableCell>
+  <IconButton 
+    color="primary" 
+    onClick={() => handleEdit(row)}   // Pass that row
+  >
+    <EditIcon />
+  </IconButton>
+
+  {/* Show Date Next to Icon */}
+  {row.date && (   // Assuming your date field is row.date
+    <span style={{ marginLeft: "8px", color: "#1976d2", fontWeight: "bold" }}>
+      {row.date}
+    </span>
+  )}
+</TableCell>
+
     <TableCell></TableCell> 
   </TableRow>
 </TableBody>

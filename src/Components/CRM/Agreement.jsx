@@ -447,25 +447,59 @@ const generatePDF = () => {
 
 
 
-  const handleOpen = (index) => {
+  // const handleOpen = (index) => {
    
-    setSelectedIndex(index); 
-    setUpdatedChecklist(currentData[index].checklistBeforeAgreement); 
-    setOpen(true); 
-  };
+  //   setSelectedIndex(index); 
+  //   setUpdatedChecklist(currentData[index].checklistBeforeAgreement); 
+  //   setOpen(true); 
+  // };
   
   const handleClose = () => setOpen(false);
 
+  const handleOpen = (index) => {
+    setSelectedIndex(index);
   
-
-
+    const checklistArray = Array.isArray(currentData[index].checklistBeforeAgreement)
+      ? currentData[index].checklistBeforeAgreement
+      : [];
+  
+    const prefillCheckedItems = {};
+  
+    checklistArray.forEach(item => {
+      prefillCheckedItems[item.label] = item.checked;
+    });
+  
+    setCheckedItems(prefillCheckedItems);  
+    setOpen(true);
+  };
+  
+  
+  
   const handleSave = () => {
-    console.log("Data Submitted:", checkedItems);
+    const updatedData = [...currentData];
+  
+    updatedData[selectedIndex].checklistBeforeAgreement = Object.keys(checkedItems).map(key => ({
+      label: key,
+      checked: checkedItems[key]
+    }));
+  
+    setCurrentData(updatedData);  
+  
     resetForm();
     setTimeout(() => {
-      closeChecklistDialog(); 
+      handleClose(); 
     }, 0);
   };
+  
+  
+
+  // const handleSave = () => {
+  //   console.log("Data Submitted:", checkedItems);
+  //   resetForm();
+  //   setTimeout(() => {
+  //     closeChecklistDialog(); 
+  //   }, 0);
+  // };
   
 
   const resetFilters = () => {
@@ -575,8 +609,25 @@ const generatePDF = () => {
     setCurrentData(updatedData);
   };
   
-
-
+  const getChecklistIconColor = (checklist) => {
+    const checklistArray = Array.isArray(checklist) ? checklist : [];
+  
+    if (checklistArray.length === 0) {
+      return "disabled"; // Gray
+    }
+  
+    const selectedItems = checklistArray.filter(item => item.checked); // Assuming item.checked is true/false
+  
+    if (selectedItems.length === 0) {
+      return "disabled"; // Gray
+    } else if (selectedItems.length === checklistArray.length) {
+      return "success"; // Green
+    } else {
+      return "error"; // Red
+    }
+  };
+  
+ 
 
   return (
     <div className="main-content">
@@ -831,13 +882,22 @@ const generatePDF = () => {
 
 
        
-<TableCell>
+{/* <TableCell>
   {loan.checklistBeforeAgreement}
 
   <IconButton onClick={() => openChecklistDialog(index)} size="small">
     <AssignmentTurnedInIcon color="primary" />
   </IconButton>
+</TableCell> */}
+
+<TableCell>
+  
+
+  <IconButton onClick={() => handleOpen(index)} size="small">
+    <AssignmentTurnedInIcon color={getChecklistIconColor(loan.checklistBeforeAgreement)} />
+  </IconButton>
 </TableCell>
+
 
 
 

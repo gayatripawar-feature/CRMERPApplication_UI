@@ -14,7 +14,7 @@ import jsPDF from "jspdf";
 
 import { FaFileDownload } from "react-icons/fa";
 import autoTable from "jspdf-autotable";
-
+import VisibilityIcon from '@mui/icons-material/Visibility';
 const fetchLoansData = async () => {
   const response = await fetch('/api/getOCRCollection');
   return response.json();
@@ -119,7 +119,7 @@ const rows = [
     timestamp: "2024-04-01",
     slab: "1st Slab",
     letterType: "Demand",
-    document: "PDF",
+    document: "",
   },
   {
     flatNo: "A-102",
@@ -127,7 +127,7 @@ const rows = [
     timestamp: "2024-04-02",
     slab: "2nd Slab",
     letterType: "Reminder",
-    document: "PDF",
+    document: "",
   },
 ];
 
@@ -410,8 +410,8 @@ const handleUpdate = () => {
     sx={{
       backgroundColor: "#3621a9",  
       color: "white",              
-      fontSize: "14px",            
-      padding: "6px",              
+      fontSize: "10px",            
+      padding: "3px",              
       '&:hover': {
         backgroundColor: "#2c1880",  
       }
@@ -425,7 +425,22 @@ const handleUpdate = () => {
               <TableCell>{loan.timestamp}</TableCell>
               <TableCell>{loan.slab}</TableCell>
               <TableCell>{loan.letterType}</TableCell>
-              <TableCell>{loan.document}</TableCell>
+              {/* <TableCell>{loan.document}</TableCell> */}
+              <TableCell>
+  <a
+    href={loan.document ? loan.document : "https://example.com/no-document"}  // Replace with your default link
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <VisibilityIcon
+      sx={{
+        color: "#3621a9",  // Always Blue Icon
+        cursor: "pointer",
+      }}
+    />
+  </a>
+</TableCell>
+
             </TableRow>
           ))}
         </TableBody>

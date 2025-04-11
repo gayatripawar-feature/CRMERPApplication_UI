@@ -17,6 +17,9 @@ const ChannelPartnerTable = ({ data =[] }) => {
   const [selectedRow, setSelectedRow] = useState(null);
   const [selectedStep, setSelectedStep] = useState("");
   const [loading, setLoading] = useState(false);
+  const [pincodeError, setPincodeError] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [mobileError, setMobileError] = useState('');
 
   const handleStatusChange = (id, newStatus) => {
     const updatedData = data.map((item) =>
@@ -39,15 +42,55 @@ const ChannelPartnerTable = ({ data =[] }) => {
     zone: "",
   });
   
+  // const handleInputChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setFormData((prev) => ({
+  //     ...prev,
+  //     [name]: value,
+  //   }));
+  // };
+  
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
+  
+    if (name === 'pincode') {
+      const regex = /^[0-9\b]*$/;
+  
+      if (!regex.test(value)) {
+        setPincodeError('Only numbers are allowed');
+        return;
+      } else {
+        setPincodeError('');
+      }
+    }
+    if (name === 'email') {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+      if (value && !emailRegex.test(value)) {
+        setEmailError('Please enter a valid email address');
+      } else {
+        setEmailError('');
+      }
+    }
+    if (name === 'MobileNo') {
+      const regex = /^[0-9\b]*$/; // Only numbers allowed
+  
+      if (!regex.test(value)) {
+        setMobileError('Only numbers are allowed');
+        return;
+      } else if (value.length > 10) {
+        setMobileError('Only 10 digits are allowed');
+        return;
+      } else {
+        setMobileError('');
+      }
+    }
+    setFormData({
+      ...formData,
       [name]: value,
-    }));
+    });
   };
   
- 
+  
   
   const handleCloseTrackModal = () => {
     setOpen(false);
@@ -96,6 +139,13 @@ const ChannelPartnerTable = ({ data =[] }) => {
       city: "",
       zone: "",
     });
+    toast.success('Details Updated Successfully!', {
+      position: "top-right",
+      autoClose: 3000,
+    });
+
+    // Close form (if you are using Dialog/Modal)
+    setOpen(false);
   };
   
 
@@ -413,10 +463,10 @@ const ChannelPartnerTable = ({ data =[] }) => {
                      <Grid item xs={6}>
                        <TextField
                          label="CP Executive Name (as per Rera)"
-                         name="projectName"
+                         name="cpexecutive"
                          fullWidth
                          variant="outlined"
-                         value={formData.projectName}
+                         value={formData.cpexecutive}
                          onChange={handleInputChange}
                          
                        />
@@ -425,76 +475,83 @@ const ChannelPartnerTable = ({ data =[] }) => {
                      <Grid item xs={6}>
                        <TextField
                          label="Designation"
-                         name="projectName"
+                         name="Designation"
                          fullWidth
                          variant="outlined"
-                         value={formData.projectName}
+                         value={formData.designation}
                          onChange={handleInputChange}
                         
                        />
                      </Grid>
                      <Grid item xs={6}>
-                       <TextField
-                         label="Mobile No"
-                         name="projectName"
-                         fullWidth
-                         variant="outlined"
-                         value={formData.projectName}
-                         onChange={handleInputChange}
-                        
-                       />
-                     </Grid>
+  <TextField
+    label="Mobile No"
+    name="MobileNo"
+    fullWidth
+    variant="outlined"
+    value={formData.MobileNo}
+    onChange={handleInputChange}
+    error={Boolean(mobileError)}
+    helperText={mobileError}
+  />
+</Grid>
+
                      <Grid item xs={6}>
                        <TextField
                          label="Website Address"
-                         name="projectName"
+                         name="website"
                          fullWidth
                          variant="outlined"
-                         value={formData.projectName}
+                         value={formData.website}
                          onChange={handleInputChange}
                          
                        />
                      </Grid>
                      <Grid item xs={6}>
-                       <TextField
-                         label="Email ID"
-                         name="projectName"
-                         fullWidth
-                         variant="outlined"
-                         value={formData.projectName}
-                         onChange={handleInputChange}
-                        
-                       />
-                     </Grid>
+  <TextField
+    label="Email ID"
+    name="email"
+    fullWidth
+    variant="outlined"
+    value={formData.email}
+    onChange={handleInputChange}
+    error={Boolean(emailError)}
+    helperText={emailError}
+  />
+</Grid>
+
                      <Grid item xs={6}>
                        <TextField
                          label="Postal Address"
-                         name="projectName"
+                         name="postal"
                          fullWidth
                          variant="outlined"
-                         value={formData.projectName}
+                         value={formData.postal}
                          onChange={handleInputChange}
                         
                        />
                      </Grid>
                      <Grid item xs={6}>
-                       <TextField
-                         label="Pin-code"
-                         name="projectName"
-                         fullWidth
-                         variant="outlined"
-                         value={formData.projectName}
-                         onChange={handleInputChange}
-                      
-                       />
-                     </Grid>
+  <TextField
+    label="Pin-code"
+    name="pincode"
+    fullWidth
+    variant="outlined"
+    value={formData.pincode}
+    onChange={handleInputChange}
+    error={Boolean(pincodeError)}
+    helperText={pincodeError}
+  />
+</Grid>
+
+
                      <Grid item xs={6}>
                        <TextField
                          label="Location"
-                         name="projectName"
+                         name="location"
                          fullWidth
                          variant="outlined"
-                         value={formData.projectName}
+                         value={formData.location}
                          onChange={handleInputChange}
                          
                        />
@@ -502,10 +559,10 @@ const ChannelPartnerTable = ({ data =[] }) => {
                      <Grid item xs={6}>
                        <TextField
                          label="City"
-                         name="projectName"
+                         name="city"
                          fullWidth
                          variant="outlined"
-                         value={formData.projectName}
+                         value={formData.city}
                          onChange={handleInputChange}
                         
                        />
@@ -515,8 +572,8 @@ const ChannelPartnerTable = ({ data =[] }) => {
          <InputLabel>Zone</InputLabel>
          <Select
            label="Zone"
-           name="projectName"
-           value={formData.projectName}
+           name="zone"
+           value={formData.zone}
            onChange={handleInputChange}
          >
            <MenuItem value="East">East</MenuItem>

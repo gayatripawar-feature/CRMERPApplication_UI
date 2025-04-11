@@ -71,8 +71,8 @@ const BookedTable = ({ data }) => {
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>TIMESTAMP</TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>LEAD NO.</TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>NAME</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>MOBILE</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>WHATSAPP NO.</TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>MOBILE/WHATSAPP NO.</TableCell>
+              {/* <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}></TableCell> */}
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>YOU ARE LOOKING FOR?</TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>EMAIL</TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>SOURCE NAME</TableCell>
@@ -86,7 +86,7 @@ const BookedTable = ({ data }) => {
                 <TableCell>{item.leadNo}</TableCell>
                 <TableCell>{item.name}</TableCell>
                 <TableCell>{item.mobile}</TableCell>
-                <TableCell>{item.whatsappNo}</TableCell>
+                {/* <TableCell>{item.whatsappNo}</TableCell> */}
                 <TableCell>{item.youAreLookingFor}</TableCell>
                 <TableCell>{item.email}</TableCell>
                 <TableCell>{item.sourceName}</TableCell>

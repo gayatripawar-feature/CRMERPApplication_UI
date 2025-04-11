@@ -729,11 +729,12 @@ const [data, setData] = useState([
 
 <TableCell>
   <IconButton 
-    color="error" 
+    
     onClick={() => window.open('URL_TO_YOUR_PDF', '_blank')}
   >
    
-    <VisibilityIcon />
+    <VisibilityIcon 
+     sx={{ color: "#3621a9" }}  />
 
   </IconButton>
 </TableCell>
@@ -741,21 +742,23 @@ const [data, setData] = useState([
 
 <TableCell>
   <IconButton 
-    color="error" 
+    
     onClick={() => window.open('URL_TO_YOUR_PDF', '_blank')}
   >
    
-    <VisibilityIcon />
+    <VisibilityIcon 
+     sx={{ color: "#3621a9" }}  />
   </IconButton>
 </TableCell>
 
 <TableCell>
   <IconButton 
-    color="error" 
+   
     onClick={() => window.open('URL_TO_YOUR_PDF', '_blank')}
   >
     
-    <VisibilityIcon />
+    <VisibilityIcon 
+     sx={{ color: "#3621a9" }}   />
   </IconButton>
 </TableCell>
 
