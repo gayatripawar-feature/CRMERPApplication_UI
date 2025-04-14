@@ -36,6 +36,53 @@ const PendingFollowuptable = () => {
     },
   ];
 
+
+  const [formData, setFormData] = useState({
+    firmName: '',
+    closingExecutive: '',
+    firmPan: '',
+    status: '',
+    assignTo: '',
+    leadType: '',
+    nextFollowUp: '',
+    lastFollowUp: '',
+    remark: '',
+    leadNo: '',
+    mobileNo: '',
+    mailId: '',
+    sourceName: '',
+  });
+
+  const handleSubmit = (e) => {
+    e.preventDefault(); // Prevent the default form submission
+
+    // Log form data (for debugging)
+    console.log('Form submitted with data:', formData);
+
+    // Update the firms array by adding the new data
+    setFirms([...firms, { ...formData, timestamp: new Date().toLocaleDateString() }]);
+
+    // Reset form data
+    setFormData({
+      firmName: '',
+      closingExecutive: '',
+      firmPan: '',
+      status: '',
+      assignTo: '',
+      leadType: '',
+      nextFollowUp: '',
+      lastFollowUp: '',
+      remark: '',
+      leadNo: '',
+      mobileNo: '',
+      mailId: '',
+      sourceName: '',
+    });
+
+    // Success toast
+    toast.success("Details are submitted!", { position: "top-right", autoClose: 3000 });
+    setShowFirmForm(false);
+  };
   const handleEditClick = (index) => {
     setEditingIndex(index);
   };
@@ -92,52 +139,52 @@ const PendingFollowuptable = () => {
   //   setLeadType('');
   //   setNextFollowUp('');
   // };
-  const handleSubmit = () => {
-    const newFirm = {
-      firmName: formData.firmName,
-      closingExecutive: formData.closingExecutive,
-      firmPanNo: formData.firmPan, // Match with firmPanNo
-      status: formData.status,
-      assignTo: formData.assignTo,
-      leadType: formData.leadType,
-      nextFollowUp: formData.nextFollowUp,
-      mobileNo: formData.mobileNo,
-      mailId: formData.mailId,
-      address: formData.address,
-      residentialAddress: formData.residentialAddress,
-      panNo: formData.panNo,
-      name: formData.firmPan, // Optional: Map firmPan to name if needed
-      occupation: formData.occupation || '', // Add if used in table
-      partner: formData.partner || '',       // Add if used in table
-      timestamp: new Date().toLocaleString(),
-    };
+  // const handleSubmit = () => {
+  //   const newFirm = {
+  //     firmName: formData.firmName,
+  //     closingExecutive: formData.closingExecutive,
+  //     firmPanNo: formData.firmPan, // Match with firmPanNo
+  //     status: formData.status,
+  //     assignTo: formData.assignTo,
+  //     leadType: formData.leadType,
+  //     nextFollowUp: formData.nextFollowUp,
+  //     mobileNo: formData.mobileNo,
+  //     mailId: formData.mailId,
+  //     address: formData.address,
+  //     residentialAddress: formData.residentialAddress,
+  //     panNo: formData.panNo,
+  //     name: formData.firmPan, // Optional: Map firmPan to name if needed
+  //     occupation: formData.occupation || '', // Add if used in table
+  //     partner: formData.partner || '',       // Add if used in table
+  //     timestamp: new Date().toLocaleString(),
+  //   };
   
-    console.log("Form submitted with data:", newFirm);
+  //   console.log("Form submitted with data:", newFirm);
   
-    setFirms((prevFirms) => [...prevFirms, newFirm]);
+  //   setFirms((prevFirms) => [...prevFirms, newFirm]);
   
-    toast.success("Details are submitted!", {
-      position: "top-right",
-      autoClose: 3000,
-    });
+  //   toast.success("Details are submitted!", {
+  //     position: "top-right",
+  //     autoClose: 3000,
+  //   });
   
-    setFormData({
-      firmName: '',
-      closingExecutive: '',
-      firmPan: '',
-      status: '',
-      assignTo: '',
-      leadType: '',
-      nextFollowUp: '',
-      mobileNo: '',
-      mailId: '',
-      address: '',
-      residentialAddress: '',
-      panNo: '',
-      occupation: '',
-      partner: '',
-    });
-  };
+  //   setFormData({
+  //     firmName: '',
+  //     closingExecutive: '',
+  //     firmPan: '',
+  //     status: '',
+  //     assignTo: '',
+  //     leadType: '',
+  //     nextFollowUp: '',
+  //     mobileNo: '',
+  //     mailId: '',
+  //     address: '',
+  //     residentialAddress: '',
+  //     panNo: '',
+  //     occupation: '',
+  //     partner: '',
+  //   });
+  // };
   
   return (
     <TableContainer component={Paper}>

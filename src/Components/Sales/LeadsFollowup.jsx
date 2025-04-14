@@ -424,7 +424,11 @@ const LeadsFollowUp = () => {
     });
   
     const [leadType, setLeadType] = useState('');
-  
+    const [lastFollowUp, setLastFollowUp] = useState(""); // or some default value
+    const [remark, setRemark] = useState(""); // Set a default value if needed
+    const [leadNo, setLeadNo] = useState("");  // Initialize leadNo state with an empty string
+
+    const [mailId, setMailId] = useState("");  // Initialize mailId state
 
     const [errors, setErrors] = useState({
       firmName: "",
@@ -805,36 +809,88 @@ const handleNextFollowUpChange = (newValue) => {
 //   setNextFollowUp('');
 // };
 
-const handleSubmit = () => {
+// const handleSubmit = () => {
+//   const newFirm = {
+//     ...formData,
+//     timestamp: new Date().toLocaleString(),
+//   };
+
+//   console.log("Form submitted with data:", newFirm); // ✅ Full formData logged
+
+//   setFirms((prevFirms) => [...prevFirms, newFirm]);
+
+//   toast.success("Details are submitted!", {
+//     position: "top-right",
+//     autoClose: 3000,
+//   });
+
+//   // Optionally reset the form
+//   setFormData({
+//     firmName: '',
+//     closingExecutive: '',
+//     firmPan: '',
+//     status: '',
+//     assignTo: '',
+//     leadType: '',
+//     nextFollowUp: '',
+//     mobileNo: '',
+//     mailId: '',
+//     address: '',
+//     residentialAddress: '',
+//     panNo: '',
+//   });
+// };
+
+
+// const handleSubmit = () => {
+//   const newFirm = {
+//     firmName,
+//     closingExecutive,
+//     firmPan,
+//     status,
+//     assignTo,
+//     leadType,
+//     nextFollowUp,
+//     timestamp: new Date().toLocaleString(),
+//   };
+
+//   console.log("Form submitted with data:", newFirm);
+//   setFirms((prevFirms) => [...prevFirms, newFirm]);
+
+//   toast.success("Details are submitted!", {
+//     position: "top-right",
+//     autoClose: 3000,
+//   });
+
+//   // Clear individual states
+//   setFirmName('');
+//   setClosingExecutive('');
+//   setFirmPan('');
+//   setStatus('');
+//   setAssignTo('');
+//   setLeadType('');
+//   setNextFollowUp('');
+// };
+const handleSubmit = (e) => {
+  // e.preventDefault();
+
   const newFirm = {
-    ...formData,
-    timestamp: new Date().toLocaleString(),
+    lastFollowUp,
+    status,
+    remark,
+    nextFollowUp,
+    assignTo,
+    leadNo,
+    name,
+    mobileNo,
+    mailId,
+    // sourceName,
+    // requirement,
   };
 
-  console.log("Form submitted with data:", newFirm); // ✅ Full formData logged
+  setLoans((prev) => [...prev, newFirm]);
 
-  setFirms((prevFirms) => [...prevFirms, newFirm]);
-
-  toast.success("Details are submitted!", {
-    position: "top-right",
-    autoClose: 3000,
-  });
-
-  // Optionally reset the form
-  setFormData({
-    firmName: '',
-    closingExecutive: '',
-    firmPan: '',
-    status: '',
-    assignTo: '',
-    leadType: '',
-    nextFollowUp: '',
-    mobileNo: '',
-    mailId: '',
-    address: '',
-    residentialAddress: '',
-    panNo: '',
-  });
+  console.log("Form submitted with data:", newFirm);
 };
 
 
@@ -1166,26 +1222,27 @@ const handleSubmit = () => {
           Submit
         </Button> */}
            <Button
-      variant="contained"
-      className="m-3"
-      color="success"
-      onClick={() => {
-        handleSubmit();
-        console.log('Form submitted with data:', {
-          firmName,
-          closingExecutive,
-          firmPan,
-          status,
-          assignTo,
-          leadType,
-          nextFollowUp
-        });
-        toast.success("Details are submitted!", { position: "top-right", autoClose: 3000 });
-        setShowFirmForm(false);
-      }}
-    >
-      Submit
-    </Button>
+  variant="contained"
+  className="m-3"
+  color="success"
+  onClick={() => {
+    handleSubmit(); 
+    console.log('Form submitted with data:', {
+      firmName,
+      closingExecutive,
+      firmPan,
+      status,
+      assignTo,
+      leadType,
+      nextFollowUp
+    });
+    toast.success("Details are submitted!", { position: "top-right", autoClose: 3000 });
+    setShowFirmForm(false);
+  }}
+>
+  Submit
+</Button>
+
       </Paper>
     </div>
       
