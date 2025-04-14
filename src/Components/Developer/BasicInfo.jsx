@@ -971,8 +971,8 @@ const handleTabClick = (index) => {
       padding: "8px 16px",
       borderRadius: "8px",
       display: "flex",
-      alignItems: "center",  // Align icon and text
-      gap: "8px",  // Space between icon and text
+      alignItems: "center",  
+      gap: "8px",  
       "&:hover": {
         background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
       },

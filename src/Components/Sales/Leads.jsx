@@ -10,7 +10,7 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
 import { FaEye, FaFileCsv, FaUpload, FaPlus, FaTrash } from "react-icons/fa";
 import { Inventory } from '@mui/icons-material';
 import InventoryTable from './InventoryTable';
-// import { toast } from "react-toastify";
+
 import { ToastContainer, toast } from "react-toastify";
 import NewLeads from './NewLeads';
 
@@ -19,25 +19,19 @@ import { jsPDF } from "jspdf";
 import { FaFileDownload } from "react-icons/fa";
 import autoTable from "jspdf-autotable";
 
-// API Call Function
+
 const fetchLoansData = async () => {
   const response = await fetch('/api/getOCRCollection');
   return response.json();
 };
 
-// Dropdown Options
+
 const statusOptions = ["Approved", "Unapproved"];
 const owners = ["Landowner", "Developer", "Investor"];
 const configurations = ["1 BHK", "1.5 BHK", "2 BHK", "2.5 BHK", "3 BHK", "3.5 BHK", "4 BHK", "4.5 BHK", "Flat", "Shop"];
 const unitTypes = ["Actual Site", "Hoarding","Facebook","Instagram","Website","Print Media","Radio","Google add","Exhibition","Online Portal","Direct call","Pamphlet","Channel Partner","References","Other"];
 
 
-// // Sidebar Sections
-// const sections = [
-//   { label: "Display Leads", icon: <FaEye size={20} /> },
-//   { label: "Sample CSV", icon: <FaFileCsv size={20}/> },
-//   { label: "Upload Excel", icon: <FaUpload size={20}/> },
-// ];
 
 
 const sections = [
@@ -57,7 +51,7 @@ const Leads = () => {
   const [showFileInput, setShowFileInput] = useState(false);
 
   const [mobile, setMobile] = useState('');
-  // const [expandedSection, setExpandedSection] = useState(null);
+  
   const [email, setEmail] = useState('');
   const [mobileError, setMobileError] = useState('');
   const [emailError, setEmailError] = useState('')
@@ -77,10 +71,10 @@ const Leads = () => {
 
   const handleToggleSection = (index) => {
     if (index === 1) {
-      // Download Sample CSV
+     
       downloadSampleCsv();
     } else if (index === 2) {
-      // Check if file input ref is defined before clicking
+      
       if (fileInputRef.current) {
         fileInputRef.current.click();
       }
@@ -100,33 +94,21 @@ const Leads = () => {
     },
   ]);
 
-  // ✅ Function to handle deletion of a row
+  
   const handleDelete = (index) => {
     setInventoryData(inventoryData.filter((_, i) => i !== index));
   };
 
 
-  // const downloadSampleCsv = () => {
-  //   const sampleData = "Name,Email,Phone\nJohn Doe,john@example.com,1234567890";
-  //   const blob = new Blob([sampleData], { type: "text/csv" });
-  //   const url = URL.createObjectURL(blob);
-
-  //   const a = document.createElement("a");
-  //   a.href = url;
-  //   a.download = "lead_template.csv";
-  //   document.body.appendChild(a);
-  //   a.click();
-  //   document.body.removeChild(a);
-  // };
   const downloadSampleCsv = () => {
-    // Define the headers and sample data
+    
     const headers = "Name,Mobile No.,Source Name,Location,Are You Looking For\n";
     const sampleData = "\n";
     
-    // Create a Blob with the CSV content
+   
     const blob = new Blob([headers + sampleData], { type: "text/csv" });
   
-    // Create a temporary URL for the Blob
+    
     const url = URL.createObjectURL(blob);
   
     // Create an anchor element for the download

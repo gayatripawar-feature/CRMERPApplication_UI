@@ -26,9 +26,9 @@ const SalesSharespace = () => {
   const [showProjectTable, setShowProjectTable] = useState(true); 
   const [rows, setRows] = useState([{}]);
   const [selectedItems, setSelectedItems] = useState([]);
-  const [selectedRow, setSelectedRow] = useState(null); // Assuming it's from state
+  const [selectedRow, setSelectedRow] = useState(null); 
   const [isEditing, setIsEditing] = useState(false);
-const [expanded, setExpanded] = useState(false); // For collapsing
+const [expanded, setExpanded] = useState(false); 
 const [isExpanded, setIsExpanded] = useState(false);
   const [sharedWithMeRows, setSharedWithMeRows] = useState([
     {
@@ -135,19 +135,19 @@ const [isExpanded, setIsExpanded] = useState(false);
     setShowForm(true);
   };
   
-  // Handle file change
+
   const handleFileChange = (e, index) => {
     const newRows = [...rows];
     newRows[index].document = e.target.files[0];
     setRows(newRows);
   };
 
-  // Add new row
+ 
   const addRow = () => {
     setRows([...rows, {}]);
   };
 
-  // Handle form submission
+ 
   const handleSubmit = () => {
     console.log(rows);
     setShowForm(false);
@@ -155,7 +155,7 @@ const [isExpanded, setIsExpanded] = useState(false);
     toast.success('Data submitted successfully!');
   };
 
-  // Remove row
+  
   const handleRemoveRow = (index) => {
     const newRows = rows.filter((_, i) => i !== index);
     setRows(newRows);
@@ -217,7 +217,7 @@ const [isExpanded, setIsExpanded] = useState(false);
     doc.setFontSize(14);
     doc.text("Firm Details Report", 14, 15);
   
-    // Updated column names
+
     const tableColumn = ["Shared From", "Timestamp", "Share To", "Type of Document"];
   
     const tableRows = rows.map(row => [
@@ -327,7 +327,7 @@ const [isExpanded, setIsExpanded] = useState(false);
         padding: '12px',
       }}
     >
-      {/* Icon */}
+      
       <FaRegShareSquare size={26} color="black" /> 
     </div>
 
@@ -369,96 +369,24 @@ const [isExpanded, setIsExpanded] = useState(false);
           padding: "8px 16px",
           borderRadius: "8px",
           display: "flex",
-          alignItems: "center",  // Align icon and text
-          gap: "8px",  // Space between icon and text
+          alignItems: "center",  
+          gap: "8px",  
           "&:hover": {
             background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
           },
          
         }}
-        // onClick={() => handledow(firms)}
+       
         onClick={handleDownloadPDFProject}
       >
-        <FaFileDownload size={18} />  {/* Added download icon */}
+        <FaFileDownload size={18} />  
         Download PDF
       </Button>
 </div>
   )}
 </div>
 
-      {/* {showForm && activeIcon === 'project' && (
-        <div className="mt-4">
-          <h4>Add Share Information</h4>
-          <form>
-            <table className=" table-bordered table-sm">
-              <thead>
-                <tr >
-                  <th className="fw-bold bg-primary text-center fs-5 ">Share To</th>
-                  <th className="fw-bold bg-primary text-center fs-5">Type of Document</th>
-                  <th className="fw-bold bg-primary text-center fs-5">Document</th>
-                  <th className="fw-bold bg-primary text-center fs-5">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {rows.map((row, index) => (
-                  <tr key={index}>
-                    <td>
-                      <FormControl sx={{ m: 1, width: 300 }}>
-                        <InputLabel id="select-share-to-label">Share To</InputLabel>
-                        <Select
-                          labelId="select-share-to-label"
-                          id="select-share-to"
-                          multiple
-                          value={selectedItems}
-                          onChange={(e) => handleChange(e, index)}
-                          input={<OutlinedInput label="Share To" />}
-                          renderValue={(selected) => selected.join(', ')}
-                          MenuProps={MenuProps}
-                        >
-                          {options.map((option) => (
-                            <MenuItem key={option} value={option}>
-                              <Checkbox checked={selectedItems.includes(option)} />
-                              <ListItemText primary={option} />
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
-                    </td>
-                    <td>
-                      <select
-                        className="form-control"
-                        value={row.documentType || ''}
-                        onChange={(e) => handleDocumentTypeChange(e, index)}
-                      >
-                        <option value="">Select Type</option>
-                        <option value="MCA certificate">MCA certificate</option>
-                        <option value="PAN Card">PAN Card</option>
-                      
-                      </select>
-                    </td>
-                    <td>
-                      <input
-                        type="file"
-                        className="form-control"
-                        onChange={(e) => handleFileChange(e, index)}
-                      />
-                    </td>
-                    <td>
-                      <button className="btn btn-sm btn-danger" onClick={() => handleRemoveRow(index)}>
-                        Remove
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </form>
-
-          <button className="btn btn-secondary me-2 mt-3" onClick={addRow}>Add Row</button>
-          <button className="btn btn-success me-2 mt-3" onClick={handleSubmit}>Submit</button>
-          <button className="btn btn-secondary mt-3" onClick={handleCancel}>Cancel</button>
-        </div>
-      )} */}
+      
 
 {showForm && activeIcon === 'project' && (
   <div className="mt-4">
@@ -505,8 +433,68 @@ const [isExpanded, setIsExpanded] = useState(false);
                   onChange={(e) => handleDocumentTypeChange(e, index)}
                 >
                   <option value="">Select Type</option>
+              
                   <option value="MCA certificate">MCA certificate</option>
                   <option value="PAN Card">PAN Card</option>
+                  <option value="Shop Act (Form G)">Shop Act (Form G)</option>
+                  <option value="Shop Act (Form F)">Shop Act (Form F)</option>
+                  <option value="Udhyam Aadhar">Udhyam Aadhar</option>
+                  <option value="TAN Certificate">TAN Certificate</option>
+                  <option value="GST Certifiacte">GST Certifiacte</option>
+                  <option value="RERA Bank Account Details">RERA Bank Account Details</option>
+                  <option value="7/12">7/12</option>
+                  <option value="Paper Notice">Paper Notice</option>
+                  <option value="Sale Deed">Sale Deed</option>
+                  <option value="POA">POA</option>
+                  <option value="Mutation Entry">Mutation Entry</option>
+                  <option value="Development Agreement">Development Agreement</option>
+                  <option value="Power of Attorney">Power of Attorney</option>
+                  <option value="Garden NOC">Garden NOC</option>
+                  <option value="Water NOC<">Water NOC</option>
+                  <option value="Drainage  NOC">Drainage  NOC</option>
+                  <option value="Fire NOC">Fire NOC</option>
+                  <option value="Pollution NOC">Pollution NOC</option>
+                  <option value="Highway Authority">Highway Authority</option>
+                  <option value="EC (IA)">EC (IA)</option>
+                  <option value="Aviation NOC">Aviation NOC</option>
+                  <option value=">NA Order">NA Order</option>
+                  <option value="Brouchure">Brouchure</option>
+                  <option value="Google Location">Google Location</option>
+                  <option value="Demarcation Plan">Demarcation Plan</option>
+                  <option value="Sanctioned Plan">Sanctioned Plan</option>
+                  <option value="Draft Agreement">Draft Agreement</option>
+                  <option value="TAX NOC<">TAX NOC</option>
+                  <option value="Soil Testing Report">Soil Testing Report</option>
+                <option value="DP Opinion">DP Opinion</option>                         <option value="Zone Certificate">Zone Certificate</option>
+
+                  <option value="Rain Water Harvesting Certificate">Rain Water Harvesting Certificate</option>
+                 <option value="Solar Installation Certificate">Solar Installation Certificate</option>
+                 <option value="STP Plant Installation Certificate">STP Plant Installation Certificate</option>
+                 <option value="Plinth Level certificate">Plinth Level certificate</option>
+                  <option value="PMC Work Order">PMC Work Order</option>
+                 <option value="Certificate Of Incorporation">Certificate Of Incorporation</option>
+                  <option value="Partnership Deed">Partnership Deed</option>
+                  <option value="Supplementary Deed">Supplementary Deed</option>
+                  <option value="Search and Title Report">Search and Title Report</option>
+                      <option value="Letterhead">Letterhead</option>
+                      <option value="Commencement Certificate">Commencement Certificate</option>
+                      <option value="IOD Issue Copy">IOD Issue Copy</option>
+                     <option value="Google Plot Image">Google Plot Image</option>
+                      <option value="Rent Agreement">Rent Agreement</option>
+                      <option value="Table F">Table F</option>
+                      <option value="Old Legal Documents SD">Old Legal Documents SD</option>
+                      <option value="ITR">ITR</option>
+                      <option value="Sales MIS">Sales MIS</option>
+                      <option value="Cash flow & Schedule">Cash flow & Schedule</option>
+                     <option value="CF Data">CF Data</option>
+                      <option value="SRO Certificate">SRO Certificate</option>
+                      <option value="MOU Attach Annexure">MOU Attach Annexure</option>
+                      <option value="Cost sheet">Cost sheet</option>
+                      <option value="Mail">Mail</option>
+                      <option value="Old to New Certifiacte All">Old to New Certifiacte All</option>
+                      <option value="Architect Certificate(Quartely) ">Architect Certificate(Quartely) </option>
+                      <option value="Engineer Certificate(Quartely) ">Engineer Certificate(Quartely) </option>
+                    <option value="CA Certificate(Quartely) ">CA Certificate(Quartely) </option>
                 </select>
               </td>
               <td>
@@ -529,7 +517,7 @@ const [isExpanded, setIsExpanded] = useState(false);
 
     <button className="btn btn-secondary me-2 mt-3" onClick={addRow}>Add Row</button>
 
-    {/* Conditionally render Submit or Update button */}
+   
     {isEditing ? (
       <button className="btn btn-warning me-2 mt-3" onClick={handleUpdate}>Update</button>
     ) : (
@@ -564,10 +552,11 @@ const [isExpanded, setIsExpanded] = useState(false);
                   size="small"
                   onClick={() => handleEdit(row)}
                   sx={{
-                    backgroundColor: "#4CAF50",
+                    // backgroundColor: "#4CAF50",
+                    backgroundColor: "#2196F3",
                     color: "white",
                     borderRadius: "50%",
-                    padding: "5px",
+                    padding: "4px",
                     "&:hover": { backgroundColor: "#388E3C" },
                   }}
                 >
@@ -580,12 +569,12 @@ const [isExpanded, setIsExpanded] = useState(false);
              
 <TableCell>
     <a
-        href={row.document || "#"} // If no document, prevent broken link
-        target={row.document ? "_blank" : "_self"} // Open in new tab only if there's a document
+        href={row.document || "#"} 
+        target={row.document ? "_blank" : "_self"} 
         rel="noopener noreferrer"
-        style={{ pointerEvents: row.document ? "auto" : "none" }} // Disable click if no document
+        style={{ pointerEvents: row.document ? "auto" : "none" }} 
     >
-        {/* <FaEye size={20} color={row.document ? "blue" : "gray"} style={{ cursor: "pointer" }} /> */}
+        
         <FaEye size={20} color="blue" style={{ cursor: "pointer" }} />
 
     </a>
@@ -617,17 +606,17 @@ const [isExpanded, setIsExpanded] = useState(false);
       padding: "8px 16px",
       borderRadius: "8px",
       display: "flex",
-      alignItems: "center",  // Align icon and text
-      gap: "8px",  // Space between icon and text
+      alignItems: "center",  
+      gap: "8px",  
       "&:hover": {
         background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
       },
      
     }}
-    // onClick={() => handledow(firms)}
+   
     onClick={handleDownloadPDFCollect}
   >
-    <FaFileDownload size={18} />  {/* Added download icon */}
+    <FaFileDownload size={18} />  
     Download PDF
   </Button>
 
@@ -646,7 +635,7 @@ const [isExpanded, setIsExpanded] = useState(false);
                 </TableRow>
             </TableHead>
 
-            {/* Table Body */}
+          
             <TableBody>
                 {currentRows.map((row, index) => (
                     <TableRow key={index}>
@@ -655,7 +644,7 @@ const [isExpanded, setIsExpanded] = useState(false);
                         <TableCell align="center">{row.shareTo}</TableCell>
                         <TableCell align="center">{row.documentType}</TableCell>
 
-                        {/* Document Column */}
+                     
                         <TableCell align="center">
                             <a
                                 href={row.document || "#"}
