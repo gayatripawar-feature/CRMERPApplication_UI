@@ -440,7 +440,7 @@ const Leads = () => {
               </div>
               <div className="mt-3">
               
-              <NewLeads inventoryData={inventoryData} handleDelete={handleDelete} />
+              <NewLeads inventoryData={inventoryData} handleDelete={handleDelete}  setInventoryData={setInventoryData}/>
            </div>
             </>
           ) : (

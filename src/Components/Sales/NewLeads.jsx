@@ -328,7 +328,7 @@ import {
 import { FaEdit, FaWhatsapp, FaEnvelope, FaUserCircle } from "react-icons/fa";
 import { toast } from "react-toastify";
 
-const NewLeads = ({ inventoryData }) => {
+const NewLeads = ({ inventoryData , setInventoryData}) => {
   const [modalOpen, setModalOpen] = useState(false);
   const [assignedTo, setAssignedTo] = useState("");
   const [successModalOpen, setSuccessModalOpen] = useState(false);
@@ -336,14 +336,14 @@ const NewLeads = ({ inventoryData }) => {
   const [editMode, setEditMode] = useState(false);
   const [editedLead, setEditedLead] = useState(null);
 
-  const [emailError, setEmailError] = useState(false); // Error state for email
+  const [emailError, setEmailError] = useState(false); 
   const [emailHelperText, setEmailHelperText] = useState("");
 
-  const [mobileError, setMobileError] = useState(false); // Error state for mobile
+  const [mobileError, setMobileError] = useState(false); 
   const [mobileHelperText, setMobileHelperText] = useState("");
-  const [inventoryData, setInventoryData] = useState([]);
+  
 
-// const [tableData, setTableData] = useState([]);
+
   const handleAssignClick = (item) => {
     setModalOpen(true);
     setSelectedLead(item);
@@ -370,32 +370,73 @@ const NewLeads = ({ inventoryData }) => {
   //   setEditedLead(null);
   // };
 
-  const handleCloseModal = () => {
-    console.log("Handle close modal triggered");
-    // Show success toast message
-    toast.success("Details updated successfully!", {
-      position: "top-right", 
-      autoClose: 5000, 
-      hideProgressBar: false, 
-      closeOnClick: true, 
-      pauseOnHover: true, 
-    });
+//   const handleCloseModal = () => {
+//     console.log("Handle close modal triggered");
+    
+//     toast.success("Details updated successfully!", {
+//       position: "top-right", 
+//       autoClose: 5000, 
+//       hideProgressBar: false, 
+//       closeOnClick: true, 
+//       pauseOnHover: true, 
+//     });
+//   setModalOpen(false);
+//     setSuccessModalOpen(false);
+// const updatedInventoryData = inventoryData.map((item) =>
+//       item.leadNo === editedLead.leadNo ? editedLead : item
+//     );
+//     setInventoryData(updatedInventoryData);
   
-    // Close modals
-    setModalOpen(false);
-    setSuccessModalOpen(false);
+    
+//     setEditMode(false);
+//     setEditedLead(null);  
+//   };
   
-    // Update inventory data with the edited lead
-    const updatedInventoryData = inventoryData.map((item) =>
-      item.leadNo === editedLead.leadNo ? editedLead : item
-    );
-    setInventoryData(updatedInventoryData);
-  
-    // Close edit mode and reset the editedLead state
-    setEditMode(false);
-    setEditedLead(null);  // Reset the edited lead data
-  };
-  
+const handleCloseModal = () => {
+  console.log("🔹 Handle close modal triggered");
+
+  // Show toast notification
+  toast.success("Details updated successfully!", {
+    position: "top-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+  });
+
+  // Log modal state before closing
+  console.log("🔹 Closing modal...");
+
+  // Close modals
+  setModalOpen(false);
+  setSuccessModalOpen(false);
+
+  // Log current editedLead
+  console.log("🔹 Edited lead:", editedLead);
+
+  // Update inventoryData array
+  const updatedInventoryData = inventoryData.map((item) => {
+    if (item.leadNo === editedLead?.leadNo) {
+      console.log("🔸 Updating lead:", item.leadNo);
+      return editedLead;
+    }
+    return item;
+  });
+
+  // Log updated inventoryData
+  console.log("🔹 Updated inventory data:", updatedInventoryData);
+
+  // Set new inventoryData state
+  setInventoryData(updatedInventoryData);
+
+  // Reset edit mode
+  setEditMode(false);
+  console.log("🔹 Edit mode turned off");
+
+  // Clear edited lead
+  setEditedLead(null);
+  console.log("🔹 Edited lead cleared");
+};
 
   const handleEmailBlur = () => {
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
@@ -574,7 +615,7 @@ const NewLeads = ({ inventoryData }) => {
             select
             label="Source Name"
             value={editedLead.source}
-            onChange={(e) => setEditedLead({ ...editedLead, source: e.target.value })}
+            onChange={(e) => setEditedLead({ ...editedLead, sourceName: e.target.value })}
           >
        
             <MenuItem value="Website">Website</MenuItem>

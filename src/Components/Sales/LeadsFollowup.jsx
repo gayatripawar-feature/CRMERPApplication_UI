@@ -13,12 +13,12 @@ import UndefinedTable from './UndefinedTable';
 import BookedTable from './BookedTable';
 import PendingFollowuptable from './PendingFollowuptable';
 
-// import { FaBuilding } from 'react-icons/fa';      // Building icon
-import { AiOutlineProject } from 'react-icons/ai'; // Project icon
-import { MdLocationCity } from 'react-icons/md';   // City icon
-import { GiHouseKeys } from 'react-icons/gi';      // House keys icon
 
-import { FaUsers } from 'react-icons/fa';           // Users icon
+import { AiOutlineProject } from 'react-icons/ai'; 
+import { MdLocationCity } from 'react-icons/md';   
+import { GiHouseKeys } from 'react-icons/gi';      
+
+import { FaUsers } from 'react-icons/fa';          
 
 
 import autoTable from "jspdf-autotable";
@@ -32,10 +32,10 @@ import dayjs from 'dayjs';
 
 
 const sections = [
-  { label: "Pending Follow Up", icon: <FaUsers size={20} />, createLabel: "Create Firm" },  // Changed to FaUsers icon
-  { label: "Follow Up History", icon: <AiOutlineProject size={20} />, createLabel: "Create Project" },  // Changed to AiOutlineProject icon
-  { label: "Undefined", icon: <MdLocationCity size={20} />, createLabel: "Create Landowner Info" },  // Changed to MdLocationCity icon
-  { label: "Visit Scheduled", icon: <GiHouseKeys size={20} />, createLabel: "Create Flat Allotment Info" },  // Changed to GiHouseKeys icon
+  { label: "Pending Follow Up", icon: <FaUsers size={20} />, createLabel: "Create Firm" },  
+  { label: "Follow Up History", icon: <AiOutlineProject size={20} />, createLabel: "Create Project" },  
+  { label: "Undefined", icon: <MdLocationCity size={20} />, createLabel: "Create Landowner Info" },  
+  { label: "Visit Scheduled", icon: <GiHouseKeys size={20} />, createLabel: "Create Flat Allotment Info" },  
  
 ];
   const tabNames = [ "firm", "display", "landowner","allotement"]; 
@@ -45,9 +45,9 @@ const LeadsFollowUp = () => {
 
      
     const [loans, setLoans] = useState([]);
-    const [expandedSection, setExpandedSection] = useState(0); // Ensure expandedSection is defined here
+    const [expandedSection, setExpandedSection] = useState(0); 
     const [showFirmForm, setShowFirmForm] = useState(false);
-    // const [partners, setPartners] = useState([]);
+   
     const [showProjectForm, setShowProjectForm] = useState(false);
     const [phases, setPhases] = useState([]);
     const [showLandownerForm, setShowLandownerForm] = useState(false); 
@@ -74,18 +74,19 @@ const LeadsFollowUp = () => {
   
     const [firmPan, setFirmPan] = useState("");
     const [firmPanError, setFirmPanError] = useState("");
-    // const [age, setAge] = useState("");
+   
     const [ageError, setAgeError] = useState("");
     const [occupationError, setOccupationError] = useState(""); 
   
     const [closingExecutive, setClosingExecutive] = useState('');
-    const [accountNo, setAccountNo] = useState(""); // Initialize the account number state
+    const [accountNo, setAccountNo] = useState(""); 
   const [accountNoError, setAccountNoError] = useState("");
   
   const [ifscCode, setIfscCode] = useState(""); 
   const [ifscCodeError, setIfscCodeError] = useState("");
   const [status, setStatus] = useState({});
-  
+  const [firms, setFirms] = useState([]);
+
 
     const [fileNames, setFileNames] = useState({
       firmPanNoDocument: "",
@@ -120,11 +121,11 @@ const LeadsFollowUp = () => {
     const handleAgeChange = (e, index) => {
       const value = e.target.value;
       const updatedPartners = [...partners];
-      updatedPartners[index].age = value; // Update the age of the specific partner
-      setPartners(updatedPartners); // Update the state
+      updatedPartners[index].age = value; 
+      setPartners(updatedPartners); 
     
-      // Validate the age value
-      validateAge(value); // You should already have this function defined
+    
+      validateAge(value); 
     };
   
     const handleStatusChange = (event, leadId) => {
@@ -138,8 +139,8 @@ const LeadsFollowUp = () => {
     const handleOccupationChange = (e, index) => {
       const value = e.target.value;
       const updatedPartners = [...partners];
-      updatedPartners[index].occupation = value; // Update the occupation field
-      setPartners(updatedPartners); // Update the state
+      updatedPartners[index].occupation = value; 
+      setPartners(updatedPartners); 
     };
   
     
@@ -195,7 +196,7 @@ const LeadsFollowUp = () => {
       setShowFirmForm(false);
       setShowProjectForm(false); 
       setShowLandownerForm(false); 
-      // setFlatAllotement(false);
+     
       setShowFlatForm(false);
     };
   
@@ -206,9 +207,7 @@ const LeadsFollowUp = () => {
     });
   
     
-     {/* Table Section */}
-    //  {selectedTab === "firm" && <FirmTable />}
-    //  {selectedTab === "display" && <DisplayTable />}
+  
     {selectedTab  === "firm" && <PendingFollowuptable/>}
     {selectedTab === "display" && <FollowupHistoryTable />}
      {selectedTab === "landowner" && <LandownerTable />}
@@ -232,7 +231,7 @@ const LeadsFollowUp = () => {
     };
   
     const handleAddPhase = () => {
-      setPhases([...phases, { phaseNo: "", wingNo: "", mahareraNo: "" }]); // Add default empty phase
+      setPhases([...phases, { phaseNo: "", wingNo: "", mahareraNo: "" }]); 
     };
   
     const handleRemovePhase = (index) => {
@@ -273,15 +272,15 @@ const LeadsFollowUp = () => {
     const handlePANChange = (e, index) => {
       const updatedPartner = { ...partners[index], pan: e.target.value };
       
-      // Validate PAN No.
+     
       const isValidPAN = validatePAN(updatedPartner.pan);
       if (!isValidPAN) {
         setPanError("Invalid PAN number format.");
       } else {
-        setPanError(""); // Clear error if valid
+        setPanError("");
       }
     
-      // Update partner state
+    
       setPartners((prevPartners) => {
         const newPartners = [...prevPartners];
         newPartners[index] = updatedPartner;
@@ -307,16 +306,16 @@ const LeadsFollowUp = () => {
     const handleMobileNoChange = (event) => {
       const value = event.target.value;
     
-      // Validate the input value
+     
       if (/[^0-9]/.test(value)) {
         setMobileError('Mobile number should only contain digits.');
       } else if (value.length > 10) {
         setMobileError('Mobile number cannot exceed 10 digits.');
       } else {
-        setMobileError(''); // Clear the error when it's valid
+        setMobileError(''); 
       }
     
-      // Update the mobile number value
+     
       setMobileNo(value);
     };
     
@@ -324,26 +323,27 @@ const LeadsFollowUp = () => {
     const handleAccountNoChange = (e) => {
       const value = e.target.value;
       
-      // Regular expression to check if the value is numeric and has a valid length (e.g., 10-16 digits)
-      const accountNoRegex = /^[0-9]{10,16}$/; // 10 to 16 digits
+     
+      const accountNoRegex = /^[0-9]{10,16}$/; 
     
       if (value && !accountNoRegex.test(value)) {
         setAccountNoError("Account number must be between 10 to 16 digits.");
       } else {
-        setAccountNoError(""); // Clear the error if valid
+        setAccountNoError(""); 
       }
     
-      // Update the account number in the state
+   
       setAccountNo(value);
     };
   
-    const [formData, setFormData] = useState({
-      nextFollowUp: "",   // your field name
-    });
+    // const [formData, setFormData] = useState({
+    //   nextFollowUp: "",   
+    // });
     
+    const [assignTo, setAssignTo] = useState('');
     const [nextFollowUp, setNextFollowUp] = useState("");
     const validatePAN = (pan) => {
-      const panPattern = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/; // PAN format: 5 letters, 4 digits, 1 letter
+      const panPattern = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/; 
       return panPattern.test(pan);
     };
   
@@ -353,34 +353,33 @@ const LeadsFollowUp = () => {
       const value = e.target.value;
       const partnerCopy = [...partners];
       
-      // Regex to check if the value contains any numbers
+     
       if (/\d/.test(value)) {
-        setNameError("Name should only contain letters"); // Error message if numbers are present
+        setNameError("Name should only contain letters"); 
       } else {
-        setNameError(""); // Clear error message if the value is valid
+        setNameError(""); 
       }
   
-      // Update the partner's name in the state
+   
       partnerCopy[index] = { ...partnerCopy[index], name: value };
       setPartners(partnerCopy);
     };
   
   
+  
     const handleFirmNameChange = (e) => {
       const value = e.target.value;
-  
-      // Regex to check if the value contains any numbers
-      if (/\d/.test(value)) {
-        setFirmNameError("Firm Name should only contain letters"); // Error message if numbers are present
+    
+      
+      if (!/^\d*$/.test(value)) {
+        setFirmNameError("Lead No should only contain digits"); 
       } else {
-        setFirmNameError(""); // Clear error message if the value is valid
+        setFirmNameError(""); 
       }
-  
-      // Update the firm name in the state
+    
       setFirmName(value);
     };
-  
-  
+    
   
     const validateFirmName = () => {
       if (!firmName.trim()) {
@@ -390,7 +389,20 @@ const LeadsFollowUp = () => {
       setFirmNameError("");
       return true;
     };
-  
+    const [formData, setFormData] = useState({
+      firmName: '',
+      closingExecutive: '',
+      firmPan: '',
+      status: '',
+      assignTo: '',
+      leadType: '',
+      nextFollowUp: '',
+      mobileNo: '',
+      mailId: '',
+      address: '',
+      residentialAddress: '',
+      panNo: '',
+    });
   
     const [formValues, setFormValues] = useState({
       firmName: "",
@@ -411,7 +423,9 @@ const LeadsFollowUp = () => {
       landmark: "",
     });
   
-    // State to store validation errors
+    const [leadType, setLeadType] = useState('');
+  
+
     const [errors, setErrors] = useState({
       firmName: "",
     });
@@ -420,14 +434,14 @@ const LeadsFollowUp = () => {
     const handleChange = (e, label, partnerIndex) => {
       const { value } = e.target;
     
-      // Update the partners array with the new value for the specific field
+     
       const updatedPartners = [...partners];
       updatedPartners[partnerIndex][label.toLowerCase().replace(/ /g, "")] = value;
       setPartners(updatedPartners);
     
-      // Apply validation for the 'firmName' field
+     
       if (label === 'Firm Name') {
-        // Check if the input contains only letters and spaces
+       
         if (!/^[A-Za-z\s]*$/.test(value)) {
           setErrors((prev) => ({
             ...prev,
@@ -436,7 +450,7 @@ const LeadsFollowUp = () => {
         } else {
           setErrors((prev) => ({
             ...prev,
-            firmName: '', // Clear the error if valid
+            firmName: '', 
           }));
         }
       }
@@ -456,17 +470,17 @@ const LeadsFollowUp = () => {
     const handleIfscCodeChange = (e) => {
       const value = e.target.value;
     
-      // Regular expression to validate IFSC code format
+      
       const ifscRegex = /^[A-Z]{4}0[A-Z0-9]{6}$/;
     
       if (value && !ifscRegex.test(value)) {
         setIfscCodeError("Invalid IFSC code. It should be in the format: XXXX0XXXXX.");
       } else {
-        setIfscCodeError(""); // Clear the error if valid
+        setIfscCodeError(""); 
       }
     
-      // Update the IFSC code in the state
-      setIfscCode(value); // Assuming you have a state for the IFSC code
+    
+      setIfscCode(value); 
     };
     
   
@@ -474,16 +488,16 @@ const LeadsFollowUp = () => {
       const value = e.target.value;
       const partnerCopy = [...partners];
     
-      // Validate Mobile No. to ensure it doesn't exceed 10 digits
+     
       if (/[^0-9]/.test(value)) {
         setMobileError("Mobile number should only contain digits");
       } else if (value.length > 10) {
         setMobileError("Mobile number cannot exceed 10 digits");
       } else {
-        setMobileError(""); // Clear the error if the value is valid
+        setMobileError(""); 
       }
     
-      // Update the partner's mobile number in the state
+    
       partnerCopy[index] = { ...partnerCopy[index], mobileNo: value };
       setPartners(partnerCopy);
     };
@@ -492,17 +506,16 @@ const LeadsFollowUp = () => {
       const value = e.target.value;
       const partnerCopy = [...partners];
     
-      // Regular expression to validate Gmail email format
       const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
     
       if (value && !emailRegex.test(value)) {
         setEmailError("Invalid Gmail address");
         console.log("invalid email");
       } else {
-        setEmailError(""); // Clear the error if the value is valid
+        setEmailError(""); 
       }
     
-      // Update the partner's email in the state
+     
       partnerCopy[index] = { ...partnerCopy[index], email: value };
       setPartners(partnerCopy);
     };
@@ -513,9 +526,9 @@ const LeadsFollowUp = () => {
       
     };
     
-    const handleClosingExecutiveChange = (event) => {
-        setClosingExecutive(event.target.value);
-      };
+    // const handleClosingExecutiveChange = (event) => {
+    //     setClosingExecutive(event.target.value);
+    //   };
 
 
       const handleDownloadPDFPending = () => {
@@ -695,17 +708,16 @@ const handleDownloadPDFVisit = () => {
   doc.setFontSize(14);
   doc.text("Pending Follow-up Report", 14, 15); 
 
-  // Merged columns for a single page
+
   const tableColumns = [
       "TIMESTAMP", "LEAD NO.",  "NAME", "MOBILE NO.",
       "YOU ARE LOOKING FOR?", "EMAIL", "SOURCE NAME", "LOCATION"
   ];
 
-  // Limit the number of rows to fit within one page
+  
   const maxRowsPerPage = 15;
   const totalRows = Math.min(loans.length, maxRowsPerPage);
 
-  // Mapping data for the table
   const tableRows = loans.slice(0, totalRows).map(row => [
       row.statusHistory || "-",
       row.remarkHistory || "-",
@@ -719,7 +731,7 @@ const handleDownloadPDFVisit = () => {
 
   console.log("Formatted Table Rows:", tableRows);
 
-  // Generate the table on a single page
+  
   autoTable(doc, {
       startY: 25,
       head: [tableColumns],
@@ -732,7 +744,100 @@ const handleDownloadPDFVisit = () => {
   doc.save("VisitScheduled_Report.pdf");
 };
   
-    
+const handleClosingExecutiveChange = (e) => {
+  setClosingExecutive(e.target.value);
+};
+
+// Handle Remark Change (optional)
+// const handleNameChange = (e) => {
+//   setFirmPan(e.target.value);
+// };
+
+// Handle Status Change
+// const handleStatusChange = (e) => {
+//   setStatus(e.target.value);
+// };
+
+// Handle Assign To Change
+const handleAssignToChange = (e) => {
+  setAssignTo(e.target.value);
+};
+
+// Handle Lead Type Change
+const handleLeadTypeChange = (e) => {
+  setLeadType(e.target.value);
+};
+
+// Handle Next Follow Up Date Change
+const handleNextFollowUpChange = (newValue) => {
+  setNextFollowUp(newValue ? newValue.format('YYYY-MM-DD') : '');
+};
+
+
+
+// const handleSubmit = () => {
+//   const newFirm = {
+//     name: firmName,
+//     partner: closingExecutive,
+//     firmPanNo: firmPan,
+//     status: status,
+//     assignTo: assignTo,
+//     leadType: leadType,
+//     nextFollowUp: nextFollowUp,
+//     timestamp: new Date().toLocaleString(), // for timestamp
+//     // Add any additional fields if needed (e.g., mobileNo, mailId)
+//   };
+
+//   setFirms((prev) => [...prev, newFirm]); // ← THIS updates your table
+
+//   toast.success("Details are submitted!", {
+//     position: "top-right",
+//     autoClose: 3000,
+//   });
+
+//   // Reset form fields
+//   setFirmName('');
+//   setClosingExecutive('');
+//   setFirmPan('');
+//   setStatus('');
+//   setAssignTo('');
+//   setLeadType('');
+//   setNextFollowUp('');
+// };
+
+const handleSubmit = () => {
+  const newFirm = {
+    ...formData,
+    timestamp: new Date().toLocaleString(),
+  };
+
+  console.log("Form submitted with data:", newFirm); // ✅ Full formData logged
+
+  setFirms((prevFirms) => [...prevFirms, newFirm]);
+
+  toast.success("Details are submitted!", {
+    position: "top-right",
+    autoClose: 3000,
+  });
+
+  // Optionally reset the form
+  setFormData({
+    firmName: '',
+    closingExecutive: '',
+    firmPan: '',
+    status: '',
+    assignTo: '',
+    leadType: '',
+    nextFollowUp: '',
+    mobileNo: '',
+    mailId: '',
+    address: '',
+    residentialAddress: '',
+    panNo: '',
+  });
+};
+
+
     return (
       <div className="main-content">
         <h6>Sales Module / Enquiry Follow Up Management</h6>
@@ -753,11 +858,11 @@ const handleDownloadPDFVisit = () => {
       alignItems: 'center', 
       backgroundColor: '#3621a9', 
       padding: '8px', 
-      borderRadius: '20px',  // borderRadius changed to 20px from 10%
+      borderRadius: '20px',  
       margin: '5px',
-      cursor: 'pointer',    // Add pointer cursor for better UX
+      cursor: 'pointer',    
       transition: "width 0.3s ease, background 0.3s ease",
-      width: expandedSection === index ? "220px" : "50px", // Toggle width based on expanded state
+      width: expandedSection === index ? "220px" : "50px", 
       minWidth: "50px",
       overflow: "hidden",
       whiteSpace: "nowrap",
@@ -765,30 +870,30 @@ const handleDownloadPDFVisit = () => {
       justifyContent: "center",
       textTransform: "none",
       position: "relative",
-      background: "linear-gradient(0deg, #4b2ac2 0%, #5c39d3 100%)", // Gradient background
+      background: "linear-gradient(0deg, #4b2ac2 0%, #5c39d3 100%)", 
       boxShadow:
         "inset 2px 2px 2px 0px rgba(255,255,255,.5), 7px 7px 20px 0px rgba(0,0,0,.1), 4px 4px 5px 0px rgba(0,0,0,.1)",
     }}
-    onClick={() => handleToggleSection(index)}  // onClick function for handling clicks
+    onClick={() => handleToggleSection(index)}  
   >
-    {/* Modify icon size here */}
+    
     {React.cloneElement(section.icon, { 
       style: { 
         marginRight: '8px', 
-        fontSize: expandedSection === index ? '150px' : '160px', // Increase the size of the icon when expanded
+        fontSize: expandedSection === index ? '150px' : '160px', 
         color: '#fff',
-        transition: "font-size 0.3s ease",  // Optional: Add transition for a smooth size change
+        transition: "font-size 0.3s ease",  
       }
     })}
 
-    {/* Conditionally display label based on expandedSection */}
+    
     {expandedSection === index ? (
       <span className="p-1 fw-bold fs-6" style={{ color: 'white', marginLeft: '10px' }}>
         {section.label}
       </span>
     ) : null}
 
-    {/* Hover effects */}
+   
     <div style={{
       position: "absolute",
       top: 0,
@@ -859,7 +964,7 @@ const handleDownloadPDFVisit = () => {
   </Button>
            </div>
   
-            {/* Previous and Next buttons on the right */}
+        
             <div className="right-buttons">
               <Button variant="contained" color="secondary" onClick={handlePrevious}>
                 Previous
@@ -871,7 +976,7 @@ const handleDownloadPDFVisit = () => {
           </div>
   
           <div className="mt-3">
-            {/* <FirmTable firms={loans} /> */}
+         
             <PendingFollowuptable firms={loans} />
           </div>
         </>
@@ -1046,20 +1151,41 @@ const handleDownloadPDFVisit = () => {
   
   
   
-        <Button
+        {/* <Button
           variant="contained"
           className="m-3"
           color="success"
           onClick={() => {
-            // Simply show the toast message without calling validation functions
+        { handleSubmit}
             toast.success("Details are submitted!", { position: "top-right", autoClose: 3000 });
             
-            // If you want to close the form (or any other logic), you can add it here
-            setShowFirmForm(false); // Example of hiding the form after submission
+           
+            setShowFirmForm(false); 
           }}
         >
           Submit
-        </Button>
+        </Button> */}
+           <Button
+      variant="contained"
+      className="m-3"
+      color="success"
+      onClick={() => {
+        handleSubmit();
+        console.log('Form submitted with data:', {
+          firmName,
+          closingExecutive,
+          firmPan,
+          status,
+          assignTo,
+          leadType,
+          nextFollowUp
+        });
+        toast.success("Details are submitted!", { position: "top-right", autoClose: 3000 });
+        setShowFirmForm(false);
+      }}
+    >
+      Submit
+    </Button>
       </Paper>
     </div>
       

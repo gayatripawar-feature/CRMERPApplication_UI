@@ -63,6 +63,82 @@ const PendingFollowuptable = () => {
       setFirmPanError(""); 
     }
   };
+
+
+  // const handleSubmit = () => {
+  //   // Create new firm data
+  //   const newFirm = {
+  //     leadNo: firmName,  // example, make sure to map your form data to appropriate fields
+  //     closingExecutive,
+  //     firmPan,
+  //     status,
+  //     assignTo,
+  //     leadType,
+  //     nextFollowUp
+  //   };
+  
+  //   // Add new firm data to the firms state
+  //   setFirms(prevFirms => [...prevFirms, newFirm]);
+  
+  //   // Show success toast
+  //   toast.success("Details are submitted!", { position: "top-right", autoClose: 3000 });
+  
+  //   // Reset form after submission
+  //   setFirmName('');
+  //   setClosingExecutive('');
+  //   setFirmPan('');
+  //   setStatus('');
+  //   setAssignTo('');
+  //   setLeadType('');
+  //   setNextFollowUp('');
+  // };
+  const handleSubmit = () => {
+    const newFirm = {
+      firmName: formData.firmName,
+      closingExecutive: formData.closingExecutive,
+      firmPanNo: formData.firmPan, // Match with firmPanNo
+      status: formData.status,
+      assignTo: formData.assignTo,
+      leadType: formData.leadType,
+      nextFollowUp: formData.nextFollowUp,
+      mobileNo: formData.mobileNo,
+      mailId: formData.mailId,
+      address: formData.address,
+      residentialAddress: formData.residentialAddress,
+      panNo: formData.panNo,
+      name: formData.firmPan, // Optional: Map firmPan to name if needed
+      occupation: formData.occupation || '', // Add if used in table
+      partner: formData.partner || '',       // Add if used in table
+      timestamp: new Date().toLocaleString(),
+    };
+  
+    console.log("Form submitted with data:", newFirm);
+  
+    setFirms((prevFirms) => [...prevFirms, newFirm]);
+  
+    toast.success("Details are submitted!", {
+      position: "top-right",
+      autoClose: 3000,
+    });
+  
+    setFormData({
+      firmName: '',
+      closingExecutive: '',
+      firmPan: '',
+      status: '',
+      assignTo: '',
+      leadType: '',
+      nextFollowUp: '',
+      mobileNo: '',
+      mailId: '',
+      address: '',
+      residentialAddress: '',
+      panNo: '',
+      occupation: '',
+      partner: '',
+    });
+  };
+  
   return (
     <TableContainer component={Paper}>
       {showFirmForm && selectedItem ? (
@@ -91,14 +167,7 @@ const PendingFollowuptable = () => {
                 
               />
             </Grid>
-            {/* <Grid item xs={6}>
-              <TextField
-                label="Closing Executive"
-                fullWidth
-                variant="outlined"
-              />
-               <Grid container spacing={3}>
-              {/* Closing Executive Field */}
+         
               <Grid item xs={6}>
                 <FormControl fullWidth variant="outlined">
                   <InputLabel id="closing-executive-label">Closing Executive</InputLabel>
@@ -109,7 +178,7 @@ const PendingFollowuptable = () => {
                     onChange={handleClosingExecutiveChange}
                     label="Closing Executive"
                   >
-                    {/* Sales Person options */}
+                    
                     <MenuItem value="Shilpha Mewada 1">Shilpha Mewada 1</MenuItem>
                     <MenuItem value="Tic Tac Toe Sohan">Tic Tac Toe Sohan</MenuItem>
                     <MenuItem value="Shilpha Mewada">Shilpha Mewada</MenuItem>
@@ -121,7 +190,7 @@ const PendingFollowuptable = () => {
                   </Select>
                 </FormControl>
               </Grid>
-            {/* </Grid> */}
+           
         
           
             <Grid item xs={6}>
@@ -131,7 +200,7 @@ const PendingFollowuptable = () => {
                 variant="outlined"
                 value={firmPan}
                       onChange={handleFirmPanChange}
-                      error={!!firmPanError}  // Show error if there is an error
+                      error={!!firmPanError}  
                       helperText={firmPanError}
               />
             </Grid>
@@ -218,7 +287,7 @@ const PendingFollowuptable = () => {
             fullWidth
             variant="outlined"
             InputLabelProps={{
-              shrink: true, // This will shrink the label when the field is focused or has a value
+              shrink: true, 
             }}
           />
         </Grid>
@@ -236,11 +305,11 @@ const PendingFollowuptable = () => {
   className="m-3"
   color="success"
   onClick={() => {
-    // Simply show the toast message without calling validation functions
+    
     toast.success("Details are submitted!", { position: "top-right", autoClose: 3000 });
     
-    // Close the form when the update button is clicked
-    setShowFirmForm(false); // This hides the form
+   
+    setShowFirmForm(false); 
   }}
 >
   Update
@@ -250,7 +319,7 @@ const PendingFollowuptable = () => {
 
         </div>
       ) : (
-        // Table view when no item is selected
+     
         <Table>
           <TableHead>
             <TableRow sx={{ background: '#3621a9' }}>
