@@ -55,12 +55,27 @@ const Leads = () => {
   const [email, setEmail] = useState('');
   const [mobileError, setMobileError] = useState('');
   const [emailError, setEmailError] = useState('')
+  // const [inventoryData, setInventoryData] = useState([]);
+
   useEffect(() => {
     loadLoansData();
   }, []);
 
   const fileInputRef = useRef(null);
 
+
+
+  const [formData, setFormData] = useState({
+    name: '',
+    mobile: '',
+    email: '',
+    location: '',
+    sourceName: '',
+    lookingFor: '',
+    partners: [],
+  });
+  
+  const [tableData, setTableData] = useState([]);
 
   const loadLoansData = async () => {
     const data = await fetchLoansData();
@@ -111,39 +126,39 @@ const Leads = () => {
     
     const url = URL.createObjectURL(blob);
   
-    // Create an anchor element for the download
+    
     const a = document.createElement("a");
     a.href = url;
-    a.download = "lead_template.csv"; // The file name
+    a.download = "lead_template.csv"; 
   
-    // Trigger the download
+   
     document.body.appendChild(a);
     a.click();
   
-    // Clean up
+   
     document.body.removeChild(a);
   };
   
   const handleChange = (e) => {
     const value = e.target.value;
     
-    // Regular expression to check for digits or spaces
-    // const regex = /[\d\s]/;
+    
     const regex = /\d/;
 
-    // If value contains digits or spaces, show error
+  
     if (regex.test(value)) {
       setError('Name should not contain digits');
     } else {
-      setError(''); // Clear the error if no issue
+      setError('');
     }
 
-    setName(value); // Update the name
+    setName(value); 
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
  
   const validateMobile = (value) => {
-    const regex = /^[0-9]{10}$/;  // Only exactly 10 digits allowed
+    const regex = /^[0-9]{10}$/; 
     if (!regex.test(value)) {
       setMobileError('Mobile number should contain exactly 10 digits');
     } else {
@@ -152,9 +167,9 @@ const Leads = () => {
   };
   
 
-  // Validate email format
+  
   const validateEmail = (value) => {
-    // const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;  
+     
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
     if (!regex.test(value)) {
       setEmailError('Please enter a valid email address');
@@ -163,18 +178,20 @@ const Leads = () => {
     }
   };
 
-  // Handle change in mobile input
+
   const handleMobileChange = (e) => {
     const value = e.target.value;
     setMobile(value);
     validateMobile(value);
+    setFormData({ ...formData, mobile: e.target.value });
   };
 
-  // Handle change in email input
+  
   const handleEmailChange = (e) => {
     const value = e.target.value;
     setEmail(value);
     validateEmail(value);
+    setFormData({ ...formData, email: e.target.value });
   };
 
   const handleDownloadPDFLeads = () => {
@@ -184,13 +201,12 @@ const Leads = () => {
     doc.setFontSize(14);
     doc.text("Leads Report", 14, 15);
   
-    // Define new table columns
+   
     const tableColumn = [
       "Timestamp", "Assign To", "Lead No", "Name", "Mobile / WhatsApp",
       "Looking For", "Email", "Source Name", "Location"
     ];
   
-    // Map data into rows
     const tableRows = loans.map(row => [
       row.timestamp || "-",
       row.assignTo || "-",
@@ -218,91 +234,118 @@ const Leads = () => {
   
 
 
-
+  // const handleFormSubmit = () => {
+  //   console.log("Form Submit Triggered");
+  //   console.log("Form Data Before Submit:", formData);
+  
+  //   const newLead = {
+  //     ...formData,
+  //     timestamp: new Date().toLocaleString(),
+  //     assignTo: '',
+  //     leadNo: `LD${Date.now()}`,
+  //   };
+  
+  //   console.log("New Lead Entry:", newLead);
+  
+  //   setTableData(prev => {
+  //     const updatedData = [...prev, newLead];
+  //     console.log("Updated Table Data:", updatedData);
+  //     return updatedData;
+  //   });
+  
+  //   setFormData({
+  //     name: '',
+  //     mobile: '',
+  //     email: '',
+  //     location: '',
+  //     sourceName: '',
+  //     lookingFor: '',
+  //     partners: [],
+  //   });
+  
+  //   toast.success("Leads details are submitted!", {
+  //     position: "top-right",
+  //     autoClose: 3000,
+  //   });
+  // };
+  
+  
+  const handleFormSubmit = () => {
+    console.log("submit");
+    
+    // Create a new lead object with a unique leadNo
+    const newLead = {
+      ...formData,
+      timestamp: new Date().toLocaleString(),
+      assignTo: '', // Default empty or set dynamically if needed
+      leadNo: `LD${Date.now()}`, // Unique Lead No.
+    };
+    
+    // Add the new lead to the inventoryData state
+    setInventoryData([...inventoryData, newLead]);
+    
+    // Clear form data after submission
+    setFormData({
+      name: '',
+      mobile: '',
+      email: '',
+      location: '',
+      sourceName: '',
+      lookingFor: '',
+      partners: [],
+    });
+    
+    toast.success("Leads details are submitted!", {
+      position: "top-right",
+      autoClose: 3000,
+    });
+  };
+  
 
 
   return (
     <div className="main-content">
       <h6>Sales Module / Lead Management</h6>
 
-      {/* Sidebar Navigation */}
+     
       <div className="d-flex align-items-center mb-3">
        
 
 
 <div className="d-flex align-items-center mb-3">
-  {/* {sections.map((section, index) => (
-    <Button
-      key={index}
-      onClick={() => handleToggleSection(index)}
-      variant="outlined"
-      color="primary"
-      className="m-3"
-      sx={{
-        borderRadius: '20px',
-        display: 'flex',
-        alignItems: 'center',
-        '&:hover': { backgroundColor: '#9b4dca', color: '#fff' },
-        borderColor: '#9b4dca',
-        color: '#9b4dca',
-      }}
-      startIcon={expandedSection === index ? section.icon : <FaEye size={20} color="#9b4dca" />}
-    >
-      {expandedSection === index ? section.label : null} 
-    </Button>
-  ))} */}
+  
 
 
-{/* 
-{sections.map((section, index) => (
-        <Tooltip key={index} title={section.label} arrow>
-          <IconButton
-            color="primary"
-            // onClick={() => console.log(`${section.label} clicked`)}
-            onClick={() => handleToggleSection(index)}
-            sx={{
-              backgroundColor: section.bgColor,
-              padding: "10px",   
-           margin :"10px",
-              borderRadius: "50%",
-              color: "white",
-              fontSize: "24px",   // Increased icon size
-            }}
-          >
-            {section.icon}
-          </IconButton>
-        </Tooltip>
-      ))} */}
 
 {sections.map((section, index) => (
   <Tooltip key={index} title={section.label} arrow>
     <div
       style={{
-        display: 'flex',               // Flexbox to arrange icon and label horizontally
-        alignItems: 'center',          // Align the icon and label vertically in the center
-        justifyContent: 'flex-start',  // Ensure the content is aligned to the left
-        backgroundColor: '#3621a9',    // Background color for the button
+        display: 'flex',               
+        alignItems: 'center',          
+        justifyContent: 'flex-start',  
+        backgroundColor: '#3621a9',   
         padding: '10px',
         margin: '10px',
-        borderRadius: '20px',          // Rounded corners for the container
+        borderRadius: '20px',         
         color: 'white',
-        fontSize: '16px',              // Font size for the label
-        width: expandedSection === index ? '200px' : '50px',  // Toggle width based on expanded state
-        height: '50px',                // Make the height consistent for both collapsed and expanded
-        transition: 'width 0.3s ease', // Smooth transition for the width
-        background: 'linear-gradient(0deg, #4b2ac2 0%, #5c39d3 100%)', // Gradient background
+        fontSize: '16px',              
+        width: expandedSection === index ? '200px' : '50px',  
+        height: '50px',                
+        transition: 'width 0.3s ease', 
+        background: 'linear-gradient(0deg, #4b2ac2 0%, #5c39d3 100%)', 
         boxShadow: 'inset 2px 2px 2px 0px rgba(255,255,255,.5), 7px 7px 20px 0px rgba(0,0,0,.1), 4px 4px 5px 0px rgba(0,0,0,.1)', // Shadow for depth
       }}
     >
-      {/* Icon */}
+      
       <IconButton
         color="primary"
         onClick={() => handleToggleSection(index)}
         sx={{
-          padding: 0,                   // Remove padding around icon for tight alignment
-          marginRight: '8px',           // Add space between icon and label
-          fontSize: '24px',             // Increased icon size
-          color: 'white',               // Set the icon color to white
+          padding: 0,                   
+          marginRight: '8px',           
+          fontSize: '24px',             
+          color: 'white',               
         }}
       >
         {section.icon}
@@ -313,8 +356,8 @@ const Leads = () => {
         style={{
           color: 'white',
           fontSize: '16px',
-          display: expandedSection === index ? 'inline' : 'none', // Show label only when expanded
-          marginLeft: '8px',             // Add some space between icon and label
+          display: expandedSection === index ? 'inline' : 'none', 
+          marginLeft: '8px',             
         }}
       >
         {section.label}
@@ -329,19 +372,19 @@ const Leads = () => {
     
 </div>
 
-{/* File Upload Input */}
+
 {showFileInput && (
   <div className="m-3">
     <input type="file" accept=".csv, .xlsx" />
   </div>
 )}
 
- {/* Hidden file input element */}
+
  <input
         type="file"
         accept=".csv, .xlsx"
         ref={fileInputRef}
-        style={{ display: 'none' }} // Hidden input element
+        style={{ display: 'none' }} 
         onChange={(e) => {
           console.log('File selected:', e.target.files[0]);
         }}
@@ -351,7 +394,7 @@ const Leads = () => {
 
       </div>
 
-      {/* Display Inventory Section */}
+     
       {expandedSection === 0 && (
         <div className="content-container mt-3">
           {!showFirmForm ? (
@@ -371,21 +414,21 @@ const Leads = () => {
       padding: "8px 16px",
       borderRadius: "8px",
       display: "flex",
-      alignItems: "center",  // Align icon and text
-      gap: "8px",  // Space between icon and text
+      alignItems: "center",  
+      gap: "8px",  
       "&:hover": {
         background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
       },
      
     }}
-    // onClick={() => handledow(firms)}
+    
     onClick={handleDownloadPDFLeads}
   >
-    <FaFileDownload size={18} />  {/* Added download icon */}
+    <FaFileDownload size={18} />  
     Download PDF
   </Button>
   </div>
-                {/* Pagination Buttons */}
+                
                 <div className="right-buttons">
                   <Button variant="contained" color="secondary"  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}>
                     Previous
@@ -396,7 +439,7 @@ const Leads = () => {
                 </div>
               </div>
               <div className="mt-3">
-              {/* <InventoryTable inventoryData={inventoryData} handleDelete={handleDelete} /> */}
+              
               <NewLeads inventoryData={inventoryData} handleDelete={handleDelete} />
            </div>
             </>
@@ -410,77 +453,88 @@ const Leads = () => {
             }}
             >
               
-              <Grid container spacing={2}>
-                {/* <Grid item xs={4}><TextField label="Name " fullWidth /></Grid> */}
-                <Grid item xs={4}>
-      <TextField
-        label="Name"
-        fullWidth
-        required
-        value={name}
-        onChange={handleChange}
-        error={!!error}  // Display error if there is an error message
-        helperText={error}  // Show the error message below the text field
-      />
-    </Grid>
-                <Grid item xs={4}><TextField label="
-You Are Looking For?" fullWidth required/></Grid>
-                {/* <Grid item xs={4}><TextField label="Mobile No. / WhatsApp No." fullWidth /></Grid>
-                <Grid item xs={4}><TextField label="Email." fullWidth /></Grid>
-               */}
+              
+
+<Grid container spacing={2}>
 
 <Grid item xs={4}>
-        <TextField
-          label="Mobile No. / WhatsApp No."
-          fullWidth
-          required
-          value={mobile}
-          onChange={handleMobileChange}
-          error={!!mobileError} // Show error if validation fails
-          helperText={mobileError} // Display error message
-        />
-      </Grid>
-      <Grid item xs={4}>
-        <TextField
-          label="Email."
-          required
-          fullWidth
-          value={email}
+  <TextField
+    label="Name"
+    fullWidth
+    required
+    value={formData.name}
+   onChange={handleChange}
+    name="name"
+        error={!!error}  
+        helperText={error}  
+  />
+</Grid>
+
+<Grid item xs={4}>
+  <TextField
+    label="You Are Looking For?"
+    fullWidth
+    required
+    value={formData.lookingFor}
+    onChange={(e) => setFormData({ ...formData, lookingFor: e.target.value })}
+  />
+</Grid>
+
+<Grid item xs={4}>
+  <TextField
+    label="Mobile No. / WhatsApp No."
+    fullWidth
+    required
+  
+    value={mobile}
+    onChange={handleMobileChange}
+    error={!!mobileError} 
+    helperText={mobileError} 
+  />
+</Grid>
+
+<Grid item xs={4}>
+  <TextField
+    label="Email"
+    required
+    fullWidth
+    value={email}
           onChange={handleEmailChange}
-          error={!!emailError} // Show error if validation fails
-          helperText={emailError} // Display error message
-        />
-      </Grid>
-                <Grid item xs={4}><TextField type="text" label="Location" fullWidth inputProps={{ step: "0.01", min: "0.01" }}
-                /></Grid>
-               
-             
-                <Grid item xs={4}>
-                  <TextField select label="Source Name" fullWidth>
-                    {unitTypes.map((type, idx) => (
-                      <MenuItem key={idx} value={type}>{type}</MenuItem>
-                    ))}
-                  </TextField>
-                </Grid>
+          error={!!emailError} 
+          helperText={emailError} 
+  />
+</Grid>
 
-               
-             
-              </Grid> 
+<Grid item xs={4}>
+  <TextField
+    type="text"
+    label="Location"
+    fullWidth
+    value={formData.location}
+    onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+  />
+</Grid>
 
-         
+<Grid item xs={4}>
+  <TextField
+    select
+    label="Source Name"
+    fullWidth
+    value={formData.sourceName}
+    onChange={(e) => setFormData({ ...formData, sourceName: e.target.value })}
+  >
+    {unitTypes.map((type, idx) => (
+      <MenuItem key={idx} value={type}>
+        {type}
+      </MenuItem>
+    ))}
+  </TextField>
+</Grid>
+
+</Grid>
+
            
-              {partners.map((_, index) => (
-                <Grid container spacing={2} key={index}>
-                  <Grid item xs={4}><TextField label="Name" fullWidth /></Grid>
-                  <Grid item xs={4}><TextField label="Age" fullWidth /></Grid>
-                  <Grid item xs={4}><TextField label="Occupation" fullWidth /></Grid>
-                  <Grid item xs={4}>
-                    <Button variant="contained" color="secondary" onClick={() => setPartners(partners.filter((_, i) => i !== index))}>
-                      <FaTrash />
-                    </Button>
-                  </Grid>
-                </Grid>
-              ))}
+              
 
              
 
@@ -491,6 +545,7 @@ You Are Looking For?" fullWidth required/></Grid>
   className="mt-3"
   color="success"
   onClick={() => {
+    handleFormSubmit();
     setShowFirmForm(false);
     toast.success("Leads details are submitted!", { position: "top-right", autoClose: 3000 });
   }}
@@ -508,7 +563,7 @@ You Are Looking For?" fullWidth required/></Grid>
         </div>
       )}
 
-{expandedSection === 1 && (
+{/* {expandedSection === 1 && (
         <div className="content-container mt-3">
           {!showFirmForm ? (
             <>
@@ -516,7 +571,7 @@ You Are Looking For?" fullWidth required/></Grid>
                 <Button variant="contained" color="primary" onClick={() => setShowFirmForm(true)}>
                   + Inventory Info
                 </Button>
-                {/* Pagination Buttons */}
+                
                 <div className="right-buttons">
                   <Button variant="contained" color="secondary" onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}>
                     Previous
@@ -528,17 +583,17 @@ You Are Looking For?" fullWidth required/></Grid>
               </div>
               <div className="mt-3">
               <InventoryTable inventoryData={inventoryData} handleDelete={handleDelete} />
-              {/* <NewLeads /> */}
+             
            </div>
             </>
           ) : (
             <div className="firm-form mt-4 p-3 border rounded" 
             style={{
-              backgroundColor: "#f8f9fa", // Light background for contrast
-              border: "1px solid #ccc", // Light gray border for separation
+              backgroundColor: "#f8f9fa", 
+              border: "1px solid #ccc", 
             }}
             >
-              {/* <h5></h5> */}
+              
               <Grid container spacing={2}>
                 <Grid item xs={4}><TextField label="Project Name" fullWidth /></Grid>
                 <Grid item xs={4}><TextField label="Wing" fullWidth /></Grid>
@@ -553,7 +608,7 @@ You Are Looking For?" fullWidth required/></Grid>
                 /></Grid>
                 <Grid item xs={4}><TextField  type="number" label="Saleable to Carpet Area Ratio (Sq. Fts)" fullWidth inputProps={{ step: "0.01", min: "0.01" }}/></Grid>
 
-                {/* Type of Units Dropdown */}
+               
                 <Grid item xs={4}>
                   <TextField select label="Type of Units" fullWidth>
                     {unitTypes.map((type, idx) => (
@@ -562,7 +617,7 @@ You Are Looking For?" fullWidth required/></Grid>
                   </TextField>
                 </Grid>
 
-                {/* Configuration Dropdown */}
+              
                 <Grid item xs={4}>
                   <TextField select label="Configuration" fullWidth>
                     {configurations.map((config, idx) => (
@@ -571,7 +626,7 @@ You Are Looking For?" fullWidth required/></Grid>
                   </TextField>
                 </Grid>
 
-                {/* Status Dropdown */}
+               
                 <Grid item xs={4}>
                   <TextField select label="Status" fullWidth>
                     {statusOptions.map((status, idx) => (
@@ -580,7 +635,7 @@ You Are Looking For?" fullWidth required/></Grid>
                   </TextField>
                 </Grid>
 
-                {/* Select Owner Dropdown */}
+               
                 <Grid item xs={4}>
                   <TextField select label="Select Owner" fullWidth>
                     {owners.map((owner, idx) => (
@@ -589,7 +644,7 @@ You Are Looking For?" fullWidth required/></Grid>
                   </TextField>
                 </Grid>
 
-                {/* <Grid item xs={4}><TextField type="number" label="ATT. Terrace Carpet Area (Sq Ft)" fullWidth /></Grid> */}
+                
                 <Grid item xs={4}>
   <TextField
     type="number"
@@ -611,7 +666,7 @@ You Are Looking For?" fullWidth required/></Grid>
                 <Grid item xs={4}><TextField label="PODIUM GARDE" fullWidth /></Grid>
               </Grid>
 
-              {/* Partner Details */}
+           
            
               {partners.map((_, index) => (
                 <Grid container spacing={2} key={index}>
@@ -651,7 +706,7 @@ You Are Looking For?" fullWidth required/></Grid>
                 <Button variant="contained" color="primary" onClick={() => setShowFirmForm(true)}>
                   + Display Inventory
                 </Button>
-                {/* Pagination Buttons */}
+             
                 <div className="right-buttons">
                   <Button variant="contained" color="secondary" onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}>
                     Previous
@@ -667,7 +722,7 @@ You Are Looking For?" fullWidth required/></Grid>
             </>
           ) : (
             <div className="firm-form mt-4 p-3 border rounded">
-              {/* <h5></h5> */}
+            
               <Grid container spacing={2}>
                 <Grid item xs={4}><TextField label="Project Name" fullWidth /></Grid>
                 <Grid item xs={4}><TextField label="Wing" fullWidth /></Grid>
@@ -682,7 +737,7 @@ You Are Looking For?" fullWidth required/></Grid>
                 /></Grid>
                 <Grid item xs={4}><TextField  type="number" label="Saleable to Carpet Area Ratio (Sq. Fts)" fullWidth inputProps={{ step: "0.01", min: "0.01" }}/></Grid>
 
-                {/* Type of Units Dropdown */}
+               
                 <Grid item xs={4}>
                   <TextField select label="Type of Units" fullWidth>
                     {unitTypes.map((type, idx) => (
@@ -691,7 +746,7 @@ You Are Looking For?" fullWidth required/></Grid>
                   </TextField>
                 </Grid>
 
-                {/* Configuration Dropdown */}
+               
                 <Grid item xs={4}>
                   <TextField select label="Configuration" fullWidth>
                     {configurations.map((config, idx) => (
@@ -700,7 +755,7 @@ You Are Looking For?" fullWidth required/></Grid>
                   </TextField>
                 </Grid>
 
-                {/* Status Dropdown */}
+              
                 <Grid item xs={4}>
                   <TextField select label="Status" fullWidth>
                     {statusOptions.map((status, idx) => (
@@ -709,7 +764,7 @@ You Are Looking For?" fullWidth required/></Grid>
                   </TextField>
                 </Grid>
 
-                {/* Select Owner Dropdown */}
+               
                 <Grid item xs={4}>
                   <TextField select label="Select Owner" fullWidth>
                     {owners.map((owner, idx) => (
@@ -718,7 +773,6 @@ You Are Looking For?" fullWidth required/></Grid>
                   </TextField>
                 </Grid>
 
-                {/* <Grid item xs={4}><TextField type="number" label="ATT. Terrace Carpet Area (Sq Ft)" fullWidth /></Grid> */}
                 <Grid item xs={4}>
   <TextField
     type="number"
@@ -740,7 +794,7 @@ You Are Looking For?" fullWidth required/></Grid>
                 <Grid item xs={4}><TextField label="PODIUM GARDE" fullWidth /></Grid>
               </Grid>
 
-              {/* Partner Details */}
+              
            
               {partners.map((_, index) => (
                 <Grid container spacing={2} key={index}>
@@ -767,7 +821,7 @@ You Are Looking For?" fullWidth required/></Grid>
 
           )}
         </div>
-      )}
+      )} */}
     </div>
   );
 };

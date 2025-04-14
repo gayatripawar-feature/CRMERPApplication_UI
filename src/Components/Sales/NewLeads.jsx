@@ -341,30 +341,61 @@ const NewLeads = ({ inventoryData }) => {
 
   const [mobileError, setMobileError] = useState(false); // Error state for mobile
   const [mobileHelperText, setMobileHelperText] = useState("");
+  const [inventoryData, setInventoryData] = useState([]);
 
-
+// const [tableData, setTableData] = useState([]);
   const handleAssignClick = (item) => {
     setModalOpen(true);
     setSelectedLead(item);
   };
 
+  // const handleCloseModal = () => {
+
+  //   toast.success("Details updated successfully!", {
+  //     position: "top-right", // Position of the toast
+  //     autoClose: 5000, // Time before the toast disappears
+  //     hideProgressBar: false, // Option to hide the progress bar
+  //     closeOnClick: true, 
+  //     pauseOnHover: true, 
+  //   });
+
+   
+  //   setModalOpen(false);
+  //   setSuccessModalOpen(false);
+
+
+      
+  
+  //   setEditMode(false);
+  //   setEditedLead(null);
+  // };
+
   const handleCloseModal = () => {
-
+    console.log("Handle close modal triggered");
+    // Show success toast message
     toast.success("Details updated successfully!", {
-      position: "top-right", // Position of the toast
-      autoClose: 5000, // Time before the toast disappears
-      hideProgressBar: false, // Option to hide the progress bar
-      closeOnClick: true, // Close the toast when clicked
-      pauseOnHover: true, // Pause the toast on hover
+      position: "top-right", 
+      autoClose: 5000, 
+      hideProgressBar: false, 
+      closeOnClick: true, 
+      pauseOnHover: true, 
     });
-
+  
+    // Close modals
     setModalOpen(false);
     setSuccessModalOpen(false);
+  
+    // Update inventory data with the edited lead
+    const updatedInventoryData = inventoryData.map((item) =>
+      item.leadNo === editedLead.leadNo ? editedLead : item
+    );
+    setInventoryData(updatedInventoryData);
+  
+    // Close edit mode and reset the editedLead state
     setEditMode(false);
-    setEditedLead(null);
+    setEditedLead(null);  // Reset the edited lead data
   };
-
-
+  
 
   const handleEmailBlur = () => {
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
@@ -405,7 +436,7 @@ const NewLeads = ({ inventoryData }) => {
         <TableContainer component={Paper} sx={{ mt: 3 }}>
           <Table>
             <TableHead>
-              {/* <TableRow sx={{ background: "linear-gradient(180deg, #3621a9 0%,rgb(139, 115, 243) 100%)" }}> */}
+              
              <TableRow sx={{background:"#3621a9"}} >
                 <TableCell sx={{color: "white", fontWeight: "bold", whiteSpace: "nowrap", padding: "15px"}}>ACTION</TableCell>
                 <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap", padding: "15px"}}>TIMESTAMP</TableCell>
@@ -421,6 +452,8 @@ const NewLeads = ({ inventoryData }) => {
             </TableHead>
             <TableBody>
               {inventoryData.map((item, index) => (
+           
+
                 <TableRow key={index}>
                 <TableCell>
   <div style={{ display: "flex", gap: "5px" }}>
