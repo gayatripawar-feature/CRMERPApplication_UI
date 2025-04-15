@@ -33,6 +33,7 @@ const Architect = () => {
 const [isCollapsed, setIsCollapsed] = useState(false);
 const [selectedRow, setSelectedRow] = useState(null);
 const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+const [slab, setSlab] = useState('');
 
   const rowsPerPage = 10;
   
@@ -74,15 +75,43 @@ const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   //   console.log("Form submitted!");
   // };
   
-  const handleSubmit = (event) => {
-    event.preventDefault();
+  // const handleSubmit = (event) => {
+  //   event.preventDefault();
     
-    // Your Submit Logic
+    
+  //   console.log("Form submitted!");
+  
+  //   toast.success("Data Submitted Successfully!");
+  //   handleCloseModal(false);
+    
+  // };
+  const handleSubmit = (event) => {
+    event.preventDefault();  // Prevent the default form submission behavior
+    console.log("Slab Value: ", slab);  // Log the 'slab' field value
+    console.log("Letter Type Value: ", letterType);  // Log the 'letterType' field value
+    console.log("Selected Files: ", selectedFiles);  
+    // Create a new row with the form data
+    const newRow = {
+      timestamp: new Date().toLocaleString(),  // Add timestamp
+      slab,  // Form field 'slab'
+      letterType,  // Form field 'letterType'
+      document: selectedFiles.length > 0 ? URL.createObjectURL(selectedFiles[0]) : null, // If files exist, create URL for first file
+    };
+  
+    // Update the state with the new row
+    setCurrentRows((prevRows) => [...prevRows, newRow]);
+  
+    // Close the modal after submission
+    setOpenModal(false);
+    
+    // Optionally log the form submission
     console.log("Form submitted!");
   
+    // Display a success message (assuming you're using react-toastify or a similar library)
     toast.success("Data Submitted Successfully!");
-    handleCloseModal(false);
-    
+  
+    // Close the modal after submission
+    handleCloseModal();  // It's fine to call it without arguments if it sets 'openModal' to false
   };
   
    
@@ -185,9 +214,14 @@ useEffect(() => {
     doc.save("EngineerArchitect_Report.pdf");
 };
 
-const handleOpenEditModal = (loan) => {
-  setSelectedRow(loan);
-  setIsEditModalOpen(true);
+// const handleOpenEditModal = (loan) => {
+//   setSelectedRow(loan);
+//   setIsEditModalOpen(true);
+// };
+const handleOpenEditModal = (row) => {
+  // Set the selected row when clicking the edit icon
+  setSelectedRow(row);  // Set the current row's data to state
+  setIsEditModalOpen(true);  // Open the modal
 };
 
 // const handleCloseEditModal = () => {
@@ -207,15 +241,38 @@ const handleFileChange = (e) => {
 };
 
 
-const handleUpdate = () => {
-  // Your update API call or logic here...
+// const handleUpdate = () => {
 
+
+//   toast.success('Details Updated Successfully!', {
+//     position: 'top-right',
+//     autoClose: 2000,
+//   });
+
+//   handleCloseEditModal();  
+// };
+const handleUpdate = () => {
+  // Prepare the updated row object with the new details from the selected row
+  const updatedRow = {
+    ...selectedRow,
+    document: selectedFiles.length > 0 ? URL.createObjectURL(selectedFiles[0]) : selectedRow.document,  // Handle file change if any
+  };
+console.log("update");
+  // Update the row in the current rows state
+  setCurrentRows((prevRows) =>
+    prevRows.map((row) =>
+      row.timestamp === updatedRow.timestamp ? updatedRow : row  // Replace the row with updated data
+    )
+  );
+
+  // Show a success toast after updating
   toast.success('Details Updated Successfully!', {
     position: 'top-right',
     autoClose: 2000,
   });
 
-  handleCloseEditModal();  // Close the Modal
+  // Close the edit modal after the update
+  handleCloseEditModal();  
 };
 
 
@@ -478,6 +535,8 @@ const handleUpdate = () => {
         label="Select Slab"
         fullWidth
         variant="outlined"
+        value={selectedRow?.slab || ""}  // Pre-fill the value
+        onChange={(e) => setSelectedRow({ ...selectedRow, slab: e.target.value })} 
         sx={{ mb: 3, backgroundColor: 'white', borderRadius: '6px' }}
       >
         {[
@@ -497,6 +556,8 @@ const handleUpdate = () => {
         label="Letter Type"
         fullWidth
         variant="outlined"
+        value={selectedRow?.letterType || ""}  // Pre-fill the value
+        onChange={(e) => setSelectedRow({ ...selectedRow, letterType: e.target.value })}
         sx={{ mb: 3, backgroundColor: 'white', borderRadius: '6px' }}
       >
         {['Engineer', 'Architect'].map((option) => (
@@ -670,6 +731,8 @@ const handleUpdate = () => {
         label="Select Slab"
         fullWidth
         variant="outlined"
+        value={slab} 
+        onChange={(e) => setSlab(e.target.value)}
         sx={{ mb: 3, backgroundColor: 'white', borderRadius: '6px' }}
       >
         {[
@@ -689,6 +752,8 @@ const handleUpdate = () => {
         label="Letter Type"
         fullWidth
         variant="outlined"
+        value={letterType}  // Bind to the 'letterType' state
+        onChange={(e) => setLetterType(e.target.value)}
         sx={{ mb: 3, backgroundColor: 'white', borderRadius: '6px' }}
       >
         {['Engineer', 'Architect'].map((option) => (
