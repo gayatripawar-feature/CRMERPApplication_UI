@@ -27,9 +27,25 @@ const ChannelPartner = () => {
   const [pincodeError, setPincodeError] = useState('');
   const [emailError, setEmailError] = useState('');
   const [mobileError, setMobileError] = useState('');
+  const [firms, setFirms] = useState([]);
+  // const [formData, setFormData] = useState({
+  //   enquiryNo: "",
+  //   projectName: "",
+  // });
+  const [submittedData, setSubmittedData] = useState([]);
+
   const [formData, setFormData] = useState({
     enquiryNo: "",
-    projectName: "",
+    cpExecutiveName: "",
+    designation: "",
+    mobileNo: "",
+    website: "",
+    email: "",
+    postal: "",
+    pincode: "",
+    location: "",
+    city: "",
+    zone: "",
   });
 
   useEffect(() => {
@@ -87,12 +103,53 @@ const ChannelPartner = () => {
   };
 
   // Handle form submission
+  // const handleFormSubmit = () => {
+  //   toast.success("Details are submitted!", { position: "top-right", autoClose: 3000 });
+  //   setShowBookingForm(false); // Hide the form after submission
+  // };
+  // const handleFormSubmit = () => {
+    
+
+  //   console.log("Submitting form data:", formData);
+
+  //   setFirms((prev) => [...prev, formData]);
+  //   setSubmittedData((prevData) => [...prevData, formData]);
+   
+  //   setFormData({
+  //     enquiryNo: "",
+  //     cpexecutivename: "",
+  //     Designation: "",
+  //     MobileNo: "",
+  //     website: "",
+  //     email: "",
+  //     postal: "",
+  //     pincode: "",
+  //     location: "",
+  //     city: "",
+  //     zone: "",
+  //   });
+
+  //   // Optionally show table after submit
+  //   setShowBookingForm(false);
+  // };
   const handleFormSubmit = () => {
-    toast.success("Details are submitted!", { position: "top-right", autoClose: 3000 });
-    setShowBookingForm(false); // Hide the form after submission
+    console.log("Submitting form data:", formData);
+    setSubmittedData((prev) => [...prev, formData]);
+    setFormData({
+      cpFirmName: "",
+      cpexecutivename: "",
+      Designation: "",
+      MobileNo: "",
+      website: "",
+      email: "",
+      postal: "",
+      pincode: "",
+      location: "",
+      city: "",
+      zone: "",
+    });
+    setShowBookingForm(false)
   };
-
-
   const handleDownloadPDFChannel = (data) => {
     const doc = new jsPDF("landscape");
     doc.setFontSize(14);
@@ -219,7 +276,10 @@ const ChannelPartner = () => {
        
         {/* {!showBookingForm && <BookingFormTable data={[]} />} */}
        
-        {!showBookingForm && <ChannelPartnerTable data={[]} />}
+        {/* {!showBookingForm && <ChannelPartnerTable data={[]} />} */}
+        {/* {!showBookingForm && <ChannelPartnerTable data={firms} />} */}
+        {!showBookingForm && <ChannelPartnerTable data={submittedData} />}
+
         {showBookingForm && (
           <Box className="firm-form mt-4 p-3" sx={{ maxHeight: "500px", overflowY: "auto", paddingRight: "10px" }}>
             <Paper elevation={4} sx={{ borderRadius: "12px", padding: 3 }}>
@@ -231,10 +291,10 @@ const ChannelPartner = () => {
                 <Grid item xs={6}>
                   <TextField
                     label="CP Firm Name"
-                    name="enquiryNo"
+                    name="cpFirmName"
                     fullWidth
                     variant="outlined"
-                    value={formData.enquiryNo}
+                    value={formData.cpFirmName}
                     onChange={handleInputChange}
                    
                   />
@@ -243,10 +303,10 @@ const ChannelPartner = () => {
                 <Grid item xs={6}>
                   <TextField
                     label="CP Executive Name (as per Rera)"
-                    name="cpexecutivename"
+                    name="cpExecutiveName"
                     fullWidth
                     variant="outlined"
-                    value={formData.cpexecutivename}
+                    value={formData.cpExecutiveName}
                     onChange={handleInputChange}
                     
                   />
@@ -255,10 +315,10 @@ const ChannelPartner = () => {
                 <Grid item xs={6}>
                   <TextField
                     label="Designation"
-                    name="Designation"
+                    name="designation"
                     fullWidth
                     variant="outlined"
-                    value={formData.Designation}
+                    value={formData.designation}
                     onChange={handleInputChange}
                    
                   />
@@ -266,10 +326,10 @@ const ChannelPartner = () => {
                 <Grid item xs={6}>
                   <TextField
                     label="Mobile No"
-                    name="MobileNo"
+                    name="mobileNo"
                     fullWidth
                     variant="outlined"
-                    value={formData.MobileNo}
+                    value={formData.mobileNo}
                     onChange={handleInputChange}
                     error={Boolean(mobileError)}
                     helperText={mobileError}
@@ -381,6 +441,11 @@ const ChannelPartner = () => {
               <Button variant="contained" color="success" className="m-3" onClick={handleFormSubmit}>
                 Submit
               </Button>
+
+              <Button variant="contained" color="light" Name="m-3" onClick={() => setShowBookingForm(false)}>
+  Cancel
+</Button>
+
             </Paper>
           </Box>
         )}

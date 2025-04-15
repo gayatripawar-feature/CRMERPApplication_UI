@@ -77,7 +77,7 @@ const firms = [
   },
 ];
 
-const Lostleadstable = () => {
+const Lostleadstable = ({firms}) => {
   const [isEditing, setIsEditing] = useState(false); // State to track whether we are editing
   const [selectedFirm, setSelectedFirm] = useState(null); 
   const [remark, setRemark] = useState('');
@@ -90,11 +90,37 @@ const Lostleadstable = () => {
             const [assignedTo, setAssignedTo] = useState("");
               const [leadType, setLeadType] = useState("");
               const [nameError, setNameError] = useState("");
+
+           
+// const [editData, setEditData] = useState(null);
+const [editData, setEditData] = useState({
+  firmName: '',
+  closingExecutive: '',
+  firmPan: '',
+  name: '',
+  newFollowUp: '',
+  assignedTo: '',
+  leadType: '',
+  status: '',
+});
+
+
+
   // Handles clicking the Edit icon
   const handleEdit = (firm) => {
     setIsEditing(true); // Set editing state to true
     setSelectedFirm(firm); // Set the selected firm for editing
     setRemark(firm.remark); // Prepopulate the remark field
+    setEditData({
+      firmName: data.firmName,
+      closingExecutive: data.closingExecutive,
+      firmPan: data.firmPan,
+      name: data.name,
+      newFollowUp: data.newFollowUp,
+      assignedTo: data.assignedTo,
+      leadType: data.leadType,
+      status: data.status
+    });
   };
 
 
@@ -158,7 +184,7 @@ const Lostleadstable = () => {
   return (
     <TableContainer component={Paper}>
       {isEditing  ? (
-        // If editing, show the form
+     
         <div style={{ padding: '20px' }}>
           <Paper className="p-4" elevation={4} style={{ borderRadius: "12px", paddingBottom: "20px" }}>
                   <Typography variant="h5" gutterBottom>
@@ -168,7 +194,7 @@ const Lostleadstable = () => {
                  
                   
                   <Grid container spacing={2}>
-              <Grid item xs={6}>
+              {/* <Grid item xs={6}>
                 <TextField
                   label="Lead No"
                   fullWidth
@@ -179,9 +205,26 @@ const Lostleadstable = () => {
                   helperText={firmNameError} 
                   required 
                 />
-              </Grid>
+              </Grid> */}
+              <Grid item xs={6}>
+  <TextField
+    label="Lead No"
+    fullWidth
+    variant="outlined"
+    value={isEditing ? editData?.firmName : firmName}  // Conditionally set the value based on editing state
+    onChange={(e) => {
+      isEditing
+        ? setEditData({ ...editData, firmName: e.target.value })  // Update editData if in edit mode
+        : handleFirmNameChange(e);  // Use regular handler if not in edit mode
+    }}
+    error={!!firmNameError} 
+    helperText={firmNameError} 
+    required 
+  />
+</Grid>
+
              
-                <Grid item xs={6}>
+                {/* <Grid item xs={6}>
                   <FormControl fullWidth variant="outlined">
                     <InputLabel id="closing-executive-label">Sales Person</InputLabel>
                     <Select
@@ -191,7 +234,7 @@ const Lostleadstable = () => {
                       onChange={handleClosingExecutiveChange}
                       label="Select Sales Person"
                     >
-                      {/* Sales Person options */}
+                    
                       <MenuItem value="Shilpha Mewada 1">Shilpha Mewada 1</MenuItem>
                       <MenuItem value="Tic Tac Toe Sohan">Tic Tac Toe Sohan</MenuItem>
                       <MenuItem value="Shilpha Mewada">Shilpha Mewada</MenuItem>
@@ -202,11 +245,36 @@ const Lostleadstable = () => {
                       <MenuItem value="Sachin Awale">Sachin Awale</MenuItem>
                     </Select>
                   </FormControl>
-                </Grid>
-              {/* </Grid> */}
+                </Grid> */}
+              <Grid item xs={6}>
+  <FormControl fullWidth variant="outlined">
+    <InputLabel id="closing-executive-label">Sales Person</InputLabel>
+    <Select
+      labelId="closing-executive-label"
+      id="closing-executive"
+      value={isEditing ? editData?.closingExecutive : closingExecutive}  // Conditionally set the value
+      onChange={(e) => {
+        isEditing
+          ? setEditData({ ...editData, closingExecutive: e.target.value })  // Update editData if in edit mode
+          : handleClosingExecutiveChange(e);  // Use regular handler if not in edit mode
+      }}
+      label="Select Sales Person"
+    >
+      <MenuItem value="Shilpha Mewada 1">Shilpha Mewada 1</MenuItem>
+      <MenuItem value="Tic Tac Toe Sohan">Tic Tac Toe Sohan</MenuItem>
+      <MenuItem value="Shilpha Mewada">Shilpha Mewada</MenuItem>
+      <MenuItem value="VIVEK TAPKIR">VIVEK TAPKIR</MenuItem>
+      <MenuItem value="Shubham Taware">Shubham Taware</MenuItem>
+      <MenuItem value="Ashwini Khot">Ashwini Khot</MenuItem>
+      <MenuItem value="Amol Pawar">Amol Pawar</MenuItem>
+      <MenuItem value="Sachin Awale">Sachin Awale</MenuItem>
+    </Select>
+  </FormControl>
+</Grid>
+
           
             
-              <Grid item xs={6}>
+              {/* <Grid item xs={6}>
                 <TextField
                   label="Remark"
                   fullWidth
@@ -216,9 +284,25 @@ const Lostleadstable = () => {
                         error={!!firmPanError}  // Show error if there is an error
                         helperText={firmPanError}
                 />
-              </Grid>
-          
+              </Grid> */}
               <Grid item xs={6}>
+  <TextField
+    label="Remark"
+    fullWidth
+    variant="outlined"
+    value={isEditing ? editData?.firmPan : firmPan}  // Conditionally set the value
+    onChange={(e) => {
+      isEditing
+        ? setEditData({ ...editData, firmPan: e.target.value })  // Update editData if in edit mode
+        : handleFirmPanChange(e);  // Use regular handler if not in edit mode
+    }}
+    error={!!firmPanError}  // Show error if there is an error
+    helperText={firmPanError}
+  />
+</Grid>
+
+          
+              {/* <Grid item xs={6}>
                 <TextField
                   label="Name"
                   fullWidth
@@ -228,17 +312,26 @@ const Lostleadstable = () => {
                   helperText={nameError} 
                         required 
                 />
-              </Grid>
-              {/* <Grid item xs={6}>
-                <TextField
-                type="date"
-                  label=""
-                  fullWidth
-                  variant="outlined"
-                />
               </Grid> */}
+             <Grid item xs={6}>
+  <TextField
+    label="Name"
+    fullWidth
+    variant="outlined"
+    value={isEditing ? editData?.name : name}  // Conditionally set the value
+    onChange={(e) => {
+      isEditing
+        ? setEditData({ ...editData, name: e.target.value })  // Update editData if in edit mode
+        : handleNameChange(e);  // Use regular handler if not in edit mode
+    }}
+    error={!!nameError}  // Show error if there is an error
+    helperText={nameError}
+    required
+  />
+</Grid>
+
               
-              <Grid item xs={6}>
+              {/* <Grid item xs={6}>
             <TextField
               type="datetime-local" // Use datetime-local for date and time input
               label="New Follow Up"
@@ -249,10 +342,28 @@ const Lostleadstable = () => {
                 shrink: true, // Ensures label is above the input
               }}
             />
-          </Grid>
+          </Grid> */}
           
-          
-              <Grid item xs={6}>
+          <Grid item xs={6}>
+  <TextField
+    type="datetime-local"  // Use datetime-local for date and time input
+    label="New Follow Up"
+    fullWidth
+    variant="outlined"
+    value={isEditing ? editData?.newFollowUp : newFollowUp}  // Conditionally set the value
+    onChange={(e) => {
+      isEditing
+        ? setEditData({ ...editData, newFollowUp: e.target.value })  // Update editData if in edit mode
+        : setNewFollowUp(e.target.value);  // Use regular handler if not in edit mode
+    }}
+    required // Correct way to add required prop
+    InputLabelProps={{
+      shrink: true, // Ensures label is above the input
+    }}
+  />
+</Grid>
+
+              {/* <Grid item xs={6}>
             <FormControl fullWidth variant="outlined">
               <InputLabel id="assign-to-label">Assign To</InputLabel>
               <Select
@@ -273,12 +384,38 @@ const Lostleadstable = () => {
                 <MenuItem value="Sachin Awale">Sachin Awale</MenuItem>
               </Select>
             </FormControl>
-          </Grid>
+          </Grid> */}
           
-              
+          <Grid item xs={6}>
+  <FormControl fullWidth variant="outlined">
+    <InputLabel id="assign-to-label">Assign To</InputLabel>
+    <Select
+      labelId="assign-to-label"
+      id="assign-to"
+      value={isEditing ? editData?.assignedTo : assignedTo}  // Conditionally set the value
+      onChange={(e) => {
+        isEditing
+          ? setEditData({ ...editData, assignedTo: e.target.value })  // Update editData if in edit mode
+          : setAssignedTo(e.target.value);  // Use regular handler if not in edit mode
+      }}
+      label="Assign To"
+      required
+    >
+      <MenuItem value="Shilpha Mewada 1">Shilpha Mewada 1</MenuItem>
+      <MenuItem value="Tic Tac Toe Sohan">Tic Tac Toe Sohan</MenuItem>
+      <MenuItem value="Shilpha Mewada">Shilpha Mewada</MenuItem>
+      <MenuItem value="VIVEK TAPKIR">VIVEK TAPKIR</MenuItem>
+      <MenuItem value="Shubham Taware">Shubham Taware</MenuItem>
+      <MenuItem value="Ashwini Khot">Ashwini Khot</MenuItem>
+      <MenuItem value="Amol Pawar">Amol Pawar</MenuItem>
+      <MenuItem value="Sachin Awale">Sachin Awale</MenuItem>
+    </Select>
+  </FormControl>
+</Grid>
+
           
           
-              <Grid item xs={6}>
+              {/* <Grid item xs={6}>
             <FormControl fullWidth variant="outlined">
               <InputLabel id="lead-type-label ">Lead type</InputLabel>
               <Select
@@ -295,11 +432,32 @@ const Lostleadstable = () => {
                 <MenuItem value="Cold">Cold</MenuItem>
               </Select>
             </FormControl>
-          </Grid>
+          </Grid> */}
           
+          <Grid item xs={6}>
+  <FormControl fullWidth variant="outlined">
+    <InputLabel id="lead-type-label">Lead Type</InputLabel>
+    <Select
+      labelId="lead-type-label"
+      id="lead-type"
+      value={isEditing ? editData?.leadType : leadType}  // Conditionally set the value
+      onChange={(e) => {
+        isEditing
+          ? setEditData({ ...editData, leadType: e.target.value })  // Update editData if in edit mode
+          : setLeadType(e.target.value);  // Use regular handler if not in edit mode
+      }}
+      label="Lead Type"
+    >
+      <MenuItem value="Hot">Hot</MenuItem>
+      <MenuItem value="Warm">Warm</MenuItem>
+      <MenuItem value="Lost">Lost</MenuItem>
+      <MenuItem value="Cold">Cold</MenuItem>
+    </Select>
+  </FormControl>
+</Grid>
+
           
-          
-              <Grid item xs={6}>
+              {/* <Grid item xs={6}>
             <FormControl fullWidth variant="outlined">
               <InputLabel id="status-label">Status</InputLabel>
               <Select
@@ -318,7 +476,33 @@ const Lostleadstable = () => {
                 <MenuItem value="Invalid number">Invalid number</MenuItem>
               </Select>
             </FormControl>
-          </Grid>
+          </Grid> */}
+
+<Grid item xs={6}>
+  <FormControl fullWidth variant="outlined">
+    <InputLabel id="status-label">Status</InputLabel>
+    <Select
+      labelId="status-label"
+      id="status"
+      value={isEditing ? editData?.status : status}  // Conditionally set the value
+      onChange={(e) => {
+        isEditing
+          ? setEditData({ ...editData, status: e.target.value })  // Update editData if in edit mode
+          : setStatus(e.target.value);  // Use regular handler if not in edit mode
+      }}
+      label="Status"
+    >
+      <MenuItem value="Follow Up">Follow Up</MenuItem>
+      <MenuItem value="Not interested">Not interested</MenuItem>
+      <MenuItem value="Callback Request">Callback Request</MenuItem>
+      <MenuItem value="Unreachable">Unreachable</MenuItem>
+      <MenuItem value="Booked property in other project">Booked property in other project</MenuItem>
+      <MenuItem value="Not Answer">Not Answer</MenuItem>
+      <MenuItem value="Invalid number">Invalid number</MenuItem>
+    </Select>
+  </FormControl>
+</Grid>
+
           
             </Grid>
             
@@ -374,13 +558,32 @@ const Lostleadstable = () => {
                 <TableCell>
                   <div style={{ display: "flex", gap: "3px", alignItems: "center" }}>
                     <Tooltip title="Edit">
-                      <IconButton
+                      {/* <IconButton
                         size="small"
                         sx={{ backgroundColor: "#1976D2", color: "white", borderRadius: "50%", "&:hover": { backgroundColor: "#1565C0" } }}
-                        onClick={() => handleEdit(firm)}
+                        onClick={() => 
+                          handleEdit(firm)
+                        }
                       >
                         <EditIcon sx={{ fontSize: "18px" }} />
-                      </IconButton>
+                      </IconButton> */}
+                      <IconButton
+  size="small"
+  sx={{
+    backgroundColor: "#1976D2",
+    color: "white",
+    borderRadius: "50%",
+    "&:hover": { backgroundColor: "#1565C0" },
+  }}
+  onClick={() => {
+    handleEdit(firm);
+    setEditData(firm);  // Assuming 'firm' is the correct row object
+    setIsEditing(true);
+  }}
+>
+  <EditIcon sx={{ fontSize: "18px" }} />
+</IconButton>
+
                     </Tooltip>
 
                     <Tooltip title="WhatsApp" arrow>

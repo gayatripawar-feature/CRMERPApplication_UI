@@ -343,7 +343,7 @@ const LostLeads = () => {
   
     
       if (/\d/.test(value)) {
-        setFirmNameError("Firm Name should only contain letters"); 
+        setFirmNameError("Lead No should only contain letters"); 
       } else {
         setFirmNameError("");
       }
@@ -422,6 +422,18 @@ const LostLeads = () => {
       } else {
         setAgeError("");
       }
+    };
+    const handleRemarkChange = (e) => {
+      const value = e.target.value;
+      const alphanumericRegex = /^[a-zA-Z0-9]*$/;
+    
+      if (!alphanumericRegex.test(value)) {
+        setFirmPanError("Only letters and numbers are allowed");
+      } else {
+        setFirmPanError("");
+      }
+    
+      setFirmPan(value);
     };
     
     
@@ -685,17 +697,30 @@ const LostLeads = () => {
     {/* </Grid> */}
 
   
-    <Grid item xs={6}>
+    {/* <Grid item xs={6}>
       <TextField
         label="Remark"
         fullWidth
         variant="outlined"
         value={firmPan}
-              onChange={handleFirmPanChange}
-              error={!!firmPanError}  // Show error if there is an error
-              helperText={firmPanError}
+              // onChange={handleFirmPanChange}
+              // error={!!firmPanError}  // Show error if there is an error
+              // helperText={firmPanError}
       />
-    </Grid>
+    </Grid> */}
+
+<Grid item xs={6}>
+  <TextField
+    label="Remark"
+    fullWidth
+    variant="outlined"
+    value={firmPan}
+    onChange={handleRemarkChange}
+    error={!!firmPanError}
+    helperText={firmPanError}
+  />
+</Grid>
+
 
     <Grid item xs={6}>
   <TextField
@@ -802,7 +827,7 @@ const LostLeads = () => {
   
   
   
-        <Button
+        {/* <Button
           variant="contained"
           className="m-3"
           color="success"
@@ -815,7 +840,50 @@ const LostLeads = () => {
           }}
         >
           Submit
-        </Button>
+        </Button> */}
+        <Button
+  variant="contained"
+  className="m-3"
+  color="success"
+  onClick={() => {
+    // Validate required fields
+    if (!firmName || !name || !assignedTo || !leadType || !status) {
+      toast.error("Please fill all required fields!", { position: "top-right" });
+      return;
+    }
+
+    // Push to the 'loans' state
+    const newEntry = {
+      leadNo: firmName,
+      salesPerson: closingExecutive,
+      remark: firmPan,
+      name: name,
+      followUp: new Date().toISOString(), // Or actual date field if you're using one
+      assignedTo,
+      leadType,
+      status,
+    };
+
+    setLoans(prev => [...prev, newEntry]);
+
+    // Toast
+    toast.success("Details submitted!", { position: "top-right", autoClose: 3000 });
+
+    // Reset fields (optional)
+    setFirmName("");
+    setClosingExecutive("");
+    setFirmPan("");
+    setName("");
+    setAssignedTo("");
+    setLeadType("");
+    setStatus("");
+
+    setShowFirmForm(false); // Hide form if needed
+  }}
+>
+  Submit
+</Button>
+
       </Paper>
     </div>
       

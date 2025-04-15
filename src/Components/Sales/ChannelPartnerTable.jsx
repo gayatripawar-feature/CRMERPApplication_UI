@@ -10,7 +10,10 @@ import { Edit, WhatsApp, Email, Visibility ,TrackChanges, Map} from "@mui/icons-
 import { DialogTitle, DialogContent, DialogActions, Button, Typography, Select, MenuItem, InputLabel, FormControl } from "@mui/material";
 import { toast } from "react-toastify";
 
-const ChannelPartnerTable = ({ data =[] }) => {
+// const ChannelPartnerTable = ({ data =[] }) => {
+
+  
+const ChannelPartnerTable = ({ data}) => {
   const [status, setStatus] = useState("Active"); 
   const [action, setAction] = useState("");
   const [open, setOpen] = useState(false);
@@ -20,6 +23,9 @@ const ChannelPartnerTable = ({ data =[] }) => {
   const [pincodeError, setPincodeError] = useState('');
   const [emailError, setEmailError] = useState('');
   const [mobileError, setMobileError] = useState('');
+  const [tableData, setTableData] = useState([]);
+
+
 
   const handleStatusChange = (id, newStatus) => {
     const updatedData = data.map((item) =>
@@ -119,13 +125,59 @@ const ChannelPartnerTable = ({ data =[] }) => {
   };
   
     
+  // const handleFormSubmit = (e) => {
+  //   e.preventDefault();
+  
+  //   // API Call or Save Data Logic Here
+  //   console.log("Form Data =>", formData);
+  
+  //   // Clear form after submit (Optional)
+  //   setFormData({
+  //     enquiryNo: "",
+  //     projectName: "",
+  //     designation: "",
+  //     mobileNo: "",
+  //     websiteAddress: "",
+  //     emailId: "",
+  //     postalAddress: "",
+  //     pinCode: "",
+  //     location: "",
+  //     city: "",
+  //     zone: "",
+  //   });
+  //   toast.success('Details Updated Successfully!', {
+  //     position: "top-right",
+  //     autoClose: 3000,
+  //   });
+
+  //   // Close form (if you are using Dialog/Modal)
+  //   setOpen(false);
+  // };
+  
   const handleFormSubmit = (e) => {
     e.preventDefault();
   
-    // API Call or Save Data Logic Here
-    console.log("Form Data =>", formData);
+    // Push new form data to the table data
+    const newEntry = {
+      timestamp: new Date().toLocaleString(),
+      cpFirmName: formData.projectName, // or appropriate field
+      cpExecutiveName: formData.enquiryNo,
+      designation: formData.designation,
+      mobileNo: formData.mobileNo,
+      website: formData.websiteAddress,
+      email: formData.emailId,
+      postalAddress: formData.postalAddress,
+      pinCode: formData.pinCode,
+      location: formData.location,
+      city: formData.city,
+      zone: formData.zone,
+      status: "Active",
+      // Add other fields like option1, option2 if needed
+    };
   
-    // Clear form after submit (Optional)
+    setTableData(prev => [...prev, newEntry]); // Update table data
+  
+    // Clear the form
     setFormData({
       enquiryNo: "",
       projectName: "",
@@ -139,16 +191,15 @@ const ChannelPartnerTable = ({ data =[] }) => {
       city: "",
       zone: "",
     });
+  
     toast.success('Details Updated Successfully!', {
       position: "top-right",
       autoClose: 3000,
     });
-
-    // Close form (if you are using Dialog/Modal)
-    setOpen(false);
+  
+    setOpen(false); // close dialog/modal
   };
   
-
   const dummyData = [{
     timestamp: "2025-03-24 ",
     cpFirmName: "ABC Corp",
@@ -189,6 +240,7 @@ const ChannelPartnerTable = ({ data =[] }) => {
 
   return (
     <>
+    <Box sx={{ maxHeight: "500px", overflowY: "auto" }}>
     <TableContainer component={Paper}>
       <Table>
         <TableHead>
@@ -210,7 +262,10 @@ const ChannelPartnerTable = ({ data =[] }) => {
           </TableRow>
         </TableHead>
         <TableBody>
-  {dummyData.map((item, index) => (
+  {/* {dummyData.map((item, index) => ( */}
+  {/* {tableData.map((item, index) => ( */}
+  {data.map((item, index) => (
+  
     <React.Fragment key={index}>
       <TableRow>
         <TableCell
@@ -427,9 +482,10 @@ const ChannelPartnerTable = ({ data =[] }) => {
 </TableBody>
 
       </Table>
+      
     </TableContainer>
 
-   
+   </Box>
     <Dialog open={open} onClose={handleClose} fullWidth maxWidth="sm">
         <DialogTitle>
           {action === "edit" && "Edit Form"}

@@ -18,6 +18,7 @@ import {  FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { jsPDF } from "jspdf";
 import {  FaFileDownload } from "react-icons/fa";
 import autoTable from "jspdf-autotable";
+import FormHelperText from '@mui/material/FormHelperText';
 
 // API Call Function
 const fetchLoansData = async () => {
@@ -70,6 +71,7 @@ const FirstVisits = () => {
   const [nameError, setNameError] = useState(false);
   const [alternateContact, setAlternateContact] = useState("");
   const [whatsappNo, setWhatsappNo] = useState("");
+  const [firms, setFirms] = useState([]);
 
   useEffect(() => {
     loadLoansData();
@@ -166,23 +168,77 @@ const handleBudgetChange = (event) => {
       setError(''); 
     }
 
-    setName(value); 
+    
   };
+  
 
 
-  const handleLeadNoChange = (event) => {
-    setLeadNo(event.target.value);
-    setError(''); // Clear error on change
+  const handleSubmit = () => {
+    const newFirmData = {
+      leadNo,
+      name,
+      mobile,
+      alternateContact,
+      whatsappNo,
+      email,
+      salesExec,
+      interestedIn,
+      budget,
+      planningToBuy,
+      occupation,
+      reasonForPurchase,
+    };
+  
+    console.log("Submitting new firm data:", newFirmData);
+  
+    // Validation logs
+    if (!name || nameError || mobileError || emailError) {
+      console.log("Validation failed", {
+        nameError,
+        mobileError,
+        emailError
+      });
+      toast.error("Please fix validation errors before submitting.");
+      return;
+    }
+  
+    setFirms(prev => {
+      const updatedFirms = [...prev, newFirmData];
+      console.log("Updated firms list after submit:", updatedFirms);
+      return updatedFirms;
+    });
+  
+    toast.success("Details are submitted!", {
+      position: "top-right",
+      autoClose: 3000,
+    });
+  
+    // Reset form values
+    setLeadNo("");
+    setName("");
+    setMobile("");
+    setAlternateContact("");
+    setWhatsappNo("");
+    setEmail("");
+    setSalesExec("");
+    setInterestedIn("");
+    setBudget("");
+    setPlanningToBuy("");
+    setOccupation("");
+    setReasonForPurchase("");
+  
+    setShowFirmForm(false);
   };
+  
 
-  // Handle change for Sales Executive Name
+  
   const handleSalesExecChange = (event) => {
     setSalesExec(event.target.value);
-    setError(''); // Clear error on change
+    setError(''); 
   };
  
   const validateMobile = (value) => {
-    const regex = /^[0-9]{10}$/;  // Only exactly 10 digits allowed
+    const regex = /^[0-9]{10}$/;  
     if (!regex.test(value)) {
       setMobileError('Mobile number should contain exactly 10 digits');
     } else {
@@ -309,6 +365,9 @@ const handleBudgetChange = (event) => {
 };
 
 
+const handleLeadNoChange = (e) => {
+  setLeadNo(e.target.value);
+};
 
 
   return (
@@ -470,7 +529,7 @@ const handleBudgetChange = (event) => {
     <Grid item xs={4}>
       <FormControl fullWidth error={!!error}>
         <InputLabel>Lead No.</InputLabel>
-        <Select value={leadNo} onChange={handleChange} label="Lead No.">
+        <Select value={leadNo} onChange={handleLeadNoChange} label="Lead No.">
           <MenuItem value="Lead 9">Lead 9</MenuItem>
           <MenuItem value="Lead 16">Lead 16</MenuItem>
           <MenuItem value="Lead 25">Lead 25</MenuItem>
@@ -495,19 +554,18 @@ const handleBudgetChange = (event) => {
 </Grid>
 
 
-    {/* Mobile No. Field */}
+  
     <Grid item xs={4}>
       <TextField
         label="Mobile No."
         fullWidth
         value={mobile}
         onChange={handleMobileChange}
-        error={!!mobileError} // Show error if validation fails
-        helperText={mobileError} // Display error message
+        error={!!mobileError} 
+        helperText={mobileError} 
       />
     </Grid>
 
-    {/* Alternate Contact No. Field */}
     <Grid item xs={4}>
   <TextField
     label="Alternate Contact No."
@@ -530,7 +588,7 @@ const handleBudgetChange = (event) => {
 </Grid>
 
 
-    {/* WhatsApp No. Field */}
+   
     <Grid item xs={4}>
   <TextField
     type="text"
@@ -539,7 +597,7 @@ const handleBudgetChange = (event) => {
     value={whatsappNo}
     onChange={(e) => {
       const value = e.target.value;
-      // Allow only numbers and limit to 10 digits
+      
       if (/^\d{0,10}$/.test(value)) {
         setWhatsappNo(value);
       }
@@ -554,39 +612,38 @@ const handleBudgetChange = (event) => {
 </Grid>
 
 
-    {/* Email Field */}
+  
     <Grid item xs={4}>
       <TextField label="Email" fullWidth 
       value={email}
       onChange={handleEmailChange}
-      error={!!emailError} // Show error if validation fails
+      error={!!emailError} 
       helperText={emailError}
       />
     </Grid>
 
-    {/* Address Field */}
+   
     <Grid item xs={4}>
       <TextField label="Address" fullWidth />
     </Grid>
 
-    {/* Company Field */}
+    
     <Grid item xs={4}>
       <TextField label="Company" fullWidth />
     </Grid>
 
-    {/* Reference by/Source Field */}
     <Grid item xs={4}>
       <TextField label="Reference by / Source" fullWidth />
     </Grid>
 
-    {/* Name of CP (if Channel Partner) Field */}
+    
     <Grid item xs={4}>
       <TextField label="Name of CP (if Channel Partner)" fullWidth />
     </Grid>
 
-    {/* Sales Executive Name Field */}
+    
     <Grid item xs={4}>
-      <FormControl fullWidth error={!!error}>
+      <FormControl fullWidth >
         <InputLabel>Sales Executive Name</InputLabel>
         <Select
           value={salesExec}
@@ -602,13 +659,13 @@ const handleBudgetChange = (event) => {
           <MenuItem value="Amol Pawar">Amol Pawar</MenuItem>
           <MenuItem value="Sachin Awale">Sachin Awale</MenuItem>
         </Select>
-        {error && <FormHelperText>{error}</FormHelperText>}
+        {/* {error && <FormHelperText>{error}</FormHelperText>} */}
       </FormControl>
     </Grid>
 
     {/* Interested In Field */}
     <Grid item xs={4}>
-      <FormControl fullWidth error={!!error}>
+      <FormControl fullWidth >
         <InputLabel>Interested In</InputLabel>
         <Select
           value={interestedIn}
@@ -621,13 +678,13 @@ const handleBudgetChange = (event) => {
           <MenuItem value="3BHK">3BHK</MenuItem>
           <MenuItem value="Other">Other</MenuItem>
         </Select>
-        {error && <FormHelperText>{error}</FormHelperText>}
+        {/* {error && <FormHelperText>{error}</FormHelperText>} */}
       </FormControl>
     </Grid>
 
-    {/* Budget Field */}
+   
     <Grid item xs={4}>
-      <FormControl fullWidth error={!!error}>
+      <FormControl fullWidth >
         <InputLabel>Budget (Approx.)</InputLabel>
         <Select value={budget} onChange={handleBudgetChange} label="Budget (Approx.)">
           <MenuItem value="45 L - 50 L">45 L - 50 L</MenuItem>
@@ -638,13 +695,13 @@ const handleBudgetChange = (event) => {
           <MenuItem value="71L -75 L">71 L - 75 L</MenuItem>
           <MenuItem value="Other">Other</MenuItem>
         </Select>
-        {error && <FormHelperText>{error}</FormHelperText>}
+        {/* {error && <FormHelperText>{error}</FormHelperText>} */}
       </FormControl>
     </Grid>
 
-    {/* Planning to Buy Within Field */}
+  
     <Grid item xs={4}>
-      <FormControl fullWidth error={!!error}>
+      <FormControl fullWidth >
         <InputLabel>Planning To Buy Within?</InputLabel>
         <Select
           value={planningToBuy}
@@ -655,13 +712,13 @@ const handleBudgetChange = (event) => {
           <MenuItem value="Within Week">Within Week</MenuItem>
           <MenuItem value="Within 1 Month">Within 1 Month</MenuItem>
         </Select>
-        {error && <FormHelperText>{error}</FormHelperText>}
+        {/* {error && <FormHelperText>{error}</FormHelperText>} */}
       </FormControl>
     </Grid>
 
-    {/* Occupation Field */}
+    
     <Grid item xs={4}>
-      <FormControl fullWidth error={!!error}>
+      <FormControl fullWidth >
         <InputLabel>Occupation</InputLabel>
         <Select value={occupation} onChange={handleOccupationChange} label="Occupation">
           <MenuItem value="Service / Job">Service / Job</MenuItem>
@@ -669,13 +726,13 @@ const handleBudgetChange = (event) => {
           <MenuItem value="Professional">Professional</MenuItem>
           <MenuItem value="Other">Other</MenuItem>
         </Select>
-        {error && <FormHelperText>{error}</FormHelperText>}
+        {/* {error && <FormHelperText>{error}</FormHelperText>} */}
       </FormControl>
     </Grid>
 
-    {/* Reason For Purchase Field */}
+   
     <Grid item xs={4}>
-      <FormControl fullWidth error={!!error}>
+      <FormControl fullWidth >
         <InputLabel>Reason For Purchase</InputLabel>
         <Select
           value={reasonForPurchase}
@@ -685,11 +742,11 @@ const handleBudgetChange = (event) => {
           <MenuItem value="End Use">End Use</MenuItem>
           <MenuItem value="Investment">Investment</MenuItem>
         </Select>
-        {error && <FormHelperText>{error}</FormHelperText>}
+        {/* {error && <FormHelperText>{error}</FormHelperText>} */}
       </FormControl>
     </Grid>
 
-    {/* Customer Feedback & Complete Followup Details Field */}
+    
     <Grid item xs={4}>
       <TextField label="Customer Feedback & Complete Followup Details" fullWidth />
     </Grid>
@@ -699,10 +756,32 @@ const handleBudgetChange = (event) => {
     variant="contained"
     className="mt-3"
     color="success"
-    onClick={() => {
-      setShowFirmForm(false);
-      toast.success("Details are submitted!", { position: "top-right", autoClose: 3000 });
-    }}
+    // onClick={() => {
+    //   setShowFirmForm(false);
+    //   toast.success("Details are submitted!", { position: "top-right", autoClose: 3000 });
+    // onClick={() => {
+    //   const newFirmData = {
+    //     leadNo,
+    //     name,
+    //     mobile,
+    //     alternateContact,
+    //     whatsappNo,
+    //     email,
+    //     salesExec,
+    //     interestedIn,
+    //     budget,
+    //     planningToBuy,
+    //     occupation,
+    //     reasonForPurchase,
+    //     // Include others as needed...
+    //   };
+    
+    //   setFirms(prev => [...prev, newFirmData]);
+    //   setShowFirmForm(false);
+    //   toast.success("Details are submitted!", { position: "top-right", autoClose: 3000 });
+   onClick={handleSubmit}
+    
+    // }}
   >
     Submit
   </Button>
