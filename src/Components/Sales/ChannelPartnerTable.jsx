@@ -24,7 +24,8 @@ const ChannelPartnerTable = ({ data}) => {
   const [emailError, setEmailError] = useState('');
   const [mobileError, setMobileError] = useState('');
   const [tableData, setTableData] = useState([]);
-
+  const [openForm, setOpenForm] = useState(false);
+  const [scheduledDate, setScheduledDate] = useState("");
 
 
   const handleStatusChange = (id, newStatus) => {
@@ -100,29 +101,30 @@ const ChannelPartnerTable = ({ data}) => {
   
   const handleCloseTrackModal = () => {
     setOpen(false);
-    setAction(""); // or setOpenTrackModal(false) if you are controlling by open state
+    setAction(""); 
   };
 
-  const handleSubmitTrack = () => {
-    if (!selectedStep) {
-      toast.error("Please select a step");
-      return;
-    }
+  // const handleSubmitTrack = () => {
+  //   if (!selectedStep) {
+  //     toast.error("Please select a step");
+  //     return;
+  //   }
+    
+  //   setLoading(true); 
+  //   setOpenForm(true); 
+  //   setAction("");
+
+  //   setTimeout(() => {
+  //     console.log("Selected Step:", selectedStep);
+  //     setLoading(false); 
+  //     toast.success("Tracking data saved successfully!");
   
-    setLoading(true); // Start loading
-  
-    // Simulate API call
-    setTimeout(() => {
-      console.log("Selected Step:", selectedStep);
-      setLoading(false); // Stop loading
-      toast.success("Tracking data saved successfully!");
-  
-      // Close modal after toast
-      setTimeout(() => {
-        handleCloseTrackModal();
-      }, 1000);  // 1 second delay for better UX
-    }, 2000);
-  };
+     
+  //     setTimeout(() => {
+  //       handleCloseTrackModal();
+  //     }, 1000);  
+  //   }, 2000);
+  // };
   
     
   // const handleFormSubmit = (e) => {
@@ -153,6 +155,59 @@ const ChannelPartnerTable = ({ data}) => {
   //   // Close form (if you are using Dialog/Modal)
   //   setOpen(false);
   // };
+  
+  // const handleSubmitTrack = () => {
+  //   if (!selectedStep) {
+  //     toast.error("Please select a step");
+  //     return;
+  //   }
+  //   else {
+  //     console.log("No step selected, please select a step");
+  //   }
+  //   setLoading(true); 
+  //   setAction("");
+  //   setOpenForm(true); 
+  //   setTimeout(() => {
+  //     console.log("Selected Step:", selectedStep);
+  //     toast.success("Tracking data saved successfully!");
+  //     setTimeout(() => {
+  //       handleCloseTrackModal();
+  //     }, 1000);  
+      
+  //     setLoading(false); 
+  
+  //   }, 2000); 
+  // };
+
+  const handleSubmitTrack = () => {
+    // Step 1: Check if a step is selected
+    if (!selectedStep) {
+      toast.error("Please select a step");
+      return;
+    }
+  
+    // Step 2: Log the selected step
+    console.log("Selected Step:", selectedStep);
+  
+    // Step 3: Set loading state and prepare for the action
+    setLoading(true); 
+    setAction(""); // Clear any other actions
+    setOpenForm(true);  // Open the second dialog
+  
+    // Step 4: Simulate a delay for saving the data
+    setTimeout(() => {
+      // toast.success("Tracking data saved successfully!");
+  
+     
+      setTimeout(() => {
+        handleCloseTrackModal(); // Close the first modal
+      }, 1000);  
+  
+      setLoading(false);  // Disable loading state
+  
+    }, 2000);  // Simulate a 2-second delay for saving
+  };
+  
   
   const handleFormSubmit = (e) => {
     e.preventDefault();
@@ -236,6 +291,21 @@ const ChannelPartnerTable = ({ data}) => {
   const handleClose = () => {
     setOpen(false);
     setAction("");
+  };
+
+  const handleSaveTrackingData = () => {
+   
+    setTimeout(() => {
+     
+      toast.success("Tracking data saved successfully!");
+
+      
+      setOpenForm(false);
+    }, 1000); 
+  };
+
+  const handleCancelForm = () => {
+    setOpenForm(false); // Close the form without saving
   };
 
   return (
@@ -682,6 +752,7 @@ const ChannelPartnerTable = ({ data}) => {
         Cancel
       </Button>
       <Button onClick={handleSubmitTrack} variant="contained">
+     
         Save
       </Button>
     </DialogActions>
@@ -691,6 +762,143 @@ const ChannelPartnerTable = ({ data}) => {
         </DialogContent>
       </Dialog>
 
+       {/* <Dialog open={openForm} onClose={handleCancelForm} fullWidth maxWidth="sm">
+        <DialogTitle>Tracking Form</DialogTitle>
+        <DialogContent>
+          <FormControl fullWidth>
+            <InputLabel>Select Step</InputLabel>
+            <Select
+              value={selectedStep}
+              onChange={(e) => setSelectedStep(e.target.value)}
+              label="Select Step"
+            >
+              <MenuItem value="Call to CP">Call to CP - 1</MenuItem>
+              <MenuItem value="Schedule Visit to CP Office">Schedule Visit to CP Office - 2</MenuItem>
+              <MenuItem value="Visit to CP Office">Visit to CP Office - 3</MenuItem>
+              <MenuItem value="Schedule Date - Visit of CP">Schedule Date - Visit of CP - 4</MenuItem>
+              <MenuItem value="Visit of CP">Visit of CP - 5</MenuItem>
+              <MenuItem value="Visit of CP with Customer">Visit of CP with Customer - 6</MenuItem>
+              <MenuItem value="1st Follow Up of CP">1st Follow Up of CP - 7</MenuItem>
+              <MenuItem value="2nd Follow Up of CP">2nd Follow Up of CP - 8</MenuItem>
+              <MenuItem value="CP Visit with Customer & Booking Form Filled">
+                CP Visit with Customer & Booking Form Filled - 9
+              </MenuItem>
+            </Select>
+          </FormControl>
+
+          <TextField
+            label="Scheduled Date"
+            type="date"
+            value={scheduledDate}
+            onChange={(e) => setScheduledDate(e.target.value)}
+            fullWidth
+            margin="normal"
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
+
+          <FormControl fullWidth margin="normal">
+            <InputLabel>Status</InputLabel>
+            <Select
+              value={status}
+              onChange={(e) => setStatus(e.target.value)}
+              label="Status"
+            >
+              <MenuItem value="Scheduled">Scheduled</MenuItem>
+              <MenuItem value="Completed">Completed</MenuItem>
+              <MenuItem value="In Progress">In Progress</MenuItem>
+            </Select>
+          </FormControl>
+
+          <input
+            type="file"
+            onChange={(e) => setFile(e.target.files[0])}
+            accept="application/pdf, image/*"
+            style={{ marginTop: "20px", width: "100%" }}
+          />
+        </DialogContent>
+
+        <DialogActions>
+          <Button onClick={handleCancelForm} color="error">
+            Cancel
+          </Button>
+          <Button onClick={handleSaveTrackingData} variant="contained">
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>  */}
+      <Dialog open={openForm} onClose={handleCancelForm} fullWidth maxWidth="sm">
+  <DialogTitle>Tracking Form</DialogTitle>
+  <DialogContent>
+    {/* This will show the selected step */}
+    <div className="pb-5">{selectedStep ? `Selected Step: ${selectedStep}` : "No Step Selected"}</div>
+
+    {/* Form content */}
+    <FormControl fullWidth>
+      <InputLabel>Select Step</InputLabel>
+      <Select
+        value={selectedStep}
+        onChange={(e) => setSelectedStep(e.target.value)}
+        label="Select Step"
+      >
+        <MenuItem value="Call to CP">Call to CP - 1</MenuItem>
+        <MenuItem value="Schedule Visit to CP Office">Schedule Visit to CP Office - 2</MenuItem>
+        <MenuItem value="Visit to CP Office">Visit to CP Office - 3</MenuItem>
+        <MenuItem value="Schedule Date - Visit of CP">Schedule Date - Visit of CP - 4</MenuItem>
+        <MenuItem value="Visit of CP">Visit of CP - 5</MenuItem>
+        <MenuItem value="Visit of CP with Customer">Visit of CP with Customer - 6</MenuItem>
+        <MenuItem value="1st Follow Up of CP">1st Follow Up of CP - 7</MenuItem>
+        <MenuItem value="2nd Follow Up of CP">2nd Follow Up of CP - 8</MenuItem>
+        <MenuItem value="CP Visit with Customer & Booking Form Filled">
+          CP Visit with Customer & Booking Form Filled - 9
+        </MenuItem>
+      </Select>
+    </FormControl>
+
+    <TextField
+      label="Scheduled Date"
+      type="date"
+      value={scheduledDate}
+      onChange={(e) => setScheduledDate(e.target.value)}
+      fullWidth
+      margin="normal"
+      InputLabelProps={{
+        shrink: true,
+      }}
+    />
+
+    <FormControl fullWidth margin="normal">
+      <InputLabel>Status</InputLabel>
+      <Select
+        value={status}
+        onChange={(e) => setStatus(e.target.value)}
+        label="Status"
+      >
+        <MenuItem value="Scheduled">Scheduled</MenuItem>
+        <MenuItem value="Completed">Completed</MenuItem>
+        <MenuItem value="In Progress">In Progress</MenuItem>
+      </Select>
+    </FormControl>
+<div className="pt-3">
+    <input
+  type="file"
+  class="form-control bg-white text-dark custom-file-input-bootstrap"
+  accept="application/pdf, image/*"
+/>
+</div>
+
+  </DialogContent>
+
+  <DialogActions>
+    <Button onClick={handleCancelForm} color="error">
+      Cancel
+    </Button>
+    <Button onClick={handleSaveTrackingData} variant="contained">
+      Save
+    </Button>
+  </DialogActions>
+</Dialog>
 
       </>
   );

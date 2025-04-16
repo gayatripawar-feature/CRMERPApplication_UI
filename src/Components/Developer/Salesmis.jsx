@@ -9,11 +9,12 @@ import {
     TableCell,
     TableBody,
     TextField,
+    TablePagination
   } from "@mui/material";
   import { FaEye } from "react-icons/fa";
   import { FaFileDownload } from "react-icons/fa";
   import { jsPDF } from "jspdf";
-  // import "jspdf-autotable";
+
   import autoTable from "jspdf-autotable";
 const Salesmis = (Data) => {
       const [isExpanded, setIsExpanded] = useState(false);
@@ -21,7 +22,11 @@ const Salesmis = (Data) => {
     const [selectedWing, setSelectedWing] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const [rowsPerPage, setRowsPerPage] = useState(10);
-    // const [data, setData] = useState([]);
+   
+    const [page, setPage] = useState(0);
+
+   
+
     const projects = [
         "Shubh Arambh", "Shubh Elara", "Infini", "Serenity", 
         "Prime", "PYB", "Onella Tower", "Aradhyam", "Stella"
@@ -41,12 +46,32 @@ const Salesmis = (Data) => {
         document.body.removeChild(link);
       };
 
-   
-  // const data = [
-  //   { id: 1, timestamp: "2025-03-01", project: "Shubh Arambh", wing: "Wing 1", floor: 5, flatNo: "501", reraCarpetAreaMtr: 100, reraCarpetAreaFt: 1076, totalSaleableArea: 1500, saleableToCarpetAreaRatio: 1.4, type: "Residential", config: "2 BHK", status: "Sold", owner: "John Doe", soldStatus: "Sold", buyerName: "John Doe", bookingDate: "2025-01-15", agreementValue: 5000000, amountReceived: 2000000, balance: 3000000, percentCollections: 40 },
-    
-  // ];
 
+
+      // 
+      const columns = [
+        { label: "TIMESTAMP", key: "timestamp" },
+        { label: "PROJECT NAME", key: "project" },
+        { label: "WING", key: "wing" },
+        { label: "FLOOR", key: "floor" },
+        { label: "FLAT NO.", key: "flatNo" },
+        { label: "RERA CARPET AREA (SQ MTR)", key: "reraCarpetAreaMtr" },
+        { label: "RERA CARPET AREA (SQ FT)", key: "reraCarpetAreaFt" },
+        { label: "TOTAL SALEABLE AREA (SQ. FTS)", key: "totalSaleableArea" },
+        { label: "SALEABLE TO CARPET AREA RATIO (SQ. FTS)", key: "saleableToCarpetAreaRatio" },
+        { label: "TYPE OF UNITS (RESIDENTIAL / COMMERCIAL)", key: "type" },
+        { label: "CONFIG (2 BHK, 3 BHK, 4 BHK)", key: "config" },
+        { label: "APPROVED / UNAPPROVED", key: "status" },
+        { label: "LANDOWNER / DEVELOPER", key: "owner" },
+        { label: "SOLD/UNSOLD", key: "soldStatus" },
+        { label: "NAME OF THE BUYER", key: "buyerName" },
+        { label: "DATE OF BOOKING", key: "bookingDate" },
+        { label: "AGREEMENT VALUE", key: "agreementValue" },
+        { label: "AMOUNT RECEIVED", key: "amountReceived" },
+        { label: "BALANCE", key: "balance" },
+        { label: "% COLLECTIONS", key: "percentCollections" },
+      ];
+   
   const data = [
     { id: 1, timestamp: "2025-03-01", project: "Shubh Arambh", wing: "Wing 1", floor: 5, flatNo: "501", reraCarpetAreaMtr: 100, reraCarpetAreaFt: 1076, totalSaleableArea: 1500, saleableToCarpetAreaRatio: 1.4, type: "Residential", config: "2 BHK", status: "Sold", owner: "John Doe", soldStatus: "Sold", buyerName: "John Doe", bookingDate: "2025-01-15", agreementValue: 5000000, amountReceived: 2000000, balance: 3000000, percentCollections: 40 },
     { id: 2, timestamp: "2025-03-02", project: "Skyline Heights", wing: "Wing 2", floor: 3, flatNo: "302", reraCarpetAreaMtr: 90, reraCarpetAreaFt: 968, totalSaleableArea: 1400, saleableToCarpetAreaRatio: 1.45, type: "Residential", config: "3 BHK", status: "Available", owner: "N/A", soldStatus: "Unsold", buyerName: "N/A", bookingDate: "-", agreementValue: 0, amountReceived: 0, balance: 0, percentCollections: 0 },
@@ -57,7 +82,7 @@ const Salesmis = (Data) => {
   { id: 5, timestamp: "2025-03-05", project: "Emerald Towers", wing: "Wing C", floor: 2, flatNo: "203", reraCarpetAreaMtr: 95, reraCarpetAreaFt: 1022, totalSaleableArea: 1450, saleableToCarpetAreaRatio: 1.4, type: "Residential", config: "2 BHK", status: "Sold", owner: "Michael Smith", soldStatus: "Sold", buyerName: "Michael Smith", bookingDate: "2025-02-10", agreementValue: 4200000, amountReceived: 3000000, balance: 1200000, percentCollections: 71 },
   ]
   
-  // Generate 15 more entries dynamically
+
   for (let i = 6; i <= 20; i++) {
     data.push({
       id: i,
@@ -84,13 +109,13 @@ const Salesmis = (Data) => {
     });
   }
   
-  console.log(data); // Check the generated data
+  console.log(data);
   
 
   const addSerialNumbers = (data) => {
     return data.map((item, index) => ({
-      serialNo: index + 1, // Add Serial Number
-      ...item, // Spread existing data
+      serialNo: index + 1, 
+      ...item, 
     }));
   };
 
@@ -122,9 +147,9 @@ const Salesmis = (Data) => {
       "BALANCE", "% COLLECTIONS"
     ];
   
-   // Map data for first table (including S.No)
+   
 const firstTableRows = dataWithSerialNo.map((item) => [
-  item.serialNo, // Use serial number here
+  item.serialNo, 
   item.timestamp, 
   item.projectName, 
   item.wing, 
@@ -137,7 +162,7 @@ const firstTableRows = dataWithSerialNo.map((item) => [
   item.typeOfUnits
 ]);
 
-// Map data for second table
+
 const secondTableRows = dataWithSerialNo.map((item) => [
   item.serialNo, 
   item.config, 
@@ -153,7 +178,7 @@ const secondTableRows = dataWithSerialNo.map((item) => [
 ]);
 
   
-    // Generate first table
+   
     autoTable(doc, {
       startY: 25,
       head: [firstTableColumns],
@@ -163,11 +188,11 @@ const secondTableRows = dataWithSerialNo.map((item) => [
       margin: { top: 20, left: 5, right: 5 }
     });
   
-    // Add a second page
+    
     doc.addPage();
     doc.text("Sales MIS Report - Page 2", 14, 15);
   
-    // Generate second table
+   
     autoTable(doc, {
       startY: 25,
       head: [secondTableColumns],
@@ -177,7 +202,6 @@ const secondTableRows = dataWithSerialNo.map((item) => [
       margin: { top: 20, left: 5, right: 5 }
     });
   
-    // Generate dynamic filename
     const timestamp = new Date().toISOString().replace(/[-T:\.Z]/g, "_");
     doc.save(`SalesMIS_Report_${timestamp}.pdf`);
   };
@@ -198,6 +222,19 @@ const secondTableRows = dataWithSerialNo.map((item) => [
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
   const currentRows = data.slice(indexOfFirstRow, indexOfLastRow);
 
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  // Handle rows per page change
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0); // Reset page to 0 when rows per page is changed
+  };
+
+  // Slice data for pagination
+  const paginatedData = data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
     return (
       <div className="p-4 border rounded-lg shadow-md w-96 bg-white ">
         <h2 className="fs-6  mb-4">Developer Module / Sales MIS</h2>
@@ -241,14 +278,14 @@ const secondTableRows = dataWithSerialNo.map((item) => [
     fontWeight: "bold",
     textTransform: "none",
     marginTop :"20px",
-    padding: "4px 10px", // Reduced padding
-    fontSize: "12px", // Smaller font size
-    minWidth: "auto", // Prevents extra width
-    height: "30px", // Adjusts button height
-    borderRadius: "6px", // Slightly smaller border radius
+    padding: "4px 10px", 
+    fontSize: "12px", 
+    minWidth: "auto", 
+    height: "30px", 
+    borderRadius: "6px", 
     display: "flex",
     alignItems: "center", 
-    gap: "4px", // Reduced space between icon and text
+    gap: "4px", 
     "&:hover": {
       background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
     },
@@ -258,22 +295,22 @@ const secondTableRows = dataWithSerialNo.map((item) => [
     handleDownloadPDFSales_MIS();
   }}
 >
-  <FaFileDownload size={14} /> {/* Reduced icon size */}
+  <FaFileDownload size={14} /> 
   Download PDF
 </Button>
 
         </div>
 
-        {/* <TableContainer component={Paper} className="pt-2" sx={{ maxHeight: "400px", overflowY: "auto" }}> */}
-        <TableContainer
+       
+        {/* <TableContainer
   component={Paper}
-  className="pt-2 hide-scrollbar" // Keep only one className
+  className="pt-2 hide-scrollbar" 
   sx={{
     maxHeight: "400px",
-    overflowY: "auto", // Allows vertical scrolling
-    overflowX: "auto", // Allows horizontal scrolling
-    scrollbarWidth: "none", // Hides scrollbar in Firefox
-    msOverflowStyle: "none" // Hides scrollbar in IE/Edge
+    overflowY: "auto", 
+    overflowX: "auto", 
+    scrollbarWidth: "none", 
+    msOverflowStyle: "none" 
   }}
 >
 
@@ -283,9 +320,9 @@ const secondTableRows = dataWithSerialNo.map((item) => [
          
          sx={{
            position: "sticky",
-           top: 0, // Sticks the header to the top
-           zIndex: 2, // Ensures the header is above table rows
-           backgroundColor: "#3621a9", // Keeps background color visible
+           top: 0, 
+           zIndex: 2, 
+           backgroundColor: "#3621a9", 
          }}
         >
           
@@ -301,8 +338,7 @@ const secondTableRows = dataWithSerialNo.map((item) => [
                 <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap", backgroundColor: "#3621a9 !important"}}>SALEABLE TO CARPET AREA RATIO (SQ. FTS)</TableCell>
                 <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap", backgroundColor: "#3621a9 !important"}}>TYPE OF UNITS (RESIDENTIAL / COMMERCIAL)</TableCell>
                 <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap", backgroundColor: "#3621a9 !important"}}>CONFIG ( 2 BHK, 3 BHK, 4 BHK)</TableCell>
-                {/* <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap", backgroundColor: "#3621a9 !important"}}>STATUS</TableCell>
-                <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap", backgroundColor: "#3621a9 !important"}}>CHOOSE OWNER</TableCell> */}
+                
                    <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap", backgroundColor: "#3621a9 !important"}}>APPROVED / UNAPPROVED</TableCell>
                    <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap", backgroundColor: "#3621a9 !important"}}>LANDOWNER / DEVELOPER</TableCell>
                
@@ -349,12 +385,118 @@ const secondTableRows = dataWithSerialNo.map((item) => [
   
     </Table>
    
-</TableContainer>
+</TableContainer> */}
 
 
+{/* <TableContainer
+  component={Paper}
+  className="pt-2 hide-scrollbar"
+  sx={{
+    maxHeight: "400px",
+    overflowY: "auto",
+    overflowX: "auto",
+    scrollbarWidth: "none",
+    msOverflowStyle: "none",
+  }}
+>
+  <Table stickyHeader>
+    <TableHead
+      sx={{
+        position: "sticky",
+        top: 0,
+        zIndex: 2,
+        backgroundColor: "#3621a9",
+      }}
+    >
+      <TableRow sx={{ background: "#3621a9" }}>
+        {columns.map((col, idx) => (
+          <TableCell
+            key={idx}
+            sx={{
+              color: "white",
+              fontWeight: "bold",
+              whiteSpace: "nowrap",
+              backgroundColor: "#3621a9 !important",
+            }}
+          >
+            {col.label}
+          </TableCell>
+        ))}
+      </TableRow>
+    </TableHead>
 
+    <TableBody>
+      {data.map((row, rowIndex) => (
+        <TableRow key={rowIndex}>
+          {columns.map((col, colIndex) => (
+            <TableCell key={colIndex}>
+              {row[col.key] || "-"}
+            </TableCell>
+          ))}
+        </TableRow>
+      ))}
+    </TableBody>
+  </Table>
+</TableContainer> */}
+<TableContainer
+      component={Paper}
+      className="pt-2 hide-scrollbar"
+      sx={{
+        maxHeight: '400px',
+        overflowY: 'auto',
+        overflowX: 'auto',
+        scrollbarWidth: 'none',
+        msOverflowStyle: 'none',
+      }}
+    >
+      <Table stickyHeader>
+        <TableHead
+          sx={{
+            position: 'sticky',
+            top: 0,
+            zIndex: 2,
+            backgroundColor: '#3621a9',
+          }}
+        >
+          <TableRow sx={{ background: '#3621a9' }}>
+            {columns.map((col, idx) => (
+              <TableCell
+                key={idx}
+                sx={{
+                  color: 'white',
+                  fontWeight: 'bold',
+                  whiteSpace: 'nowrap',
+                  backgroundColor: '#3621a9 !important',
+                }}
+              >
+                {col.label}
+              </TableCell>
+            ))}
+          </TableRow>
+        </TableHead>
 
-      {/* Pagination Section */}
+        <TableBody>
+          {paginatedData.map((row, rowIndex) => (
+            <TableRow key={rowIndex}>
+              {columns.map((col, colIndex) => (
+                <TableCell key={colIndex}>{row[col.key] || '-'}</TableCell>
+              ))}
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+
+      <TablePagination
+        rowsPerPageOptions={[5, 10, 25]} // Options for number of rows per page
+        component="div"
+        count={data.length} // Total number of rows
+        rowsPerPage={rowsPerPage} // Rows per page state
+        page={page} // Current page state
+        onPageChange={handleChangePage} // Page change handler
+        onRowsPerPageChange={handleChangeRowsPerPage} // Rows per page change handler
+      />
+    </TableContainer>
+     
       <div className="d-flex justify-content-between align-items-center">
         <Button style={{backgroundColor:"#800080"}} className="text-white mt-3" onClick={handlePagination} disabled={currentPage === 1}>Previous</Button>
         <Button style={{backgroundColor:"#800080"}} className='text-white mt-3' onClick={handlePagination} disabled={currentPage === totalPages}>Next</Button>

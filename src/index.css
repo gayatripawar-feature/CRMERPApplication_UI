@@ -305,3 +305,16 @@ th, td {
 .visitpdftable{
   padding-top: 20px;
 }
+
+.custom-file-input-bootstrap::file-selector-button {
+  background-color: white;
+  color: #212529;
+  border: 1px solid #ced4da;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.custom-file-input-bootstrap::file-selector-button:hover {
+  background-color: #f8f9fa;
+}
