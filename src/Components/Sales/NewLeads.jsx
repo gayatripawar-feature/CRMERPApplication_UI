@@ -323,6 +323,7 @@ import {
   MenuItem,
   Button,
   TextField,
+  TablePagination,
   Box,
 } from "@mui/material";
 import { FaEdit, FaWhatsapp, FaEnvelope, FaUserCircle } from "react-icons/fa";
@@ -471,6 +472,21 @@ const handleCloseModal = () => {
     setEditedLead({ ...item });
   };
 
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5); // Default rows per page
+
+  // Handle page change
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  // Handle rows per page change
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0); // Reset to the first page when changing rows per page
+  };
+
+
   return (
     <>
       {!editMode ? (
@@ -558,6 +574,22 @@ const handleCloseModal = () => {
               ))}
             </TableBody>
           </Table>
+
+          <TablePagination
+        rowsPerPageOptions={[5, 10, 25]}
+        component="div"
+        count={inventoryData.length} // Total number of rows
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+        sx={{
+          display: 'flex',
+          justifyContent: 'flex-end', // Align pagination to the right
+          paddingTop: '16px', // Optional: Add space between table and pagination
+        }}
+      />
+
         </TableContainer>
       ) : (
         <Paper sx={{ padding: 3, mt: 3 }}>

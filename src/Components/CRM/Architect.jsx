@@ -443,7 +443,7 @@ console.log("update");
       
       </div>
 
-      <TableContainer component={Paper} className="mt-4" sx={{ mt: 2, boxShadow: 3, borderRadius: 2 }}>
+      <TableContainer component={Paper} className="mt-4" sx={{ mt: 2, boxShadow: 3, borderRadius: 2 ,maxHeight: 400, overflowY: 'auto'}}>
         <Table>
           <TableHead>
             

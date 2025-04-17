@@ -516,7 +516,7 @@ const [data, setData] = useState([
 
 
 
-<TableContainer component={Paper} className="mt-4" sx={{ mt: 2, boxShadow: 3, borderRadius: 2 }}>
+<TableContainer component={Paper} className="mt-4" sx={{ mt: 2, boxShadow: 3, borderRadius: 2 , overflowY: 'auto',maxHeight: 400}}>
       <Table >
         <TableHead>
         <TableRow sx={{background:"#3621a9"}}>

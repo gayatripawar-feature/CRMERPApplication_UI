@@ -837,13 +837,9 @@ const displayLoans = () => {
       </div> */}
 
       {/* Table */}
-      <TableContainer component={Paper} sx={{ mt: 2, boxShadow: 3, borderRadius: 2 }}>
+      <TableContainer component={Paper} sx={{ mt: 2, boxShadow: 3, borderRadius: 2 , maxHeight: 400,overflowY: 'auto'}}>
         <Table style={{ tableLayout: 'auto', width: '100%' }}>
           
-
-
-
-
 <TableHead>
   <TableRow sx={{ background: "#3621a9" }}>
     <TableCell className="" sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>FLAT NO.</TableCell>
