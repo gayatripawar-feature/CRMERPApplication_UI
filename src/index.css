@@ -318,3 +318,24 @@ th, td {
 .custom-file-input-bootstrap::file-selector-button:hover {
   background-color: #f8f9fa;
 }
+
+
+.ag-theme-alpine {
+  height: auto; /* or set to 400px, etc. */
+  width: 100%;
+}
+
+
+.ag-paging-panel select {
+  pointer-events: none; /* Disable interaction */
+  opacity: 0; /* Hide the dropdown */
+}
+
+
+/* Style for Ag-Grid headers */
+.ag-theme-alpine .ag-header-cell {
+  background-color: #3621a9;  /* Replace with your desired color */
+  color: rgb(249, 244, 244);  /* Optional: Change text color for contrast */
+  font-weight: bold;  /* Optional: Make text bold */
+}
+

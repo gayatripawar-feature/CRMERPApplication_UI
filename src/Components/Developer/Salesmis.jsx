@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState ,useMemo} from "react";
 import {
     Button,
     TableContainer,
@@ -14,8 +14,18 @@ import {
   import { FaEye } from "react-icons/fa";
   import { FaFileDownload } from "react-icons/fa";
   import { jsPDF } from "jspdf";
-
+  
   import autoTable from "jspdf-autotable";
+
+  // import { AgGridReact } from 'ag-grid-react';
+  import { AgGridReact } from '@ag-grid-community/react';  
+  import { ModuleRegistry } from '@ag-grid-community/core';
+  import { ClientSideRowModelModule } from '@ag-grid-community/client-side-row-model';
+  import 'ag-grid-community/styles/ag-grid.css';
+import 'ag-grid-community/styles/ag-theme-alpine.css';
+
+  
+  
 const Salesmis = (Data) => {
       const [isExpanded, setIsExpanded] = useState(false);
     const [selectedProject, setSelectedProject] = useState("");
@@ -24,9 +34,9 @@ const Salesmis = (Data) => {
     const [rowsPerPage, setRowsPerPage] = useState(10);
    
     const [page, setPage] = useState(0);
-
+    const [pageSize, setPageSize] = useState(8);
    
-
+    ModuleRegistry.registerModules([ClientSideRowModelModule]);
     const projects = [
         "Shubh Arambh", "Shubh Elara", "Infini", "Serenity", 
         "Prime", "PYB", "Onella Tower", "Aradhyam", "Stella"
@@ -48,7 +58,7 @@ const Salesmis = (Data) => {
 
 
 
-      // 
+     
       const columns = [
         { label: "TIMESTAMP", key: "timestamp" },
         { label: "PROJECT NAME", key: "project" },
@@ -71,19 +81,41 @@ const Salesmis = (Data) => {
         { label: "BALANCE", key: "balance" },
         { label: "% COLLECTIONS", key: "percentCollections" },
       ];
-   
+      // const columns = useMemo(() => [
+      //   { headerName: "TIMESTAMP", field: "timestamp", filter: true, sortable: true },
+      //   { headerName: "PROJECT NAME", field: "project", filter: true, sortable: true },
+      //   { headerName: "WING", field: "wing", filter: true, sortable: true },
+      //   { headerName: "FLOOR", field: "floor", filter: true, sortable: true },
+      //   { headerName: "FLAT NO.", field: "flatNo", filter: true, sortable: true },
+      //   { headerName: "RERA CARPET AREA (SQ MTR)", field: "reraCarpetAreaMtr", filter: true, sortable: true },
+      //   { headerName: "RERA CARPET AREA (SQ FT)", field: "reraCarpetAreaFt", filter: true, sortable: true },
+      //   { headerName: "TOTAL SALEABLE AREA (SQ. FTS)", field: "totalSaleableArea", filter: true, sortable: true },
+      //   { headerName: "SALEABLE TO CARPET AREA RATIO (SQ. FTS)", field: "saleableToCarpetAreaRatio", filter: true, sortable: true },
+      //   { headerName: "TYPE OF UNITS (RESIDENTIAL / COMMERCIAL)", field: "type", filter: true, sortable: true },
+      //   { headerName: "CONFIG (2 BHK, 3 BHK, 4 BHK)", field: "config", filter: true, sortable: true },
+      //   { headerName: "APPROVED / UNAPPROVED", field: "status", filter: true, sortable: true },
+      //   { headerName: "LANDOWNER / DEVELOPER", field: "owner", filter: true, sortable: true },
+      //   { headerName: "SOLD/UNSOLD", field: "soldStatus", filter: true, sortable: true },
+      //   { headerName: "NAME OF THE BUYER", field: "buyerName", filter: true, sortable: true },
+      //   { headerName: "DATE OF BOOKING", field: "bookingDate", filter: true, sortable: true },
+      //   { headerName: "AGREEMENT VALUE", field: "agreementValue", filter: true, sortable: true },
+      //   { headerName: "AMOUNT RECEIVED", field: "amountReceived", filter: true, sortable: true },
+      //   { headerName: "BALANCE", field: "balance", filter: true, sortable: true },
+      //   { headerName: "% COLLECTIONS", field: "percentCollections", filter: true, sortable: true },
+      // ], []);
+    
   const data = [
     { id: 1, timestamp: "2025-03-01", project: "Shubh Arambh", wing: "Wing 1", floor: 5, flatNo: "501", reraCarpetAreaMtr: 100, reraCarpetAreaFt: 1076, totalSaleableArea: 1500, saleableToCarpetAreaRatio: 1.4, type: "Residential", config: "2 BHK", status: "Sold", owner: "John Doe", soldStatus: "Sold", buyerName: "John Doe", bookingDate: "2025-01-15", agreementValue: 5000000, amountReceived: 2000000, balance: 3000000, percentCollections: 40 },
     { id: 2, timestamp: "2025-03-02", project: "Skyline Heights", wing: "Wing 2", floor: 3, flatNo: "302", reraCarpetAreaMtr: 90, reraCarpetAreaFt: 968, totalSaleableArea: 1400, saleableToCarpetAreaRatio: 1.45, type: "Residential", config: "3 BHK", status: "Available", owner: "N/A", soldStatus: "Unsold", buyerName: "N/A", bookingDate: "-", agreementValue: 0, amountReceived: 0, balance: 0, percentCollections: 0 },
     { id: 3, timestamp: "2025-03-03", project: "Urban Nest", wing: "Wing A", floor: 6, flatNo: "604", reraCarpetAreaMtr: 85, reraCarpetAreaFt: 915, totalSaleableArea: 1300, saleableToCarpetAreaRatio: 1.52, type: "Residential", config: "2 BHK", status: "Sold", owner: "Emma Watson", soldStatus: "Sold", buyerName: "Emma Watson", bookingDate: "2025-02-01", agreementValue: 4500000, amountReceived: 2500000, balance: 2000000, percentCollections: 55 },
     { id: 4, timestamp: "2025-03-04", project: "Sunrise Residency", wing: "Wing B", floor: 4, flatNo: "402", reraCarpetAreaMtr: 110, reraCarpetAreaFt: 1184, totalSaleableArea: 1600, saleableToCarpetAreaRatio: 1.35, type: "Residential", config: "3 BHK", status: "Available", owner: "N/A", soldStatus: "Unsold", buyerName: "N/A", bookingDate: "-", agreementValue: 0, amountReceived: 0, balance: 0, percentCollections: 0 },
     { id: 5, timestamp: "2025-03-05", project: "Emerald Towers", wing: "Wing C", floor: 2, flatNo: "203", reraCarpetAreaMtr: 95, reraCarpetAreaFt: 1022, totalSaleableArea: 1450, saleableToCarpetAreaRatio: 1.4, type: "Residential", config: "2 BHK", status: "Sold", owner: "Michael Smith", soldStatus: "Sold", buyerName: "Michael Smith", bookingDate: "2025-02-10", agreementValue: 4200000, amountReceived: 3000000, balance: 1200000, percentCollections: 71 },
-  ,
-  { id: 5, timestamp: "2025-03-05", project: "Emerald Towers", wing: "Wing C", floor: 2, flatNo: "203", reraCarpetAreaMtr: 95, reraCarpetAreaFt: 1022, totalSaleableArea: 1450, saleableToCarpetAreaRatio: 1.4, type: "Residential", config: "2 BHK", status: "Sold", owner: "Michael Smith", soldStatus: "Sold", buyerName: "Michael Smith", bookingDate: "2025-02-10", agreementValue: 4200000, amountReceived: 3000000, balance: 1200000, percentCollections: 71 },
+  
+  // { id: 5, timestamp: "2025-03-05", project: "Emerald Towers", wing: "Wing C", floor: 2, flatNo: "203", reraCarpetAreaMtr: 95, reraCarpetAreaFt: 1022, totalSaleableArea: 1450, saleableToCarpetAreaRatio: 1.4, type: "Residential", config: "2 BHK", status: "Sold", owner: "Michael Smith", soldStatus: "Sold", buyerName: "Michael Smith", bookingDate: "2025-02-10", agreementValue: 4200000, amountReceived: 3000000, balance: 1200000, percentCollections: 71 },
   ]
   
 
-  for (let i = 6; i <= 20; i++) {
+  for (let i = 6; i <= 50; i++) {
     data.push({
       id: i,
       timestamp: `2025-03-${i < 10 ? "0" + i : i}`,
@@ -235,6 +267,35 @@ const secondTableRows = dataWithSerialNo.map((item) => [
 
   // Slice data for pagination
   const paginatedData = data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+
+
+
+ 
+  // const columnDefs = useMemo(
+  //   () =>
+  //     columns.map((col) => ({
+  //       headerName: col.headerName,  // Corrected from `label`
+  //       field: col.field,  // Corrected from `key`
+  //       filter: true,
+  //       sortable: true,
+  //       resizable: true,
+  //       cellStyle: { whiteSpace: 'nowrap' },
+  //     })),
+  //   [columns]
+  // );
+  
+
+  // const defaultColDef = useMemo(() => ({
+  //   flex: 1,
+  //   minWidth: 100,
+  //   filter: true,
+  //   sortable: true,
+  //   resizable: true,
+  // }), []);
+
+
+
+
     return (
       <div className="p-4 border rounded-lg shadow-md w-96 bg-white ">
         <h2 className="fs-6  mb-4">Developer Module / Sales MIS</h2>
@@ -438,7 +499,10 @@ const secondTableRows = dataWithSerialNo.map((item) => [
     </TableBody>
   </Table>
 </TableContainer> */}
-<TableContainer
+
+
+{/* ----------------- */}
+ <TableContainer
       component={Paper}
       className="pt-2 hide-scrollbar"
       sx={{
@@ -497,10 +561,17 @@ const secondTableRows = dataWithSerialNo.map((item) => [
       />
     </TableContainer>
      
-      <div className="d-flex justify-content-between align-items-center">
+
+
+   
+   
+
+
+
+      {/* <div className="d-flex justify-content-between align-items-center">
         <Button style={{backgroundColor:"#800080"}} className="text-white mt-3" onClick={handlePagination} disabled={currentPage === 1}>Previous</Button>
         <Button style={{backgroundColor:"#800080"}} className='text-white mt-3' onClick={handlePagination} disabled={currentPage === totalPages}>Next</Button>
-      </div>
+      </div> */}
       </div>
     );
   };
