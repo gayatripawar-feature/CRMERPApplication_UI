@@ -456,6 +456,7 @@ import {
   TableCell,
   TableBody,
   TextField,
+  TablePagination
 } from "@mui/material";
 import { FaEye } from "react-icons/fa";
 import { FaFileDownload } from "react-icons/fa";
@@ -614,6 +615,17 @@ const handleSave = () => {
 };
 
 
+const [page, setPage] = useState(0);
+  // const [rowsPerPage, setRowsPerPage] = useState(5); // Show 5 rows per page
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0); // Reset page when changing rows per page
+  };
 
 
   return (
@@ -913,10 +925,11 @@ const handleSave = () => {
   style={{
     marginTop: '20px',
     maxHeight: '600px',  
-    overflowY: 'auto'    
+    overflowY: 'auto',
   }}
 >
-          <Table>
+
+          <Table >
           
             <TableHead>
             
@@ -942,9 +955,18 @@ const handleSave = () => {
               ))}
             </TableBody>
           </Table>
-        </TableContainer>
+      
 
-
+          <TablePagination
+        rowsPerPageOptions={[5, 10, 25]}
+        component="div"
+        count={tableData.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
+</TableContainer>
         </>
       )}
     </div>

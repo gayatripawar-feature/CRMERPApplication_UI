@@ -984,10 +984,41 @@ const ProjectInventory = () => {
     };
   
     setInventoryData([...inventoryData, newItem]); // Update the inventory data with the new item
-    toast.success("Firm details are submitted!", { position: "top-right", autoClose: 3000 });
+    // toast.success("Firm details are submitted!", { position: "top-right", autoClose: 3000 });
     setShowFirmForm(false);
   };
   
+
+  const handleSubmit = () => {
+ 
+    console.log(formValues);
+
+    
+    setFormValues({
+      projectName: '',
+      wing: '',
+      floor: '',
+      flatNo: '',
+      reraCarpetAreaSqMtr: '',
+      reraCarpetAreaSqFt: '',
+      totalSaleableArea: '',
+      saleableToCarpetRatio: '',
+      unitType: '',
+      configuration: '',
+      status: '',
+      owner: '',
+      terraceArea: '',
+      balconyArea: '',
+      porchArea: '',
+      topTerraceArea: '',
+      superBuiltupArea: '',
+      balconySanctioned: '',
+      podiumGarde: ''
+    });
+
+    // Reset partners array after submission
+    setPartners([{ name: '', age: '', occupation: '' }]);
+  };
   
   return (
     <div className="main-content">
@@ -1418,7 +1449,7 @@ const ProjectInventory = () => {
 
            
            
-              {partners.map((_, index) => (
+              {/* {partners.map((_, index) => (
                 <Grid container spacing={2} key={index}>
                   <Grid item xs={4}><TextField label="Name" fullWidth /></Grid>
                   <Grid item xs={4}><TextField label="Age" fullWidth /></Grid>
@@ -1429,7 +1460,7 @@ const ProjectInventory = () => {
                     </Button>
                   </Grid>
                 </Grid>
-              ))}
+              ))} */}
 
              
 
@@ -1580,7 +1611,12 @@ const ProjectInventory = () => {
 
              
 
-              <Button variant="contained" className="mt-3" color="success" onClick={() => setShowFirmForm(false)}>
+              <Button variant="contained" className="mt-3" color="success" 
+              onClick={() => {
+                handleSubmit(); // your form submission logic
+                setShowFirmForm(false); // hide the form
+              }}
+              >
                 Submit
               </Button>
              

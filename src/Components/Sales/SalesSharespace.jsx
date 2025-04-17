@@ -13,7 +13,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import { FaArrowRight } from 'react-icons/fa'; 
 import EditIcon from "@mui/icons-material/Edit";
 import PersonIcon from "@mui/icons-material/Person";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper ,IconButton,Button} from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper ,IconButton,Button,TablePagination} from '@mui/material';
 import { FaRegClipboard, FaRegShareSquare } from 'react-icons/fa';
 import { FaFileDownload } from "react-icons/fa";
 import autoTable from "jspdf-autotable";
@@ -240,6 +240,17 @@ const [isExpanded, setIsExpanded] = useState(false);
     doc.save("Collect_Document_Report.pdf");
   };
   
+  const [page, setPage] = useState(0);
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0); // Reset page when changing rows per page
+  };
+
+
 
   return (
     <div className="container my-4">
@@ -585,6 +596,16 @@ const [isExpanded, setIsExpanded] = useState(false);
           ))}
         </TableBody>
       </Table>
+      <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={rows.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+
     </TableContainer>
   </div>
 )}
@@ -659,6 +680,15 @@ const [isExpanded, setIsExpanded] = useState(false);
                 ))}
             </TableBody>
         </Table>
+        <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={rows.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
     </TableContainer>
     </div>
 )}

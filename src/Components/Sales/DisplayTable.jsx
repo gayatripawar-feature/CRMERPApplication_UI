@@ -1,9 +1,22 @@
-import React from "react";
-import { TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Paper } from "@mui/material";
+import React ,{useState}from "react";
+import { TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Paper ,TablePagination} from "@mui/material";
 
 const DisplayTable = ({ data }) => {
+
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+    const [rows, setRows] = useState([{}]);
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0); // Reset page when changing rows per page
+  };
+
   return (
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper}  sx={{ maxHeight: 500, position: "relative" }}>
       <Table>
         <TableHead>
           {/* <TableRow sx={{ bgcolor: "primary.main" }}> */}
@@ -60,6 +73,22 @@ const DisplayTable = ({ data }) => {
           ))}
         </TableBody>
       </Table>
+
+      {/* <TablePagination
+        rowsPerPageOptions={[5, 10, 25]}
+        component="div"
+        count={data.length} // Use data.length to count the total number of rows
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+        sx={{
+          // position: "absolute",
+          bottom: 0,
+          width: "100%",
+        }}
+      /> */}
+
     </TableContainer>
   );
 };

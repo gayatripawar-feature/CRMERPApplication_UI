@@ -432,7 +432,7 @@
 
 
 import React, { useState } from 'react';
-import { Button, IconButton, Tooltip, TextField, MenuItem, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import { Button, IconButton, Tooltip, TextField, MenuItem, Table, TableBody, TableCell, TableContainer, TablePagination,TableHead, TableRow, Paper } from '@mui/material';
 import { FaRegAddressCard } from 'react-icons/fa';
 import EditIcon from '@mui/icons-material/Edit';
 import { toast } from 'react-toastify';
@@ -556,8 +556,17 @@ const MarketingModule = () => {
 
     doc.save("Marketing_Details_Report.pdf");
 };
+const [page, setPage] = useState(0);
+const [rowsPerPage, setRowsPerPage] = useState(5);
 
 
+const handleChangePage = (event, newPage) => {
+  setPage(newPage);
+};
+const handleChangeRowsPerPage = (event) => {
+  setRowsPerPage(+event.target.value);
+  setPage(0);
+};
       
   return (
     <div className="p-4 border rounded-lg shadow-md w-96 bg-white">
@@ -650,7 +659,7 @@ const MarketingModule = () => {
 
       {!showForm && (
         <div className="mt-4">
-         
+          <Paper sx={{ mt: 2, boxShadow: 3, borderRadius: 2 }}>
           <TableContainer component={Paper} sx={{ mt: 2, boxShadow: 3, borderRadius: 2 }}>
           <div 
   style={{ 
@@ -744,6 +753,16 @@ const MarketingModule = () => {
 
             </div>
           </TableContainer>
+          <TablePagination
+        rowsPerPageOptions={[5, 10, 25, 50]}
+        component="div"
+        count={marketingData.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
+    </Paper>
           </div>
        
       )}
