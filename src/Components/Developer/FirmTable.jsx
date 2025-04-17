@@ -2,7 +2,7 @@
 
 
 import React, { useState,useEffect } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Tooltip, Input,TextField, Button ,Typography,Grid} from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Box, Paper, IconButton, Tooltip, TablePagination, Input,TextField, Button ,Typography,Grid} from '@mui/material';
 import { Edit, Visibility } from '@mui/icons-material';
 import EditIcon from '@mui/icons-material/Edit';
 import { FaEye, FaBuilding, FaFileDownload, FaPlus, FaTrash,FaUpload } from "react-icons/fa";
@@ -29,7 +29,8 @@ const FirmTable = () => {
             const [aadhaarError, setAadhaarError] = useState(false);
 const [aadhaarErrorMessage, setAadhaarErrorMessage] = useState("");
 
-
+const [page, setPage] = useState(0);
+const rowsPerPage = 8; // You can make this dynamic too
 
 // useEffect(() => {
 //   console.log("Firm Data Updated:", firms);
@@ -257,6 +258,10 @@ const [aadhaarErrorMessage, setAadhaarErrorMessage] = useState("");
   const validatePAN = (pan) => {
     const panPattern = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/; // PAN format: 5 letters, 4 digits, 1 letter
     return panPattern.test(pan);
+  };
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
   };
   return (
 
@@ -497,6 +502,16 @@ const [aadhaarErrorMessage, setAadhaarErrorMessage] = useState("");
         </Paper>
       </div>
       ) : (
+        <Box sx={{ position: "relative", height: "400px" ,overflow: "auto" }}>
+  
+  <Box
+    sx={{
+      maxHeight: "400px",
+      overflow: "auto",
+      border: "1px solid #ccc",
+      display: "block", 
+    }}
+  ></Box>
         <Table>
           <TableHead>
           <TableRow sx={{ background: "#3621a9" }}>
@@ -637,7 +652,29 @@ const [aadhaarErrorMessage, setAadhaarErrorMessage] = useState("");
          
           </TableBody>
         </Table>
+        </Box>
       )}
+      
+    
+   <Box
+    sx={{
+      position: "sticky",
+      bottom: 0, // Fix the pagination at the bottom of the table
+      backgroundColor: "white",
+      zIndex: 1000, // Ensures pagination stays above the table
+      borderTop: "1px solid #ccc",
+      width: "100%", // Ensures the pagination spans the entire width
+    }}
+  >
+    <TablePagination
+      rowsPerPageOptions={[10]}
+      component="div"
+      count={firms.length}
+      rowsPerPage={rowsPerPage}
+      page={page}
+      onPageChange={handleChangePage}
+    />
+  </Box>
     </TableContainer>
 
    

@@ -853,7 +853,7 @@ import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import { FaFileDownload } from "react-icons/fa";
 
-import { Table, TableContainer, TableHead, TableBody, TableRow, TableCell, Paper,IconButton ,Button,Tooltip} from '@mui/material';
+import { Table, TableContainer, TableHead, TableBody, TableRow, TableCell, Paper,IconButton ,Button,Tooltip,TablePagination,} from '@mui/material';
 
 
 import { ToastContainer, toast } from 'react-toastify';
@@ -866,6 +866,10 @@ const ShareSpace = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editData, setEditData] = useState(null); 
 const [editIndex, setEditIndex] = useState(null);
+
+const [page, setPage] = useState(0);
+const [rowsPerPage, setRowsPerPage] = useState(8);
+
 
   const row = {
     shareTo: ['Sales', 'CRM','Admin','Legal','Engineering','Accounting'], 
@@ -894,7 +898,7 @@ const [editIndex, setEditIndex] = useState(null);
   
   
   const [currentPage, setCurrentPage] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+ 
 
   const handleToggle = (iconName) => {
     setActiveIcon(iconName);
@@ -1146,6 +1150,12 @@ const handleDownloadPDFShared = () => {
 
   doc.save("Project_Share_Details_Report.pdf");
 };
+
+const handleChangePage = (event, newPage) => setPage(newPage);
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
 
   return (
     <div className="container my-4">
@@ -1476,6 +1486,7 @@ const handleDownloadPDFShared = () => {
 
 {showProjectTable && activeIcon === 'project' && !isEditing && (
   <div className='mt-4' ref={project_pdf}>
+    <>
     <TableContainer component={Paper} className="mt-4">
       <Table>
         <TableHead style={{ backgroundColor: '#3621a9' }}>
@@ -1532,7 +1543,19 @@ const handleDownloadPDFShared = () => {
           ))}
         </TableBody>
       </Table>
+      <TablePagination
+        component="div"
+        count={currentRows.length}
+        page={page}
+        rowsPerPage={rowsPerPage}
+        rowsPerPageOptions={[5, 10, 25]}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+        sx={{ mt: 1, backgroundColor: "#fff", borderRadius: 1 }}
+      />
     </TableContainer>
+    
+      </>
   </div>
 )}
 
@@ -1709,7 +1732,7 @@ const handleDownloadPDFShared = () => {
             <TableCell align="center" sx={{ fontWeight: "bold", color: "white" }}>SHARE TO</TableCell>
             <TableCell align="center" sx={{ fontWeight: "bold", color: "white" }}>TYPE OF DOCUMENT</TableCell>
             <TableCell align="center" sx={{ fontWeight: "bold",  color: "white" }}>DOCUMENT</TableCell>
-            {/* <TableCell align="center" sx={{ fontWeight: "bold",  color: "white" }}>ACTION</TableCell> */}
+      
           </TableRow>
         </TableHead>
         <TableBody>
@@ -1741,6 +1764,16 @@ const handleDownloadPDFShared = () => {
           ))}
         </TableBody>
       </Table>
+      <TablePagination
+        component="div"
+        count={currentRows.length}
+        page={page}
+        rowsPerPage={rowsPerPage}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+        rowsPerPageOptions={[5, 10, 25]}
+        sx={{ mt: 1, backgroundColor: "#fff", borderRadius: 1 }}
+      />
     </TableContainer>
   </div>
 )}

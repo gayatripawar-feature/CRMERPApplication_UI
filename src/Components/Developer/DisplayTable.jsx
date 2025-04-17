@@ -2,7 +2,7 @@
 
 
 import React, { useState } from "react";
-import { TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Paper, Tooltip, IconButton, TextField, Button, Grid, Typography } from "@mui/material";
+import { TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Paper, Tooltip, IconButton, Box,TablePagination,TextField, Button, Grid, Typography } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';  
 import { FaEye, FaBuilding, FaFileDownload, FaPlus, FaTrash,FaUpload } from "react-icons/fa";
 import { toast } from 'react-toastify';
@@ -11,7 +11,8 @@ const DisplayTable = ({ data }) => {
  const [firmName, setFirmName] = useState("");
     const [firmNameError, setFirmNameError] = useState("");
     const [phases, setPhases] = useState([]);
- 
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(6);
   const data1 = [{
     action: 'Edit',
     firmName: 'ABC Firm',
@@ -100,6 +101,15 @@ const DisplayTable = ({ data }) => {
     setSelectedItem(null); 
   };
 
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  // Handle rows per page change
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
   return (
     <TableContainer component={Paper}>
    
@@ -261,6 +271,16 @@ const DisplayTable = ({ data }) => {
         </div>
       ) : (
         // Table view
+        <Box sx={{ position: "relative", height: "400px" ,overflow: "auto" }}>
+  
+        <Box
+          sx={{
+            maxHeight: "400px",
+            overflow: "auto",
+            border: "1px solid #ccc",
+            display: "block", 
+          }}
+        ></Box>
         <Table>
           <TableHead>
             <TableRow sx={{ background: "#3621a9" }}>
@@ -330,7 +350,29 @@ const DisplayTable = ({ data }) => {
             ))}
           </TableBody>
         </Table>
+    </Box>
       )}
+       <Box
+           sx={{
+             position: "sticky",
+             bottom: 0, // Fix the pagination at the bottom of the table
+             backgroundColor: "white",
+             zIndex: 1000, // Ensures pagination stays above the table
+             borderTop: "1px solid #ccc",
+             width: "100%", // Ensures the pagination spans the entire width
+           }}
+         >
+           <TablePagination
+             rowsPerPageOptions={[10]}
+             component="div"
+             count={data1.length}
+             rowsPerPage={rowsPerPage}
+             page={page}
+             onPageChange={handleChangePage}
+           />
+         </Box>
+
+      {/* )} */}
     </TableContainer>
   );
 };

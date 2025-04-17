@@ -251,7 +251,7 @@
 
 
 import React, { useState , forwardRef }  from "react";
-import {Box, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Paper, Button, IconButton, Tooltip, MenuItem,TextField, Grid, Typography } from "@mui/material";
+import {Box, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Paper, Button, IconButton, Tooltip,  TablePagination,MenuItem,TextField, Grid, Typography } from "@mui/material";
 import { FaTrash } from "react-icons/fa";
 import EditIcon from '@mui/icons-material/Edit';
 import { Delete as DeleteIcon } from "@mui/icons-material";
@@ -280,7 +280,8 @@ const [editIndex, setEditIndex] = useState(null);
   //   setSelectedItem(item); 
   //   setFormValues(item); 
   // };
- 
+  const [page, setPage] = useState(0);
+  
 
   const handleEdit = (item,index) => {
     console.log("Editing item:", item);
@@ -448,8 +449,23 @@ const [editIndex, setEditIndex] = useState(null);
       return updatedItems;
     });
   };
-  
-  
+  const [currentPage, setCurrentPage] = useState(1);
+const rowsPerPage = 10;
+
+// totalPages = ceil(total rows / rows per page)
+const totalPages = Math.ceil(inventoryData.length / rowsPerPage);
+
+const handlePageChange = (event, value) => {
+  setCurrentPage(value);
+};
+const handleChangePage = (event, newPage) => {
+  setPage(newPage);
+};
+
+const handleChangeRowsPerPage = (event) => {
+  setRowsPerPage(parseInt(event.target.value, 10));
+  setPage(0);
+};
   
   return (
 
@@ -766,6 +782,7 @@ Cancel
         </div> 
       ) : (
         // Table view
+        <Box sx={{ width: '100%' }}>
         <Box sx={{ maxHeight: '400px', overflowY: 'auto' }}>
         <Table>
           <TableHead>
@@ -838,6 +855,21 @@ Cancel
           </TableBody>
         </Table>
         </Box>
+
+        {/* Fixed pagination below the table */}
+        <TablePagination
+        rowsPerPageOptions={[8, 20, 50, 100]}
+        component="div"
+        count={inventoryData.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+        showFirstButton
+        showLastButton
+      />
+        </Box>
+
       )}
     </TableContainer>
     </div>

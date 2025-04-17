@@ -2,7 +2,7 @@
 
 
 import React, { useState } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Tooltip, IconButton ,Grid,TextField,FormControl,
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Tooltip, IconButton , TablePagination,Grid,TextField,FormControl,
   InputLabel,Select,MenuItem,Button} from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 
@@ -17,6 +17,9 @@ const [error, setError] = useState('');
 const [mobileNo, setMobileNo] = useState('');
 const [mobileError, setMobileError] = useState("");
 const [flats, setFlats] = useState(''); 
+const [page, setPage] = useState(0);
+const [rowsPerPage, setRowsPerPage] = useState(5);
+
 // const [formData, setFormData] = useState({
 //     area: "",
 //     wing: "",
@@ -176,6 +179,13 @@ const [flats, setFlats] = useState('');
    
   ];
 
+  const handleChangePage = (event, newPage) => setPage(newPage);
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
+
+  
   return (
     <TableContainer component={Paper}>
       {editFlat ? (

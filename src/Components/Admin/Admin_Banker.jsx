@@ -725,7 +725,7 @@
 
 import React, { useState ,useEffect} from "react";
 import { FaPlus } from "react-icons/fa";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton ,Box,Tooltip,Typography} from "@mui/material";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton ,Box,Tooltip,Typography,TablePagination,} from "@mui/material";
 import { Edit as EditIcon, Delete as DeleteIcon } from "@mui/icons-material";
 
 import {
@@ -759,6 +759,9 @@ const Admin_Banker = () => {
     status: "Active",
   });
 
+
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const [editClicked, setEditClicked] = useState(false);
   const [selectedBanker, setSelectedBanker] = useState(null);
@@ -966,7 +969,11 @@ const Admin_Banker = () => {
       return uniqueFiles.join(', '); 
     });
   };
-  
+  const handleChangePage = (event, newPage) => setPage(newPage);
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
   
 
   return (
@@ -1234,7 +1241,8 @@ const Admin_Banker = () => {
 
 
 {!showForm && (
-  <TableContainer component={Paper} sx={{ mt: 2, boxShadow: 3, borderRadius: 2 }}>
+  <>
+  <TableContainer component={Paper} sx={{ mt: 2, boxShadow: 3, borderRadius: 2 ,overflowY: "auto" }}>
     <Table>
       <TableHead>
         <TableRow sx={{ background: "#3621a9" }}>
@@ -1460,7 +1468,19 @@ const Admin_Banker = () => {
 
 
     </Table>
+    <TablePagination
+  rowsPerPageOptions={[5, 10, 25]}
+  component="div"
+  count={bankers.length}
+  rowsPerPage={rowsPerPage}
+  page={page}
+  onPageChange={handleChangePage}
+  onRowsPerPageChange={handleChangeRowsPerPage}
+  sx={{ mt: 1, backgroundColor: "#fff", borderRadius: 1 }}
+/>
   </TableContainer>
+ 
+</>
 )}
 
 

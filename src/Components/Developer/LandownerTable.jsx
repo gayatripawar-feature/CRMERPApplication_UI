@@ -75,7 +75,7 @@
 
 
 import React, { useState } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, TextField, Button ,Typography,Input,MenuItem,Tooltip,Grid,FormControl,InputLabel,Select} from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton,TablePagination, TextField, Button ,Typography,Input,MenuItem,Tooltip,Grid,FormControl,InputLabel,Select} from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import { toast } from 'react-toastify';
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -96,6 +96,11 @@ const [emailError, setEmailError] = useState("");
    const [fileNames, setFileNames] = useState("");
   const [ifscCode, setIfscCode] = useState(""); 
   const [ifscCodeError, setIfscCodeError] = useState("");
+
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+
+
   const handleEdit = (row) => {
     setEditRow(row);
     setFormData(row);
@@ -243,6 +248,14 @@ const [emailError, setEmailError] = useState("");
 
   const displayData = data && data.length > 0 ? data : dummyData;
 
+
+  const handleChangePage = (event, newPage) => setPage(newPage);
+  const handleChangeRowsPerPage = event => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  // const displayData = landowners.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
   return (
     <TableContainer component={Paper}>
       {editRow ? (
