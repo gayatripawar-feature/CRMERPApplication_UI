@@ -18,13 +18,13 @@ import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 
 const Ocrtable = ({ loans }) => {
-  const [expandedCashWithAV, setExpandedCashWithAV] = useState(null); // Expanded state for Cash With AV
-  const [expandedCashWithoutAV, setExpandedCashWithoutAV] = useState(null); // Expanded state for Cash Without AV
-  const [historyCashWithAV, setHistoryCashWithAV] = useState([]); // History for Cash With AV
-  const [historyCashWithoutAV, setHistoryCashWithoutAV] = useState([]); // History for Cash Without AV
-  const [inputValues, setInputValues] = useState({}); // Track input values per flatNo
+  const [expandedCashWithAV, setExpandedCashWithAV] = useState(null); 
+  const [expandedCashWithoutAV, setExpandedCashWithoutAV] = useState(null); 
+  const [historyCashWithAV, setHistoryCashWithAV] = useState([]); 
+  const [historyCashWithoutAV, setHistoryCashWithoutAV] = useState([]); 
+  const [inputValues, setInputValues] = useState({}); 
 
-  // Handle changes for Cash With AV
+  
   const handleCashWithAVChange = (flatNo, value) => {
     setHistoryCashWithAV((prevState) => {
       const updatedState = prevState.map((item) =>
@@ -34,7 +34,7 @@ const Ocrtable = ({ loans }) => {
     });
   };
 
-  // Handle changes for Cash Without AV
+  
   const handleCashWithoutAVChange = (flatNo, value) => {
     setHistoryCashWithoutAV((prevState) => {
       const updatedState = prevState.map((item) =>
@@ -44,37 +44,36 @@ const Ocrtable = ({ loans }) => {
     });
   };
 
-  // Handle add or toggle text box visibility for Cash With AV
+ 
   const handleAddClickCashWithAV = (flatNo) => {
     if (expandedCashWithAV === flatNo) {
-      setExpandedCashWithAV(null); // Close if it's already open
+      setExpandedCashWithAV(null); 
     } else {
-      setExpandedCashWithAV(flatNo); // Open the text box for this row only
+      setExpandedCashWithAV(flatNo); 
     }
   };
 
-  // Handle add or toggle text box visibility for Cash Without AV
   const handleAddClickCashWithoutAV = (flatNo) => {
     if (expandedCashWithoutAV === flatNo) {
-      setExpandedCashWithoutAV(null); // Close if it's already open
+      setExpandedCashWithoutAV(null); 
     } else {
-      setExpandedCashWithoutAV(flatNo); // Open the text box for this row only
+      setExpandedCashWithoutAV(flatNo); 
     }
   };
 
-  // Handle value input changes dynamically based on flatNo and type
+  
   const handleInputChange = (flatNo, type, value) => {
     setInputValues((prevState) => ({
       ...prevState,
-      [`${flatNo}-${type}`]: value, // Store input value for specific flatNo and type (CashWithAV, CashWithoutAV)
+      [`${flatNo}-${type}`]: value, 
     }));
   };
 
-  // Handle Save functionality for both CashWithAV and CashWithoutAV
+ 
   const handleSave = (flatNo, type) => {
-    const inputValue = inputValues[`${flatNo}-${type}`]; // Get the correct value based on flatNo and type
+    const inputValue = inputValues[`${flatNo}-${type}`]; 
 
-    // Save the value to the corresponding history array
+   
     if (type === "CashWithAV") {
       setHistoryCashWithAV((prevState) =>
         prevState.map((item) =>
@@ -89,7 +88,7 @@ const Ocrtable = ({ loans }) => {
       );
     }
 
-    // Reset the expanded state after saving
+    
     setExpandedCashWithAV(null);
     setExpandedCashWithoutAV(null);
   };

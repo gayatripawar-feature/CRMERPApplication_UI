@@ -32,7 +32,7 @@ const fetchLoansData = async () => {
 
 const Demand = () => {
   const [loans, setLoans] = useState([]);
-  // const [data, setData] = useState([]);
+
   const [filteredLoans, setFilteredLoans] = useState([]);
    const [isExpanded, setIsExpanded] = useState(true);
   const [startDate, setStartDate] = useState('');
@@ -211,7 +211,7 @@ const handleToggle = () => {
     doc.setFontSize(14);
     doc.text("Demand Report", 14, 15);
 
-    // Column headers split into two pages
+    
     const firstPageColumns = [
         "S.No", "FLAT NO.", "NAME OF ALLOTEE", "NAME OF CO-ALLOTEE",
         "TYPE", "FLOOR", "EMAIL ID", "WHATSAPP MOBILE NO."
@@ -225,7 +225,7 @@ const handleToggle = () => {
         "Balance Against Agreement Value"
     ];
 
-    // Split data for both pages
+   
     const firstPageRows = loans.map((row, index) => [
         index + 1, // Serial Number
         row.flatNo || "-",
@@ -255,7 +255,7 @@ const handleToggle = () => {
     console.log("First Page Rows:", firstPageRows);
     console.log("Second Page Rows:", secondPageRows);
 
-    // First Page Table
+   
     autoTable(doc, {
         startY: 25,
         head: [firstPageColumns],
@@ -264,10 +264,10 @@ const handleToggle = () => {
         headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
     });
 
-    // Add new page
+   
     doc.addPage();
 
-    // Second Page Table
+   
     autoTable(doc, {
         startY: 25,
         head: [secondPageColumns],
@@ -287,25 +287,6 @@ const handleDemandLevelChange = (newLevel, index) => {
 };
 
 
-// const data = [
-//   {
-//     flatNo: "A-101",
-//     nameOfAllotee: "John Doe",
-//     nameOfCoAllotee: "Jane Doe",
-//     type: "3BHK",
-//     floor: "1st",
-//     email: "john@example.com",
-//     whatsappNo: "9876543210",
-//     rate: "5000",
-//     agreementValue: "50 Lakhs",
-//     dateOfBooking: "2023-04-01",
-//     parking: "Yes",
-//     receivedDate: null,
-//     demandLetter: "Issued",
-//     demandLevel: 10,
-//   },
-//   // more rows...
-// ];
 const [data, setData] = useState([
   {
     flatNo: "A-101",
@@ -400,20 +381,20 @@ const [data, setData] = useState([
       textTransform: "none",
       marginTop :"px",
      
-      minHeight: "unset", // Removes fixed height  
-      height: "39px", // Explicitly set a smaller height  
+      minHeight: "unset",   
+      height: "39px",  
       fontSize: "12px",
       borderRadius: "20px",
-      display: "inline-flex", // Ensures compact size  
+      display: "inline-flex",   
       alignItems: "center",
       gap: "6px",
-      lineHeight: "1", // Reduces text spacing  
+      lineHeight: "1",   
       "&:hover": {
         background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
       },
     }}
-    disableElevation // Removes shadow that might add visual space  
-    disableRipple // Removes ripple effect padding  
+    disableElevation   
+    disableRipple  
     onClick={handleDownloadPDFDemand}
   >
     <FaFileDownload size={14} />
@@ -546,127 +527,7 @@ const [data, setData] = useState([
             <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>BALANCE AGAINST AGREEMENT VALUE</TableCell>
           </TableRow>
         </TableHead>
-        {/* <TableBody>
-         <TableCell></TableCell>
-         <TableCell></TableCell>
-         <TableCell></TableCell>
-         <TableCell></TableCell>
-         <TableCell></TableCell>
-         <TableCell></TableCell>
-         <TableCell></TableCell>
-         <TableCell></TableCell>
-         <TableCell></TableCell>
-         <TableCell></TableCell>
-         <TableCell></TableCell>
-         <TableCell>
-              <LocalizationProvider dateAdapter={AdapterDateFns}>
-                <DatePicker
-                  label="Select Date"
-                  value={selectedDate}
-                  onChange={handleDateChange}
-                  renderInput={(params) => <TextField {...params} />}
-                />
-              </LocalizationProvider>
-            </TableCell>
-          
-
-<TableCell></TableCell>
-<TableCell></TableCell>
-<TableCell></TableCell>
-<TableCell></TableCell>
-
-            <TableCell>
-  <FormControl fullWidth>
-    <InputLabel>Demand Level</InputLabel>
-    <Select value={selectedLevel} onChange={handleChange}>
-      <MenuItem value={10}>Booking Level (10%)</MenuItem>
-      <MenuItem value={20}>Agreement Level (20%)</MenuItem>
-      <MenuItem value={35}>Plinth Level (35%)</MenuItem>
-      <MenuItem value={40}>1st Slab Level (40%)</MenuItem>
-      <MenuItem value={45}>2nd Slab Level (45%)</MenuItem>
-      <MenuItem value={50}>3rd Slab Level (50%)</MenuItem>
-      <MenuItem value={55}>5th Slab Level (55%)</MenuItem>
-      <MenuItem value={60}>7th Slab Level (60%)</MenuItem>
-      <MenuItem value={65}>9th Slab Level (65%)</MenuItem>
-      <MenuItem value={70}>10th Slab Level (70%)</MenuItem>
-      <MenuItem value={75}>Brick Work Level (75%)</MenuItem>
-      <MenuItem value={80}>External Plaster Level (80%)</MenuItem>
-      <MenuItem value={90}>Staircase Level (90%)</MenuItem>
-      <MenuItem value={95}>Lift Level (95%)</MenuItem>
-      <MenuItem value={100}>Possession Level (100%)</MenuItem>
-    </Select>
-  </FormControl>
-</TableCell>
-<TableCell></TableCell>
-
-
-
-<TableCell>
-  <IconButton 
-    color="error" 
-    onClick={() => window.open('URL_TO_YOUR_PDF', '_blank')}
-  >
-   
-    <VisibilityIcon />
-
-  </IconButton>
-</TableCell>
-
-
-<TableCell>
-  <IconButton 
-    color="error" 
-    onClick={() => window.open('URL_TO_YOUR_PDF', '_blank')}
-  >
-   
-    <VisibilityIcon />
-  </IconButton>
-</TableCell>
-
-<TableCell>
-  <IconButton 
-    color="error" 
-    onClick={() => window.open('URL_TO_YOUR_PDF', '_blank')}
-  >
-    
-    <VisibilityIcon />
-  </IconButton>
-</TableCell>
-
-<TableCell></TableCell>
-<TableCell>
-  <LocalizationProvider dateAdapter={AdapterDateFns}>
-    <DatePicker
-      label="Select Date"
-      value={selectedDate}
-      onChange={handleDateChange}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          variant="standard"
-          InputProps={{
-            disableUnderline: true, 
-          }}
-          sx={{
-            "& .MuiInputBase-root": {
-              border: "none", 
-            },
-            "& .MuiOutlinedInput-notchedOutline": {
-              display: "none", 
-            },
-            "& .MuiInputBase-input": {
-              backgroundColor: "transparent", 
-              padding: "8px 0", 
-            },
-          }}
-        />
-      )}
-    />
-  </LocalizationProvider>
-</TableCell>
-
-
-        </TableBody> */}
+      
 
 <TableBody>
   {data.map((row, index) => (
@@ -682,7 +543,7 @@ const [data, setData] = useState([
       <TableCell>{row.agreementValue}</TableCell>
       <TableCell>{row.dateOfBooking}</TableCell>
       <TableCell>{row.parking}</TableCell>
-        {/* Received Date */}
+        
         <TableCell>
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <DatePicker
@@ -694,10 +555,7 @@ const [data, setData] = useState([
         </LocalizationProvider>
       </TableCell>
 
-      {/* Demand Letter Column */}
-      {/* <TableCell>{row.demandLetter}</TableCell> */}
-
-      {/* Demand Level */}
+    
       <TableCell>
         <FormControl fullWidth size="small">
           <InputLabel>Demand Level</InputLabel>

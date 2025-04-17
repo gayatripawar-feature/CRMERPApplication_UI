@@ -3,21 +3,21 @@
 
 
 import React, { useState } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css'; // Ensure Bootstrap is imported
+import 'bootstrap/dist/css/bootstrap.min.css'; 
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button } from '@mui/material';
 import { FaFileDownload } from "react-icons/fa";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import autoTable from "jspdf-autotable";
 const MISReport = () => {
-  // Initializing state for form inputs
+
   const [flatNo, setFlatNo] = useState('');
   const [allotteeName, setAllotteeName] = useState('');
   const [status, setStatus] = useState('');
   const [ownerType, setOwnerType] = useState('');
   const [approvalStatus, setApprovalStatus] = useState('');
   
-  // Additional fields for the form
+ 
   const [coAllotteeName, setCoAllotteeName] = useState('');
   const [allotteePanNo, setAllotteePanNo] = useState('');
   const [coAllotteePanNo, setCoAllotteePanNo] = useState('');
@@ -67,10 +67,10 @@ const MISReport = () => {
   const [lift, setLift] = useState('');
   const [possession, setPossession] = useState('');
   
-  // State to store the selected values for the table
+  
   const [formData, setFormData] = useState([]);
 
-  // Handle form submission to add selected values to the table
+  
   const handleSubmit = (e) => {
     e.preventDefault();
     const newFormData = {
@@ -129,8 +129,8 @@ const MISReport = () => {
       approvalStatus
     };
 
-    setFormData([...formData, newFormData]); // Add new row to the table
-    // Optionally, reset form after submission
+    setFormData([...formData, newFormData]); 
+   
     setFlatNo('');
     setAllotteeName('');
     setCoAllotteeName('');
@@ -188,9 +188,9 @@ const MISReport = () => {
     doc.setFontSize(14);
     doc.text("MIS Report", 14, 15);
   
-    // Common Table Rows
+    
     const tableRows = formData.map((row, index) => ([
-      index + 1,  // Serial No
+      index + 1,  
       row.flatNo || "-",
       row.bookingDate || "-",
       row.allotteeName || "-",
@@ -202,7 +202,7 @@ const MISReport = () => {
       row.address || "-",
       row.flatType || "-",
       row.floor || "-",
-      row.status || "-",  // SOLD/UNSOLD
+      row.status || "-",  
       row.rate || "-",
       row.agreementStatus || "-",
       row.agreementDateTime || "-",
@@ -235,7 +235,7 @@ const MISReport = () => {
       row.totalPercent || "-"
     ]));
   
-    // Split Columns into 3 pages
+   
     const columnsPage1 = ["Sr No", "FLAT NO", "BOOKING DATE", "NAME OF ALLOTEE", "NAME OF CO-ALLOTEE", "ALLOTEE PAN NO.", "CO-ALLOTEE PAN NO", "ALLOTEE AADHAR NO.", "CO-ALLOTEE AADHAR NO.", "ADDRESS", "FLAT TYPE", "FLOOR", "SOLD/UNSOLD", "RATE"];
     const columnsPage2 = ["AGREEMENT STATUS", "AGREEMENT DATE AND TIME", "REGISTRATION NUMBER", "CONTACT NO", "EMAIL ID", "CARPET AREA SQM", "OPEN BALCONY SQM", "ENCLOSED BALCONY SQM", "TOTAL CARPET AREA SQM", "CARPET AREA IN SQ FT", "SALEABLE AREA SQ. FT"];
     const columnsPage3 = ["STAMP DUTY (7%)", "REGISTRATION FEE", "LEGAL FEE", "AGREEMENT VALUE", "RECEIVED AGAINST AGREEMENT", "BALANCE AGAINST AGREEMENT", "GST VALUE", "RECEIVED AGAINST GST", "BALANCE AGAINST GST", "TOTAL DUE INCLUDING GST", "PARKING", "BANKER", "BOOKING (10%)", "AGREEMENT (10%)", "PLINTH (15%)", "1ST SLAB (5%)", "2ND SLAB (5%)", "TOTAL"];
@@ -369,29 +369,27 @@ const MISReport = () => {
     textTransform: "none",
     marginTop :"24px",
    
-    minHeight: "unset", // Removes fixed height  
-    height: "39px", // Explicitly set a smaller height  
+    minHeight: "unset",  
+    height: "39px",   
     fontSize: "12px",
     borderRadius: "20px",
-    display: "inline-flex", // Ensures compact size  
+    display: "inline-flex",  
     alignItems: "center",
     gap: "6px",
-    lineHeight: "1", // Reduces text spacing  
+    lineHeight: "1", 
     "&:hover": {
       background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
     },
   }}
-  disableElevation // Removes shadow that might add visual space  
-  disableRipple // Removes ripple effect padding  
+  disableElevation   
+  disableRipple   
   onClick={handleDownloadPDFMIS}
 >
   <FaFileDownload size={14} />
   Download PDF
 </Button>
         </div>
-        {/* <button type="submit" className="btn btn-primary mt-3">
-          Submit
-        </button> */}
+      
       </form>
 
     
@@ -484,7 +482,7 @@ const MISReport = () => {
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>APPROVED / UNAPPROVED</TableCell>
             </TableRow>
           </TableHead>
-          {/* Table Body */}
+         
           <TableBody>
             {formData.map((data, index) => (
               <TableRow key={index}>
@@ -573,9 +571,7 @@ const MISReport = () => {
     Total
   </TableCell>
 
-  {/* <TableCell sx={{ color: 'white', fontWeight: 'bold' }}>
-    {formData.reduce((acc, row) => acc + (Number(row.flatNo) || 0), 0)}
-  </TableCell> */}
+ 
 
   
   {[...Array(20)].map((_, idx) => (

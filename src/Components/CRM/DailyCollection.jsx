@@ -15,7 +15,7 @@ import { MonetizationOn } from "@mui/icons-material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-// import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
+
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import { IconButton } from "@mui/material";
 import InfoIcon from '@mui/icons-material/Info';  
@@ -46,7 +46,7 @@ const [isCollapsed, setIsCollapsed] = useState(false);
 
 const [selectedDate, setSelectedDate] = useState(null);
 const [openForm, setOpenForm] = useState(false)
-const [setAmount, setSetAmount] = useState(false);  // State for Modal
+const [setAmount, setSetAmount] = useState(false);  
 const [setAmountForm, setSetAmountForm] = useState(false);
 const [selectedTitle, setSelectedTitle] = useState("Mr."); 
 const [error, setError] = useState(false);
@@ -64,8 +64,8 @@ const [openAmount, setOpenAmount] = useState(false);
   
 
   const [selectedLoan, setSelectedLoan] = useState({
-    chequeNo: '', // separate field for Cheque No
-    receiptNo: '' // separate field for Receipt No
+    chequeNo: '', 
+    receiptNo: '' 
   });
   
   const [selectedLevel, setSelectedLevel] = useState("");
@@ -112,17 +112,17 @@ const [openAmount, setOpenAmount] = useState(false);
   }, []);
   
   const handleEdit = (loan) => {
-    setSelectedLoan(loan);  // Open Modal with data
-    setSetAmount(true);     // Open Form Modal
+    setSelectedLoan(loan);  
+    setSetAmount(true);     
   };
   
 
   const handleEditClick = () => {
-    setOpenForm(true); // Open the form
+    setOpenForm(true); 
   };
   const handleCloseForm = () => {
     e.stopPropagation();
-    setOpenForm(false); // Close the form
+    setOpenForm(false); 
   };
 
   const handleOpenModal = (loan) => {
@@ -131,7 +131,7 @@ const [openAmount, setOpenAmount] = useState(false);
   };
 
   const handleDateChange = (date) => {
-    setSelectedDate(date); // Update state when date is selected
+    setSelectedDate(date); 
   };
   
   const handleCloseModal = () => {
@@ -148,32 +148,21 @@ const [openAmount, setOpenAmount] = useState(false);
   const handleCollapseToggle = () => {
     setIsCollapsed((prev) => !prev);
   };
-  // const handleChange = (event) => {
-  //   setSelectedLevel(event.target.value);
-  // };
-
  
-
-  // const handleOpen = (rowId) => {
-  //   setSelectedRowId(rowId);  // this will store that row's ID
-  //   setSetAmount(true);
-  //   setSetAmountForm(true);
-  // };
   
   const handleOpen = (rowId) => {
     console.log("Opening Modal for Row Id:", rowId);
     setSelectedRowId(rowId);  
   
-    // changed here 
-    // setOpenAmount(true);  
+   
     setSetAmount(true);
     setSetAmountForm(true);
   };
   
   const handleClose = () => {
-    // setOpenAmount(false); 
-    setSetAmount(false); // Close the modal
-    setSetAmountForm(false);  // Optionally close the form inside the modal
+   
+    setSetAmount(false); 
+    setSetAmountForm(false);  
   };
 
   const handlePageChange = (newPage) => {
@@ -199,7 +188,7 @@ const [openAmount, setOpenAmount] = useState(false);
   const currentRows = filteredLoans.slice(indexOfFirstRow, indexOfLastRow);
 
 
-  // / Handle Rows per page change
+  
 const handleRowsPerPageChange = (e) => {
   const value = parseInt(e.target.value, 10);
   if (!isNaN(value) && value > 0) {
@@ -219,10 +208,10 @@ const handleToggle = () => {
       case 'Parking':
         return ['Basement', 'Parking 1','Parking 2'];
       case 'Floor':
-        // return ['1', 'First', 'Second'];
+       
         return Array.from({ length: 15 }, (_, i) => (i + 1).toString());
       case 'Rate':
-        return Array.from({ length: 120 }, (_, i) => (50000 * (i + 1)).toLocaleString()); // Generates values from 50,000 to 6,000,000
+        return Array.from({ length: 120 }, (_, i) => (50000 * (i + 1)).toLocaleString()); 
       case 'Slab':
         return ['OCR', 'GST', 'Stamp Duty', 'Registration', 'Booking', 'Plinth Amount Received', '1st Slab Level', '2nd Slab Level', '3rd Slab Level', '5th Slab Level', '7th Slab Level', '10th Slab Level', 'Brick Level', 'External Plaster Level', 'Flooring Level', 'Staircase Level', 'Lift Level', 'Possession Level'];
       default:
@@ -236,12 +225,12 @@ const handleToggle = () => {
     const value = e.target.value;
 
     if (/^\d*$/.test(value)) {
-      // ✅ If valid (numbers only), update state and clear error
+     
       setSelectedLoan({ ...selectedLoan, flatNo: value });
       setSelectedLevel(event.target.value);
       setError(false);
     } else {
-      // ❌ If invalid, show error message
+     
       setError(true);
     }
   };
@@ -249,12 +238,12 @@ const handleToggle = () => {
   const handleChequeno = (e) => {
     const value = e.target.value;
   
-    // Allow only alphanumeric characters (letters and numbers)
+    
     if (/^[a-zA-Z0-9]*$/.test(value)) {
       setSelectedLoan({ ...selectedLoan, chequeNo: value });
-      setChequeNoError(false); // Clear Cheque No error
+      setChequeNoError(false); 
     } else {
-      setChequeNoError(true); // Set error for Cheque No
+      setChequeNoError(true); 
     }
   };
   
@@ -263,72 +252,16 @@ const handleToggle = () => {
   const handleReceiptNo = (e) => {
     const value = e.target.value;
   
-    // Validate Receipt No (allow only numbers, if that's the requirement)
+ 
     if (/^\d*$/.test(value)) {
       setSelectedLoan({ ...selectedLoan, receiptNo: value });
-      setReceiptNoError(false); // Clear Receipt No error
+      setReceiptNoError(false); 
     } else {
-      setReceiptNoError(true); // Set error for Receipt No
+      setReceiptNoError(true); 
     }
   };
   
   
-  // const handleSubmit = () => {
-    
-  //   toast.success("Form submitted successfully!");
-  //  // Assuming you have selectedDate value from TextField
-  //  const updatedDates = { ...selectedDates };
-  //  updatedDates[selectedRowId] = selectedDate; // selectedRowId is the ID of that row you clicked
-  //  setSelectedDates(updatedDates);
- 
-  //  handleClose(); // close the modal
-    
-  //   setTimeout(() => {
-  //     setOpenForm(false);  // Close the form modal
-  //     setOpenModal(false);  // Close any other modal (if applicable)
-  //   },2000);  // Adjust the timeout (in ms) if needed to match the toast duration
-  // };
-  
-  // const handleSubmit = () => {
- 
-  
-  //   toast.success("Form submitted successfully!");
-  
-  //   const updatedDates = { ...selectedDates };
-  //   updatedDates[selectedRowId] = selectedDate;
-  //   setSelectedDates(updatedDates);
-  
-  //   setTimeout(() => {
-  //     setOpenForm(false);  // Close the form modal
-  //     setOpenModal(false);  // Close any other modal (if applicable)
-  //     handleClose();  // Close Modal Properly After Toast
-  //   }, 2000);  // Wait till toast is shown
-  // };
-
-  // const handleSubmit = () => {
-  //   if (!selectedDate) {
-  //     toast.error("Please select a date!");
-  //     return;
-  //   }
-  
-  //   console.log("SelectedRowId:", selectedRowId);
-  //   console.log("SelectedDate:", selectedDate);
-  //   console.log("SelectedDates Object:", selectedDates);
-    
-  
-  //   const updatedDates = { ...selectedDates };
-  //   updatedDates[selectedRowId] = selectedDate;
-  
-  //   setSelectedDates(updatedDates);
-  
-  //   toast.success("Form submitted successfully!");
-  
-  //   setTimeout(() => {
-  //     handleClose();  // Close Modal after success toast
-  //     setOpenForm(false);
-  //     setOpenModal(false);
-  //   }, 1500); // small delay for better UX
-  // };
   
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -457,7 +390,7 @@ const handleToggle = () => {
     whiteSpace: "nowrap",
     padding: "10px 15px",
     marginTop: "20px",
-    marginBottom: "12px", // Updated margin-bottom
+    marginBottom: "12px", 
     fontSize: "14px",
     display: "flex",
     alignItems: "center",
@@ -511,20 +444,20 @@ const handleToggle = () => {
           textTransform: "none",
           marginTop :"px",
          
-          minHeight: "unset", // Removes fixed height  
-          height: "39px", // Explicitly set a smaller height  
+          minHeight: "unset",  
+          height: "39px",   
           fontSize: "12px",
           borderRadius: "20px",
-          display: "inline-flex", // Ensures compact size  
+          display: "inline-flex",  
           alignItems: "center",
           gap: "6px",
-          lineHeight: "1", // Reduces text spacing  
+          lineHeight: "1",   
           "&:hover": {
             background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
           },
         }}
-        disableElevation // Removes shadow that might add visual space  
-        disableRipple // Removes ripple effect padding  
+        disableElevation  
+        disableRipple 
         onClick={handleDownloadPDFDailyCollection}
       >
         <FaFileDownload size={14} />
@@ -568,7 +501,7 @@ const handleToggle = () => {
         </TableHead>
         <TableBody>
         {dailyCollectionData.map((row, index) => (
-  // <TableRow>
+ 
   <TableRow key={row.id}>
     <TableCell>
  
@@ -605,46 +538,9 @@ const handleToggle = () => {
     <TableCell></TableCell> 
     <TableCell></TableCell> 
   
-    {/* <TableCell> */}
+   
         
-        {/* <IconButton onClick={handleOpen} style={{ backgroundColor: '#3621a9' }}>
-          <InfoIcon style={{ color: '#fff', fontSize: 18 }} />  
-        </IconButton>
-      </TableCell> */}
-       {/* <TableCell>
-        <IconButton 
-          onClick={() => handleOpen(row.id)} 
-          style={{ backgroundColor: '#3621a9' }}
-        >
-          <InfoIcon style={{ color: '#fff', fontSize: 18 }} />
-        </IconButton>
-
        
-        {selectedDates[row.id] && (
-          <span style={{ marginLeft: '8px', color: '#1976d2', fontWeight: 'bold' }}>
-            {selectedDates[row.id]}
-          </span>
-        )}
-      </TableCell> */}
-      {/* <TableCell>
-  <IconButton 
-    onClick={() => handleOpen(row.id)} 
-    style={{ backgroundColor: '#3621a9' }}
-  >
-    <InfoIcon style={{ color: '#fff', fontSize: 18 }} />
-  </IconButton>
-
-  
-  {selectedDates[row.id] ? (
-    <span style={{ marginLeft: '8px', color: '#1976d2', fontWeight: 'bold' }}>
-      {selectedDates[row.id]}
-    </span>
-  ) : (
-    <span style={{ marginLeft: '8px', color: 'gray', fontStyle: 'italic' }}>
-      Please select a date
-    </span>
-  )}
-</TableCell> */}
 
 <TableCell>
   <IconButton 
@@ -676,19 +572,6 @@ const handleToggle = () => {
 
 
 
- {/* <TableCell>
-       <IconButton 
-        color="primary" 
-        onClick={() => handleEdit(row)}   // Pass loan here
-      >
-        <EditIcon />
-      </IconButton> 
-
-     
-      <span style={{ marginLeft: "8px", color: "#1976d2", fontWeight: "bold" }}>
-        {row.date} 
-      </span>
-    </TableCell>  */}
 
     <TableCell></TableCell> 
   </TableRow>

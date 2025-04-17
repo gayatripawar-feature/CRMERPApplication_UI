@@ -1,14 +1,4 @@
 
-
-
-
-
-
-
-
-
-
-
 import React, { useState, useEffect ,useRef} from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, MenuItem, TextField ,IconButton,Dialog, DialogTitle, 
   DialogContent, DialogActions,FormGroup,FormControlLabel , Box, Checkbox} from '@mui/material';
@@ -31,7 +21,7 @@ const fetchLoansData = async () => {
 import CloseIcon from "@mui/icons-material/Close";
 
 
-// import {  } from "@mui/material";
+
 
 
 const Registration = () => {
@@ -66,8 +56,7 @@ const Registration = () => {
  const [registrationNumber, setRegistrationNumber] = useState("");
  const [selectedFile, setSelectedFile] = useState(null);
 
-//  const [activeChecklist, setActiveChecklist] = useState(null); // Track open checklist dialog
-//   const [checklistData, setChecklistData] = useState({});
+
  
   const [isEditableRow, setIsEditableRow] = useState(null);
 
@@ -156,83 +145,24 @@ const Registration = () => {
   }, [filteredLoans, rowsPerPage]);
 
  
-  // const openChecklist = (index) => {
-  //   setActiveChecklist(index);
-  // };
+  
   const [loansData, setLoansData] = useState(sampleLoans);
-  // const [beforeAgreementChecklist, setBeforeAgreementChecklist] = useState({});
+  
   const [beforeAgreementChecklist, setBeforeAgreementChecklist] = useState([]);
 
 
-  // const openChecklist = (index) => {
-  //   setActiveChecklist(index);
-  //   setChecklistData({}); // Reset checklist when opening again
-  // };
-
-  //  // Close dialog
-  //  const closeChecklist = () => {
-  //   setActiveChecklist(null);
-  // };
-
-  // // Close dialog
-  // const closeChecklist = () => {
-  //   setActiveChecklist(null);
-  // };
-// // Handle checkbox change
-// const updateChecklist = (event, index) => {
-//   const { name, checked } = event.target;
-//   setChecklistData((prevData) => ({
-//     ...prevData,
-//     [index]: { ...prevData[index], [name]: checked }
-//   }));
-// };
-
-
-// Handle checkbox selection
-// const updateChecklist = (event, index) => {
-//   const { name, checked } = event.target;
-//   setChecklistData((prevData) => ({
-//     ...prevData,
-//     [name]: checked
-//   }));
-// };
-// const updateChecklist = (e, index) => {
-//   const { name, checked } = e.target;
-  
-//   setChecklistData((prev) => ({
-//     ...prev,
-//     [index]: {
-//       ...prev[index],
-//       [name]: checked,
-//     },
-//   }));
-// };
 
 const saveChecklist = () => {
   console.log("Checklist Data Saved:", checklistData);
   closeChecklist();
 };
 
-// const saveChecklist = () => {
-//   setChecklistData((prev) => ({
-//     ...prev,
-//     [selectedRowIndex]: beforeAgreementChecklist[selectedRowIndex],
-//   }));
-//   setOpenModal(false);
-// };
-
-
-// const handleOpenModal = (index) => {
-//   setSelectedRowIndex(index);
-//   setOpenModal(true);
-// }
 
 
 const handleOpenModal = (index) => {
   setSelectedRowIndex(index);
   setOpenModal(true);
 
-  // Fix: Create checklist for row if not exists
   setBeforeAgreementChecklist((prev) => ({
     ...prev,
     [index]: prev[index] || { taskOne: false, taskTwo: false, taskThree: false },
@@ -327,9 +257,7 @@ const handleToggle = () => {
 };
  
 
-// const handleEditClick = () => {
-//   setIsEditable(!isEditable); // Toggle editable state on clicking the edit icon
-// };
+
 
 
 const handleCheckboxChange = (event) => {
@@ -341,15 +269,15 @@ const handleCheckboxChange = (event) => {
 
 
 const openItemDetailsModal = (item) => {
-  setSelectedItem(item);  // Store the clicked item details
-  setOpenModal(true);      // Open the modal
+  setSelectedItem(item);  
+  setOpenModal(true);     
 };
 
 
 
 const handleSave = () => {
   console.log("Save button clicked");
-  // Add logic to save data
+  
   resetForm(); 
   closeChecklistDialog(); 
 };
@@ -425,12 +353,12 @@ const handleSave = () => {
 const handleUpload = (index) => {
   console.log(`Uploading document for row ID: ${index}`);
   if (fileInputRef.current) {
-    fileInputRef.current.click();  // Trigger the hidden file input
+    fileInputRef.current.click();  
   }
 };
 const handleFileUpload = (file, index) => {
   const updatedData = [...loansData];
-  updatedData[index].selectedFile = file; // store file in particular row
+  updatedData[index].selectedFile = file; 
   setLoansData(updatedData);
 };
 
@@ -440,12 +368,12 @@ const handleFileUpload = (file, index) => {
   const file = event.target.files[0];
   if (file) {
     console.log("Selected file:", file.name);
-    setSelectedFile(file);  // Store the selected file in state
+    setSelectedFile(file);  
   }
 };
   const onUpload = (id) => {
     console.log(`Uploading document for row ID: ${id}`);
-    // Your file upload logic goes here
+    
   };
   
   const handlePagination = (event, newPage) => {
@@ -476,21 +404,21 @@ const handleFileUpload = (file, index) => {
   <TableCell>{loan.agreementValue}</TableCell>
   <TableCell>{loan.dateOfBooking}</TableCell>
   <TableCell>{loan.parking}</TableCell>
-  <TableCell>{loan.registrationNumber}</TableCell> {/* Updated column */}
-  <TableCell>{loan.checklistOfDocumentCollection}</TableCell> {/* Updated column */}
-  <TableCell>{loan.uploadIndex2}</TableCell> {/* Updated column */}
-  <TableCell>{loan.documentHandover}</TableCell> {/* Updated column */}
+  <TableCell>{loan.registrationNumber}</TableCell> 
+  <TableCell>{loan.checklistOfDocumentCollection}</TableCell> 
+  <TableCell>{loan.uploadIndex2}</TableCell> 
+  <TableCell>{loan.documentHandover}</TableCell> 
 </TableRow>
 
     ));
   };
 
   const updateLoanStatus = (flatNo, newStatus) => {
-    // Update the loan status in your backend or state here
+   
     console.log(`Updating loan ${flatNo} status to ${newStatus}`);
   };
 
-  // Handle the toggle for collapsing
+  
   const handleCollapseToggle = () => {
     setIsCollapsed(prev => !prev);
   };
@@ -508,12 +436,12 @@ const handleFileUpload = (file, index) => {
       "S.No.", "FLAT NO.", "NAME OF ALLOTEE", "NAME OF CO-ALLOTEE", "TYPE", "FLOOR"
     ];
   
-    // Define the second-page columns
+  
     const secondPageColumns = [
       "S.No.", "EMAIL ID", "WHATSAPP MOBILE NO.", "RATE", "AGREEMENT VALUE", "DATE OF BOOKING", "PARKING"
     ];
   
-    // Extracting data for the first set of columns with serial numbers
+   
     const firstPageRows = loans.map((row, index) => [
       index + 1, // Serial Number
       row.flatNo || "-",
@@ -523,7 +451,7 @@ const handleFileUpload = (file, index) => {
       row.floor || "-"
     ]);
   
-    // Extracting data for the second set of columns with serial numbers
+  
     const secondPageRows = loans.map((row, index) => [
       index + 1, // Serial Number
       row.emailId || "-",
@@ -537,7 +465,6 @@ const handleFileUpload = (file, index) => {
     console.log("First Page Rows:", firstPageRows);
     console.log("Second Page Rows:", secondPageRows);
   
-    // Generate the first table (Page 1)
     autoTable(doc, {
       startY: 25,
       head: [firstPageColumns],
@@ -546,10 +473,10 @@ const handleFileUpload = (file, index) => {
       headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
     });
   
-    // Add a new page
+    
     doc.addPage();
   
-    // Generate the second table (Page 2)
+   
     doc.setFontSize(14);
     doc.text("Registration Report - Continued", 14, 15);
   
@@ -570,11 +497,11 @@ const handleFileUpload = (file, index) => {
     const checkedCount = Object.values(checklist).filter(Boolean).length;
   
     if (checkedCount === 0) {
-      return "gray";  // No document selected
+      return "gray";  
     } else if (checkedCount === totalTasks) {
-      return "green"; // All documents selected
+      return "green"; 
     } else {
-      return "red";   // Some documents selected
+      return "red";   
     }
   };
   
@@ -644,24 +571,24 @@ const handleFileUpload = (file, index) => {
          background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
          color: "white",
          fontWeight: "bold",
-        //  fontWeight: "900",
+       
          textTransform: "none",
          marginTop :"24px",
         
-         minHeight: "unset", // Removes fixed height  
-         height: "39px", // Explicitly set a smaller height  
+         minHeight: "unset",  
+         height: "39px",   
          fontSize: "12px",
          borderRadius: "20px",
-         display: "inline-flex", // Ensures compact size  
+         display: "inline-flex",  
          alignItems: "center",
          gap: "6px",
-         lineHeight: "1", // Reduces text spacing  
+         lineHeight: "1",  
          "&:hover": {
            background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
          },
        }}
-       disableElevation // Removes shadow that might add visual space  
-       disableRipple // Removes ripple effect padding  
+       disableElevation  
+       disableRipple 
        onClick={handleDownloadPDFRegistration}
      >
        <FaFileDownload size={14} />
@@ -810,52 +737,7 @@ const handleFileUpload = (file, index) => {
       <TableCell></TableCell>
       <TableCell></TableCell>
 
-      {/* <TableCell sx={{ padding: 1, position: "relative", whiteSpace: "nowrap" }}>
-        {isEditable ? (
-          <TextField
-            value={registrationNumber}
-            onChange={(e) => setRegistrationNumber(e.target.value)}
-            placeholder="Enter Registration Number"
-            onBlur={() => setIsEditable(false)} 
-            sx={{
-              border: "none",
-              width: "100%",
-              paddingRight: "30px", 
-              whiteSpace: "nowrap", 
-              overflow: "hidden", 
-              textOverflow: "ellipsis", 
-            }}
-            InputProps={{
-              endAdornment: (
-                <IconButton
-                  onClick={handleEditClick}
-                  sx={{
-                    position: "absolute",
-                    right: 10,
-                    top: "50%",
-                    transform: "translateY(-50%)", 
-                  }}
-                >
-                  <EditIcon />
-                </IconButton>
-              ),
-            }}
-          />
-        ) : (
-          <span style={{ display: 'inline-flex', alignItems: 'center', whiteSpace: 'nowrap' }}>
-            {registrationNumber || "Enter Registration Number"}
-            <IconButton
-              onClick={handleEditClick}
-              sx={{
-                marginLeft: "8px",
-                color: "blue", 
-              }}
-            >
-              <EditIcon />
-            </IconButton>
-          </span>
-        )}
-      </TableCell> */}
+      
  <TableCell>
         {isEditableRow === index ? (
           <TextField
@@ -879,26 +761,14 @@ const handleFileUpload = (file, index) => {
       </TableCell>
 
       <TableCell>
-  {/* <IconButton onClick={() => openItemDetailsModal(index)} size="small">
-    <AssignmentTurnedInIcon color="primary" />
-  </IconButton> */}
-  {/* <IconButton onClick={() => setOpenModal(true)} size="small">
-  <AssignmentTurnedInIcon style={{ color: getBeforeAgreementChecklistStatusColor() }} />
-</IconButton> */}
-
-{/* <IconButton onClick={() => { 
-   setSelectedRowIndex(index);  // important
-   setOpenModal(true); 
-}} size="small"> */}
+  
 <IconButton onClick={() => handleOpenModal(index)} size="small">
 
   <AssignmentTurnedInIcon style={{ color: getBeforeAgreementChecklistStatusColor(index) }} />
 </IconButton>
 
 
-  {/* <IconButton onClick={() => openChecklist(index)} size="small">
-  <AssignmentTurnedInIcon color="primary" />
-</IconButton> */}
+ 
 
 </TableCell>
 
@@ -913,43 +783,7 @@ const handleFileUpload = (file, index) => {
 
   <DialogContent>
     
-    {/* <Box>
-  <FormControlLabel
-    control={
-      <Checkbox 
-        checked={beforeAgreementChecklist[selectedRowIndex]?.taskOne || false}
-        onChange={updateBeforeAgreementChecklist}
-        name="taskOne"
-      />
-    }
-    label="Agreement with Signature"
-    sx={{ display: "block" }}
-  />
-
-  <FormControlLabel
-    control={
-      <Checkbox 
-        checked={beforeAgreementChecklist[selectedRowIndex]?.taskTwo || false}
-        onChange={updateBeforeAgreementChecklist}
-        name="taskTwo"
-      />
-    }
-    label="Agreement Receipt"
-    sx={{ display: "block" }}
-  />
-
-  <FormControlLabel
-    control={
-      <Checkbox 
-        checked={beforeAgreementChecklist[selectedRowIndex]?.taskThree || false}
-        onChange={updateBeforeAgreementChecklist}
-        name="taskThree"
-      />
-    }
-    label="Index II"
-    sx={{ display: "block" }}
-  />
-</Box> */}
+    
 <Box>
   <FormControlLabel
     control={
@@ -1023,9 +857,7 @@ const handleFileUpload = (file, index) => {
           />
       <TableCell>
 
-      {/* <IconButton onClick={() => openChecklist(index)} size="small">
-        <AssignmentTurnedInIcon color="primary" />
-      </IconButton> */}
+     
        <IconButton onClick={() => openChecklist(index)}>
   <AssignmentTurnedInIcon style={{ color: getChecklistStatusColor(index) }} />
 </IconButton>

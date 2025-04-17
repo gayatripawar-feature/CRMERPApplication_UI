@@ -7,10 +7,10 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { Card } from 'antd';
-// import { jsPDF } from "jspdf";
+
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
-// import { HomeOutlined } from '@ant-design/icons';
+
 const FlatAllotmentReport = () => {
   const [formData, setFormData] = useState({
     project: '',

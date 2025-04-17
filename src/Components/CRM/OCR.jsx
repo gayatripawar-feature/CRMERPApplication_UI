@@ -330,11 +330,10 @@ const handleToggle = () => {
   };
 
   const updateLoanStatus = (flatNo, newStatus) => {
-    // Update the loan status in your backend or state here
+    
     console.log(`Updating loan ${flatNo} status to ${newStatus}`);
   };
 
-  // Handle the toggle for collapsing
   const handleCollapseToggle = () => {
     setIsCollapsed(prev => !prev);
   };
@@ -344,14 +343,14 @@ const handleToggle = () => {
     doc.setFontSize(14);
     doc.text("OCR Details Report", 14, 15);
   
-    // Define columns for the first page
+   
     const tableColumnPage1 = [
       "Flat No.", "Name Of Allotee", "Name Of Co-Allotee", "Type", "Floor",
       "Email", "Whatsapp No.", "Rate", "Agreement Value", "Booking Date",
       "Parking No", "Loan Status"
     ];
   
-    // Define columns for the second page
+   
     const tableColumnPage2 = [
       "OCR Amount", "OCR Received", "OCR Balance", "Received As Per Stage",
       "Stamp Duty Total", "Stamp Duty Received", "Stamp Duty Balance",
@@ -359,7 +358,7 @@ const handleToggle = () => {
       "GST Total", "GST Received", "Balance GST"
     ];
   
-    // Extract data for the first page
+   
     const tableRowsPage1 = loans.map(row => [
       row.flatNo || "-",
       row.nameOfAllotee || "-",
@@ -375,7 +374,7 @@ const handleToggle = () => {
       row.loanStatus || "-"
     ]);
   
-    // Extract data for the second page
+    
     const tableRowsPage2 = loans.map(row => [
       row.ocrAmount || "-",
       row.ocrReceived || "-",
@@ -492,21 +491,21 @@ const handleToggle = () => {
        textTransform: "none",
        marginTop :"23px",
       padding:"18px",
-      // fontWeight:"700",
-       minHeight: "unset", // Removes fixed height  
-       height: "41px", // Explicitly set a smaller height  
+     
+       minHeight: "unset",  
+       height: "41px",  
        fontSize: "12px",
        borderRadius: "20px",
-       display: "inline-flex", // Ensures compact size  
+       display: "inline-flex",   
        alignItems: "center",
        gap: "6px",
-       lineHeight: "1", // Reduces text spacing  
+       lineHeight: "1",  
        "&:hover": {
          background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
        },
      }}
-     disableElevation // Removes shadow that might add visual space  
-     disableRipple // Removes ripple effect padding  
+     disableElevation  
+     disableRipple 
      onClick={handleDownloadPDFOCR}
    >
      <FaFileDownload size={14} />

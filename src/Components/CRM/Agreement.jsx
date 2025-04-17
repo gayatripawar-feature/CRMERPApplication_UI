@@ -150,7 +150,7 @@ const Agreement = () => {
       time: "12:00:00",
     },
   ]);
-  // const [loans, setLoans] = useState([]);
+
 
   
 
@@ -158,7 +158,7 @@ const Agreement = () => {
 
   const [loans, setLoans] = useState([
     { agreementStatus: "" },
-    // ... more loan entries
+    
   ]);
   const [filteredLoans, setFilteredLoans] = useState([]);
   const [startDate, setStartDate] = useState('');
@@ -288,7 +288,7 @@ const handleCheckboxChange = (event) => {
       }
     } 
     else {
-      // For other fields, just update the state
+     
       setSelectedLoan((prev) => ({
         ...prev,
         [field]: value,
@@ -310,8 +310,8 @@ const handleCheckboxChange = (event) => {
   };
   
   const closeChecklistDialog = () => {
-    setOpen(false); // Close the dialog
-    setSelectedIndex(null); // Reset the selected index when closing
+    setOpen(false); 
+    setSelectedIndex(null); 
   };
 
   const resetForm = () => {
@@ -319,34 +319,14 @@ const handleCheckboxChange = (event) => {
   };
   
   const handleTimeChange = (newTime, index) => {
-    console.log("Selected Time:", newTime.format("HH:mm:ss")); // Handle update logic here
+    console.log("Selected Time:", newTime.format("HH:mm:ss")); 
   };
   
   const handleDateChange = (newValue, index) => {
-    console.log("Selected Date:", newValue.format("YYYY-MM-DD")); // Handle update logic here
+    console.log("Selected Date:", newValue.format("YYYY-MM-DD")); 
   };
 
-  // const handleStatusChange = (event, index) => {
-  //   const newStatus = event.target.value;
-  //   console.log("Selected Status:", newStatus);
-  //   // Handle update logic here
-  // };
-  // const handleStatusChange = (event, index) => {
-  //   const newStatus = event.target.value;
-  
-  //   const updatedData = [...loanData];
-  //   updatedData[index].agreementStatus = newStatus;
-  
-  //   setLoanData(updatedData);
-  // };
-  
-
-  // const handleStatusChange = (event, index) => {
-  //   const newStatus = event.target.value;
-  //   const updatedData = [...currentData];
-  //   updatedData[index].agreementStatus = newStatus;
-  //   setCurrentData(updatedData);
-  // };
+ 
   
 
   const filterLoans = () => {
@@ -393,7 +373,7 @@ const handleCheckboxChange = (event) => {
 const generatePDF = () => {
   if (!selectedLoan) {
     toast.error("No data found to generate PDF!", {
-      position: "top-center",  // use string not toast.POSITION
+      position: "top-center", 
       autoClose: 3000,
     });
   
@@ -447,12 +427,7 @@ const generatePDF = () => {
 
 
 
-  // const handleOpen = (index) => {
-   
-  //   setSelectedIndex(index); 
-  //   setUpdatedChecklist(currentData[index].checklistBeforeAgreement); 
-  //   setOpen(true); 
-  // };
+  
   
   const handleClose = () => setOpen(false);
 
@@ -493,13 +468,6 @@ const generatePDF = () => {
   
   
 
-  // const handleSave = () => {
-  //   console.log("Data Submitted:", checkedItems);
-  //   resetForm();
-  //   setTimeout(() => {
-  //     closeChecklistDialog(); 
-  //   }, 0);
-  // };
   
 
   const resetFilters = () => {
@@ -509,10 +477,10 @@ const generatePDF = () => {
     setParking('');
     setFloor('');
     setRate('');
-    setFilteredLoans(loans); // Reset loans filter if necessary
+    setFilteredLoans(loans); 
     setCurrentPage(1);
-    setFilterType('');  // Reset the select dropdown value
-    setFilterValue(''); // Reset the select dropdown value
+    setFilterType('');  
+    setFilterValue(''); 
   };
   
   const indexOfLastRow = currentPage * rowsPerPage;
@@ -577,10 +545,10 @@ const generatePDF = () => {
       headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
     });
   
-    // Add a new page
+    
     doc.addPage();
   
-    // Generate the second table (Page 2)
+    
     doc.setFontSize(14);
     doc.text("Agreement Report - Continued", 14, 15);
     
@@ -592,7 +560,7 @@ const generatePDF = () => {
       headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
     });
   
-    // Save the PDF
+    
     doc.save("Agreement_Report.pdf");
   };
   
@@ -746,7 +714,7 @@ const generatePDF = () => {
   onChange={(e) => setEndDate(e.target.value)}
   fullWidth
   InputLabelProps={{ shrink: true }}
-  placeholder="Enter your end date" // Add placeholder
+  placeholder="Enter your end date" 
 />
 
 
@@ -841,32 +809,14 @@ const generatePDF = () => {
         <TableCell>{loan.dateOfBooking}</TableCell>
         <TableCell>{loan.parking}</TableCell>
         <TableCell>{loan.agreementDraftGeneration}</TableCell>
-        {/* <TableCell>{loan.agreementStatus}</TableCell> */}
-        {/* <TableCell>
-  <FormControl fullWidth size="small">
-  <Select
-  value={loan.agreementStatus || ""}
-  onChange={(event) => handleStatusChange(event, index)}
-  displayEmpty
-  renderValue={(selected) => (selected ? selected : "Select Status")} 
-  variant="outlined"
->
-  <MenuItem disabled value="">
-    Select Status
-  </MenuItem>
-  <MenuItem value="Yes">Yes</MenuItem>
-  <MenuItem value="No">No</MenuItem>
-</Select>
-
-  </FormControl>
-</TableCell> */}
+      
 
 
 <TableCell>
   <FormControl fullWidth size="small">
   <Select
   value={loan.agreementStatus ?? ""}
-  // onChange={(event) => handleStatusChange(event, index)}
+
   onChange={(event) => handleStatusChange(index, event.target.value)}
 
   displayEmpty
@@ -881,14 +831,7 @@ const generatePDF = () => {
 </TableCell>
 
 
-       
-{/* <TableCell>
-  {loan.checklistBeforeAgreement}
-
-  <IconButton onClick={() => openChecklistDialog(index)} size="small">
-    <AssignmentTurnedInIcon color="primary" />
-  </IconButton>
-</TableCell> */}
+   
 
 <TableCell>
   
@@ -1122,10 +1065,10 @@ const generatePDF = () => {
   <LocalizationProvider dateAdapter={AdapterDayjs}>
     <TimePicker
       label="Select Time"
-      value={loan.time ? dayjs(loan.time, "HH:mm:ss") : null} // Parse existing time
+      value={loan.time ? dayjs(loan.time, "HH:mm:ss") : null} 
       onChange={(newTime) => handleTimeChange(newTime, index)}
-      ampm={false} // Uses 24-hour format, set to `true` for AM/PM format
-      slotProps={{ textField: { variant: "outlined", size: "small" } }} // Styled input
+      ampm={false} 
+      slotProps={{ textField: { variant: "outlined", size: "small" } }}
     />
   </LocalizationProvider>
 </TableCell>
@@ -1234,7 +1177,7 @@ const generatePDF = () => {
   <TextField
     fullWidth
     label="Flat No"
-    value={selectedLoan?.flatNo || ""}   // Safe Access
+    value={selectedLoan?.flatNo || ""}   
     onChange={(e) => handleInputChange("flatNo", e.target.value)}
     required
   />
@@ -1248,7 +1191,7 @@ const generatePDF = () => {
   label="DOB"
   type="date"
   InputLabelProps={{ shrink: true }}
-  value={selectedLoan?.alloteeDOB || ""}  // safe access
+  value={selectedLoan?.alloteeDOB || ""}  
   onChange={(e) => handleInputChange("alloteeDOB", e.target.value)}
   required
 />
@@ -1258,8 +1201,8 @@ const generatePDF = () => {
 <TextField
   fullWidth
   label="Allotee Age"
-  value={selectedLoan?.alloteeAge || ""}  // Safe access
-  InputProps={{ readOnly: true }}  // If only display
+  value={selectedLoan?.alloteeAge || ""}  
+  InputProps={{ readOnly: true }} 
 />
 </Grid>
 
@@ -1267,7 +1210,7 @@ const generatePDF = () => {
 <TextField
   fullWidth
   label="Occupation"
-  value={selectedLoan?.a1Occupation || ""}  // Safe Access
+  value={selectedLoan?.a1Occupation || ""}  
   onChange={(e) => handleInputChange("a1Occupation", e.target.value)}
 />
 </Grid>
@@ -1278,7 +1221,7 @@ const generatePDF = () => {
     placeholder="Enter PAN Number"
     value={selectedLoan?.a1PanNo || ""}
     onChange={(e) => {
-      const value = e.target.value.toUpperCase();  // Auto convert to uppercase
+      const value = e.target.value.toUpperCase();  
       const regex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
 
       handleInputChange("a1PanNo", value);
@@ -1301,7 +1244,7 @@ const generatePDF = () => {
     value={selectedLoan?.a1AadharNo || ""}
     onChange={(e) => {
       const value = e.target.value;
-      const regex = /^[0-9]{0,12}$/; // Only Numbers & Max 12 Digits
+      const regex = /^[0-9]{0,12}$/; 
 
       if (regex.test(value)) {
         handleInputChange("a1AadharNo", value);
@@ -1345,7 +1288,7 @@ const generatePDF = () => {
     value={selectedLoan?.nameOfAllotee || ""}
     onChange={(e) => {
       const value = e.target.value;
-      const regex = /^[A-Za-z\s]*$/;  // Only Letters & Spaces
+      const regex = /^[A-Za-z\s]*$/;  
 
       if (regex.test(value)) {
         handleInputChange("nameOfAllotee", value);
@@ -1363,7 +1306,7 @@ const generatePDF = () => {
 
 
       </Grid>
-      {/* </Grid> */}
+      
       
 
       <Grid container spacing={2}>
@@ -1405,7 +1348,7 @@ const generatePDF = () => {
     placeholder="Enter Co-PAN Number"
     value={selectedLoan?.coPanNo || ""}
     onChange={(e) => {
-      const value = e.target.value.toUpperCase();  // Auto convert to uppercase
+      const value = e.target.value.toUpperCase();  
       const regex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
 
       handleInputChange("coPanNo", value);
@@ -1432,7 +1375,7 @@ const generatePDF = () => {
     value={selectedLoan?.coAadharNo || ""}
     onChange={(e) => {
       const value = e.target.value;
-      const regex = /^[0-9]{0,12}$/; // Only Numbers, Max 12 Digits
+      const regex = /^[0-9]{0,12}$/; 
 
       if (regex.test(value)) {
         handleInputChange("coAadharNo", value);
@@ -1472,7 +1415,7 @@ const generatePDF = () => {
     value={selectedLoan?.contact || ""}
     onChange={(e) => {
       const value = e.target.value;
-      const regex = /^[0-9]{0,10}$/; // Only Numbers & Max 10 Digits
+      const regex = /^[0-9]{0,10}$/; 
 
       if (regex.test(value)) {
         handleInputChange("contact", value);

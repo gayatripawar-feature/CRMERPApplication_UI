@@ -248,7 +248,7 @@ const handleToggle = () => {
   const handleOpenDocument = (loanId) => {
     const loan = loansData.find((loan) => loan.id === loanId);
     if (loan && loan.sanctionLetter) {
-      window.open(loan.sanctionLetter, '_blank'); // Open the document in a new browser tab
+      window.open(loan.sanctionLetter, '_blank'); 
     }
   };
 
@@ -262,10 +262,10 @@ const handleToggle = () => {
       loanAccountNo: '',
       loanAmount: '',
       sanctionLetter: null,
-      error: '',  // Reset the error message as well
+      error: '',  
       errorMobileNo: '',
     });
-    setSelectedFileName(''); // Clear file name if required
+    setSelectedFileName('');
   };
   const start = (currentPage - 1) * rowsPerPage;
   const end = Math.min(start + rowsPerPage, filteredLoans.length);
@@ -293,16 +293,7 @@ const handleToggle = () => {
   
  
 
-  // const handleStatusChange = (e, id) => {
-  //   console.log(loanData);
-
-  //   const { value } = e.target;
-  //   setLoanData((prevData) =>
-  //     prevData.map((loan) =>
-  //       loan.id === id ? { ...loan, homeLoanSanctionCertificateCollected: value } : loan
-  //     )
-  //   );
-  // };
+ 
   
   const handleStatusChange = (e, id) => {
     const { value } = e.target;
@@ -345,10 +336,10 @@ const displayLoans = () => {
     </Select>
   </TableCell>
 
-  {/* Bank Name Column */}
+ 
   
 
-  {/* Icon Button for Bank Name */}
+  
   <TableCell>
     <IconButton onClick={() => handleOpenDialog(loan.id)} color="primary">
       <AccountCircle fontSize="medium" />
@@ -516,40 +507,7 @@ const displayLoans = () => {
   </TableCell>
 
   
-  {/* <TableCell>
-    <select className='p-2 bg-light'
-      value={loan?.homeLoanSanctionCertificateCollected || ""} 
-      onChange={(e) => handleStatusChange(e, loan.id)}
-    >
-      <option value="Collected">Collected</option>
-      <option value="In Process">In Process</option>
-      <option value="Self Funding">Self Funding</option>
-    </select>
-  </TableCell> */}
- {/* <TableCell>
-  <select
-    className='p-2 bg-light'
-    value={loan?.homeLoanSanctionCertificateCollected || ""}
-    onChange={(e) => handleStatusChange(e, loan.id)}
-  >
-    <option value="" disabled>Select Status</option>  
-    <option value="Collected">Collected</option>
-    <option value="In Process">In Process</option>
-    <option value="Self Funding">Self Funding</option>
-  </select>
-</TableCell> */}
-{/* <TableCell>
-  <select
-    className='p-2 bg-light'
-    value={loan?.homeLoanSanctionCertificateCollected || ""}
-    onChange={(e) => handleStatusChange(e, loan.id)}
-  >
-    <option value="" disabled>Select Status</option>
-    <option value="Collected">Collected</option>
-    <option value="In Process">In Process</option>
-    <option value="Self Funding">Self Funding</option>
-  </select>
-</TableCell> */}
+ 
  <TableCell>
       <select
         className="p-2 bg-light"
@@ -673,7 +631,7 @@ const displayLoans = () => {
       loan.bookingCancelationReason || "-"
     ]);
   
-    // Generate first table (first page)
+  
     autoTable(doc, {
       startY: 25,
       head: [firstTableColumns],
@@ -682,14 +640,14 @@ const displayLoans = () => {
       headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
       didDrawPage: () => {
         doc.setFontSize(10);
-        doc.text(`Page 1`, 280, 200); // Page Number
+        doc.text(`Page 1`, 280, 200); 
       }
     });
   
-    // Add a new page for the second table
+   
     doc.addPage();
   
-    // Generate second table (second page)
+   
     doc.text("Home Loan Report (Page 2)", 14, 15);
     autoTable(doc, {
       startY: 25,
@@ -699,11 +657,11 @@ const displayLoans = () => {
       headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
       didDrawPage: () => {
         doc.setFontSize(10);
-        doc.text(`Page 2`, 280, 200); // Page Number
+        doc.text(`Page 2`, 280, 200); 
       }
     });
   
-    // Save the PDF
+   
     doc.save("HomeLoan_Report.pdf");
   };
   
@@ -730,7 +688,7 @@ const displayLoans = () => {
           whiteSpace: "nowrap",
           padding: "10px 10px",
           marginTop: "20px",
-          marginBottom: "12px", // Updated margin-bottom
+          marginBottom: "12px", 
           fontSize: "14px",
           display: "flex",
           alignItems: "center",
@@ -774,20 +732,20 @@ const displayLoans = () => {
     textTransform: "none",
     marginTop :"24px",
    
-    minHeight: "unset", // Removes fixed height  
-    height: "39px", // Explicitly set a smaller height  
+    minHeight: "unset",  
+    height: "39px",   
     fontSize: "12px",
     borderRadius: "20px",
-    display: "inline-flex", // Ensures compact size  
+    display: "inline-flex",   
     alignItems: "center",
     gap: "6px",
-    lineHeight: "1", // Reduces text spacing  
+    lineHeight: "1",  
     "&:hover": {
       background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
     },
   }}
-  disableElevation // Removes shadow that might add visual space  
-  disableRipple // Removes ripple effect padding  
+  disableElevation   
+  disableRipple  
   onClick={handleDownloadPDFHomeLoan}
 >
   <FaFileDownload size={14} />
@@ -800,42 +758,7 @@ const displayLoans = () => {
       
      
 
-      {/* <div className="pt-5" style={{ display: 'flex', gap: '20px', marginBottom: '20px' }}>
-        <TextField
-          label="Start Date"
-          type="date"
-          variant="outlined"
-          size="small"
-          value={startDate}
-          onChange={(e) => setStartDate(e.target.value)}
-          InputLabelProps={{
-            shrink: true,
-          }}
-        />
-        <TextField
-          label="End Date"
-          type="date"
-          variant="outlined"
-          size="small"
-          value={endDate}
-          onChange={(e) => setEndDate(e.target.value)}
-          InputLabelProps={{
-            shrink: true,
-          }}
-        />
-        <Select
-          value={filterValue}
-          onChange={(e) => setFilterValue(e.target.value)}
-          variant="outlined"
-          size="small"
-          sx={{ width: '200px' }}
-        >
-          <MenuItem value="">All Loans</MenuItem>
-          <MenuItem value="Yes">Home Loan Applicable</MenuItem>
-          <MenuItem value="No">No Home Loan</MenuItem>
-        </Select>
-      </div> */}
-
+      
       {/* Table */}
       <TableContainer component={Paper} sx={{ mt: 2, boxShadow: 3, borderRadius: 2 , maxHeight: 400,overflowY: 'auto'}}>
         <Table style={{ tableLayout: 'auto', width: '100%' }}>

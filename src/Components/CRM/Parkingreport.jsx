@@ -7,12 +7,12 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { Card } from 'antd';
-// import { jsPDF } from "jspdf";
+
 
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
-// import { HomeOutlined } from '@ant-design/icons';
+
 const Parkingreport = () => {
   const [formData, setFormData] = useState({
     project: '',
@@ -57,7 +57,7 @@ const Parkingreport = () => {
     {
       flatNo: "101",
       flatType: "2 BHK",
-      parkingType: "Covered Car Parking", // Could be "Covered", "Open", "Basement", or any other type
+      parkingType: "Covered Car Parking", 
     },
     {
       flatNo: "102",
@@ -70,7 +70,7 @@ const Parkingreport = () => {
       parkingType: "Parking Available",
     },
    
-    // More flat objects...
+    
   ];
   
   const componentRef = useRef();
@@ -103,14 +103,13 @@ const Parkingreport = () => {
   
    
     autoTable(doc, {
-      startY: 30, // After title
+      startY: 30, 
       head: [tableColumn],
       body: tableRows,
-      theme: 'grid', // optional
+      theme: 'grid', 
       styles: { fontSize: 12 },
     });
   
-    // Save PDF
     doc.save("Parking_Report.pdf");
   };
   return (
@@ -125,7 +124,7 @@ const Parkingreport = () => {
 <div className="form-wrapper shadow-lg p-4 rounded" style={{ boxShadow: '0px 0px 15px 5px rgba(255, 255, 255, 0.7)', overflowX: 'auto', whiteSpace: 'nowrap' }}>
   <LocalizationProvider dateAdapter={AdapterDateFns}>
     <form>
-      {/* First Row */}
+      
       <div className="row mb-3 pt-3">
         <div className="col-md-4">
           <label htmlFor="project" className="form-label">Project:</label>
@@ -382,18 +381,10 @@ const Parkingreport = () => {
 
 
 <div>
-  {/* Button to trigger PDF download via hook */}
-   {/* Button to trigger PDF download */}
-   {/* <button onClick={handleDownloadPDF} className="btn btn-primary mb-3">
-        Download Parking Report PDF
-      </button> */}
-
-
-
-{/* Section for PDF */}
+ 
 <div ref={componentRef}>
 
-{/* Wing Header */}
+
 <div className="wing-header p-3"
   style={{
     background: 'linear-gradient(to right,rgb(156, 67, 252),rgb(37, 252, 238))',
@@ -404,7 +395,7 @@ const Parkingreport = () => {
   Wing:
 </div>
 
-{/* Card Section */}
+
 <div className="row mt-5">
   {parkingData.map((flat, index) => (
     <div className="col-md-4 mb-4" key={index}>
