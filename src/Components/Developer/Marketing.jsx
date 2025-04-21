@@ -812,24 +812,37 @@ const handleChangeRowsPerPage = (event) => {
 
             <div className="d-flex justify-content-center w-100 mb-3">
               <div className="col-6 pr-2 m-2">
-                {/* <TextField
-                  label="Start Date"
-                  name="startDate"
-                  type="date"
-                  value={formData.startDate}
-                  onChange={handleChange}
-                  fullWidth
-                  variant="outlined"
-                  style={{ backgroundColor: '#fff', borderRadius: '8px' }}
-                  InputLabelProps={{ shrink: true, style: { width: '100%' } }}
-                /> */}
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
+             
+                {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
   <DatePicker
     label="Start Date"
     value={formData.startDate ? dayjs(formData.startDate) : null}
     onChange={(newValue) => {
       setFormData({ ...formData, startDate: newValue ? newValue.format('YYYY-MM-DD') : '' });
     }}
+     format="DD-MM-YYYY"
+    renderInput={(params) => (
+      <TextField
+        {...params}
+        fullWidth
+        variant="outlined"
+        style={{ backgroundColor: '#fff', borderRadius: '8px' }}
+        InputLabelProps={{ shrink: true }}
+      />
+    )}
+  />
+</LocalizationProvider> */}
+<LocalizationProvider dateAdapter={AdapterDayjs}>
+  <DatePicker
+    label="Start Date"
+    value={formData.startDate ? dayjs(formData.startDate, 'DD-MM-YYYY') : null}
+    onChange={(newValue) => {
+      setFormData({ 
+        ...formData, 
+        startDate: newValue ? newValue.format('DD-MM-YYYY') : '' 
+      });
+    }}
+    format="DD-MM-YYYY"
     renderInput={(params) => (
       <TextField
         {...params}
@@ -844,24 +857,38 @@ const handleChangeRowsPerPage = (event) => {
 
               </div>
               <div className="col-6 pl-2 m-2">
-                {/* <TextField
-                  label="End Date"
-                  name="endDate"
-                  type="date"
-                  value={formData.endDate}
-                  onChange={handleChange}
-                  fullWidth
-                  variant="outlined"
-                  style={{ backgroundColor: '#fff', borderRadius: '8px' }}
-                  InputLabelProps={{ shrink: true, style: { width: '100%' } }}
-                /> */}
-                 <LocalizationProvider dateAdapter={AdapterDayjs}>
+               
+                 {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
   <DatePicker
     label="End Date"
     value={formData.startDate ? dayjs(formData.startDate) : null}
     onChange={(newValue) => {
       setFormData({ ...formData, startDate: newValue ? newValue.format('YYYY-MM-DD') : '' });
     }}
+    format="DD-MM-YYYY"
+    renderInput={(params) => (
+      <TextField
+        {...params}
+        fullWidth
+        variant="outlined"
+        style={{ backgroundColor: '#fff', borderRadius: '8px' }}
+        InputLabelProps={{ shrink: true }}
+      />
+    )}
+  />
+</LocalizationProvider> */}
+
+<LocalizationProvider dateAdapter={AdapterDayjs}>
+  <DatePicker
+    label="End Date"
+    value={formData.endDate ? dayjs(formData.endDate, 'DD-MM-YYYY') : null} // Use formData.endDate
+    onChange={(newValue) => {
+      setFormData({ 
+        ...formData, 
+        endDate: newValue ? newValue.format('DD-MM-YYYY') : '' // Update endDate instead of startDate
+      });
+    }}
+    format="DD-MM-YYYY"
     renderInput={(params) => (
       <TextField
         {...params}
