@@ -25,7 +25,7 @@ const sections = [
   { label: "Firm Display", icon: <FaProjectDiagram size={20} />, createLabel: "Create Firm" },
   { label: "Project Display", icon: <FaHome size={20} />, createLabel: "Create Project" },
   { label: "Landowner Display", icon: <FaUserTie size={20} />, createLabel: "Create Landowner Info" },
-  { label: "Flat Allotement Display", icon: <FaBuilding size={20} />, createLabel: "Create Flat Allotment Info" },
+  { label: "Landowner Flat Allotement Display", icon: <FaBuilding size={20} />, createLabel: "Create Flat Allotment Info" },
   // { label: "Download PDF", icon: <  PictureAsPdfIcon  size={20} />, createLabel: "" }
 ];
 
@@ -242,7 +242,7 @@ const handleTabClick = (index) => {
     setSelectedTab("firm");
   } else if (sections[index].label === "Landowner Display") {
     setSelectedTab("landowner");
-  } else if (sections[index].label === "Flat Allotement Display") {
+  } else if (sections[index].label === "Landowner Flat Allotement Display") {
     setSelectedTab("allotement");
   }
 
@@ -886,7 +886,7 @@ const handleTabClick = (index) => {
       margin: '5px',
       cursor: 'pointer',    
       transition: "width 0.3s ease, background 0.3s ease",
-      width: expandedSection === index ? "250px" : "50px", 
+      width: expandedSection === index ? "290px" : "50px", 
       minWidth: "50px",
       overflow: "hidden",
       whiteSpace: "nowrap",
@@ -1880,7 +1880,7 @@ Submit Landowner Info
 
         <Grid item xs={4}>
           <FormControl fullWidth disabled={!selectedProject}>
-            <InputLabel> Name</InputLabel>
+            <InputLabel> Landowner Name</InputLabel>
             <Select value={selectedLandowner} onChange={handleLandownerChange}>
               {selectedProject && landowners[selectedProject]?.map((owner) => (
                 <MenuItem key={owner.name} value={owner.name}>{owner.name}</MenuItem>

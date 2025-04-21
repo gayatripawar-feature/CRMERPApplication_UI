@@ -2201,7 +2201,7 @@ const handleGeneratePDFPackage = async () => {
       <h5>Sales Templates</h5>
       
       
-   
+{/*    
 <div className="d-flex m-2">
   <div style={{ display: "flex", gap: "15px", flexWrap: "wrap", padding: "6px" }}>
   <Button
@@ -2314,7 +2314,7 @@ const handleGeneratePDFPackage = async () => {
       Agreement
     </Button>
   </div>
-  </div>
+  </div> */}
 
 <div className="row g-4 mt-5">
   {templates.map((template) => (

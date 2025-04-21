@@ -1192,7 +1192,7 @@ const handleChangePage = (event, newPage) => setPage(newPage);
     <div className="d-flex justify-content-center align-items-center rounded-circle  p-2 shadow">
       <FaProjectDiagram size={26} color="#ff5733" />
     </div>
-    {activeIcon === 'project' && <span className="fw-bold text-white fs-6" style={{ marginLeft: '10px' }}>Project Display</span>}
+    {activeIcon === 'project' && <span className="fw-bold text-white fs-6" style={{ marginLeft: '10px' }}>Shared By Me</span>}
   </div>
 
  
