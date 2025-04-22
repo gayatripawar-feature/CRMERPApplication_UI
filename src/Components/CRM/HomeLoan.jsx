@@ -48,20 +48,24 @@ const HomeLoan = () => {
   //  const [loanData, setLoanData] = useState([]);
   
   // const [editingLoan, setEditingLoan] = useState(null);
-  const [editingLoan, setEditingLoan] = useState({
-    flatNo: '',
-    nameOfAllotee: '',
-    mobileNo: '',
-    loanAccountNo: '',
-    loanAmount: '',
-    bankName: '',
-    bankerName: '',
-    errorFlatNo: '',
-    errorNameOfAllotee: '',
-    errorMobileNo: '',
-    selectedFileName: ''
-  });
+  // const [editingLoan, setEditingLoan] = useState({
+  //   flatNo: '',
+  //   nameOfAllotee: '',
+  //   mobileNo: '',
+  //   loanAccountNo: '',
+  //   loanAmount: '',
+  //   bankName: '',
+  //   bankerName: '',
+  //   errorFlatNo: '',
+  //   errorNameOfAllotee: '',
+  //   errorMobileNo: '',
+  //   selectedFileName: ''
+  // });
   
+  const [editingLoan, setEditingLoan] = useState([]);
+  // const [editingLoans, setEditingLoans] = useState([]);
+
+
   const [selectedFileName, setSelectedFileName] = useState(''); 
   useEffect(() => {
     setTotalPages(Math.ceil(filteredLoans.length / rowsPerPage));
@@ -282,7 +286,8 @@ const handleToggle = () => {
   };
 
  
-
+  
+  
  
 
   const handleSendMail = () => {
@@ -304,6 +309,44 @@ const handleToggle = () => {
     );
   };
 
+
+  // const handleBookingConfirmationChange = (id, value) => {
+  //   setEditingLoan((prevData) =>
+  //     prevData.map((loan) =>
+  //       loan.id === id ? { ...loan, bookingCancellationReason: value } : loan
+  //     )
+  //   );
+  // };
+
+  // const handleBookingConfirmationChange = (id, value) => {
+  //   setEditingLoan(prev =>
+  //     prev.map(loan =>
+  //       loan.id === id ? { ...loan, bookingConfirmation: value } : loan
+  //     )
+  //   );
+  // };
+  
+  const handleBookingConfirmationChange = (id, value) => {
+    setEditingLoan(prev =>
+      prev.map(loan =>
+        loan.id === id ? { ...loan, bookingConfirmation: value } : loan
+      )
+    );
+  };
+  
+  
+
+  const handleBookingCancellationChange = (id, value) => {
+    setEditingLoan((prev) =>
+      prev.map((loan) =>
+        loan.id === id
+          ? { ...loan, bookingCancellationReason: value }
+          : loan
+      )
+    );
+  };
+  
+  
 const displayLoans = () => {
   return filteredLoans.slice(start, end).map((loan) => (
 
@@ -521,7 +564,7 @@ const displayLoans = () => {
       </select>
     </TableCell>
 
-  <TableCell>
+  {/* <TableCell>
   <Select
     value={loan.bookingConfirmation || ""}
     onChange={(e) => handleBookingConfirmationChange(loan.id, e.target.value)}
@@ -532,8 +575,42 @@ const displayLoans = () => {
     <MenuItem value="Booked">Booked</MenuItem>
     <MenuItem value="Cancelled">Cancelled</MenuItem>
   </Select>
-</TableCell>
+</TableCell> */}
+  {/* <TableCell>
+      <Select
+        value={loan.bookingConfirmation || ""}
+        onChange={(e) => handleBookingConfirmationChange(loan.id, e.target.value)}
+        variant="outlined"
+        size="small"
+        sx={{ width: "120px" }}
+      >
+         <MenuItem value="" disabled>
+    Select Reason
+  </MenuItem>
+        <MenuItem value="Booked">Booked</MenuItem>
+        <MenuItem value="Cancelled">Cancelled</MenuItem>
+      </Select>
+    </TableCell> */}
+  
 
+
+
+  <TableCell>
+      <Select
+        value={loan.bookingConfirmation || ""}
+        onChange={(e) => handleBookingConfirmationChange(loan.id, e.target.value)}
+        variant="outlined"
+        size="small"
+        sx={{ width: "120px" }}
+        displayEmpty
+      >
+        <MenuItem value="" disabled>
+          Select Reason
+        </MenuItem>
+        <MenuItem value="Booked">Booked</MenuItem>
+        <MenuItem value="Cancelled">Cancelled</MenuItem>
+      </Select>
+    </TableCell>
 <TableCell>
   <Select
     value={loan.bookingCancellationReason || ""}
