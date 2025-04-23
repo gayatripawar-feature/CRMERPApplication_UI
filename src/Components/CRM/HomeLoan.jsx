@@ -326,26 +326,39 @@ const handleToggle = () => {
   //   );
   // };
   
+  // const handleBookingConfirmationChange = (id, value) => {
+  //   setEditingLoan(prev =>
+  //     prev.map(loan =>
+  //       loan.id === id ? { ...loan, bookingConfirmation: value } : loan
+  //     )
+  //   );
+  // };
+  
+  
+
+  // const handleBookingCancellationChange = (id, value) => {
+  //   setEditingLoan((prev) =>
+  //     prev.map((loan) =>
+  //       loan.id === id
+  //         ? { ...loan, bookingCancellationReason: value }
+  //         : loan
+  //     )
+  //   );
+  // };
   const handleBookingConfirmationChange = (id, value) => {
-    setEditingLoan(prev =>
-      prev.map(loan =>
+    setLoansData((prevData) =>
+      prevData.map((loan) =>
         loan.id === id ? { ...loan, bookingConfirmation: value } : loan
       )
     );
   };
-  
-  
-
   const handleBookingCancellationChange = (id, value) => {
-    setEditingLoan((prev) =>
-      prev.map((loan) =>
-        loan.id === id
-          ? { ...loan, bookingCancellationReason: value }
-          : loan
+    setLoansData((prevData) =>
+      prevData.map((loan) =>
+        loan.id === id ? { ...loan, bookingCancellationReason: value } : loan
       )
     );
   };
-  
   
 const displayLoans = () => {
   return filteredLoans.slice(start, end).map((loan) => (
