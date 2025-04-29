@@ -763,17 +763,40 @@ const handleTabClick = (index) => {
   });
   
 
-  const handleChange = (e, label, partnerIndex) => {
+  // const handleChange = (e, label, partnerIndex) => {
+  //   const { value } = e.target;
+  
+  
+  //   const updatedPartners = [...partners];
+  //   updatedPartners[partnerIndex][label.toLowerCase().replace(/ /g, "")] = value;
+  //   setPartners(updatedPartners);
+  
+    
+  //   if (label === 'Firm Name') {
+      
+  //     if (!/^[A-Za-z\s]*$/.test(value)) {
+  //       setErrors((prev) => ({
+  //         ...prev,
+  //         firmName: 'Firm Name should only contain letters and spaces',
+  //       }));
+  //     } else {
+  //       setErrors((prev) => ({
+  //         ...prev,
+  //         firmName: '', // Clear the error if valid
+  //       }));
+  //     }
+  //   }
+  // };
+  
+  const handleChange = (e, label) => {
     const { value } = e.target;
   
-    // Update the partners array with the new value for the specific field
-    const updatedPartners = [...partners];
-    updatedPartners[partnerIndex][label.toLowerCase().replace(/ /g, "")] = value;
-    setPartners(updatedPartners);
+    setFormValues((prevValues) => ({
+      ...prevValues,
+      [label.toLowerCase().replace(/ /g, "")]: value,
+    }));
   
-    // Apply validation for the 'firmName' field
     if (label === 'Firm Name') {
-      // Check if the input contains only letters and spaces
       if (!/^[A-Za-z\s]*$/.test(value)) {
         setErrors((prev) => ({
           ...prev,
@@ -787,8 +810,6 @@ const handleTabClick = (index) => {
       }
     }
   };
-  
-  
 
   const validateAge = (age) => {
     if (!age || age < 0 || age > 120) {
@@ -1534,13 +1555,31 @@ onClick={() => {
         <Grid container spacing={2}>
           {/* <Grid item xs={4}><TextField label="Project Name" fullWidth /></Grid> */}
           <Grid item xs={4}>
-        <FormControl fullWidth variant="outlined">
+        {/* <FormControl fullWidth variant="outlined">
           <InputLabel id="project-name-label">Project Name</InputLabel>
           <Select
             labelId="project-name-label"
             id="project-name-select"
             value={selectedProject}
             onChange={handleChange}
+            label="Project Name"
+          >
+            <MenuItem value="Project Name 1">Project Name 1</MenuItem>
+            <MenuItem value="Project Name 121">Project Name 121</MenuItem>
+            <MenuItem value="11">11</MenuItem>
+            <MenuItem value="PROJECT NAME">PROJECT NAME</MenuItem>
+            <MenuItem value="Shubh Elara">Shubh Elara</MenuItem>
+            <MenuItem value="Sohan Enterprised">Sohan Enterprised</MenuItem>
+          </Select>
+        </FormControl> */}
+         <FormControl fullWidth variant="outlined">
+          <InputLabel id="project-name-label">Project Name</InputLabel>
+          <Select
+            labelId="project-name-label"
+            id="project-name-select"
+            value={selectedProject}
+            // onChange={handleChange}
+            onChange={handleProjectChange}
             label="Project Name"
           >
             <MenuItem value="Project Name 1">Project Name 1</MenuItem>
