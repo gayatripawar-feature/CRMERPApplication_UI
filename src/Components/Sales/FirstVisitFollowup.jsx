@@ -82,7 +82,9 @@ const FirstvisitFollowup = () => {
   
   const [ifscCode, setIfscCode] = useState(""); 
   const [ifscCodeError, setIfscCodeError] = useState("");
-  const [status, setStatus] = useState({});
+  // const [status, setStatus] = useState({});
+  const [status, setStatus] = useState('');
+
   
     const [fileNames, setFileNames] = useState({
       firmPanNoDocument: "",
@@ -124,14 +126,17 @@ const FirstvisitFollowup = () => {
       validateAge(value); // You should already have this function defined
     };
   
-    const handleStatusChange = (event, leadId) => {
-        setStatus({
-          ...status,
-          [leadId]: event.target.value
-        });
-      };
+    // const handleStatusChange = (event, leadId) => {
+    //     setStatus({
+    //       ...status,
+    //       [leadId]: event.target.value
+    //     });
+    //   };
   
-  
+    const handleStatusChange = (event) => {
+      setStatus(event.target.value);
+    };
+    
     const handleOccupationChange = (e, index) => {
       const value = e.target.value;
       const updatedPartners = [...partners];
@@ -1042,8 +1047,9 @@ const FirstvisitFollowup = () => {
         <InputLabel>Status</InputLabel>
         <Select
           value={status}
-          // onChange={handleStatusChange}
-          onChange={(e) => handleStatusChange(e, 'Status')}
+        //  onChange={(e) => handleStatusChange(e, 'Status')}
+        onChange={handleStatusChange}
+
           label="Status"
         >
           <MenuItem value="follow_up">Follow up</MenuItem>
