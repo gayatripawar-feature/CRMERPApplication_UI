@@ -177,7 +177,8 @@ const [coAllotteePan, setCoAllotteePan] = useState("");
 const [coAllotteeAadhar, setCoAllotteeAadhar] = useState("");
 const [coAllotteeAadharError, setCoAllotteeAadharError] = useState("");
 
-const [expandedSection, setExpandedSection] = useState(null);
+// const [expandedSection, setExpandedSection] = useState(null);
+const [expandedSection, setExpandedSection] = useState(0);
 const [isExpanded, setIsExpanded] = useState(false);
 
 
@@ -824,7 +825,7 @@ const handleCoAllotteeAadharChange = (e) => {
   
       
 
-        {/* <div className="d-flex align-items-center mb-3">
+         <div className="d-flex align-items-center mb-3">
   {sections.map((section, index) => (
     <Button
       key={index}
@@ -853,7 +854,7 @@ const handleCoAllotteeAadharChange = (e) => {
       <span style={{ color: "white", fontSize: "16px" }}>{section.label}</span> 
     </Button>
   ))}
-</div> */}
+</div> 
 
 
 
