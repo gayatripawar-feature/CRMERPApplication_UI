@@ -701,7 +701,7 @@ const handleToggle = () => {
               <TableCell>
                 <input
                   type="number"
-                  value={loan.cashWithAV}
+                  // value={loan.cashWithAV}
                   onChange={(e) => handleCashWithAVChange(loan.flatNo, e.target.value)}
                   style={{
                     padding: '8px',
