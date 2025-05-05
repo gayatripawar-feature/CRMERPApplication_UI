@@ -545,7 +545,52 @@ const displayLoans = () => {
     const documentUrl = "https://your-document-url.com"; // Replace with actual document URL
     window.open(documentUrl, "_blank"); // Opens in a new tab
   };
-
+  const handleSubmit = (event) => {
+    event.preventDefault();
+  
+    let isValid = true;
+  
+    if (name.trim() === '') {
+      setNameError(true);
+      setNameHelperText('Name is required');
+      isValid = false;
+    }
+  
+    if (!/^[A-Z]{5}[0-9]{4}[A-Z]$/.test(pan)) {
+      setPanError(true);
+      setPanHelperText('Invalid PAN format');
+      isValid = false;
+    }
+  
+    if (!/^[0-9]{12}$/.test(aadhar)) {
+      setAadharError(true);
+      setAadharHelperText('Invalid Aadhar Number');
+      isValid = false;
+    }
+  
+    if (!/^\d{10}$/.test(coMobile)) {
+      setCoMobileError(true);
+      setCoMobileHelperText('Invalid mobile number');
+      isValid = false;
+    }
+  
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(coEmail)) {
+      setCoEmailError(true);
+      setCoEmailHelperText('Invalid email');
+      isValid = false;
+    }
+  
+    
+  
+    if (!isValid) {
+      return; // Stop the submission
+    }
+  
+    // Proceed to save the form data
+    console.log('Form is valid. Submitting...');
+    
+  };
+  
   
 const loansData = [
   {
@@ -931,7 +976,7 @@ const handleDownloadPDFCRM = () => {
           >
           
 
-          
+          <form onSubmit={handleSubmit}>
         <Typography variant="h5" gutterBottom sx={{ paddingTop: 3 }}>
         Section 1: Personal Information
         </Typography>
@@ -1047,12 +1092,7 @@ const handleDownloadPDFCRM = () => {
       />
     </Grid>
 
-  {/* <Grid item xs={6}>
-    <TextField
-      label="AADHAR No."
-      variant="outlined"
-    />
-  </Grid> */}
+  
    <Grid item xs={6}>
       <TextField
         label="AADHAR No."
@@ -1129,13 +1169,7 @@ const handleDownloadPDFCRM = () => {
     />
   </Grid>
 
-  {/* <Grid item xs={6}>
-    <TextField
-      label="Name of Co-Allottee"
-      fullWidth
-      variant="outlined"
-    />
-  </Grid> */}
+  
    <Grid item xs={2}>
         <FormControl fullWidth required>
           <InputLabel>Title</InputLabel>
@@ -1180,13 +1214,7 @@ const handleDownloadPDFCRM = () => {
     />
   </Grid>
 
-  {/* <Grid item xs={6}>
-    <TextField
-      label="PAN No. (Co-Allottee)"
-      fullWidth
-      variant="outlined"
-    />
-  </Grid> */}
+ 
   <Grid item xs={6}>
    <TextField
         label="PAN No. (Co-Allottee)"
@@ -1695,7 +1723,7 @@ Section 2: Particulars of Flat
   
   
   
-  
+  </form>
         
     
           </Paper>
