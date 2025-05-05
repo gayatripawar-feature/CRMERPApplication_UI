@@ -67,6 +67,7 @@ const HomeLoan = () => {
 
 
   const [selectedFileName, setSelectedFileName] = useState(''); 
+  
   useEffect(() => {
     setTotalPages(Math.ceil(filteredLoans.length / rowsPerPage));
   }, [filteredLoans, rowsPerPage]);

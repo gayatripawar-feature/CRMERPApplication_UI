@@ -6,7 +6,7 @@
 
 
 import React, { useState, useEffect } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, MenuItem, TextField ,Tooltip,IconButton,Typography} from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper,Box, Button, MenuItem, TextField ,Tooltip,IconButton,Typography} from '@mui/material';
 import { FaEye,FaEyeSlash } from 'react-icons/fa'; 
 import EditIcon from '@mui/icons-material/Edit';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
@@ -26,6 +26,8 @@ import jsPDF from "jspdf";
 import { toast } from "react-toastify";
 import { FaFileDownload } from "react-icons/fa";
 import autoTable from "jspdf-autotable";
+
+
 const fetchLoansData = async () => {
   const response = await fetch('/api/getOCRCollection');
   return response.json();
@@ -40,7 +42,7 @@ const CRM = () => {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
  
-
+  const [selectedAadharFiles, setSelectedAadharFiles] = useState([]);
   const [flatType, setFlatType] = useState('');
   const [parking, setParking] = useState('');
   const [floor, setFloor] = useState('');
@@ -58,10 +60,47 @@ const CRM = () => {
     const [inputValue, setInputValue] = useState("");
     const [isExpanded, setIsExpanded] = useState(true); 
     const [showForm, setShowForm] = useState(false);
-
+    const [passportPhotos, setPassportPhotos] = useState([]);
       const [dateOfFlatBooking, setDateOfFlatBooking] = useState(null);
         const [closingExecutive, setClosingExecutive] = useState('');
+        const [email, setEmail] = useState('');
+        const [error, setError] = useState(false);
+        const [helperText, setHelperText] = useState('');
 
+        const [pan, setPan] = useState('');
+        const [panError, setPanError] = useState(false);
+        const [panHelperText, setPanHelperText] = useState('');
+        const [aadhar, setAadhar] = useState('');
+        const [aadharError, setAadharError] = useState(false);
+        const [aadharHelperText, setAadharHelperText] = useState('');
+
+        const [title, setTitle] = useState('');
+  const [name, setName] = useState('');
+  const [nameError, setNameError] = useState(false);
+  const [nameHelperText, setNameHelperText] = useState('');
+
+  const [coTitle, setCoTitle] = useState('');
+  const [coName, setCoName] = useState('');
+  const [coNameError, setCoNameError] = useState(false);
+  const [coNameHelperText, setCoNameHelperText] = useState('');
+  const [selectedMarriageFiles, setSelectedMarriageFiles] = useState([]);
+
+
+  const [coPan, setCoPan] = useState('');
+  const [coPanError, setCoPanError] = useState(false);
+  const [coPanHelperText, setCoPanHelperText] = useState('');
+  const [coAadhar, setCoAadhar] = useState('');
+  const [coAadharError, setCoAadharError] = useState(false);
+  const [coAadharHelperText, setCoAadharHelperText] = useState('');
+  const [coMobile, setCoMobile] = useState('');
+  const [coMobileError, setCoMobileError] = useState(false);
+  const [coMobileHelperText, setCoMobileHelperText] = useState('');
+
+  const [coEmail, setCoEmail] = useState('');
+  const [coEmailError, setCoEmailError] = useState(false);
+  const [coEmailHelperText, setCoEmailHelperText] = useState('');
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [uploadedFiles, setUploadedFiles] = useState([]);
   useEffect(() => {
     loadLoansData();
   }, []);
@@ -76,22 +115,214 @@ const CRM = () => {
     setFilteredLoans(data);
   };
 
+  const handleCoAadharChange = (e) => {
+    const value = e.target.value.replace(/\D/g, ''); // Remove non-digits
+    setCoAadhar(value);
+
+    if (value.length === 0) {
+      setCoAadharError(false);
+      setCoAadharHelperText('');
+    } else if (value.length !== 12) {
+      setCoAadharError(true);
+      setCoAadharHelperText('Only 12 digits must be entered.');
+    } else {
+      setCoAadharError(false);
+      setCoAadharHelperText('');
+    }
+  };
+  const handleFileChange = (e) => {
+    const newFiles = Array.from(e.target.files);
+    setSelectedFiles((prevFiles) => [...prevFiles, ...newFiles]);
+  };
   
+
+  const handleAadharChange = (e) => {
+    const value = e.target.value.replace(/\s/g, ''); // remove spaces
+    setAadhar(value);
+
+    const aadharRegex = /^[0-9]{12}$/;
+
+    if (value === '') {
+      setAadharError(false);
+      setAadharHelperText('');
+    } else if (!aadharRegex.test(value)) {
+      setAadharError(true);
+      setAadharHelperText('Enter a valid 12-digit Aadhar number');
+    } else {
+      setAadharError(false);
+      setAadharHelperText('');
+    }
+  };
 
   const handleToggle = () => {
     setIsExpanded((prev) => !prev);
   };
   
-
+  const handleAadharFileChange = (e) => {
+    const newFiles = Array.from(e.target.files);
+    setSelectedAadharFiles((prevFiles) => {
+      const allFiles = [...prevFiles, ...newFiles];
+      // Remove duplicates by file name
+      const uniqueFiles = Array.from(new Map(allFiles.map(file => [file.name, file])).values());
+      return uniqueFiles;
+    });
+  };
+  
+  const handleFileSelection = (event) => {
+    const selectedFiles = Array.from(event.target.files);
+    
+    setUploadedFiles((prevFiles) => [...prevFiles, ...selectedFiles.map((file) => file.name)]);
+  };
   const handleClose = () => {
-    setShowForm(false);  // Close the modal by setting showForm to false
+    setShowForm(false);  
   };
 
+  const handleMarriageFileChange = (e) => {
+    const newFiles = Array.from(e.target.files);
+    setSelectedMarriageFiles((prevFiles) => {
+      const allFiles = [...prevFiles, ...newFiles];
+      const uniqueFiles = Array.from(new Map(allFiles.map(file => [file.name, file])).values());
+      return uniqueFiles;
+    });
+  };
+  
   const handleClosingExecutiveChange = (event) => {
     setClosingExecutive(event.target.value);
   };
 
+  const handleEmailChange = (e) => {
+    const value = e.target.value;
+    setEmail(value);
 
+    // Regex to match email with domains like gmail.com, .in, .org, or any custom domain
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.(com|in|org|[a-zA-Z]{2,})$/;
+
+    if (value === '') {
+      setError(false);
+      setHelperText('');
+    } else if (!emailRegex.test(value)) {
+      setError(true);
+      setHelperText('Enter a valid email (e.g. user@gmail.com, user@customdomain.in)');
+    } else {
+      setError(false);
+      setHelperText('');
+    }
+  };
+  const handleTitleChange = (e) => {
+    setTitle(e.target.value);
+  };
+
+  const handleCoMobileChange = (e) => {
+    const value = e.target.value.replace(/\D/g, '');
+    setCoMobile(value);
+
+    if (value.length === 10) {
+      setCoMobileError(false);
+      setCoMobileHelperText('');
+    } else {
+      setCoMobileError(true);
+      setCoMobileHelperText('Enter a valid 10-digit mobile number.');
+    }
+  };
+
+  const handleCoEmailChange = (e) => {
+    const value = e.target.value;
+    setCoEmail(value);
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.(com|in|org|[a-z]{2,})$/i;
+
+    if (value === '') {
+      setCoEmailError(false);
+      setCoEmailHelperText('');
+    } else if (!emailRegex.test(value)) {
+      setCoEmailError(true);
+      setCoEmailHelperText('Enter a valid email (e.g. name@gmail.com, .in, .org, etc.)');
+    } else {
+      setCoEmailError(false);
+      setCoEmailHelperText('');
+    }
+  };
+  const handleNameChange = (e) => {
+    const value = e.target.value;
+    const nameRegex = /^[A-Za-z\s]+$/;
+
+    setName(value);
+
+    if (value === '') {
+      setNameError(false);
+      setNameHelperText('');
+    } else if (!nameRegex.test(value)) {
+      setNameError(true);
+      setNameHelperText('Name can only contain letters and spaces');
+    } else {
+      setNameError(false);
+      setNameHelperText('');
+    }
+  };
+
+  const handlePanChange = (e) => {
+    const value = e.target.value.toUpperCase(); // PAN is usually uppercase
+    setPan(value);
+
+    const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
+
+    if (value === '') {
+      setPanError(false);
+      setPanHelperText('');
+    } else if (!panRegex.test(value)) {
+      setPanError(true);
+      setPanHelperText('Enter valid PAN format (e.g. ABCDE1234F)');
+    } else {
+      setPanError(false);
+      setPanHelperText('');
+    }
+  };
+  const handleCoTitleChange = (e) => {
+    setCoTitle(e.target.value);
+  };
+
+
+  const handleCoPanChange = (e) => {
+    const value = e.target.value.toUpperCase();
+    setCoPan(value);
+
+    const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
+
+    if (value === '') {
+      setCoPanError(false);
+      setCoPanHelperText('');
+    } else if (!panRegex.test(value)) {
+      setCoPanError(true);
+      setCoPanHelperText('Invalid PAN format (e.g., ABCDE1234F)');
+    } else {
+      setCoPanError(false);
+      setCoPanHelperText('');
+    }
+  };
+
+  const handleCoNameChange = (e) => {
+    const value = e.target.value;
+    const nameRegex = /^[A-Za-z\s]+$/;
+
+    setCoName(value);
+
+    if (value === '') {
+      setCoNameError(false);
+      setCoNameHelperText('');
+    } else if (!nameRegex.test(value)) {
+      setCoNameError(true);
+      setCoNameHelperText('Name can only contain letters and spaces');
+    } else {
+      setCoNameError(false);
+      setCoNameHelperText('');
+    }
+  };
+
+  const handlePhotoFileChange = (e) => {
+    const newFiles = Array.from(e.target.files); // Get new files
+    setPassportPhotos((prevFiles) => [...prevFiles, ...newFiles]); // Append new files to the existing ones
+  };
+  
   const getFilterOptions = (type) => {
     switch (type) {
       case "Flat Type":
@@ -742,14 +973,32 @@ const handleDownloadPDFCRM = () => {
     </LocalizationProvider>
   </Grid>
 
-  <Grid item xs={6}>
-    <TextField
-      label="NAME OF ALOTEE"
-      fullWidth
-      variant="outlined"
-      required
-    />
-  </Grid>
+   <Grid item xs={2}>
+        <FormControl fullWidth required>
+          <InputLabel>Title</InputLabel>
+          <Select value={title} onChange={handleTitleChange} label="Title">
+            <MenuItem value="Mr.">Mr.</MenuItem>
+            <MenuItem value="Mrs.">Mrs.</MenuItem>
+            <MenuItem value="Miss">Miss</MenuItem>
+          </Select>
+        </FormControl>
+      </Grid>
+
+      <Grid item xs={4}>
+        <TextField
+          label="NAME OF ALLOTTEE"
+          fullWidth
+          variant="outlined"
+          required
+          value={name}
+          onChange={handleNameChange}
+          error={nameError}
+          helperText={nameHelperText}
+        />
+      </Grid>
+
+
+     
 
   <Grid item xs={6}>
     <TextField
@@ -786,19 +1035,36 @@ const handleDownloadPDFCRM = () => {
   </Grid>
 
   <Grid item xs={6}>
-    <TextField
-      label="PAN No."
-      variant="outlined"
-      inputProps={{ maxLength: 10 }} // Prevent entering more than 10 characters
-    />
-  </Grid>
+      <TextField
+        label="PAN No."
+        variant="outlined"
+        fullWidth
+        value={pan}
+        onChange={handlePanChange}
+        inputProps={{ maxLength: 10 }}
+        error={panError}
+        helperText={panHelperText}
+      />
+    </Grid>
 
-  <Grid item xs={6}>
+  {/* <Grid item xs={6}>
     <TextField
       label="AADHAR No."
       variant="outlined"
     />
-  </Grid>
+  </Grid> */}
+   <Grid item xs={6}>
+      <TextField
+        label="AADHAR No."
+        variant="outlined"
+        fullWidth
+        value={aadhar}
+        onChange={handleAadharChange}
+        inputProps={{ maxLength: 12 }}
+        error={aadharError}
+        helperText={aadharHelperText}
+      />
+    </Grid>
 
   <Grid item xs={6}>
     <TextField
@@ -838,6 +1104,9 @@ const handleDownloadPDFCRM = () => {
       label="Email ID"
       fullWidth
       variant="outlined"
+      onChange={handleEmailChange}
+      error={error}
+      helperText={helperText}
     />
   </Grid>
 
@@ -860,13 +1129,36 @@ const handleDownloadPDFCRM = () => {
     />
   </Grid>
 
-  <Grid item xs={6}>
+  {/* <Grid item xs={6}>
     <TextField
       label="Name of Co-Allottee"
       fullWidth
       variant="outlined"
     />
-  </Grid>
+  </Grid> */}
+   <Grid item xs={2}>
+        <FormControl fullWidth required>
+          <InputLabel>Title</InputLabel>
+          <Select value={coTitle} onChange={handleCoTitleChange} label="Title">
+            <MenuItem value="Mr.">Mr.</MenuItem>
+            <MenuItem value="Mrs.">Mrs.</MenuItem>
+            <MenuItem value="Miss">Miss</MenuItem>
+          </Select>
+        </FormControl>
+      </Grid>
+
+      <Grid item xs={4}>
+        <TextField
+          label="NAME OF CO-ALLOTTEE"
+          fullWidth
+          variant="outlined"
+          required
+          value={coName}
+          onChange={handleCoNameChange}
+          error={coNameError}
+          helperText={coNameHelperText}
+        />
+      </Grid>
 
   <Grid item xs={6}>
     <TextField
@@ -888,30 +1180,69 @@ const handleDownloadPDFCRM = () => {
     />
   </Grid>
 
-  <Grid item xs={6}>
+  {/* <Grid item xs={6}>
     <TextField
       label="PAN No. (Co-Allottee)"
       fullWidth
       variant="outlined"
     />
-  </Grid>
+  </Grid> */}
+  <Grid item xs={6}>
+   <TextField
+        label="PAN No. (Co-Allottee)"
+        fullWidth
+        variant="outlined"
+        inputProps={{ maxLength: 10 }}
+        value={coPan}
+        onChange={handleCoPanChange}
+        error={coPanError}
+        helperText={coPanHelperText}
+      />
+      </Grid>
 
   <Grid item xs={6}>
     <TextField
       label="AADHAR No. (Co-Allottee)"
       fullWidth
       variant="outlined"
-      inputProps={{ maxLength: 12 }} // Ensures AADHAR No. can't exceed 12 digits
+      inputProps={{ maxLength: 12 }} 
+      onChange={handleCoAadharChange}
+      error={coAadharError}
+      helperText={coAadharHelperText}
     />
   </Grid>
 
-  <Grid item xs={6}>
+  {/* <Grid item xs={6}>
     <TextField
       label="MOBILE No. & EMAIL (Co-Allottee)"
       fullWidth
       variant="outlined"
     />
-  </Grid>
+  </Grid> */}
+  <Grid item xs={6}>
+        <TextField
+          label="MOBILE No. (Co-Allottee)"
+          fullWidth
+          variant="outlined"
+          value={coMobile}
+          onChange={handleCoMobileChange}
+          inputProps={{ maxLength: 10 }}
+          error={coMobileError}
+          helperText={coMobileHelperText}
+        />
+      </Grid>
+
+      <Grid item xs={6}>
+        <TextField
+          label="EMAIL (Co-Allottee)"
+          fullWidth
+          variant="outlined"
+          value={coEmail}
+          onChange={handleCoEmailChange}
+          error={coEmailError}
+          helperText={coEmailHelperText}
+        />
+      </Grid>
 </Grid>
 
 <hr/>
@@ -1112,67 +1443,150 @@ Section 2: Particulars of Flat
   {/* PAN Card */}
   <Grid item xs={6}>
     <Typography variant="body1">PAN Card (of both)</Typography>
-    <Button 
-      variant="contained" 
-      component="label"
-      sx={{ backgroundColor: "white", color: "black", "&:hover": { backgroundColor: "#f0f0f0" } }}
-    >
-      Choose File
-      <input type="file" hidden />
-    </Button>
+    <Button
+        variant="contained"
+        component="label"
+        sx={{ backgroundColor: "white", color: "black", "&:hover": { backgroundColor: "#f0f0f0" } }}
+      >
+        Choose File
+        <input
+          type="file"
+          hidden
+          multiple
+          onChange={handleFileChange}
+        />
+      </Button>
+      <Box mt={1}>
+        {selectedFiles.map((file, index) => (
+          <Typography key={index} variant="body2">
+            {file.name}
+          </Typography>
+        ))}
+      </Box>
   </Grid>
 
   {/* AADHAR Card */}
   <Grid item xs={6}>
-    <Typography variant="body1">AADHAR Card (of both)</Typography>
-    <Button 
-      variant="contained" 
-      component="label"
-      sx={{ backgroundColor: "white", color: "black", "&:hover": { backgroundColor: "#f0f0f0" } }}
-    >
-      Choose File
-      <input type="file" hidden />
-    </Button>
-  </Grid>
+  <Typography variant="body1">AADHAR Card (of both)</Typography>
+  <Button
+    variant="contained"
+    component="label"
+    sx={{
+      backgroundColor: "white",
+      color: "black",
+      "&:hover": { backgroundColor: "#f0f0f0" }
+    }}
+  >
+    Choose File
+    <input type="file" hidden multiple onChange={handleAadharFileChange} />
+  </Button>
+
+  {selectedAadharFiles.length > 0 && (
+    <Box mt={1}>
+      {selectedAadharFiles.map((file, index) => (
+        <Typography key={index} variant="body2">
+          {file.name}
+        </Typography>
+      ))}
+    </Box>
+  )}
+</Grid>
+
 
   {/* Marriage Certificate */}
   <Grid item xs={6}>
-    <Typography variant="body1">MARRIAGE CERTIFICATE (If Available)</Typography>
-    <Button 
-      variant="contained" 
-      component="label"
-      sx={{ backgroundColor: "white", color: "black", "&:hover": { backgroundColor: "#f0f0f0" } }}
-    >
-      Choose File
-      <input type="file" hidden />
-    </Button>
-  </Grid>
+  <Typography variant="body1">MARRIAGE CERTIFICATE (If Available)</Typography>
+  <Button
+    variant="contained"
+    component="label"
+    sx={{
+      backgroundColor: "white",
+      color: "black",
+      "&:hover": { backgroundColor: "#f0f0f0" }
+    }}
+  >
+    Choose File
+    <input type="file" hidden multiple onChange={handleMarriageFileChange} />
+  </Button>
+
+  {selectedMarriageFiles.length > 0 && (
+    <Box mt={1}>
+      {selectedMarriageFiles.map((file, index) => (
+        <Typography key={index} variant="body2">
+          {file.name}
+        </Typography>
+      ))}
+    </Box>
+  )}
+</Grid>
+
 
   {/* Passport Size Photo */}
+
   <Grid item xs={6}>
-    <Typography variant="body1">PASSPORT SIZE PHOTO (of both)</Typography>
-    <Button 
-      variant="contained" 
-      component="label"
-      sx={{ backgroundColor: "white", color: "black", "&:hover": { backgroundColor: "#f0f0f0" } }}
-    >
-      Choose File
-      <input type="file" hidden />
-    </Button>
-  </Grid>
+  <Typography variant="body1">PASSPORT SIZE PHOTO (of both)</Typography>
+  <Button
+    variant="contained"
+    component="label"
+    sx={{
+      backgroundColor: "white",
+      color: "black",
+      "&:hover": { backgroundColor: "#f0f0f0" },
+      mt: 1
+    }}
+  >
+    Choose Files
+    <input
+      type="file"
+      hidden
+      multiple
+      onChange={handlePhotoFileChange}
+    />
+  </Button>
+
+  {passportPhotos.length > 0 && (
+    <Box mt={1}>
+      {passportPhotos.map((file, index) => (
+        <Typography key={index} variant="body2">
+          {file.name}
+        </Typography>
+      ))}
+    </Box> 
+  )}
+</Grid> 
+
+  
 
   {/* Any Other Documents */}
   <Grid item xs={6}>
-    <Typography variant="body1">Any Other</Typography>
-    <Button 
-      variant="contained" 
-      component="label"
-      sx={{ backgroundColor: "white", color: "black", "&:hover": { backgroundColor: "#f0f0f0" } }}
-    >
-      Choose File
-      <input type="file" hidden />
-    </Button>
-  </Grid>
+      <Typography variant="body1">Any Other</Typography>
+      <Button 
+        variant="contained" 
+        component="label"
+        sx={{ backgroundColor: "white", color: "black", "&:hover": { backgroundColor: "#f0f0f0" } }}
+      >
+        Choose File
+        <input 
+          type="file" 
+          hidden 
+          multiple 
+          onChange={handleFileSelection} 
+        />
+      </Button>
+
+      <div>
+        {uploadedFiles.length > 0 && (
+          <div>
+            {uploadedFiles.map((fileName, index) => (
+              // Use Typography with children to display file names
+              <Typography key={index} sx={{ margin: 1 }}>
+                {fileName}
+              </Typography>
+            ))}
+          </div>
+        )}
+      </div>
+    </Grid>
 </Grid>
 
 
@@ -1223,6 +1637,7 @@ Section 2: Particulars of Flat
     <Grid item xs={6}>
       <DatePicker
         label="Cheque/TRN Date"
+         inputFormat="dd/MM/yyyy"
         renderInput={(params) => (
           <TextField 
             {...params} 
