@@ -25,6 +25,7 @@ import CloseIcon from "@mui/icons-material/Close";
 
 
 const Registration = () => {
+  
   const [loans, setLoans] = useState([]);
   const [filteredLoans, setFilteredLoans] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -33,7 +34,7 @@ const Registration = () => {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [checkedItems, setCheckedItems] = useState({});
-  // State for filter options
+ 
   const [flatType, setFlatType] = useState('');
   const [parking, setParking] = useState('');
   const [floor, setFloor] = useState('');
@@ -664,7 +665,7 @@ const handleFileUpload = (file, index) => {
                />
              </div>
          
-             {/* End Date */}
+             
              <div className="d-flex align-items-center">
                <label style={{ marginRight: '5px' }}>End Date:</label>
                <TextField
