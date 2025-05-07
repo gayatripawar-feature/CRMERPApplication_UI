@@ -266,10 +266,10 @@ const handleToggle = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
   
-    if (!selectedLoan.receivedDate) {
-      toast.error("Please select received date");
-      return;
-    }
+    // if (!selectedLoan.receivedDate) {
+    //   toast.error("Please select received date");
+    //   return;
+    // }
   
     setSelectedDates(prev => ({
       ...prev,
@@ -1014,6 +1014,7 @@ Towards"
 <FormControl fullWidth>
   <InputLabel>Name of Customer</InputLabel>
   <Select
+  label="Name Of Customer"
     value={selectedLoan?.nameOfAllotee || ""}
     onChange={(e) => setSelectedLoan({ ...selectedLoan, nameOfAllotee: e.target.value })}
   >
@@ -1027,6 +1028,7 @@ Towards"
       <FormControl sx={{ minWidth: 100 }}>
           <InputLabel>Demand Level</InputLabel>
           <Select
+          label="Demand Level"
             value={selectedLoan?.demandLevel || ""}
             onChange={(e) => setSelectedLoan({ ...selectedLoan, demandLevel: e.target.value })}
           >
@@ -1108,6 +1110,7 @@ Towards"
   <FormControl sx={{ width: "100%" }}>
     <InputLabel>Mode of Payment</InputLabel>
     <Select
+    label="Mode Of Payment"
       value={selectedLoan?.paymentBalanceWords || ""}
       onChange={(e) => setSelectedLoan({ ...selectedLoan, paymentBalanceWords: e.target.value })}
     >
