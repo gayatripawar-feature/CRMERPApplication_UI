@@ -304,7 +304,7 @@ const [data, setData] = useState([
     demandLetter: "Issued",
     demandLevel: 10,
   },
-  // more rows...
+  
 ]);
 
   return (
@@ -376,7 +376,7 @@ const [data, setData] = useState([
     sx={{
       background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
       color: "white",
-      fontWeight: "bold",
+      // fontWeight: "bold",
       fontWeight: "900",
       textTransform: "none",
       marginTop :"px",
@@ -550,6 +550,7 @@ const [data, setData] = useState([
             label="Select Date"
             value={row.receivedDate}
             onChange={(newDate) => handleDateChange(newDate, index)}
+             format="dd/MM/yyyy"
             renderInput={(params) => <TextField {...params} size="small" />}
           />
         </LocalizationProvider>
@@ -557,7 +558,7 @@ const [data, setData] = useState([
 
     
       <TableCell>
-        <FormControl fullWidth size="small">
+        <FormControl fullWidth size="medium">
           <InputLabel>Demand Level</InputLabel>
           <Select
             value={row.demandLevel}
@@ -627,6 +628,7 @@ const [data, setData] = useState([
       label="Select Date"
       value={selectedDate}
       onChange={handleDateChange}
+       format="dd/MM/yyyy"
       renderInput={(params) => (
         <TextField
           {...params}
@@ -722,6 +724,7 @@ const [data, setData] = useState([
       label="Select Date"
       value={selectedDate}
       onChange={(newValue) => setSelectedDate(newValue)}
+       format="dd/MM/yyyy"
       renderInput={(params) => <TextField {...params} fullWidth />}
       style={{ width: '200%' }}
     />
