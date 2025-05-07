@@ -19,12 +19,13 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import { IconButton } from "@mui/material";
 import InfoIcon from '@mui/icons-material/Info';  
-
+import autoTable from "jspdf-autotable";
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import { FaFileDownload } from "react-icons/fa";
 
 
 
+import "jspdf-autotable";
 
 const fetchLoansData = async () => {
   const response = await fetch('/api/getOCRCollection');
@@ -126,6 +127,7 @@ const [openAmount, setOpenAmount] = useState(false);
   };
 
   const handleOpenModal = (loan) => {
+    console.log('Opening modal for loan:', loan)
     setSelectedLoan(loan);
     setOpenModal(true);
   };
@@ -326,22 +328,68 @@ const handleToggle = () => {
  
 
 
-  const handleDownloadPDFDailyCollection= () => {
-    console.log("Loans data before mapping:", loans); // Use loans instead of firms
+  // const handleDownloadPDFDailyCollection= () => {
+  //   console.log("Loans data before mapping:", loans); // Use loans instead of firms
   
    
+  
+  //   const doc = new jsPDF("landscape");
+  //   doc.setFontSize(14);
+  //   doc.text("Firm Details Report", 14, 15);
+  
+  //   const tableColumn = [
+  //     "Timestamp", "Firm Name", "Firm Address", "Firm PAN No",
+  //     "Firm GST No", "Residential Address", "PAN No", "Aadhaar No",
+  //     "Photo", "Light Bill"
+  //   ];
+  
+  //   const tableRows = loans.map(row => [
+  //     row.timestamp || "-",
+  //     row.name || "-",
+  //     row.address || "-",
+  //     row.firmPanNo || "-",
+  //     row.firmGstNo || "-",
+  //     row.residentialAddress || "-",
+  //     row.panNo || "-",
+  //     row.aadhaarNo || "-",
+  //     row.photo || "-",
+  //     row.lightBill || "-"
+  //   ]);
+  
+  //   console.log("Formatted Table Rows:", tableRows);
+  
+  //   autoTable(doc, {
+  //     startY: 25,
+  //     head: [tableColumn],
+  //     body: tableRows,
+  //     styles: { fontSize: 10, cellPadding: 3 },
+  //     headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+  //   });
+  
+  //   doc.save("DailyCollection_Report.pdf");
+  // };
+
+
+  const handleDownloadPDFDailyCollection = () => {
+    console.log("Loans data before mapping:", loans); // Use loans instead of firms
   
     const doc = new jsPDF("landscape");
     doc.setFontSize(14);
     doc.text("Firm Details Report", 14, 15);
   
-    const tableColumn = [
+    // Define the columns for the first page
+    const firstPageColumns = [
       "Timestamp", "Firm Name", "Firm Address", "Firm PAN No",
-      "Firm GST No", "Residential Address", "PAN No", "Aadhaar No",
+      "Firm GST No", "Residential Address", "PAN No", "Aadhaar No"
+    ];
+  
+    // Define the columns for the second page
+    const secondPageColumns = [
       "Photo", "Light Bill"
     ];
   
-    const tableRows = loans.map(row => [
+    // Prepare rows for the first page (general info)
+    const firstPageRows = loans.map(row => [
       row.timestamp || "-",
       row.name || "-",
       row.address || "-",
@@ -349,26 +397,42 @@ const handleToggle = () => {
       row.firmGstNo || "-",
       row.residentialAddress || "-",
       row.panNo || "-",
-      row.aadhaarNo || "-",
+      row.aadhaarNo || "-"
+    ]);
+  
+    // Prepare rows for the second page (photo and light bill info)
+    const secondPageRows = loans.map(row => [
       row.photo || "-",
       row.lightBill || "-"
     ]);
   
-    console.log("Formatted Table Rows:", tableRows);
+    console.log("First Page Rows:", firstPageRows);
+    console.log("Second Page Rows:", secondPageRows);
   
+    // Add the first table (general info)
     autoTable(doc, {
-      startY: 25,
-      head: [tableColumn],
-      body: tableRows,
+      startY: 25, // Start position for the table
+      head: [firstPageColumns], // Column headers
+      body: firstPageRows, // Table rows (data)
       styles: { fontSize: 10, cellPadding: 3 },
       headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
     });
   
+    // Add a new page for the second table (photo and light bill info)
+    doc.addPage();
+  
+    // Add the second table (photo and light bill info)
+    autoTable(doc, {
+      startY: 25, // Start position for the table
+      head: [secondPageColumns], // Column headers
+      body: secondPageRows, // Table rows (data)
+      styles: { fontSize: 10, cellPadding: 3 },
+      headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+    });
+  
+    // Save the PDF with the given filename
     doc.save("DailyCollection_Report.pdf");
   };
-
-
-
   return (
     <div className="main-content">
        {!openModal ? (
