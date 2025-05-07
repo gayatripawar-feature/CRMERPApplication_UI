@@ -60,47 +60,6 @@ const getFilterOptions = (type) => {
 
 
 
-// const currentData = [
-//   {
-//     flatNo: "101",
-//     nameOfAllotee: "John Doe",
-//     nameOfCoAllotee: "Jane Doe",
-//     type: "2 BHK",
-//     floor: "1st Floor",
-//     emailId: "johndoe@example.com",
-//     whatsappMobileNo: "+1234567890",
-//     rate: "₹50,000",
-//     agreementValue: "₹5,00,000",
-//     dateOfBooking: "01/01/2023",
-//     parking: "Yes",
-//     agreementDraftGeneration: "Generated",
-//     agreementStatus: "",
-//     checklistBeforeAgreement: "",
-//     addressOfAgreement: "123 Street, City, Country",
-//     agreementDate: "", // Add this field for the date
-//     time: "10:00:00",
-//   },
-//   {
-//     flatNo: "102",
-//     nameOfAllotee: "Alice Smith",
-//     nameOfCoAllotee: "Bob Smith",
-//     type: "3 BHK",
-//     floor: "2nd Floor",
-//     emailId: "alicesmith@example.com",
-//     whatsappMobileNo: "+1987654321",
-//     rate: "₹60,000",
-//     agreementValue: "₹6,00,000",
-//     dateOfBooking: "05/02/2023",
-//     parking: "No",
-//     agreementDraftGeneration: "Not Generated",
-//     agreementStatus: "",
-//     checklistBeforeAgreement: "",
-//     addressOfAgreement: "456 Avenue, City, Country",
-//     agreementDate: "", // Add this field for the date
-//     time: "12:00:00",
-//   },
-//   // Add more rows as needed...
-// ];
 
 
 

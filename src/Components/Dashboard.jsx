@@ -1,206 +1,5 @@
 
 
-// import React, { useState } from 'react';
-// import { Link, Outlet, useNavigate } from 'react-router-dom';
-// import { 
-//   FaBars, FaTachometerAlt, FaUserShield, FaCode, FaChartLine, FaCogs, FaUser, FaSignOutAlt 
-// } from 'react-icons/fa';
-
-// const Dashboard = () => {
-//   const [collapsed, setCollapsed] = useState(false);
-//   const [adminOpen, setAdminOpen] = useState(false);
-//   const [developerOpen, setDeveloperOpen] = useState(false);
-//   const [salesOpen, setSalesOpen] = useState(false);
-//   const [crmOpen, setCrmOpen] = useState(false);
-
-//   const navigate = useNavigate();
-
-//   const toggleSidebar = () => setCollapsed(!collapsed);
-
-//   const handleLogout = () => {
-   
-//     localStorage.removeItem('authToken');
-//     navigate('/login');
-//   };
-
-//   return (
-//     <div className="d-flex flex-column vh-100">
-//       {/* Top Navbar */}
-//       <nav className="navbar navbar-dark bg-dark px-3">
-//         <div className="d-flex align-items-center">
-//           <button className="btn btn-dark me-3" onClick={toggleSidebar}>
-//             <FaBars size={20} />
-//           </button>
-//           <span className="navbar-brand mb-0 h1">CRM ERP</span>
-//         </div>
-//         <div className="mx-auto w-50">
-//           <input type="text" className="form-control" placeholder="Search..." />
-//         </div>
-//         <div>
-//           <img 
-//             src="https://i.pravatar.cc/40?img=3" 
-//             alt="Profile"
-//             className="rounded-circle"
-//           />
-//         </div>
-//       </nav>
-
-//       <div className="d-flex flex-grow-1">
-//         {/* Sidebar */}
-//         <div 
-//           className="bg-dark text-white p-3 d-flex flex-column" 
-//           style={{ width: collapsed ? '80px' : '250px', transition: 'width 0.3s' }}
-//         >
-//           <ul className="nav flex-column">
-//             <li className="nav-item mb-3">
-//               <Link to="/" className="nav-link text-white d-flex align-items-center">
-//                 <FaTachometerAlt className="me-2" />
-//                 {!collapsed && <span>Dashboard</span>}
-//               </Link>
-//             </li>
-//             <li className="nav-item mb-3">
-//               <div 
-//                 className="nav-link text-white d-flex align-items-center" 
-//                 style={{ cursor: 'pointer' }}
-//                 onClick={() => setAdminOpen(!adminOpen)}
-//               >
-//                 <FaUserShield className="me-2" />
-//                 {!collapsed && <span>Admin Section</span>}
-//               </div>
-//               {adminOpen && !collapsed && (
-//                 <ul className="nav flex-column ps-3">
-//                   <li className="nav-item mb-2">
-//                     <Link to="/admin/salesperson" className="nav-link text-white d-flex align-items-center">
-//                       <FaUserShield className="me-2" />
-//                       <span>Sales Person</span>
-//                     </Link>
-//                   </li>
-//                 </ul>
-//               )}
-//             </li>
-//             <li className="nav-item mb-3">
-//               <div 
-//                 className="nav-link text-white d-flex align-items-center" 
-//                 style={{ cursor: 'pointer' }}
-//                 onClick={() => setDeveloperOpen(!developerOpen)}
-//               >
-//                 <FaCode className="me-2" />
-//                 {!collapsed && <span>Developer Module</span>}
-//               </div>
-//               {developerOpen && !collapsed && (
-//                 <ul className="nav flex-column ps-3">
-//                   <li className="nav-item mb-2">
-//                     <Link to="/developer/sharespace" className="nav-link text-white d-flex align-items-center">
-//                       <FaCode className="me-2" />
-//                       <span>Share Space</span>
-//                     </Link>
-//                   </li>
-//                 </ul>
-//               )}
-//             </li>
-//             <li className="nav-item mb-3">
-//               <div 
-//                 className="nav-link text-white d-flex align-items-center" 
-//                 style={{ cursor: 'pointer' }}
-//                 onClick={() => setSalesOpen(!salesOpen)}
-//               >
-//                 <FaChartLine className="me-2" />
-//                 {!collapsed && <span>Sales Module</span>}
-//               </div>
-//               {salesOpen && !collapsed && (
-//                 <ul className="nav flex-column ps-3">
-//                   <li className="nav-item mb-2">
-//                     <Link to="/sales/lostvisits" className="nav-link text-white d-flex align-items-center">
-//                       <FaChartLine className="me-2" />
-//                       <span>Lost Visits</span>
-//                     </Link>
-//                   </li>
-//                 </ul>
-//               )}
-//             </li>
-//             <li className="nav-item mb-3">
-//               <div 
-//                 className="nav-link text-white d-flex align-items-center" 
-//                 style={{ cursor: 'pointer' }}
-//                 onClick={() => setCrmOpen(!crmOpen)}
-//               >
-//                 <FaCogs className="me-2" />
-//                 {!collapsed && <span>CRM Module</span>}
-//               </div>
-//               {crmOpen && !collapsed && (
-//                 <ul className="nav flex-column ps-3">
-//                   <li className="nav-item mb-2">
-//                     <Link to="/crm/registration" className="nav-link text-white d-flex align-items-center">
-//                       <FaUser className="me-2" />
-//                       <span>Registration</span>
-//                     </Link>
-//                   </li>
-//                 </ul>
-//               )}
-//             </li>
-//           </ul>
-
-//           {/* Logout Option */}
-//           <div className="mt-auto">
-//             <button className="btn btn-danger w-100 d-flex align-items-center justify-content-center" onClick={handleLogout}>
-//               <FaSignOutAlt className="me-2" />
-//               {!collapsed && 'Logout'}
-//             </button>
-//           </div>
-//         </div>
-
-//         {/* Main Content */}
-//         <div className="flex-grow-1 p-4">
-//           <Outlet /> {/* Render the child routes */}
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Dashboard;
-
-
-
-// import React, { useState, useCallback } from 'react';
-// import { Link, Outlet, useNavigate } from 'react-router-dom';
-// import {
-//   FaBars, FaTachometerAlt, FaUserShield, FaCode, FaChartLine, FaCogs, FaSignOutAlt
-// } from 'react-icons/fa';
-// import { FaUsers, FaUserCheck, FaHome, FaFileAlt, FaFileSignature, FaStamp, FaDraftingCompass, FaBell } from "react-icons/fa";
-// import { 
-//   FaInfoCircle, 
-//   FaBuilding, 
-//   FaFileInvoiceDollar, 
-//   FaBullhorn, 
-//   FaUsers,  // <-- Add this
-//   FaUserCheck, 
-//   FaHome, 
-//   FaFileAlt, 
-//   FaFileSignature, 
-//   FaStamp, 
-//   FaDraftingCompass, 
-//   FaBell 
-// } from "react-icons/fa";
-
-// import React, { useState, useCallback } from 'react';
-// import { Link, Outlet, useNavigate } from 'react-router-dom';
-// import {
-//   FaBars, FaTachometerAlt, FaUserShield, FaCode, FaChartLine, FaCogs, FaSignOutAlt,
-//   FaUsers, FaUserCheck, FaHome, FaFileAlt, FaFileSignature, FaStamp, 
-//   FaDraftingCompass, FaBell, FaInfoCircle, FaBuilding, FaFileInvoiceDollar, FaBullhorn
-// } from 'react-icons/fa';
-
-// ===
-// import React from "react";
-// import { useState, useCallback } from "react";
-
-// import {
-//   FaBars, FaTachometerAlt, FaUserShield, FaCode, FaChartLine, FaCogs, FaSignOutAlt,
-//   FaUsers, FaUserCheck, FaHome, FaFileAlt, FaFileSignature, FaStamp, FaDraftingCompass, FaBell,
-//   FaInfoCircle, FaBuilding, FaFileInvoiceDollar, FaBullhorn
-// } from 'react-icons/fa';
-
 
 import React, { useState, useCallback,useRef,useEffect } from "react"; 
 import { 
@@ -214,7 +13,7 @@ import {  FaClipboardList, FaCalendarCheck, FaRegHandshake, FaRegClock, FaTasks,
 
 import {  FaMicrophone } from "react-icons/fa";
 import VoiceNavigation from "./VoiceNavigation";
-
+import { FaMoneyBillWave,  FaParking, FaChartBar } from "react-icons/fa";
 
 
 
@@ -224,10 +23,10 @@ const Dashboard = () => {
 
   const [query, setQuery] = useState("");
 
-  // const [listening, setListening] = useState(false);
+  
   const recognitionRef = useRef(null);
 
-// const [showVoiceRecognition, setShowVoiceRecognition] = useState(false);
+
 
 const [listening, setListening] = useState(false);
 
@@ -240,11 +39,11 @@ const [listening, setListening] = useState(false);
     crm: false,
   });
   const [showVoiceRecognition, setShowVoiceRecognition] = useState(false);
-  // const [query, setQuery] = useState("");
+  
 
   const navigate = useNavigate();
 
-  // Memoized toggle functions
+  
   const toggleSidebar = useCallback(() => setCollapsed((prev) => !prev), []);
  
   const toggleSection = useCallback((section) => {
@@ -257,20 +56,12 @@ const [listening, setListening] = useState(false);
   }, [navigate]);
 
 
-  // const menuItems = [
-  //   { to: "/developer/sharespace", icon: <FaCode />, label: "Share Space" },
-  //   { to: "/developer/basicinfo", icon: <FaInfoCircle />, label: "Basic Information" },
-  //   { to: "/developer/projectinventory", icon: <FaBuilding />, label: "Project Inventory" },
-  //   { to: "/developer/costsheet", icon: <FaFileInvoiceDollar />, label: "Cost Sheet Details" },
-  //   { to: "/developer/salesmis", icon: <FaChartLine />, label: "Sales MIS" },
-  //   { to: "/developer/marketing", icon: <FaBullhorn />, label: "Marketing" },
-  // ];
+ 
 
 
-  // handleClose function that will be passed to VoiceNavigation as a prop
   const handleClose = () => {
     console.log("Closing the voice navigation.");
-    setShowVoiceRecognition(false); // Hide the voice recognition when it's closed
+    setShowVoiceRecognition(false); 
   };
 
 
@@ -310,7 +101,7 @@ const [listening, setListening] = useState(false);
   // ];
 
   const moduleData = [
-    // { name: "CRM", path: "CRM", to: "/crm" }xxxxxxxxxxxxxxxx ,
+    
     { name: "Share Space", path: "CRM > Share Space", to: "/crm/sharespace" },
     { name: "Home Loan Applicability", path: "CRM > Home Loan Applicability", to: "/crm/homeloan" },
     { name: "OCR Collection", path: "CRM > OCR Collection", to: "/crm/OCR" },
@@ -374,118 +165,14 @@ const handleRedirect = (path) => {
 };
 
 
-// useEffect(() => {
-//   if (!recognitionRef.current && ("webkitSpeechRecognition" in window || "SpeechRecognition" in window)) {
-//     recognitionRef.current = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-//     const recognition = recognitionRef.current;
 
-//     recognition.continuous = false;
-//     recognition.interimResults = false;
-//     recognition.lang = "en-US";
 
-//     recognition.onstart = () => {
-//       setListening(true); // 🔴 Mic turns red
-//     };
 
-//     recognition.onend = () => {
-//       setListening(false); // ✅ Mic turns green after listening
-//     };
-    
-
-//     recognition.onresult = (event) => {
-//       let command = event.results[0][0].transcript.trim().toLowerCase();
-//       console.log("Recognized command:", command);
-//       console.log("redirecting");
-//       // Process command (Navigate or Speak)
-//       setTimeout(() => {
-//         setListening(false); // ✅ Ensure mic turns green after execution
-//       }, 1000);
-//     };
-
-//     recognition.onerror = () => {
-//       setListening(false); // Reset in case of error
-//     };
-//   }
-// }, []);
-
-// const speak = (message) => {
-//   const speech = new SpeechSynthesisUtterance(message);
-//   speech.lang = "en-US";
-//   speech.rate = 1;
-
-//   speech.onstart = () => {
-//     if (recognitionRef.current) {
-//       recognitionRef.current.stop();
-//     }
-//   };
-
-//   speech.onend = () => {
-//     if (!listening) {
-//       setTimeout(() => startListening(), 500);
-//     }
-//   };
-
-//   window.speechSynthesis.speak(speech);
-// };
 
 
  
-//  const startListening = () => {
-//   if (recognitionRef.current && !listening) {
-//     console.log("🎤 Starting recognition...");
-//     recognitionRef.current.start();
-//   }
-// };
-
-// const commandRoutes = {
-
-  
-//   "admin banker": "/admin/banker",
-//   "admin sales module": "/admin/salesperson",
-
-//   "agreement": "/crm/agreement",
-//   "architect": "/crm/architect",
-//   "dashboard": "/crm",
-//   "daily collection": "/crm/daily-collection",
-//   "demand": "/crm/demand",
-//   "flat allotment report": "/crm/flat-allotment-report",
-//   "home loan": "/crm/home-loan",
-//   "mis report": "/crm/mis-report",
-//   "ocr": "/crm/ocr",
-//   "parking report": "/crm/parking-report",
-//   "registration": "/crm/registration",
-//   "share space": "/crm/sharespacecrm",
 
 
-//   "share space developer": "/developer/sharespace",
-//   "basic information": "/developer/basicinfo",
-//   "project inventory": "/developer/projectinventory",
-//   "cost sheet details": "/developer/costsheet",
-//   "sales mis": "/developer/salesmis",
-//   "marketing": "/developer/marketing",
-
- 
-//   "sales": "/sales",
-//   "dashboard sales": "/sales/salesdashboard",
-//   "calendar": "/sales/salescalander",
-//   "shared by developer": "/sales/sharedbydeveloper",
-//   "leads": "/sales/leads",
-//   "leads follow up": "/sales/leadsfollowup",
-//   "lost leads": "/sales/lostleads",
-//   "first visit": "/sales/firstvisits",
-//   "first visit follow up": "/sales/firstvisitfollowup",
-//   "first visit steps": "/sales/firstvisitsteps",
-//   "lost visits": "/sales/saleslostvisits",
-//   "templates": "/sales/salestemplates",
-//   "booking form": "/sales/bookingform",
-//   "channel partner": "/sales/channelpartner",
-
-  
-//   "dashboard": "/dashboard",
-//   "profile": "/profile",
-//   "settings": "/settings",
-//   "reports": "/reports",
-// }
 
 const commandRoutes = {
   // Admin Module
@@ -634,27 +321,15 @@ const startListening = () => {
 
 <div className="position-relative">
      
-      {/* <div className="mx-auto w-100">
-        <input
-          type="text"
-          className="form-control"
-          placeholder="Search..."
-          onChange={handleSearch} 
-        />
-      </div> */}
+      
       <div className="mx-auto w-100">
     <input
       type="text"
-      className="form-control ps-5" // Add left padding to make space for the icon
+      className="form-control ps-5" 
       placeholder="Search..."
       onChange={handleSearch}
     /> 
-     {/* <FaMicrophone
-      size={30}
-      className="position-absolute top-50 end-0 translate-middle-y text-black p-1"
-      style={{ cursor: "pointer", paddingLeft: "10px"}}
-      onClick={() => setShowVoiceRecognition(true)}
-    />  */}
+    
     <FaMicrophone
   size={30}
   className={`position-absolute top-50 end-0 translate-middle-y p-1 ${listening ? "text-danger" : "text-success"}`} 
@@ -662,18 +337,7 @@ const startListening = () => {
   onClick={startListening} 
 /> 
 
-{/* <input
-      type="text"
-      className="form-control ps-5"
-      placeholder="Search..."
-      onChange={handleSearch}
-    />
-    <FaMicrophone
-  size={30}
-  className={`position-absolute top-50 end-0 translate-middle-y p-1 ${listening ? "text-danger" : "text-success"}`} 
-  style={{ cursor: "pointer", marginRight: "10px" }}
-  onClick={startListening} 
-/> */}
+
 
   </div>
 
@@ -704,13 +368,7 @@ const startListening = () => {
     </div>
   <div className="d-flex align-items-center">
    
-    {/* <FaMicrophone
-            size={20}
-            className="me-3 text-white"
-            style={{ cursor: "pointer" }}
-            onClick={() => setShowVoiceRecognition(true)}
-          /> */}
-    {/* Profile Image */}
+   
     <img
       src="/unnamed.png"
       alt="Profile"
@@ -815,10 +473,10 @@ const startListening = () => {
     { to: "/crm/registration", icon: <FaStamp />, label: "Registration" },
     { to: "/crm/Architect", icon: <FaDraftingCompass />, label: "Engineer & Architect Letter" },
     { to: "/crm/Demand", icon: <FaBell />, label: "Demand Raised" },
-    { to: "/crm/dailycollection", icon: <FaBell />, label: "Daily Collection" },
-    { to: "/crm/flatallotmentreport", icon: <FaBell />, label: "Flat Allotement Report" },
-    {to :"/crm/parkingreport" ,icon :<FaBell />, label :"Parking Report"},
-    {to :"/crm/misreport" ,icon :<FaBell />, label :"MIS Report"},
+    { to: "/crm/dailycollection", icon: <FaMoneyBillWave />, label: "Daily Collection" },
+    { to: "/crm/flatallotmentreport", icon: <FaHome />, label: "Flat Allotement Report" },
+    {to :"/crm/parkingreport" ,icon :<FaParking />, label :"Parking Report"},
+    {to :"/crm/misreport" ,icon :<FaChartBar />, label :"MIS Report"},
       ]}
       />
    
