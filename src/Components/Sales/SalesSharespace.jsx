@@ -476,7 +476,8 @@ const [isExpanded, setIsExpanded] = useState(false);
                   <option value="Draft Agreement">Draft Agreement</option>
                   <option value="TAX NOC<">TAX NOC</option>
                   <option value="Soil Testing Report">Soil Testing Report</option>
-                <option value="DP Opinion">DP Opinion</option>                         <option value="Zone Certificate">Zone Certificate</option>
+                <option value="DP Opinion">DP Opinion</option>                        
+                 <option value="Zone Certificate">Zone Certificate</option>
 
                   <option value="Rain Water Harvesting Certificate">Rain Water Harvesting Certificate</option>
                  <option value="Solar Installation Certificate">Solar Installation Certificate</option>
