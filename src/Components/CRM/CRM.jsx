@@ -1758,24 +1758,51 @@ Section 2: Particulars of Flat
 
       </Dialog>
    
-    <Tooltip title="WhatsApp" arrow>
+    {/* <Tooltip title="WhatsApp" arrow>
       <IconButton
         sx={{
-          color: 'white', // Icon color white for contrast
+          color: 'white', 
           fontSize: '2px',
-          backgroundColor: '#25D366', // WhatsApp green background
-          borderRadius: '50%', // Makes the icon rounded
+          backgroundColor: '#25D366', 
+          borderRadius: '50%', 
           padding: '2px',
           '&:hover': {
-            backgroundColor: '#128C7E', // Darker green for WhatsApp on hover
+            backgroundColor: '#128C7E', 
           },
         }}
         onClick={() => handleWhatsapp(item)}
       >
         <WhatsAppIcon />
       </IconButton>
-    </Tooltip>
-    <Tooltip title="Email" arrow>
+    </Tooltip> */}
+
+<Tooltip title="WhatsApp" arrow>
+              <IconButton
+                sx={{
+                  color: 'white',
+                  fontSize: '2px',
+                  backgroundColor: '#25D366', // WhatsApp green color
+                  borderRadius: '50%',
+                  padding: '2px',
+                  '&:hover': {
+                    backgroundColor: '#128C7E', // WhatsApp darker green on hover
+                  },
+                }}
+                onClick={() => {
+                  const mobile = item['mobileNo']; // dynamically get the mobile number from each item in loansData
+                  if (mobile) {
+                    const fullNumber = `91${mobile}`; // assuming all numbers are Indian, you can adjust for international if needed
+                    const message = encodeURIComponent("Hello, I would like to get in touch.");
+                    window.open(`https://wa.me/${fullNumber}?text=${message}`, '_blank');
+                  } else {
+                    alert("Mobile number not available.");
+                  }
+                }}
+              >
+                <WhatsAppIcon />
+              </IconButton>
+            </Tooltip>
+    {/* <Tooltip title="Email" arrow>
       <IconButton
         sx={{
           color: 'white', // Icon color white for contrast
@@ -1792,7 +1819,39 @@ Section 2: Particulars of Flat
       >
         <EmailIcon />
       </IconButton>
-    </Tooltip>
+    </Tooltip> */}
+    <Tooltip title="Email" arrow>
+  <IconButton
+    sx={{
+      color: 'white', // Icon color white for contrast
+      fontSize: '1px',
+      backgroundColor: '#007BFF', // Blue background for Email
+      borderRadius: '50%',
+      padding: '4px',
+      // Makes the icon rounded
+      '&:hover': {
+        backgroundColor: '#0056b3', // Darker blue for Email on hover
+      },
+    }}
+    // onClick={() => {
+    //   const email = item['email']; 
+    //   if (email && email.trim()) {
+    //     window.location.href = `mailto:${email}`; 
+    //   } else {
+    //     alert("Email not available.");
+    //   }
+    // }}
+    onClick={() =>
+      window.open(
+        `https://mail.google.com/mail/?view=cm&fs=1&to=${item['EMAIL ID']}`,
+        "_blank"
+      )
+    }
+  >
+    <EmailIcon />
+  </IconButton>
+</Tooltip>
+
   </div>
 </TableCell>
 
