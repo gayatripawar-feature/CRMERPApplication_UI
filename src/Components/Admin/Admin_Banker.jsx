@@ -768,6 +768,7 @@ const Admin_Banker = () => {
   const [fileNames, setFileNames] = useState([]);
   const [bankList, setBankList] = useState([]);
   const [submittedData, setSubmittedData] = useState([]);
+const [editIndex, setEditIndex] = useState(null); 
 
   useEffect(() => {
     console.log("Modal state changed:", editClicked); 
@@ -775,13 +776,39 @@ const Admin_Banker = () => {
 
 
 
-  const handleEditClick = (banker) => {
-    console.log("edit clicked");
-    setSelectedBanker(banker); 
-    setEditClicked(true);
-    console.log("Modal state changed:", true);
-  };
+  // const handleEditClick = (banker) => {
+  //   console.log("edit clicked");
+  //   setSelectedBanker(banker); 
+  //   setEditClicked(true);
+  //   console.log("Modal state changed:", true);
+  // };
   
+//   const handleEditClick = (bankerToEdit, parentData) => {
+//   setSelectedBanker(bankerToEdit);
+
+
+//   setFormData({
+//     name: parentData.name || "",
+//     address: parentData.address || "",
+//     apfLetter: parentData.apfLetter || "",
+//   });
+
+//   // Set bankers (if multiple)
+//   setBankers(parentData.bankers || []);
+// };
+const handleEditClick = (bankerToEdit, parentData, index) => {
+  setSelectedBanker(bankerToEdit);
+  setEditIndex(index); // This is essential to know which row to update
+
+  setFormData({
+    name: parentData.name || "",
+    address: parentData.address || "",
+    apfLetter: parentData.apfLetter || "",
+  });
+
+  setBankers(parentData.bankers || []);
+};
+
   const handleClose = () => {
     console.log("Modal closed");
     setEditClicked(false);
@@ -867,54 +894,61 @@ const Admin_Banker = () => {
   }, [showForm]); 
 
 
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   toast.success("Data submitted successfully!");
-  // };
+ 
 
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
 
-  //   const newBanker = {
-  //     name: formData.name,
-  //     address: formData.address,
-  //     apfLetter: formData.apfLetter, // Assuming this is the file or its name
-  //     bankers: bankers, // You may need to manage this better depending on your data
-  //   };
+//   const handleSubmit = (e) => {
+//   e.preventDefault();
+
+//   const newBank = {
+//     name:         formData.name,
+//     address:      formData.address,
+//     apfLetter:    formData.apfLetter,
+//     bankers:      bankers,           
+//   };
+
   
-  //   // Add the new banker to the bankers array (updating state)
-  //   setBankers((prevBankers) => [...prevBankers, newBanker]);
-  
-  //   // Reset the form data after submission if necessary
-  //   setFormData({
-  //     name: "",
-  //     address: "",
-  //     apfLetter: null,
-  //   });
-  
-  //   toast.success("Data submitted successfully!");
-  // };
+//   setBankList(prev => [...prev, newBank]);
 
+ 
+//   setSubmittedData((prev) => [...prev, newBank]);
 
-  const handleSubmit = (e) => {
+//   setFormData({ name: "", address: "", apfLetter: null });
+//   setBankers([{ bankerName: "", bankerMobile: "" }]);
+
+//   toast.success("Data submitted successfully!");
+//   handleClose();
+// };
+const handleSubmit = (e) => {
   e.preventDefault();
 
   const newBank = {
-    name:         formData.name,
-    address:      formData.address,
-    apfLetter:    formData.apfLetter,
-    bankers:      bankers,           
+    name: formData.name,
+    address: formData.address,
+    apfLetter: formData.apfLetter,
+    bankers: bankers,
   };
 
-  
-  setBankList(prev => [...prev, newBank]);
+  if (editIndex !== null && editIndex !== undefined) {
+    // Edit mode: update the existing entry
+    const updatedList = [...submittedData];
+    updatedList[editIndex] = newBank;
+    setSubmittedData(updatedList);
 
- 
-  setSubmittedData((prev) => [...prev, newBank]);
+    const updatedBankList = [...bankList];
+    updatedBankList[editIndex] = newBank;
+    setBankList(updatedBankList);
 
-  setFormData({ name: "", address: "", apfLetter: null });
+    setEditIndex(null); // reset edit mode
+  } else {
+    // Add mode: append new entry
+    setSubmittedData((prev) => [...prev, newBank]);
+    setBankList((prev) => [...prev, newBank]);
+  }
+
+  // Reset form
+  setFormData({ name: "", address: "", apfLetter: "" });
   setBankers([{ bankerName: "", bankerMobile: "" }]);
-
   toast.success("Data submitted successfully!");
   handleClose();
 };
@@ -1284,219 +1318,232 @@ const Admin_Banker = () => {
       
 
 
+
 <TableBody>
-  {submittedData.map((data, index) => (
+  {submittedData.map((data, index) =>
     data.bankers.map((banker, bIndex) => (
-      <TableRow key={`${index}-${bIndex}`}>
-       
-         <TableCell>
-        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          <IconButton
-            color="primary"
-            style={{
-              backgroundColor: "#1976d2",
-              borderRadius: "50%",
-              padding: "6px",
-            }}
-            onClick={() => handleEditClick(banker)}
-          >
-            <EditIcon style={{ color: "white" }} />
-          </IconButton>
+      <React.Fragment key={`${index}-${bIndex}`}>
+        <TableRow>
+          <TableCell>
+            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+              <IconButton
+                color="primary"
+                style={{
+                  backgroundColor: "#1976d2",
+                  borderRadius: "50%",
+                  padding: "6px",
+                }}
+                // onClick={() => handleEditClick(banker)}
+                // onClick={() => handleEditClick(banker, data)}
+onClick={() => handleEditClick(banker, data, index)}
 
-          <IconButton
-            color="error"
-            style={{
-              backgroundColor: "#d32f2f",
-              borderRadius: "50%",
-              padding: "6px",
-            }}
-          >
-            <DeleteIcon style={{ color: "white" }} />
-          </IconButton>
-        </div>
-      </TableCell>
-        <TableCell>{data.timestamp}</TableCell>
-        <TableCell>{data.name}</TableCell>
-        <TableCell>{data.email}</TableCell>
-        <TableCell>{banker.bankerName}</TableCell>
-        <TableCell>{banker.bankerMobile}</TableCell>
-        <TableCell>{data.apfLetter}</TableCell>
-         {selectedBanker === banker && (
-  <div
-    style={{
-      position: "fixed",  
-      top: "40%",  
-      left: "50%",
-      transform: "translate(-50%, -50%)",  
-      backgroundColor: "white",  
-      padding: "20px", 
-      borderRadius: "8px",  
-      boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",  
-      zIndex: 9999,  
-      width: "800px",  
-    }}
-  >
+              >
+                <EditIcon style={{ color: "white" }} />
+              </IconButton>
 
-    <div
-      className="modal-header bg-primary text-white"
-      style={{
-        borderTopLeftRadius: "10px",
-        borderTopRightRadius: "10px",
-        padding: "15px 20px",  
-        height: "80px",
-        display: "flex",  
-        justifyContent: "space-between",  
-        alignItems: "center",
-      }}
-    >
-      <h5 className="modal-title ">Add Banker Details</h5>
-      <button type="button" className="btn-close" onClick={closeModal}></button>
-      
-
-    </div>
-
-    
-    <div className="modal-body">
-      <div className="container">
-        <div
-          className="p-3"
-          style={{
-            border: "1px solid #ddd",
-            borderRadius: "8px",
-            backgroundColor: "#f9f9f9",
-          }}
-        >
-          <form className="pt-4">
-            <div className="row mb-3">
-              <div className="col-md-4">
-                <label className="form-label">Bank Name</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div className="col-md-4">
-                <label className="form-label">Address</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  name="address"
-                  value={formData.address}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
-              <div className="col-md-4">
-                <label className="form-label">APF Letter</label>
-                <input
-                  type="file"
-                  className="form-control"
-                  name="apfLetter"
-                  onChange={handleChange}
-                  required
-                />
-              </div>
+              <IconButton
+                color="error"
+                style={{
+                  backgroundColor: "#d32f2f",
+                  borderRadius: "50%",
+                  padding: "6px",
+                }}
+              >
+                <DeleteIcon style={{ color: "white" }} />
+              </IconButton>
             </div>
-
+          </TableCell>
+          <TableCell>{data.timestamp}</TableCell>
+          <TableCell>{data.name}</TableCell>
+          <TableCell>{data.email}</TableCell>
+          <TableCell>{banker.bankerName}</TableCell>
+          <TableCell>{banker.bankerMobile}</TableCell>
          
-            {bankers.map((banker, index) => (
-              <div className="row mb-3" key={index}>
-                <div className="col-md-4">
-                  <label className="form-label">Banker Name:</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={banker.bankerName}
-                    onChange={(e) => handleBankerName(index, "bankerName", e.target.value)}
-                    required
-                  />
-                  {bankerErrors[index] && (
-                    <p style={{ color: "red", fontSize: "12px" }}>
-                      {bankerErrors[index]}
-                    </p>
-                  )}
+          <TableCell sx={{ textAlign: "center" }}>
+            <Tooltip title="View Document" arrow>
+              <IconButton
+                sx={{
+                  background: "#1976D2",
+                  color: "white",
+                  borderRadius: "50%",
+                  width: 32,
+                  height: 32,
+                  p: 0.5,
+                  border: "none",
+                }}
+                onClick={() => handleViewClick(bankers.website)}
+              >
+                <Visibility sx={{ fontSize: 18 }} />
+              </IconButton>
+            </Tooltip>
+          </TableCell>
+        </TableRow>
+
+        {/* Modal outside of TableRow but still within Fragment */}
+        {selectedBanker === banker && (
+          <TableRow>
+            <TableCell colSpan={8}>
+              <div
+                style={{
+                  position: "fixed",
+                  top: "40%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  backgroundColor: "white",
+                  padding: "20px",
+                  borderRadius: "8px",
+                  boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+                  zIndex: 9999,
+                  width: "800px",
+                }}
+              >
+                {/* Modal Header */}
+                <div
+                  className="modal-header bg-primary text-white"
+                  style={{
+                    borderTopLeftRadius: "10px",
+                    borderTopRightRadius: "10px",
+                    padding: "15px 20px",
+                    height: "80px",
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                  }}
+                >
+                  <h5 className="modal-title">Add Banker Details</h5>
+                  <button type="button" className="btn-close" onClick={closeModal}></button>
                 </div>
-                <div className="col-md-4">
-                  <label className="form-label">Mobile No:</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={banker.bankerMobile}
-                    onChange={(e) => handleBankerChange(index, "bankerMobile", e.target.value)}
-                    required
-                  />
-                  {error && <p style={{ color: 'red' }}>{error}</p>}
-                </div>
-                {index > 0 && (
-                  <div className="col-md-4 pt-4">
-                    <button
-                      type="button"
-                      className="btn btn-danger mt-2"
-                      onClick={() => handleRemoveBanker(index)}
+
+                {/* Modal Body */}
+                <div className="modal-body">
+                  <div className="container">
+                    <div
+                      className="p-3"
+                      style={{
+                        border: "1px solid #ddd",
+                        borderRadius: "8px",
+                        backgroundColor: "#f9f9f9",
+                      }}
                     >
-                      Remove
-                    </button>
+                      <form className="pt-4">
+                        <div className="row mb-3">
+                          <div className="col-md-4">
+                            <label className="form-label">Bank Name</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              name="name"
+                              value={formData.name}
+                              onChange={handleChange}
+                              required
+                            />
+                          </div>
+                          <div className="col-md-4">
+                            <label className="form-label">Address</label>
+                            <input
+                              type="text"
+                              className="form-control"
+                              name="address"
+                              value={formData.address}
+                              onChange={handleChange}
+                              required
+                            />
+                          </div>
+                          <div className="col-md-4">
+                            <label className="form-label">APF Letter</label>
+                            <input
+                              type="file"
+                              className="form-control"
+                              name="apfLetter"
+                              onChange={handleChange}
+                              required
+                            />
+                          </div>
+                        </div>
+
+                        {bankers.map((banker, index) => (
+                          <div className="row mb-3" key={index}>
+                            <div className="col-md-4">
+                              <label className="form-label">Banker Name:</label>
+                              <input
+                                type="text"
+                                className="form-control"
+                                value={banker.bankerName}
+                                onChange={(e) =>
+                                  handleBankerName(index, "bankerName", e.target.value)
+                                }
+                                required
+                              />
+                              {bankerErrors[index] && (
+                                <p style={{ color: "red", fontSize: "12px" }}>
+                                  {bankerErrors[index]}
+                                </p>
+                              )}
+                            </div>
+                            <div className="col-md-4">
+                              <label className="form-label">Mobile No:</label>
+                              <input
+                                type="text"
+                                className="form-control"
+                                value={banker.bankerMobile}
+                                onChange={(e) =>
+                                  handleBankerChange(index, "bankerMobile", e.target.value)
+                                }
+                                required
+                              />
+                              {error && <p style={{ color: "red" }}>{error}</p>}
+                            </div>
+                            {index > 0 && (
+                              <div className="col-md-4 pt-4">
+                                <button
+                                  type="button"
+                                  className="btn btn-danger mt-2"
+                                  onClick={() => handleRemoveBanker(index)}
+                                >
+                                  Remove
+                                </button>
+                              </div>
+                            )}
+                          </div>
+                        ))}
+
+                        <div className="mb-3 text-center pt-3 pb-3">
+                          <button
+                            type="button"
+                            className="btn btn-primary"
+                            onClick={handleAddBanker}
+                          >
+                            + Add Another Banker
+                          </button>
+                        </div>
+
+                        <div className="d-flex justify-content-center gap-3">
+                          <button
+                            type="submit"
+                            className="btn btn-success"
+                            onClick={handleSubmit}
+                          >
+                            Update
+                          </button>
+                          <button
+                            type="button"
+                            className="btn btn-secondary"
+                            onClick={handleCancel}
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </form>
+                    </div>
                   </div>
-                )}
+                </div>
               </div>
-            ))}
-
-        
-            <div className="mb-3 text-center pt-3 pb-3">
-              <button type="button" className="btn btn-primary" onClick={handleAddBanker}>
-                + Add Another Banker
-              </button>
-            </div>
-
-        
-            <div className="d-flex justify-content-center gap-3">
-              <button type="submit" className="btn btn-success" onClick={handleSubmit}>
-                
-                Update
-              </button>
-              <button type="button" className="btn btn-secondary" onClick={handleCancel}>
-                Cancel
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-    </div>
-         )}
-   
-
-<TableCell></TableCell>
-<TableCell></TableCell>
-<TableCell></TableCell>
-<TableCell></TableCell>
-<TableCell></TableCell>
- <TableCell sx={{ textAlign: "center" }}>
-                <Tooltip title="View Document" arrow>
-                  <IconButton
-                    sx={{
-                      background: "#1976D2",
-                      color: "white",
-                      borderRadius: "50%",
-                      width: 32,
-                      height: 32,
-                      p: 0.5,
-                      border: "none",
-                    }}
-                    onClick={() => handleViewClick(bankers.website)}
-                  >
-                    <Visibility sx={{ fontSize: 18 }} />
-                  </IconButton>
-                </Tooltip>
-              </TableCell>
-
-      </TableRow>
+            </TableCell>
+          </TableRow>
+        )}
+      </React.Fragment>
     ))
-  ))}
+  )}
 </TableBody>
 
 
