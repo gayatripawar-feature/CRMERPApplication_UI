@@ -766,6 +766,9 @@ const Admin_Banker = () => {
   const [editClicked, setEditClicked] = useState(false);
   const [selectedBanker, setSelectedBanker] = useState(null);
   const [fileNames, setFileNames] = useState([]);
+  const [bankList, setBankList] = useState([]);
+  const [submittedData, setSubmittedData] = useState([]);
+
   useEffect(() => {
     console.log("Modal state changed:", editClicked); 
   }, [editClicked]);
@@ -869,30 +872,53 @@ const Admin_Banker = () => {
   //   toast.success("Data submitted successfully!");
   // };
 
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+
+  //   const newBanker = {
+  //     name: formData.name,
+  //     address: formData.address,
+  //     apfLetter: formData.apfLetter, // Assuming this is the file or its name
+  //     bankers: bankers, // You may need to manage this better depending on your data
+  //   };
+  
+  //   // Add the new banker to the bankers array (updating state)
+  //   setBankers((prevBankers) => [...prevBankers, newBanker]);
+  
+  //   // Reset the form data after submission if necessary
+  //   setFormData({
+  //     name: "",
+  //     address: "",
+  //     apfLetter: null,
+  //   });
+  
+  //   toast.success("Data submitted successfully!");
+  // };
+
+
   const handleSubmit = (e) => {
-    e.preventDefault();
-  
-    // Create a new banker object from the form data
-    const newBanker = {
-      name: formData.name,
-      address: formData.address,
-      apfLetter: formData.apfLetter, // Assuming this is the file or its name
-      bankers: bankers, // You may need to manage this better depending on your data
-    };
-  
-    // Add the new banker to the bankers array (updating state)
-    setBankers((prevBankers) => [...prevBankers, newBanker]);
-  
-    // Reset the form data after submission if necessary
-    setFormData({
-      name: "",
-      address: "",
-      apfLetter: null,
-    });
-  
-    toast.success("Data submitted successfully!");
+  e.preventDefault();
+
+  const newBank = {
+    name:         formData.name,
+    address:      formData.address,
+    apfLetter:    formData.apfLetter,
+    bankers:      bankers,           
   };
+
   
+  setBankList(prev => [...prev, newBank]);
+
+ 
+  setSubmittedData((prev) => [...prev, newBank]);
+
+  setFormData({ name: "", address: "", apfLetter: null });
+  setBankers([{ bankerName: "", bankerMobile: "" }]);
+
+  toast.success("Data submitted successfully!");
+  handleClose();
+};
+
   
   const handleBankerName = (index, field, value) => {
     if (field === "bankerName") {
@@ -1257,10 +1283,13 @@ const Admin_Banker = () => {
       </TableHead>
       
 
+
 <TableBody>
-  {bankers.map((banker, index) => (
-    <TableRow key={index} style={{ position: "relative" }}>
-      <TableCell>
+  {submittedData.map((data, index) => (
+    data.bankers.map((banker, bIndex) => (
+      <TableRow key={`${index}-${bIndex}`}>
+       
+         <TableCell>
         <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
           <IconButton
             color="primary"
@@ -1286,9 +1315,13 @@ const Admin_Banker = () => {
           </IconButton>
         </div>
       </TableCell>
-
-    
-      {selectedBanker === banker && (
+        <TableCell>{data.timestamp}</TableCell>
+        <TableCell>{data.name}</TableCell>
+        <TableCell>{data.email}</TableCell>
+        <TableCell>{banker.bankerName}</TableCell>
+        <TableCell>{banker.bankerMobile}</TableCell>
+        <TableCell>{data.apfLetter}</TableCell>
+         {selectedBanker === banker && (
   <div
     style={{
       position: "fixed",  
@@ -1369,7 +1402,7 @@ const Admin_Banker = () => {
               </div>
             </div>
 
-            {/* Loop through the bankers */}
+         
             {bankers.map((banker, index) => (
               <div className="row mb-3" key={index}>
                 <div className="col-md-4">
@@ -1412,17 +1445,17 @@ const Admin_Banker = () => {
               </div>
             ))}
 
-            {/* Add Another Banker Button */}
+        
             <div className="mb-3 text-center pt-3 pb-3">
               <button type="button" className="btn btn-primary" onClick={handleAddBanker}>
                 + Add Another Banker
               </button>
             </div>
 
-            {/* Submit and Cancel Buttons */}
+        
             <div className="d-flex justify-content-center gap-3">
               <button type="submit" className="btn btn-success" onClick={handleSubmit}>
-                {/* Submit */}
+                
                 Update
               </button>
               <button type="button" className="btn btn-secondary" onClick={handleCancel}>
@@ -1433,9 +1466,9 @@ const Admin_Banker = () => {
         </div>
       </div>
     </div>
-  </div>
-)}
-
+    </div>
+         )}
+   
 
 <TableCell></TableCell>
 <TableCell></TableCell>
@@ -1461,8 +1494,8 @@ const Admin_Banker = () => {
                 </Tooltip>
               </TableCell>
 
-
-    </TableRow>
+      </TableRow>
+    ))
   ))}
 </TableBody>
 
