@@ -77,7 +77,7 @@ const [ifscCodeError, setIfscCodeError] = useState("");
 const [selectedLandowner, setSelectedLandowner] = useState("");
 const [noOfFlats, setNoOfFlats] = useState(0);
 const [tableRows, setTableRows] = useState([]);
-
+const [firms, setFirms] = useState([]);
 
  // ✅ Initialize as an empty array
 
@@ -819,7 +819,88 @@ const handleTabClick = (index) => {
     }
   };
   
+  const [firmFormData, setFirmFormData] = useState({
+  name: '',
+  address: '',
+  firmPanNo: '',
+  firmGstNo: '',
+  firmPan: null,
+  firmGst: null,
+  firmLightBill: null,
+  // ... other fields
+});
+//   const handleFirmSubmit = () => {
+//   const timestamp = new Date().toLocaleString(); // or Date.now()
+
+//   const newFirm = {
+//     ...firmFormData,
+//     timestamp,
+//   };
+
+//   setFirms((prevFirms) => [...prevFirms, newFirm]);
+
+//   toast.success("Details are submitted!", { position: "top-right", autoClose: 3000 });
+
+//   // Reset form if needed
+//   setFirmFormData({
+//     name: '',
+//     address: '',
+//     firmPanNo: '',
+//     firmGstNo: '',
+//     firmPan: null,
+//     firmGst: null,
+//     firmLightBill: null,
+//     // ... other fields
+//   });
+
+//   setShowFirmForm(false);
+// };
+
+const handleFirmSubmit = () => {
+  const timestamp = new Date().toLocaleString(); // Add a timestamp
+
+  const newFirm = {
+    name: firmName,
+    address: firmFormData.address,
+    firmPanNo: firmPan,
+    firmGstNo: firmFormData.firmGstNo,
+    firmPan: firmFormData.firmPan,           // Assuming file state
+    firmGst: firmFormData.firmGst,           // Assuming file state
+    firmLightBill: firmFormData.firmLightBill, // Assuming file state
+    partners: partners,
+    timestamp,
+  };
+
+  setFirms((prevFirms) => [...prevFirms, newFirm]);
+
+  toast.success("Details are submitted!", {
+    position: "top-right",
+    autoClose: 3000,
+  });
+
+  // Reset all relevant states
+  setFirmFormData({
+    name: '',
+    address: '',
+    firmPanNo: '',
+    firmGstNo: '',
+    firmPan: null,
+    firmGst: null,
+    firmLightBill: null,
+  });
+
+  setFirmName('');
+  setFirmPan('');
+  setFirmPanError('');
+  setFirmGstNo('');
+  setPartners([]);
+  setFileNames({});
+  setShowFirmForm(false);
   
+};
+
+
+
   const handleIfscCodeChange = (e) => {
     const value = e.target.value;
   
@@ -1051,6 +1132,9 @@ const handleTabClick = (index) => {
       label="Firm Address"
       fullWidth
       variant="outlined"
+      value={firmFormData.address}
+  onChange={(e) => setFirmFormData({ ...firmFormData, address: e.target.value })}
+
     />
   </Grid>
 
@@ -1061,7 +1145,7 @@ const handleTabClick = (index) => {
       variant="outlined"
       value={firmPan}
             onChange={handleFirmPanChange}
-            error={!!firmPanError}  // Show error if there is an error
+            error={!!firmPanError}  
             helperText={firmPanError}
     />
   </Grid>
@@ -1070,6 +1154,8 @@ const handleTabClick = (index) => {
       label="Firm GST No"
       fullWidth
       variant="outlined"
+       value={firmFormData.firmGstNo}
+  onChange={(e) => setFirmFormData({ ...firmFormData, firmGstNo: e.target.value })}
     />
   </Grid>
 </Grid>
@@ -1099,15 +1185,10 @@ const handleTabClick = (index) => {
           </Button>
         </label>
 
-        {/* Display selected file name */}
-        {/* {fileNames[item.key] && (
-          <Typography variant="body2" color="textSecondary" style={{ marginTop: "8px" }}>
-            {fileNames[item.key]}
-          </Typography>
-        )} */}
+        
  {fileNames[item.key] && (
           <Typography variant="body2" color="textSecondary" style={{ marginTop: "8px" , whiteSpace: "pre-line" }}>
-            {/* {fileNames[item.key]} */}
+            
             {fileNames[item.key].join('\n')}
           </Typography>
         )} 
@@ -1162,11 +1243,11 @@ const handleTabClick = (index) => {
                 value={partner[label.toLowerCase().replace(/ /g, "")]} // Dynamically map to partner data
                 onChange={(e) => {
                   if (label === "Age") {
-                    handleAgeChange(e, index); // Handle Age change and validation
+                    handleAgeChange(e, index); 
                   } else if (label === "Occupation") {
-                    handleOccupationChange(e, index); // Handle Occupation change
+                    handleOccupationChange(e, index); 
                   } else if (label === "Name") {
-                    handlePartnerNameChange(e, index); // Handle Name change
+                    handlePartnerNameChange(e, index); 
                   } else if (label === "Mobile No.") {
                     handleMobileChange(e, index); // Handle Mobile No. change
                   } else if (label === "Mail ID") {
@@ -1230,20 +1311,29 @@ const handleTabClick = (index) => {
   Remove Partner
 </Button>
 
-      <Button
+      {/* <Button
         variant="contained"
         className="m-3"
         color="success"
         onClick={() => {
-          // Simply show the toast message without calling validation functions
+       
           toast.success("Details are submitted!", { position: "top-right", autoClose: 3000 });
           
-          // If you want to close the form (or any other logic), you can add it here
-          setShowFirmForm(false); // Example of hiding the form after submission
+          
+          setShowFirmForm(false); 
         }}
       >
         Submit
-      </Button>
+      </Button> */}
+      <Button
+  variant="contained"
+  className="m-3"
+  color="success"
+  onClick={handleFirmSubmit}
+>
+  Submit
+</Button>
+
     </Paper>
   </div>
     
@@ -1279,8 +1369,8 @@ onClick={() => {
       padding: "8px 16px",
       borderRadius: "8px",
       display: "flex",
-      alignItems: "center",  // Align icon and text
-      gap: "8px",  // Space between icon and text
+      alignItems: "center",  
+      gap: "8px",  
       "&:hover": {
         background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
       },
@@ -1291,7 +1381,7 @@ onClick={() => {
     }}
 
   >
-    <FaFileDownload size={18} />  {/* Added download icon */}
+    <FaFileDownload size={18} /> 
     Download PDF
   </Button>
   </div>
@@ -1338,9 +1428,9 @@ onClick={() => {
               fullWidth
               variant="outlined"
               value={firmName}
-              onChange={handleFirmNameChange} // Handle Firm Name change with validation
-              error={!!firmNameError} // Show error state for Firm Name field
-              helperText={firmNameError} // Display error message if any
+              onChange={handleFirmNameChange} 
+              error={!!firmNameError} 
+              helperText={firmNameError} 
             />
           </Grid>
 
@@ -1367,8 +1457,8 @@ onClick={() => {
                 label={label}
                 fullWidth
                 variant="outlined"
-                value={formValues[label.toLowerCase().replace(/ /g, '')]} // Dynamically bind value
-                onChange={(e) => handleChange(e, label)} // Handle change for other fields
+                value={formValues[label.toLowerCase().replace(/ /g, '')]} 
+                onChange={(e) => handleChange(e, label)} 
               />
             </Grid>
           ))}
@@ -1511,8 +1601,8 @@ onClick={() => {
       padding: "8px 16px",
       borderRadius: "8px",
       display: "flex",
-      alignItems: "center",  // Align icon and text
-      gap: "8px",  // Space between icon and text
+      alignItems: "center",  
+      gap: "8px",  
       "&:hover": {
         background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
       },
@@ -1520,7 +1610,7 @@ onClick={() => {
     onClick={handleDownloadPDFLandowner}
     
   >
-    <FaFileDownload size={18} />  {/* Added download icon */}
+    <FaFileDownload size={18} />  
     Download PDF
   </Button>
         </div>
