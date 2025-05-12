@@ -7,10 +7,8 @@ import { TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Paper
 const UndefinedTable = ({ data }) => {
   return (
     <>
-      {/* <Typography variant="h5" sx={{ marginBottom: "16px", fontWeight: "bold" }}>
-      Lost Enquiries
-      </Typography> */}
-
+     
+<Box sx={{ maxHeight: 400, overflowY: 'auto' }}>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
@@ -54,6 +52,7 @@ const UndefinedTable = ({ data }) => {
           </TableBody>
         </Table>
       </TableContainer>
+      </Box>
     </>
   );
 };

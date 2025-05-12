@@ -78,7 +78,7 @@
 // export default FollowupHistoryTable ;
 
 import React from "react";
-import { TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Paper, Typography } from "@mui/material";
+import { TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Paper, Typography ,Box} from "@mui/material";
 
 const FollowupHistoryTable = ({ data }) => {
   return (
@@ -86,7 +86,7 @@ const FollowupHistoryTable = ({ data }) => {
       {/* <Typography variant="h5" sx={{ marginBottom: "16px", fontWeight: "bold" }}>
         Enquiry History
       </Typography> */}
-
+<Box sx={{ maxHeight: 400, overflowY: 'auto' }}>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
@@ -152,6 +152,7 @@ const FollowupHistoryTable = ({ data }) => {
           </TableBody>
         </Table>
       </TableContainer>
+      </Box>
     </>
   );
 };

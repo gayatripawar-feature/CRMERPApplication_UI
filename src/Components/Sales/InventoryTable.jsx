@@ -82,12 +82,12 @@ import { useRef } from "react";
 
 // const InventoryTable = ({ inventoryData, handleDelete ,InventoryRef}) => {
   const InventoryTable =  forwardRef(({ inventoryData, handleDelete }, ref) => {
-  const [selectedItem, setSelectedItem] = useState(null); // State for selected item
-  const [formValues, setFormValues] = useState({}); // State for form values
+  const [selectedItem, setSelectedItem] = useState(null); 
+  const [formValues, setFormValues] = useState({}); 
 const [partners, setPartners] = useState([]);
 
 
-// const [items, setItems] = useState([]);
+
 const [editIndex, setEditIndex] = useState(null);
 
 
@@ -98,10 +98,7 @@ const [editIndex, setEditIndex] = useState(null);
   const statusOptions = ["Approved", "Unapproved"];
   const owners = ["Landowner", "Developer", "Investor"];
 
-  // const handleEdit = (item) => {
-  //   setSelectedItem(item); 
-  //   setFormValues(item); 
-  // };
+ 
  
 
   const handleEdit = (item,index) => {
@@ -138,30 +135,13 @@ const [editIndex, setEditIndex] = useState(null);
   
   
  
-  // const handleEdit = (item) => {
-  //   setFormData({
-  //     projectName: item.projectName || '',
-  //     wing: item.wing || '',
-  //     floor: item.floor || '',
-  //     flatNo: item.flatNo || '',
-  //     reraCarpetArea: item.reraCarpetArea || '',
-  //     reraCarpetSqFt: item.reraCarpetSqFt || '',
-  //     totalSaleableArea: item.totalSaleableArea || '',  
-  //     carpetAreaRatio: item.carpetAreaRatio || '',
-  //     unitType: item.unitType || '',
-  //     configuration: item.configuration || '',
-  //     status: item.status || '',
-  //     owner: item.owner || '',
-  //     terraceCarpetArea: item.terraceCarpetArea || '',
-  //     balconyArea: item.balconyArea || '',
-  //     porchArea: item.porchArea || '',
-  //     topTerraceArea: item.topTerraceArea || '',
-  //     superBuiltUpArea: item.superBuiltUpArea || '',
-  //     balconySanctioned: item.balconySanctioned || '',
-  //     podiumGarden: item.podiumGarden || '',
-  //   });
-  // };
   
+//   const handleSave = () => {
+//   const updatedItem = { ...formData };
+//   onUpdateItem(editIndex, updatedItem);  // call parent function
+//   setSelectedItem(null);
+// };
+
   const handleSave = () => {
     console.log("Saved Item: ", formValues);
     setSelectedItem(null); 
@@ -195,27 +175,7 @@ const [editIndex, setEditIndex] = useState(null);
   });
   
 
-  // const handleInputChange = (e) => {
-  //   const { name, value } = e.target;
-  //   console.log(`Input changed: ${name} = ${value}`);
-  
-  //   setFormData((prevData) => {
-  //     const updatedData = { ...prevData, [name]: value };
-  //     console.log("Updated form data:", updatedData);
-  //     return updatedData;
-  //   });
-  // };
-  
-  // const handleUpdate = () => {
-  //   const updatedItem = { ...selectedItem, ...formData };
-  //   setItems(prevItems =>
-  //     prevItems.map(item =>
-  //       item.id === updatedItem.id ? updatedItem : item
-  //     )
-  //   );
-  //   setSelectedItem(false);
-  //   toast.success("Details are Updated!", { position: "top-right", autoClose: 3000 });
-  // };
+ 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -227,32 +187,12 @@ const [editIndex, setEditIndex] = useState(null);
   
   const [items, setItems] = useState([
     { flatNo: '230', projectName: 'Sales', wing: '90', floor: '1000', reraCarpetArea: '120' }
-    // Add other initial items if needed
+   
   ]);
 
   
 
-  // const handleUpdate = () => {
-  //   console.log("Updating item with form data:", formData);
   
-  //   // Ensure selectedItem contains the correct values from formData
-  //   const updatedItem = { ...selectedItem, ...formData };
-  
-  //   console.log("Updated item:", updatedItem);
-  //   console.log("Before update:", items);
-  //   console.log("Updated item:", updatedItem);
-  //   // Update the item in the list
-  //   setItems((prevItems) => {
-  //     const updatedItems = prevItems.map((item) =>
-  //       item.id === updatedItem.id ? updatedItem : item
-  //     );
-  //     console.log("Updated items list:", updatedItems);
-  //     return updatedItems;
-  //   });
-  
-  //   setSelectedItem(false);
-  //   toast.success("Details are Updated!", { position: "top-right", autoClose: 3000 });
-  // };
    
   const handleUpdate = () => {
     setItems(prevItems => {

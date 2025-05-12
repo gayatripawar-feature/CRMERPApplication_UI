@@ -229,8 +229,8 @@ const data = [
     customerFeedback: "Looking for more options.",
   },
 ];
-
-const DisplayEnquiryTable = () => {
+// added data:
+const DisplayEnquiryTable = ({data}) => {
   const [isEditing, setIsEditing] = useState(false); // To toggle between table and form
   const [selectedItem, setSelectedItem] = useState(null); // To track the item being edited
   const [error, setError] = useState('');

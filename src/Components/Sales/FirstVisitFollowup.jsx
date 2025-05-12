@@ -1,7 +1,7 @@
 
 
 import React, { useState, useEffect } from 'react';
-import {Input, Table, TableBody, TableCell, TableContainer, Typography,IconButton,TableHead, TableRow, Paper,Box,Tabs, Tab, Button, TextField, Grid ,MenuItem,FormControl,Select, InputLabel} from '@mui/material';
+import {Input, Table, TableBody, TableCell, TableContainer, Typography,IconButton,TableHead,TableRow, Paper,Box,Tabs, Tab, Button, TextField, Grid ,MenuItem,FormControl,Select, InputLabel} from '@mui/material';
 import { FaEye, FaBuilding, FaFileDownload, FaPlus, FaTrash,FaUpload } from "react-icons/fa";
 import FirmTable from './FirmTable';
 import DisplayTable from "./DisplayTable";
@@ -64,7 +64,8 @@ const FirstvisitFollowup = () => {
     const [leadType, setLeadType] = useState('');
     const [firmName, setFirmName] = useState("");
     const [firmNameError, setFirmNameError] = useState("");
-  
+  const [firms, setFirms] = useState([]);
+
   const [statusError, setStatusError] = useState('');
     const [mobileError, setMobileError] = useState("");
     const [email, setEmail] = useState('');
@@ -83,6 +84,7 @@ const FirstvisitFollowup = () => {
   const [ifscCode, setIfscCode] = useState(""); 
   const [ifscCodeError, setIfscCodeError] = useState("");
   // const [status, setStatus] = useState({});
+   const [nextFollowUp, setNextFollowUp] = useState('');
   const [status, setStatus] = useState('');
 
   
@@ -777,7 +779,31 @@ const FirstvisitFollowup = () => {
         setFirmName(e.target.value);
       };
       
-      
+       const handleSubmit = () => {
+    const newFirm = {
+      firmName,
+      closingExecutive,
+      name,
+      nextFollowUp,
+      leadType,
+      status
+    };
+
+    // Add new firm data to the firms array
+    setFirms((prevFirms) => [...prevFirms, newFirm]);
+
+    // Show success toast
+    toast.success("Details are submitted!", { position: "top-right", autoClose: 3000 });
+
+    // Clear form fields after submission (optional)
+    setFirmName('');
+    setClosingExecutive('');
+    setName('');
+    setNextFollowUp('');
+    setLeadType('');
+    setStatus('');
+    setShowFirmForm(false);
+  };
 
     return (
       <div className="main-content">
@@ -917,7 +943,8 @@ const FirstvisitFollowup = () => {
           </div>
   
           <div className="mt-3">
-            <FirmTable firms={loans} />
+            {/* <FirmTable firms={loans} /> */}
+            <FirmTable firms={firms} />
           </div>
         </>
       ) : (
@@ -979,17 +1006,7 @@ const FirstvisitFollowup = () => {
       />
     </Grid>
 
-    {/* <Grid item xs={6}>
-      <TextField
-        label="Name"
-        fullWidth
-        variant="outlined"
-        value={firmPan}
-              onChange={handleFirmPanChange}
-              error={!!firmPanError}  // Show error if there is an error
-              helperText={firmPanError}
-      />
-    </Grid> */}
+    
     <Grid item xs={6}>
   <TextField
     label="Name"
@@ -1082,13 +1099,14 @@ const FirstvisitFollowup = () => {
           variant="contained"
           className="m-3"
           color="success"
-          onClick={() => {
-            // Simply show the toast message without calling validation functions
-            toast.success("Details are submitted!", { position: "top-right", autoClose: 3000 });
+          // onClick={() => {
+           
+          //   // toast.success("Details are submitted!", { position: "top-right", autoClose: 3000 });
             
-            // If you want to close the form (or any other logic), you can add it here
-            setShowFirmForm(false); // Example of hiding the form after submission
-          }}
+      
+          //   // setShowFirmForm(false); 
+          // }}
+           onClick={handleSubmit}
         >
           Submit
         </Button>

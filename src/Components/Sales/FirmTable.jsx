@@ -46,7 +46,8 @@ const handleOpenDocument = (url) => {
   }
 };
 
-const FirmTable = ( ) => {
+const FirmTable = ( {firms}) => {
+   console.log("Received firms data:", firms); 
   return (
     <TableContainer component={Paper}>
     <Table>

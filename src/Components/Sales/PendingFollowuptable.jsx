@@ -2,7 +2,7 @@
 
 
 import React, { useState } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Tooltip, IconButton,
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Tooltip, IconButton,TablePagination,Box,
   MenuItem, TextField, Button ,FormControl,InputLabel,Select,Typography,Grid} from '@mui/material';
 import { FaEdit, FaWhatsapp, FaEnvelope, FaUserCircle } from 'react-icons/fa';
 import {toast } from 'react-toastify';
@@ -118,15 +118,16 @@ const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
 
-  // Handle rows per page change
+  
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0); // Reset to first page when rows per page change
+    setPage(0); 
   };
 
   
   
   return (
+    <>
     <TableContainer component={Paper}>
       {showFirmForm && selectedItem ? (
        
@@ -306,7 +307,7 @@ const handleChangePage = (event, newPage) => {
 
         </div>
       ) : (
-     
+     <Box sx={{ maxHeight: 400, overflowY: 'auto' }}>
         <Table>
           <TableHead>
             <TableRow sx={{ background: '#3621a9' }}>
@@ -393,8 +394,23 @@ const handleChangePage = (event, newPage) => {
             ))}
           </TableBody>
         </Table>
+        </Box>
+
+        
       )}
     </TableContainer>
+
+    <TablePagination
+  component="div"
+  count={firms.length}
+  page={page}
+  onPageChange={handleChangePage}
+  rowsPerPage={rowsPerPage}
+  onRowsPerPageChange={handleChangeRowsPerPage}
+  rowsPerPageOptions={[5, 6, 10, 25, 50]}
+/>
+
+</>
   );
 };
 

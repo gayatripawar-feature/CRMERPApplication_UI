@@ -33,12 +33,6 @@ const configurations = ["1 BHK", "1.5 BHK", "2 BHK", "2.5 BHK", "3 BHK", "3.5 BH
 const unitTypes = ["Actual Site", "Hoarding","Facebook","Instagram","Website","Print Media","Radio","Google add","Exhibition","Online Portal","Direct call","Pamphlet","Channel Partner","References","Other"];
 
 
-// // Sidebar Sections
-// const sections = [
-//   { label: "Display Leads", icon: <FaEye size={20} /> },
-//   { label: "Sample CSV", icon: <FaFileCsv size={20}/> },
-//   { label: "Upload Excel", icon: <FaUpload size={20}/> },
-// ];
 
 
 const sections = [
@@ -124,16 +118,17 @@ const handleBudgetChange = (event) => {
       setShowFileInput(false);
     }
   };
+  const [inventoryData, setInventoryData] = useState([]);
+
   
-  
-  const [inventoryData, setInventoryData] = useState([
-    {
+  // const [inventoryData, setInventoryData] = useState([
+  //   {
      
-    },
-    {
+  //   },
+  //   {
      
-    },
-  ]);
+  //   },
+  // ]);
 
   // ✅ Function to handle deletion of a row
   const handleDelete = (index) => {
@@ -230,6 +225,13 @@ const handleBudgetChange = (event) => {
     setShowFirmForm(false);
   };
   
+const handleUpdateItem = (index, updatedItem) => {
+  const updatedData = [...inventoryData];
+  updatedData[index] = updatedItem;
+  setInventoryData(updatedData);
+  console.log("Updated inventoryData:", updatedData);
+
+};
 
   
   const handleSalesExecChange = (event) => {
@@ -509,7 +511,9 @@ const handleLeadNoChange = (e) => {
               {/* <InventoryTable inventoryData={inventoryData} handleDelete={handleDelete} /> */}
               {/* <NewLeads inventoryData={inventoryData} handleDelete={handleDelete} /> */}
               
-              <DisplayEnquiryTable data= {data} />
+              {/* <DisplayEnquiryTable data= {data} /> */}
+              <DisplayEnquiryTable data={firms} />
+
            </div>
             </>
           ) : (
@@ -794,7 +798,7 @@ const handleLeadNoChange = (e) => {
         </div>
       )}
 
-{expandedSection === 1 && (
+{/* {expandedSection === 1 && (
         <div className="content-container mt-3">
           {!showFirmForm ? (
             <>
@@ -802,7 +806,7 @@ const handleLeadNoChange = (e) => {
                 <Button variant="contained" color="primary" onClick={() => setShowFirmForm(true)}>
                   
                 </Button>
-                {/* Pagination Buttons */}
+              
                 <div className="right-buttons">
                   <Button variant="contained" color="secondary" onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}>
                     Previous
@@ -814,7 +818,7 @@ const handleLeadNoChange = (e) => {
               </div>
               <div className="mt-3">
               <InventoryTable inventoryData={inventoryData} handleDelete={handleDelete} />
-              {/* <NewLeads /> */}
+              
            </div>
             </>
           ) : (
@@ -839,7 +843,7 @@ const handleLeadNoChange = (e) => {
                 /></Grid>
                 <Grid item xs={4}><TextField  type="number" label="Saleable to Carpet Area Ratio (Sq. Fts)" fullWidth inputProps={{ step: "0.01", min: "0.01" }}/></Grid>
 
-                {/* Type of Units Dropdown */}
+               
                 <Grid item xs={4}>
                   <TextField select label="Type of Units" fullWidth>
                     {unitTypes.map((type, idx) => (
@@ -848,7 +852,7 @@ const handleLeadNoChange = (e) => {
                   </TextField>
                 </Grid>
 
-                {/* Configuration Dropdown */}
+             
                 <Grid item xs={4}>
                   <TextField select label="Configuration" fullWidth>
                     {configurations.map((config, idx) => (
@@ -857,7 +861,6 @@ const handleLeadNoChange = (e) => {
                   </TextField>
                 </Grid>
 
-                {/* Status Dropdown */}
                 <Grid item xs={4}>
                   <TextField select label="Status" fullWidth>
                     {statusOptions.map((status, idx) => (
@@ -866,7 +869,7 @@ const handleLeadNoChange = (e) => {
                   </TextField>
                 </Grid>
 
-                {/* Select Owner Dropdown */}
+        
                 <Grid item xs={4}>
                   <TextField select label="Select Owner" fullWidth>
                     {owners.map((owner, idx) => (
@@ -875,7 +878,7 @@ const handleLeadNoChange = (e) => {
                   </TextField>
                 </Grid>
 
-                {/* <Grid item xs={4}><TextField type="number" label="ATT. Terrace Carpet Area (Sq Ft)" fullWidth /></Grid> */}
+               
                 <Grid item xs={4}>
   <TextField
     type="number"
@@ -897,7 +900,7 @@ const handleLeadNoChange = (e) => {
                 <Grid item xs={4}><TextField label="PODIUM GARDE" fullWidth /></Grid>
               </Grid>
 
-              {/* Partner Details */}
+            
            
               {partners.map((_, index) => (
                 <Grid container spacing={2} key={index}>
@@ -926,10 +929,10 @@ const handleLeadNoChange = (e) => {
 
           )}
         </div>
-      )}
+      )} */}
 
 
-{expandedSection === 2 && (
+{/* {expandedSection === 2 && (
         <div className="content-container mt-3">
           {!showFirmForm ? (
             <>
@@ -937,7 +940,7 @@ const handleLeadNoChange = (e) => {
                 <Button variant="contained" color="primary" onClick={() => setShowFirmForm(true)}>
                   + Display Inventory
                 </Button>
-                {/* Pagination Buttons */}
+                
                 <div className="right-buttons">
                   <Button variant="contained" color="secondary" onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}>
                     Previous
@@ -953,7 +956,7 @@ const handleLeadNoChange = (e) => {
             </>
           ) : (
             <div className="firm-form mt-4 p-3 border rounded">
-              {/* <h5></h5> */}
+              
               <Grid container spacing={2}>
                 <Grid item xs={4}><TextField label="Project Name" fullWidth /></Grid>
                 <Grid item xs={4}><TextField label="Wing" fullWidth /></Grid>
@@ -968,7 +971,7 @@ const handleLeadNoChange = (e) => {
                 /></Grid>
                 <Grid item xs={4}><TextField  type="number" label="Saleable to Carpet Area Ratio (Sq. Fts)" fullWidth inputProps={{ step: "0.01", min: "0.01" }}/></Grid>
 
-                {/* Type of Units Dropdown */}
+                
                 <Grid item xs={4}>
                   <TextField select label="Type of Units" fullWidth>
                     {unitTypes.map((type, idx) => (
@@ -977,7 +980,7 @@ const handleLeadNoChange = (e) => {
                   </TextField>
                 </Grid>
 
-                {/* Configuration Dropdown */}
+              
                 <Grid item xs={4}>
                   <TextField select label="Configuration" fullWidth>
                     {configurations.map((config, idx) => (
@@ -986,7 +989,7 @@ const handleLeadNoChange = (e) => {
                   </TextField>
                 </Grid>
 
-                {/* Status Dropdown */}
+                
                 <Grid item xs={4}>
                   <TextField select label="Status" fullWidth>
                     {statusOptions.map((status, idx) => (
@@ -995,7 +998,7 @@ const handleLeadNoChange = (e) => {
                   </TextField>
                 </Grid>
 
-                {/* Select Owner Dropdown */}
+                
                 <Grid item xs={4}>
                   <TextField select label="Select Owner" fullWidth>
                     {owners.map((owner, idx) => (
@@ -1004,7 +1007,7 @@ const handleLeadNoChange = (e) => {
                   </TextField>
                 </Grid>
 
-                {/* <Grid item xs={4}><TextField type="number" label="ATT. Terrace Carpet Area (Sq Ft)" fullWidth /></Grid> */}
+              
                 <Grid item xs={4}>
   <TextField
     type="number"
@@ -1026,7 +1029,7 @@ const handleLeadNoChange = (e) => {
                 <Grid item xs={4}><TextField label="PODIUM GARDE" fullWidth /></Grid>
               </Grid>
 
-              {/* Partner Details */}
+            
            
               {partners.map((_, index) => (
                 <Grid container spacing={2} key={index}>
@@ -1053,7 +1056,7 @@ const handleLeadNoChange = (e) => {
 
           )}
         </div>
-      )}
+      )} */}
     </div>
   );
 };
