@@ -298,8 +298,8 @@ const LeadsFollowUp = () => {
       } else {
         setError('');
       }
-  
-      setName(value);
+  setFirmPan(value);
+      // setName(value);
     };
   
    
@@ -389,21 +389,35 @@ const LeadsFollowUp = () => {
       setFirmNameError("");
       return true;
     };
-    const [formData, setFormData] = useState({
-      firmName: '',
-      closingExecutive: '',
-      firmPan: '',
-      status: '',
-      assignTo: '',
-      leadType: '',
-      nextFollowUp: '',
-      mobileNo: '',
-      mailId: '',
-      address: '',
-      residentialAddress: '',
-      panNo: '',
-    });
+    // const [formData, setFormData] = useState({
+    //   firmName: '',
+    //   closingExecutive: '',
+    //   firmPan: '',
+    //   status: '',
+    //   assignTo: '',
+    //   leadType: '',
+    //   nextFollowUp: '',
+    //   mobileNo: '',
+    //   mailId: '',
+    //   address: '',
+    //   residentialAddress: '',
+    //   panNo: '',
+    // });
   
+
+
+
+    const [formData, setFormData] = useState({
+  leadNo: '',
+  closingExecutive: '',
+  remark: '',
+  name: '',
+  status: '',
+  assignTo: '',
+  leadType: '',
+  nextFollowUp: '',
+});
+
     const [formValues, setFormValues] = useState({
       firmName: "",
       projectName: "",
@@ -872,7 +886,7 @@ const handleNextFollowUpChange = (newValue) => {
 //   setNextFollowUp('');
 // };
 const handleSubmit = (e) => {
-  // e.preventDefault();
+ 
 
   const newFirm = {
     lastFollowUp,
@@ -888,9 +902,19 @@ const handleSubmit = (e) => {
     // requirement,
   };
 
-  setLoans((prev) => [...prev, newFirm]);
-
-  console.log("Form submitted with data:", newFirm);
+  // setLoans((prev) => [...prev, newFirm]);
+ setLoans((prev) => [...prev, formData]);
+  setFormData({   // Reset form
+    leadNo: '',
+    closingExecutive: '',
+    name: '',
+    remark: '',
+    status: '',
+    assignTo: '',
+    leadType: '',
+    nextFollowUp: '',
+  });
+  console.log("Form submitted with data:", formData);
 };
 
 
@@ -1005,17 +1029,17 @@ const handleSubmit = (e) => {
       padding: "8px 16px",
       borderRadius: "8px",
       display: "flex",
-      alignItems: "center",  // Align icon and text
-      gap: "8px",  // Space between icon and text
+      alignItems: "center",  
+      gap: "8px",  
       "&:hover": {
         background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
       },
      
     }}
-    // onClick={() => handledow(firms)}
+    
     onClick={handleDownloadPDFPending}
   >
-    <FaFileDownload size={18} />  {/* Added download icon */}
+    <FaFileDownload size={18} />  
     Download PDF
   </Button>
            </div>
@@ -1033,7 +1057,8 @@ const handleSubmit = (e) => {
   
           <div className="mt-3">
          
-            <PendingFollowuptable firms={loans} />
+            {/* <PendingFollowuptable firms={loans}  /> */}
+              <PendingFollowuptable firms={loans} setFirms={setFirms} />
           </div>
         </>
       ) : (
@@ -1070,7 +1095,7 @@ const handleSubmit = (e) => {
             onChange={handleClosingExecutiveChange}
             label="Closing Executive"
           >
-            {/* Sales Person options */}
+           
             <MenuItem value="Shilpha Mewada 1">Shilpha Mewada 1</MenuItem>
             <MenuItem value="Tic Tac Toe Sohan">Tic Tac Toe Sohan</MenuItem>
             <MenuItem value="Shilpha Mewada">Shilpha Mewada</MenuItem>
@@ -1082,7 +1107,7 @@ const handleSubmit = (e) => {
           </Select>
         </FormControl>
       </Grid>
-    {/* </Grid> */}
+    
 
   
     <Grid item xs={6}>
@@ -1184,6 +1209,7 @@ const handleSubmit = (e) => {
             nextFollowUp: newValue ? newValue.format('YYYY-MM-DD') : '',
           });
         }}
+         format="DD/MM/YYYY"
         renderInput={(params) => (
           <TextField
             {...params}
@@ -1207,20 +1233,7 @@ const handleSubmit = (e) => {
   
   
   
-        {/* <Button
-          variant="contained"
-          className="m-3"
-          color="success"
-          onClick={() => {
-        { handleSubmit}
-            toast.success("Details are submitted!", { position: "top-right", autoClose: 3000 });
-            
-           
-            setShowFirmForm(false); 
-          }}
-        >
-          Submit
-        </Button> */}
+       
            <Button
   variant="contained"
   className="m-3"

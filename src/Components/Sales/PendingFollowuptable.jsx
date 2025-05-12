@@ -6,35 +6,38 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
   MenuItem, TextField, Button ,FormControl,InputLabel,Select,Typography,Grid} from '@mui/material';
 import { FaEdit, FaWhatsapp, FaEnvelope, FaUserCircle } from 'react-icons/fa';
 import {toast } from 'react-toastify';
-const PendingFollowuptable = () => {
-  const [editingIndex, setEditingIndex] = useState(null); // State to track which row is being edited
-  const [selectedItem, setSelectedItem] = useState(null); // State to track selected item for display in detail view
+const PendingFollowuptable = ({firms, setFirms}) => {
+  const [editingIndex, setEditingIndex] = useState(null); 
+  const [selectedItem, setSelectedItem] = useState(null); 
  const [closingExecutive, setClosingExecutive] = useState('');
  
      const [firmPan, setFirmPan] = useState("");
      const [showFirmForm, setShowFirmForm] = useState(true)
          const [firmPanError, setFirmPanError] = useState("");
-  const firms = [
-    {
-      timestamp: '2025-03-22',
-      name: 'John Doe',
-      address: '1234 Street Name',
-      firmPanNo: 'ABCDE1234F',
-      firmGstNo: 'GST12345',
-      firmPan: 'ABCDE1234',
-      firmGst: 'GST123',
-      firmLightBill: '1000',
-      partner: 'Jane Doe',
-      aadhaarNo: '1234 5678 9012',
-      age: '30',
-      occupation: 'Software Engineer',
-      mobileNo: '9876543210',
-      mailId: 'johndoe@example.com',
-      residentialAddress: '5678 Another Street',
-      panNo: 'ABCDE1234F',
-      lightBill: '500',
-    },
-  ];
+  const [page, setPage] = useState(0); // Current page
+  const [rowsPerPage, setRowsPerPage] = useState(6);
+
+  // const firms = [
+  //   {
+  //     timestamp: '2025-03-22',
+  //     name: 'John Doe',
+  //     address: '1234 Street Name',
+  //     firmPanNo: 'ABCDE1234F',
+  //     firmGstNo: 'GST12345',
+  //     firmPan: 'ABCDE1234',
+  //     firmGst: 'GST123',
+  //     firmLightBill: '1000',
+  //     partner: 'Jane Doe',
+  //     aadhaarNo: '1234 5678 9012',
+  //     age: '30',
+  //     occupation: 'Software Engineer',
+  //     mobileNo: '9876543210',
+  //     mailId: 'johndoe@example.com',
+  //     residentialAddress: '5678 Another Street',
+  //     panNo: 'ABCDE1234F',
+  //     lightBill: '500',
+  //   },
+  // ];
 
 
   const [formData, setFormData] = useState({
@@ -54,15 +57,15 @@ const PendingFollowuptable = () => {
   });
 
   const handleSubmit = (e) => {
-    e.preventDefault(); // Prevent the default form submission
+    e.preventDefault(); 
 
-    // Log form data (for debugging)
+    
     console.log('Form submitted with data:', formData);
 
-    // Update the firms array by adding the new data
+   
     setFirms([...firms, { ...formData, timestamp: new Date().toLocaleDateString() }]);
 
-    // Reset form data
+    
     setFormData({
       firmName: '',
       closingExecutive: '',
@@ -79,7 +82,7 @@ const PendingFollowuptable = () => {
       sourceName: '',
     });
 
-    // Success toast
+   
     toast.success("Details are submitted!", { position: "top-right", autoClose: 3000 });
     setShowFirmForm(false);
   };
@@ -111,85 +114,22 @@ const PendingFollowuptable = () => {
     }
   };
 
+const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
 
-  // const handleSubmit = () => {
-  //   // Create new firm data
-  //   const newFirm = {
-  //     leadNo: firmName,  // example, make sure to map your form data to appropriate fields
-  //     closingExecutive,
-  //     firmPan,
-  //     status,
-  //     assignTo,
-  //     leadType,
-  //     nextFollowUp
-  //   };
+  // Handle rows per page change
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0); // Reset to first page when rows per page change
+  };
+
   
-  //   // Add new firm data to the firms state
-  //   setFirms(prevFirms => [...prevFirms, newFirm]);
-  
-  //   // Show success toast
-  //   toast.success("Details are submitted!", { position: "top-right", autoClose: 3000 });
-  
-  //   // Reset form after submission
-  //   setFirmName('');
-  //   setClosingExecutive('');
-  //   setFirmPan('');
-  //   setStatus('');
-  //   setAssignTo('');
-  //   setLeadType('');
-  //   setNextFollowUp('');
-  // };
-  // const handleSubmit = () => {
-  //   const newFirm = {
-  //     firmName: formData.firmName,
-  //     closingExecutive: formData.closingExecutive,
-  //     firmPanNo: formData.firmPan, // Match with firmPanNo
-  //     status: formData.status,
-  //     assignTo: formData.assignTo,
-  //     leadType: formData.leadType,
-  //     nextFollowUp: formData.nextFollowUp,
-  //     mobileNo: formData.mobileNo,
-  //     mailId: formData.mailId,
-  //     address: formData.address,
-  //     residentialAddress: formData.residentialAddress,
-  //     panNo: formData.panNo,
-  //     name: formData.firmPan, // Optional: Map firmPan to name if needed
-  //     occupation: formData.occupation || '', // Add if used in table
-  //     partner: formData.partner || '',       // Add if used in table
-  //     timestamp: new Date().toLocaleString(),
-  //   };
-  
-  //   console.log("Form submitted with data:", newFirm);
-  
-  //   setFirms((prevFirms) => [...prevFirms, newFirm]);
-  
-  //   toast.success("Details are submitted!", {
-  //     position: "top-right",
-  //     autoClose: 3000,
-  //   });
-  
-  //   setFormData({
-  //     firmName: '',
-  //     closingExecutive: '',
-  //     firmPan: '',
-  //     status: '',
-  //     assignTo: '',
-  //     leadType: '',
-  //     nextFollowUp: '',
-  //     mobileNo: '',
-  //     mailId: '',
-  //     address: '',
-  //     residentialAddress: '',
-  //     panNo: '',
-  //     occupation: '',
-  //     partner: '',
-  //   });
-  // };
   
   return (
     <TableContainer component={Paper}>
       {showFirmForm && selectedItem ? (
-        // Display selected item details
+       
         <div
           className="project-form mt-4 p-3"
           style={{
@@ -459,4 +399,11 @@ const PendingFollowuptable = () => {
 };
 
 export default PendingFollowuptable;
+
+
+
+
+
+
+
 
