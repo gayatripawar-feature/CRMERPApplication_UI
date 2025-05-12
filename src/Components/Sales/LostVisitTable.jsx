@@ -1,7 +1,7 @@
 
 
 
-import React ,{useState} from "react";
+import React ,{useState,useEffect} from "react";
 import { TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Paper, IconButton, MenuItem, Box,FormControl,InputLabel,Select } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
@@ -50,8 +50,15 @@ const LostVisitTable = ({data}) => {
           const [nameError, setNameError] = useState('');
            const [leadType, setLeadType] = useState("");
            const [status, setStatus] = useState("");
-
+const [editableRow, setEditableRow] = useState({});
           const [assignedTo, setAssignedTo] = useState(""); 
+
+
+              useEffect(() => {
+  if (selectedRow) {
+    setEditableRow(selectedRow);
+  }
+}, [selectedRow]);
       const handleFirmPanChange = (e) => {
         const value = e.target.value;
         setFirmPan(value);
@@ -234,115 +241,140 @@ const LostVisitTable = ({data}) => {
       <Paper className="p-4" elevation={4} style={{ borderRadius: "12px", paddingBottom: "20px" }}>
         <Grid container spacing={2}>
           {/* Enquiry No */}
-          <Grid item xs={6}>
+        <Grid item xs={6}>
             <TextField label="Enquiry No." fullWidth variant="outlined" required 
-            value={selectedRow?.enquiryNo || ""}
+            value={editableRow?.enquiryNo || ""}
+
+            onChange={(e) =>
+  setEditableRow({ ...editableRow, enquiryNo : e.target.value })
+}
+            
             />
           </Grid>
 
           {/* Sales Person */}
-          <Grid item xs={6}>
-            <FormControl fullWidth variant="outlined">
-              <InputLabel>Sales Person</InputLabel>
-              <Select
-              //  value={closingExecutive}
-              value={selectedRow?.closingExecutive || " "}
-               onChange={handleClosingExecutiveChange} label="Sales Person">
-                <MenuItem value="Shilpha Mewada 1">Shilpha Mewada 1</MenuItem>
-                <MenuItem value="Tic Tac Toe Sohan">Tic Tac Toe Sohan</MenuItem>
-                <MenuItem value="Shilpha Mewada">Shilpha Mewada</MenuItem>
-                <MenuItem value="VIVEK TAPKIR">VIVEK TAPKIR</MenuItem>
-                <MenuItem value="Shubham Taware">Shubham Taware</MenuItem>
-                <MenuItem value="Ashwini Khot">Ashwini Khot</MenuItem>
-                <MenuItem value="Amol Pawar">Amol Pawar</MenuItem>
-                <MenuItem value="Sachin Awale">Sachin Awale</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
+         <Grid item xs={6}>
+  <FormControl
+    fullWidth
+    variant="outlined"
+    
+  >
+    <InputLabel>Sales Person</InputLabel>
+    <Select
+      value={editableRow?.closingExecutive || ""}
+      onChange={(e) =>
+        setEditableRow({ ...editableRow, closingExecutive: e.target.value })
+      }
+      label="Sales Person"
+    >
+      <MenuItem value="Shilpha Mewada 1">Shilpha Mewada 1</MenuItem>
+      <MenuItem value="Tic Tac Toe Sohan">Tic Tac Toe Sohan</MenuItem>
+      <MenuItem value="Shilpha Mewada">Shilpha Mewada</MenuItem>
+      <MenuItem value="VIVEK TAPKIR">VIVEK TAPKIR</MenuItem>
+      <MenuItem value="Shubham Taware">Shubham Taware</MenuItem>
+      <MenuItem value="Ashwini Khot">Ashwini Khot</MenuItem>
+      <MenuItem value="Amol Pawar">Amol Pawar</MenuItem>
+      <MenuItem value="Sachin Awale">Sachin Awale</MenuItem>
+    </Select>
+  </FormControl>
+</Grid>
 
          
-          <Grid item xs={6}>
-            <TextField
-              label="Remark"
-              fullWidth
-              variant="outlined"
-             value={selectedRow?.remark || ""}
-              
-              onChange={(e) => setFirmPan(e.target.value)}
-            />
-          </Grid>
+              <Grid item xs={6}>
+  <TextField
+    label="Remark"
+    fullWidth
+    variant="outlined"
+    value={editableRow?.remark || ""}
+    onChange={(e) =>
+      setEditableRow({ ...editableRow, remark: e.target.value })
+    }
+    
+  />
+</Grid>
 
           {/* Name */}
-          <Grid item xs={6}>
-            <TextField
-              label="Name"
-              fullWidth
-              variant="outlined"
-              // value={name}
-              value={selectedRow?.name || ""}
-              onChange={handleNameChange}
-              error={!!nameError}
-              helperText={nameError}
-              required
-            />
-          </Grid>
+        <Grid item xs={6}>
+  <TextField
+    label="Name"
+    fullWidth
+    variant="outlined"
+    value={editableRow?.name || ""}
+    onChange={(e) =>
+      setEditableRow({ ...editableRow, name: e.target.value })
+    }
+    error={!!nameError}
+    helperText={nameError}
+    required
+   
+  />
+</Grid>
+
 
           {/* Next Follow Up */}
-          <Grid item xs={6}>
-            <TextField
-              type="datetime-local"
-              label="Next Follow Up"
-              fullWidth
-              variant="outlined"
-              required
-              // value={selectedRow?.nextFollowUp || ""}
-              InputLabelProps={{ shrink: true }}
-            />
-          </Grid>
+        <Grid item xs={6}>
+  <TextField
+    type="datetime-local"
+    label="Next Follow Up"
+    fullWidth
+    variant="outlined"
+    required
+    value={editableRow?.nextFollowUp || ""}
+    onChange={(e) =>
+      setEditableRow({ ...editableRow, nextFollowUp: e.target.value })
+    }
+    InputLabelProps={{ shrink: true }}
+    
+  />
+</Grid>
 
-          {/* Assign To */}
-          <Grid item xs={6}>
-            <FormControl fullWidth variant="outlined">
-              <InputLabel>Assign To</InputLabel>
-              <Select
-               
-                value={selectedRow?.assignedTo || " "}
-                onChange={(e) => setAssignedTo(e.target.value)}
-                label="Assign To"
-                required
-              >
-                <MenuItem value="Shilpha Mewada 1">Shilpha Mewada 1</MenuItem>
-                <MenuItem value="Tic Tac Toe Sohan">Tic Tac Toe Sohan</MenuItem>
-                <MenuItem value="Shilpha Mewada">Shilpha Mewada</MenuItem>
-                <MenuItem value="VIVEK TAPKIR">VIVEK TAPKIR</MenuItem>
-                <MenuItem value="Shubham Taware">Shubham Taware</MenuItem>
-                <MenuItem value="Ashwini Khot">Ashwini Khot</MenuItem>
-                <MenuItem value="Amol Pawar">Amol Pawar</MenuItem>
-                <MenuItem value="Sachin Awale">Sachin Awale</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
+         <Grid item xs={6}>
+  <FormControl fullWidth variant="outlined" >
+    <InputLabel>Assign To</InputLabel>
+    <Select
+      value={editableRow?.assignedTo || " "}
+      onChange={(e) => setEditableRow({ ...editableRow, assignedTo: e.target.value })}
+      label="Assign To"
+      required
+    >
+      <MenuItem value="Shilpha Mewada 1">Shilpha Mewada 1</MenuItem>
+      <MenuItem value="Tic Tac Toe Sohan">Tic Tac Toe Sohan</MenuItem>
+      <MenuItem value="Shilpha Mewada">Shilpha Mewada</MenuItem>
+      <MenuItem value="VIVEK TAPKIR">VIVEK TAPKIR</MenuItem>
+      <MenuItem value="Shubham Taware">Shubham Taware</MenuItem>
+      <MenuItem value="Ashwini Khot">Ashwini Khot</MenuItem>
+      <MenuItem value="Amol Pawar">Amol Pawar</MenuItem>
+      <MenuItem value="Sachin Awale">Sachin Awale</MenuItem>
+    </Select>
+  </FormControl>
+</Grid>
+
 
           {/* Lead Type */}
-          <Grid item xs={6}>
-            <FormControl fullWidth variant="outlined">
-              <InputLabel>Lead Type</InputLabel>
-              <Select  value={selectedRow?.leadType || leadType} onChange={(e) => setLeadType(e.target.value)} label="Lead Type">
-                <MenuItem value="Hot">Hot</MenuItem>
-                <MenuItem value="Warm">Warm</MenuItem>
-                <MenuItem value="Lost">Lost</MenuItem>
-                <MenuItem value="Cold">Cold</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
+        <Grid item xs={6}>
+  <FormControl fullWidth variant="outlined" >
+    <InputLabel>Lead Type</InputLabel>
+    <Select
+      value={editableRow?.leadType || " "}
+      onChange={(e) => setEditableRow({ ...editableRow, leadType: e.target.value })}
+      label="Lead Type"
+    >
+      <MenuItem value="Hot">Hot</MenuItem>
+      <MenuItem value="Warm">Warm</MenuItem>
+      <MenuItem value="Lost">Lost</MenuItem>
+      <MenuItem value="Cold">Cold</MenuItem>
+    </Select>
+  </FormControl>
+</Grid>
+
 
           {/* Status */}
-          <Grid item xs={6}>
-  <FormControl fullWidth variant="outlined">
+        <Grid item xs={6}>
+  <FormControl fullWidth variant="outlined" >
     <InputLabel>Status</InputLabel>
     <Select
-    // value={selectedRow?.status || status}
-      onChange={(e) => setStatus(e.target.value)}
+      value={editableRow?.status || " "}
+      onChange={(e) => setEditableRow({ ...editableRow, status: e.target.value })}
       label="Status"
     >
       <MenuItem value="Follow Up">Follow Up</MenuItem>
