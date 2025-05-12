@@ -235,14 +235,19 @@ const LostVisitTable = ({data}) => {
         <Grid container spacing={2}>
           {/* Enquiry No */}
           <Grid item xs={6}>
-            <TextField label="Enquiry No." fullWidth variant="outlined" required />
+            <TextField label="Enquiry No." fullWidth variant="outlined" required 
+            value={selectedRow?.enquiryNo || ""}
+            />
           </Grid>
 
           {/* Sales Person */}
           <Grid item xs={6}>
             <FormControl fullWidth variant="outlined">
               <InputLabel>Sales Person</InputLabel>
-              <Select value={closingExecutive} onChange={handleClosingExecutiveChange} label="Sales Person">
+              <Select
+              //  value={closingExecutive}
+              value={selectedRow?.closingExecutive || " "}
+               onChange={handleClosingExecutiveChange} label="Sales Person">
                 <MenuItem value="Shilpha Mewada 1">Shilpha Mewada 1</MenuItem>
                 <MenuItem value="Tic Tac Toe Sohan">Tic Tac Toe Sohan</MenuItem>
                 <MenuItem value="Shilpha Mewada">Shilpha Mewada</MenuItem>
@@ -255,16 +260,15 @@ const LostVisitTable = ({data}) => {
             </FormControl>
           </Grid>
 
-          {/* Remark */}
+         
           <Grid item xs={6}>
             <TextField
               label="Remark"
               fullWidth
               variant="outlined"
-              value={firmPan}
-              onChange={handleFirmPanChange}
-              error={!!firmPanError}
-              helperText={firmPanError}
+             value={selectedRow?.remark || ""}
+              
+              onChange={(e) => setFirmPan(e.target.value)}
             />
           </Grid>
 
@@ -274,7 +278,8 @@ const LostVisitTable = ({data}) => {
               label="Name"
               fullWidth
               variant="outlined"
-              value={name}
+              // value={name}
+              value={selectedRow?.name || ""}
               onChange={handleNameChange}
               error={!!nameError}
               helperText={nameError}
@@ -290,6 +295,7 @@ const LostVisitTable = ({data}) => {
               fullWidth
               variant="outlined"
               required
+              // value={selectedRow?.nextFollowUp || ""}
               InputLabelProps={{ shrink: true }}
             />
           </Grid>
@@ -299,7 +305,8 @@ const LostVisitTable = ({data}) => {
             <FormControl fullWidth variant="outlined">
               <InputLabel>Assign To</InputLabel>
               <Select
-                value={assignedTo}
+               
+                value={selectedRow?.assignedTo || " "}
                 onChange={(e) => setAssignedTo(e.target.value)}
                 label="Assign To"
                 required
@@ -320,7 +327,7 @@ const LostVisitTable = ({data}) => {
           <Grid item xs={6}>
             <FormControl fullWidth variant="outlined">
               <InputLabel>Lead Type</InputLabel>
-              <Select value={leadType} onChange={(e) => setLeadType(e.target.value)} label="Lead Type">
+              <Select  value={selectedRow?.leadType || leadType} onChange={(e) => setLeadType(e.target.value)} label="Lead Type">
                 <MenuItem value="Hot">Hot</MenuItem>
                 <MenuItem value="Warm">Warm</MenuItem>
                 <MenuItem value="Lost">Lost</MenuItem>
@@ -334,7 +341,7 @@ const LostVisitTable = ({data}) => {
   <FormControl fullWidth variant="outlined">
     <InputLabel>Status</InputLabel>
     <Select
-      value={status}
+    // value={selectedRow?.status || status}
       onChange={(e) => setStatus(e.target.value)}
       label="Status"
     >

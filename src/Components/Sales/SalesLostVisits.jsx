@@ -75,6 +75,7 @@ const SalesLostVisits = () => {
   const [status, setStatus] = useState({});
   
   const [data, setData] = useState([]); 
+const [submittedData, setSubmittedData] = useState([]);
 
   
   const dummyData = [
@@ -420,7 +421,7 @@ const SalesLostVisits = () => {
       landmark: "",
     });
   
-    // State to store validation errors
+   
     const [errors, setErrors] = useState({
       firmName: "",
     });
@@ -429,12 +430,11 @@ const SalesLostVisits = () => {
     const handleChange = (e, label, partnerIndex) => {
       const { value } = e.target;
     
-      // Update the partners array with the new value for the specific field
       const updatedPartners = [...partners];
       updatedPartners[partnerIndex][label.toLowerCase().replace(/ /g, "")] = value;
       setPartners(updatedPartners);
     
-      // Apply validation for the 'firmName' field
+      
       if (label === 'Firm Name') {
         // Check if the input contains only letters and spaces
         if (!/^[A-Za-z\s]*$/.test(value)) {
@@ -693,7 +693,9 @@ const SalesLostVisits = () => {
           
 
           {/* <LostVisitTable data={data} /> */}
-          <LostVisitTable data={dummyData} />
+          {/* <LostVisitTable data={dummyData} /> */}
+          <LostVisitTable data={submittedData} />
+
         
 
           </div>
@@ -754,9 +756,10 @@ const SalesLostVisits = () => {
         fullWidth
         variant="outlined"
         value={firmPan}
-              onChange={handleFirmPanChange}
-              error={!!firmPanError}  // Show error if there is an error
-              helperText={firmPanError}
+         onChange={(e) => setFirmPan(e.target.value)}
+              // onChange={handleFirmPanChange}
+              // error={!!firmPanError}  // Show error if there is an error
+              // helperText={firmPanError}
       />
     </Grid>
 
@@ -772,14 +775,7 @@ const SalesLostVisits = () => {
               required 
       />
     </Grid>
-    {/* <Grid item xs={6}>
-      <TextField
-      type="date"
-        label=""
-        fullWidth
-        variant="outlined"
-      />
-    </Grid> */}
+   
     
     <Grid item xs={6}>
   <TextField
@@ -875,13 +871,31 @@ const SalesLostVisits = () => {
           variant="contained"
           className="m-3"
           color="success"
-          onClick={() => {
-            // Simply show the toast message without calling validation functions
-            toast.success("Details are submitted!", { position: "top-right", autoClose: 3000 });
+          // onClick={() => {
+           
+          //   toast.success("Details are submitted!", { position: "top-right", autoClose: 3000 });
             
-            // If you want to close the form (or any other logic), you can add it here
-            setShowFirmForm(false); // Example of hiding the form after submission
-          }}
+         
+          //   setShowFirmForm(false); 
+          // }}
+          onClick={() => {
+  const newRecord = {
+    enquiryNo: firmName,
+    closingExecutive,
+    remark: firmPan,
+    name,
+    nextFollowUp: new Date().toISOString(), // replace with actual input value if needed
+    assignedTo,
+    leadType,
+    status
+  };
+
+  setSubmittedData((prevData) => [...prevData, newRecord]);
+
+  toast.success("Details are submitted!", { position: "top-right", autoClose: 3000 });
+  setShowFirmForm(false);
+}}
+
         >
           Submit
         </Button>
