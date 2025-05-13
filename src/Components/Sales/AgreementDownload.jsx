@@ -3,65 +3,23 @@ import jsPDF from 'jspdf';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Typography, Button } from '@mui/material';
 
 const AgreementDownloadPDF = ({ modalContent }) => {
-    // const handleGeneratePDFRateAgreement = () => {
-    //     const doc = new jsPDF("p", "mm", "a4"); // A4 portrait
-    //     const pageHeight = doc.internal.pageSize.getHeight();
-    //     const leftMargin = 20;
-    //     const topMargin = 20;
-    //     let y = topMargin;
-      
-    //     // Title
-    //     doc.setFontSize(16);
-    //     doc.text("Negotiation Calculation (Agreement Wise)", leftMargin, y);
-    //     y += 15;
-      
-    //     // Content Fields
-    //     const fields = [
-    //       "Package",
-    //       "Registration",
-    //       "Balance",
-    //       "Tax Cut",
-    //       "Balance",
-    //       "Agreement Value",
-    //       "Stamp Duty",
-    //       "Registration Charges",
-    //       "GST",
-    //       "Total",  
-    //       "Carpet Area",
-    //       "Area",
-    //       "Per Sq. Ft",
-    //     ];
-      
-    //     doc.setFontSize(12);
-      
-    //     fields.forEach((label, index) => {
-    //       if (y > pageHeight - 20) {
-    //         doc.addPage(); // Add new page if space is running out
-    //         y = topMargin;
-    //       }
-      
-    //       doc.text(`${label}: ____________________`, leftMargin, y);
-    //       y += 10;
-    //     });
-      
-    //     doc.save("agreement-details.pdf");
-    //   };
+  
     const handleGeneratePDFRateAgreement = () => {
         const doc = new jsPDF("p", "mm", "a4");
         const pageHeight = doc.internal.pageSize.getHeight();
         const pageWidth = doc.internal.pageSize.getWidth();
       
-        let y = 20; // Starting vertical position
+        let y = 20; 
         const lineHeight = 12;
         const leftMargin = 20;
       
-        // Title Section
+     
         doc.setFontSize(14);
         doc.setFont("helvetica", "bold");
         doc.text("Negotiation Calculation (Agreement Wise)", pageWidth / 2, y, { align: "center" });
         y += lineHeight + 5;
       
-        // Define Field Label and Placeholder Values
+       
         const fields = [
           { label: "Package", value: "" },
           { label: "Registration", value: "" },
@@ -87,13 +45,13 @@ const AgreementDownloadPDF = ({ modalContent }) => {
             y = 20;
           }
       
-          // Adjust layout as needed: Label left, blank line right
+       
           doc.text(`${field.label}:`, leftMargin, y);
           doc.text("_________________________", leftMargin + 50, y);
           y += lineHeight;
         });
       
-        // Save the PDF
+       
         doc.save("AgreementDetails.pdf");
       };
       

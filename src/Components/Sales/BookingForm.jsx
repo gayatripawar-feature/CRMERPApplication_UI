@@ -37,7 +37,7 @@ const  BookingForm = () => {
     const [loans, setLoans] = useState([]);
     const [leadType, setLeadType] = useState("");
     const [assignedTo, setAssignedTo] = useState(""); 
-    // const [expandedSection, setExpandedSection] = useState(0); 
+   
     const [showFirmForm, setShowFirmForm] = useState(false);
    
     const [showProjectForm, setShowProjectForm] = useState(false);
@@ -82,13 +82,11 @@ const  BookingForm = () => {
   const [data, setData] = useState([]); 
   const [panNumber, setPanNumber] = useState('');
   const [aadharNumber, setAadharNumber] = useState('');
-//   const [leadType, setLeadType] = useState('');
+
 const [dateOfBirth, setDateOfBirth] = useState('');
+ const [mobileEmail, setMobileEmail] = useState('');
 
 
-  const [mobileEmail, setMobileEmail] = useState('');
-
-  // const [aadhaarCard, setAadhaarCard] = useState([]);
 
 
   const dummyData = [
@@ -140,22 +138,21 @@ const [dateOfBirth, setDateOfBirth] = useState('');
   const [parking, setParking] = useState('');
   const [floor, setFloor] = useState('');
   const [mobileNumber, setMobileNumber] = useState('');
-  // const [mobileError, setMobileError] = useState('');
-  // State for Section 3: Consideration
+ 
   const [bookingAmount, setBookingAmount] = useState('');
   const [totalConsideration, setTotalConsideration] = useState('');
   const [stampDuty, setStampDuty] = useState('');
   const [registrationFee, setRegistrationFee] = useState('');
   const [gstAmount, setGstAmount] = useState('');
 
-  // State for Section 4: Documents
+
   const [panCard, setPanCard] = useState('');
   const [aadhaarCard, setAadhaarCard] = useState('');
   const [marriageCertificate, setMarriageCertificate] = useState('');
   const [passportPhoto, setPassportPhoto] = useState('');
   const [otherDocuments, setOtherDocuments] = useState('');
  
-  // State for Section 5: Booking Payment Mode
+  
   const [paymentMode, setPaymentMode] = useState('');
   const [chequeNo, setChequeNo] = useState('');
   const [chequeDate, setChequeDate] = useState('');
@@ -177,7 +174,7 @@ const [coAllotteePan, setCoAllotteePan] = useState("");
 const [coAllotteeAadhar, setCoAllotteeAadhar] = useState("");
 const [coAllotteeAadharError, setCoAllotteeAadharError] = useState("");
 
-// const [expandedSection, setExpandedSection] = useState(null);
+
 const [expandedSection, setExpandedSection] = useState(0);
 const [isExpanded, setIsExpanded] = useState(false);
 

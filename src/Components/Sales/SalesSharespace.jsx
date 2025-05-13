@@ -247,7 +247,7 @@ const [isExpanded, setIsExpanded] = useState(false);
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
-    setPage(0); // Reset page when changing rows per page
+    setPage(0); 
   };
 
 
@@ -334,7 +334,7 @@ const [isExpanded, setIsExpanded] = useState(false);
     <div
       className="d-flex justify-content-center align-items-center rounded-circle p-2 shadow"
       style={{
-        backgroundColor: activeIcon === 'shared' ? "#3621a9" : "transparent",  // Icon background when active
+        backgroundColor: activeIcon === 'shared' ? "#3621a9" : "transparent",  
         padding: '12px',
       }}
     >
@@ -646,7 +646,7 @@ const [isExpanded, setIsExpanded] = useState(false);
     <TableContainer component={Paper} className="mt-4">
 
         <Table size="small" aria-label="shared table">
-            {/* Table Head */}
+          
             <TableHead>
                 <TableRow sx={{ background: "#3621a9" }}>
                     <TableCell sx={{ color: "white", fontWeight: "bold", textAlign: "center" }}>Shared From</TableCell>

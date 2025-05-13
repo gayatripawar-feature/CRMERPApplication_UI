@@ -1783,7 +1783,10 @@ const handleOpenModal = (content) => {
 
 
 const handleGeneratePDF = () => {
-    const content = document.getElementById('pdf-content');
+    // const content = document.getElementById('pdf-content');
+     const content = document.getElementById('table-content');
+      const downloadBtn = document.getElementById('download-pdf-button');
+        if (downloadBtn) downloadBtn.style.display = 'none';
     if (!content) return;
 
     html2canvas(content, { scale: 2 }).then((canvas) => {
