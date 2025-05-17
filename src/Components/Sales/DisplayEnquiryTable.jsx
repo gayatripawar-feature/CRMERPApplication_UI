@@ -229,10 +229,10 @@ const data = [
     customerFeedback: "Looking for more options.",
   },
 ];
-// added data:
+
 const DisplayEnquiryTable = ({data}) => {
-  const [isEditing, setIsEditing] = useState(false); // To toggle between table and form
-  const [selectedItem, setSelectedItem] = useState(null); // To track the item being edited
+  const [isEditing, setIsEditing] = useState(false); 
+  const [selectedItem, setSelectedItem] = useState(null); 
   const [error, setError] = useState('');
 
   const [leadNo, setLeadNo] = useState(''); 
@@ -250,10 +250,10 @@ const DisplayEnquiryTable = ({data}) => {
       const [alternateContact, setAlternateContact] = useState("");
        const [whatsappNo, setWhatsappNo] = useState("");
        const [name, setName] = useState("");
-  // Handlers for each action (Edit, Email, Assign)
+  
   const handleEdit = (row) => {
-    setSelectedItem(row); // Set the item to be edited
-    setIsEditing(true); // Show the form
+    setSelectedItem(row); 
+    setIsEditing(true); 
   };
 
   const handleEmail = (row) => {
@@ -284,19 +284,18 @@ const DisplayEnquiryTable = ({data}) => {
 
   const handleSave = () => {
     console.log("Form saved for", selectedItem);
-    setIsEditing(false); // Close the form after saving
-    setSelectedItem(null); // Reset the selected item
+    setIsEditing(false); 
+    setSelectedItem(null); 
   };
 
   const handleCancel = () => {
-    setIsEditing(false); // Close the form without saving
-    setSelectedItem(null); // Reset the selected item
+    setIsEditing(false); 
+    setSelectedItem(null); 
   };
 
   
-  // Validate email format
   const validateEmail = (value) => {
-    // const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;  // Basic email regex
+   
 
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
 
@@ -307,28 +306,28 @@ const DisplayEnquiryTable = ({data}) => {
     }
   };
 
-  // Handle change in mobile input
+  
   const handleMobileChange = (e) => {
     const value = e.target.value;
     setMobile(value);
     validateMobile(value);
   };
 
-  // Handle change in email input
+  
   const handleEmailChange = (e) => {
     const value = e.target.value;
     setEmail(value);
     validateEmail(value);
   };
 
-  // Handle change for Sales Executive Name
+ 
   const handleSalesExecChange = (event) => {
     setSalesExec(event.target.value);
-    setError(''); // Clear error on change
+    setError(''); 
   };
  
   const validateMobile = (value) => {
-    const regex = /^[0-9]{10}$/;  // Only exactly 10 digits allowed
+    const regex = /^[0-9]{10}$/;  
     if (!regex.test(value)) {
       setMobileError('Mobile number should contain exactly 10 digits');
     } else {
@@ -339,7 +338,7 @@ const DisplayEnquiryTable = ({data}) => {
   const handleInterestedInChange = (event) => {
     setInterestedIn(event.target.value);
   };
-// Handle the change for 'Budget'
+
 const handleBudgetChange = (event) => {
     setBudget(event.target.value);
   };
@@ -351,61 +350,37 @@ const handleBudgetChange = (event) => {
 
   const handleNameChange = (e) => {
     const value = e.target.value;
-    const regex = /^[A-Za-z\s]*$/;  // Only alphabets & space
+    const regex = /^[A-Za-z\s]*$/;  
   
     if (regex.test(value)) {
       setName(value);
-      setNameError(false);   // No error
+      setNameError(false);   
     } else {
-      setNameError(true);    // Show error
+      setNameError(true);    
     }
   };
   
 
 
- // Handle the change for 'Planning To Buy Within'
+ 
  const handlePlanningToBuyChange = (event) => {
   setPlanningToBuy(event.target.value);
 };
 
 
-   // Handle the change for 'Occupation'
+   
    const handleOccupationChange = (event) => {
-    setOccupation(event.target.value); // Update occupation state
+    setOccupation(event.target.value); 
   };
 
   const handleReasonForPurchaseChange = (event) => {
-    setReasonForPurchase(event.target.value); // Update reasonForPurchase state
+    setReasonForPurchase(event.target.value); 
   };
 
   return (
     <div>
       {isEditing ? (
-        // <div>
-        //   {/* Form view */}
-        //   <h3>Edit Enquiry</h3>
-        //   <TextField
-        //     label="Remark History"
-        //     value={selectedItem.remarkHistory}
-        //     onChange={(e) => setSelectedItem({ ...selectedItem, remarkHistory: e.target.value })}
-        //     fullWidth
-        //   />
-        //   <TextField
-        //     label="Enquiry No."
-        //     value={selectedItem.enquiryNo}
-        //     onChange={(e) => setSelectedItem({ ...selectedItem, enquiryNo: e.target.value })}
-        //     fullWidth
-        //   />
-        //   {/* Add more fields as necessary */}
-        //   <div>
-        //     <Button variant="contained" color="success" onClick={handleSave}>
-        //       Save
-        //     </Button>
-        //     <Button variant="outlined" color="error" onClick={handleCancel}>
-        //       Cancel
-        //     </Button>
-        //   </div>
-        // </div>
+       
 
         <div
   className="firm-form mt-4 p-3 border rounded"
@@ -417,7 +392,7 @@ const handleBudgetChange = (event) => {
   }}
 >
   <Grid container spacing={2}>
-    {/* Lead No. Field */}
+   
     <Grid item xs={4}>
       <FormControl fullWidth error={!!error}>
         <InputLabel>Lead No.</InputLabel>
@@ -434,7 +409,6 @@ const handleBudgetChange = (event) => {
       </FormControl>
     </Grid>
 
-    {/* Name Field */}
    
        <Grid item xs={4}>
      <TextField
@@ -448,7 +422,7 @@ const handleBudgetChange = (event) => {
    </Grid>
    
 
-    {/* Mobile No. Field */}
+   
     <Grid item xs={4}>
       <TextField
         label="Mobile No."
@@ -467,7 +441,7 @@ const handleBudgetChange = (event) => {
        value={alternateContact}
        onChange={(e) => {
          const value = e.target.value;
-         // Allow only numbers and limit to 10 digits
+         
          if (/^\d{0,10}$/.test(value)) {
            setAlternateContact(value);
          }
@@ -482,7 +456,7 @@ const handleBudgetChange = (event) => {
    </Grid>
    
 
-   {/* WhatsApp No. Field */}
+   
       <Grid item xs={4}>
     <TextField
       type="text"
@@ -491,7 +465,7 @@ const handleBudgetChange = (event) => {
       value={whatsappNo}
       onChange={(e) => {
         const value = e.target.value;
-        // Allow only numbers and limit to 10 digits
+       
         if (/^\d{0,10}$/.test(value)) {
           setWhatsappNo(value);
         }
@@ -505,37 +479,36 @@ const handleBudgetChange = (event) => {
     />
   </Grid>
   
-   {/* Email Field */}
+  
     <Grid item xs={4}>
       <TextField label="Email" fullWidth 
       value={email}
       onChange={handleEmailChange}
-      error={!!emailError} // Show error if validation fails
+      error={!!emailError} 
       helperText={emailError}
       />
     </Grid>
 
-    {/* Address Field */}
+  
     <Grid item xs={4}>
       <TextField label="Address" fullWidth />
     </Grid>
 
-    {/* Company Field */}
     <Grid item xs={4}>
       <TextField label="Company" fullWidth />
     </Grid>
 
-    {/* Reference by/Source Field */}
+   
     <Grid item xs={4}>
       <TextField label="Reference by / Source" fullWidth />
     </Grid>
 
-    {/* Name of CP (if Channel Partner) Field */}
+   
     <Grid item xs={4}>
       <TextField label="Name of CP (if Channel Partner)" fullWidth />
     </Grid>
 
-    {/* Sales Executive Name Field */}
+  
     <Grid item xs={4}>
       <FormControl fullWidth error={!!error}>
         <InputLabel>Sales Executive Name</InputLabel>
@@ -557,7 +530,6 @@ const handleBudgetChange = (event) => {
       </FormControl>
     </Grid>
 
-    {/* Interested In Field */}
     <Grid item xs={4}>
       <FormControl fullWidth error={!!error}>
         <InputLabel>Interested In</InputLabel>
@@ -582,7 +554,7 @@ const handleBudgetChange = (event) => {
 
 
     
-        {/* Budget Field */}
+    
         <Grid item xs={4}>
           <FormControl fullWidth error={!!error}>
             <InputLabel>Budget (Approx.)</InputLabel>
@@ -599,7 +571,7 @@ const handleBudgetChange = (event) => {
           </FormControl>
         </Grid>
     
-        {/* Planning to Buy Within Field */}
+     
         <Grid item xs={4}>
           <FormControl fullWidth error={!!error}>
             <InputLabel>Planning To Buy Within?</InputLabel>
@@ -616,7 +588,7 @@ const handleBudgetChange = (event) => {
           </FormControl>
         </Grid>
     
-        {/* Occupation Field */}
+       
         <Grid item xs={4}>
           <FormControl fullWidth error={!!error}>
             <InputLabel>Occupation</InputLabel>
@@ -630,7 +602,7 @@ const handleBudgetChange = (event) => {
           </FormControl>
         </Grid>
     
-        {/* Reason For Purchase Field */}
+        
         <Grid item xs={4}>
           <FormControl fullWidth error={!!error}>
             <InputLabel>Reason For Purchase</InputLabel>
@@ -646,13 +618,13 @@ const handleBudgetChange = (event) => {
           </FormControl>
         </Grid>
     
-        {/* Customer Feedback & Complete Followup Details Field */}
+      
         <Grid item xs={4}>
           <TextField label="Customer Feedback & Complete Followup Details" fullWidth />
         </Grid>
   </Grid>
 
-  {/* Action Buttons */}
+ 
   <div className="mt-3">
     <Button variant="contained" color="success" onClick={handleSave}>
  Update
