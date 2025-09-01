@@ -487,7 +487,7 @@ const handleToggle = () => {
        background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
        color: "white",
        fontWeight: "bold",
-       fontWeight: "900",
+      //  fontWeight: "900",
        textTransform: "none",
        marginTop :"23px",
       padding:"18px",
@@ -742,58 +742,7 @@ const handleToggle = () => {
 <TableCell>
   <HistoryWithoutCash />
 </TableCell>
-{/* <TableCell>
-      <div style={{ display: "flex", alignItems: "center", flexDirection: "column" }}>
-       
-        <IconButton onClick={() => handleAddClick("cashWithAV")} style={{ marginBottom: "8px" }}>
-          <AddIcon />
-        </IconButton>
 
-        
-{historyCashValues2.map((value, index) => (
-  <TextField
-    key={index}
-    value={value}
-    disabled={expandedIndex2 !== index}
-    InputProps={{
-      endAdornment: (
-      
-        <IconButton onClick={() => handleEditValue(index, "cashWithAV")}>
-   <EditIcon />
-</IconButton>
-
-      ),
-    }}
-  />
-))}
-
-       
-        <Collapse in={expanded2} timeout="auto" unmountOnExit>
-          <div style={{ marginTop: "10px", display: "flex", flexDirection: "column", gap: "8px" }}>
-            <TextField
-              fullWidth
-              type="number"
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              sx={{ width: "80%", fontSize: "14px", padding: "0px", height: "20px",marginBottom: "3px" }}
-              InputProps={{
-                sx: { height: "28px", fontSize: "12px", padding: "5px" }, 
-              }}
-            />
-            <div style={{ display: "flex", justifyContent: "flex-start", gap: "8px" }}>
-              <Button onClick={() => setExpanded(false)} variant="outlined" size="small">
-                Cancel
-              </Button>
-             
-              <Button onClick={() => handleSave("cashWithAV")} variant="contained" size="small">
-  {editingIndex !== null ? "Update" : "Save"}
-</Button>
-
-            </div>
-          </div>
-        </Collapse>
-      </div>
-    </TableCell> */}
 
 <TableCell></TableCell>
 <TableCell></TableCell>
@@ -827,20 +776,6 @@ const handleToggle = () => {
       </Table>
     </TableContainer> 
 
-{/* 
-<Ocrtable
-        loans={loans}
-        handleCashWithAVChange={handleCashWithAVChange}
-        historyCashValues={historyCashValues}
-        handleAddClick={handleAddClick}
-        expanded={expanded}
-        setExpanded={setExpanded}
-        inputValue={inputValue}
-        setInputValue={setInputValue}
-        handleSave={handleSave}
-        editingIndex={editingIndex}
-        handleEditValue={handleEditValue}
-      /> */}
       <div className="d-flex justify-content-between align-items-center">
               <Button style={{backgroundColor:"#800080"}} className="text-white mt-3" onClick={handlePagination} disabled={currentPage === 1}>Previous</Button>
               <Button style={{backgroundColor:"#800080"}} className='text-white mt-3' onClick={handlePagination} disabled={currentPage === totalPages}>Next</Button>

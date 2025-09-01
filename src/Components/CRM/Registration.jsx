@@ -677,9 +677,9 @@ const handleFileUpload = (file, index) => {
                  onChange={(e) => setEndDate(e.target.value)}
                />
              </div>
-             {/* </div> */}
+             
 
-  {/* Rows per page */}
+ 
   <div className="d-flex align-items-center gap-3">
     <label className="me-2">Rows per page:</label>
     <input

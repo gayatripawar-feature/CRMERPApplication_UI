@@ -1,15 +1,8 @@
-
-
-
-
-
-
 import React, { useState, useEffect } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, MenuItem, Select, InputLabel, FormControl, TextField, Modal, Box } from '@mui/material';
 import { Grid ,IconButton,Dialog, DialogTitle, 
   DialogContent, DialogActions,FormGroup, FormControlLabel, Checkbox} from '@mui/material';
-  import { } from "@mui/material";
-
+import { } from "@mui/material";
 import dayjs from 'dayjs';
 import EditIcon from "@mui/icons-material/Edit";
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -21,22 +14,13 @@ import { toast } from "react-toastify";
 import { jsPDF } from "jspdf";
 import { Form, FloatingLabel } from 'react-bootstrap';
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-
 import DescriptionIcon from "@mui/icons-material/Description";
 import CloseIcon from "@mui/icons-material/Close";
-
 import { FaFileSignature } from 'react-icons/fa';
-
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import { FaFileDownload } from "react-icons/fa";
-
-
 import "jspdf-autotable";
-
 import autoTable from "jspdf-autotable";
-
-
-
 const fetchLoansData = async () => {
   const response = await fetch('/api/getOCRCollection');
   return response.json();
@@ -57,19 +41,8 @@ const getFilterOptions = (type) => {
   }
 };
 
-
-
-
-
-
-
-
-
-
-
 const Agreement = () => {
-
-  const [currentData, setCurrentData] = useState([
+const [currentData, setCurrentData] = useState([
     {
       flatNo: "101",
       nameOfAllotee: "John Doe",
@@ -109,16 +82,9 @@ const Agreement = () => {
       time: "12:00:00",
     },
   ]);
-
-
-  
-
-
-
-  const [loans, setLoans] = useState([
+ const [loans, setLoans] = useState([
     { agreementStatus: "" },
-    
-  ]);
+    ]);
   const [filteredLoans, setFilteredLoans] = useState([]);
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
@@ -126,21 +92,12 @@ const Agreement = () => {
   const [filterValue, setFilterValue] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-   const [isExpanded, setIsExpanded] = useState(true);
- 
-
-
+  const [isExpanded, setIsExpanded] = useState(true);
   const rowsPerPage = 10;
-  
- 
-  const [openModal, setOpenModal] = useState(false);
- 
-
-  const [open, setOpen] = useState(false);
-
-  const [updatedChecklist, setUpdatedChecklist] = useState("");
-
-  const [checkedItems, setCheckedItems] = useState({
+ const [openModal, setOpenModal] = useState(false);
+ const [open, setOpen] = useState(false);
+ const [updatedChecklist, setUpdatedChecklist] = useState("");
+ const [checkedItems, setCheckedItems] = useState({
     item1: false,
     item2: false,
     item3: false
@@ -178,27 +135,18 @@ const Agreement = () => {
     title: "",
     nameOfCoAllotee: "",
   });
-  
- 
-
-
-  useEffect(() => {
+   useEffect(() => {
     loadLoansData();
   }, []);
-
-  const loadLoansData = async () => {
+const loadLoansData = async () => {
     const data = await fetchLoansData();
     setLoans(data);
     setFilteredLoans(data);
   };
-
-  
-  
 const handleToggle = () => {
   setIsExpanded((prev) => !prev);
 };
  
-
 const handleCheckboxChange = (event) => {
   setCheckedItems({
     ...checkedItems,
@@ -267,7 +215,6 @@ const handleCheckboxChange = (event) => {
     setSelectedIndex(index); 
     setOpen(true);
   };
-  
   const closeChecklistDialog = () => {
     setOpen(false); 
     setSelectedIndex(null); 

@@ -45,28 +45,10 @@ const HomeLoan = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
    const [isExpanded, setIsExpanded] = useState(true);
    const [selectedFileNames, setSelectedFileNames] = useState([]);
-  //  const [loanData, setLoanData] = useState([]);
-  
-  // const [editingLoan, setEditingLoan] = useState(null);
-  // const [editingLoan, setEditingLoan] = useState({
-  //   flatNo: '',
-  //   nameOfAllotee: '',
-  //   mobileNo: '',
-  //   loanAccountNo: '',
-  //   loanAmount: '',
-  //   bankName: '',
-  //   bankerName: '',
-  //   errorFlatNo: '',
-  //   errorNameOfAllotee: '',
-  //   errorMobileNo: '',
-  //   selectedFileName: ''
-  // });
+
   
   const [editingLoan, setEditingLoan] = useState([]);
-  // const [editingLoans, setEditingLoans] = useState([]);
-
-
-  const [selectedFileName, setSelectedFileName] = useState(''); 
+ const [selectedFileName, setSelectedFileName] = useState(''); 
   
   useEffect(() => {
     setTotalPages(Math.ceil(filteredLoans.length / rowsPerPage));
@@ -311,41 +293,6 @@ const handleToggle = () => {
   };
 
 
-  // const handleBookingConfirmationChange = (id, value) => {
-  //   setEditingLoan((prevData) =>
-  //     prevData.map((loan) =>
-  //       loan.id === id ? { ...loan, bookingCancellationReason: value } : loan
-  //     )
-  //   );
-  // };
-
-  // const handleBookingConfirmationChange = (id, value) => {
-  //   setEditingLoan(prev =>
-  //     prev.map(loan =>
-  //       loan.id === id ? { ...loan, bookingConfirmation: value } : loan
-  //     )
-  //   );
-  // };
-  
-  // const handleBookingConfirmationChange = (id, value) => {
-  //   setEditingLoan(prev =>
-  //     prev.map(loan =>
-  //       loan.id === id ? { ...loan, bookingConfirmation: value } : loan
-  //     )
-  //   );
-  // };
-  
-  
-
-  // const handleBookingCancellationChange = (id, value) => {
-  //   setEditingLoan((prev) =>
-  //     prev.map((loan) =>
-  //       loan.id === id
-  //         ? { ...loan, bookingCancellationReason: value }
-  //         : loan
-  //     )
-  //   );
-  // };
   const handleBookingConfirmationChange = (id, value) => {
     setLoansData((prevData) =>
       prevData.map((loan) =>
@@ -578,34 +525,7 @@ const displayLoans = () => {
       </select>
     </TableCell>
 
-  {/* <TableCell>
-  <Select
-    value={loan.bookingConfirmation || ""}
-    onChange={(e) => handleBookingConfirmationChange(loan.id, e.target.value)}
-    variant="outlined"
-    size="small"
-    sx={{ width: "120px" }} // Adjust width if needed
-  >
-    <MenuItem value="Booked">Booked</MenuItem>
-    <MenuItem value="Cancelled">Cancelled</MenuItem>
-  </Select>
-</TableCell> */}
-  {/* <TableCell>
-      <Select
-        value={loan.bookingConfirmation || ""}
-        onChange={(e) => handleBookingConfirmationChange(loan.id, e.target.value)}
-        variant="outlined"
-        size="small"
-        sx={{ width: "120px" }}
-      >
-         <MenuItem value="" disabled>
-    Select Reason
-  </MenuItem>
-        <MenuItem value="Booked">Booked</MenuItem>
-        <MenuItem value="Cancelled">Cancelled</MenuItem>
-      </Select>
-    </TableCell> */}
-  
+
 
 
 
@@ -631,7 +551,7 @@ const displayLoans = () => {
     onChange={(e) => handleBookingCancellationChange(loan.id, e.target.value)}
     variant="outlined"
     size="small"
-    sx={{ width: "150px" }} // Adjust width if needed
+    sx={{ width: "150px" }} 
   >
    
     <MenuItem value="Loan Issue">Loan Issue</MenuItem>

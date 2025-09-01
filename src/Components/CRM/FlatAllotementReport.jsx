@@ -60,48 +60,7 @@ const FlatAllotmentReport = () => {
     { flatNo: "301", floor: "3rd floor", flatType: "1.5BHK", price: "$65,000", owner: "Landowner" },
   ];
 
-  //   const doc = new jsPDF();
-  //   let y = 20; // Initial vertical position
-  
-   
-  //   doc.setFontSize(18);
-  //   doc.setFont("helvetica", "bold");
-  //   doc.text("Flat Allotement Report", 20, y);
-  //   y += 10; // Space after first header
-  
-  //   // Add Sub Header
-  //   doc.text("Wing", 20, y);
-  //   y += 10; // Space after second header
-  
-  //   // Loop through flatData to add flat details
-  //   flatData.forEach(flat => {
-  //     doc.setFontSize(14);
-  //     doc.setFont("helvetica", "normal");
-  
-  //     doc.text(`Flat No: ${flat.flatNo}`, 20, y);
-  //     y += 10;
-  
-  //     doc.text(`Flat Type: ${flat.flatType}`, 20, y);
-  //     y += 10;
-  
-  //     doc.text(`Status: ${flat.status === "approved" ? "Approved" : "Pending"}`, 20, y);
-  //     y += 10;
-  
-  //     doc.text(`Landowner: ${flat.landOwner || "N/A"}`, 20, y);
-  //     y += 10;
-  
-  //     doc.text(`Date: ${flat.date || "N/A"}`, 20, y);
-  //     y += 15; // Space before next record
-  
-  //     // Check for page break
-  //     if (y > 270) {
-  //       doc.addPage();
-  //       y = 20;
-  //     }
-  //   });
-  
-  //   doc.save("FlatAllotment_Report.pdf");
-  // };
+
   
   const handleDownloadPDF = () => {
     const doc = new jsPDF();
