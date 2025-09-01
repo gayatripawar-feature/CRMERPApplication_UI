@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import {
   Button,
@@ -12,29 +11,21 @@ import {
   Select,MenuItem,
 } from "@mui/material";
 import {  FaHandshake } from 'react-icons/fa';
-
 import { ToastContainer, toast } from "react-toastify";
 import ChannelPartnerTable from "./ChannelPartnerTable";
-
 import { jsPDF } from "jspdf";
 import {  FaFileDownload } from "react-icons/fa";
 import autoTable from "jspdf-autotable";
- 
-const ChannelPartner = () => {
-  const [isExpanded, setIsExpanded] = useState(true); // Default expanded state
+ const ChannelPartner = () => {
+  const [isExpanded, setIsExpanded] = useState(true); 
   const [showBookingForm, setShowBookingForm] = useState(false);
   const [data, setData] = useState([]);
   const [pincodeError, setPincodeError] = useState('');
   const [emailError, setEmailError] = useState('');
   const [mobileError, setMobileError] = useState('');
   const [firms, setFirms] = useState([]);
-  // const [formData, setFormData] = useState({
-  //   enquiryNo: "",
-  //   projectName: "",
-  // });
   const [submittedData, setSubmittedData] = useState([]);
-
-  const [formData, setFormData] = useState({
+   const [formData, setFormData] = useState({
     enquiryNo: "",
     cpExecutiveName: "",
     designation: "",
@@ -52,15 +43,11 @@ const ChannelPartner = () => {
     console.log("Updated Selected Tab:");
   }, []);
 
-  // Toggle the display of the icon (expanded/collapsed)
+  
   const handleToggleSidebar = () => {
     setIsExpanded((prev) => !prev);
   };
 
-  // Handle input change
-  // const handleInputChange = (e) => {
-  //   setFormData({ ...formData, [e.target.name]: e.target.value });
-  // };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -102,36 +89,6 @@ const ChannelPartner = () => {
     });
   };
 
-  // Handle form submission
-  // const handleFormSubmit = () => {
-  //   toast.success("Details are submitted!", { position: "top-right", autoClose: 3000 });
-  //   setShowBookingForm(false); // Hide the form after submission
-  // };
-  // const handleFormSubmit = () => {
-    
-
-  //   console.log("Submitting form data:", formData);
-
-  //   setFirms((prev) => [...prev, formData]);
-  //   setSubmittedData((prevData) => [...prevData, formData]);
-   
-  //   setFormData({
-  //     enquiryNo: "",
-  //     cpexecutivename: "",
-  //     Designation: "",
-  //     MobileNo: "",
-  //     website: "",
-  //     email: "",
-  //     postal: "",
-  //     pincode: "",
-  //     location: "",
-  //     city: "",
-  //     zone: "",
-  //   });
-
-  //   // Optionally show table after submit
-  //   setShowBookingForm(false);
-  // };
   const handleFormSubmit = () => {
     console.log("Submitting form data:", formData);
     setSubmittedData((prev) => [...prev, formData]);
@@ -203,24 +160,24 @@ const ChannelPartner = () => {
   sx={{
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'flex-start', // Align items to the left
+    justifyContent: 'flex-start', 
     gap: 1,
-    borderRadius: '20px',  // Border radius applied here
-    width: isExpanded ? '200px' : '50px',  // Toggle width based on expanded state
+    borderRadius: '20px',  
+    width: isExpanded ? '200px' : '50px',  
     minWidth: '50px',
     padding: '10px 15px',
     textTransform: 'none',
     transition: 'width 0.3s ease, background 0.3s ease',
-    background: 'linear-gradient(0deg, #4b2ac2 0%, #5c39d3 100%)', // Gradient background
+    background: 'linear-gradient(0deg, #4b2ac2 0%, #5c39d3 100%)', 
     boxShadow:
       'inset 2px 2px 2px 0px rgba(255,255,255,.5), 7px 7px 20px 0px rgba(0,0,0,.1), 4px 4px 5px 0px rgba(0,0,0,.1)',
-    cursor: 'pointer',  // Add pointer cursor for better UX
+    cursor: 'pointer',  
     marginBottom: 2,
   }}
   onClick={handleToggleSidebar}
-  startIcon={<FaHandshake size={24} color="white" />} // Increased icon size and changed color to white
+  startIcon={<FaHandshake size={24} color="white" />} 
 >
-  {isExpanded && <span style={{ color: 'white', fontSize: '16px' }}>Channel Partner</span>} {/* Increased font size and set text color to white */}
+  {isExpanded && <span style={{ color: 'white', fontSize: '16px' }}>Channel Partner</span>} 
 </Button>
 
 
@@ -252,18 +209,18 @@ const ChannelPartner = () => {
       padding: "8px 16px",
       borderRadius: "8px",
       display: "flex",
-      alignItems: "center",  // Align icon and text
-      gap: "8px",  // Space between icon and text
+      alignItems: "center",  
+      gap: "8px",  
       "&:hover": {
         background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
       },
      
     }}
-    // onClick={() => handledow(firms)}
+   
     onClick={() => handleDownloadPDFChannel(data)}
 
   >
-    <FaFileDownload size={18} />  {/* Added download icon */}
+    <FaFileDownload size={18} />  
     Download PDF
   </Button>
   </div>
@@ -274,10 +231,7 @@ const ChannelPartner = () => {
   </Box>
 
        
-        {/* {!showBookingForm && <BookingFormTable data={[]} />} */}
-       
-        {/* {!showBookingForm && <ChannelPartnerTable data={[]} />} */}
-        {/* {!showBookingForm && <ChannelPartnerTable data={firms} />} */}
+   
         {!showBookingForm && <ChannelPartnerTable data={submittedData} />}
 
         {showBookingForm && (
@@ -347,19 +301,7 @@ const ChannelPartner = () => {
                     
                   />
                 </Grid>
-                {/* <Grid item xs={6}>
-                  <TextField
-                    label="Email ID"
-                    name="emailId"
-                    fullWidth
-                    variant="outlined"
-                    value={formData.emailId}
-                    onChange={handleInputChange}
-                    error={Boolean(emailError)}
-                    helperText={emailError}
-                   
-                  />
-                </Grid> */}
+              
                    <Grid item xs={6}>
                   <TextField
                     label="Email ID"
@@ -437,7 +379,7 @@ const ChannelPartner = () => {
 
               </Grid>
 
-              {/* Submit Button */}
+              
               <Button variant="contained" color="success" className="m-3" onClick={handleFormSubmit}>
                 Submit
               </Button>

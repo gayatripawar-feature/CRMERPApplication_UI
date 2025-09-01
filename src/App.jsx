@@ -1,12 +1,7 @@
 import React from 'react';
 import {useEffect} from "react";
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Dashboard from './Components/Dashboard'; // Import the Dashboard component
-// import DashboardContent from './DashboardContent'; // Dashboard content component
-// import AdminSection from './AdminSection'; 
-// import DeveloperModule from './DeveloperModule'; 
-// import SalesModule from './Components/Admin_SalesModule';
-// import Admin_SalesModule from './Components/Admin_SalesModule';
+import { BrowserRouter as Router, Routes, Route,Navigate } from 'react-router-dom';
+import Dashboard from './Components/Dashboard'; 
 import ShareSpace from './Components/Developer/ShareSpace';
 import LostVisitsModule from './Components/LostVisitsModule';
 import CRM from "./Components/CRM/CRM";
@@ -16,9 +11,6 @@ import OCR from "./Components/CRM/OCR";
 import Agreement from './Components/CRM/Agreement';
 import Architect from './Components/CRM/Architect';
 import Demand from './Components/CRM/Demand';
-
-// import Banker from './Components/Banker';
-// import Admin_Banker from './Components/Admin_Banker';
 import Admin_Banker from './Components/Admin/Admin_Banker';
 import BasicInfo from './Components/Developer/BasicInfo';
 import ProjectInventory from './Components/Developer/ProjectInventory';
@@ -47,12 +39,9 @@ import FlatAllotementReport from "./Components/CRM/FlatAllotementReport";
 import Parkingreport from "./Components/CRM/Parkingreport";
 import MISReport from "./Components/CRM/MISReport";
 import GeneratePdf from "./Components/Sales/GeneratePdf";
-// import Temp from "./Components/Sales/Temp";
-// import Temp2 from "./Components/Sales/Temp2";  
-// import Temp4 from "./Components/Sales/Temp4";
 import Temp5 from "./Components/Sales/Temp5";
+import Login from "./Components/Login";
 
-// import Temp3 from "./Components/Sales/Temp3";
 const App = () => {
 
   useEffect(() => {
@@ -74,48 +63,38 @@ const App = () => {
       <ToastContainer position="top-right" autoClose={3000} />
       <Routes>
       
-        <Route path="/" element={<Dashboard />}>
-      
 
-        {/* <Route path="admin/salesperson" element={<SalesModule />} /> */}
-        {/* <Route path="admin/banker" element={<Banker />} /> */}
-
-
-        <Route path="admin/salesperson" element={<Admin_SalesModule />} />
+       <Route path="/login" element={<Login />} />
+         <Route path="/" element={<Navigate to="/login" />} />
+         {/* Dashboard and nested routes */}
+         <Route path="/dashboard" element={<Dashboard />} >
+         {/* <Route path="/" element={<Dashboard />}> */}
+       <Route path="admin/salesperson" element={<Admin_SalesModule />} />
         <Route path="admin/banker" element={<Admin_Banker/>} />
 
-
-        <Route path="/developer/sharespace" element={<ShareSpace />} />
-        <Route path ="/developer/basicinfo" element={<BasicInfo />} />
-        <Route path ="/developer/projectinventory" element={<ProjectInventory />} />
-        <Route path ="/developer/costsheet" element={<CostSheet />} />
-        <Route path ="/developer/salesmis" element={<Salesmis/>} />
-        <Route path="/developer/marketing" element={<Marketing/>}/>
+         <Route path="developer/sharespace" element={<ShareSpace />} />
+        <Route path ="developer/basicinfo" element={<BasicInfo />} />
+        <Route path ="developer/projectinventory" element={<ProjectInventory />} />
+        <Route path ="developer/costsheet" element={<CostSheet />} />
+        <Route path ="developer/salesmis" element={<Salesmis/>} />
+        <Route path="developer/marketing" element={<Marketing/>}/>
         
-        <Route path="/sales/lostvisits"  element={<LostVisitsModule />} />
-        <Route path ="/sales/salesdashboard" element={< SalesDashboard/>} />
-
-        <Route path ="/sales/sharespace" element={< SalesSharespace/>} /> 
-        <Route path = "/sales/sharedbydeveloper" element={<SharedbyDeveloper/>}  />
-
-        <Route path = "/sales/leads" element={<Leads/>}  />
-        <Route path = "/sales/leadsfollowup" element={<LeadsFollowUp/>}  />
-        <Route path = "/sales/LostLeads" element ={<LostLeads />} />
-        <Route path = "/sales/firstvisits" element ={<FirstVisits />} />
-        <Route path="/sales/firstvisitfollowup" element={<FirstVisitFollowup/>} />
-        <Route path ="/sales/FirstVisitSteps" element={<FirstVisitSteps/>} />
-        <Route path ="/sales/saleslostvisits" element={<SalesLostVisits/>} />
-        {/* <Route path = "/sales/salestemplates" element={<Templates/>} /> */}
-        {/* <Route path = "/sales/salestemplates" element={<Temp/>} /> */}
-        {/* <Route path = "/sales/salestemplates" element={<Temp2/>} /> */}
- {/* <Route path = "/sales/salestemplates" element={<Temp3/>} />  */}
-        
-        {/* <Route path = "/sales/salestemplates" element={<Temp4/>} /> */}
-        <Route path = "/sales/salestemplates" element={<Temp5/>} />
-        <Route path = "/sales/bookingform" element={<BookingForm/>} />
-        <Route path = "/sales/channelpartner" element={<ChannelPartner/>} />
-         <Route path ="/sales/salescalander" element={< SalesCalendar/>} />
-       {/* <Route path ="/sales/sharespace" element={< SalesSharespace/>} /> */}
+        <Route path="sales/lostvisits"  element={<LostVisitsModule />} />
+        <Route path ="sales/salesdashboard" element={< SalesDashboard/>} />
+        <Route path ="sales/sharespace" element={< SalesSharespace/>} /> 
+        <Route path = "sales/sharedbydeveloper" element={<SharedbyDeveloper/>}  />
+        <Route path = "sales/leads" element={<Leads/>}  />
+        <Route path = "sales/leadsfollowup" element={<LeadsFollowUp/>}  />
+        <Route path = "sales/LostLeads" element ={<LostLeads />} />
+        <Route path = "sales/firstvisits" element ={<FirstVisits />} />
+        <Route path="sales/firstvisitfollowup" element={<FirstVisitFollowup/>} />
+        <Route path ="sales/FirstVisitSteps" element={<FirstVisitSteps/>} />
+        <Route path ="sales/saleslostvisits" element={<SalesLostVisits/>} />
+        <Route path = "sales/salestemplates" element={<Temp5/>} />
+        <Route path = "sales/bookingform" element={<BookingForm/>} />
+        <Route path = "sales/channelpartner" element={<ChannelPartner/>} />
+         <Route path ="sales/salescalander" element={< SalesCalendar/>} />
+      
          
         
            <Route path="crm/CRM" element={<CRM/>} /> 
@@ -130,8 +109,7 @@ const App = () => {
           <Route path ="crm/flatallotmentreport" element ={<FlatAllotementReport />} />
           <Route path ="crm/parkingreport" element ={<Parkingreport />}  />
           <Route path ="crm/misreport" element ={<MISReport/>}  />
-          {/* <Route path ="crm/Demand" element={<Demand />} /> */}
-  
+       
   
 
         </Route>

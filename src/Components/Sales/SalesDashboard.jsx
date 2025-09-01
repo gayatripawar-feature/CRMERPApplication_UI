@@ -1,4 +1,3 @@
-
 import { useState,useEffect } from "react";
 import { Button, TextField, Box, Typography, Select, MenuItem } from "@mui/material";
 import { FaChartLine, FaUsers, FaChartPie, FaMapMarkerAlt } from "react-icons/fa";
@@ -6,23 +5,13 @@ import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
   PieChart, Pie, Cell, BarChart, Bar,LabelList
 } from "recharts";
-
-
 import { FormControl } from "@mui/material";
-
 import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Paper } from '@mui/material';
 import {  InputLabel} from "@mui/material";
 import SourceMetrics from "./SourceMetrics";
 import TimeSeriesChart from "./TimeSerieschart";
-
-
-
-
-
 const SalesDashboard = () => {
-
-
-  const allData = {
+const allData = {
     today: [
       { label: "Tower A", value: 2 },
       { label: "Tower B", value: 5 },
@@ -47,26 +36,24 @@ const SalesDashboard = () => {
     { label: "Source Base Report", icon: <FaChartPie size={20} />, bgColor: "#f1c40f" },
     { label: "Visit Tracker", icon: <FaMapMarkerAlt size={20} />, bgColor: "#2ecc71" },
   ];
-
   const [selectedTab, setSelectedTab] = useState("Lead Conversion"); 
   const [selectedSource, setSelectedSource] = useState(""); 
- 
   const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
-  const [selectedEmployee, setSelectedEmployee] = useState(""); // Added missing state
-  const employeeOptions = ["Shubham Taware ", "Ashwini Khot", "Amol Pawar","Sachin Awale"]; 
+  
 
+  const [endDate, setEndDate] = useState("");
+  const [selectedEmployee, setSelectedEmployee] = useState(""); 
+  const employeeOptions = ["Shubham Taware ", "Ashwini Khot", "Amol Pawar","Sachin Awale"]; 
   const [dateFilter, setDateFilter] = useState('thisMonth');
   const handleFilter = () => {
     console.log("Filtering from:", startDate, "to", endDate);
   };
-
-  const handleReset = () => {
+ const handleReset = () => {
     setStartDate("");
     setEndDate("");
   };
 
-const chartData = [
+const [chartData] = useState([
   { date: "01/01/2025", leads: 10, plannedVisits: 5, actualVisits: 2, conversions: 1 },
   { date: "08/01/2025", leads: 30, plannedVisits: 20, actualVisits: 10, conversions: 5 },
   { date: "15/01/2025", leads: 50, plannedVisits: 35, actualVisits: 25, conversions: 10 },
@@ -82,45 +69,23 @@ const chartData = [
   { date: "26/03/2025", leads: 270, plannedVisits: 190, actualVisits: 170, conversions: 110 },
   { date: "02/04/2025", leads: 290, plannedVisits: 205, actualVisits: 185, conversions: 120 },
   { date: "09/04/2025", leads: 310, plannedVisits: 220, actualVisits: 200, conversions: 130 },
-];
+]);
 
 
-// const [filteredChartData, setFilteredChartData] = useState(chartData);
 const [filteredChartData, setFilteredChartData] = useState(allData.today);
 
 
-// const handleFilterChange = (filter) => {
-//   setDateFilter(filter);
-// };
 
 // useEffect(() => {
-//   fetchChartData();
-// }, [dateFilter]);
-
-// useEffect(() => {
-//   let filteredData = [];
-
-//   if (dateFilter === 'today') {
-//     filteredData = allData.filter(item => item.date === today);
-//   } else if (dateFilter === 'last7Days') {
-//     filteredData = allData.filter(item => isWithinLast7Days(item.date));
-//   } else if (dateFilter === 'last30Days') {
-//     filteredData = allData.filter(item => isWithinLast30Days(item.date));
+//   if (allData && allData[dateFilter]) {
+//     setFilteredChartData(allData[dateFilter]);
 //   }
-
-//   setFilteredChartData(filteredData);
-// }, [dateFilter, allData]);
-
-useEffect(() => {
-  if (allData && allData[dateFilter]) {
-    setFilteredChartData(allData[dateFilter]);
-  }
-}, [dateFilter, allData]);   // ✅ Only depend on allData and dateFilter
+// }, [dateFilter, allData]);   
 
 
 
 const fetchChartData = async () => {
-  // Example API Call
+ 
   const response = await fetch(`/api/flat-allotment-report?filter=${dateFilter}`);
   const data = await response.json();
   setChartData(data);
@@ -391,11 +356,11 @@ useEffect(() => {
         </ResponsiveContainer>
       </Box>
 
-      {/* Bar Chart - Total Lead Metrics Overview with Shadow */}
+     
       <Box width="50%" p={2} boxShadow={3} borderRadius={2} bgcolor="white">
         <ResponsiveContainer width="100%" height={300}>
           <BarChart data={barData}>
-            {/* Title for Bar Chart */}
+         
             <text x="50%" y="10%" textAnchor="middle" fontSize={16} fontWeight="bold">
               Total Lead Metrics Overview
             </text>
@@ -418,7 +383,7 @@ useEffect(() => {
       </Box>
     </Box>
 
-    {/* Table Section */}
+   
   <Box mt={3} p={2} boxShadow={3} borderRadius={2} bgcolor="white">
       <Typography variant="h6" gutterBottom>
         Sales Person Performance

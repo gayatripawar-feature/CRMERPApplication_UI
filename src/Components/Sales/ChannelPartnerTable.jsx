@@ -1,18 +1,10 @@
-
-
-
 import React, { useState } from "react";
 import { TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Paper, IconButton, Tooltip,Box,Grid,TextField, 
-
   Dialog,
 } from "@mui/material";
 import { Edit, WhatsApp, Email, Visibility ,TrackChanges, Map} from "@mui/icons-material";
 import { DialogTitle, DialogContent, DialogActions, Button, Typography, Select, MenuItem, InputLabel, FormControl } from "@mui/material";
 import { toast } from "react-toastify";
-
-// const ChannelPartnerTable = ({ data =[] }) => {
-
-  
 const ChannelPartnerTable = ({ data}) => {
   const [status, setStatus] = useState("Active"); 
   const [action, setAction] = useState("");
@@ -26,16 +18,13 @@ const ChannelPartnerTable = ({ data}) => {
   const [tableData, setTableData] = useState([]);
   const [openForm, setOpenForm] = useState(false);
   const [scheduledDate, setScheduledDate] = useState("");
-
-
   const handleStatusChange = (id, newStatus) => {
     const updatedData = data.map((item) =>
       item.id === id ? { ...item, status: newStatus } : item
     );
     setData(updatedData);
   };
-
-  const [formData, setFormData] = useState({
+ const [formData, setFormData] = useState({
     enquiryNo: "",
     projectName: "",
     designation: "",
@@ -48,14 +37,7 @@ const ChannelPartnerTable = ({ data}) => {
     city: "",
     zone: "",
   });
-  
-  // const handleInputChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setFormData((prev) => ({
-  //     ...prev,
-  //     [name]: value,
-  //   }));
-  // };
+
   
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -79,7 +61,7 @@ const ChannelPartnerTable = ({ data}) => {
       }
     }
     if (name === 'MobileNo') {
-      const regex = /^[0-9\b]*$/; // Only numbers allowed
+      const regex = /^[0-9\b]*$/; 
   
       if (!regex.test(value)) {
         setMobileError('Only numbers are allowed');
@@ -104,118 +86,35 @@ const ChannelPartnerTable = ({ data}) => {
     setAction(""); 
   };
 
-  // const handleSubmitTrack = () => {
-  //   if (!selectedStep) {
-  //     toast.error("Please select a step");
-  //     return;
-  //   }
-    
-  //   setLoading(true); 
-  //   setOpenForm(true); 
-  //   setAction("");
 
-  //   setTimeout(() => {
-  //     console.log("Selected Step:", selectedStep);
-  //     setLoading(false); 
-  //     toast.success("Tracking data saved successfully!");
-  
-     
-  //     setTimeout(() => {
-  //       handleCloseTrackModal();
-  //     }, 1000);  
-  //   }, 2000);
-  // };
-  
-    
-  // const handleFormSubmit = (e) => {
-  //   e.preventDefault();
-  
-  //   // API Call or Save Data Logic Here
-  //   console.log("Form Data =>", formData);
-  
-  //   // Clear form after submit (Optional)
-  //   setFormData({
-  //     enquiryNo: "",
-  //     projectName: "",
-  //     designation: "",
-  //     mobileNo: "",
-  //     websiteAddress: "",
-  //     emailId: "",
-  //     postalAddress: "",
-  //     pinCode: "",
-  //     location: "",
-  //     city: "",
-  //     zone: "",
-  //   });
-  //   toast.success('Details Updated Successfully!', {
-  //     position: "top-right",
-  //     autoClose: 3000,
-  //   });
-
-  //   // Close form (if you are using Dialog/Modal)
-  //   setOpen(false);
-  // };
-  
-  // const handleSubmitTrack = () => {
-  //   if (!selectedStep) {
-  //     toast.error("Please select a step");
-  //     return;
-  //   }
-  //   else {
-  //     console.log("No step selected, please select a step");
-  //   }
-  //   setLoading(true); 
-  //   setAction("");
-  //   setOpenForm(true); 
-  //   setTimeout(() => {
-  //     console.log("Selected Step:", selectedStep);
-  //     toast.success("Tracking data saved successfully!");
-  //     setTimeout(() => {
-  //       handleCloseTrackModal();
-  //     }, 1000);  
-      
-  //     setLoading(false); 
-  
-  //   }, 2000); 
-  // };
 
   const handleSubmitTrack = () => {
-    // Step 1: Check if a step is selected
-    if (!selectedStep) {
+   if (!selectedStep) {
       toast.error("Please select a step");
       return;
     }
-  
-    // Step 2: Log the selected step
-    console.log("Selected Step:", selectedStep);
-  
-    // Step 3: Set loading state and prepare for the action
-    setLoading(true); 
-    setAction(""); // Clear any other actions
-    setOpenForm(true);  // Open the second dialog
-  
-    // Step 4: Simulate a delay for saving the data
-    setTimeout(() => {
-      // toast.success("Tracking data saved successfully!");
-  
-     
+   console.log("Selected Step:", selectedStep);
+   setLoading(true); 
+    setAction(""); 
+    setOpenForm(true);  
+     setTimeout(() => {
       setTimeout(() => {
-        handleCloseTrackModal(); // Close the first modal
+        handleCloseTrackModal(); 
       }, 1000);  
   
-      setLoading(false);  // Disable loading state
+      setLoading(false);  
   
-    }, 2000);  // Simulate a 2-second delay for saving
+    }, 2000);  
   };
   
   
   const handleFormSubmit = (e) => {
     e.preventDefault();
   
-    // Push new form data to the table data
+   
     const newEntry = {
       timestamp: new Date().toLocaleString(),
-      cpFirmName: formData.projectName, // or appropriate field
+      cpFirmName: formData.projectName, 
       cpExecutiveName: formData.enquiryNo,
       designation: formData.designation,
       mobileNo: formData.mobileNo,
@@ -227,12 +126,10 @@ const ChannelPartnerTable = ({ data}) => {
       city: formData.city,
       zone: formData.zone,
       status: "Active",
-      // Add other fields like option1, option2 if needed
+      
     };
   
-    setTableData(prev => [...prev, newEntry]); // Update table data
-  
-    // Clear the form
+    setTableData(prev => [...prev, newEntry]); 
     setFormData({
       enquiryNo: "",
       projectName: "",
@@ -252,7 +149,7 @@ const ChannelPartnerTable = ({ data}) => {
       autoClose: 3000,
     });
   
-    setOpen(false); // close dialog/modal
+    setOpen(false); 
   };
   
   const dummyData = [{
@@ -276,15 +173,13 @@ const ChannelPartnerTable = ({ data}) => {
     window.open(url, "_blank");
   };
 
-  // const handleStatusChange = (newStatus) => {
-  //   setStatus(newStatus); // Update the status when a button is clicked
-  // };
+
   const handleIconClick = (type, rowIndex) => {
     if (type === "edit" || type === "track") {
       setAction(type);
       setOpen(true);
     } else if (type === "roadmap") {
-      setSelectedRow(selectedRow === rowIndex ? null : rowIndex); // Toggle Row Expansion
+      setSelectedRow(selectedRow === rowIndex ? null : rowIndex); 
     }
   };
 
@@ -294,18 +189,14 @@ const ChannelPartnerTable = ({ data}) => {
   };
 
   const handleSaveTrackingData = () => {
-   
-    setTimeout(() => {
-     
-      toast.success("Tracking data saved successfully!");
-
-      
-      setOpenForm(false);
+   setTimeout(() => {
+    toast.success("Tracking data saved successfully!");
+     setOpenForm(false);
     }, 1000); 
   };
 
   const handleCancelForm = () => {
-    setOpenForm(false); // Close the form without saving
+    setOpenForm(false); 
   };
 
   return (
@@ -317,23 +208,22 @@ const ChannelPartnerTable = ({ data}) => {
           <TableRow sx={{ background: "#3621a9" }}>
             <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap", textAlign: "center" }}>ACTION</TableCell>
             <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap", textAlign: "center" }}>TIMESTAMP</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap", textAlign: "center" }}>CP Firm Name</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap", textAlign: "center" }}>CP Executive Name</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap", textAlign: "center" }}>Designation</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap", textAlign: "center" }}>Mobile No</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap", textAlign: "center" }}>Website Address</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap", textAlign: "center" }}>Email ID</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap", textAlign: "center" }}>Postal Address</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap", textAlign: "center" }}>Pin-code</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap", textAlign: "center" }}>Location</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap", textAlign: "center" }}>City</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap", textAlign: "center" }}>Zone</TableCell>
-            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap", textAlign: "center" }}>Status</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap", textAlign: "center" }}>CP FIRM NAME</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap", textAlign: "center" }}>CP EXECUTIVE NAME</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap", textAlign: "center" }}>DESIGNATION</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap", textAlign: "center" }}>MOBILE NO</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap", textAlign: "center" }}>WEBSITE ADDRESS</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap", textAlign: "center" }}>EMAIL ID</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap", textAlign: "center" }}>POSTAL ADDRESS</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap", textAlign: "center" }}>PIN-CODE</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap", textAlign: "center" }}>LOCATION</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap", textAlign: "center" }}>CITY</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap", textAlign: "center" }}>ZONE</TableCell>
+            <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap", textAlign: "center" }}>STATUS</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-  {/* {dummyData.map((item, index) => ( */}
-  {/* {tableData.map((item, index) => ( */}
+ 
   {data.map((item, index) => (
   
     <React.Fragment key={index}>
@@ -347,7 +237,7 @@ const ChannelPartnerTable = ({ data}) => {
             borderBottom: "none",
           }}
         >
-          {/* Edit Icon */}
+         
           <Tooltip title="Edit" arrow>
             <IconButton
               sx={{
@@ -365,7 +255,7 @@ const ChannelPartnerTable = ({ data}) => {
             </IconButton>
           </Tooltip>
 
-          {/* Track Progress Icon */}
+          
           <Tooltip title="Track Progress" arrow>
             <IconButton
               sx={{
@@ -383,7 +273,7 @@ const ChannelPartnerTable = ({ data}) => {
             </IconButton>
           </Tooltip>
 
-          {/* Roadmap Icon */}
+        
           <Tooltip title="Roadmap" arrow>
             <IconButton
               sx={{
@@ -434,7 +324,7 @@ const ChannelPartnerTable = ({ data}) => {
         <TableCell sx={{ textAlign: "center" }}>{item.city}</TableCell>
         <TableCell sx={{ textAlign: "center" }}>{item.zone}</TableCell>
 
-        {/* Status Button */}
+      
         <TableCell sx={{ display: "flex", justifyContent: "center" }}>
           <Button
             className="m-1"
@@ -481,7 +371,7 @@ const ChannelPartnerTable = ({ data}) => {
               </Box>
               <Typography fontSize="11px">{step}</Typography>
 
-              {/* Card Below First Step */}
+          
               {idx === 0 && (
                 <Box mt={1}>
                   <Typography fontWeight="bold" fontSize="13px">
@@ -511,7 +401,7 @@ const ChannelPartnerTable = ({ data}) => {
                 </Box>
               )}
 
-              {/* Card Below Last Step */}
+              
               {idx === 4 && (
                 <Box mt={1}>
                   <Typography fontWeight="bold" fontSize="13px">
@@ -762,79 +652,13 @@ const ChannelPartnerTable = ({ data}) => {
         </DialogContent>
       </Dialog>
 
-       {/* <Dialog open={openForm} onClose={handleCancelForm} fullWidth maxWidth="sm">
-        <DialogTitle>Tracking Form</DialogTitle>
-        <DialogContent>
-          <FormControl fullWidth>
-            <InputLabel>Select Step</InputLabel>
-            <Select
-              value={selectedStep}
-              onChange={(e) => setSelectedStep(e.target.value)}
-              label="Select Step"
-            >
-              <MenuItem value="Call to CP">Call to CP - 1</MenuItem>
-              <MenuItem value="Schedule Visit to CP Office">Schedule Visit to CP Office - 2</MenuItem>
-              <MenuItem value="Visit to CP Office">Visit to CP Office - 3</MenuItem>
-              <MenuItem value="Schedule Date - Visit of CP">Schedule Date - Visit of CP - 4</MenuItem>
-              <MenuItem value="Visit of CP">Visit of CP - 5</MenuItem>
-              <MenuItem value="Visit of CP with Customer">Visit of CP with Customer - 6</MenuItem>
-              <MenuItem value="1st Follow Up of CP">1st Follow Up of CP - 7</MenuItem>
-              <MenuItem value="2nd Follow Up of CP">2nd Follow Up of CP - 8</MenuItem>
-              <MenuItem value="CP Visit with Customer & Booking Form Filled">
-                CP Visit with Customer & Booking Form Filled - 9
-              </MenuItem>
-            </Select>
-          </FormControl>
-
-          <TextField
-            label="Scheduled Date"
-            type="date"
-            value={scheduledDate}
-            onChange={(e) => setScheduledDate(e.target.value)}
-            fullWidth
-            margin="normal"
-            InputLabelProps={{
-              shrink: true,
-            }}
-          />
-
-          <FormControl fullWidth margin="normal">
-            <InputLabel>Status</InputLabel>
-            <Select
-              value={status}
-              onChange={(e) => setStatus(e.target.value)}
-              label="Status"
-            >
-              <MenuItem value="Scheduled">Scheduled</MenuItem>
-              <MenuItem value="Completed">Completed</MenuItem>
-              <MenuItem value="In Progress">In Progress</MenuItem>
-            </Select>
-          </FormControl>
-
-          <input
-            type="file"
-            onChange={(e) => setFile(e.target.files[0])}
-            accept="application/pdf, image/*"
-            style={{ marginTop: "20px", width: "100%" }}
-          />
-        </DialogContent>
-
-        <DialogActions>
-          <Button onClick={handleCancelForm} color="error">
-            Cancel
-          </Button>
-          <Button onClick={handleSaveTrackingData} variant="contained">
-            Save
-          </Button>
-        </DialogActions>
-      </Dialog>  */}
+      
       <Dialog open={openForm} onClose={handleCancelForm} fullWidth maxWidth="sm">
   <DialogTitle>Tracking Form</DialogTitle>
   <DialogContent>
-    {/* This will show the selected step */}
+  
     <div className="pb-5">{selectedStep ? `Selected Step: ${selectedStep}` : "No Step Selected"}</div>
 
-    {/* Form content */}
     <FormControl fullWidth>
       <InputLabel>Select Step</InputLabel>
       <Select

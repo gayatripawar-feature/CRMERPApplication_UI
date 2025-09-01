@@ -10,6 +10,7 @@ import {  FaClipboardList, FaCalendarCheck, FaRegHandshake, FaRegClock, FaTasks,
 import {  FaMicrophone } from "react-icons/fa";
 import VoiceNavigation from "./VoiceNavigation";
 import { FaMoneyBillWave,  FaParking, FaChartBar } from "react-icons/fa";
+import RolePermissions from "./RolePermissions";
 const Dashboard = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [query, setQuery] = useState("");
@@ -39,7 +40,8 @@ const handleClose = () => {
     setShowVoiceRecognition(false); 
   };
 
-
+ const role = localStorage.getItem("userRole");
+ const allowedMenus = RolePermissions[role] || [];
 
   const moduleData = [
     
@@ -70,7 +72,7 @@ const handleClose = () => {
     { name: "Templates", path: "Sales > Templates", to: "/sales/salestemplates" },
     { name: "Booking Form", path: "Sales > Booking Form", to: "/sales/bookingform" },
     { name: "Channel Partner", path: "Sales > Channel Partner", to: "/sales/channelpartner" },
-
+      
     {name : "Banker Details" , path :"Admin > Banker Details" , to :"/admin/banker"},
     {name :"Sales Person" ,path : "Admin > Sales Person" ,to :"/admin/salesperson"},
 
@@ -332,14 +334,14 @@ const startListening = () => {
       background:"#3621a9",
       overflowY: 'auto',
       scrollbarWidth: 'none',
-      //  background: "linear-gradient(180deg, #ff6347 0%, #2c1a80 100%)",
+      
 
 
     }}
   >
-    <ul className="nav flex-column">
-      <SidebarItem to="/" icon={<FaTachometerAlt />} label="Dashboard" collapsed={collapsed} />
-
+    {/* <ul className="nav flex-column">
+     
+ <SidebarItem to="/dashboard" icon={<FaTachometerAlt />} label="Dashboard" collapsed={collapsed} />
       <SidebarDropdown
         label="Admin Section"
         icon={<FaUserShield />}
@@ -421,9 +423,21 @@ const startListening = () => {
       ]}
       />
    
-    </ul>
+    </ul> */}
 
-   
+   <ul className="nav flex-column">
+  {allowedMenus.map((menu, idx) => (
+    <SidebarDropdown
+      key={idx}
+      label={menu.label}
+      icon={menu.icon}
+      collapsed={collapsed}
+      isOpen={sections[menu.label]}
+      toggleOpen={() => toggleSection(menu.label)}
+      subItems={menu.subItems}
+    />
+  ))}
+</ul>
     <div style={{ marginTop: "auto", marginBottom: "50px" }}>
 
       <button className="btn btn-danger w-100 d-flex align-items-center justify-content-center" onClick={handleLogout}>
