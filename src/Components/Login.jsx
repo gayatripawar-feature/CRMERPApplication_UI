@@ -1,63 +1,51 @@
-
 // import React, { useState } from "react";
 // import { useNavigate } from "react-router-dom";
+// import RolePermissions from "./RolePermissions";
 
-// const Login = () => {
+// const LoginPage = () => {
 //   const [email, setEmail] = useState("");
 //   const [password, setPassword] = useState("");
+//   const [role, setRole] = useState("sales"); 
 //   const navigate = useNavigate();
 
-  
 //   const handleLogin = (e) => {
 //     e.preventDefault();
 
-    
-//     if (email === "admin@test.com" && password === "12345") {
-//       localStorage.setItem("authToken", "sampleToken");
-//       navigate("/dashboard"); 
-//     } else {
-
-//       alert("Invalid credentials");
+//     // ✅ in real app, validate from backend
+//     if (email && password) {
+//       localStorage.setItem("userRole", role);
+// const firstPage =
+//   RolePermissions[role]?.[0]?.subItems?.[0]?.to || "/dashboard";
+// navigate(firstPage);
 //     }
-//   };
-
-
+// };
 
 //   return (
-//     <div className="d-flex justify-content-center align-items-center vh-100 bg-light">
-//       <div className="card p-4 shadow" style={{ width: "350px" }}>
-//         <h3 className="text-center mb-4">Login</h3>
-//         <form onSubmit={handleLogin}>
-//           <div className="mb-3">
-//             <label>Email</label>
-//             <input
-//               type="email"
-//               className="form-control"
-//               value={email}
-//               onChange={(e) => setEmail(e.target.value)}
-//               required
-//             />
-//           </div>
-//           <div className="mb-3">
-//             <label>Password</label>
-//             <input
-//               type="password"
-//               className="form-control"
-//               value={password}
-//               onChange={(e) => setPassword(e.target.value)}
-//               required
-//             />
-//           </div>
-//           <button type="submit" className="btn btn-primary w-100">
-//             Login
-//           </button>
-//         </form>
-//       </div>
-//     </div>
+//     <form onSubmit={handleLogin}>
+//       <input
+//         type="email"
+//         placeholder="Email"
+//         value={email}
+//         onChange={(e) => setEmail(e.target.value)}
+//       />
+//       <input
+//         type="password"
+//         placeholder="Password"
+//         value={password}
+//         onChange={(e) => setPassword(e.target.value)}
+//       />
+//       <select value={role} onChange={(e) => setRole(e.target.value)}>
+//         <option value="admin">Admin</option>
+//         <option value="sales">Sales</option>
+//         <option value="developer">Developer</option>
+//         <option value="crm">CRM</option>
+//       </select>
+//       <button type="submit">Login</button>
+//     </form>
 //   );
 // };
 
-// export default Login;
+// export default LoginPage;
 
 
 
@@ -66,53 +54,122 @@ import { useNavigate } from "react-router-dom";
 import RolePermissions from "./RolePermissions";
 
 const LoginPage = () => {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState("sales"); // default
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
-    // ✅ in real app, validate from backend
-    if (email && password) {
-      localStorage.setItem("userRole", role);
+    try {
+      const response = await fetch("http://localhost:5000/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password }),
+      });
 
-    
-   
-//     const firstPage = RolePermissions[role]?.[0]?.to || "/dashboard";
-// navigate(firstPage);
+      const data = await response.json();
 
-const firstPage =
-  RolePermissions[role]?.[0]?.subItems?.[0]?.to || "/dashboard";
-navigate(firstPage);
+      if (response.ok) {
+        const { role } = data;
+        localStorage.setItem("userRole", role);
 
+        const firstPage =
+          RolePermissions[role]?.[0]?.subItems?.[0]?.to || "/dashboard";
 
+        navigate(firstPage);
+      } else {
+        alert(data.message || "Invalid credentials");
+      }
+    } catch (error) {
+      console.error("Login failed:", error);
+      alert("Something went wrong. Please try again.");
     }
   };
 
   return (
-    <form onSubmit={handleLogin}>
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <select value={role} onChange={(e) => setRole(e.target.value)}>
-        <option value="admin">Admin</option>
-        <option value="sales">Sales</option>
-        <option value="developer">Developer</option>
-        <option value="crm">CRM</option>
-      </select>
-      <button type="submit">Login</button>
-    </form>
+    <div
+      style={{
+        minHeight: "100vh",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        background: "linear-gradient(135deg, #f5f7fa, #c3cfe2)",
+      }}
+    >
+      <div
+        style={{
+          width: "100%",
+          maxWidth: "400px",
+          background: "#fff",
+          padding: "30px",
+          borderRadius: "12px",
+          boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+          textAlign: "center",
+        }}
+      >
+        {/* ✅ Small Logo at Top */}
+        <img
+          src="./unnamed.png"
+          alt="Logo"
+          style={{ width: "60px", marginBottom: "20px" ,borderRadius:"50%"}}
+        />
+
+        <h2 style={{ marginBottom: "20px", color: "#333" }}>Login</h2>
+
+        <form onSubmit={handleLogin}>
+          <input
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+            style={{
+              width: "100%",
+              padding: "12px",
+              margin: "10px 0",
+              border: "1px solid #ccc",
+              borderRadius: "8px",
+              fontSize: "14px",
+            }}
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            style={{
+              width: "100%",
+              padding: "12px",
+              margin: "10px 0",
+              border: "1px solid #ccc",
+              borderRadius: "8px",
+              fontSize: "14px",
+            }}
+          />
+          <button
+            type="submit"
+            style={{
+              width: "100%",
+              padding: "12px",
+              marginTop: "15px",
+              backgroundColor: "#4CAF50",
+              color: "white",
+              border: "none",
+              borderRadius: "8px",
+              fontSize: "16px",
+              cursor: "pointer",
+              transition: "background 0.3s ease",
+            }}
+          >
+            Login
+          </button>
+        </form>
+      </div>
+    </div>
   );
 };
 
