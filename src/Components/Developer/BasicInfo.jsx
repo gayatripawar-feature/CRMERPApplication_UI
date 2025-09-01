@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from 'react';
 import {Input, Table, TableBody, TableCell, TableContainer, Typography,IconButton,TableHead, TableRow, Paper,Box,Tabs, Tab, Button, TextField, Grid ,MenuItem,FormControl,Select, InputLabel} from '@mui/material';
 import { FaEye, FaBuilding, FaFileDownload, FaPlus, FaTrash,FaUpload } from "react-icons/fa";
@@ -11,8 +9,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import { useRef } from "react";
 import {  FaProjectDiagram, FaUserTie, FaHome, } from 'react-icons/fa';
 import { jsPDF } from "jspdf";
-// import "jspdf-autotable";
-import autoTable from "jspdf-autotable"; // Import autoTable plugin
+import autoTable from "jspdf-autotable"; 
 import { GetApp as GetAppIcon } from '@mui/icons-material';
 import { PictureAsPdf as PictureAsPdfIcon } from '@mui/icons-material';
 import html2canvas from "html2canvas";
@@ -26,13 +23,9 @@ const sections = [
   { label: "Project Display", icon: <FaHome size={20} />, createLabel: "Create Project" },
   { label: "Landowner Display", icon: <FaUserTie size={20} />, createLabel: "Create Landowner Info" },
   { label: "Landowner Flat Allotement Display", icon: <FaBuilding size={20} />, createLabel: "Create Flat Allotment Info" },
-  // { label: "Download PDF", icon: <  PictureAsPdfIcon  size={20} />, createLabel: "" }
-];
-
-
+  ];
 const tabNames = [ "firm", "display", "landowner","allotement"]; 
-  
-const BasicInfo = () => {
+  const BasicInfo = () => {
   const [loans, setLoans] = useState([]);
   const [expandedSection, setExpandedSection] = useState(0); 
   const [showFirmForm, setShowFirmForm] = useState(false);
@@ -53,25 +46,20 @@ const BasicInfo = () => {
   const [nameError, setNameError] = useState('');
   const [mobileNoError, setMobileNoError] = useState('');
   const [panError, setPanError] = useState("");
-
+  const[  firmgstno, setFirmGstNo] = useState("");
   const [firmName, setFirmName] = useState("");
   const [firmNameError, setFirmNameError] = useState("");
-
   const [mobileError, setMobileError] = useState("");
   const [email, setEmail] = useState('');
-const [emailError, setEmailError] = useState("");
-
+  const [emailError, setEmailError] = useState("");
   const [firmPan, setFirmPan] = useState("");
   const [firmPanError, setFirmPanError] = useState("");
-  // const [age, setAge] = useState("");
   const [ageError, setAgeError] = useState("");
   const [occupationError, setOccupationError] = useState(""); 
  const [aadhaarError, setAadhaarError] = useState(false);
-const [aadhaarErrorMessage, setAadhaarErrorMessage] = useState("");
-
-  const [accountNo, setAccountNo] = useState(""); // Initialize the account number state
+ const [aadhaarErrorMessage, setAadhaarErrorMessage] = useState("");
+  const [accountNo, setAccountNo] = useState(""); 
 const [accountNoError, setAccountNoError] = useState("");
-
 const [ifscCode, setIfscCode] = useState(""); 
 const [ifscCodeError, setIfscCodeError] = useState("");
 const [selectedLandowner, setSelectedLandowner] = useState("");
@@ -79,15 +67,13 @@ const [noOfFlats, setNoOfFlats] = useState(0);
 const [tableRows, setTableRows] = useState([]);
 const [firms, setFirms] = useState([]);
 
- // ✅ Initialize as an empty array
-
+ // Initialize as an empty array
 const projects = ["Project A", "Project B", "Project C"];
 const landowners = {
   "Project A": [{ name: "John Doe", mobile: "9876543210", flats: 2 }],
   "Project B": [{ name: "Jane Smith", mobile: "8765432109", flats: 3 }],
   "Project C": [{ name: "Mike Johnson", mobile: "7654321098", flats: 1 }]
 };
-
 const handleProjectChange = (event) => {
   setSelectedProject(event.target.value);
   setSelectedLandowner("");
@@ -125,13 +111,8 @@ useEffect(() => {
   console.log("Loans updated:", loans);
 }, [loans]);
 
-  // const [fileNames, setFileNames] = useState({
-  //   firmPanNoDocument: "",
-  //   firmGstNoDocument: "",
-  //   firmLightBillForAddressProof: "",
-  // });
   const [fileNames, setFileNames] = useState({
-    firmPanNoDocument: [], // ✅ Change from "" to []
+    firmPanNoDocument: [], 
     firmGstNoDocument: [],
     firmLightBillForAddressProof: [],
   });
@@ -175,30 +156,20 @@ useEffect(() => {
       [key]: prev[key] ? [...prev[key], ...newFiles] : newFiles, 
     }));
   };
-  
-
-  const handleAgeChange = (e, index) => {
+    const handleAgeChange = (e, index) => {
     const value = e.target.value;
     const updatedPartners = [...partners];
-    updatedPartners[index].age = value; // Update the age of the specific partner
-    setPartners(updatedPartners); // Update the state
-  
+    updatedPartners[index].age = value; 
+    setPartners(updatedPartners); 
     // Validate the age value
-    validateAge(value); // You should already have this function defined
+    validateAge(value); 
   };
-
-  
-
-
-  const handleOccupationChange = (e, index) => {
+ const handleOccupationChange = (e, index) => {
     const value = e.target.value;
     const updatedPartners = [...partners];
-    updatedPartners[index].occupation = value; // Update the occupation field
-    setPartners(updatedPartners); // Update the state
+    updatedPartners[index].occupation = value; 
+    setPartners(updatedPartners); 
   };
-
-  
-
 
   const [partners, setPartners] = useState([
     { name: "", age: "", occupation: "", mobile: "", email: "", address: "", pan: "", aadhaar: "" }
@@ -220,12 +191,9 @@ const handleTabClick = (index) => {
     console.log("Selected Tab Before Update:", selectedTab);
     setSelectedTab(tabNames[index]); 
 };
-
-  const handleTabChange = (_, newValue) => {
+const handleTabChange = (_, newValue) => {
     setSelectedTab(newValue);
   };
-
-
   const handleToggleSection = (index) => {
     if (sections[index].label === "Download PDF") {
       handleDownloadPDF();
@@ -245,14 +213,10 @@ const handleTabClick = (index) => {
   } else if (sections[index].label === "Landowner Flat Allotement Display") {
     setSelectedTab("allotement");
   }
-
-
-  
-    setShowFirmForm(false);
+   setShowFirmForm(false);
     setShowProjectForm(false); 
     setShowLandownerForm(false); 
-    // setFlatAllotement(false);
-    setShowFlatForm(false);
+     setShowFlatForm(false);
   };
 
   const [newPhase, setNewPhase] = useState({
@@ -268,17 +232,10 @@ const handleTabClick = (index) => {
    {selectedTab === "landowner" && <LandownerTable />}
    {selectedTab === "allotement" && <FlatAllotement/>}
 
-
-
-  
-    const handleDownloadPDF = () => {
-    
-      const doc = new jsPDF();
-    
-   
-      const timestamp = new Date().toLocaleDateString();  
-  
-      const projectName = "";
+   const handleDownloadPDF = () => {
+    const doc = new jsPDF();
+    const timestamp = new Date().toLocaleDateString();  
+    const projectName = "";
       const name = "";
       const mobileNo = "";
       const flatsAlloted = "";  
@@ -286,42 +243,27 @@ const handleTabClick = (index) => {
       const wing = "";
       const flatNo = "";
       const typeOfFlat = "";
-    
-      
       const columns = [
         "Timestamp", "Project Name", "Name", "Mobile No", 
         "No of Flats Allotted", "RERA Carpet Area", "Wing", "Flat No", "Type of Flat"
       ];
-    
       const data = [
         timestamp, projectName, name, mobileNo, 
         flatsAlloted, reraCarpetArea, wing, flatNo, typeOfFlat
       ];
-    
-      
       doc.setFontSize(18);
       doc.text("Flat Allotment Information", 10, 10);
-  
-      doc.setFontSize(12);
-    
-   
-      const columnWidths = [25, 30, 20, 20, 20, 20, 20, 20, 20]; 
-   
-      const splitTextToFit = (text, maxWidth) => {
+    doc.setFontSize(12);
+    const columnWidths = [25, 30, 20, 20, 20, 20, 20, 20, 20]; 
+   const splitTextToFit = (text, maxWidth) => {
         const lines = doc.splitTextToSize(text, maxWidth);
         return lines;
       };
       const rowHeight = 15;  
-  
-  
-    const extraRowSpacing = 5; 
-    
-    
+      const extraRowSpacing = 5; 
       let xPos = 10;
       let yPos = 40;
-    
-     
-      columns.forEach((col, index) => {
+     columns.forEach((col, index) => {
         doc.rect(xPos, yPos, columnWidths[index], 20); 
         let headerLines = splitTextToFit(col, columnWidths[index] - 4); 
         doc.text(headerLines, xPos + 2, yPos + 7); 
@@ -398,7 +340,7 @@ const handleTabClick = (index) => {
         console.error("DisplayTable ref is not available.");
         return;
       }
-      console.log("Loans data before mapping:", loans); // Use loans instead of firms
+      console.log("Loans data before mapping:", loans); 
     
       const doc = new jsPDF("landscape");
       doc.setFontSize(14);
@@ -526,9 +468,7 @@ const handleTabClick = (index) => {
   
       const doc = new jsPDF("landscape");
       doc.setFontSize(14);
-      // doc.text("Flat Allotment Display Report", 14, 15);
-  
-      // ✅ Columns as per the new requirement
+     
       const tableColumn = [
           "Timestamp", 
           "Project Name", 
@@ -545,16 +485,16 @@ const handleTabClick = (index) => {
       const tableRows = projectData.map(row => [
           row.timestamp || "-",
           row.projectName || "-",
-          row.flatAllotteeName || "-",  // Ensure this key exists in your data
+          row.flatAllotteeName || "-",  
           row.mobileNo || "-",
-          row.noOfFlatsAllotted || "-", // Ensure this key exists in your data
-          row.reraCarpetArea || "-",    // Ensure this key exists in your data
+          row.noOfFlatsAllotted || "-", 
+          row.reraCarpetArea || "-",    
           row.wing || "-",
           row.flatNo || "-",
-          row.typeOfFlat || "-"         // Ensure this key exists in your data
+          row.typeOfFlat || "-"         
       ]);
   
-      console.log("Formatted Table Rows:", tableRows); // Debugging
+      console.log("Formatted Table Rows:", tableRows); 
   
       autoTable(doc, {
           startY: 25,
@@ -567,7 +507,7 @@ const handleTabClick = (index) => {
           }
       });
   
-      // ✅ Save the PDF with the updated name
+      
       doc.save("flat_allotment_display.pdf");
   };
   
@@ -578,7 +518,7 @@ const handleTabClick = (index) => {
   
   
   const handleRemovePartner = () => {
-    setPartners(partners.slice(0, partners.length - 1)); // Remove the last partner
+    setPartners(partners.slice(0, partners.length - 1)); 
   };
   
   const handleAddPhase = () => {
@@ -673,28 +613,20 @@ const handleTabClick = (index) => {
 
   const handleAccountNoChange = (e) => {
     const value = e.target.value;
-    
-    // Regular expression to check if the value is numeric and has a valid length (e.g., 10-16 digits)
+     // Regular expression to check if the value is numeric and has a (e.g., 10-16 digits)
     const accountNoRegex = /^[0-9]{10,16}$/; // 10 to 16 digits
-  
     if (value && !accountNoRegex.test(value)) {
       setAccountNoError("Account number must be between 10 to 16 digits.");
     } else {
-      setAccountNoError(""); // Clear the error if valid
+      setAccountNoError(""); 
     }
-  
-    // Update the account number in the state
-    setAccountNo(value);
+   setAccountNo(value);
   };
 
-  
- 
   const validatePAN = (pan) => {
     const panPattern = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/; // PAN format: 5 letters, 4 digits, 1 letter
     return panPattern.test(pan);
   };
-
-  
 
   const handlePartnerNameChange = (e, index) => {
     const value = e.target.value;
@@ -763,30 +695,7 @@ const handleTabClick = (index) => {
   });
   
 
-  // const handleChange = (e, label, partnerIndex) => {
-  //   const { value } = e.target;
-  
-  
-  //   const updatedPartners = [...partners];
-  //   updatedPartners[partnerIndex][label.toLowerCase().replace(/ /g, "")] = value;
-  //   setPartners(updatedPartners);
-  
-    
-  //   if (label === 'Firm Name') {
-      
-  //     if (!/^[A-Za-z\s]*$/.test(value)) {
-  //       setErrors((prev) => ({
-  //         ...prev,
-  //         firmName: 'Firm Name should only contain letters and spaces',
-  //       }));
-  //     } else {
-  //       setErrors((prev) => ({
-  //         ...prev,
-  //         firmName: '', // Clear the error if valid
-  //       }));
-  //     }
-  //   }
-  // };
+
   
   const handleChange = (e, label) => {
     const { value } = e.target;
@@ -805,7 +714,7 @@ const handleTabClick = (index) => {
       } else {
         setErrors((prev) => ({
           ...prev,
-          firmName: '', // Clear the error if valid
+          firmName: '',
         }));
       }
     }
@@ -827,46 +736,21 @@ const handleTabClick = (index) => {
   firmPan: null,
   firmGst: null,
   firmLightBill: null,
-  // ... other fields
+  
 });
-//   const handleFirmSubmit = () => {
-//   const timestamp = new Date().toLocaleString(); // or Date.now()
 
-//   const newFirm = {
-//     ...firmFormData,
-//     timestamp,
-//   };
-
-//   setFirms((prevFirms) => [...prevFirms, newFirm]);
-
-//   toast.success("Details are submitted!", { position: "top-right", autoClose: 3000 });
-
-//   // Reset form if needed
-//   setFirmFormData({
-//     name: '',
-//     address: '',
-//     firmPanNo: '',
-//     firmGstNo: '',
-//     firmPan: null,
-//     firmGst: null,
-//     firmLightBill: null,
-//     // ... other fields
-//   });
-
-//   setShowFirmForm(false);
-// };
 
 const handleFirmSubmit = () => {
-  const timestamp = new Date().toLocaleString(); // Add a timestamp
+  const timestamp = new Date().toLocaleString(); 
 
   const newFirm = {
     name: firmName,
     address: firmFormData.address,
     firmPanNo: firmPan,
     firmGstNo: firmFormData.firmGstNo,
-    firmPan: firmFormData.firmPan,           // Assuming file state
-    firmGst: firmFormData.firmGst,           // Assuming file state
-    firmLightBill: firmFormData.firmLightBill, // Assuming file state
+    firmPan: firmFormData.firmPan,          
+    firmGst: firmFormData.firmGst,           
+    firmLightBill: firmFormData.firmLightBill, 
     partners: partners,
     timestamp,
   };
@@ -910,11 +794,11 @@ const handleFirmSubmit = () => {
     if (value && !ifscRegex.test(value)) {
       setIfscCodeError("Invalid IFSC code. It should be in the format: XXXX0XXXXX.");
     } else {
-      setIfscCodeError(""); // Clear the error if valid
+      setIfscCodeError(""); 
     }
   
-    // Update the IFSC code in the state
-    setIfscCode(value); // Assuming you have a state for the IFSC code
+  
+    setIfscCode(value); 
   };
   
 
@@ -928,7 +812,7 @@ const handleFirmSubmit = () => {
     } else if (value.length > 10) {
       setMobileError("Mobile number cannot exceed 10 digits");
     } else {
-      setMobileError(""); // Clear the error if the value is valid
+      setMobileError(""); 
     }
   
     // Update the partner's mobile number in the state
@@ -949,10 +833,10 @@ const handleFirmSubmit = () => {
       setEmailError("Invalid Gmail address");
       console.log("invalid email");
     } else {
-      setEmailError(""); // Clear the error if the value is valid
+      setEmailError(""); 
     }
   
-    // Update the partner's email in the state
+    
     partnerCopy[index] = { ...partnerCopy[index], email: value };
     setPartners(partnerCopy);
   };
@@ -1102,7 +986,7 @@ const handleFirmSubmit = () => {
         <div className="mt-3">
         <div ref={pdfRef} className="mt-3">
           <FirmTable firms={loans} />
-          {/* <FirmTable firms={loans} onGeneratePDF={handleDownloadPDFFirm} /> */}
+        
 
           </div>
         </div>
@@ -1122,9 +1006,9 @@ const handleFirmSubmit = () => {
       fullWidth
       variant="outlined"
       value={firmName}
-      onChange={handleFirmNameChange} // Handle Firm Name change with validation
-      error={!!firmNameError} // Show error state for Firm Name field
-      helperText={firmNameError} // Display error message if any
+      onChange={handleFirmNameChange} 
+      error={!!firmNameError} 
+      helperText={firmNameError} 
     />
   </Grid>
   <Grid item xs={6}>
@@ -1176,9 +1060,9 @@ const handleFirmSubmit = () => {
           <Input
             type="file"
             multiple
-            style={{ display: "none" }} // Hide the default input
-            id={`file-input-${index}`} // Unique ID for each input
-            onChange={(e) => handleFileChange(e, item.key)} // Handle file change
+            style={{ display: "none" }} 
+            id={`file-input-${index}`} 
+            onChange={(e) => handleFileChange(e, item.key)} 
           />
           <Button variant="contained" color="light" component="span">
             Choose File
@@ -1219,9 +1103,9 @@ const handleFirmSubmit = () => {
                 <label>
                   <Input
                     type="file"
-                    style={{ display: "none" }} // Hide default file input
-                    id={`file-input-${label}`} // Unique ID for each file input
-                    onChange={(e) => handleFileChange(e, label)} // Handle file change
+                    style={{ display: "none" }} 
+                    id={`file-input-${label}`} 
+                    onChange={(e) => handleFileChange(e, label)} 
                   />
                   <Button variant="contained" color="light" component="span">
                     Choose File
@@ -1239,8 +1123,8 @@ const handleFirmSubmit = () => {
                 label={label}
                 fullWidth
                 variant="outlined"
-                type={label === "Age" ? "text" : "text"} // Keep text type for simplicity
-                value={partner[label.toLowerCase().replace(/ /g, "")]} // Dynamically map to partner data
+                type={label === "Age" ? "text" : "text"} 
+                value={partner[label.toLowerCase().replace(/ /g, "")]} 
                 onChange={(e) => {
                   if (label === "Age") {
                     handleAgeChange(e, index); 
@@ -1249,11 +1133,11 @@ const handleFirmSubmit = () => {
                   } else if (label === "Name") {
                     handlePartnerNameChange(e, index); 
                   } else if (label === "Mobile No.") {
-                    handleMobileChange(e, index); // Handle Mobile No. change
+                    handleMobileChange(e, index); 
                   } else if (label === "Mail ID") {
-                    handleEmailChange(e, index); // Handle Mail ID change
+                    handleEmailChange(e, index); 
                   } else if (label === "PAN No.") {
-                    handlePANChange(e, index); // Handle PAN No. change
+                    handlePANChange(e, index); 
                   } else if (label === "Aadhaar No.") {
                     const aadhaar = e.target.value;
                     if (validateAadhaar(aadhaar)) {

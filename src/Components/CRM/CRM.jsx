@@ -786,25 +786,25 @@ const handleDownloadPDFCRM = () => {
       sx={{
         background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
         color: "white",
-        fontWeight: "bold",
+        // fontWeight: "bold",
         fontWeight: "900",
         textTransform: "none",
         marginTop :"24px",
        
-        minHeight: "unset", // Removes fixed height  
-        height: "39px", // Explicitly set a smaller height  
+        minHeight: "unset",  
+        height: "39px", 
         fontSize: "12px",
         borderRadius: "20px",
-        display: "inline-flex", // Ensures compact size  
+        display: "inline-flex", 
         alignItems: "center",
         gap: "6px",
-        lineHeight: "1", // Reduces text spacing  
+        lineHeight: "1", 
         "&:hover": {
           background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
         },
       }}
-      disableElevation // Removes shadow that might add visual space  
-      disableRipple // Removes ripple effect padding  
+      disableElevation  
+      disableRipple  
       onClick={handleDownloadPDFCRM}
     >
       <FaFileDownload size={14} />
@@ -1758,40 +1758,24 @@ Section 2: Particulars of Flat
 
       </Dialog>
    
-    {/* <Tooltip title="WhatsApp" arrow>
-      <IconButton
-        sx={{
-          color: 'white', 
-          fontSize: '2px',
-          backgroundColor: '#25D366', 
-          borderRadius: '50%', 
-          padding: '2px',
-          '&:hover': {
-            backgroundColor: '#128C7E', 
-          },
-        }}
-        onClick={() => handleWhatsapp(item)}
-      >
-        <WhatsAppIcon />
-      </IconButton>
-    </Tooltip> */}
+   
 
 <Tooltip title="WhatsApp" arrow>
               <IconButton
                 sx={{
                   color: 'white',
                   fontSize: '2px',
-                  backgroundColor: '#25D366', // WhatsApp green color
+                  backgroundColor: '#25D366', 
                   borderRadius: '50%',
                   padding: '2px',
                   '&:hover': {
-                    backgroundColor: '#128C7E', // WhatsApp darker green on hover
+                    backgroundColor: '#128C7E', 
                   },
                 }}
                 onClick={() => {
-                  const mobile = item['mobileNo']; // dynamically get the mobile number from each item in loansData
+                  const mobile = item['mobileNo']; 
                   if (mobile) {
-                    const fullNumber = `91${mobile}`; // assuming all numbers are Indian, you can adjust for international if needed
+                    const fullNumber = `91${mobile}`; 
                     const message = encodeURIComponent("Hello, I would like to get in touch.");
                     window.open(`https://wa.me/${fullNumber}?text=${message}`, '_blank');
                   } else {
@@ -1802,45 +1786,21 @@ Section 2: Particulars of Flat
                 <WhatsAppIcon />
               </IconButton>
             </Tooltip>
-    {/* <Tooltip title="Email" arrow>
-      <IconButton
-        sx={{
-          color: 'white', // Icon color white for contrast
-          fontSize: '1px',
-          backgroundColor: '#007BFF', // Blue background for Email
-          borderRadius: '50%', 
-          padding: '4px',
-          // Makes the icon rounded
-          '&:hover': {
-            backgroundColor: '#0056b3', // Darker blue for Email on hover
-          },
-        }}
-        onClick={() => handleEmail(item)}
-      >
-        <EmailIcon />
-      </IconButton>
-    </Tooltip> */}
+  
     <Tooltip title="Email" arrow>
   <IconButton
     sx={{
-      color: 'white', // Icon color white for contrast
+      color: 'white', 
       fontSize: '1px',
-      backgroundColor: '#007BFF', // Blue background for Email
+      backgroundColor: '#007BFF', 
       borderRadius: '50%',
       padding: '4px',
-      // Makes the icon rounded
+    
       '&:hover': {
-        backgroundColor: '#0056b3', // Darker blue for Email on hover
+        backgroundColor: '#0056b3', 
       },
     }}
-    // onClick={() => {
-    //   const email = item['email']; 
-    //   if (email && email.trim()) {
-    //     window.location.href = `mailto:${email}`; 
-    //   } else {
-    //     alert("Email not available.");
-    //   }
-    // }}
+  
     onClick={() =>
       window.open(
         `https://mail.google.com/mail/?view=cm&fs=1&to=${item['EMAIL ID']}`,
@@ -1856,7 +1816,7 @@ Section 2: Particulars of Flat
 </TableCell>
 
 
-      {/* Map the correct data fields */}
+      
       <TableCell sx={{ whiteSpace: 'nowrap' }}>{item.timestamp}</TableCell>
       <TableCell sx={{ whiteSpace: 'nowrap' }}>{item.enquiryNo}</TableCell>
       <TableCell sx={{ whiteSpace: 'nowrap' }}>{item.projectName}</TableCell>

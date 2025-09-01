@@ -483,6 +483,7 @@ const paginatedData = salesPersons.slice(
                       name="designation"
                       value={formData.designation}
                       onChange={handleChange}
+                      required
                       sx={{ marginTop: '10px' }} 
                     />
                   </Grid>
@@ -495,6 +496,7 @@ const paginatedData = salesPersons.slice(
     type="date"
     name="joiningDate"
     value={formData.joiningDate}
+    required
     onChange={handleChange}
     sx={{ marginTop: '10px' }} 
     InputLabelProps={{
@@ -511,6 +513,7 @@ const paginatedData = salesPersons.slice(
                         name="status"
                         value={formData.status}
                         onChange={handleChange}
+                        required
                         sx={{ marginTop: '10px' }} 
                       >
                         <MenuItem value="Active">Active</MenuItem>

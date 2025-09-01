@@ -1,6 +1,3 @@
-
-
-
 import React, { useState, useCallback,useRef,useEffect } from "react"; 
 import { 
   FaBars, FaTachometerAlt, FaUserShield, FaCode, FaChartLine, FaCogs, FaSignOutAlt,
@@ -8,29 +5,17 @@ import {
   FaInfoCircle, FaBuilding, FaFileInvoiceDollar, FaBullhorn , FaUserTie ,FaLandmark,FaCalendarAlt,FaPeopleArrows
 } from "react-icons/fa";  
 import { useNavigate } from "react-router-dom";
-import { Outlet, Link } from "react-router-dom";
+import { Outlet, Link, NavLink } from "react-router-dom";
 import {  FaClipboardList, FaCalendarCheck, FaRegHandshake, FaRegClock, FaTasks, FaRegTimesCircle, FaClipboard, FaRegEdit } from 'react-icons/fa';
-
 import {  FaMicrophone } from "react-icons/fa";
 import VoiceNavigation from "./VoiceNavigation";
 import { FaMoneyBillWave,  FaParking, FaChartBar } from "react-icons/fa";
-
-
-
-
 const Dashboard = () => {
   const [searchQuery, setSearchQuery] = useState("");
-
   const [query, setQuery] = useState("");
-
-  
   const recognitionRef = useRef(null);
-
-
-
-const [listening, setListening] = useState(false);
-
-  const [results, setResults] = useState([]);
+ const [listening, setListening] = useState(false);
+ const [results, setResults] = useState([]);
   const [collapsed, setCollapsed] = useState(false);
   const [sections, setSections] = useState({
     admin: false,
@@ -39,66 +24,22 @@ const [listening, setListening] = useState(false);
     crm: false,
   });
   const [showVoiceRecognition, setShowVoiceRecognition] = useState(false);
-  
-
   const navigate = useNavigate();
-
-  
   const toggleSidebar = useCallback(() => setCollapsed((prev) => !prev), []);
- 
-  const toggleSection = useCallback((section) => {
+ const toggleSection = useCallback((section) => {
     setSections((prev) => ({ ...prev, [section]: !prev[section] }));
   }, []);
-
-  const handleLogout = useCallback(() => {
+const handleLogout = useCallback(() => {
     localStorage.removeItem('authToken');
     navigate('/login');
   }, [navigate]);
 
-
- 
-
-
-  const handleClose = () => {
+const handleClose = () => {
     console.log("Closing the voice navigation.");
     setShowVoiceRecognition(false); 
   };
 
 
-  // const moduleData = [
-  //   {name :"CRM" ,path: "CRM"},
-  //   {name :"Share Space" ,path: "CRM > Share Space"},
-  //   { name : "Home Loan Applicability" , path :"CRM > Home Loan Applicability"},
-  //   { name : "CRM" , path :"CRM > CRM"},
-  //   { name : "OCR Collection" , path :"CRM > OCR Collection"},
-  //   { name : "Agreement" , path :"CRM > Agreement"},
-  //   { name : "Registration" , path :"CRM > Registration"},
-  //   { name: "Engineer & Architect Letter", path: " CRM > Engineer & Architect Letter" },
-  //   { name: "Demand Raised", path: " CRM > Demand Raised" },
-  //   { name: "Daily Collection", path: " CRM > Daily Collection" },
-  //   { name: "Flat Allotement Report", path: " CRM > Flat Allotement Report" },
-  //   { name: "Parking Report", path: " CRM > Parking Report" },
-  //   { name: "MIS Report", path: " CRM > MIS Report" },
-
-  //   {name : "Sales" , path :"Sales"},
-  //   {name: "Dashboard" , path :" Sales > Dashboard"},
-  //   {name: "Calendar" , path :" Sales > Calendar"},
-  //   {name: "Share Space" , path :" Sales > Share Space"},
-  //   {name: "Shared By Developer" , path :" Sales > Shared By Developer"},
-  //   {name: "Leads" , path :" Sales > Leads"},
-  //   {name: "Leads Follow Up" , path :" Sales > Leads Follow Up"},
-  //   {name: "Lost Leads" , path :" Sales > Lost Leads"}, 
-  //   {name: "First Visit" , path :" Sales >First Visit"}, 
-  //   {name: "First Visit Follow Up" , path :" Sales > First Visit Follow Up"},
-  //   {name: "First Visit Steps" , path :" Sales > First Visit Steps"},
-  //   {name: "Lost Visits" , path :" Sales > Lost visits"},
-  //   {name: "Templates" , path :" Sales > Templates"},
-  //   { name: "Booking Form", path: "Sales > Booking Form" },
-  //   { name: "Channel Partner", path: "Sales > Channel Partner" },
-
-
-    
-  // ];
 
   const moduleData = [
     
@@ -536,10 +477,28 @@ const startListening = () => {
 
 const SidebarItem = React.memo(({ to, icon, label, collapsed }) => (
   <li className="nav-item">
-    <Link to={to} className="nav-link text-white d-flex align-items-center">
+    {/* <Link to={to} className="nav-link text-white d-flex align-items-center">
       {icon}
       {!collapsed && <span className="ms-2">{label}</span>}
-    </Link>
+    </Link> */}
+       <NavLink
+      to={to}
+      className={({ isActive }) =>
+        `nav-link d-flex align-items-center ${
+          isActive ? "active-tab" : "text-white"
+        }`
+      }
+
+      style={({ isActive }) => ({
+        background: isActive ? "#8498fdff" : "transparent",  
+        color: isActive ? "#fff" : "#ddd",                 
+        borderRadius: "8px",
+        padding: "8px",
+      })}
+    >
+      {icon}
+      {!collapsed && <span className="ms-2">{label}</span>}
+    </NavLink>
   </li>
 ));
 
