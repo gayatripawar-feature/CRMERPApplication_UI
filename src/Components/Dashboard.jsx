@@ -1,3 +1,4 @@
+import { toast } from "react-toastify";
 import React, { useState, useCallback,useRef,useEffect } from "react"; 
 import { 
   FaBars, FaTachometerAlt, FaUserShield, FaCode, FaChartLine, FaCogs, FaSignOutAlt,
@@ -43,46 +44,109 @@ const handleClose = () => {
  const role = localStorage.getItem("userRole");
  const allowedMenus = RolePermissions[role] || [];
 
-  const moduleData = [
-    
-    { name: "Share Space", path: "CRM > Share Space", to: "/crm/sharespace" },
-    { name: "Home Loan Applicability", path: "CRM > Home Loan Applicability", to: "/crm/homeloan" },
-    { name: "OCR Collection", path: "CRM > OCR Collection", to: "/crm/OCR" },
-    { name: "Agreement", path: "CRM > Agreement", to: "/crm/agreement" },
-    { name: "Registration", path: "CRM > Registration", to: "/crm/registration" },
-    { name: "Engineer & Architect Letter", path: "CRM > Engineer & Architect Letter", to: "/crm/Architect" },
-    { name: "Demand Raised", path: "CRM > Demand Raised", to: "/crm/demand-raised" },
-    { name: "Daily Collection", path: "CRM > Daily Collection", to: "/crm/dailycollection" },
-    { name: "Flat Allotment Report", path: "CRM > Flat Allotment Report", to: "/crm/flatallotmentreport" },
-    { name: "Parking Report", path: "CRM > Parking Report", to: "/crm/parkingreport" },
-    { name: "MIS Report", path: "CRM > MIS Report", to: "/crm/misreport" },
-  
-    { name: "Sales", path: "Sales", to: "/sales" },
-    { name: "Dashboard", path: "Sales > Dashboard", to: "/sales/salesdashboard" },
-    { name: "Calendar", path: "Sales > Calendar", to: "/sales/salescalander" },
-    { name: "Share Space", path: "Sales > Share Space", to: "/sales/sharespace" },
-    { name: "Shared By Developer", path: "Sales > Shared By Developer", to: "/sales/sharedbydeveloper" },
-    { name: "Leads", path: "Sales > Leads", to: "/sales/leads" },
-    { name: "Leads Follow Up", path: "Sales > Leads Follow Up", to: "/sales/leadsfollowup" },
-    { name: "Lost Leads", path: "Sales > Lost Leads", to: "/sales/lostleads" },
-    { name: "First Visit", path: "Sales > First Visit", to: "/sales/firstvisits" },
-    { name: "First Visit Follow Up", path: "Sales > First Visit Follow Up", to: "/sales/firstvisitfollowup" },
-    { name: "First Visit Steps", path: "Sales > First Visit Steps", to: "/sales/firstvisitsteps" },
-    { name: "Lost Visits", path: "Sales > Lost Visits", to: "/sales/saleslostvisits" },
-    { name: "Templates", path: "Sales > Templates", to: "/sales/salestemplates" },
-    { name: "Booking Form", path: "Sales > Booking Form", to: "/sales/bookingform" },
-    { name: "Channel Partner", path: "Sales > Channel Partner", to: "/sales/channelpartner" },
-      
-    {name : "Banker Details" , path :"Admin > Banker Details" , to :"/admin/banker"},
-    {name :"Sales Person" ,path : "Admin > Sales Person" ,to :"/admin/salesperson"},
+ 
 
-    { name: "Share Space", path : "Developer/ Share Space" ,to: "/developer/sharespace",  },
-    {name: "Basic Information", path :"Developer / Basic Information", to: "/developer/basicinfo",  },
-    { name: "Project Inventory" ,  path :"Developer /Project Inventory", to: "/developer/projectinventory", },
-    { name: "Cost Sheet Details" , path :"Developer/Cost Sheet Details", to: "/developer/costsheet", },
-    { name: "Sales MIS", path :"Developer/Sales MIS" ,to: "/developer/salesmis",  },
-    { name: "Marketing" ,path :"Developer/Marketing", to: "/developer/marketing",  }
-  ];
+ // 🔹 Build ALL commands (for all modules, not filtered by role)
+const buildAllVoiceCommands = (rolePermissions) => {
+  const commands = {};
+  Object.values(rolePermissions).forEach(menus => {
+    menus.forEach(menu => {
+      if (menu.subItems) {
+        menu.subItems.forEach(item => {
+          const command = item.label.toLowerCase();
+          commands[command] = item.to;
+        });
+      }
+    });
+  });
+  return commands;
+};
+
+
+// functions for path  and voice system for their respective modules:
+const buildVoiceCommands = (allowedMenus, navigate) => {
+  const commands = {};
+
+  allowedMenus.forEach(menu => {
+    if (menu.subItems) {
+      menu.subItems.forEach(item => {
+        const command = item.label.toLowerCase(); // Example: "Leads"
+        commands[command] = item.to;             // Example: "/dashboard/sales/leads"
+      });
+    }
+  });
+
+  return commands;
+};
+
+// 🔹 Build search data only for allowed menus
+const buildSearchData = (allowedMenus) => {
+  const searchList = [];
+
+  allowedMenus.forEach(menu => {
+    if (menu.subItems) {
+      menu.subItems.forEach(item => {
+        searchList.push({
+          label: item.label,   // e.g. "Leads"
+          value: item.to       // e.g. "/dashboard/sales/leads"
+        });
+      });
+    }
+  });
+
+  return searchList;
+};
+
+
+
+ // ✅ Build commands & search data dynamically
+
+ const allCommandRoutes = buildAllVoiceCommands(RolePermissions); // 🔹 all
+const commandRoutes = buildVoiceCommands(allowedMenus, navigate);  // filtred
+const moduleData = buildSearchData(allowedMenus);
+
+
+//  For path system :
+  // const moduleData = [
+    
+  //   { name: "Share Space", path: "CRM > Share Space", to: "dashboard/crm/sharespace" },
+  //   { name: "Home Loan Applicability", path: "CRM > Home Loan Applicability", to: "dashboard/crm/homeloan" },
+  //   { name: "OCR Collection", path: "CRM > OCR Collection", to: "dashboard/crm/OCR" },
+  //   { name: "Agreement", path: "CRM > Agreement", to: "dashboard/crm/agreement" },
+  //   { name: "Registration", path: "CRM > Registration", to: "dashboard/crm/registration" },
+  //   { name: "Engineer & Architect Letter", path: "CRM > Engineer & Architect Letter", to: "dashboard/crm/Architect" },
+  //   { name: "Demand Raised", path: "CRM > Demand Raised", to: "dashboard/crm/demand-raised" },
+  //   { name: "Daily Collection", path: "CRM > Daily Collection", to: "dashboard/crm/dailycollection" },
+  //   { name: "Flat Allotment Report", path: "CRM > Flat Allotment Report", to: "dashboard/crm/flatallotmentreport" },
+  //   { name: "Parking Report", path: "CRM > Parking Report", to: "dashboard/crm/parkingreport" },
+  //   { name: "MIS Report", path: "CRM > MIS Report", to: "dashboard/crm/misreport" },
+  
+  //   { name: "Sales", path: "Sales", to: "/sales" },
+  //   { name: "Dashboard", path: "Sales > Dashboard", to: "dashboard/sales/salesdashboard" },
+  //   { name: "Calendar", path: "Sales > Calendar", to: "dashboard/sales/salescalander" },
+  //   { name: "Share Space", path: "Sales > Share Space", to: "dashboard/sales/sharespace" },
+  //   { name: "Shared By Developer", path: "Sales > Shared By Developer", to: "dashboard/sales/sharedbydeveloper" },
+  //   { name: "Leads", path: "Sales > Leads", to: "/dashboard/sales/leads" },
+  //   { name: "Leads Follow Up", path: "Sales > Leads Follow Up", to: "dashboard/sales/leadsfollowup" },
+  //   { name: "Lost Leads", path: "Sales > Lost Leads", to: "dashboard/sales/lostleads" },
+  //   { name: "First Visit", path: "Sales > First Visit", to: "dashboard/sales/firstvisits" },
+  //   { name: "First Visit Follow Up", path: "Sales > First Visit Follow Up", to: "dashboard/sales/firstvisitfollowup" },
+  //   { name: "First Visit Steps", path: "Sales > First Visit Steps", to: "dashboard/sales/firstvisitsteps" },
+  //   { name: "Lost Visits", path: "Sales > Lost Visits", to: "dashboard/sales/saleslostvisits" },
+  //   { name: "Templates", path: "Sales > Templates", to: "dashboard/sales/salestemplates" },
+  //   { name: "Booking Form", path: "Sales > Booking Form", to: "dashboard/sales/bookingform" },
+  //   { name: "Channel Partner", path: "Sales > Channel Partner", to: "dashboard/sales/channelpartner" },
+      
+  //   {name : "Banker Details" , path :"Admin > Banker Details" , to :"dashboard/admin/banker"},
+  //   {name :"Sales Person" ,path : "Admin > Sales Person" ,to :"dashboard/admin/salesperson"},
+
+  //   { name: "Share Space", path : "Developer/ Share Space" ,to: "dashboard/developer/sharespace",  },
+  //   {name: "Basic Information", path :"Developer / Basic Information", to: "dashboard/developer/basicinfo",  },
+  //   { name: "Project Inventory" ,  path :"Developer /Project Inventory", to: "dashboard/developer/projectinventory", },
+  //   { name: "Cost Sheet Details" , path :"Developer/Cost Sheet Details", to: "dashboard/developer/costsheet", },
+  //   { name: "Sales MIS", path :"Developer/Sales MIS" ,to: "dashboard/developer/salesmis",  },
+  //   { name: "Marketing" ,path :"Developer/Marketing", to: "dashboard/developer/marketing",  }
+  // ];
   
 
 
@@ -109,56 +173,101 @@ const handleRedirect = (path) => {
 
 
 
+// For voice system :
+// const commandRoutes = {
+//   // Admin Module
+//   "admin banker": "/dashboard/admin/banker",  //done
+//   "admin sales module": "/dashboard/admin/salesperson",   //done
 
-const commandRoutes = {
-  // Admin Module
-  "admin banker": "/admin/banker",  //done
-  "admin sales module": "/admin/salesperson",   //done
+//   // CRM Module
+//   "agreement": "/dashboard/crm/agreement",   //done
+//   "architect": "/dashboard/crm/architect",   //done
+//   // "dashboard": "/crm",
+//   "daily collection": "/dashboard/crm/dailycollection",   //done
+//   "demand": "/dashboard/crm/demand",          //done
+//   "flat allotment report": "/dashboard/crm/flatallotmentreport",  //done
+//   "home loan": "/dashboard/crm/HomeLoan",    //done
+//   "mis report": "/dashboard/crm/misreport",  //done
+//   "ocr": "/dashboard/crm/ocr",              //done
+//   "parking report": "/dashboard/crm/parkingreport",   //done
+//   "registration": "/dashboard/crm/registration",         //done
+  
 
-  // CRM Module
-  "agreement": "/crm/agreement",   //done
-  "architect": "/crm/architect",   //done
-  // "dashboard": "/crm",
-  "daily collection": "/crm/dailycollection",   //done
-  "demand": "/crm/demand",          //done
-  "flat allotment report": "/crm/flatallotmentreport",  //done
-  "home loan": "/crm/HomeLoan",    //done
-  "mis report": "/crm/misreport",  //done
-  "ocr": "/crm/ocr",              //done
-  "parking report": "/crm/parkingreport",   //done
-  "registration": "/crm/registration",         //done
-  // "share space": "/crm/sharespace",
+//   // Developer Module
+//   "share space developer": "/dashboard/developer/sharespace",  //done
+//   "basic information": "/dashboard/developer/basicinfo",      //done
+//   "project inventory": "/dashboard/developer/projectinventory",  //done
+//   "cost sheet details": "/dashboard/developer/costsheet",    //done
+//   "sales mis": "/dashboard/developer/salesmis",        //done
+//   "marketing": "/dashboard/developer/marketing",      //done
 
-  // Developer Module
-  "share space developer": "/developer/sharespace",  //done
-  "basic information": "/developer/basicinfo",      //done
-  "project inventory": "/developer/projectinventory",  //done
-  "cost sheet details": "/developer/costsheet",    //done
-  "sales mis": "/developer/salesmis",        //done
-  "marketing": "/developer/marketing",      //done
+//   // Sales Module
+//   // "sales": "/sales",
+//   "dashboard sales": "/dashboard/sales/salesdashboard",     //done
+//   "calendar": "/dashboard/sales/salescalander",               //done
+//   "shared by developer": "/dashboard/sales/sharedbydeveloper",   //done
+//   "leads": "/dashboard/sales/leads",                       //done
+//   "leads follow up": "/dashboard/sales/leadsfollowup",     //done
+//   "lost leads": "/dashboard/sales/lostleads",         //done
+//   "first visit": "/dashboard/sales/firstvisits",       //done
+//   "first visit follow up": "/dashboard/sales/firstvisitfollowup",  //done
+//   "first visit steps": "/dashboard/sales/firstvisitsteps",     //done
+//   "lost visits": "/dashboard/sales/saleslostvisits",     //done
+//   "templates": "/dashboard/sales/salestemplates",    //done
+//   "booking form": "/dashboard/sales/bookingform",    //done
+//   "channel partner": "/dashboard/sales/channelpartner",   //done
 
-  // Sales Module
-  // "sales": "/sales",
-  "dashboard sales": "/sales/salesdashboard",     //done
-  "calendar": "/sales/salescalander",               //done
-  "shared by developer": "/sales/sharedbydeveloper",   //done
-  "leads": "/sales/leads",                       //done
-  "leads follow up": "/sales/leadsfollowup",     //done
-  "lost leads": "/sales/lostleads",         //done
-  "first visit": "/sales/firstvisits",       //done
-  "first visit follow up": "/sales/firstvisitfollowup",  //done
-  "first visit steps": "/sales/firstvisitsteps",     //done
-  "lost visits": "/sales/saleslostvisits",     //done
-  "templates": "/sales/salestemplates",    //done
-  "booking form": "/sales/bookingform",    //done
-  "channel partner": "/sales/channelpartner",   //done
+  
+// }
 
-  // Common Routes
-  "dashboard": "/dashboard",
-  "profile": "/profile",
-  "settings": "/settings",
-  "reports": "/reports",
-}
+
+
+// First useeefect for voice system
+// useEffect(() => {
+//   if (!recognitionRef.current && ("webkitSpeechRecognition" in window || "SpeechRecognition" in window)) {
+//     recognitionRef.current = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+//     const recognition = recognitionRef.current;
+
+//     recognition.continuous = false;
+//     recognition.interimResults = false;
+//     recognition.lang = "en-US";
+
+//     recognition.onstart = () => {
+//       setListening(true);
+//     };
+
+//     recognition.onend = () => {
+//       setListening(false);
+//     };
+
+//     recognition.onresult = (event) => {
+//       let command = event.results[0][0].transcript.trim().toLowerCase();
+//       console.log("Recognized command:", command);
+
+//       const path = commandRoutes[command];
+     
+//       if (path) {
+        
+//         speak(`Redirecting to ${command}`, () => {
+//           handleRedirect(path);
+//         });
+//       } else {
+//         speak("Command not recognized");
+//       }
+
+//       setTimeout(() => {
+//         setListening(false);
+//       }, 1000);
+//     };
+
+//     recognition.onerror = () => {
+//       setListening(false);
+//     };
+//   }
+// }, []);
+
+
+
 
 
 useEffect(() => {
@@ -178,32 +287,84 @@ useEffect(() => {
       setListening(false);
     };
 
-    recognition.onresult = (event) => {
-      let command = event.results[0][0].transcript.trim().toLowerCase();
-      console.log("Recognized command:", command);
+//  recognition.onresult = (event) => {
+//   let command = event.results[0][0].transcript.trim().toLowerCase();
+//   console.log("Recognized command:", command);
 
-      const path = commandRoutes[command];
-     
-      if (path) {
-        
-        speak(`Redirecting to ${command}`, () => {
-          handleRedirect(path);
-        });
-      } else {
-        speak("Command not recognized");
-      }
+//   const path = commandRoutes[command];
 
-      setTimeout(() => {
-        setListening(false);
-      }, 1000);
-    };
+//   if (path) {
+//     // ✅ Command exists → now check access
+//     const hasAccess = moduleData.some((item) => item.value === path);
+
+//     if (hasAccess) {
+//       // User has access → redirect
+//       speak(`Redirecting to ${command}`, () => {
+//         handleRedirect(path);
+//       });
+//     } else {
+//       // ❌ Command exists but not in allowed modules
+//       toast.error("🚫 You don’t have access to this module");
+//       speak("You don’t have access to this module");
+//     }
+//   } else {
+//     // ❌ Command not found in commandRoutes
+//     toast.error("❓ Command not recognized");
+//     speak("Command not recognized");
+//   }
+
+//   setTimeout(() => {
+//     setListening(false);
+//   }, 1000);
+// };
+
+
+
+recognition.onresult = (event) => {
+  let command = event.results[0][0].transcript.trim().toLowerCase();
+  console.log("🎤 Recognized command:", command);
+
+  // 1️⃣ First: see if it exists at all in ALL commands
+  let matchedPath = null;
+  for (const key in allCommandRoutes) {
+    if (command.includes(key)) {
+      matchedPath = allCommandRoutes[key];
+      break;
+    }
+  }
+
+  if (!matchedPath) {
+    // ❌ Not found anywhere
+    toast.error("❓ Command not recognized");
+    speak("Command not recognized");
+    return;
+  }
+
+  // 2️⃣ Found a valid command → now check access
+  const hasAccess = moduleData.some(
+    (item) => item.value.toLowerCase() === matchedPath.toLowerCase()
+  );
+
+  if (hasAccess) {
+    speak(`Redirecting to ${command}`, () => {
+      handleRedirect(matchedPath);
+    });
+  } else {
+    toast.error("🚫 You don’t have access to this module");
+    speak("You don’t have access to this module");
+  }
+
+  setTimeout(() => {
+    setListening(false);
+  }, 1000);
+};
+
 
     recognition.onerror = () => {
       setListening(false);
     };
   }
-}, []);
-
+}, [commandRoutes, moduleData]); // 👈 add dependencies
 const speak = (message,callback) => {
   const speech = new SpeechSynthesisUtterance(message);
   speech.lang = "en-US";
@@ -242,6 +403,7 @@ const startListening = () => {
 
 
 
+
   return (
     <div className="d-flex flex-column vh-100 ">
      
@@ -268,7 +430,8 @@ const startListening = () => {
     
     <FaMicrophone
   size={30}
-  className={`position-absolute top-50 end-0 translate-middle-y p-1 ${listening ? "text-danger" : "text-success"}`} 
+  className={`position-absolute top-50 end-0 translate-middle-y p-1 ${
+    listening ? "text-success" : "text-secondary"}`} 
   style={{ cursor: "pointer", marginRight: "10px" }}
   onClick={startListening} 
 /> 
@@ -288,7 +451,7 @@ const startListening = () => {
           className="list-group mt-2 position-absolute bg-white w-100 shadow"
           style={{ zIndex: 1050, maxHeight: "200px", overflowY: "auto" }}
         >
-          {results.map((item, index) => (
+          {/* {results.map((item, index) => (
             <li
               key={index}
               className="list-group-item cursor-pointer"
@@ -298,7 +461,18 @@ const startListening = () => {
               
               {item.path}
             </li>
-          ))}
+          ))} */}
+          {results.map((item, index) => (
+  <li
+    key={index}
+    className="list-group-item cursor-pointer"
+    onClick={() => handleRedirect(item.value)}
+    style={{ cursor: "pointer" }}
+  >
+    {item.label}
+  </li>
+))}
+
         </ul>
       )}
     </div>
