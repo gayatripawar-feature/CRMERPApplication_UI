@@ -23,6 +23,7 @@ import {
   import { ClientSideRowModelModule } from '@ag-grid-community/client-side-row-model';
   import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
+import Constants from "../Constants";
 
   
   
@@ -55,11 +56,7 @@ const Salesmis = (Data) => {
         link.click();
         document.body.removeChild(link);
       };
-
-
-
-     
-      const columns = [
+     const columns = [
         { label: "TIMESTAMP", key: "timestamp" },
         { label: "PROJECT NAME", key: "project" },
         { label: "WING", key: "wing" },
@@ -81,28 +78,7 @@ const Salesmis = (Data) => {
         { label: "BALANCE", key: "balance" },
         { label: "% COLLECTIONS", key: "percentCollections" },
       ];
-      // const columns = useMemo(() => [
-      //   { headerName: "TIMESTAMP", field: "timestamp", filter: true, sortable: true },
-      //   { headerName: "PROJECT NAME", field: "project", filter: true, sortable: true },
-      //   { headerName: "WING", field: "wing", filter: true, sortable: true },
-      //   { headerName: "FLOOR", field: "floor", filter: true, sortable: true },
-      //   { headerName: "FLAT NO.", field: "flatNo", filter: true, sortable: true },
-      //   { headerName: "RERA CARPET AREA (SQ MTR)", field: "reraCarpetAreaMtr", filter: true, sortable: true },
-      //   { headerName: "RERA CARPET AREA (SQ FT)", field: "reraCarpetAreaFt", filter: true, sortable: true },
-      //   { headerName: "TOTAL SALEABLE AREA (SQ. FTS)", field: "totalSaleableArea", filter: true, sortable: true },
-      //   { headerName: "SALEABLE TO CARPET AREA RATIO (SQ. FTS)", field: "saleableToCarpetAreaRatio", filter: true, sortable: true },
-      //   { headerName: "TYPE OF UNITS (RESIDENTIAL / COMMERCIAL)", field: "type", filter: true, sortable: true },
-      //   { headerName: "CONFIG (2 BHK, 3 BHK, 4 BHK)", field: "config", filter: true, sortable: true },
-      //   { headerName: "APPROVED / UNAPPROVED", field: "status", filter: true, sortable: true },
-      //   { headerName: "LANDOWNER / DEVELOPER", field: "owner", filter: true, sortable: true },
-      //   { headerName: "SOLD/UNSOLD", field: "soldStatus", filter: true, sortable: true },
-      //   { headerName: "NAME OF THE BUYER", field: "buyerName", filter: true, sortable: true },
-      //   { headerName: "DATE OF BOOKING", field: "bookingDate", filter: true, sortable: true },
-      //   { headerName: "AGREEMENT VALUE", field: "agreementValue", filter: true, sortable: true },
-      //   { headerName: "AMOUNT RECEIVED", field: "amountReceived", filter: true, sortable: true },
-      //   { headerName: "BALANCE", field: "balance", filter: true, sortable: true },
-      //   { headerName: "% COLLECTIONS", field: "percentCollections", filter: true, sortable: true },
-      // ], []);
+     
     
   const data = [
     { id: 1, timestamp: "2025-03-01", project: "Shubh Arambh", wing: "Wing 1", floor: 5, flatNo: "501", reraCarpetAreaMtr: 100, reraCarpetAreaFt: 1076, totalSaleableArea: 1500, saleableToCarpetAreaRatio: 1.4, type: "Residential", config: "2 BHK", status: "Sold", owner: "John Doe", soldStatus: "Sold", buyerName: "John Doe", bookingDate: "2025-01-15", agreementValue: 5000000, amountReceived: 2000000, balance: 3000000, percentCollections: 40 },
@@ -111,7 +87,7 @@ const Salesmis = (Data) => {
     { id: 4, timestamp: "2025-03-04", project: "Sunrise Residency", wing: "Wing B", floor: 4, flatNo: "402", reraCarpetAreaMtr: 110, reraCarpetAreaFt: 1184, totalSaleableArea: 1600, saleableToCarpetAreaRatio: 1.35, type: "Residential", config: "3 BHK", status: "Available", owner: "N/A", soldStatus: "Unsold", buyerName: "N/A", bookingDate: "-", agreementValue: 0, amountReceived: 0, balance: 0, percentCollections: 0 },
     { id: 5, timestamp: "2025-03-05", project: "Emerald Towers", wing: "Wing C", floor: 2, flatNo: "203", reraCarpetAreaMtr: 95, reraCarpetAreaFt: 1022, totalSaleableArea: 1450, saleableToCarpetAreaRatio: 1.4, type: "Residential", config: "2 BHK", status: "Sold", owner: "Michael Smith", soldStatus: "Sold", buyerName: "Michael Smith", bookingDate: "2025-02-10", agreementValue: 4200000, amountReceived: 3000000, balance: 1200000, percentCollections: 71 },
   
-  // { id: 5, timestamp: "2025-03-05", project: "Emerald Towers", wing: "Wing C", floor: 2, flatNo: "203", reraCarpetAreaMtr: 95, reraCarpetAreaFt: 1022, totalSaleableArea: 1450, saleableToCarpetAreaRatio: 1.4, type: "Residential", config: "2 BHK", status: "Sold", owner: "Michael Smith", soldStatus: "Sold", buyerName: "Michael Smith", bookingDate: "2025-02-10", agreementValue: 4200000, amountReceived: 3000000, balance: 1200000, percentCollections: 71 },
+  
   ]
   
 
@@ -120,7 +96,7 @@ const Salesmis = (Data) => {
       id: i,
       timestamp: `2025-03-${i < 10 ? "0" + i : i}`,
       project: `Project ${i}`,
-      wing: `Wing ${String.fromCharCode(64 + (i % 4) + 1)}`, // A, B, C, D looping
+      wing: `Wing ${String.fromCharCode(64 + (i % 4) + 1)}`, 
       floor: (i % 10) + 1,
       flatNo: `${i}0${i % 5}`,
       reraCarpetAreaMtr: 80 + (i % 20),
@@ -269,33 +245,6 @@ const secondTableRows = dataWithSerialNo.map((item) => [
   const paginatedData = data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
 
-
- 
-  // const columnDefs = useMemo(
-  //   () =>
-  //     columns.map((col) => ({
-  //       headerName: col.headerName,  // Corrected from `label`
-  //       field: col.field,  // Corrected from `key`
-  //       filter: true,
-  //       sortable: true,
-  //       resizable: true,
-  //       cellStyle: { whiteSpace: 'nowrap' },
-  //     })),
-  //   [columns]
-  // );
-  
-
-  // const defaultColDef = useMemo(() => ({
-  //   flex: 1,
-  //   minWidth: 100,
-  //   filter: true,
-  //   sortable: true,
-  //   resizable: true,
-  // }), []);
-
-
-
-
     return (
       <div className="p-4 border rounded-lg shadow-md w-96 bg-white ">
         <h2 className="fs-6  mb-4">Developer Module / Sales MIS</h2>
@@ -363,145 +312,7 @@ const secondTableRows = dataWithSerialNo.map((item) => [
         </div>
 
        
-        {/* <TableContainer
-  component={Paper}
-  className="pt-2 hide-scrollbar" 
-  sx={{
-    maxHeight: "400px",
-    overflowY: "auto", 
-    overflowX: "auto", 
-    scrollbarWidth: "none", 
-    msOverflowStyle: "none" 
-  }}
->
-
-
-    <Table stickyHeader>
-        <TableHead 
-         
-         sx={{
-           position: "sticky",
-           top: 0, 
-           zIndex: 2, 
-           backgroundColor: "#3621a9", 
-         }}
-        >
-          
-             <TableRow sx={{background:"#3621a9"}}>
-                <TableCell  sx={{ color: "white", fontWeight: "bold",whiteSpace: "nowrap", backgroundColor: "#3621a9 !important"  }}>TIMESTAMP</TableCell>
-                <TableCell  sx={{ color: "white", fontWeight: "bold",whiteSpace: "nowrap", backgroundColor: "#3621a9 !important" }}>PROJECT NAME</TableCell>
-                <TableCell  sx={{ color: "white", fontWeight: "bold",whiteSpace: "nowrap", backgroundColor: "#3621a9 !important" }}>WING</TableCell>
-                <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap", backgroundColor: "#3621a9 !important"}}>FLOOR</TableCell>
-                <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap", backgroundColor: "#3621a9 !important"}}>FLAT NO.</TableCell>
-                <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap", backgroundColor: "#3621a9 !important"}}>RERA CARPET AREA (SQ MTR)</TableCell>
-                <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap", backgroundColor: "#3621a9 !important"}}>RERA CARPET AREA (SQ FT)</TableCell>
-                <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap", backgroundColor: "#3621a9 !important"}}>TOTAL SALEABLE AREA (SQ. FTS)</TableCell>
-                <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap", backgroundColor: "#3621a9 !important"}}>SALEABLE TO CARPET AREA RATIO (SQ. FTS)</TableCell>
-                <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap", backgroundColor: "#3621a9 !important"}}>TYPE OF UNITS (RESIDENTIAL / COMMERCIAL)</TableCell>
-                <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap", backgroundColor: "#3621a9 !important"}}>CONFIG ( 2 BHK, 3 BHK, 4 BHK)</TableCell>
-                
-                   <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap", backgroundColor: "#3621a9 !important"}}>APPROVED / UNAPPROVED</TableCell>
-                   <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap", backgroundColor: "#3621a9 !important"}}>LANDOWNER / DEVELOPER</TableCell>
-               
-               
-                <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap", backgroundColor: "#3621a9 !important"}}>SOLD/UNSOLD</TableCell>
-                <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap", backgroundColor: "#3621a9 !important"}}>NAME OF THE BUYER</TableCell>
-                <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap", backgroundColor: "#3621a9 !important"}}>DATE OF BOOKING</TableCell>
-                <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap", backgroundColor: "#3621a9 !important"}}>AGREEMENT VALUE</TableCell>
-                <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap", backgroundColor: "#3621a9 !important"}}>AMOUNT RECEIVED</TableCell>
-                <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap", backgroundColor: "#3621a9 !important"}}>BALANCE</TableCell>
-                <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap", backgroundColor: "#3621a9 !important"}}>% COLLECTIONS</TableCell>
-            </TableRow>
-        </TableHead>
        
-        <TableBody>
-  {data.map((row, index) => (
-    <TableRow key={index}>
-      <TableCell>{row.timestamp || "-"}</TableCell>
-      <TableCell>{row.project || "-"}</TableCell>
-      <TableCell>{row.wing || "-"}</TableCell>
-      <TableCell>{row.floor || "-"}</TableCell>
-      <TableCell>{row.flatNo || "-"}</TableCell>
-      <TableCell>{row.reraCarpetAreaMtr || "-"}</TableCell>
-      <TableCell>{row.reraCarpetAreaFt || "-"}</TableCell>
-      <TableCell>{row.totalSaleableArea || "-"}</TableCell>
-      <TableCell>{row.saleableToCarpetAreaRatio || "-"}</TableCell>
-      <TableCell>{row.type || "-"}</TableCell>
-      <TableCell>{row.config || "-"}</TableCell>
-      <TableCell>{row.status || "-"}</TableCell>
-      <TableCell>{row.owner || "-"}</TableCell>
-      <TableCell>{row.soldStatus || "-"}</TableCell>
-      <TableCell>{row.buyerName || "-"}</TableCell>
-      <TableCell>{row.bookingDate || "-"}</TableCell>
-      <TableCell>{row.agreementValue || "-"}</TableCell>
-      <TableCell>{row.amountReceived || "-"}</TableCell>
-      <TableCell>{row.balance || "-"}</TableCell>
-      <TableCell>{row.percentCollections || "-"}</TableCell>
-    </TableRow>
-  ))}
-</TableBody>
-
-
-
-  
-    </Table>
-   
-</TableContainer> */}
-
-
-{/* <TableContainer
-  component={Paper}
-  className="pt-2 hide-scrollbar"
-  sx={{
-    maxHeight: "400px",
-    overflowY: "auto",
-    overflowX: "auto",
-    scrollbarWidth: "none",
-    msOverflowStyle: "none",
-  }}
->
-  <Table stickyHeader>
-    <TableHead
-      sx={{
-        position: "sticky",
-        top: 0,
-        zIndex: 2,
-        backgroundColor: "#3621a9",
-      }}
-    >
-      <TableRow sx={{ background: "#3621a9" }}>
-        {columns.map((col, idx) => (
-          <TableCell
-            key={idx}
-            sx={{
-              color: "white",
-              fontWeight: "bold",
-              whiteSpace: "nowrap",
-              backgroundColor: "#3621a9 !important",
-            }}
-          >
-            {col.label}
-          </TableCell>
-        ))}
-      </TableRow>
-    </TableHead>
-
-    <TableBody>
-      {data.map((row, rowIndex) => (
-        <TableRow key={rowIndex}>
-          {columns.map((col, colIndex) => (
-            <TableCell key={colIndex}>
-              {row[col.key] || "-"}
-            </TableCell>
-          ))}
-        </TableRow>
-      ))}
-    </TableBody>
-  </Table>
-</TableContainer> */}
-
-
-{/* ----------------- */}
  <TableContainer
       component={Paper}
       className="pt-2 hide-scrollbar"
@@ -519,10 +330,10 @@ const secondTableRows = dataWithSerialNo.map((item) => [
             position: 'sticky',
             top: 0,
             zIndex: 2,
-            backgroundColor: '#3621a9',
+            backgroundColor: Constants.primaryColor
           }}
         >
-          <TableRow sx={{ background: '#3621a9' }}>
+          <TableRow sx={{ background: Constants.primaryColor }}>
             {columns.map((col, idx) => (
               <TableCell
                 key={idx}
@@ -530,7 +341,7 @@ const secondTableRows = dataWithSerialNo.map((item) => [
                   color: 'white',
                   fontWeight: 'bold',
                   whiteSpace: 'nowrap',
-                  backgroundColor: '#3621a9 !important',
+                  backgroundColor: Constants.primaryColor,
                 }}
               >
                 {col.label}
@@ -568,10 +379,7 @@ const secondTableRows = dataWithSerialNo.map((item) => [
 
 
 
-      {/* <div className="d-flex justify-content-between align-items-center">
-        <Button style={{backgroundColor:"#800080"}} className="text-white mt-3" onClick={handlePagination} disabled={currentPage === 1}>Previous</Button>
-        <Button style={{backgroundColor:"#800080"}} className='text-white mt-3' onClick={handlePagination} disabled={currentPage === totalPages}>Next</Button>
-      </div> */}
+    
       </div>
     );
   };

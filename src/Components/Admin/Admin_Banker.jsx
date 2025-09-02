@@ -537,7 +537,7 @@ const handleSubmit = (e) => {
   <TableContainer component={Paper} sx={{ mt: 2, boxShadow: 3, borderRadius: 2 ,overflowY: "auto" }}>
     <Table>
       <TableHead>
-        <TableRow sx={{ background: "#3621a9" }}>
+        <TableRow sx={{ background: Constants.primaryColor }}>
           <TableCell sx={{ color: "white", fontWeight: "bold" }}>ACTION</TableCell>
           <TableCell sx={{ color: "white", fontWeight: "bold" }}>TIMESTAMP</TableCell>
           <TableCell sx={{ color: "white", fontWeight: "bold" }}>BANK NAME</TableCell>

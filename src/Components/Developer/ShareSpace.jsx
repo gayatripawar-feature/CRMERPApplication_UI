@@ -857,6 +857,7 @@ import { Table, TableContainer, TableHead, TableBody, TableRow, TableCell, Paper
 
 
 import { ToastContainer, toast } from 'react-toastify';
+import Constants from '../Constants';
 const ShareSpace = () => {
   const [activeIcon, setActiveIcon] = useState('project');
   const [showForm, setShowForm] = useState(false);
@@ -1237,7 +1238,7 @@ const handleChangePage = (event, newPage) => setPage(newPage);
   <Button 
     variant="contained" 
     onClick={handleOutShare} 
-    sx={{ background: "#3621a9", color: "#fff", '&:hover': { background: "#2a1983" } }}
+    sx={{ background: Constants.primaryColor, color: "#fff", '&:hover': { background: "#2a1983" } }}
   >
     Out Share
   </Button>
@@ -1489,7 +1490,7 @@ const handleChangePage = (event, newPage) => setPage(newPage);
     <>
     <TableContainer component={Paper} className="mt-4">
       <Table>
-        <TableHead style={{ backgroundColor: '#3621a9' }}>
+        <TableHead style={{ backgroundColor: Constants.primaryColor }}>
           <TableRow>
             <TableCell align="center" style={{ fontWeight: 'bold', color: 'white' }}>ACTION</TableCell>
             <TableCell align="center" style={{ fontWeight: 'bold', color: 'white' }}>TIMESTAMP</TableCell>
@@ -1713,20 +1714,12 @@ const handleChangePage = (event, newPage) => setPage(newPage);
 {activeIcon === 'shared' && (
 
   <div className="mt-4" useRef = {shared_with}>
-      {/* <Button
-            variant="contained"
-            color="primary"
-            startIcon={<FaFileDownload />}
-            onClick={handleDownloadPDFShared}
-            sx={{ marginBottom: 2 }}
-          >
-            Download PDF
-          </Button> */}
+    
 
 <TableContainer component={Paper}>
       <Table>
         <TableHead>
-          <TableRow sx={{ background: "#3621a9" }}> 
+          <TableRow sx={{ background: Constants.primaryColor }}> 
             <TableCell align="center" sx={{ fontWeight: "bold",color: "white" }}>SHARED FROM</TableCell>
             <TableCell align="center" sx={{ fontWeight: "bold",  color: "white" }}>TIMESTAMP</TableCell>
             <TableCell align="center" sx={{ fontWeight: "bold", color: "white" }}>SHARE TO</TableCell>

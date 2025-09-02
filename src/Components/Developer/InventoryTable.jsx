@@ -257,6 +257,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import { Delete as DeleteIcon } from "@mui/icons-material";
 import { toast } from "react-toastify";
 import { useRef } from "react";
+import { CpuIcon } from "lucide-react";
+import Constants from "../Constants";
 
 // const InventoryTable = ({ inventoryData, handleDelete ,InventoryRef}) => {
   const InventoryTable =  forwardRef(({ inventoryData, handleDelete }, ref) => {
@@ -786,7 +788,7 @@ Cancel
         <Box sx={{ maxHeight: '400px', overflowY: 'auto' }}>
         <Table>
           <TableHead>
-            <TableRow sx={{ background: "linear-gradient(180deg, #3621a9 0%,rgb(139, 115, 243) 100%)" }}>
+            <TableRow sx={{ background:Constants.primaryColor }}>
               <TableCell sx={{ color: "white", fontWeight: "bold" }}>ACTION</TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>TIMESTAMP</TableCell>
              <TableCell sx={{ color: "white", fontWeight: "bold",whiteSpace: "nowrap"  }}>PROJECT NAME</TableCell>
@@ -818,7 +820,7 @@ Cancel
                     <IconButton
                       size="small"
                       sx={{
-                        backgroundColor: '#1976D2',
+                        backgroundColor: Constants.primaryColor,
                         color: 'white',
                         borderRadius: '50%',
                         '&:hover': { backgroundColor: '#1565C0' },
