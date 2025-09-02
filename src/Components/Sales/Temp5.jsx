@@ -2820,7 +2820,7 @@ const handleGeneratePDFPackage = async () => {
                     <tr>
                       <td
                         colSpan="4"
-                        style={{ fontWeight: "bold", fontSize: "1rem" ,fontWeight:"bold"}}
+                        style={{ fontWeight: "bold", fontSize: "1rem" }}
                       >
                         To
                       </td>
