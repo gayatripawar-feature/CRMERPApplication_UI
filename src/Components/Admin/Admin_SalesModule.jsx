@@ -16,7 +16,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
-
+import Constants from "../Constants";
 const Admin_SalesModule = () => {
   const [showForm, setShowForm] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
@@ -269,7 +269,7 @@ const paginatedData = salesPersons.slice(
           <h2 className="mb-3 fs-6">Admin Module / Sales Person Management</h2>
           {!showForm && (
             <div className="d-flex gap-3">
-            <button className="btn btn-primary d-flex align-items-center" onClick={handleAddNew} style={{ background: '#fac9d6ff' }} >
+            <button className="btn  d-flex align-items-center" onClick={handleAddNew} style={{ background: '#800020',color:"#fff" }} >
               <FaPlus className="me-2"  />
               Add Sales Person
             </button>
@@ -277,7 +277,7 @@ const paginatedData = salesPersons.slice(
             <Button
     variant="contained"
     sx={{
-      background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+      background: "linear-gradient(45deg,rgba(107, 14, 23, 1),rgba(118, 7, 16, 1))",
       color: "white",
       fontWeight: "bold",
       textTransform: "none",
@@ -286,9 +286,7 @@ const paginatedData = salesPersons.slice(
       display: "flex",
       alignItems: "center",  
       gap: "8px",  
-      "&:hover": {
-        background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
-      },
+     
      
     }}
   
@@ -342,10 +340,11 @@ const paginatedData = salesPersons.slice(
       >
       
         <div
-          className="modal-header bg-primary text-white"
+          className="modal-header text-white"
           style={{
             borderTopLeftRadius: "10px",
             borderTopRightRadius: "10px",
+            backgroundColor:"#800020",
           }}
         >
           <h5 className="modal-title">Add New Sales Person</h5>
@@ -373,7 +372,7 @@ const paginatedData = salesPersons.slice(
                       value={formData.name}
                       onChange={handleChange}
                       required
-                      sx={{ marginTop: '10px' }} 
+                      sx={{ marginTop: '10px' ,border:Constants.formInputBorderColor}} 
                     
                     />
                  
@@ -391,7 +390,7 @@ const paginatedData = salesPersons.slice(
     onChange={handleChange}  
     onBlur={handleEmailBlur}  
     required
-    sx={{ marginTop: '10px' }}
+    sx={{ marginTop: '10px',border:Constants.formInputBorderColor }}
   />
   {emailError && <p style={{ color: 'red' }}>{emailError}</p>}  
 </Grid>
@@ -406,7 +405,7 @@ const paginatedData = salesPersons.slice(
                       onBlur={handleEmailBlur}
                       required
                      
-                      sx={{ marginTop: '10px' }} 
+                      sx={{ marginTop: '10px' ,border:Constants.formInputBorderColor}} 
                     />
                     
                       {error.mobile && <p style={{ color: 'red' }}>{error.mobile}</p>}
@@ -422,7 +421,7 @@ const paginatedData = salesPersons.slice(
                       value={formData.designation}
                       onChange={handleChange}
                       required
-                      sx={{ marginTop: '10px' }} 
+                      sx={{ marginTop: '10px' ,border:Constants.formInputBorderColor}} 
                     />
                   </Grid>
 
@@ -436,7 +435,7 @@ const paginatedData = salesPersons.slice(
     value={formData.joiningDate}
     required
     onChange={handleChange}
-    sx={{ marginTop: '10px' }} 
+    sx={{ marginTop: '10px',border:Constants.formInputBorderColor }} 
     InputLabelProps={{
       shrink: true,
     }}
@@ -444,7 +443,7 @@ const paginatedData = salesPersons.slice(
 </Grid>
 
                   <Grid item xs={6}>
-                    <FormControl fullWidth>
+                    <FormControl fullWidth sx={{border:Constants.formInputBorderColor}}>
                       <InputLabel>Status</InputLabel>
                       <Select
                         label="Status"
@@ -452,7 +451,7 @@ const paginatedData = salesPersons.slice(
                         value={formData.status}
                         onChange={handleChange}
                         required
-                        sx={{ marginTop: '10px' }} 
+                        sx={{ marginTop: '10px',border:Constants.formInputBorderColor }} 
                       >
                         <MenuItem value="Active">Active</MenuItem>
                         <MenuItem value="Inactive">Inactive</MenuItem>
@@ -471,6 +470,7 @@ const paginatedData = salesPersons.slice(
                     variant="contained"
                     color="success"
                     onClick={handleSubmit}
+                    sx={{background:Constants.primaryColor}}
                   >
                     Submit
                   </Button>
@@ -500,7 +500,7 @@ const paginatedData = salesPersons.slice(
           <Table>
             <TableHead >
               
-               <TableRow sx={{background:"#3621a9"}}>
+               <TableRow sx={{background:"#800020"}}>
                 <TableCell sx={{ color: "white", fontWeight: "bold" }}>ACTION</TableCell>
                 <TableCell sx={{ color: "white", fontWeight: "bold" }}>NAME</TableCell>
                 <TableCell sx={{ color: "white", fontWeight: "bold" }}>EMAIL</TableCell>
@@ -525,7 +525,7 @@ const paginatedData = salesPersons.slice(
                   <IconButton
                     color="primary"
                     style={{
-                      backgroundColor: "#1976d2",
+                      backgroundColor: Constants.primaryColor,
                       borderRadius: "50%",
                       padding: "6px",
                     }}
@@ -539,7 +539,7 @@ const paginatedData = salesPersons.slice(
                 <IconButton
                   color="error"
                   style={{
-                    backgroundColor: "#d32f2f",
+                    backgroundColor: Constants.primaryColor,
                     borderRadius: "50%",
                     padding: "6px",
                   }}

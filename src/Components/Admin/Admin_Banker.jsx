@@ -11,6 +11,7 @@ import { Visibility } from '@mui/icons-material';
 import { FaFileDownload } from 'react-icons/fa';
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import Constants from "../Constants";
 
 const Admin_Banker = () => {
   const [showForm, setShowForm] = useState(false);
@@ -270,9 +271,9 @@ const handleSubmit = (e) => {
 <div className="d-flex gap-3">
  
   <button
-    className="btn btn-primary d-flex align-items-center fw-bold"
+    className="btn d-flex align-items-center fw-bold"
     onClick={handleAddNew}
-    style={{ background: '#272ba8' }}
+    style={{ background: Constants.primaryColor ,color:"#fff"}}
   >
     <FaPlus className="me-2" />
     Add Banker Details
@@ -282,7 +283,7 @@ const handleSubmit = (e) => {
   <Button
     onClick={handleDownloadPDFBanker}
     style={{
-      background: 'linear-gradient(45deg, rgb(139, 107, 255), rgb(178, 83, 255))',
+      background: 'linear-gradient(45deg, rgba(126, 13, 27, 1), rgba(121, 13, 38, 1))',
       color: 'white',
       fontWeight: 'bold',
       textTransform: 'none',
@@ -381,6 +382,7 @@ const handleSubmit = (e) => {
                 value={formData.name}
                 onChange={handleChange}
                 required
+                sx={{border:Constants.formInputBorderColor}}
               />
             </Grid>
 
@@ -392,6 +394,7 @@ const handleSubmit = (e) => {
                 value={formData.email}
                 onChange={handleChange}
                 required
+                   sx={{border:Constants.formInputBorderColor}}
               />
             </Grid>
           </Grid>
@@ -404,10 +407,11 @@ const handleSubmit = (e) => {
 
   <Box
     sx={{
-      border: '1px solid #c4c4c4',
+      border: Constants.formInputBorderColor,
       borderRadius: '4px',
       padding: '8px',
       backgroundColor: 'white',
+      
     }}
   >
     <input
@@ -438,6 +442,7 @@ const handleSubmit = (e) => {
                     value={banker.bankerName}
                     onChange={(e) => handleBankerName(index, "bankerName", e.target.value)}
                     required
+                    sx={{border:Constants.formInputBorderColor}}
                   />
                 </Grid>
 
@@ -448,6 +453,9 @@ const handleSubmit = (e) => {
                     value={banker.bankerMobile}
                     onChange={(e) => handleBankerChange(index, "bankerMobile", e.target.value)}
                     required
+                     sx={{border:Constants.formInputBorderColor}}
+                   
+                   
                   />
                 </Grid>
               </Grid>
@@ -471,7 +479,7 @@ const handleSubmit = (e) => {
             <Button className="bg-info"
               variant="outlined"
               onClick={handleAddBanker}
-              sx={{ backgroundColor: "#e0f7fa", color: "#00796b", border: "1px solid #00796b" }}
+              sx={{ backgroundColor:Constants.primaryColor, color: "#00796b", border: "1px solid #00796b" }}
             >
               + Add Another Banker
             </Button>
@@ -602,7 +610,7 @@ onClick={() => handleEditClick(banker, data, index)}>
           </TableCell>
         </TableRow>
 
-        
+        {/* Modal outside of TableRow but still within Fragment */}
         {selectedBanker === banker && (
           <TableRow>
             <TableCell colSpan={8}>
