@@ -110,13 +110,6 @@ const handleRedirect = (path) => {
 
 
 
-
-
-
- 
-
-
-
 const commandRoutes = {
   // Admin Module
   "admin banker": "/admin/banker",  //done
@@ -252,11 +245,11 @@ const startListening = () => {
   return (
     <div className="d-flex flex-column vh-100 ">
      
-<nav className="navbar navbar-dark px-3" style={{ background: "#3621a9" }}>
+<nav className="navbar navbar-dark px-3" style={{ background: "#800020" }}>
 
   <div className="d-flex align-items-center">
-    <button className="btn btn-dark me-3" onClick={toggleSidebar}>
-      <FaBars size={20} />
+    <button className="btn  me-3" onClick={toggleSidebar}>
+      <FaBars size={20} style={{color:"#fff"}}/>
     </button>
     <span className="navbar-brand mb-0 h1">CRM ERP</span>
   </div>
@@ -302,7 +295,7 @@ const startListening = () => {
               onClick={() => handleRedirect(item.to)}
               style={{ cursor: "pointer" }}
             >
-              {/* ✅ Show breadcrumb-style path */}
+              
               {item.path}
             </li>
           ))}
@@ -312,11 +305,11 @@ const startListening = () => {
   <div className="d-flex align-items-center">
    
    
-    <img
+    {/* <img
       src="/unnamed.png"
       alt="Profile"
       className="rounded-circle profile"
-    />
+    /> */}
   </div>
 </nav>
 {/* {showVoiceRecognition && <VoiceNavigation />} */}
@@ -331,13 +324,11 @@ const startListening = () => {
       height: '100vh',  
       transition: 'width 0.3s',  
       flexShrink: 0,  
-      background:"#3621a9",
+      // background:"#3621a9",
+     background:"#800020",
       overflowY: 'auto',
       scrollbarWidth: 'none',
-      
-
-
-    }}
+       }}
   >
     {/* <ul className="nav flex-column">
      
@@ -426,6 +417,7 @@ const startListening = () => {
     </ul> */}
 
    <ul className="nav flex-column">
+     <SidebarItem to="/dashboard" icon={<FaTachometerAlt />} label="Dashboard" collapsed={collapsed} />
   {allowedMenus.map((menu, idx) => (
     <SidebarDropdown
       key={idx}
@@ -440,8 +432,8 @@ const startListening = () => {
 </ul>
     <div style={{ marginTop: "auto", marginBottom: "50px" }}>
 
-      <button className="btn btn-danger w-100 d-flex align-items-center justify-content-center" onClick={handleLogout}>
-        <FaSignOutAlt className="me-2" />
+      <button className="btn w-100 d-flex align-items-center justify-content-center" onClick={handleLogout} style={{background:"#fbcbd7ff"}}>
+        <FaSignOutAlt className="me-2"  />
         {!collapsed && 'SignOut'}
       </button>
     </div>
@@ -491,10 +483,7 @@ const startListening = () => {
 
 const SidebarItem = React.memo(({ to, icon, label, collapsed }) => (
   <li className="nav-item">
-    {/* <Link to={to} className="nav-link text-white d-flex align-items-center">
-      {icon}
-      {!collapsed && <span className="ms-2">{label}</span>}
-    </Link> */}
+  
        <NavLink
       to={to}
       className={({ isActive }) =>
@@ -504,7 +493,7 @@ const SidebarItem = React.memo(({ to, icon, label, collapsed }) => (
       }
 
       style={({ isActive }) => ({
-        background: isActive ? "#8498fdff" : "transparent",  
+        background: isActive ? "#fbcbd7ff" : "transparent",  
         color: isActive ? "#fff" : "#ddd",                 
         borderRadius: "8px",
         padding: "8px",

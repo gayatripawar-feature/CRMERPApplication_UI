@@ -1,9 +1,3 @@
-
-
-
-
-
-
 import React, { useState, useEffect } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper,   Dialog, DialogActions, DialogContent, DialogTitle, Button,TextField, Modal, Box, MenuItem, Select, InputLabel, FormControl } from '@mui/material';
 import { FaEye } from "react-icons/fa";
@@ -503,7 +497,7 @@ const handleToggle = () => {
         sx={{
           background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
           color: "white",
-          fontWeight: "bold",
+          
           fontWeight: "900",
           textTransform: "none",
           marginTop :"px",

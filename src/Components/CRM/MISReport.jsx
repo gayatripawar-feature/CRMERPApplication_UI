@@ -360,7 +360,7 @@ const MISReport = () => {
   sx={{
     background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
     color: "white",
-    // fontWeight: "bold",
+    
     fontWeight: "900",
     textTransform: "none",
     marginTop :"24px",
@@ -368,6 +368,7 @@ const MISReport = () => {
     minHeight: "unset",  
     height: "39px",   
     fontSize: "12px",
+    
     borderRadius: "20px",
     display: "inline-flex",  
     alignItems: "center",

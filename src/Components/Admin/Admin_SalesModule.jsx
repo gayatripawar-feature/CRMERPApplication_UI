@@ -36,7 +36,7 @@ const [rowsPerPage, setRowsPerPage] = useState(8); // default 8
     joiningDate: "",
     status: "Active",
   });
-  // const [salesPersons, setSalesPersons] = useState([]); 
+  
   const [salesPersons, setSalesPersons] = useState([
     {
       name: '',
@@ -59,20 +59,10 @@ const [rowsPerPage, setRowsPerPage] = useState(8); // default 8
   };
 
   
-
-  
-
-
-
-
-
 const handleChange = (e) => {
   const { name, value } = e.target;
-
   console.log(`Handling change for ${name}: ${value}`); 
-
- 
-  if (name === "name") {
+   if (name === "name") {
     const regex = /^[A-Za-z\s]*$/;  
     if (regex.test(value) || value === "") {
       setFormData((prevData) => ({
@@ -84,13 +74,9 @@ const handleChange = (e) => {
       setNameError("Invalid input: Only letters and spaces are allowed in Name.");
     }
   }
-
-  
-  else if (name === "mobile") {
+    else if (name === "mobile") {
     const regex = /^[0-9]*$/;  
     let errorMessage = '';
-
-    
     if (!regex.test(value) && value.length > 0) {
       errorMessage = "Invalid input: Only digits are allowed in Mobile.";
     } else if (value.length > 10) {
@@ -98,41 +84,29 @@ const handleChange = (e) => {
     } else if (value.length < 10 && value.length > 0) {
       errorMessage = "Mobile number must be 10 digits.";
     }
-
-    setError((prevErrors) => ({
+      setError((prevErrors) => ({
       ...prevErrors,
       [name]: errorMessage,
     }));
-
-    
-    console.log("Updating:", name, "to:", value);
+   console.log("Updating:", name, "to:", value);
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
-      
-      
-    }));
+      }));
   }
-
- 
-
-  else if (name === "email") {
-
-    const emailRegex= /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
-  
-    setFormData((prevData) => ({
+ else if (name === "email") {
+  const emailRegex= /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+   setFormData((prevData) => ({
       ...prevData,
       [name]: value,  
     }));
-  
-    if (!emailRegex.test(value) && value.length > 0) {
+   if (!emailRegex.test(value) && value.length > 0) {
       setEmailError("Invalid email format: Please enter a valid email address.");
     } else {
       setEmailError("");  
     }
   }
-  
-  else {
+    else {
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
@@ -140,12 +114,9 @@ const handleChange = (e) => {
   }
 };
 
-
 const handleEmailBlur = () => {
   const email = formData.email;
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;  
-
-  
   if (email && !emailRegex.test(email)) {
     console.log("invalid email");
     setEmailError("Invalid email: Please enter a valid email address.");
@@ -156,8 +127,7 @@ const handleEmailBlur = () => {
   
   useEffect(() => {
     if (showForm) {
-  
-      setFormData({
+   setFormData({
         name: "",
         email: "",
         mobile: "",
@@ -169,27 +139,18 @@ const handleEmailBlur = () => {
   }, [showForm]); 
 
   
-
-
-
   const handleSubmit = (e) => {
     e.preventDefault();
-  
     if (editIndex !== null) {
-     
-      const updatedData = [...salesPersons];
+     const updatedData = [...salesPersons];
       updatedData[editIndex] = formData;  
       setSalesPersons(updatedData);
       setEditIndex(null);  
     } else {
-      
       setSalesPersons([...salesPersons, formData]);
     }
-  
     console.log("Form Data:", formData);
     setShowForm(false); 
-  
-   
     setFormData({
       name: "",   
       email: "",
@@ -202,23 +163,18 @@ const handleEmailBlur = () => {
     toast.success("Updated successfully");
     setOpenEditModal(false);
   };
-  
-  
   const handleCancel = () => {
     setShowForm(false); 
   };
 
   const handleDownloadPDFSales = () => {
-
-    const doc = new jsPDF("landscape");
+  const doc = new jsPDF("landscape");
     doc.setFontSize(14);
     doc.text("Sales Person Report", 14, 15);
-  
-    const tableColumn = [
+   const tableColumn = [
       "Name", "Email", "Mobile", "Designation", "Joining Date", "Status"
     ];
-  
-    const tableRows = salesPersons.map(row => [
+   const tableRows = salesPersons.map(row => [
       row.name || "-",
       row.email || "-",
       row.mobile || "-",
@@ -228,7 +184,6 @@ const handleEmailBlur = () => {
     ]);
   
     console.log("Formatted Table Rows:", tableRows);
-  
     autoTable(doc, {
       startY: 25,
       head: [tableColumn],
@@ -239,34 +194,24 @@ const handleEmailBlur = () => {
   
     doc.save("SalesPerson_Report.pdf");
   };
-  
-  
-  
- 
   const handleEdit = (person, index) => {
     console.log("Selected Row:", person);
     console.log("Selected Index:", index);  
-  
     setFormData(person);
     setEditIndex(index);
     setOpenEditModal(true);
-    
-  };
+    };
   
-  
-  const handleSaveEdit = () => {
+   const handleSaveEdit = () => {
     const updatedData = [...salesPersons];  
     updatedData[editIndex] = formData;  
-  
     setSalesPersons(updatedData);  
     setOpenEditModal(false);  
     toast.success(" updated successfully");
     setOpenEditModal(false);
   };
   
-  
-  
-  const handleDelete = (id) => {
+const handleDelete = (id) => {
     toast.info(
       <div>
         <p>Are you sure you want to delete?</p>
@@ -297,20 +242,14 @@ const handleEmailBlur = () => {
     );
   };
   
- 
-
-  const deleteRow = (indexToDelete) => {
+   const deleteRow = (indexToDelete) => {
     const updatedData = salesPersons.filter((_, index) => index !== indexToDelete);
     setSalesPersons(updatedData);
-  
-    toast.success("Row deleted successfully!", {
+   toast.success("Row deleted successfully!", {
       position: "top-center",
       autoClose: 1500,
     });
   };
-  
-
-
   
 const handleChangePage = (event, newPage) => setPage(newPage);
 const handleChangeRowsPerPage = (event) => {
@@ -323,7 +262,6 @@ const paginatedData = salesPersons.slice(
   page * rowsPerPage + rowsPerPage
 );
 
-
   return (
     <div className="container my-4">
       <div className="row mb-3">
@@ -331,7 +269,7 @@ const paginatedData = salesPersons.slice(
           <h2 className="mb-3 fs-6">Admin Module / Sales Person Management</h2>
           {!showForm && (
             <div className="d-flex gap-3">
-            <button className="btn btn-primary d-flex align-items-center" onClick={handleAddNew} style={{ background: '#272ba8' }} >
+            <button className="btn btn-primary d-flex align-items-center" onClick={handleAddNew} style={{ background: '#fac9d6ff' }} >
               <FaPlus className="me-2"  />
               Add Sales Person
             </button>
@@ -556,7 +494,7 @@ const paginatedData = salesPersons.slice(
 
    
       {!showForm && (
-        // <TableContainer component={Paper} sx={{ mt: 2, boxShadow: 3, borderRadius: 2  }}>
+       
         <Paper sx={{ mt: 2, boxShadow: 3, borderRadius: 2 }}>
       <TableContainer sx={{ maxHeight: 400, overflowY: "auto" }}>
           <Table>
