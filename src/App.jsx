@@ -41,7 +41,7 @@ import MISReport from "./Components/CRM/MISReport";
 import GeneratePdf from "./Components/Sales/GeneratePdf";
 import Temp5 from "./Components/Sales/Temp5";
 import Login from "./Components/Login";
-
+import DashboardHome from "./Components/DashboardHome/DashboardHome";
 const App = () => {
 
   useEffect(() => {
@@ -68,6 +68,9 @@ const App = () => {
          <Route path="/" element={<Navigate to="/login" />} />
          {/* Dashboard and nested routes */}
          <Route path="/dashboard" element={<Dashboard />} >
+
+               <Route index element={<DashboardHome />} />
+
          {/* <Route path="/" element={<Dashboard />}> */}
        <Route path="admin/salesperson" element={<Admin_SalesModule />} />
         <Route path="admin/banker" element={<Admin_Banker/>} />

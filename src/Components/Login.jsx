@@ -15,6 +15,7 @@ const users = [
   { email: "ranjeet@hegl.in", password: "ranjeet", role: "sales" }, 
   { email: "yogita@hegl.in", password: "yogita", role: "sales" },  
   {email:"gayatri@gmail.com",password:"gayatri",role:"developer"},
+  {email:"receiptionist@gmail.com",password:"receiptionist",role:"receiptionist"},
   
   
 ];

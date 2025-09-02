@@ -36,7 +36,8 @@ import {
 const RolePermissions = {
   admin: [
       
-         {to: "dashboard" ,icon :<FaUserTie />, label:"Dashboard"},
+    
+
     {
       label: "Admin Section",
       icon: <FaUserShield />,
@@ -208,6 +209,15 @@ label: "CRM",
         { to: "/dashboard/crm/misreport", icon: <FaChartBar />, label: "MIS Report" },
       ],
     },
+  ],
+  receiptionist:[
+    {
+        label: "Sales Module",
+      icon: <FaChartLine />,
+      subItems: [
+       { to: "/dashboard/sales/leads", icon: <FaClipboardList />, label: "Leads" },
+      ],
+}
   ],
 };
 
