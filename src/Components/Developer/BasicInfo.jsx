@@ -631,15 +631,13 @@ const handleTabChange = (_, newValue) => {
   const handlePartnerNameChange = (e, index) => {
     const value = e.target.value;
     const partnerCopy = [...partners];
-    
     // Regex to check if the value contains any numbers
     if (/\d/.test(value)) {
-      setNameError("Name should only contain letters"); // Error message if numbers are present
+      setNameError("Name should only contain letters"); 
     } else {
       setNameError(""); // Clear error message if the value is valid
     }
-
-    // Update the partner's name in the state
+ // Update the partner's name in the state
     partnerCopy[index] = { ...partnerCopy[index], name: value };
     setPartners(partnerCopy);
   };
