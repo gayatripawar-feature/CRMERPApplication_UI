@@ -7,6 +7,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { FaFileDownload } from "react-icons/fa";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
+import Constants from '../Constants';
 const fetchLoansData = async () => {
   const response = await fetch('/api/getOCRCollection');
   return response.json();
@@ -222,13 +223,11 @@ const ProjectInventory = () => {
       <h6>Dashboard / Developer Module / Project Inventory</h6>
 
     
-      <div className="d-flex align-items-center mb-3">
+      <div className="d-flex align-items-center mb-2">
        
 
-
-<div className="d-flex align-items-center mb-3">
- 
-
+<div className="d-flex align-items-center justify-content-between mb-2" style={{ width: "100%" }}>
+<div className="d-flex align-items-center ">
   {sections.map((section, index) => (
     <div 
       key={index} 
@@ -257,7 +256,7 @@ const ProjectInventory = () => {
       }}
       onClick={() => handleToggleSection(index)} 
     >
-      {React.cloneElement(section.icon, { style: { marginRight: '8px',color: 'white' } })}  {/* Add some margin to separate icon from label */}
+      {React.cloneElement(section.icon, { style: { marginRight: '8px',color: 'white' } })}  
       
       {/* Conditionally display label based on expandedSection */}
       {expandedSection === index ? (
@@ -290,7 +289,14 @@ const ProjectInventory = () => {
     </div>
   ))}
 </div>
-
+ <TextField
+    variant="outlined"
+    placeholder="Search Inventory..."
+    size="small"
+    style={{ width: "250px" }}
+    sx={{border:Constants.formInputBorderColor}}
+  />
+</div>
 {/* File Upload Input */}
 {showFileInput && (
   <div className="m-3">
@@ -312,12 +318,12 @@ const ProjectInventory = () => {
 
 
       {expandedSection === 0 && (
-        <div className="content-container mt-3">
+        <div className="content-container">
           {!showFirmForm ? (
             <>
               <div className="button-container">
                 <div className='d-flex gap-3'>
-                <Button variant="contained" color="primary" style={{ background: '#272ba8' }} onClick={() => setShowFirmForm(true)}>
+                <Button variant="contained" color="primary" style={{ background: Constants.primaryColor }} onClick={() => setShowFirmForm(true)}>
                   + Inventory Info
                 </Button>
                 <Button
@@ -358,7 +364,7 @@ const ProjectInventory = () => {
                   </Button>
                 </div>
               </div>
-              <div className="mt-3">
+              <div className="">
             
               <InventoryTable ref={inventoryRef} inventoryData={inventoryData} handleDelete={handleDelete} />
            </div>
@@ -797,7 +803,7 @@ const ProjectInventory = () => {
 
 
 {expandedSection === 2 && (
-        <div className="content-container mt-3">
+        <div className="content-container">
           {!showFirmForm ? (
             <>
               <div className="button-container">

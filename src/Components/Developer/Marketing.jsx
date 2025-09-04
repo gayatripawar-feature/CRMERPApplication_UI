@@ -146,7 +146,7 @@ const handleChangeRowsPerPage = (event) => {
           onClick={handleToggle}
           variant="outlined"
           color="success"
-          className="m-3"
+          className=""
           style={{
             display: 'flex',
             alignItems: 'center',

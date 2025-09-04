@@ -462,7 +462,7 @@ const handleLeadNoChange = (e) => {
 
       {/* Display Inventory Section */}
       {expandedSection === 0 && (
-        <div className="content-container mt-3">
+        <div className="content-container mt-0">
           {!showFirmForm ? (
             <>
             

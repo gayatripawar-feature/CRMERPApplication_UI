@@ -132,7 +132,7 @@ const handleChangePage = (event, newPage) => {
       {showFirmForm && selectedItem ? (
        
         <div
-          className="project-form mt-4 p-3"
+          className="project-form mt-3 p-3"
           style={{
             maxHeight: '500px',
             overflowY: 'auto',

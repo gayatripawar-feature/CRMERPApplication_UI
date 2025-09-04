@@ -360,7 +360,7 @@ const [isExpanded, setIsExpanded] = useState(false);
 
 </div>
 
-<div className="d-flex justify-content-between align-items-center mt-4">
+<div className="d-flex justify-content-between align-items-center ">
   {activeIcon !== 'shared' && (
     <div className='d-flex gap-3'>
     <button

@@ -582,11 +582,11 @@ setShowFlatForm(false); // Ensure this is not reset elsewhere if you want the ta
   return (
   <div className="main-content">
       <h6>Sales Module / Shared by Developer</h6>
-     <div className="d-flex align-items-center mb-3">
+     <div className="d-flex align-items-center">
       
 
 
-  <div className="d-flex align-items-center mb-3" style={{ justifyContent: "space-between", width: "100%" }}>
+  <div className="d-flex align-items-center" style={{ justifyContent: "space-between", width: "100%" }}>
   {/* Left side: Tabs */}
   <div style={{ display: "flex", gap: "8px" }}>
     {sections.map((section, index) => (
@@ -661,41 +661,14 @@ setShowFlatForm(false); // Ensure this is not reset elsewhere if you want the ta
 
      
 {expandedSection === 0 && selectedTab === "display" && (
-  <div className="content-container mt-3">
+  <div className="content-container mt-4">
     {!showFirmForm ? (
       <>
         <div className='button-container' >
-     
-        {/* <Button
-    variant="contained"
-    sx={{
-      background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
-      color: "white",
-      fontWeight: "bold",
-      textTransform: "none",
-      padding: "8px 16px",
-      borderRadius: "8px",
-      display: "flex",
-      alignItems: "center", 
-      
-      gap: "8px",  
-      "&:hover": {
-        background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
-      },
-     
-    }}
-    
-    onClick={handleDownloadPDFFirm}
-  >
-    <FaFileDownload size={18} />  
-    Download PDF
-  </Button> */}
-
-          
-        </div>
+       </div>
 
         <div className="">
-          {/* <FirmTable firms={loans} /> */}
+         
           <DisplayTable data={projectData} />
         </div>
       </>
@@ -774,7 +747,7 @@ setShowFlatForm(false); // Ensure this is not reset elsewhere if you want the ta
 
  
  {expandedSection === 3 && selectedTab === "allotement" && (
-  <div className="content-container mt-3">
+  <div className="content-container mt-4">
     {!showFlatForm ? (
       <>
         <div>

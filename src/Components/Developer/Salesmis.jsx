@@ -9,7 +9,8 @@ import {
     TableCell,
     TableBody,
     TextField,
-    TablePagination
+    TablePagination,
+   
   } from "@mui/material";
   import { FaEye } from "react-icons/fa";
   import { FaFileDownload } from "react-icons/fa";
@@ -243,35 +244,40 @@ const secondTableRows = dataWithSerialNo.map((item) => [
 
   // Slice data for pagination
   const paginatedData = data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
-
+const handleSearch = (e) => {
+    setSearchTerm(e.target.value);
+    console.log("Search term:", e.target.value);
+    // 👉 here you can add your filtering logic
+  };
 
     return (
       <div className="p-4 border rounded-lg shadow-md w-96 bg-white ">
         <h2 className="fs-6  mb-4">Developer Module / Sales MIS</h2>
-        
-        <div className="d-flex space-x-5">
+        <div className="d-flex items-center space-x-5 w-100">
+        <div className="d-flex space-x-5 flex-grow-1">
           <div className="w-1/2 m-3 ">
             <label className="block text-sm font-medium mb-1">Select Project:</label>
             <select
               value={selectedProject}
               onChange={(e) => setSelectedProject(e.target.value)}
               className="w-full p-2 border rounded"
+              
             >
-              <option value="">-- Select Project --</option>
+              <option value="">Select Project </option>
               {projects.map((project, index) => (
                 <option key={index} value={project}>{project}</option>
               ))}
             </select>
           </div>
           
-          <div className="w-1/2 m-3">
+          <div className=" m-3">
             <label className="block text-sm font-medium mb-1">Select Wing:</label>
             <select
               value={selectedWing}
               onChange={(e) => setSelectedWing(e.target.value)}
-              className="w-full p-2 border rounded"
+              className=" p-2 border round w-"
             >
-              <option value="">-- Select Wing --</option>
+              <option value="">Select Wing</option>
               {wings.map((wing, index) => (
                 <option key={index} value={wing}>{wing}</option>
               ))}
@@ -288,10 +294,10 @@ const secondTableRows = dataWithSerialNo.map((item) => [
     fontWeight: "bold",
     textTransform: "none",
     marginTop :"20px",
-    padding: "4px 10px", 
+    padding: "4px 12px", 
     fontSize: "12px", 
     minWidth: "auto", 
-    height: "30px", 
+    height: "36px", 
     borderRadius: "6px", 
     display: "flex",
     alignItems: "center", 
@@ -305,12 +311,27 @@ const secondTableRows = dataWithSerialNo.map((item) => [
     handleDownloadPDFSales_MIS();
   }}
 >
-  <FaFileDownload size={14} /> 
+  <FaFileDownload size={16} /> 
   Download PDF
 </Button>
 
         </div>
-
+          <div className="ml-auto m-3">
+   <TextField
+  placeholder="Search..."
+  variant="outlined"
+  size="small"
+  onChange={handleSearch}
+  sx={{
+    minWidth: "200px",
+    border: Constants.formInputBorderColor, 
+    "& .MuiOutlinedInput-root": {
+      borderRadius: "6px",
+    },
+  }}
+/>
+  </div>
+</div>
        
        
  <TableContainer

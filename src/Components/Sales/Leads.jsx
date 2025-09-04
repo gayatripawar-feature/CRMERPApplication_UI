@@ -295,10 +295,10 @@ const Leads = () => {
       partners: [],
     });
     
-    toast.success("Leads details are submitted!", {
-      position: "top-right",
-      autoClose: 3000,
-    });
+    // toast.success("Leads details are submitted!", {
+    //   position: "top-right",
+    //   autoClose: 3000,
+    // });
   };
   
 
@@ -308,11 +308,11 @@ const Leads = () => {
       <h6>Sales Module / Lead Management</h6>
 
      
-      <div className="d-flex align-items-center mb-3">
+      <div className="d-flex align-items-center ">
        
 
 
-<div className="d-flex align-items-center mb-3">
+<div className="d-flex align-items-center">
   
 
 
@@ -396,7 +396,7 @@ const Leads = () => {
 
      
       {expandedSection === 0 && (
-        <div className="content-container mt-3">
+        <div className="content-container mt-1">
           {!showFirmForm ? (
             <>
               <div className="button-container">
