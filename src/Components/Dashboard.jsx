@@ -771,21 +771,7 @@ const handleSearch = (event) => {
         <div className="d-flex align-items-center">
           <button className="btn  me-3 " onClick={toggleSidebar} style={{ cursor: "pointer" }}>
             
-               {/* <img
-            src="/unnamed.png"
-            alt="Profile"
-            className="rounded-circle profile"
-            /> */}
-            {/* <img
-  src="/unnamed.png"
-  alt="Profile"
-  className="rounded-circle profile"
-  style={{ cursor: window.innerWidth > 768 ? "pointer" : "default" }}
-  // onClick={toggleSidebar}
-    onClick={() => {
-    if (window.innerWidth > 768) toggleSidebar();
-  }}
-/> */}
+             
 
  <img
       src="/unnamed.png"
@@ -939,135 +925,121 @@ const SidebarItem = React.memo(({ to, icon, label, collapsed }) => (
   </li>
 ));
 
-// const SidebarDropdown = React.memo(({ label, icon, collapsed, isOpen, toggleOpen, subItems }) => (
-//   <li className="nav-item mb-3">
-//     <div className="nav-link text-white d-flex align-items-center" style={{ cursor: 'pointer' }} onClick={toggleOpen}>
-//       {icon}
-//       {!collapsed && <span className="ms-2">{label}</span>}
-//     </div>
-//     {isOpen && !collapsed && (
-//       <ul className="nav flex-column ps-3">
-//         {subItems.map((item, index) => (
-//           <SidebarItem key={index} to={item.to} icon={item.icon} label={item.label} collapsed={collapsed} />
-//         ))}
-//       </ul>
-//     )}
-//   </li>
-// ));
 
-const SidebarDropdown = React.memo(
-  ({ label, icon, collapsed, isOpen, toggleOpen, subItems }) => {
-    const [showMenu, setShowMenu] = useState(false);
-    const isMobileOrTablet = window.innerWidth <= 992; // small/medium
 
-    return (
-      <li
-        className="nav-item mb-3 position-relative"
-        onMouseEnter={() => collapsed && !isMobileOrTablet && setShowMenu(true)}
-        onMouseLeave={() => collapsed && !isMobileOrTablet && setShowMenu(false)}
+
+
+const SidebarDropdown = React.memo(({ label, icon, collapsed, isOpen, toggleOpen, subItems }) => {
+  const [showMenu, setShowMenu] = useState(false);
+  const isMobileOrTablet = window.innerWidth <= 992;
+
+  // For positioning the floating menu next to the clicked item
+  const itemRef = useRef(null);
+  const [menuPos, setMenuPos] = useState({ top: 0 });
+
+  const handleMouseEnter = () => {
+    if (collapsed && !isMobileOrTablet) {
+      const rect = itemRef.current.getBoundingClientRect();
+      setMenuPos({ top: rect.top });
+      setShowMenu(true);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (collapsed && !isMobileOrTablet) {
+      setShowMenu(false);
+    }
+  };
+
+  const handleClick = () => {
+    if (!collapsed) {
+      toggleOpen();
+    } else if (isMobileOrTablet) {
+      // On mobile/tablet, click opens menu below
+      setShowMenu((prev) => !prev);
+    }
+  };
+
+  return (
+    <li
+      className="nav-item mb-3 position-relative"
+      ref={itemRef}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
+      <div
+        className="nav-link text-white d-flex align-items-center"
+        style={{ cursor: "pointer" }}
+        onClick={handleClick}
       >
-        {/* Main menu item */}
-        <div
-          className="nav-link text-white d-flex align-items-center"
-          style={{ cursor: "pointer" }}
-          onClick={toggleOpen}
-        >
-          {icon}
-          {!collapsed && <span className="ms-2">{label}</span>}
-          {collapsed && isMobileOrTablet && (
-            <span className="ms-auto">&#9662;</span>
-          )}
-        </div>
+        {icon}
+        {!collapsed && <span className="ms-2">{label}</span>}
+        {collapsed && <span className="ms-auto">&#9662;</span>}
+      </div>
 
-        {/* Expanded sidebar: normal inline submenu */}
-        {isOpen && !collapsed && (
-          <ul className="nav flex-column ps-3">
-            {subItems.map((item, index) => (
-              <SidebarItem
-                key={index}
+      {/* Inline submenu for expanded sidebar */}
+      {isOpen && !collapsed && (
+        <ul className="nav flex-column ps-3">
+          {subItems.map((item, idx) => (
+            <SidebarItem key={idx} to={item.to} icon={item.icon} label={item.label} collapsed={collapsed} />
+          ))}
+        </ul>
+      )}
+
+      {/* Floating menu for collapsed sidebar on desktop */}
+      {collapsed && showMenu && !isMobileOrTablet && (
+        <ul
+          className="list-group position-fixed shadow"
+          style={{
+            minWidth: "200px",
+            zIndex: 2000,
+            left: "80px", // next to collapsed sidebar
+            top: menuPos.top,
+          }}
+        >
+          <li className="list-group-item fw-bold bg-light">{label}</li>
+          {subItems.map((item, idx) => (
+            <li key={idx} className="list-group-item p-2">
+              <NavLink
                 to={item.to}
-                icon={item.icon}
-                label={item.label}
-                collapsed={collapsed}
-              />
-            ))}
-          </ul>
-        )}
+                className="text-decoration-none text-dark d-flex align-items-center"
+              >
+                {item.icon}
+                <span className="ms-2">{item.label}</span>
+              </NavLink>
+            </li>
+          ))}
+        </ul>
+      )}
 
-        {/* Collapsed + mobile/tablet: click → dropdown below */}
-        {isOpen && collapsed && isMobileOrTablet && (
-          <ul
-            className="list-group mt-2 shadow"
-            style={{ minWidth: "180px", zIndex: 2000 }}
-          >
-            <li className="list-group-item fw-bold bg-light">{label}</li>
-            {subItems.map((item, index) => (
-              <li key={index} className="list-group-item p-2">
-                <NavLink
-                  to={item.to}
-                  className="text-decoration-none text-dark d-flex align-items-center"
-                >
-                  {item.icon}
-                  <span className="ms-2">{item.label}</span>
-                </NavLink>
-              </li>
-            ))}
-          </ul>
-        )}
-
-        {/* Collapsed + laptop/desktop: hover → floating popout */}
-        {/* {showMenu && collapsed && !isMobileOrTablet && (
-          <ul
-            className="list-group position-absolute  top-0  shadow"
-            style={{ minWidth: "180px", zIndex: 2000 ,left: "64px",   
-              top: 0,   
-      }}
-          >
-            <li className="list-group-item fw-bold bg-light">{label}</li>
-            {subItems.map((item, index) => (
-              <li key={index} className="list-group-item p-2">
-                <NavLink
-                  to={item.to}
-                  className="text-decoration-none text-dark d-flex align-items-center"
-                >
-                  {item.icon}
-                  <span className="ms-2">{item.label}</span>
-                </NavLink>
-              </li>
-            ))}
-          </ul>
-        )} */}
-
-        {showMenu && collapsed && !isMobileOrTablet && (
-  <ul
-    className="list-group position-absolute shadow"
-    style={{
-      minWidth: "180px",
-      zIndex: 2000,
-      left: "80%",
-      top: 0,
-    }}
-  >
-
-    <li className="list-group-item fw-bold bg-light">{label}</li>
-    {subItems.map((item, index) => (
-      <li key={index} className="list-group-item p-2">
-        <NavLink
-          to={item.to}
-          className="text-decoration-none text-dark d-flex align-items-center"
+      {/* Collapsed + mobile/tablet: click → dropdown below */}
+      {collapsed && showMenu && isMobileOrTablet && (
+        <ul
+          className="list-group mt-2 shadow"
+          style={{ minWidth: "180px", zIndex: 2000 }}
         >
-          {item.icon}
-          <span className="ms-2">{item.label}</span>
-        </NavLink>
-      </li>
-    ))}
-  </ul>
-)}
+          <li className="list-group-item fw-bold bg-light">{label}</li>
+          {subItems.map((item, idx) => (
+            <li key={idx} className="list-group-item p-2">
+              <NavLink
+                to={item.to}
+                className="text-decoration-none text-dark d-flex align-items-center"
+              >
+                {item.icon}
+                <span className="ms-2">{item.label}</span>
+              </NavLink>
+            </li>
+          ))}
+        </ul>
+      )}
+    </li>
+  );
+});
 
-      </li>
-    );
-  }
-);
+
+
+
+
 
 
 
