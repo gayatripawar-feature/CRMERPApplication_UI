@@ -766,15 +766,6 @@ const handleClosingExecutiveChange = (e) => {
   setClosingExecutive(e.target.value);
 };
 
-// Handle Remark Change (optional)
-// const handleNameChange = (e) => {
-//   setFirmPan(e.target.value);
-// };
-
-// Handle Status Change
-// const handleStatusChange = (e) => {
-//   setStatus(e.target.value);
-// };
 
 // Handle Assign To Change
 const handleAssignToChange = (e) => {
@@ -793,98 +784,6 @@ const handleNextFollowUpChange = (newValue) => {
 
 
 
-// const handleSubmit = () => {
-//   const newFirm = {
-//     name: firmName,
-//     partner: closingExecutive,
-//     firmPanNo: firmPan,
-//     status: status,
-//     assignTo: assignTo,
-//     leadType: leadType,
-//     nextFollowUp: nextFollowUp,
-//     timestamp: new Date().toLocaleString(), // for timestamp
-//     // Add any additional fields if needed (e.g., mobileNo, mailId)
-//   };
-
-//   setFirms((prev) => [...prev, newFirm]); // ← THIS updates your table
-
-//   toast.success("Details are submitted!", {
-//     position: "top-right",
-//     autoClose: 3000,
-//   });
-
-//   // Reset form fields
-//   setFirmName('');
-//   setClosingExecutive('');
-//   setFirmPan('');
-//   setStatus('');
-//   setAssignTo('');
-//   setLeadType('');
-//   setNextFollowUp('');
-// };
-
-// const handleSubmit = () => {
-//   const newFirm = {
-//     ...formData,
-//     timestamp: new Date().toLocaleString(),
-//   };
-
-//   console.log("Form submitted with data:", newFirm); // ✅ Full formData logged
-
-//   setFirms((prevFirms) => [...prevFirms, newFirm]);
-
-//   toast.success("Details are submitted!", {
-//     position: "top-right",
-//     autoClose: 3000,
-//   });
-
-//   // Optionally reset the form
-//   setFormData({
-//     firmName: '',
-//     closingExecutive: '',
-//     firmPan: '',
-//     status: '',
-//     assignTo: '',
-//     leadType: '',
-//     nextFollowUp: '',
-//     mobileNo: '',
-//     mailId: '',
-//     address: '',
-//     residentialAddress: '',
-//     panNo: '',
-//   });
-// };
-
-
-// const handleSubmit = () => {
-//   const newFirm = {
-//     firmName,
-//     closingExecutive,
-//     firmPan,
-//     status,
-//     assignTo,
-//     leadType,
-//     nextFollowUp,
-//     timestamp: new Date().toLocaleString(),
-//   };
-
-//   console.log("Form submitted with data:", newFirm);
-//   setFirms((prevFirms) => [...prevFirms, newFirm]);
-
-//   toast.success("Details are submitted!", {
-//     position: "top-right",
-//     autoClose: 3000,
-//   });
-
-//   // Clear individual states
-//   setFirmName('');
-//   setClosingExecutive('');
-//   setFirmPan('');
-//   setStatus('');
-//   setAssignTo('');
-//   setLeadType('');
-//   setNextFollowUp('');
-// };
 const handleSubmit = (e) => {
  
 
@@ -898,13 +797,12 @@ const handleSubmit = (e) => {
     name,
     mobileNo,
     mailId,
-    // sourceName,
-    // requirement,
+   
   };
 
-  // setLoans((prev) => [...prev, newFirm]);
+ 
  setLoans((prev) => [...prev, formData]);
-  setFormData({   // Reset form
+  setFormData({   
     leadNo: '',
     closingExecutive: '',
     name: '',
@@ -1000,10 +898,6 @@ const handleSubmit = (e) => {
 ))}
 
         </div>
-  
-        
-  
-       
   {expandedSection === 0 && selectedTab === "firm" && (
     <div className="content-container mt-3">
       {!showFirmForm ? (
@@ -1431,10 +1325,7 @@ const handleSubmit = (e) => {
       )}
     </div>
   )}
-  
-  
-  
-    </div>
+  </div>
     )
   };
      

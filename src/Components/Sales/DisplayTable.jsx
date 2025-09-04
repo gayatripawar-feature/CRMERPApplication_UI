@@ -19,9 +19,9 @@ const DisplayTable = ({ data }) => {
     <TableContainer component={Paper}  sx={{ maxHeight: 500, position: "relative" }}>
       <Table>
         <TableHead>
-          {/* <TableRow sx={{ bgcolor: "primary.main" }}> */}
+        
            <TableRow sx={{background:"#3621a9"}}>
-            {/* <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>ACTION</TableCell> */}
+          
             <TableCell  sx={{ color: "white", fontWeight: "bold",whiteSpace: "nowrap" }}>TIMESTAMP</TableCell>
             <TableCell  sx={{ color: "white", fontWeight: "bold",whiteSpace: "nowrap" }}>FIRM NAME</TableCell>
             
@@ -74,20 +74,7 @@ const DisplayTable = ({ data }) => {
         </TableBody>
       </Table>
 
-      {/* <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
-        component="div"
-        count={data.length} // Use data.length to count the total number of rows
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-        sx={{
-          // position: "absolute",
-          bottom: 0,
-          width: "100%",
-        }}
-      /> */}
+     
 
     </TableContainer>
   );

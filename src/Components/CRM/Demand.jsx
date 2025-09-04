@@ -1,27 +1,17 @@
-
-
-
-
-
-
 import React, { useState, useEffect } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, TextField, Modal, Box, MenuItem, Select, InputLabel, FormControl } from '@mui/material';
 import { FaEye } from "react-icons/fa";
 import VisibilityIcon from '@mui/icons-material/Visibility';
-
 import { ToastContainer, toast } from 'react-toastify';
 import { MonetizationOn } from "@mui/icons-material";
 import { FaFileDownload } from "react-icons/fa";
-
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import { IconButton } from "@mui/material";
 const fetchLoansData = async () => {

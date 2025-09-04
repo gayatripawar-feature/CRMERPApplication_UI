@@ -11,29 +11,22 @@ import { ToastContainer, toast } from 'react-toastify';
 import FollowupHistoryTable from './FollowupHistoryTable';
 import UndefinedTable from './UndefinedTable';
 import BookedTable from './BookedTable';
-// import FirstvisitfollowupbookedTable from './FirstvisitfollowupUndefinedTable';
+
 import FirstvisitfollowupUndefinedTable from './FirstvisitfollowupUndefinedTable';
 import FirstvisitfollowupbookedTable from './FirstvisitfollowupbookedTable';
-// import { FaBuilding,    } from 'react-icons/fa'; 
+ 
 import {   FaHourglassStart,FaHistory, FaUserCheck, FaQuestionCircle } from 'react-icons/fa'; 
 
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 
 
-// const sections = [
-//     { label: "Pending Follow Up", icon: <FaBuilding size={20} />, createLabel: "Create Firm" },
-//     { label: "Follow Up History", icon: <FaBuilding size={20} />, createLabel: "Create Project" },
-//     { label: "Booked", icon: <FaBuilding size={20} />, createLabel: "Create Landowner Info" },
-//     { label: "Undefined", icon: <FaBuilding size={20} />, createLabel: "Create Flat Allotment Info" },
- 
-//   ];
 
 const sections = [
-  { label: "Pending Follow Up", icon: <FaHourglassStart size={20} />, createLabel: "Create Firm" }, // Use FaHistory for pending follow-up
-  { label: "Follow Up History", icon: <FaHistory size={20} />, createLabel: "Create Project" }, // Use FaHistory for follow-up history
-  { label: "Booked", icon: <FaUserCheck size={20} />, createLabel: "Create Landowner Info" }, // Use FaUserCheck for booked
-  { label: "Undefined", icon: <FaQuestionCircle size={20} />, createLabel: "Create Flat Allotment Info" }, // Use FaQuestionCircle for undefined
+  { label: "Pending Follow Up", icon: <FaHourglassStart size={20} />, createLabel: "Create Firm" }, 
+  { label: "Follow Up History", icon: <FaHistory size={20} />, createLabel: "Create Project" }, 
+  { label: "Booked", icon: <FaUserCheck size={20} />, createLabel: "Create Landowner Info" }, 
+  { label: "Undefined", icon: <FaQuestionCircle size={20} />, createLabel: "Create Flat Allotment Info" }, 
 ];
   const tabNames = [ "firm", "display", "landowner","allotement"]; 
 
@@ -121,19 +114,14 @@ const FirstvisitFollowup = () => {
     const handleAgeChange = (e, index) => {
       const value = e.target.value;
       const updatedPartners = [...partners];
-      updatedPartners[index].age = value; // Update the age of the specific partner
-      setPartners(updatedPartners); // Update the state
+      updatedPartners[index].age = value; 
+      setPartners(updatedPartners); 
     
-      // Validate the age value
-      validateAge(value); // You should already have this function defined
+ 
+      validateAge(value); 
     };
   
-    // const handleStatusChange = (event, leadId) => {
-    //     setStatus({
-    //       ...status,
-    //       [leadId]: event.target.value
-    //     });
-    //   };
+   
   
     const handleStatusChange = (event) => {
       setStatus(event.target.value);

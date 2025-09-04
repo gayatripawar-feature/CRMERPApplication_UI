@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, MenuItem, TextField,Typography, IconButton,Select, InputAdornment,Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import { FaEye} from 'react-icons/fa';
@@ -11,8 +9,6 @@ import "jspdf-autotable";
 import { HomeIcon } from 'lucide-react';
 import { FaFileDownload } from "react-icons/fa";
 import autoTable from "jspdf-autotable";
-
-
 const HomeLoan = () => {
   const [loansData, setLoansData] = useState([
     { 

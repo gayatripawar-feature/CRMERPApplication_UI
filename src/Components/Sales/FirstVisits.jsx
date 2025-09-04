@@ -1,16 +1,8 @@
-
-
-
-
-
-
-
 import React, { useState, useRef , useEffect } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, TextField, Grid,FormControl,InputLabel,Select, MenuItem ,Box,Tooltip,IconButton} from '@mui/material';
 import { FaEye, FaFileCsv, FaUpload, FaPlus, FaTrash } from "react-icons/fa";
 import { Inventory } from '@mui/icons-material';
 import InventoryTable from './InventoryTable';
-// import { toast } from "react-toastify";
 import { ToastContainer, toast } from "react-toastify";
 import NewLeads from './NewLeads';
 import DisplayEnquiryTable from './DisplayEnquiryTable';
@@ -119,16 +111,6 @@ const handleBudgetChange = (event) => {
     }
   };
   const [inventoryData, setInventoryData] = useState([]);
-
-  
-  // const [inventoryData, setInventoryData] = useState([
-  //   {
-     
-  //   },
-  //   {
-     
-  //   },
-  // ]);
 
   // ✅ Function to handle deletion of a row
   const handleDelete = (index) => {

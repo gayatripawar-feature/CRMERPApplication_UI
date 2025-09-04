@@ -196,19 +196,10 @@ const [panCardFiles, setPanCardFiles] = useState([]);
   const calculateGstAmount = () => {
  };
 
-  // const handleAadharChange = (e) => {
-  //   const value = e.target.value;
-  //   if (value.length > 12) {
-  //     setAadharError('AADHAR No. cannot exceed 12 digits');
-  //   } else {
-  //     setAadharError('');
-  //   }
-  //   setAadharNo(value);
-  // };
+  
 
   const handlePanCardChange = (e) => {
-    const files = Array.from(e.target.files);  // Convert FileList to Array
-    // setPanCardFiles(files);
+    const files = Array.from(e.target.files);  
     setPanCardFiles((prev) => [...prev, ...files]);
 
   };
@@ -1064,19 +1055,7 @@ const handleCoAllotteeAadharChange = (e) => {
   </FormControl>
 </Grid>
 
-{/* <Grid item xs={6}>
-  <FormControl fullWidth variant="outlined">
-    <TextField
-      label="AADHAR No."
-      variant="outlined"
-      value={aadharNumber}
-      onChange={handleAadharChange2}  // Validation Function
-      error={!!aadharError}         // Show error if invalid
-      helperText={aadharError}      // Show error message
-      inputProps={{ maxLength: 12 }} // Only 12 digits allowed
-    />
-  </FormControl>
-</Grid> */}
+
 <Grid item xs={6}>
   <FormControl fullWidth variant="outlined">
     <TextField
@@ -1170,21 +1149,7 @@ const handleCoAllotteeAadharChange = (e) => {
   />
 </Grid>
 
-{/* 
-<Grid item xs={6}>
-  <TextField
-    label="AADHAR No."
-    fullWidth
-    variant="outlined"
-    value={aadharNo} 
-    onChange={(e) => handleAadharChange(e)} // Handle the change
-    error={!!aadharError} // Show error if there's a validation error
-    helperText={aadharError} // Display the error message
-    inputProps={{
-      maxLength: 12, // Limit to 12 digits
-    }}
-  />
-</Grid> */}
+
 
 <Grid item xs={6}>
   <TextField

@@ -1,52 +1,28 @@
-
-
-
-
-
-
-
-
-
 import React, { useState, useEffect } from 'react';
 import { Table, TableBody, TableCell, Modal,TableContainer, TableHead, TableRow, TablePagination, Paper, Button, MenuItem,IconButton, Select, InputLabel, FormControl, Box, Collapse, TextField } from '@mui/material';
-
 import { FaEye, FaEyeSlash } from "react-icons/fa";
-
 import EditIcon from '@mui/icons-material/Edit';
 import AddIcon from '@mui/icons-material/Add';
 import InputAdornment from "@mui/material/InputAdornment";
 import Ocrtable from './Ocrtable';
-
 import jsPDF from "jspdf";
-
 import { FaFileDownload } from "react-icons/fa";
 import autoTable from "jspdf-autotable";
-
 import HistoryWithCash from './HistorywithCash';
 import HistoryWithoutCash from "./HistoryWithoutCash";
-
 const fetchLoansData = async () => {
   const response = await fetch('/api/getOCRCollection');
   return response.json();
 };
-
 const OCR = () => {
-
-
-
-  const [historyCashValues1, setHistoryCashValues1] = useState([]);
+const [historyCashValues1, setHistoryCashValues1] = useState([]);
 const [historyCashValues2, setHistoryCashValues2] = useState([]);
-
 const [expandedIndex1, setExpandedIndex1] = useState(null);
 const [expandedIndex2, setExpandedIndex2] = useState(null);
-
 const [inputValue1, setInputValue1] = useState("");
 const [inputValue2, setInputValue2] = useState("");
-
-
-
-  const [isExpanded, setIsExpanded] = useState(true);
-  const [loans, setLoans] = useState([
+const [isExpanded, setIsExpanded] = useState(true);
+const [loans, setLoans] = useState([
     {
       flatNo: '',
       cashWithAV: '',
@@ -62,64 +38,41 @@ const [inputValue2, setInputValue2] = useState("");
   const [totalPages, setTotalPages] = useState(1);
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
-  
- 
   const [flatType, setFlatType] = useState('');
   const [parking, setParking] = useState('');
   const [floor, setFloor] = useState('');
   const [rate, setRate] = useState('');
-  
-  
   const [showFilters, setShowFilters] = useState(false);
   const [showCRM, setShowCRM] = useState(false);  
   const [isCollapsed, setIsCollapsed] = useState(false); 
   const [filterType, setFilterType] = useState(''); 
   const [filterValue, setFilterValue] = useState(''); 
-
   const [editingFlatNo, setEditingFlatNo] = useState(null); 
   const [editingHistoryCashWithAV, setEditingHistoryCashWithAV] = useState('');
 const [expandedCashWithAV, setExpandedCashWithAV] = useState(false);
 const [expandedCashWithoutAV, setExpandedCashWithoutAV] = useState(false);
-
-  const [historyCashValues, setHistoryCashValues] = useState([]);
+ const [historyCashValues, setHistoryCashValues] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(null); 
-
   const [modalOpen, setModalOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
-
   const [expandedIndex, setExpandedIndex] = useState(null); 
-
   const [expanded, setExpanded] = useState(false); 
   const [editingIndex, setEditingIndex] = useState(null);
   const [inputValue, setInputValue] = useState("");
-
- 
-const [editingIndex1, setEditingIndex1] = useState(null);
+ const [editingIndex1, setEditingIndex1] = useState(null);
 const [expanded1, setExpanded1] = useState(false);
-
-
 const [editingIndex2, setEditingIndex2] = useState(null);
 const [expanded2, setExpanded2] = useState(false);
-
- 
   const [editableCashValues, setEditableCashValues] = useState([]); 
-  
-  
-
-
-
   const [editMode, setEditMode] = useState(historyCashValues.map(() => false));
-
   useEffect(() => {
     loadLoansData();
   }, []);
-
-  useEffect(() => {
+useEffect(() => {
     setTotalPages(Math.ceil(filteredLoans.length / rowsPerPage));
   }, [filteredLoans, rowsPerPage]);
-
-  const loadLoansData = async () => {
+const loadLoansData = async () => {
     const data = await fetchLoansData();
     setLoans(data);
     setFilteredLoans(data);
@@ -143,14 +96,12 @@ const [expanded2, setExpanded2] = useState(false);
         return [];
     }
   };
-
-  const filterLoansByDate = () => {
-    const filtered = loans.filter(loan => {
+const filterLoansByDate = () => {
+     const filtered = loans.filter(loan => {
       const loanDate = new Date(loan.dateOfBooking);
       const start = startDate ? new Date(startDate) : new Date(0);
       const end = endDate ? new Date(endDate) : new Date();
-
-      const matchesFilters =
+     const matchesFilters =
         (!flatType || loan.type === flatType) &&
         (!parking || loan.parking === parking) &&
         (!floor || loan.floor === floor) &&
@@ -175,9 +126,6 @@ const [expanded2, setExpanded2] = useState(false);
     setFilterType('');
     setFilterValue('');
   };
-
-
-
   const handlePagination = (event, newPage) => {
     setCurrentPage(newPage + 1);
   };
@@ -186,8 +134,6 @@ const [expanded2, setExpanded2] = useState(false);
     setRowsPerPage(parseInt(event.target.value, 10)); 
     setCurrentPage(1); 
   };
-
-
 const handleEditValue = (index, column) => {
   if (column === "cash") {
     setEditingIndex1(index);

@@ -149,13 +149,7 @@ const [editableRow, setEditableRow] = useState({});
               <TableCell>
                 <div style={{ display: "flex", gap: "3px", alignItems: "center" }}>
                   <Tooltip title="Edit">
-                    {/* <IconButton onClick={() => handleEditClick(row)}
-                      size="small" 
-                      sx={{ backgroundColor: "#1976D2", color: "white", borderRadius: "50%", "&:hover": { backgroundColor: "#1565C0" } }} 
-                  
-                    >
-                      <EditIcon sx={{ fontSize: "18px" }} />
-                    </IconButton> */}
+                   
                     <IconButton
                       size="small"
                       sx={{

@@ -884,13 +884,7 @@ Towards"
                 onChange={(e) => setSelectedLoan({ ...selectedLoan, receiptNo: e.target.value })}
               />
               
-              {/* Customer Name */}
-              {/* <TextField
-                label="Customer Name"
-                fullWidth
-                value={selectedLoan?.customerName || ""}
-                onChange={(e) => setSelectedLoan({ ...selectedLoan, customerName: e.target.value })}
-              /> */}
+           
  <TextField
   label="Customer Name"
   fullWidth
@@ -948,17 +942,10 @@ Towards"
               />
 
              
-              <LocalizationProvider dateAdapter={AdapterDateFns}> {/* Localization Provider wrapping the component */}
+              <LocalizationProvider dateAdapter={AdapterDateFns}> 
       <div style={{ width: '90%' }}>
         
-        {/* <DesktopDatePicker
-          label="Received Date"
-          inputFormat="yyyy-MM-dd" // Date format
-          value={selectedLoan.receivedDate}
-          onChange={(date) => setSelectedLoan({ ...selectedLoan, receivedDate: date })}
-          renderInput={(params) => <TextField {...params} fullWidth />} // Use MUI TextField for input
-        /> */}
-       
+      
 
        <DesktopDatePicker
   label="Received Date"

@@ -1,53 +1,5 @@
 
 
-// import React from 'react';
-// import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
-
-// const Lostleadstable = ({ firms }) => {
-//   return (
-//     <TableContainer component={Paper}>
-//       <Table>
-//         <TableHead>
-//           <TableRow sx={{ background: "#3621a9" }}>
-//             <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>ACTION</TableCell>
-//             <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>LAST FOLLOW UP</TableCell>
-//             <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>STATUS</TableCell>
-//             <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>REMARK</TableCell>
-//             <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>NEXT FOLLOW UP</TableCell>
-//             <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>ASSIGN TO</TableCell>
-//             <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>LEAD NO.</TableCell>
-//             <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>NAME</TableCell>
-//             <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>MOBILE NO. / WHATSAPP NO.</TableCell>
-//             <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>YOU ARE LOOKING FOR?</TableCell>
-//             <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>EMAIL</TableCell>
-//             <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>SOURCE NAME</TableCell>
-//           </TableRow>
-//         </TableHead>
-//         <TableBody>
-//           {firms.map((firm, index) => (
-//             <TableRow key={index}>
-//               <TableCell>{firm.action}</TableCell>
-//               <TableCell>{firm.lastFollowUp}</TableCell> {/* Last Follow Up */}
-//               <TableCell>{firm.status}</TableCell> {/* Status */}
-//               <TableCell>{firm.remark}</TableCell> {/* Remark */}
-//               <TableCell>{firm.nextFollowUp}</TableCell> {/* Next Follow Up */}
-//               <TableCell>{firm.assignTo}</TableCell> {/* Assign To */}
-//               <TableCell>{firm.leadNo}</TableCell> {/* Lead No */}
-//               <TableCell>{firm.name}</TableCell> {/* Name */}
-//               <TableCell>{firm.mobileNo}</TableCell> {/* Mobile No / WhatsApp No */}
-//               <TableCell>{firm.lookingFor}</TableCell> {/* You Are Looking For? */}
-//               <TableCell>{firm.email}</TableCell> {/* Email */}
-//               <TableCell>{firm.sourceName}</TableCell> {/* Source Name */}
-//             </TableRow>
-//           ))}
-//         </TableBody>
-//       </Table>
-//     </TableContainer>
-//   );
-// };
-
-// export default Lostleadstable;
-
 
 
 
@@ -224,28 +176,7 @@ const [editData, setEditData] = useState({
 </Grid>
 
              
-                {/* <Grid item xs={6}>
-                  <FormControl fullWidth variant="outlined">
-                    <InputLabel id="closing-executive-label">Sales Person</InputLabel>
-                    <Select
-                      labelId="closing-executive-label"
-                      id="closing-executive"
-                      value={closingExecutive}
-                      onChange={handleClosingExecutiveChange}
-                      label="Select Sales Person"
-                    >
-                    
-                      <MenuItem value="Shilpha Mewada 1">Shilpha Mewada 1</MenuItem>
-                      <MenuItem value="Tic Tac Toe Sohan">Tic Tac Toe Sohan</MenuItem>
-                      <MenuItem value="Shilpha Mewada">Shilpha Mewada</MenuItem>
-                      <MenuItem value="VIVEK TAPKIR">VIVEK TAPKIR</MenuItem>
-                      <MenuItem value="Shubham Taware">Shubham Taware</MenuItem>
-                      <MenuItem value="Ashwini Khot">Ashwini Khot</MenuItem>
-                      <MenuItem value="Amol Pawar">Amol Pawar</MenuItem>
-                      <MenuItem value="Sachin Awale">Sachin Awale</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Grid> */}
+               
               <Grid item xs={6}>
   <FormControl fullWidth variant="outlined">
     <InputLabel id="closing-executive-label">Sales Person</InputLabel>

@@ -35,29 +35,6 @@ const Constants = {
     formButtonColor: "#800020",
    
 
-
-    // formInputBorderColor: {
-    //   '& .MuiOutlinedInput-root': {
-    //     '& fieldset': {
-    //       borderColor: '#B22222', 
-    //     },
-    //     '&:hover fieldset': {
-    //       borderColor: '#8B0000', 
-    //     },
-    //     '&.Mui-focused fieldset': {
-    //       borderColor: '#A52A2A', 
-    //     },
-    //   },
-    //   '& .MuiInputLabel-root': {
-    //     color: '#800000',
-    //   },
-    //   '& .MuiInputLabel-root.Mui-focused': {
-    //     color: '#A52A2A',
-    //   },
-    // },
-
-
-
     formInputBorderColor: {
     "& .MuiOutlinedInput-root": {
       "& fieldset": {

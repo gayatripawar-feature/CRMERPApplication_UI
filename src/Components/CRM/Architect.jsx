@@ -1,9 +1,3 @@
-
-
-
-
-
-
 import React, { useState, useEffect } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, IconButton,Typography,TextField, Modal, Box, MenuItem, Select, InputLabel, FormControl } from '@mui/material';
 import { FaEye } from "react-icons/fa";
@@ -11,7 +5,6 @@ import FoundationIcon from '@mui/icons-material/Foundation';
 import EditIcon from '@mui/icons-material/Edit';
 import { toast } from 'react-toastify';
 import jsPDF from "jspdf";
-
 import { FaFileDownload } from "react-icons/fa";
 import autoTable from "jspdf-autotable";
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -19,8 +12,6 @@ const fetchLoansData = async () => {
   const response = await fetch('/api/getOCRCollection');
   return response.json();
 };
-
-
 const Architect = () => {
   const [loans, setLoans] = useState([]);
   const [filteredLoans, setFilteredLoans] = useState([]);
@@ -34,96 +25,63 @@ const [isCollapsed, setIsCollapsed] = useState(false);
 const [selectedRow, setSelectedRow] = useState(null);
 const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 const [slab, setSlab] = useState('');
-
-  const rowsPerPage = 10;
-  
-  
-  const [openModal, setOpenModal] = useState(false);
-  const [selectedLoan, setSelectedLoan] = useState(null);
-
-  useEffect(() => {
+const rowsPerPage = 10;
+const [openModal, setOpenModal] = useState(false);
+const [selectedLoan, setSelectedLoan] = useState(null);
+useEffect(() => {
     loadLoansData();
   }, []);
-
-  const loadLoansData = async () => {
+const loadLoansData = async () => {
     const data = await fetchLoansData();
     setLoans(data);
     setFilteredLoans(data);
   };
-
-  const handleOpenModal = (loan) => {
+const handleOpenModal = (loan) => {
     setSelectedLoan(loan);
     setOpenModal(true);
   };
-
-  const handleCloseModal = () => {
+ const handleCloseModal = () => {
     setOpenModal(false);
     setSelectedLoan(null);
   };
-
-  
-
-
   const handleCollapseToggle = () => {
     setIsCollapsed((prev) => !prev);
   };
-
- 
-  
   const handleSubmit = (event) => {
     event.preventDefault();  
     console.log("Slab Value: ", slab);  
     console.log("Letter Type Value: ", letterType);  
     console.log("Selected Files: ", selectedFiles);  
-   
     const newRow = {
       timestamp: new Date().toLocaleString(),  
       slab,  
       letterType,  
       document: selectedFiles.length > 0 ? URL.createObjectURL(selectedFiles[0]) : null, 
     };
-  
-    
     setCurrentRows((prevRows) => [...prevRows, newRow]);
-  
-   
-    setOpenModal(false);
-    
-    
-    console.log("Form submitted!");
-  
+     setOpenModal(false);
+     console.log("Form submitted!");
     toast.success("Data Submitted Successfully!");
-  
-   
     handleCloseModal();  
   };
-  
-   
-const handleToggle = () => {
+  const handleToggle = () => {
   setIsExpanded((prev) => !prev);
 };
-
-
   const handlePageChange = (newPage) => {
     if (newPage > 0 && newPage <= Math.ceil(filteredLoans.length / rowsPerPage)) {
       setCurrentPage(newPage);
     }
   };
-
   const handleResetFilters = () => {
     setFilterType('');
     setFilterValue('');
   };
-
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-  
-  const [currentRows, setCurrentRows] = useState([]);
- 
-  const [selectedSlab, setSelectedSlab] = useState('');
+ const [currentRows, setCurrentRows] = useState([]);
+ const [selectedSlab, setSelectedSlab] = useState('');
 const [letterType, setLetterType] = useState('');
 const [selectedFiles, setSelectedFiles] = useState([]);
-
 const rows = [
   {
     flatNo: "A-101",
@@ -133,29 +91,18 @@ const rows = [
     letterType: "Demand",
     document: "",
   },
-  {
-    flatNo: "A-102",
-    nameOfAllotee: "Jane Doe",
-    timestamp: "2024-04-02",
-    slab: "2nd Slab",
-    letterType: "Reminder",
-    document: "",
-  },
+  
 ];
-
 useEffect(() => {
   setCurrentRows(rows);
 }, []);
-
-
-  const getFilterOptions = (type) => {
+const getFilterOptions = (type) => {
     switch (type) {
       case 'Flat Type':
         return ['1BHK', '2BHK', '3BHK'];
       case 'Parking':
         return ['Basement', 'Parking 1','Parking 2'];
       case 'Floor':
-       
         return Array.from({ length: 15 }, (_, i) => (i + 1).toString());
       case 'Rate':
         return Array.from({ length: 120 }, (_, i) => (50000 * (i + 1)).toLocaleString()); 
@@ -165,17 +112,12 @@ useEffect(() => {
         return [];
     }
   };
-
   const handleDownloadPDFArchitect = () => {
     console.log("Loans data before mapping:", loans);
-
     const doc = new jsPDF("landscape");
     doc.setFontSize(14);
     doc.text("Firm Details Report", 14, 15);
-
-   
     const tableColumn = ["ACTION", "TIMESTAMP", "SLAB", "LETTER TYPE", "DOCUMENT"];
-
     const tableRows = loans.map(row => [
       row.action || "-",
       row.timestamp || "-",
@@ -183,9 +125,7 @@ useEffect(() => {
       row.letterType || "-",
       row.document || "-"
     ]);
-
     console.log("Formatted Table Rows:", tableRows);
-
     autoTable(doc, {
       startY: 25,
       head: [tableColumn],
@@ -193,67 +133,44 @@ useEffect(() => {
       styles: { fontSize: 10, cellPadding: 3 },
       headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
     });
-
     doc.save("EngineerArchitect_Report.pdf");
 };
-
 const handleOpenEditModal = (row) => {
- 
-  setSelectedRow(row);  
+ setSelectedRow(row);  
   setIsEditModalOpen(true);  
 };
-
-
-
 const handleCloseEditModal = () => {
   setSelectedSlab('');
   setLetterType('');
   setSelectedFiles([]);
   setIsEditModalOpen(false);  
 };
-
 const handleFileChange = (e) => {
   const newFiles = Array.from(e.target.files);
   setSelectedFiles((prevFiles) => [...prevFiles, ...newFiles]);
 };
-
-
 const handleUpdate = () => {
-
-  const updatedRow = {
+ const updatedRow = {
     ...selectedRow,
     document: selectedFiles.length > 0 ? URL.createObjectURL(selectedFiles[0]) : selectedRow.document,  
   };
 console.log("update");
-  
   setCurrentRows((prevRows) =>
     prevRows.map((row) =>
       row.timestamp === updatedRow.timestamp ? updatedRow : row  
     )
   );
-
-  
-  toast.success('Details Updated Successfully!', {
+ toast.success('Details Updated Successfully!', {
     position: 'top-right',
     autoClose: 2000,
   });
-
- 
-  handleCloseEditModal();  
+ handleCloseEditModal();  
 };
-
-
-  return (
+return (
     <div className="main-content">
        {!openModal ? (
         <>
       <h6>Letter Module / Engineer & Architect Letters</h6>
-
-
-
-
-         
-
 <Button
   variant="contained"
   color="success"
@@ -301,9 +218,6 @@ console.log("update");
   {isExpanded && "Display Letters"}
 </Button>
 
-
-      {/* {isCollapsed && (
-        <> */}
         <div className='d-flex gap-3'>
       <div className="d-flex align-items-center justify-content-between my-3 pt-4 pb-3">
         <Button variant="contained" className="text-nowrap m-1" style={{ minWidth: "180px", background:"#272ba8"}} color="primary" onClick={() => handleOpenModal(null)}>
@@ -333,12 +247,8 @@ console.log("update");
     Download PDF
   </Button>
         </div>
-
-       
-        
-        <div className="d-flex align-items-center gap-2">
- 
-  <FormControl style={{ minWidth: "180px" }}>
+         <div className="d-flex align-items-center gap-2">
+   <FormControl style={{ minWidth: "180px" }}>
     <InputLabel>Filter By</InputLabel>
     <Select value={filterType} onChange={(e) => setFilterType(e.target.value)}>
       <MenuItem value="Flat Type">Flat Type</MenuItem>
@@ -350,8 +260,6 @@ console.log("update");
       <MenuItem value="Week">Week</MenuItem>
     </Select>
   </FormControl>
-
- 
   {filterType === "Date" ? (
     <TextField
       type="date"
@@ -372,9 +280,8 @@ console.log("update");
       <Select
         value={filterValue}
         onChange={(e) => setFilterValue(e.target.value)}
-        disabled={!filterType}
-      >
-        {getFilterOptions(filterType).map((option, index) => (
+        disabled={!filterType}>
+       {getFilterOptions(filterType).map((option, index) => (
           <MenuItem key={index} value={option}>
             {option}
           </MenuItem>
@@ -382,9 +289,7 @@ console.log("update");
       </Select>
     </FormControl>
   )}
-
-  
-  <Button
+<Button
     className="text-white"
     style={{ backgroundColor: "#800080", padding: "10px 15px", borderRadius: "5px" }}
     variant="outlined"
@@ -406,15 +311,11 @@ console.log("update");
     />
   </div>
 </div>
-
-      
-      </div>
-
-      <TableContainer component={Paper} className="mt-4" sx={{ mt: 2, boxShadow: 3, borderRadius: 2 ,maxHeight: 400, overflowY: 'auto'}}>
+  </div>
+ <TableContainer component={Paper} className="mt-4" sx={{ mt: 2, boxShadow: 3, borderRadius: 2 ,maxHeight: 400, overflowY: 'auto'}}>
         <Table>
           <TableHead>
-            
-                     <TableRow sx={{background:"#3621a9"}}>
+             <TableRow sx={{background:"#3621a9"}}>
               <TableCell sx={{ color: "white", fontWeight: "bold" }}>ACTION</TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold" }}>TIMESTAMP</TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold" }}>SLAB</TableCell>
@@ -422,13 +323,10 @@ console.log("update");
               <TableCell sx={{ color: "white", fontWeight: "bold" }}>DOCUMENT</TableCell>
             </TableRow>
           </TableHead>
-         
-            <TableBody>
+          <TableBody>
           {currentRows.map((loan, index) => (
             <TableRow key={index}>
-          
-
-<TableCell>
+          <TableCell>
   <IconButton
     onClick={() => handleOpenEditModal(loan)}
     sx={{
@@ -444,9 +342,7 @@ console.log("update");
     <EditIcon />
   </IconButton>
 </TableCell>
-
-
-              <TableCell>{loan.timestamp}</TableCell>
+ <TableCell>{loan.timestamp}</TableCell>
               <TableCell>{loan.slab}</TableCell>
               <TableCell>{loan.letterType}</TableCell>
               
@@ -470,9 +366,6 @@ console.log("update");
         </TableBody>
         </Table>
       </TableContainer>
-
-
-
       <Modal open={isEditModalOpen} onClose={handleCloseEditModal}>
   <Box 
     sx={{ 
@@ -581,10 +474,7 @@ console.log("update");
     </div>
   </Box>
 </Modal>
-
-
-
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}>
+ <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}>
         <button 
           className="btn btn-secondary"
           onClick={() => handlePageChange(currentPage - 1)}
@@ -593,9 +483,7 @@ console.log("update");
         >
           Previous
         </button>
-
-
-        <button
+         <button
           className="btn btn-secondary"
           onClick={() => handlePageChange(currentPage + 1)}
           disabled={currentPage === Math.ceil(filteredLoans.length / rowsPerPage)}
@@ -604,16 +492,8 @@ console.log("update");
           Next
         </button>
       </div>
-
-
-
 </>
 ) : (
-
-
-    
-    
-
 
 <Modal
   open={openModal}
@@ -650,8 +530,6 @@ console.log("update");
         borderRadius: '10px 10px 0 0'
       }}
     >
-      
-    
 
 <div
   style={{
@@ -687,12 +565,8 @@ console.log("update");
   </Button>
 </div>
 </div>
-
-    
-    <div className="modal-body" style={{ marginTop: '16px', padding: '10px', backgroundColor: '#f9f9f9', borderRadius: '8px' }}>
-      
-   
-      <h6 style={{ marginBottom: '8px', fontWeight: 600 }}>Select Slab</h6>
+ <div className="modal-body" style={{ marginTop: '16px', padding: '10px', backgroundColor: '#f9f9f9', borderRadius: '8px' }}>
+  <h6 style={{ marginBottom: '8px', fontWeight: 600 }}>Select Slab</h6>
       <TextField
         select
         label="Select Slab"
@@ -711,9 +585,7 @@ console.log("update");
           <MenuItem key={option} value={option}>{option}</MenuItem>
         ))}
       </TextField>
-
-      
-      <h6 style={{ marginBottom: '8px', fontWeight: 600 }}>Letter Type</h6>
+    <h6 style={{ marginBottom: '8px', fontWeight: 600 }}>Letter Type</h6>
       <TextField
         select
         label="Letter Type"
@@ -727,11 +599,8 @@ console.log("update");
           <MenuItem key={option} value={option}>{option}</MenuItem>
         ))}
       </TextField>
-
-    
-      <h6 style={{ marginBottom: '8px', fontWeight: 600 ,}}>Upload Document</h6>
-      
-      <Button
+       <h6 style={{ marginBottom: '8px', fontWeight: 600 ,}}>Upload Document</h6>
+       <Button
             variant="contained"
             color="light"
             component="label"

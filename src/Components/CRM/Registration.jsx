@@ -12,20 +12,12 @@ import "jspdf-autotable";
 import { HomeIcon } from 'lucide-react';
 import { FaFileDownload } from "react-icons/fa";
 import autoTable from "jspdf-autotable";
-
+import CloseIcon from "@mui/icons-material/Close";
 const fetchLoansData = async () => {
   const response = await fetch('/api/getOCRCollection');
   return response.json();
 };
-
-import CloseIcon from "@mui/icons-material/Close";
-
-
-
-
-
 const Registration = () => {
-  
   const [loans, setLoans] = useState([]);
   const [filteredLoans, setFilteredLoans] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -34,7 +26,6 @@ const Registration = () => {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [checkedItems, setCheckedItems] = useState({});
- 
   const [flatType, setFlatType] = useState('');
   const [parking, setParking] = useState('');
   const [floor, setFloor] = useState('');
@@ -536,13 +527,11 @@ const handleFileUpload = (file, index) => {
         justifyContent: "center",
         textTransform: "none",
         position: "relative",
-        // background: "linear-gradient(0deg, rgba(22,9,240,1) 0%, rgba(49,110,244,1) 100%)",
         background: "linear-gradient(0deg, #4b2ac2 0%, #5c39d3 100%)",
         boxShadow:
           "inset 2px 2px 2px 0px rgba(255,255,255,.5), 7px 7px 20px 0px rgba(0,0,0,.1), 4px 4px 5px 0px rgba(0,0,0,.1)",
         "&:hover": {
-          // background: "linear-gradient(0deg, rgba(2,126,251,1) 0%, rgba(0,3,255,1) 100%)",
-          background: "linear-gradient(0deg, rgb(230, 4, 255) 0%, rgb(245, 182, 24) 100%)",
+        background: "linear-gradient(0deg, rgb(230, 4, 255) 0%, rgb(245, 182, 24) 100%)",
         },
         "&::after": {
           content: '""',

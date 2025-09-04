@@ -510,6 +510,9 @@
 
 
 
+
+
+
 import { toast } from "react-toastify";
 import React, { useState, useCallback, useRef, useEffect } from "react";
 import {
@@ -929,44 +932,128 @@ const SidebarItem = React.memo(({ to, icon, label, collapsed }) => (
 
 
 
+// const SidebarDropdown = React.memo(({ label, icon, collapsed, isOpen, toggleOpen, subItems }) => {
+//   const [showMenu, setShowMenu] = useState(false);
+//   const isMobileOrTablet = window.innerWidth <= 992;
+
+//   // For positioning the floating menu next to the clicked item
+//   const itemRef = useRef(null);
+//   const [menuPos, setMenuPos] = useState({ top: 0 });
+
+//   const handleMouseEnter = () => {
+//     if (collapsed && !isMobileOrTablet) {
+//       const rect = itemRef.current.getBoundingClientRect();
+//       setMenuPos({ top: rect.top });
+//       setShowMenu(true);
+//     }
+//   };
+
+//   const handleMouseLeave = () => {
+//     if (collapsed && !isMobileOrTablet) {
+//       setShowMenu(false);
+//     }
+//   };
+
+//   const handleClick = () => {
+//     if (!collapsed) {
+//       toggleOpen();
+//     } else if (isMobileOrTablet) {
+//       // On mobile/tablet, click opens menu below
+//       setShowMenu((prev) => !prev);
+//     }
+//   };
+
+//   return (
+//     <li
+//       className="nav-item mb-3 position-relative"
+//       ref={itemRef}
+//       onMouseEnter={handleMouseEnter}
+//       onMouseLeave={handleMouseLeave}
+//     >
+//       <div
+//         className="nav-link text-white d-flex align-items-center"
+//         style={{ cursor: "pointer" }}
+//         onClick={handleClick}
+//       >
+//         {icon}
+//         {!collapsed && <span className="ms-2">{label}</span>}
+//         {collapsed && <span className="ms-auto">&#9662;</span>}
+//       </div>
+
+//       {/* Inline submenu for expanded sidebar */}
+//       {isOpen && !collapsed && (
+//         <ul className="nav flex-column ps-3">
+//           {subItems.map((item, idx) => (
+//             <SidebarItem key={idx} to={item.to} icon={item.icon} label={item.label} collapsed={collapsed} />
+//           ))}
+//         </ul>
+//       )}
+      
+//       {/* Floating menu for collapsed sidebar on desktop */}
+//       {collapsed && showMenu && !isMobileOrTablet && (
+//         <ul
+//           className="list-group position-fixed shadow"
+//           style={{
+//             minWidth: "200px",
+//             zIndex: 2000,
+//             left: "80px", // next to collapsed sidebar
+//             top: menuPos.top,
+//           }}
+//         >
+//           <li className="list-group-item fw-bold bg-light">{label}</li>
+//           {subItems.map((item, idx) => (
+//             <li key={idx} className="list-group-item p-2">
+//               <NavLink
+//                 to={item.to}
+//                 className="text-decoration-none text-dark d-flex align-items-center"
+//               >
+//                 {item.icon}
+//                 <span className="ms-2">{item.label}</span>
+//               </NavLink>
+//             </li>
+//           ))}
+//         </ul>
+//       )}
+
+   
+      
+//     </li>
+//   );
+// });
 const SidebarDropdown = React.memo(({ label, icon, collapsed, isOpen, toggleOpen, subItems }) => {
   const [showMenu, setShowMenu] = useState(false);
-  const isMobileOrTablet = window.innerWidth <= 992;
-
-  // For positioning the floating menu next to the clicked item
   const itemRef = useRef(null);
   const [menuPos, setMenuPos] = useState({ top: 0 });
 
-  const handleMouseEnter = () => {
-    if (collapsed && !isMobileOrTablet) {
-      const rect = itemRef.current.getBoundingClientRect();
-      setMenuPos({ top: rect.top });
-      setShowMenu(true);
-    }
-  };
-
-  const handleMouseLeave = () => {
-    if (collapsed && !isMobileOrTablet) {
-      setShowMenu(false);
-    }
-  };
+  // Determine if screen is mobile/tablet
+  const isMobileOrTablet = window.innerWidth <= 992;
 
   const handleClick = () => {
     if (!collapsed) {
-      toggleOpen();
+      toggleOpen(); // inline submenu for full sidebar
     } else if (isMobileOrTablet) {
-      // On mobile/tablet, click opens menu below
+      // Only show floating menu on mobile/tablet
+      const rect = itemRef.current.getBoundingClientRect();
+      setMenuPos({ top: rect.top });
       setShowMenu((prev) => !prev);
     }
   };
 
+  // Close floating menu when clicking outside
+  useEffect(() => {
+    const handleOutsideClick = (e) => {
+      if (itemRef.current && !itemRef.current.contains(e.target)) {
+        setShowMenu(false);
+      }
+    };
+    if (showMenu && isMobileOrTablet) {
+      document.addEventListener("mousedown", handleOutsideClick);
+    }
+    return () => document.removeEventListener("mousedown", handleOutsideClick);
+  }, [showMenu, isMobileOrTablet]);
+
   return (
-    <li
-      className="nav-item mb-3 position-relative"
-      ref={itemRef}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-    >
+    <li className="nav-item mb-3 position-relative" ref={itemRef}>
       <div
         className="nav-link text-white d-flex align-items-center"
         style={{ cursor: "pointer" }}
@@ -986,14 +1073,14 @@ const SidebarDropdown = React.memo(({ label, icon, collapsed, isOpen, toggleOpen
         </ul>
       )}
 
-      {/* Floating menu for collapsed sidebar on desktop */}
-      {collapsed && showMenu && !isMobileOrTablet && (
+      {/* Floating submenu for mobile/tablet only */}
+      {collapsed && showMenu && isMobileOrTablet && (
         <ul
           className="list-group position-fixed shadow"
           style={{
             minWidth: "200px",
-            zIndex: 2000,
-            left: "80px", // next to collapsed sidebar
+            zIndex: 9999,
+            left: "80px",       // next to collapsed sidebar
             top: menuPos.top,
           }}
         >
@@ -1003,27 +1090,7 @@ const SidebarDropdown = React.memo(({ label, icon, collapsed, isOpen, toggleOpen
               <NavLink
                 to={item.to}
                 className="text-decoration-none text-dark d-flex align-items-center"
-              >
-                {item.icon}
-                <span className="ms-2">{item.label}</span>
-              </NavLink>
-            </li>
-          ))}
-        </ul>
-      )}
-
-      {/* Collapsed + mobile/tablet: click → dropdown below */}
-      {collapsed && showMenu && isMobileOrTablet && (
-        <ul
-          className="list-group mt-2 shadow"
-          style={{ minWidth: "180px", zIndex: 2000 }}
-        >
-          <li className="list-group-item fw-bold bg-light">{label}</li>
-          {subItems.map((item, idx) => (
-            <li key={idx} className="list-group-item p-2">
-              <NavLink
-                to={item.to}
-                className="text-decoration-none text-dark d-flex align-items-center"
+                onClick={() => setShowMenu(false)}
               >
                 {item.icon}
                 <span className="ms-2">{item.label}</span>

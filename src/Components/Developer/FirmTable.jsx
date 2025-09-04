@@ -1548,29 +1548,10 @@ const FirmTable = () => {
                   <TableCell></TableCell>
                   <TableCell></TableCell>
                   <TableCell></TableCell>
-
-                  <TableCell sx={{ color: "black", fontWeight: "bold" }}>
-                    {/* <IconButton onClick={() => handleView(firm.residentialAddress)}
-         sx={{ backgroundColor: "blue", borderRadius: "50%", padding: "3px" }}>
-        <Visibility sx={{ color: "white" }} />
-      </IconButton> */}
-                  </TableCell>
-
-                  <TableCell sx={{ color: "black", fontWeight: "bold" }}>
-                    {/* <IconButton onClick={() => handleView(firm.panNo)}
-         sx={{ backgroundColor: "blue", borderRadius: "50%", padding: "3px" }}>
-        <Visibility sx={{ color: "white" }} />
-      </IconButton> */}
-                  </TableCell>
-
-                  <TableCell sx={{ color: "black", fontWeight: "bold" }}>
-                    {/* <IconButton onClick={() => handleView(firm.aadhaarNo)}
-         sx={{ backgroundColor: "blue", borderRadius: "50%", padding: "3px" }}>
-        <Visibility sx={{ color: "white" }} />
-      </IconButton> */}
-                  </TableCell>
-
-                  <TableCell>
+           <TableCell sx={{ color: "black", fontWeight: "bold" }}> </TableCell>
+               <TableCell sx={{ color: "black", fontWeight: "bold" }}> </TableCell>
+           <TableCell sx={{ color: "black", fontWeight: "bold" }}> </TableCell>
+           <TableCell>
                     <IconButton
                       onClick={() => handleView(firm.residentialAddress)}
                       sx={{

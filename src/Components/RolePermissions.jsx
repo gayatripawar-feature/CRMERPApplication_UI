@@ -35,10 +35,7 @@ import {
 
 const RolePermissions = {
   admin: [
-      
-    
-
-    {
+     {
       label: "Admin Section",
       icon: <FaUserShield />,
       subItems: [

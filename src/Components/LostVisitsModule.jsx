@@ -1,24 +1,6 @@
-
-
-
-
-
-
-
-
-
-
-
 import React, { useState, useEffect } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, MenuItem, Select, InputLabel, FormControl, TextField, Modal, Box } from '@mui/material';
 import { Grid } from '@mui/material';
-
-
-
-
-
-
-
 const fetchLoansData = async () => {
   const response = await fetch('/api/getOCRCollection');
   return response.json();

@@ -1139,10 +1139,10 @@ const handleFirmSubmit = () => {
                   } else if (label === "Aadhaar No.") {
                     const aadhaar = e.target.value;
                     if (validateAadhaar(aadhaar)) {
-                      setAadhaarError(false); // Reset error if valid
-                      handleAadhaarChange(e, index); // Custom handler for Aadhaar field
+                      setAadhaarError(false); 
+                      handleAadhaarChange(e, index); 
                     } else {
-                      setAadhaarError(true); // Set error if invalid
+                      setAadhaarError(true); 
                       setAadhaarErrorMessage("Aadhaar number should be exactly 12 digits.");
                     }
                   }
@@ -1182,31 +1182,18 @@ const handleFirmSubmit = () => {
 <Button
   variant="contained"
   sx={{
-    backgroundColor: 'red', // Red background
+    backgroundColor: 'red', 
     '&:hover': {
-      backgroundColor: '#d32f2f', // Darker red on hover
+      backgroundColor: '#d32f2f', 
     }
   }}
-  onClick={handleRemovePartner} // Pass the index to remove the partner
+  onClick={handleRemovePartner} 
   className="m-2"
 >
   Remove Partner
 </Button>
 
-      {/* <Button
-        variant="contained"
-        className="m-3"
-        color="success"
-        onClick={() => {
-       
-          toast.success("Details are submitted!", { position: "top-right", autoClose: 3000 });
-          
-          
-          setShowFirmForm(false); 
-        }}
-      >
-        Submit
-      </Button> */}
+  
       <Button
   variant="contained"
   className="m-3"

@@ -20,35 +20,6 @@ const users = [
   
 ];
 
-
-
-
-// const handleLogin = (e) => {
-//   e.preventDefault();
-
-//   const user = users.find(
-//     (u) => u.email === email && u.password === password
-//   );
-
-//   if (user) {
-    
-//     const { role } = user;
-//     const normalizedRole = role.toLowerCase();
-
-   
-//     localStorage.setItem("userRole", normalizedRole);
-
-    
-//     const firstPage =
-//       RolePermissions[normalizedRole]?.[0]?.subItems?.[0]?.to || "/dashboard";
-
-//     navigate(firstPage);
-//   } else {
-//     alert("Invalid email or password");
-//   }
-// };
-
-
 const handleLogin = (e) => {
   e.preventDefault();
 

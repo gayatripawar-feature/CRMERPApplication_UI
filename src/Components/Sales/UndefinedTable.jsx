@@ -1,6 +1,3 @@
-
-
-
 import React from "react";
 import { TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Paper, Typography } from "@mui/material";
 

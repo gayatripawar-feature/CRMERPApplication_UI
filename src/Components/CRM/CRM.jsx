@@ -1,10 +1,3 @@
-
-
-
-
-
-
-
 import React, { useState, useEffect } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper,Box, Button, MenuItem, TextField ,Tooltip,IconButton,Typography} from '@mui/material';
 import { FaEye,FaEyeSlash } from 'react-icons/fa'; 
@@ -14,7 +7,6 @@ import EmailIcon from '@mui/icons-material/Email';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { MdDashboard } from 'react-icons/md';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-// import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import {AdapterDateFns} from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import Grid from '@mui/material/Grid'; // For Material-UI Grid
@@ -116,7 +108,7 @@ const CRM = () => {
   };
 
   const handleCoAadharChange = (e) => {
-    const value = e.target.value.replace(/\D/g, ''); // Remove non-digits
+    const value = e.target.value.replace(/\D/g, ''); // To Remove non-digits
     setCoAadhar(value);
 
     if (value.length === 0) {
@@ -137,7 +129,7 @@ const CRM = () => {
   
 
   const handleAadharChange = (e) => {
-    const value = e.target.value.replace(/\s/g, ''); // remove spaces
+    const value = e.target.value.replace(/\s/g, ''); // To remove spaces
     setAadhar(value);
 
     const aadharRegex = /^[0-9]{12}$/;
@@ -373,7 +365,7 @@ const CRM = () => {
     setParking('');
     setFloor('');
     setRate('');
-    setProjectType('');  // Added this line for Project Type
+    setProjectType('');  
     setFilteredLoans(loans);
     setCurrentPage(1);
     setFilterType('');
@@ -396,54 +388,54 @@ const CRM = () => {
 const displayLoans = () => {
   return filteredLoans.slice(start, end).map((loan, index) => (
     <TableRow key={loan.flatNo}>
-      <TableCell>{loan.action}</TableCell> {/* New column */}
-      <TableCell>{loan.timestamp}</TableCell> {/* New column */}
-      <TableCell>{loan.enquiryNo}</TableCell> {/* New column */}
-      <TableCell>{loan.projectName}</TableCell> {/* New column */}
-      <TableCell>{loan.dateOfFlatBooking}</TableCell> {/* New column */}
+      <TableCell>{loan.action}</TableCell> 
+      <TableCell>{loan.timestamp}</TableCell> 
+      <TableCell>{loan.enquiryNo}</TableCell> 
+      <TableCell>{loan.projectName}</TableCell> 
+      <TableCell>{loan.dateOfFlatBooking}</TableCell> 
       <TableCell>{loan.nameOfAllotee}</TableCell>
-      <TableCell>{loan.sourceName}</TableCell> {/* New column */}
-      <TableCell>{loan.dateOfBirth}</TableCell> {/* New column */}
-      <TableCell>{loan.occupation}</TableCell> {/* New column */}
-      <TableCell>{loan.panNo}</TableCell> {/* New column */}
-      <TableCell>{loan.aadharNo}</TableCell> {/* New column */}
+      <TableCell>{loan.sourceName}</TableCell>
+      <TableCell>{loan.dateOfBirth}</TableCell> 
+      <TableCell>{loan.occupation}</TableCell> 
+      <TableCell>{loan.panNo}</TableCell> 
+      <TableCell>{loan.aadharNo}</TableCell> 
       <TableCell>{loan.mobileNo}</TableCell>
-      <TableCell>{loan.alternateMobileNo}</TableCell> {/* New column */}
+      <TableCell>{loan.alternateMobileNo}</TableCell> 
       <TableCell>{loan.whatsappNo}</TableCell>
       <TableCell>{loan.emailId}</TableCell>
-      <TableCell>{loan.address}</TableCell> {/* New column */}
+      <TableCell>{loan.address}</TableCell> 
       <TableCell>{loan.nameOfCoAllotee}</TableCell>
-      <TableCell>{loan.dobCoAllotee}</TableCell> {/* New column */}
-      <TableCell>{loan.occupationCoAllotee}</TableCell> {/* New column */}
-      <TableCell>{loan.panNoCoAllotee}</TableCell> {/* New column */}
-      <TableCell>{loan.aadharNoCoAllotee}</TableCell> {/* New column */}
-      <TableCell>{loan.mobileEmailCoAllotee}</TableCell> {/* New column */}
+      <TableCell>{loan.dobCoAllotee}</TableCell> 
+      <TableCell>{loan.occupationCoAllotee}</TableCell> 
+      <TableCell>{loan.panNoCoAllotee}</TableCell> 
+      <TableCell>{loan.aadharNoCoAllotee}</TableCell> 
+      <TableCell>{loan.mobileEmailCoAllotee}</TableCell> 
       <TableCell>{loan.flatNo}</TableCell>
       <TableCell>{loan.type}</TableCell>
-      <TableCell>{loan.wing}</TableCell> {/* New column */}
-      <TableCell>{loan.soldRate}</TableCell> {/* New column */}
-      <TableCell>{loan.carpetArea}</TableCell> {/* New column */}
-      <TableCell>{loan.enclosedBalcony}</TableCell> {/* New column */}
-      <TableCell>{loan.openBalcony}</TableCell> {/* New column */}
-      <TableCell>{loan.terrace}</TableCell> {/* New column */}
+      <TableCell>{loan.wing}</TableCell> 
+      <TableCell>{loan.soldRate}</TableCell> 
+      <TableCell>{loan.carpetArea}</TableCell> 
+      <TableCell>{loan.enclosedBalcony}</TableCell> 
+      <TableCell>{loan.openBalcony}</TableCell> 
+      <TableCell>{loan.terrace}</TableCell> 
       <TableCell>{loan.parking}</TableCell>
       <TableCell>{loan.floor}</TableCell>
-      <TableCell>{loan.totalConsideration}</TableCell> {/* New column */}
-      <TableCell>{loan.bookingAmount}</TableCell> {/* New column */}
-      <TableCell>{loan.stampDuty}</TableCell> {/* New column */}
-      <TableCell>{loan.registrationFee}</TableCell> {/* New column */}
-      <TableCell>{loan.gstAmount}</TableCell> {/* New column */}
-      <TableCell>{loan.panCard}</TableCell> {/* New column */}
-      <TableCell>{loan.aadharCard}</TableCell> {/* New column */}
-      <TableCell>{loan.marriageCertificate}</TableCell> {/* New column */}
-      <TableCell>{loan.passportSizePhoto}</TableCell> {/* New column */}
-      <TableCell>{loan.anyOther}</TableCell> {/* New column */}
+      <TableCell>{loan.totalConsideration}</TableCell> 
+      <TableCell>{loan.bookingAmount}</TableCell> 
+      <TableCell>{loan.stampDuty}</TableCell> 
+      <TableCell>{loan.registrationFee}</TableCell> 
+      <TableCell>{loan.gstAmount}</TableCell> 
+      <TableCell>{loan.panCard}</TableCell> 
+      <TableCell>{loan.aadharCard}</TableCell>
+      <TableCell>{loan.marriageCertificate}</TableCell> 
+      <TableCell>{loan.passportSizePhoto}</TableCell> 
+      <TableCell>{loan.anyOther}</TableCell> 
       <TableCell>{loan.bookingAmount}</TableCell>
-      <TableCell>{loan.paymentMode}</TableCell> {/* New column */}
-      <TableCell>{loan.chequeTrnNo}</TableCell> {/* New column */}
-      <TableCell>{loan.chequeTrnDate}</TableCell> {/* New column */}
+      <TableCell>{loan.paymentMode}</TableCell> 
+      <TableCell>{loan.chequeTrnNo}</TableCell>
+      <TableCell>{loan.chequeTrnDate}</TableCell> 
       <TableCell>{loan.bankName}</TableCell>
-      <TableCell>{loan.bankDetails}</TableCell> {/* New column */}
+      <TableCell>{loan.bankDetails}</TableCell> 
       
      <TableCell>
         <div style={{ display: "flex", gap: "5px" }}>
@@ -647,7 +639,7 @@ const loansData = [
 
 
 const handleDownloadPDFCRM = () => {
-  console.log("Loans data before mapping:", loans); // Ensure 'loans' contains the correct data
+  console.log("Loans data before mapping:", loans); 
 
   const doc = new jsPDF("landscape");
   doc.setFontSize(14);

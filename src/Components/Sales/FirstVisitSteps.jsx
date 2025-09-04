@@ -1,8 +1,3 @@
-
-
-
-
-
 import React, { useState } from 'react';
 import { FaProjectDiagram, FaShareAlt, FaEdit, FaEye } from 'react-icons/fa';
 import OutlinedInput from '@mui/material/OutlinedInput';
@@ -223,54 +218,6 @@ const MenuProps = {
     doc.save("Booking_Status_Report.pdf");
   };
 
-  // const handleDownloadPDFRevisit = () => {
-  //   const doc = new jsPDF("landscape");
-  //   doc.setFontSize(14);
-  //   doc.text("Firm Details Report", 14, 15);
-  
-  //   const tableColumn = [
-  //     "PLANNED", "ACTUAL", "STATUS", "LOAN SECURITY", "TIME DELAY",
-  //     "ENQUIRY NO.", "SALES EXECUTIVE NAME", "NAME", "MOBILE", "EMAIL",
-  //     "OCCUPATION", "COMPANY", "INTERESTED IN", "BUDGET (APPROX.)",
-  //     "REASON FOR PURCHASE", "REFERENCE BY / SOURCE", "NAME OF CP",
-  //     "PLANNING TO BUY WITHIN ?", "CUSTOMER FEEDBACK"
-  //   ];
-  
-  //   const tableRows = loans.map(row => [
-  //     row.planned || "-",
-  //     row.actual || "-",
-  //     row.status || "-",
-  //     row.loanSecurity || "-",
-  //     row.timeDelay || "-",
-  //     row.enquiryNo || "-",
-  //     row.salesExecutiveName || "-",
-  //     row.name || "-",
-  //     row.mobile || "-",
-  //     row.email || "-",
-  //     row.occupation || "-",
-  //     row.company || "-",
-  //     row.interestedIn || "-",
-  //     row.budget || "-",
-  //     row.reasonForPurchase || "-",
-  //     row.referenceBy || "-",
-  //     row.cpName || "-",
-  //     row.planningToBuyWithin || "-",
-  //     row.customerFeedback || "-"
-  //   ]);
-  
-  //   console.log("Formatted Table Rows:", tableRows);
-  
-  //   autoTable(doc, {
-  //     startY: 25,
-  //     head: [tableColumn],
-  //     body: tableRows,
-  //     styles: { fontSize: 9, cellPadding: 3 },
-  //     headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
-  //   });
-  
-  //   doc.save("Revisit_Report.pdf");
-  // };
-  
 
 
 

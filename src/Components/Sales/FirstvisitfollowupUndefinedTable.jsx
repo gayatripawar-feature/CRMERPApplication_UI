@@ -7,9 +7,7 @@ import { TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Paper
 const FirstvisitfollowupUndefinedTable = ({ data }) => {
   return (
     <>
-      {/* <Typography variant="h5" component="h2" sx={{ marginBottom: "16px", color: "", fontWeight: "bold" }}>
-      Lost Enquiries
-      </Typography> */}
+     
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
