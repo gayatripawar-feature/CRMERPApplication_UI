@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FaPlus } from "react-icons/fa";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Box, Tooltip, Typography, TablePagination, Dialog, DialogContent, DialogTitle } from "@mui/material";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Box, TableFooter,Tooltip, Typography, TablePagination, Dialog, DialogContent, DialogTitle } from "@mui/material";
 import { Edit as EditIcon, Delete as DeleteIcon, Close as CloseIcon } from "@mui/icons-material";
 import { TextField, Grid } from "@mui/material";
 import { Button } from "react-bootstrap";
@@ -538,7 +538,7 @@ const handleSubmit = (e) => {
 
       {!showForm && (
         <>
-          <TableContainer component={Paper} sx={{ mt: 2, boxShadow: 3, borderRadius: 2, overflowY: "auto" }}>
+          <TableContainer component={Paper} sx={{ mt: 2, boxShadow: 3, borderRadius: 2, overflowY: "auto",overflowX:"auto" }}>
             <Table size={isMobile ? "small" : "medium"}>
               <TableHead>
                 <TableRow sx={{ background: Constants.primaryColor }}>
@@ -628,26 +628,29 @@ const handleSubmit = (e) => {
                   </TableRow>
                 )}
               </TableBody>
+        
+    <TableFooter>
+      <TableRow>
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          count={filteredData.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          sx={{
+            backgroundColor: "#fff",
+            borderRadius: 1,
+            "& .MuiTablePagination-toolbar": {
+              flexDirection: isMobile ? "column" : "row",
+              alignItems: isMobile ? "flex-end" : "center",
+              gap: isMobile ? "10px" : "0",
+            },
+          }}
+        />
+      </TableRow>
+    </TableFooter>
             </Table>
-            <TablePagination
-              rowsPerPageOptions={[5, 10, 25]}
-              component="div"
-              count={filteredData.length}
-              rowsPerPage={rowsPerPage}
-              page={page}
-              onPageChange={handleChangePage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-              sx={{ 
-                mt: 1, 
-                backgroundColor: "#fff", 
-                borderRadius: 1,
-                '& .MuiTablePagination-toolbar': {
-                  flexDirection: isMobile ? 'column' : 'row',
-                  alignItems: isMobile ? 'flex-start' : 'center',
-                  gap: isMobile ? '10px' : '0',
-                }
-              }}
-            />
           </TableContainer>
         </>
       )}

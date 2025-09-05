@@ -99,16 +99,16 @@ th, td {
   font-size: 12px;
   padding: 8px;
   text-align: left;
-  width: 33.33%; /* Ensure equal width */
+  width: 33.33%; 
 }
 
 .label-cell {
-  font-weight: normal; /* Remove bold */
-  padding-right: 15px; /* Provide space for values */
+  font-weight: normal; 
+  padding-right: 15px; 
 }
 
 .value-cell {
-  min-width: 150px; /* Space for backend values */
+  min-width: 150px; 
 }
 
 
@@ -117,28 +117,28 @@ th, td {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 60px;  /* Adjust the height to make it square-shaped */
-  width: 60px;   /* Adjust the width to make it square-shaped */
-  background-color: #5ab7f9; /* Optional: Set a background color */
-  border: 1px solid #ddd;   /* Optional: Add a border for a square block effect */
-  border-radius: 25px; /* Optional: Add rounded corners if you prefer */
+  height: 60px; 
+  width: 60px;   
+  background-color: #5ab7f9; 
+  border: 1px solid #ddd;   
+  border-radius: 25px; 
 }
 
 .square-day:hover {
-  background-color: #e0e0e0; /* Optional: Change background color on hover */
+  background-color: #e0e0e0;
 }
 
 
 .square-block {
-  width: 70px; /* Increase size for better spacing */
-  height: 70px; /* Keep width and height same for a perfect square */
+  width: 70px; 
+  height: 70px; 
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #f8f9fa; /* Light background */
-  box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow instead of borders */
-  border-radius: 10px; /* Slight rounding for smooth design */
-  font-size: 1.2rem; /* Larger font for better visibility */
+  background-color: #f8f9fa; 
+  box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px; 
+  font-size: 1.2rem;
   font-weight: bold;
   transition: 0.2s ease-in-out;
 }
@@ -179,7 +179,7 @@ th, td {
   font-size: 1.25rem;
   font-weight: bold;
   border-radius: 8px;
-  margin-bottom: 1.5rem; /* Adds space below the heading */
+  margin-bottom: 1.5rem; 
 }
 
 .hover-shadow {
@@ -200,12 +200,9 @@ th, td {
 }
 
 
-
-
-/* Set the width for the custom card column */
 .card-column {
-  flex: 0 0 20%;  /* This ensures that each card takes up around 20% of the width */
-  max-width: 20%;  /* This limits the maximum width */
+  flex: 0 0 20%;  
+  max-width: 20%; 
 }
 
 
@@ -244,13 +241,13 @@ th, td {
 
 
 .visit-style {
-  border: 1px solid black;   /* Border from all sides */
-  padding: 10px;             /* Padding from all sides */
+  border: 1px solid black;   
+  padding: 10px;             
 }
 
 .visit-style td {
-  padding: 10px 15px;         /* Padding inside cells */
-  font-size: 38px;           /* Increase font size */
+  padding: 10px 15px;        
+  font-size: 38px;          
 }
 
 .visitpdftable{
@@ -272,21 +269,21 @@ th, td {
 
 
 .ag-theme-alpine {
-  height: auto; /* or set to 400px, etc. */
+  height: auto; 
   width: 100%;
 }
 
 
 .ag-paging-panel select {
-  pointer-events: none; /* Disable interaction */
-  opacity: 0; /* Hide the dropdown */
+  pointer-events: none; 
+  opacity: 0; 
 }
 
 
-/* Style for Ag-Grid headers */
+
 .ag-theme-alpine .ag-header-cell {
-  background-color: #3621a9;  /* Replace with your desired color */
-  color: rgb(249, 244, 244);  /* Optional: Change text color for contrast */
-  font-weight: bold;  /* Optional: Make text bold */
+  background-color: #3621a9;  
+  color: rgb(249, 244, 244); 
+  font-weight: bold;  
 }
 

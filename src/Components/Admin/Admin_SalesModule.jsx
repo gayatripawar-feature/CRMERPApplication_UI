@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { FaPlus } from "react-icons/fa";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Box, TablePagination, } from "@mui/material";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Box, TablePagination, TableFooter, } from "@mui/material";
 import { Edit as EditIcon, Delete as DeleteIcon } from "@mui/icons-material";
 import { TextField, Button, Grid, MenuItem, Select, InputLabel, FormControl, NativeSelect } from '@mui/material';
 import { toast, ToastContainer } from 'react-toastify';
@@ -606,13 +606,12 @@ const Admin_SalesModule = () => {
                   </TableRow>
                 )}
               </TableBody>
-            </Table>
-
-          </TableContainer>
-
-          <TablePagination
+<TableFooter>
+   <TableRow>
+     
+ <TablePagination
             rowsPerPageOptions={[5, 8, 15, 25]}
-            component="div"
+          
             count={filteredSalesPersons.length}
             rowsPerPage={rowsPerPage}
             page={page}
@@ -623,11 +622,20 @@ const Admin_SalesModule = () => {
             sx={{
               '& .MuiTablePagination-toolbar': {
                 flexDirection: isMobile ? 'column' : 'row',
-                alignItems: isMobile ? 'flex-start' : 'center',
+                alignItems: isMobile ? 'flex-end' : 'center',
+                justifyContent: "flex-end", 
                 gap: isMobile ? '10px' : '0',
               }
             }}
           />
+          
+</TableRow>
+          </TableFooter>
+            </Table>
+
+          </TableContainer>
+
+         
         </Paper>
       )}
 
