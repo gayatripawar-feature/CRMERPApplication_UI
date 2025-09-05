@@ -1,5 +1,3 @@
-
-
 // import { toast } from "react-toastify";
 // import React, { useState, useCallback, useRef, useEffect } from "react";
 // import {
@@ -324,7 +322,7 @@
 
 //       <div className="d-flex w-100">
 
-//         <div
+//         {/* <div
 //           className=" text-white p-3 d-flex flex-column"
 //           style={{
 //             width: collapsed ? '80px' : '250px',
@@ -336,7 +334,25 @@
 //             scrollbarWidth: 'none',
 //              position: "relative", 
 //           }}
-//         >
+//         > */}
+//          <div
+//   className="sidebar text-white p-3 d-flex flex-column"
+//   style={{
+//     width: collapsed ? "80px" : "250px",
+//     height: "100vh",                  // full viewport height
+//     transition: "width 0.3s",
+//     flexShrink: 0,
+//     background: Constants.primaryColor,
+//     scrollbarWidth: "none",
+   
+//     position: "fixed",                 // keep sidebar fixed
+//     top: 0,
+//     left: 0,
+//     overflow: "hidden",                // prevent sidebar scroll
+//     zIndex: 1000,
+//   }}
+// >
+
        
 
 //           <ul className="nav flex-column">
@@ -370,20 +386,34 @@
 //           </div>
 //         </div>
 
-//         <div
+//         {/* <div
 //           className="main-content flex-grow-1 p-3 "
 //           style={{
-
-//             paddingLeft: collapsed ? "80px" : "250px",
+//              paddingLeft: collapsed ? "80px" : "250px",
 //             transition: "margin-left 0.3s ease-in-out",
 //             width: collapsed ? "calc(100% - 80px)" : "calc(100% - 250px)",
 //             background: "#fff",
 //             minHeight: "100vh",
 //             borderRadius: "10px",
 //             boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
-
+           
 //           }}
-//         >
+//         > */}
+        
+// <div
+//   className="main-content flex-grow-1 p-3"
+//   style={{
+//     marginLeft: collapsed ? "80px" : "250px",    // ✅ shift content, not padding
+//     transition: "margin-left 0.3s ease-in-out",
+//     width: collapsed ? "calc(100% - 80px)" : "calc(100% - 250px)", // ✅ match sidebar width
+//     background: "#fff",
+//     minHeight: "100vh",
+//     borderRadius: "10px",
+//     boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
+//     overflowY: "auto",   // allow scrolling if content is long
+    
+//   }}
+// >
 //           <Outlet />
 //         </div>
 //       </div>
@@ -500,8 +530,18 @@
 //     </li>
 //   );
 // });
-
 // export default Dashboard;
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -522,6 +562,7 @@ import { FaMoneyBillWave, FaParking, FaChartBar } from "react-icons/fa";
 import RolePermissions from "./RolePermissions";
 import Constants from "./Constants";
 
+
 const Dashboard = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [query, setQuery] = useState("");
@@ -534,10 +575,12 @@ const Dashboard = () => {
 //   return window.innerWidth <= 768;
 // });
 
+
 const [collapsed, setCollapsed] = useState(() => {
   // Always collapsed on small screens
   return window.innerWidth <= 768;
 });
+
 
   const [sections, setSections] = useState({
     admin: false,
@@ -554,6 +597,7 @@ const [collapsed, setCollapsed] = useState(() => {
 //   }
 // }, []);
 
+
 const toggleSidebar = useCallback(() => {
   if (window.innerWidth > 768) {
     setCollapsed((prev) => !prev);   // expand/collapse only on tablet/laptop
@@ -561,6 +605,8 @@ const toggleSidebar = useCallback(() => {
     setCollapsed(true);  // force collapsed on mobile
   }
 }, []);
+
+
 
 
   const toggleSection = useCallback((section) => {
@@ -571,13 +617,18 @@ const toggleSidebar = useCallback(() => {
     navigate('/login');
   }, [navigate]);
 
+
   const handleClose = () => {
     console.log("Closing the voice navigation.");
     setShowVoiceRecognition(false);
   };
 
+
   const role = localStorage.getItem("userRole");
   const allowedMenus = RolePermissions[role] || [];
+
+
+
 
 
 
@@ -598,9 +649,12 @@ const toggleSidebar = useCallback(() => {
   };
 
 
+
+
   // functions for path  and voice system for their respective modules:
   const buildVoiceCommands = (allowedMenus, navigate) => {
     const commands = {};
+
 
     allowedMenus.forEach(menu => {
       if (menu.subItems) {
@@ -611,12 +665,15 @@ const toggleSidebar = useCallback(() => {
       }
     });
 
+
     return commands;
   };
+
 
   // 🔹 Build search data only for allowed menus
   const buildSearchData = (allowedMenus) => {
     const searchList = [];
+
 
     allowedMenus.forEach(menu => {
       if (menu.subItems) {
@@ -629,23 +686,31 @@ const toggleSidebar = useCallback(() => {
       }
     });
 
+
     return searchList;
   };
 
 
 
+
+
+
   // ✅ Build commands & search data dynamically
+
 
   const allCommandRoutes = buildAllVoiceCommands(RolePermissions); // 🔹 all
   const commandRoutes = buildVoiceCommands(allowedMenus, navigate);  // filtred
   const moduleData = buildSearchData(allowedMenus);
 
+
   // for path system :moduleData
 
-  
+
+ 
 const handleSearch = (event) => {
   const searchTerm = event.target.value.toLowerCase();
   setQuery(searchTerm);
+
 
   if (searchTerm) {
     const filteredResults = moduleData.filter((item) =>
@@ -658,13 +723,17 @@ const handleSearch = (event) => {
 };
 
 
+
+
   const handleRedirect = (path) => {
     navigate(path);
     setQuery("");
     setResults([]);
   };
 
+
 // for voice system => commandRoutes
+
 
   useEffect(() => {
     if (!recognitionRef.current && ("webkitSpeechRecognition" in window || "SpeechRecognition" in window)) {
@@ -674,13 +743,16 @@ const handleSearch = (event) => {
       recognition.interimResults = false;
       recognition.lang = "en-US";
 
+
       recognition.onstart = () => {
         setListening(true);
       };
 
+
       recognition.onend = () => {
         setListening(false);
       };
+
 
      recognition.onresult = (event) => {
         let command = event.results[0][0].transcript.trim().toLowerCase();
@@ -693,17 +765,20 @@ const handleSearch = (event) => {
           }
         }
 
+
         if (!matchedPath) {
-        
+       
           toast.error("❓ Command not recognized");
           speak("Command not recognized");
           return;
         }
 
-        
+
+       
         const hasAccess = moduleData.some(
           (item) => item.value.toLowerCase() === matchedPath.toLowerCase()
         );
+
 
         if (hasAccess) {
           speak(`Redirecting to ${command}`, () => {
@@ -714,10 +789,13 @@ const handleSearch = (event) => {
           speak("You don’t have access to this module");
         }
 
+
         setTimeout(() => {
           setListening(false);
         }, 1000);
       };
+
+
 
 
       recognition.onerror = () => {
@@ -737,6 +815,8 @@ const handleSearch = (event) => {
     };
 
 
+
+
     speech.onend = () => {
       if (callback) {
         callback();
@@ -749,7 +829,9 @@ const handleSearch = (event) => {
     window.speechSynthesis.cancel();
     window.speechSynthesis.speak(speech);
 
+
   };
+
 
   const startListening = () => {
     if (recognitionRef.current && !listening) {
@@ -759,17 +841,20 @@ const handleSearch = (event) => {
   };
 
 
+
+
   return (
-    // <div className="d-flex flex-column vh-100 ">
-    <div className="d-flex flex-column" style={{ minHeight: "100vh" }}>
+    <div className="d-flex flex-column vh-100 ">
 
 
-      <nav className="navbar  px-3" style={{ background: Constants.primaryColor  }}>
+      <nav className="navbar  px-3" style={{ background: Constants.primaryColor }}>
+
 
         <div className="d-flex align-items-center">
           <button className="btn  me-3 " onClick={toggleSidebar} style={{ cursor: "pointer" }}>
-            
+           
              
+
 
  <img
       src="/unnamed.png"
@@ -777,12 +862,17 @@ const handleSearch = (event) => {
       className="rounded-circle profile"
     />
 
+
           </button>
           <span className="navbar-brand mb-0 h1">CRM ERP</span>
         </div>
 
 
+
+
         <div className="position-relative">
+
+
 
 
           <div className="mx-auto w-100 d-none d-md-block">
@@ -792,6 +882,7 @@ const handleSearch = (event) => {
               placeholder="Search..."
               onChange={handleSearch}
             />
+
 
             <FaMicrophone
               size={30}
@@ -815,10 +906,13 @@ const handleSearch = (event) => {
                 </li>
               ))}
 
+
             </ul>
           )}
         </div>
         <div className="d-flex align-items-center">
+
+
 
 
           {/* <img
@@ -830,42 +924,44 @@ const handleSearch = (event) => {
       </nav>
      
 
+
       <div className="d-flex w-100">
 
+
         {/* <div
-          className=" sidebar text-white p-3 d-flex flex-column"
+          className=" text-white p-3 d-flex flex-column"
           style={{
             width: collapsed ? '80px' : '250px',
-            // height: '100vh',
-            minHeight: "100%",
+            height: '100vh',
             transition: 'width 0.3s',
             flexShrink: 0,
             background:Constants.primaryColor,
-            // overflowY: 'auto',
+            overflowY: 'auto',
             scrollbarWidth: 'none',
-             position: "relative", 
-            
-            
+             position: "relative",
+          
           }}
         > */}
-       
-       <div
-  className="sidebar text-white p-3 d-flex flex-column"
+      
+<div
+  className="text-white p-3 d-flex flex-column"
   style={{
-    width: collapsed ? "80px" : "250px",
-    height: "100vh",                  // full viewport height
-    transition: "width 0.3s",
+    width: collapsed ? '80px' : '250px',
+    height: '100vh',
+    transition: 'width 0.3s',
     flexShrink: 0,
     background: Constants.primaryColor,
-    scrollbarWidth: "none",
+    // position: "sticky",   // ✅ keeps sidebar visible inside parent
    
-    position: "fixed",                 // keep sidebar fixed
-    top: 0,
-    left: 0,
-    overflow: "hidden",                // prevent sidebar scroll
-    zIndex: 1000,
+    top: 0,               // ✅ stick to top
+    overflowY: window.innerWidth <= 768 ? "hidden" : "auto", // ✅ no scroll on mobile
+ 
+    scrollbarWidth: 'none',
+  // position: "fixed",
+
   }}
 >
+
 
 
           <ul className="nav flex-column">
@@ -877,7 +973,7 @@ const handleSearch = (event) => {
       collapsed={collapsed}
     />
   )}
-          
+         {/*To get the  Sidebar values  */}
             {allowedMenus.map((menu, idx) => (
               <SidebarDropdown
                 key={idx}
@@ -886,11 +982,12 @@ const handleSearch = (event) => {
                 collapsed={collapsed}
                 isOpen={sections[menu.label]}
                 toggleOpen={() => toggleSection(menu.label)}
-                subItems={menu.subItems}
+                subItems={menu.subItems}       //  SUBMODULES passed here
               />
             ))}
           </ul>
           <div style={{ marginTop: "auto", marginBottom: "50px" }}>
+
 
             <button className="btn w-100 d-flex align-items-center justify-content-center" onClick={handleLogout} style={{ background: "#fbcbd7ff" }}>
               <FaSignOutAlt className="me-2" />
@@ -899,39 +996,27 @@ const handleSearch = (event) => {
           </div>
         </div>
 
+
         {/* <div
           className="main-content flex-grow-1 p-3 "
           style={{
-
             paddingLeft: collapsed ? "80px" : "250px",
             transition: "margin-left 0.3s ease-in-out",
             width: collapsed ? "calc(100% - 80px)" : "calc(100% - 250px)",
             background: "#fff",
             minHeight: "100vh",
-            // minHeight: "100%", 
             borderRadius: "10px",
             boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
 
+
           }}
         > */}
-
-        {/* <div
-  className="main-content flex-grow-1 p-3 "
-  style={{
-    paddingLeft: collapsed ? "80px" : "350px",
-    transition: "margin-left 0.3s ease-in-out",
-    width: collapsed ? "calc(100% - 80px)" : "calc(100% - 250px)",
-    background: "#fff",
-    minHeight: "100vh",
-    borderRadius: "10px",
-    boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
-  }}
-> */}
-
+        
 <div
   className="main-content flex-grow-1 p-3"
   style={{
-    marginLeft: collapsed ? "80px" : "250px",    // ✅ shift content, not padding
+    // marginLeft: collapsed ? "10px" : "10px",    // ✅ shift content, not padding
+    // marginLeft: collapsed ? "80px" : "250px",
     transition: "margin-left 0.3s ease-in-out",
     width: collapsed ? "calc(100% - 80px)" : "calc(100% - 250px)", // ✅ match sidebar width
     background: "#fff",
@@ -946,11 +1031,14 @@ const handleSearch = (event) => {
       </div>
     </div>
 
+
   );
 };
 
+
 const SidebarItem = React.memo(({ to, icon, label, collapsed }) => (
   <li className="nav-item">
+
 
     <NavLink
       to={to}
@@ -958,6 +1046,7 @@ const SidebarItem = React.memo(({ to, icon, label, collapsed }) => (
         `nav-link d-flex align-items-center ${isActive ? "active-tab" : "text-white"
         }`
       }
+
 
       style={({ isActive }) => ({
         background: isActive ? "#fbcbd7ff" : "transparent",
@@ -976,13 +1065,18 @@ const SidebarItem = React.memo(({ to, icon, label, collapsed }) => (
 
 
 
+
+
+
 const SidebarDropdown = React.memo(({ label, icon, collapsed, isOpen, toggleOpen, subItems }) => {
   const [showMenu, setShowMenu] = useState(false);
   const itemRef = useRef(null);
   const [menuPos, setMenuPos] = useState({ top: 0 });
 
+
   // Determine if screen is mobile/tablet
   const isMobileOrTablet = window.innerWidth <= 992;
+
 
   const handleClick = () => {
     if (!collapsed) {
@@ -994,6 +1088,7 @@ const SidebarDropdown = React.memo(({ label, icon, collapsed, isOpen, toggleOpen
       setShowMenu((prev) => !prev);
     }
   };
+
 
   // Close floating menu when clicking outside
   useEffect(() => {
@@ -1008,6 +1103,7 @@ const SidebarDropdown = React.memo(({ label, icon, collapsed, isOpen, toggleOpen
     return () => document.removeEventListener("mousedown", handleOutsideClick);
   }, [showMenu, isMobileOrTablet]);
 
+
   return (
     <li className="nav-item mb-3 position-relative" ref={itemRef}>
       <div
@@ -1020,6 +1116,7 @@ const SidebarDropdown = React.memo(({ label, icon, collapsed, isOpen, toggleOpen
         {collapsed && <span className="ms-auto">&#9662;</span>}
       </div>
 
+
       {/* Inline submenu for expanded sidebar */}
       {isOpen && !collapsed && (
         <ul className="nav flex-column ps-3">
@@ -1029,15 +1126,19 @@ const SidebarDropdown = React.memo(({ label, icon, collapsed, isOpen, toggleOpen
         </ul>
       )}
 
+
       {/* Floating submenu for mobile/tablet only */}
       {collapsed && showMenu && isMobileOrTablet && (
         <ul
           className="list-group position-fixed shadow"
+         
           style={{
             minWidth: "200px",
             zIndex: 9999,
             left: "80px",       // next to collapsed sidebar
-            top: menuPos.top,
+            // top: menuPos.top,
+            top:0,
+        
           }}
         >
           <li className="list-group-item fw-bold bg-light">{label}</li>
@@ -1060,14 +1161,5 @@ const SidebarDropdown = React.memo(({ label, icon, collapsed, isOpen, toggleOpen
 });
 
 
-
-
-
-
-
-
-
-
 export default Dashboard;
-
 

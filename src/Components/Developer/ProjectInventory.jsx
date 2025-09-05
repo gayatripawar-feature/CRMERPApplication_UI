@@ -234,7 +234,8 @@ const ProjectInventory = () => {
       style={{ 
         display: 'flex', 
         alignItems: 'center', 
-        backgroundColor: '#3621a9', 
+        // backgroundColor: '#3621a9', 
+        backgroundColor:Constants.primaryColor,
         padding: '8px', 
         borderRadius: '20px',  
         margin: '5px',
@@ -250,7 +251,8 @@ const ProjectInventory = () => {
         justifyContent: "center",
         textTransform: "none",
         position: "relative",
-        background: "linear-gradient(0deg, #4b2ac2 0%, #5c39d3 100%)", 
+        // background: "linear-gradient(0deg, #4b2ac2 0%, #5c39d3 100%)", 
+        background:Constants.primaryColor,
         boxShadow:
           "inset 2px 2px 2px 0px rgba(255,255,255,.5), 7px 7px 20px 0px rgba(0,0,0,.1), 4px 4px 5px 0px rgba(0,0,0,.1)",
       }}
@@ -329,7 +331,7 @@ const ProjectInventory = () => {
                 <Button
                    variant="contained"
                    sx={{
-                     background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+                    background:Constants.primaryColor,
                      color: "white",
                      fontWeight: "bold",
                      textTransform: "none",
@@ -339,7 +341,7 @@ const ProjectInventory = () => {
                      alignItems: "center",  
                      gap: "8px",  
                      "&:hover": {
-                       background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+                       background:Constants.primaryColor,
                      },
                    }}
                    onClick={() => {
@@ -372,16 +374,17 @@ const ProjectInventory = () => {
           ) : (
             <div className="firm-form mt-4 p-3 border rounded" 
             style={{
-              maxHeight: "500px",
+              // maxHeight: "500px",
               overflowY: "auto",
               backgroundColor: "#f8f9fa", 
               border: "1px solid #ccc", 
+
             }}
             >
               
               <Grid container spacing={2}>
                 
-                <Grid item xs={4}>
+                <Grid item xs={12} sm={6} md={4}>
                 <TextField
   label="Project Name"
   fullWidth
@@ -391,7 +394,7 @@ const ProjectInventory = () => {
 />
 </Grid> 
                 
-                <Grid item xs={4}>
+               <Grid item xs={12} sm={6} md={4}>
   <TextField
     label="Wing"
     fullWidth
@@ -401,7 +404,7 @@ const ProjectInventory = () => {
   />
 </Grid>
 
-                <Grid item xs={4}>
+               <Grid item xs={12} sm={6} md={4}>
   <TextField
     label="Floor"
     fullWidth
@@ -412,7 +415,7 @@ const ProjectInventory = () => {
 </Grid>
 
                 
-                <Grid item xs={4}>
+               <Grid item xs={12} sm={6} md={4}>
   <TextField
     label="Flat No."
     fullWidth
@@ -424,7 +427,7 @@ const ProjectInventory = () => {
 
 
               
-<Grid item xs={4}>
+<Grid item xs={12} sm={6} md={4}>
   <TextField
     type="number"
     label="RERA Carpet Area (Sq Mtr)"
@@ -437,7 +440,7 @@ const ProjectInventory = () => {
 </Grid>
 
                
-                <Grid item xs={4}>
+               <Grid item xs={12} sm={6} md={4}>
   <TextField
     type="number"
     label="RERA Carpet Area (Sq Ft)"
@@ -454,7 +457,7 @@ const ProjectInventory = () => {
 
                 
 
-<Grid item xs={4}>
+<Grid item xs={12} sm={6} md={4}>
   <TextField
     type="number"
     label="Total Saleable Area (Sq. Fts)"
@@ -470,7 +473,7 @@ const ProjectInventory = () => {
 </Grid>
 
               
-                <Grid item xs={4}>
+              <Grid item xs={12} sm={6} md={4}>
   <TextField
     type="number"
     label="Saleable to Carpet Area Ratio (Sq. Fts)"
@@ -486,7 +489,7 @@ const ProjectInventory = () => {
 </Grid>
 
               
-                <Grid item xs={4}>
+               <Grid item xs={12} sm={6} md={4}>
   <TextField
     select
     label="Type of Units"
@@ -506,7 +509,7 @@ const ProjectInventory = () => {
 
                 
 
-<Grid item xs={4}>
+<Grid item xs={12} sm={6} md={4}>
   <TextField
     select
     label="Configuration"
@@ -525,7 +528,7 @@ const ProjectInventory = () => {
 
 
                
-                <Grid item xs={4}>
+               <Grid item xs={12} sm={6} md={4}>
   <TextField
     select
     label="Status"
@@ -542,7 +545,7 @@ const ProjectInventory = () => {
   </TextField>
 </Grid>
 
-                <Grid item xs={4}>
+                <Grid item xs={12} sm={6} md={4}>
   <TextField
     select
     label="Select Owner"
@@ -561,7 +564,7 @@ const ProjectInventory = () => {
 
 
            
-<Grid item xs={4}>
+<Grid item xs={12} sm={6} md={4}>
   <TextField
     type="number"
     label="ATT. Terrace Carpet Area (Sq Ft)"
@@ -574,7 +577,7 @@ const ProjectInventory = () => {
 </Grid>
 
 
-                <Grid item xs={4}>
+               <Grid item xs={12} sm={6} md={4}>
   <TextField
     type="number"
     label="Balcony Area/Sitout Carpet Area (Sq Ft)"
@@ -587,7 +590,7 @@ const ProjectInventory = () => {
 </Grid>
 
               
-                <Grid item xs={4}>
+               <Grid item xs={12} sm={6} md={4}>
   <TextField
     type="number"
     label="Porch Area (Sq Ft)"
@@ -600,7 +603,7 @@ const ProjectInventory = () => {
 </Grid>
 
               
-                <Grid item xs={4}>
+                <Grid item xs={12} sm={6} md={4}>
   <TextField
     type="number"
     label="Top Terrace Carpet Area (Sq Ft)"
@@ -612,7 +615,7 @@ const ProjectInventory = () => {
   />
 </Grid>
 
-                <Grid item xs={4}>
+                <Grid item xs={12} sm={6} md={4}>
   <TextField
     type="number"
     label="Super Built-up Area (Sq Ft)"
@@ -625,7 +628,7 @@ const ProjectInventory = () => {
 </Grid>
 
                 
-                <Grid item xs={4}>
+             <Grid item xs={12} sm={6} md={4}>
   <TextField
     label="OPEN/ENCLOSED BALCONY AS SANCTIONED"
     fullWidth
@@ -635,7 +638,7 @@ const ProjectInventory = () => {
   />
 </Grid>
 
-                <Grid item xs={4}>
+               <Grid item xs={12} sm={6} md={4}>
   <TextField
     label="PODIUM GARDE"
     fullWidth
@@ -701,21 +704,30 @@ const ProjectInventory = () => {
             >
              
               <Grid container spacing={2}>
-                <Grid item xs={4}><TextField label="Project Name" fullWidth /></Grid>
-                <Grid item xs={4}><TextField label="Wing" fullWidth /></Grid>
-                <Grid item xs={4}><TextField label="Floor" fullWidth /></Grid>
-                <Grid item xs={4}><TextField label="Flat No." fullWidth /></Grid>
-                <Grid item xs={4}><TextField type="number" label="RERA Carpet Area (Sq Mtr)" fullWidth 
+                <Grid item xs={12} sm={6} md={4}>
+                  <TextField label="Project Name" fullWidth />
+                  </Grid>
+               <Grid item xs={12} sm={6} md={4}>
+                  <TextField label="Wing" fullWidth /></Grid>
+                <Grid item xs={12} sm={6} md={4}>
+                  <TextField label="Floor" fullWidth /></Grid>
+                <Grid item xs={12} sm={6} md={4}>
+                  <TextField label="Flat No." fullWidth /></Grid>
+               <Grid item xs={12} sm={6} md={4}>
+                  <TextField type="number" label="RERA Carpet Area (Sq Mtr)" fullWidth 
                 inputProps={{ step: "0.01", min: "0.01" }}
                 /></Grid>
-                <Grid item xs={4}><TextField type="number" label="RERA Carpet Area (Sq Ft)" fullWidth inputProps={{ step: "0.01", min: "0.01" }}
+                <Grid item xs={12} sm={6} md={4}>
+                  <TextField type="number" label="RERA Carpet Area (Sq Ft)" fullWidth inputProps={{ step: "0.01", min: "0.01" }}
                 /></Grid>
-                <Grid item xs={4}><TextField  type="number" label="Total Saleable Area (Sq. Fts)" fullWidth inputProps={{ step: "0.01", min: "0.01" }}
+              <Grid item xs={12} sm={6} md={4}>
+                  <TextField  type="number" label="Total Saleable Area (Sq. Fts)" fullWidth inputProps={{ step: "0.01", min: "0.01" }}
                 /></Grid>
-                <Grid item xs={4}><TextField  type="number" label="Saleable to Carpet Area Ratio (Sq. Fts)" fullWidth inputProps={{ step: "0.01", min: "0.01" }}/></Grid>
+               <Grid item xs={12} sm={6} md={4}>
+                  <TextField  type="number" label="Saleable to Carpet Area Ratio (Sq. Fts)" fullWidth inputProps={{ step: "0.01", min: "0.01" }}/></Grid>
 
              
-                <Grid item xs={4}>
+              <Grid item xs={12} sm={6} md={4}>
                   <TextField select label="Type of Units" fullWidth>
                     {unitTypes.map((type, idx) => (
                       <MenuItem key={idx} value={type}>{type}</MenuItem>
@@ -731,7 +743,7 @@ const ProjectInventory = () => {
                   </TextField>
                 </Grid>
 
-                <Grid item xs={4}>
+                <Grid item xs={12} sm={6} md={4}>
                   <TextField select label="Status" fullWidth>
                     {statusOptions.map((status, idx) => (
                       <MenuItem key={idx} value={status}>{status}</MenuItem>
@@ -740,7 +752,7 @@ const ProjectInventory = () => {
                 </Grid>
 
               
-                <Grid item xs={4}>
+               <Grid item xs={12} sm={6} md={4}>
                   <TextField select label="Select Owner" fullWidth>
                     {owners.map((owner, idx) => (
                       <MenuItem key={idx} value={owner}>{owner}</MenuItem>
@@ -749,7 +761,7 @@ const ProjectInventory = () => {
                 </Grid>
 
                 
-                <Grid item xs={4}>
+                <Grid item xs={12} sm={6} md={4}>
   <TextField
     type="number"
     label="ATT. Terrace Carpet Area (Sq Ft)"
@@ -758,25 +770,35 @@ const ProjectInventory = () => {
   />
 </Grid>
 
-                <Grid item xs={4}><TextField type="number" label="Balcony Area/Sitout Carpet Area (Sq Ft)" fullWidth 
+                <Grid item xs={12} sm={6} md={4}>
+                  <TextField type="number" label="Balcony Area/Sitout Carpet Area (Sq Ft)" fullWidth 
                 inputProps={{ step: "0.01", min: "0.01" }}/></Grid>
-                <Grid item xs={4}><TextField type="number" label="Porch Area (Sq Ft)" fullWidth 
+              <Grid item xs={12} sm={6} md={4}>
+                  <TextField type="number" label="Porch Area (Sq Ft)" fullWidth 
                 inputProps={{ step: "0.01", min: "0.01" }}/></Grid>
-                <Grid item xs={4}><TextField  type="number" label="Top Terrace Carpet Area (Sq Ft)" fullWidth inputProps={{ step: "0.01", min: "0.01" }}
+                <Grid item xs={12} sm={6} md={4}>
+                  <TextField  type="number" label="Top Terrace Carpet Area (Sq Ft)" fullWidth inputProps={{ step: "0.01", min: "0.01" }}
                 /></Grid>
-                <Grid item xs={4}><TextField type="number" label="Super Built-up Area (Sq Ft)" fullWidth inputProps={{ step: "0.01", min: "0.01" }}
+               <Grid item xs={12} sm={6} md={4}>
+                  <TextField type="number" label="Super Built-up Area (Sq Ft)" fullWidth inputProps={{ step: "0.01", min: "0.01" }}
                 /></Grid>
-                <Grid item xs={4}><TextField label="OPEN/ENCLOSED BALCONY AS SANCTIONED" fullWidth /></Grid>
-                <Grid item xs={4}><TextField label="PODIUM GARDE" fullWidth /></Grid>
+               <Grid item xs={12} sm={6} md={4}>
+                  <TextField label="OPEN/ENCLOSED BALCONY AS SANCTIONED" fullWidth /></Grid>
+              <Grid item xs={12} sm={6} md={4}>
+                  <TextField label="PODIUM GARDE" fullWidth /></Grid>
               </Grid>
 
            
               {partners.map((_, index) => (
                 <Grid container spacing={2} key={index}>
-                  <Grid item xs={4}><TextField label="Name" fullWidth /></Grid>
-                  <Grid item xs={4}><TextField label="Age" fullWidth /></Grid>
-                  <Grid item xs={4}><TextField label="Occupation" fullWidth /></Grid>
-                  <Grid item xs={4}>
+                 <Grid item xs={12} sm={6} md={4}>
+                    <TextField label="Name" fullWidth />
+                    </Grid>
+                  <Grid item xs={12} sm={6} md={4}>
+                    <TextField label="Age" fullWidth /></Grid>
+                 <Grid item xs={12} sm={6} md={4}>
+                    <TextField label="Occupation" fullWidth /></Grid>
+                 <Grid item xs={12} sm={6} md={4}>
                     <Button variant="contained" color="secondary" onClick={() => setPartners(partners.filter((_, i) => i !== index))}>
                       <FaTrash />
                     </Button>
