@@ -1,10 +1,17 @@
 
    html, body {
     height: 100%;
-    overflow: hidden; 
+    /* overflow: hidden;  */
    }  
   
-  
+/*    
+  html, body, #root {
+  height: 100%;
+  margin: 0;
+  overflow-x: hidden;  
+  overflow-y: auto;    
+} */
+
   
   
 
@@ -25,7 +32,8 @@
   transition: width 0.3s ease;
   padding-top: 20px;
   overflow-y: auto;
-  height: 100vh;  /* Ensure sidebar takes full viewport height */
+  height: 100vh;  
+  
 }
 
 .sidebar.closed {

@@ -920,21 +920,13 @@ const handleFirmSubmit = () => {
   </div>
 ))}
 
-      </div>
-
-      
- 
-
-
-     
+      </div>  
 {expandedSection === 0 && selectedTab === "firm" && (
   <div className="content-container mt-3">
     {!showFirmForm ? (
       <>
         <div className='button-container'>
-   
-
-<div className="d-flex gap-3">  
+    <div className="d-flex gap-3">  
   <Button 
     variant="contained" 
     color="primary" 
