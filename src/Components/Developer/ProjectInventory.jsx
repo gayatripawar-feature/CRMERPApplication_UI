@@ -220,7 +220,7 @@ const ProjectInventory = () => {
   
   return (
     <div className="main-content">
-      <h6>Dashboard / Developer Module / Project Inventory</h6>
+      <h6 className='col-12'>Dashboard / Developer Module / Project Inventory</h6>
 
     
       <div className="d-flex align-items-center mb-2">
@@ -231,11 +231,11 @@ const ProjectInventory = () => {
   {sections.map((section, index) => (
     <div 
       key={index} 
+
       style={{ 
         display: 'flex', 
         alignItems: 'center', 
-        // backgroundColor: '#3621a9', 
-        backgroundColor:Constants.primaryColor,
+         backgroundColor:Constants.primaryColor,
         padding: '8px', 
         borderRadius: '20px',  
         margin: '5px',
@@ -246,12 +246,9 @@ const ProjectInventory = () => {
         overflow: "hidden",
         whiteSpace: "nowrap",
         fontSize: "14px",
-        
-       
-        justifyContent: "center",
+       justifyContent: "center",
         textTransform: "none",
         position: "relative",
-        // background: "linear-gradient(0deg, #4b2ac2 0%, #5c39d3 100%)", 
         background:Constants.primaryColor,
         boxShadow:
           "inset 2px 2px 2px 0px rgba(255,255,255,.5), 7px 7px 20px 0px rgba(0,0,0,.1), 4px 4px 5px 0px rgba(0,0,0,.1)",

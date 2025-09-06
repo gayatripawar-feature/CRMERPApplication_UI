@@ -544,7 +544,1151 @@
 
 
 
+// Second Code :
+// ****************
+// import { toast } from "react-toastify";
+// import React, { useState, useCallback, useRef, useEffect } from "react";
+// import {
+//   FaBars, FaTachometerAlt, FaUserShield, FaCode, FaChartLine, FaCogs, FaSignOutAlt,
+//   FaUsers, FaUserCheck, FaHome, FaFileAlt, FaFileSignature, FaStamp, FaDraftingCompass, FaBell,
+//   FaInfoCircle, FaBuilding, FaFileInvoiceDollar, FaBullhorn, FaUserTie, FaLandmark, FaCalendarAlt, FaPeopleArrows
+// } from "react-icons/fa";
+// import { useNavigate } from "react-router-dom";
+// import { Outlet, Link, NavLink } from "react-router-dom";
+// import { FaClipboardList, FaCalendarCheck, FaRegHandshake, FaRegClock, FaTasks, FaRegTimesCircle, FaClipboard, FaRegEdit } from 'react-icons/fa';
+// import { FaMicrophone } from "react-icons/fa";
+// import VoiceNavigation from "./VoiceNavigation";
+// import { FaMoneyBillWave, FaParking, FaChartBar } from "react-icons/fa";
+// import RolePermissions from "./RolePermissions";
+// import Constants from "./Constants";
 
+
+// const Dashboard = () => {
+//   const [searchQuery, setSearchQuery] = useState("");
+//   const [query, setQuery] = useState("");
+//   const recognitionRef = useRef(null);
+//   const [listening, setListening] = useState(false);
+//   const [results, setResults] = useState([]);
+//   // const [collapsed, setCollapsed] = useState(false);
+// //   const [collapsed, setCollapsed] = useState(() => {
+// //   // Default collapsed on small screens
+// //   return window.innerWidth <= 768;
+// // });
+
+
+// const [collapsed, setCollapsed] = useState(() => {
+//   // Always collapsed on small screens
+//   return window.innerWidth <= 768;
+// });
+
+
+//   const [sections, setSections] = useState({
+//     admin: false,
+//     developer: false,
+//     sales: false,
+//     crm: false,
+//   });
+//   const [showVoiceRecognition, setShowVoiceRecognition] = useState(false);
+//   const navigate = useNavigate();
+//   // const toggleSidebar = useCallback(() => setCollapsed((prev) => !prev), []);
+// //   const toggleSidebar = useCallback(() => {
+// //   if (window.innerWidth > 768) {   // only toggle for medium+ screens
+// //     setCollapsed((prev) => !prev);
+// //   }
+// // }, []);
+
+
+// const toggleSidebar = useCallback(() => {
+//   if (window.innerWidth > 768) {
+//     setCollapsed((prev) => !prev);   // expand/collapse only on tablet/laptop
+//   } else {
+//     setCollapsed(true);  // force collapsed on mobile
+//   }
+// }, []);
+
+
+
+
+//   const toggleSection = useCallback((section) => {
+//     setSections((prev) => ({ ...prev, [section]: !prev[section] }));
+//   }, []);
+//   const handleLogout = useCallback(() => {
+//     localStorage.removeItem('authToken');
+//     navigate('/login');
+//   }, [navigate]);
+
+
+//   const handleClose = () => {
+//     console.log("Closing the voice navigation.");
+//     setShowVoiceRecognition(false);
+//   };
+
+
+//   const role = localStorage.getItem("userRole");
+//   const allowedMenus = RolePermissions[role] || [];
+
+
+
+
+
+
+//   // 🔹 Build ALL commands (for all modules, not filtered by role)
+//   const buildAllVoiceCommands = (rolePermissions) => {
+//     const commands = {};
+//     Object.values(rolePermissions).forEach(menus => {
+//       menus.forEach(menu => {
+//         if (menu.subItems) {
+//           menu.subItems.forEach(item => {
+//             const command = item.label.toLowerCase();
+//             commands[command] = item.to;
+//           });
+//         }
+//       });
+//     });
+//     return commands;
+//   };
+
+
+
+
+//   // functions for path  and voice system for their respective modules:
+//   const buildVoiceCommands = (allowedMenus, navigate) => {
+//     const commands = {};
+
+
+//     allowedMenus.forEach(menu => {
+//       if (menu.subItems) {
+//         menu.subItems.forEach(item => {
+//           const command = item.label.toLowerCase(); // Example: "Leads"
+//           commands[command] = item.to;             // Example: "/dashboard/sales/leads"
+//         });
+//       }
+//     });
+
+
+//     return commands;
+//   };
+
+
+//   // 🔹 Build search data only for allowed menus
+//   const buildSearchData = (allowedMenus) => {
+//     const searchList = [];
+
+
+//     allowedMenus.forEach(menu => {
+//       if (menu.subItems) {
+//         menu.subItems.forEach(item => {
+//           searchList.push({
+//             label: item.label,   // e.g. "Leads"
+//             value: item.to       // e.g. "/dashboard/sales/leads"
+//           });
+//         });
+//       }
+//     });
+
+
+//     return searchList;
+//   };
+   
+//   // ✅ Build commands & search data dynamically
+//   const allCommandRoutes = buildAllVoiceCommands(RolePermissions); // 🔹 all
+//   const commandRoutes = buildVoiceCommands(allowedMenus, navigate);  // filtred
+//   const moduleData = buildSearchData(allowedMenus);
+
+
+//   // for path system :moduleData
+
+// const handleSearch = (event) => {
+//   const searchTerm = event.target.value.toLowerCase();
+//   setQuery(searchTerm);
+//   if (searchTerm) {
+//     const filteredResults = moduleData.filter((item) =>
+//       item.label.toLowerCase().includes(searchTerm)
+//     );
+//     setResults(filteredResults);
+//   } else {
+//     setResults([]);
+//   }
+// };
+
+//   const handleRedirect = (path) => {
+//     navigate(path);
+//     setQuery("");
+//     setResults([]);
+//   };
+
+
+// // for voice system => commandRoutes
+
+
+//   useEffect(() => {
+//     if (!recognitionRef.current && ("webkitSpeechRecognition" in window || "SpeechRecognition" in window)) {
+//       recognitionRef.current = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+//       const recognition = recognitionRef.current;
+//       recognition.continuous = false;
+//       recognition.interimResults = false;
+//       recognition.lang = "en-US";
+
+
+//       recognition.onstart = () => {
+//         setListening(true);
+//       };
+
+
+//       recognition.onend = () => {
+//         setListening(false);
+//       };
+
+
+//      recognition.onresult = (event) => {
+//         let command = event.results[0][0].transcript.trim().toLowerCase();
+//         console.log("🎤 Recognized command:", command);
+//       let matchedPath = null;
+//         for (const key in allCommandRoutes) {
+//           if (command.includes(key)) {
+//             matchedPath = allCommandRoutes[key];
+//             break;
+//           }
+//         }
+
+
+//         if (!matchedPath) {
+       
+//           toast.error("❓ Command not recognized");
+//           speak("Command not recognized");
+//           return;
+//         }
+
+
+       
+//         const hasAccess = moduleData.some(
+//           (item) => item.value.toLowerCase() === matchedPath.toLowerCase()
+//         );
+
+
+//         if (hasAccess) {
+//           speak(`Redirecting to ${command}`, () => {
+//             handleRedirect(matchedPath);
+//           });
+//         } else {
+//           toast.error("🚫 You don’t have access to this module");
+//           speak("You don’t have access to this module");
+//         }
+
+
+//         setTimeout(() => {
+//           setListening(false);
+//         }, 1000);
+//       };
+
+//       recognition.onerror = () => {
+//         setListening(false);
+//       };
+//     }
+//   }, [commandRoutes, moduleData]); // 👈 added dependencies
+//   const speak = (message, callback) => {
+//     const speech = new SpeechSynthesisUtterance(message);
+//     speech.lang = "en-US";
+//     speech.rate = 1;
+   
+//     speech.onstart = () => {
+//       if (recognitionRef.current) {
+//         recognitionRef.current.stop();
+//       }
+//     };
+
+//    speech.onend = () => {
+//       if (callback) {
+//         callback();
+//       } else {
+//         if (!listening) {
+//           setTimeout(() => startListening(), 500);
+//         }
+//       }
+//     };
+//     window.speechSynthesis.cancel();
+//     window.speechSynthesis.speak(speech);
+
+
+//   };
+
+
+//   const startListening = () => {
+//     if (recognitionRef.current && !listening) {
+//       console.log("🎤 Starting recognition...");
+//       recognitionRef.current.start();
+//     }
+//   };
+
+//   return (
+//     <div className="d-flex flex-column vh-100 ">
+//     <nav className="navbar  px-3" style={{ background: Constants.primaryColor }}>
+//    <div className="d-flex align-items-center">
+//           <button className="btn  me-3 " onClick={toggleSidebar} style={{ cursor: "pointer" }}>
+//            <img
+//       src="/unnamed.png"
+//       alt="Profile"
+//       className="rounded-circle profile"
+//     />
+//  </button>
+//           <span className="navbar-brand mb-0 h1">CRM ERP</span>
+//         </div>
+//  <div className="position-relative">
+// <div className="mx-auto w-100 d-none d-md-block">
+//             <input
+//               type="text"
+//               className="form-control ps-5"
+//               placeholder="Search..."
+//               onChange={handleSearch}
+//             />
+
+//  <FaMicrophone
+//               size={30}
+//               className={`position-absolute top-50 end-0 translate-middle-y p-1 ${listening ? "text-success" : "text-secondary"}`}
+//               style={{ cursor: "pointer", marginRight: "10px" }}
+//               onClick={startListening}
+//             />
+//   </div>
+//  {results.length > 0 && (
+//             <ul
+//               className="list-group mt-2 position-absolute bg-white w-100 shadow"
+//               style={{ zIndex: 1050, maxHeight: "200px", overflowY: "auto" }}   >
+//              {results.map((item, index) => (
+//                 <li
+//                   key={index}
+//                   className="list-group-item cursor-pointer"
+//                   onClick={() => handleRedirect(item.value)}
+//                   style={{ cursor: "pointer" }}
+//                 >
+//                   {item.label}
+//                 </li>
+//               ))}
+
+
+//             </ul>
+//           )}
+//         </div>
+//         <div className="d-flex align-items-center">
+
+
+             
+
+//           {/* <img
+//       src="/unnamed.png"
+//       alt="Profile"
+//       className="rounded-circle profile"
+//     /> */}
+//         </div>
+//       </nav>
+     
+
+
+//      {/* removed here */}
+//      <div className="d-flex w-100">
+
+//   {/* Sidebar */}
+//   <div
+//     className="text-white p-3 d-flex flex-column"
+//     style={{
+//       width: collapsed ? "80px" : "250px",
+//       height: "100vh",
+//       transition: "width 0.3s",
+//       flexShrink: 0,
+//       background: Constants.primaryColor,
+       
+//       // ✅ Sidebar fixed only on mobile
+//       position: window.innerWidth <= 768 ? "fixed" : "relative",
+//       left: 0,
+//       top: 0,
+//       zIndex: 1000,
+
+//       // ✅ No scroll on mobile, scrollable on desktop
+//       overflowY: window.innerWidth <= 768 ? "hidden" : "auto",
+//       scrollbarWidth: "none",
+//     }}
+//   >
+//     <ul className="nav flex-column">
+//       {(role === "admin" || role === "developer") && (
+//         <SidebarItem
+//           to="/dashboard"
+//           icon={<FaTachometerAlt />}
+//           label="Dashboard"
+//           collapsed={collapsed}
+//         />
+//       )}
+
+//       {/* Dynamic Menus */}
+//       {allowedMenus.map((menu, idx) => (
+//         <SidebarDropdown
+//           key={idx}
+//           label={menu.label}
+//           icon={menu.icon}
+//           collapsed={collapsed}
+//           isOpen={sections[menu.label]}
+//           toggleOpen={() => toggleSection(menu.label)}
+//           subItems={menu.subItems}
+//         />
+//       ))}
+//     </ul>
+
+//     {/* Logout Button */}
+//     <div style={{ marginTop: "auto", marginBottom: "50px" }}>
+//       <button
+//         className="btn w-100 d-flex align-items-center justify-content-center"
+//         onClick={handleLogout}
+//         style={{ background: "#fbcbd7ff" }}
+//       >
+//         <FaSignOutAlt className="me-2" />
+//         {!collapsed && "SignOut"}
+//       </button>
+//     </div>
+//   </div>
+
+//   {/* Main Content */}
+//   <div
+//     className="main-content flex-grow-1 p-3"
+//     style={{
+//       marginLeft:
+//         window.innerWidth <= 768
+//           ? 0 // ✅ On mobile, sidebar overlays → no shift
+//           : collapsed
+//           ? "80px"
+//           : "250px", // ✅ On desktop, content shifts
+//       transition: "margin-left 0.3s ease-in-out",
+//       background: "#fff",
+//       minHeight: "100vh",
+//       borderRadius: "10px",
+//       boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
+//       overflowY: "auto",
+//     }}
+//   >
+//     <Outlet />
+//   </div>
+// </div>
+
+//     </div>
+
+
+//   );
+// };
+
+
+// const SidebarItem = React.memo(({ to, icon, label, collapsed }) => (
+//   <li className="nav-item">
+//    <NavLink
+//       to={to}
+//       className={({ isActive }) =>
+//         `nav-link d-flex align-items-center ${isActive ? "active-tab" : "text-white"
+//         }`
+//       }
+//       style={({ isActive }) => ({
+//         background: isActive ? "#fbcbd7ff" : "transparent",
+//         color: isActive ? "#fff" : "#ddd",
+//         borderRadius: "8px",
+//         padding: "8px",
+//       })}
+//     >
+//       {icon}
+//       {!collapsed && <span className="ms-2">{label}</span>}
+//     </NavLink>
+//   </li>
+// ));
+
+// const SidebarDropdown = React.memo(({ label, icon, collapsed, isOpen, toggleOpen, subItems }) => {
+//   const [showMenu, setShowMenu] = useState(false);
+//   const itemRef = useRef(null);
+//   const [menuPos, setMenuPos] = useState({ top: 0 });
+//   // Determine if screen is mobile/tablet
+//   const isMobileOrTablet = window.innerWidth <= 992;
+
+
+//   const handleClick = () => {
+//     if (!collapsed) {
+//       toggleOpen(); // inline submenu for full sidebar
+//     } else if (isMobileOrTablet) {
+//       // Only show floating menu on mobile/tablet
+//       const rect = itemRef.current.getBoundingClientRect();
+//       setMenuPos({ top: rect.top });
+//       setShowMenu((prev) => !prev);
+//     }
+//   };
+
+
+//   // Close floating menu when clicking outside
+//   useEffect(() => {
+//     const handleOutsideClick = (e) => {
+//       if (itemRef.current && !itemRef.current.contains(e.target)) {
+//         setShowMenu(false);
+//       }
+//     };
+//     if (showMenu && isMobileOrTablet) {
+//       document.addEventListener("mousedown", handleOutsideClick);
+//     }
+//     return () => document.removeEventListener("mousedown", handleOutsideClick);
+//   }, [showMenu, isMobileOrTablet]);
+
+
+//   return (
+//     <li className="nav-item mb-3 position-relative" ref={itemRef}>
+//       <div
+//         className="nav-link text-white d-flex align-items-center"
+//         style={{ cursor: "pointer" }}
+//         onClick={handleClick}
+//       >
+//         {icon}
+//         {!collapsed && <span className="ms-2">{label}</span>}
+//         {collapsed && <span className="ms-auto">&#9662;</span>}
+//       </div>
+
+
+//       {/* Inline submenu for expanded sidebar */}
+//       {isOpen && !collapsed && (
+//         <ul className="nav flex-column ps-3">
+//           {subItems.map((item, idx) => (
+//             <SidebarItem key={idx} to={item.to} icon={item.icon} label={item.label} collapsed={collapsed} />
+//           ))}
+//         </ul>
+//       )}
+
+
+//       {/* Floating submenu for mobile/tablet only */}
+//       {collapsed && showMenu && isMobileOrTablet && (
+//         <ul
+//           className="list-group position-fixed shadow"
+         
+//           style={{
+//             minWidth: "200px",
+//             zIndex: 9999,
+//             left: "80px",       // next to collapsed sidebar
+//             // top: menuPos.top,
+//             top:0,
+        
+//           }}
+//         >
+//           <li className="list-group-item fw-bold bg-light">{label}</li>
+//           {subItems.map((item, idx) => (
+//             <li key={idx} className="list-group-item p-2">
+//               <NavLink
+//                 to={item.to}
+//                 className="text-decoration-none text-dark d-flex align-items-center"
+//                 onClick={() => setShowMenu(false)}
+//               >
+//                 {item.icon}
+//                 <span className="ms-2">{item.label}</span>
+//               </NavLink>
+//             </li>
+//           ))}
+//         </ul>
+//       )}
+//     </li>
+//   );
+// });
+
+
+// export default Dashboard;
+
+
+
+
+
+
+
+
+
+
+
+// Third Code :
+
+
+// import { toast } from "react-toastify";
+// import React, { useState, useCallback, useRef, useEffect } from "react";
+// import {
+//   FaBars, FaTachometerAlt, FaUserShield, FaCode, FaChartLine, FaCogs, FaSignOutAlt,
+//   FaUsers, FaUserCheck, FaHome, FaFileAlt, FaFileSignature, FaStamp, FaDraftingCompass, FaBell,
+//   FaInfoCircle, FaBuilding, FaFileInvoiceDollar, FaBullhorn, FaUserTie, FaLandmark, FaCalendarAlt, FaPeopleArrows
+// } from "react-icons/fa";
+// import { useNavigate } from "react-router-dom";
+// import { Outlet, Link, NavLink } from "react-router-dom";
+// import { FaClipboardList, FaCalendarCheck, FaRegHandshake, FaRegClock, FaTasks, FaRegTimesCircle, FaClipboard, FaRegEdit } from 'react-icons/fa';
+// import { FaMicrophone } from "react-icons/fa";
+// import VoiceNavigation from "./VoiceNavigation";
+// import { FaMoneyBillWave, FaParking, FaChartBar } from "react-icons/fa";
+// import RolePermissions from "./RolePermissions";
+// import Constants from "./Constants";
+
+
+// const Dashboard = () => {
+//   const [searchQuery, setSearchQuery] = useState("");
+//   const [query, setQuery] = useState("");
+//   const recognitionRef = useRef(null);
+//   const [listening, setListening] = useState(false);
+//   const [results, setResults] = useState([]);
+//  const [collapsed, setCollapsed] = useState(() => {
+  
+//   return window.innerWidth <= 768;
+// });
+
+
+//   const [sections, setSections] = useState({
+//     admin: false,
+//     developer: false,
+//     sales: false,
+//     crm: false,
+//   });
+//   const [showVoiceRecognition, setShowVoiceRecognition] = useState(false);
+//   const navigate = useNavigate();
+ 
+
+
+// const toggleSidebar = useCallback(() => {
+//   if (window.innerWidth > 768) {
+//     setCollapsed((prev) => !prev);   // expand/collapse only on tablet/laptop
+//   } else {
+//     setCollapsed(true);  // force collapsed on mobile
+//   }
+// }, []);
+
+
+
+
+//   const toggleSection = useCallback((section) => {
+//     setSections((prev) => ({ ...prev, [section]: !prev[section] }));
+//   }, []);
+//   const handleLogout = useCallback(() => {
+//     localStorage.removeItem('authToken');
+//     navigate('/login');
+//   }, [navigate]);
+
+
+//   const handleClose = () => {
+//     console.log("Closing the voice navigation.");
+//     setShowVoiceRecognition(false);
+//   };
+
+
+//   const role = localStorage.getItem("userRole");
+//   const allowedMenus = RolePermissions[role] || [];
+
+
+
+
+
+
+//   // 🔹 Build ALL commands (for all modules, not filtered by role)
+//   const buildAllVoiceCommands = (rolePermissions) => {
+//     const commands = {};
+//     Object.values(rolePermissions).forEach(menus => {
+//       menus.forEach(menu => {
+//         if (menu.subItems) {
+//           menu.subItems.forEach(item => {
+//             const command = item.label.toLowerCase();
+//             commands[command] = item.to;
+//           });
+//         }
+//       });
+//     });
+//     return commands;
+//   };
+
+
+
+
+//   // functions for path  and voice system for their respective modules:
+//   const buildVoiceCommands = (allowedMenus, navigate) => {
+//     const commands = {};
+
+
+//     allowedMenus.forEach(menu => {
+//       if (menu.subItems) {
+//         menu.subItems.forEach(item => {
+//           const command = item.label.toLowerCase(); // Example: "Leads"
+//           commands[command] = item.to;             // Example: "/dashboard/sales/leads"
+//         });
+//       }
+//     });
+
+
+//     return commands;
+//   };
+
+
+//   // 🔹 Build search data only for allowed menus
+//   const buildSearchData = (allowedMenus) => {
+//     const searchList = [];
+
+
+//     allowedMenus.forEach(menu => {
+//       if (menu.subItems) {
+//         menu.subItems.forEach(item => {
+//           searchList.push({
+//             label: item.label,   // e.g. "Leads"
+//             value: item.to       // e.g. "/dashboard/sales/leads"
+//           });
+//         });
+//       }
+//     });
+
+
+//     return searchList;
+//   };
+   
+//   // ✅ Build commands & search data dynamically
+//   const allCommandRoutes = buildAllVoiceCommands(RolePermissions); // 🔹 all
+//   const commandRoutes = buildVoiceCommands(allowedMenus, navigate);  // filtred
+//   const moduleData = buildSearchData(allowedMenus);
+
+
+//   // for path system :moduleData
+
+// const handleSearch = (event) => {
+//   const searchTerm = event.target.value.toLowerCase();
+//   setQuery(searchTerm);
+//   if (searchTerm) {
+//     const filteredResults = moduleData.filter((item) =>
+//       item.label.toLowerCase().includes(searchTerm)
+//     );
+//     setResults(filteredResults);
+//   } else {
+//     setResults([]);
+//   }
+// };
+
+//   const handleRedirect = (path) => {
+//     navigate(path);
+//     setQuery("");
+//     setResults([]);
+//   };
+
+
+// // for voice system => commandRoutes
+
+
+//   useEffect(() => {
+//     if (!recognitionRef.current && ("webkitSpeechRecognition" in window || "SpeechRecognition" in window)) {
+//       recognitionRef.current = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+//       const recognition = recognitionRef.current;
+//       recognition.continuous = false;
+//       recognition.interimResults = false;
+//       recognition.lang = "en-US";
+
+
+//       recognition.onstart = () => {
+//         setListening(true);
+//       };
+
+
+//       recognition.onend = () => {
+//         setListening(false);
+//       };
+
+
+//      recognition.onresult = (event) => {
+//         let command = event.results[0][0].transcript.trim().toLowerCase();
+//         console.log("🎤 Recognized command:", command);
+//       let matchedPath = null;
+//         for (const key in allCommandRoutes) {
+//           if (command.includes(key)) {
+//             matchedPath = allCommandRoutes[key];
+//             break;
+//           }
+//         }
+
+
+//         if (!matchedPath) {
+       
+//           toast.error("❓ Command not recognized");
+//           speak("Command not recognized");
+//           return;
+//         }
+
+
+       
+//         const hasAccess = moduleData.some(
+//           (item) => item.value.toLowerCase() === matchedPath.toLowerCase()
+//         );
+
+
+//         if (hasAccess) {
+//           speak(`Redirecting to ${command}`, () => {
+//             handleRedirect(matchedPath);
+//           });
+//         } else {
+//           toast.error("🚫 You don’t have access to this module");
+//           speak("You don’t have access to this module");
+//         }
+
+
+//         setTimeout(() => {
+//           setListening(false);
+//         }, 1000);
+//       };
+
+//       recognition.onerror = () => {
+//         setListening(false);
+//       };
+//     }
+//   }, [commandRoutes, moduleData]); // 👈 added dependencies
+//   const speak = (message, callback) => {
+//     const speech = new SpeechSynthesisUtterance(message);
+//     speech.lang = "en-US";
+//     speech.rate = 1;
+   
+//     speech.onstart = () => {
+//       if (recognitionRef.current) {
+//         recognitionRef.current.stop();
+//       }
+//     };
+
+//    speech.onend = () => {
+//       if (callback) {
+//         callback();
+//       } else {
+//         if (!listening) {
+//           setTimeout(() => startListening(), 500);
+//         }
+//       }
+//     };
+//     window.speechSynthesis.cancel();
+//     window.speechSynthesis.speak(speech);
+
+
+//   };
+
+
+//   const startListening = () => {
+//     if (recognitionRef.current && !listening) {
+//       console.log("🎤 Starting recognition...");
+//       recognitionRef.current.start();
+//     }
+//   };
+
+//   return (
+//     <div className="d-flex flex-column vh-100 ">
+//     <nav className="navbar  px-3" style={{ background: Constants.primaryColor }}>
+//    <div className="d-flex align-items-center">
+//           <button className="btn  me-3 " onClick={toggleSidebar} style={{ cursor: "pointer" }}>
+//            <img
+//       src="/unnamed.png"
+//       alt="Profile"
+//       className="rounded-circle profile"
+//     />
+//  </button>
+//           <span className="navbar-brand mb-0 h1">CRM ERP</span>
+//         </div>
+//  <div className="position-relative">
+// <div className="mx-auto w-100 d-none d-md-block">
+//             <input
+//               type="text"
+//               className="form-control ps-5"
+//               placeholder="Search..."
+//               onChange={handleSearch}
+//             />
+
+//  <FaMicrophone
+//               size={30}
+//               className={`position-absolute top-50 end-0 translate-middle-y p-1 ${listening ? "text-success" : "text-secondary"}`}
+//               style={{ cursor: "pointer", marginRight: "10px" }}
+//               onClick={startListening}
+//             />
+//   </div>
+//  {results.length > 0 && (
+//             <ul
+//               className="list-group mt-2 position-absolute bg-white w-100 shadow"
+//               style={{ zIndex: 1050, maxHeight: "200px", overflowY: "auto" }}   >
+//              {results.map((item, index) => (
+//                 <li
+//                   key={index}
+//                   className="list-group-item cursor-pointer"
+//                   onClick={() => handleRedirect(item.value)}
+//                   style={{ cursor: "pointer" }}
+//                 >
+//                   {item.label}
+//                 </li>
+//               ))}
+
+
+//             </ul>
+//           )}
+//         </div>
+//         {/* <div className="d-flex align-items-center"> */}
+//              {/* <img
+//       src="/unnamed.png"
+//       alt="Profile"
+//       className="rounded-circle profile"
+//     /> */}
+//         {/* </div> */}
+//       </nav>
+     
+
+
+//      {/* removed here */}
+//      {/* <div className="d-flex w-100">
+    
+//   <div
+//     className="text-white p-3 d-flex flex-column"
+//     style={{
+//       width: collapsed ? "80px" : "250px",
+//       height: "100vh",
+//       transition: "width 0.3s",
+//       flexShrink: 0,
+//       background: Constants.primaryColor,
+//      position: window.innerWidth <= 768 ? "fixed" : "relative",
+//       left: 0,
+//       top: 0,
+//       zIndex: 1000,
+//       overflowY: window.innerWidth <= 768 ? "hidden" : "auto",
+//       scrollbarWidth: "none",
+//     }}
+//   >
+//     <ul className="nav flex-column">
+//       {(role === "admin" || role === "developer") && (
+//         <SidebarItem
+//           to="/dashboard"
+//           icon={<FaTachometerAlt />}
+//           label="Dashboard"
+//           collapsed={collapsed}
+//         />
+//       )}
+
+      
+//       {allowedMenus.map((menu, idx) => (
+//         <SidebarDropdown
+//           key={idx}
+//           label={menu.label}
+//           icon={menu.icon}
+//           collapsed={collapsed}
+//           isOpen={sections[menu.label]}
+//           toggleOpen={() => toggleSection(menu.label)}
+//           subItems={menu.subItems}
+//         />
+//       ))}
+//     </ul>
+
+  
+//     <div style={{ marginTop: "auto", marginBottom: "50px" }}>
+//       <button
+//         className="btn w-100 d-flex align-items-center justify-content-center"
+//         onClick={handleLogout}
+//         style={{ background: "#fbcbd7ff" }}
+//       >
+//         <FaSignOutAlt className="me-2" />
+//         {!collapsed && "SignOut"}
+//       </button>
+//     </div>
+//   </div>
+
+  
+//   <div
+//     className="main-content flex-grow-1 p-3"
+//     style={{
+//       marginLeft:
+//         window.innerWidth <= 768
+//           ? 0 
+//           : collapsed
+//           ? "80px"
+//           : "250px", 
+//       transition: "margin-left 0.3s ease-in-out",
+//       background: "#fff",
+//       minHeight: "100vh",
+//       borderRadius: "10px",
+//       boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
+//       overflowY: "auto",
+//     }}
+//   >
+//     <Outlet />
+//   </div>
+// </div> */}
+// <div
+//   className="text-white p-3 d-flex flex-column"
+//   style={{
+//     width: collapsed ? "80px" : "250px",
+//     height: "100vh",
+//     transition: "width 0.3s",
+//     flexShrink: 0,
+//     background: Constants.primaryColor,
+//     position: window.innerWidth <= 768 ? "fixed" : "relative",
+//     left: 0,
+//     top: 0,
+//     zIndex: 1000,
+//     overflowY: window.innerWidth <= 768 ? "hidden" : "auto",
+//     scrollbarWidth: "none",
+//   }}
+// >
+//   {/* 🔹 Profile Image at top of sidebar */}
+//   <div className="d-flex justify-content-center mb-3">
+//     <img
+//       src="/unnamed.png"
+//       alt="Profile"
+//       className="rounded-circle"
+//       style={{ width: collapsed ? "40px" : "70px", height: "auto" }}
+//     />
+//   </div>
+
+//   <ul className="nav flex-column">
+//     {(role === "admin" || role === "developer") && (
+//       <SidebarItem
+//         to="/dashboard"
+//         icon={<FaTachometerAlt />}
+//         label="Dashboard"
+//         collapsed={collapsed}
+//       />
+//     )}
+
+//     {allowedMenus.map((menu, idx) => (
+//       <SidebarDropdown
+//         key={idx}
+//         label={menu.label}
+//         icon={menu.icon}
+//         collapsed={collapsed}
+//         isOpen={sections[menu.label]}
+//         toggleOpen={() => toggleSection(menu.label)}
+//         subItems={menu.subItems}
+//       />
+//     ))}
+//   </ul>
+
+//   {/* Logout Button */}
+//   <div style={{ marginTop: "auto", marginBottom: "50px" }}>
+//     <button
+//       className="btn w-100 d-flex align-items-center justify-content-center"
+//       onClick={handleLogout}
+//       style={{ background: "#fbcbd7ff" }}
+//     >
+//       <FaSignOutAlt className="me-2" />
+//       {!collapsed && "SignOut"}
+//     </button>
+//   </div>
+// </div>
+
+//     </div>
+
+
+//   );
+// };
+
+
+// const SidebarItem = React.memo(({ to, icon, label, collapsed }) => (
+//   <li className="nav-item">
+//    <NavLink
+//       to={to}
+//       className={({ isActive }) =>
+//         `nav-link d-flex align-items-center ${isActive ? "active-tab" : "text-white"
+//         }`
+//       }
+//       style={({ isActive }) => ({
+//         background: isActive ? "#fbcbd7ff" : "transparent",
+//         color: isActive ? "#fff" : "#ddd",
+//         borderRadius: "8px",
+//         padding: "8px",
+//       })}
+//     >
+//       {icon}
+//       {!collapsed && <span className="ms-2">{label}</span>}
+//     </NavLink>
+//   </li>
+// ));
+
+// const SidebarDropdown = React.memo(({ label, icon, collapsed, isOpen, toggleOpen, subItems }) => {
+//   const [showMenu, setShowMenu] = useState(false);
+//   const itemRef = useRef(null);
+//   const [menuPos, setMenuPos] = useState({ top: 0 });
+//   // Determine if screen is mobile/tablet
+//   const isMobileOrTablet = window.innerWidth <= 992;
+
+
+//   const handleClick = () => {
+//     if (!collapsed) {
+//       toggleOpen(); // inline submenu for full sidebar
+//     } else if (isMobileOrTablet) {
+//       // Only show floating menu on mobile/tablet
+//       const rect = itemRef.current.getBoundingClientRect();
+//       setMenuPos({ top: rect.top });
+//       setShowMenu((prev) => !prev);
+//     }
+//   };
+
+
+//   // Close floating menu when clicking outside
+//   useEffect(() => {
+//     const handleOutsideClick = (e) => {
+//       if (itemRef.current && !itemRef.current.contains(e.target)) {
+//         setShowMenu(false);
+//       }
+//     };
+//     if (showMenu && isMobileOrTablet) {
+//       document.addEventListener("mousedown", handleOutsideClick);
+//     }
+//     return () => document.removeEventListener("mousedown", handleOutsideClick);
+//   }, [showMenu, isMobileOrTablet]);
+
+
+//   return (
+//     <li className="nav-item mb-3 position-relative" ref={itemRef}>
+//       <div
+//         className="nav-link text-white d-flex align-items-center"
+//         style={{ cursor: "pointer" }}
+//         onClick={handleClick}
+//       >
+//         {icon}
+//         {!collapsed && <span className="ms-2">{label}</span>}
+//         {collapsed && <span className="ms-auto">&#9662;</span>}
+//       </div>
+
+
+//       {/* Inline submenu for expanded sidebar */}
+//       {isOpen && !collapsed && (
+//         <ul className="nav flex-column ps-3">
+//           {subItems.map((item, idx) => (
+//             <SidebarItem key={idx} to={item.to} icon={item.icon} label={item.label} collapsed={collapsed} />
+//           ))}
+//         </ul>
+//       )}
+
+
+//       {/* Floating submenu for mobile/tablet only */}
+//       {collapsed && showMenu && isMobileOrTablet && (
+//         <ul
+//           className="list-group position-fixed shadow"
+         
+//           style={{
+//             minWidth: "200px",
+//             zIndex: 9999,
+//             left: "80px",       // next to collapsed sidebar
+//             // top: menuPos.top,
+//             top:0,
+        
+//           }}
+//         >
+//           <li className="list-group-item fw-bold bg-light">{label}</li>
+//           {subItems.map((item, idx) => (
+//             <li key={idx} className="list-group-item p-2">
+//               <NavLink
+//                 to={item.to}
+//                 className="text-decoration-none text-dark d-flex align-items-center"
+//                 onClick={() => setShowMenu(false)}
+//               >
+//                 {item.icon}
+//                 <span className="ms-2">{item.label}</span>
+//               </NavLink>
+//             </li>
+//           ))}
+//         </ul>
+//       )}
+//     </li>
+//   );
+// });
+
+
+// export default Dashboard;
+
+
+
+
+
+
+
+
+// working Code :
 
 import { toast } from "react-toastify";
 import React, { useState, useCallback, useRef, useEffect } from "react";
@@ -562,27 +1706,17 @@ import { FaMoneyBillWave, FaParking, FaChartBar } from "react-icons/fa";
 import RolePermissions from "./RolePermissions";
 import Constants from "./Constants";
 
-
 const Dashboard = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [query, setQuery] = useState("");
   const recognitionRef = useRef(null);
   const [listening, setListening] = useState(false);
   const [results, setResults] = useState([]);
-  // const [collapsed, setCollapsed] = useState(false);
-//   const [collapsed, setCollapsed] = useState(() => {
-//   // Default collapsed on small screens
-//   return window.innerWidth <= 768;
-// });
-
-
 const [collapsed, setCollapsed] = useState(() => {
   // Always collapsed on small screens
   return window.innerWidth <= 768;
 });
-
-
-  const [sections, setSections] = useState({
+ const [sections, setSections] = useState({
     admin: false,
     developer: false,
     sales: false,
@@ -590,23 +1724,13 @@ const [collapsed, setCollapsed] = useState(() => {
   });
   const [showVoiceRecognition, setShowVoiceRecognition] = useState(false);
   const navigate = useNavigate();
-  // const toggleSidebar = useCallback(() => setCollapsed((prev) => !prev), []);
-//   const toggleSidebar = useCallback(() => {
-//   if (window.innerWidth > 768) {   // only toggle for medium+ screens
-//     setCollapsed((prev) => !prev);
-//   }
-// }, []);
-
-
-const toggleSidebar = useCallback(() => {
+  const toggleSidebar = useCallback(() => {
   if (window.innerWidth > 768) {
     setCollapsed((prev) => !prev);   // expand/collapse only on tablet/laptop
   } else {
     setCollapsed(true);  // force collapsed on mobile
   }
 }, []);
-
-
 
 
   const toggleSection = useCallback((section) => {
@@ -617,21 +1741,12 @@ const toggleSidebar = useCallback(() => {
     navigate('/login');
   }, [navigate]);
 
-
   const handleClose = () => {
     console.log("Closing the voice navigation.");
     setShowVoiceRecognition(false);
   };
-
-
   const role = localStorage.getItem("userRole");
   const allowedMenus = RolePermissions[role] || [];
-
-
-
-
-
-
   // 🔹 Build ALL commands (for all modules, not filtered by role)
   const buildAllVoiceCommands = (rolePermissions) => {
     const commands = {};
@@ -647,15 +1762,9 @@ const toggleSidebar = useCallback(() => {
     });
     return commands;
   };
-
-
-
-
-  // functions for path  and voice system for their respective modules:
+// functions for path  and voice system for their respective modules:
   const buildVoiceCommands = (allowedMenus, navigate) => {
     const commands = {};
-
-
     allowedMenus.forEach(menu => {
       if (menu.subItems) {
         menu.subItems.forEach(item => {
@@ -664,18 +1773,12 @@ const toggleSidebar = useCallback(() => {
         });
       }
     });
-
-
-    return commands;
+ return commands;
   };
-
-
   // 🔹 Build search data only for allowed menus
   const buildSearchData = (allowedMenus) => {
     const searchList = [];
-
-
-    allowedMenus.forEach(menu => {
+  allowedMenus.forEach(menu => {
       if (menu.subItems) {
         menu.subItems.forEach(item => {
           searchList.push({
@@ -685,34 +1788,17 @@ const toggleSidebar = useCallback(() => {
         });
       }
     });
-
-
-    return searchList;
+  return searchList;
   };
-
-
-
-
-
-
   // ✅ Build commands & search data dynamically
-
-
   const allCommandRoutes = buildAllVoiceCommands(RolePermissions); // 🔹 all
   const commandRoutes = buildVoiceCommands(allowedMenus, navigate);  // filtred
   const moduleData = buildSearchData(allowedMenus);
-
-
   // for path system :moduleData
-
-
- 
-const handleSearch = (event) => {
+ const handleSearch = (event) => {
   const searchTerm = event.target.value.toLowerCase();
   setQuery(searchTerm);
-
-
-  if (searchTerm) {
+   if (searchTerm) {
     const filteredResults = moduleData.filter((item) =>
       item.label.toLowerCase().includes(searchTerm)
     );
@@ -721,40 +1807,27 @@ const handleSearch = (event) => {
     setResults([]);
   }
 };
-
-
-
-
-  const handleRedirect = (path) => {
+const handleRedirect = (path) => {
     navigate(path);
     setQuery("");
     setResults([]);
   };
 
-
 // for voice system => commandRoutes
-
-
-  useEffect(() => {
+useEffect(() => {
     if (!recognitionRef.current && ("webkitSpeechRecognition" in window || "SpeechRecognition" in window)) {
       recognitionRef.current = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
       const recognition = recognitionRef.current;
       recognition.continuous = false;
       recognition.interimResults = false;
       recognition.lang = "en-US";
-
-
-      recognition.onstart = () => {
+         recognition.onstart = () => {
         setListening(true);
       };
-
-
-      recognition.onend = () => {
+     recognition.onend = () => {
         setListening(false);
       };
-
-
-     recognition.onresult = (event) => {
+ recognition.onresult = (event) => {
         let command = event.results[0][0].transcript.trim().toLowerCase();
         console.log("🎤 Recognized command:", command);
       let matchedPath = null;
@@ -764,23 +1837,15 @@ const handleSearch = (event) => {
             break;
           }
         }
-
-
-        if (!matchedPath) {
-       
-          toast.error("❓ Command not recognized");
+   if (!matchedPath) {
+         toast.error("❓ Command not recognized");
           speak("Command not recognized");
           return;
         }
-
-
-       
-        const hasAccess = moduleData.some(
+    const hasAccess = moduleData.some(
           (item) => item.value.toLowerCase() === matchedPath.toLowerCase()
         );
-
-
-        if (hasAccess) {
+     if (hasAccess) {
           speak(`Redirecting to ${command}`, () => {
             handleRedirect(matchedPath);
           });
@@ -788,17 +1853,11 @@ const handleSearch = (event) => {
           toast.error("🚫 You don’t have access to this module");
           speak("You don’t have access to this module");
         }
-
-
-        setTimeout(() => {
+     setTimeout(() => {
           setListening(false);
         }, 1000);
       };
-
-
-
-
-      recognition.onerror = () => {
+  recognition.onerror = () => {
         setListening(false);
       };
     }
@@ -807,17 +1866,12 @@ const handleSearch = (event) => {
     const speech = new SpeechSynthesisUtterance(message);
     speech.lang = "en-US";
     speech.rate = 1;
-   
     speech.onstart = () => {
       if (recognitionRef.current) {
         recognitionRef.current.stop();
       }
     };
-
-
-
-
-    speech.onend = () => {
+  speech.onend = () => {
       if (callback) {
         callback();
       } else {
@@ -828,63 +1882,37 @@ const handleSearch = (event) => {
     };
     window.speechSynthesis.cancel();
     window.speechSynthesis.speak(speech);
-
-
-  };
-
-
-  const startListening = () => {
+};
+const startListening = () => {
     if (recognitionRef.current && !listening) {
       console.log("🎤 Starting recognition...");
       recognitionRef.current.start();
     }
   };
-
-
-
-
   return (
     <div className="d-flex flex-column vh-100 ">
-
-
-      <nav className="navbar  px-3" style={{ background: Constants.primaryColor }}>
-
-
-        <div className="d-flex align-items-center">
-          <button className="btn  me-3 " onClick={toggleSidebar} style={{ cursor: "pointer" }}>
-           
-             
-
-
+   <nav className="navbar  px-3" style={{ background: Constants.primaryColor }}>
+   <div className="d-flex align-items-center">
+   {/* <button className="btn  me-3 " onClick={toggleSidebar} style={{ cursor: "pointer" }}> */}
+    <div className="btn  me-3 " onClick={toggleSidebar} style={{ cursor: "pointer" }}>
  <img
       src="/unnamed.png"
       alt="Profile"
       className="rounded-circle profile"
     />
-
-
-          </button>
-          <span className="navbar-brand mb-0 h1">CRM ERP</span>
+</div>
+          {/* </button> */}
+          <span className="navbar-brand mb-0 h1 text-white">CRM ERP</span>
         </div>
-
-
-
-
-        <div className="position-relative">
-
-
-
-
-          <div className="mx-auto w-100 d-none d-md-block">
+ <div className="position-relative">
+  <div className="mx-auto w-100 d-none d-md-block">
             <input
               type="text"
               className="form-control ps-5"
               placeholder="Search..."
               onChange={handleSearch}
             />
-
-
-            <FaMicrophone
+ <FaMicrophone
               size={30}
               className={`position-absolute top-50 end-0 translate-middle-y p-1 ${listening ? "text-success" : "text-secondary"}`}
               style={{ cursor: "pointer", marginRight: "10px" }}
@@ -906,29 +1934,19 @@ const handleSearch = (event) => {
                 </li>
               ))}
 
-
             </ul>
           )}
         </div>
         <div className="d-flex align-items-center">
-
-
-
-
-          {/* <img
+    {/* <img
       src="/unnamed.png"
       alt="Profile"
       className="rounded-circle profile"
     /> */}
         </div>
       </nav>
-     
-
-
       <div className="d-flex w-100">
-
-
-        {/* <div
+      <div
           className=" text-white p-3 d-flex flex-column"
           style={{
             width: collapsed ? '80px' : '250px',
@@ -938,33 +1956,10 @@ const handleSearch = (event) => {
             background:Constants.primaryColor,
             overflowY: 'auto',
             scrollbarWidth: 'none',
-             position: "relative",
-          
+             position: "relative", 
           }}
-        > */}
-      
-<div
-  className="text-white p-3 d-flex flex-column"
-  style={{
-    width: collapsed ? '80px' : '250px',
-    height: '100vh',
-    transition: 'width 0.3s',
-    flexShrink: 0,
-    background: Constants.primaryColor,
-    // position: "sticky",   // ✅ keeps sidebar visible inside parent
-   
-    top: 0,               // ✅ stick to top
-    overflowY: window.innerWidth <= 768 ? "hidden" : "auto", // ✅ no scroll on mobile
- 
-    scrollbarWidth: 'none',
-  // position: "fixed",
-
-  }}
->
-
-
-
-          <ul className="nav flex-column">
+        >
+     <ul className="nav flex-column">
 {(role === "admin" || role === "developer") && (
     <SidebarItem
       to="/dashboard"
@@ -973,7 +1968,7 @@ const handleSearch = (event) => {
       collapsed={collapsed}
     />
   )}
-         {/*To get the  Sidebar values  */}
+          
             {allowedMenus.map((menu, idx) => (
               <SidebarDropdown
                 key={idx}
@@ -982,25 +1977,21 @@ const handleSearch = (event) => {
                 collapsed={collapsed}
                 isOpen={sections[menu.label]}
                 toggleOpen={() => toggleSection(menu.label)}
-                subItems={menu.subItems}       //  SUBMODULES passed here
+                subItems={menu.subItems}
               />
             ))}
           </ul>
           <div style={{ marginTop: "auto", marginBottom: "50px" }}>
-
-
-            <button className="btn w-100 d-flex align-items-center justify-content-center" onClick={handleLogout} style={{ background: "#fbcbd7ff" }}>
+  <button className="btn w-100 d-flex align-items-center justify-content-center" onClick={handleLogout} style={{ background: "#fbcbd7ff" }}>
               <FaSignOutAlt className="me-2" />
               {!collapsed && 'SignOut'}
             </button>
           </div>
         </div>
-
-
-        {/* <div
+<div
           className="main-content flex-grow-1 p-3 "
           style={{
-            paddingLeft: collapsed ? "80px" : "250px",
+           paddingLeft: collapsed ? "80px" : "250px",
             transition: "margin-left 0.3s ease-in-out",
             width: collapsed ? "calc(100% - 80px)" : "calc(100% - 250px)",
             background: "#fff",
@@ -1008,37 +1999,18 @@ const handleSearch = (event) => {
             borderRadius: "10px",
             boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
 
-
           }}
-        > */}
-        
-<div
-  className="main-content flex-grow-1 p-3"
-  style={{
-    // marginLeft: collapsed ? "10px" : "10px",    // ✅ shift content, not padding
-    // marginLeft: collapsed ? "80px" : "250px",
-    transition: "margin-left 0.3s ease-in-out",
-    width: collapsed ? "calc(100% - 80px)" : "calc(100% - 250px)", // ✅ match sidebar width
-    background: "#fff",
-    minHeight: "100vh",
-    borderRadius: "10px",
-    boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
-    overflowY: "auto",   // allow scrolling if content is long
-  }}
->
+        >
           <Outlet />
         </div>
       </div>
     </div>
 
-
   );
 };
 
-
 const SidebarItem = React.memo(({ to, icon, label, collapsed }) => (
   <li className="nav-item">
-
 
     <NavLink
       to={to}
@@ -1046,7 +2018,6 @@ const SidebarItem = React.memo(({ to, icon, label, collapsed }) => (
         `nav-link d-flex align-items-center ${isActive ? "active-tab" : "text-white"
         }`
       }
-
 
       style={({ isActive }) => ({
         background: isActive ? "#fbcbd7ff" : "transparent",
@@ -1064,19 +2035,13 @@ const SidebarItem = React.memo(({ to, icon, label, collapsed }) => (
 
 
 
-
-
-
-
 const SidebarDropdown = React.memo(({ label, icon, collapsed, isOpen, toggleOpen, subItems }) => {
   const [showMenu, setShowMenu] = useState(false);
   const itemRef = useRef(null);
   const [menuPos, setMenuPos] = useState({ top: 0 });
 
-
   // Determine if screen is mobile/tablet
   const isMobileOrTablet = window.innerWidth <= 992;
-
 
   const handleClick = () => {
     if (!collapsed) {
@@ -1088,7 +2053,6 @@ const SidebarDropdown = React.memo(({ label, icon, collapsed, isOpen, toggleOpen
       setShowMenu((prev) => !prev);
     }
   };
-
 
   // Close floating menu when clicking outside
   useEffect(() => {
@@ -1103,7 +2067,6 @@ const SidebarDropdown = React.memo(({ label, icon, collapsed, isOpen, toggleOpen
     return () => document.removeEventListener("mousedown", handleOutsideClick);
   }, [showMenu, isMobileOrTablet]);
 
-
   return (
     <li className="nav-item mb-3 position-relative" ref={itemRef}>
       <div
@@ -1116,7 +2079,6 @@ const SidebarDropdown = React.memo(({ label, icon, collapsed, isOpen, toggleOpen
         {collapsed && <span className="ms-auto">&#9662;</span>}
       </div>
 
-
       {/* Inline submenu for expanded sidebar */}
       {isOpen && !collapsed && (
         <ul className="nav flex-column ps-3">
@@ -1126,19 +2088,15 @@ const SidebarDropdown = React.memo(({ label, icon, collapsed, isOpen, toggleOpen
         </ul>
       )}
 
-
       {/* Floating submenu for mobile/tablet only */}
       {collapsed && showMenu && isMobileOrTablet && (
         <ul
           className="list-group position-fixed shadow"
-         
           style={{
             minWidth: "200px",
             zIndex: 9999,
             left: "80px",       // next to collapsed sidebar
-            // top: menuPos.top,
-            top:0,
-        
+            top: menuPos.top,
           }}
         >
           <li className="list-group-item fw-bold bg-light">{label}</li>
@@ -1159,7 +2117,6 @@ const SidebarDropdown = React.memo(({ label, icon, collapsed, isOpen, toggleOpen
     </li>
   );
 });
-
 
 export default Dashboard;
 

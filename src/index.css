@@ -1,7 +1,8 @@
 
    html, body {
     height: 100%;
-    /* overflow: hidden;  */
+    overflow: hidden;    
+    /* here by doing hidden not getting scrollbar to whole sidebar + main contenet */
    }  
   
 /*    
@@ -24,7 +25,7 @@
   display: flex;
   height: 100vh;
 }
-
+/* 
 .sidebar {
   width: 200px;
   background-color: #333;
@@ -34,8 +35,17 @@
   overflow-y: auto;
   height: 100vh;  
   
+} */
+.sidebar {
+  position: fixed;      /* fixes it on screen */
+  top: 0;               /* from top */
+  left: 0;
+  bottom: 0;            /* full height */
+  width: 250px;         /* or collapsed width */
+  /* background: Constants.primaryColor; */
+  background: '£800020';
+  overflow-y: auto;     /* scroll if sidebar items overflow */
 }
-
 .sidebar.closed {
   width: 50px;
 }
@@ -48,13 +58,19 @@
   padding: 10px;
   cursor: pointer;
 }
-
+/* 
 .main-content {
   flex-grow: 1;
   padding: 20px;
   transition: margin-left 0.3s ease;
+} */
+.main-content {
+  /* margin-left: 250px;    */
+   /* match sidebar width */
+  padding: 20px;
+  height: 100vh;
+  overflow-y: auto;      /* only this scrolls */
 }
-
 .main-content.collapsed {
   margin-left: 50px;
 }
