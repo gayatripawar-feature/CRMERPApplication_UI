@@ -10,63 +10,51 @@ import {
   TableCell,
   TableBody,
   TextField,
-  TablePagination
+  TablePagination,
+  Stack,
+  TableFooter,
+  Box
 } from "@mui/material";
 import { FaEye } from "react-icons/fa";
 import { FaFileDownload } from "react-icons/fa";
 import { jsPDF } from "jspdf";
-
-
 import autoTable from "jspdf-autotable";
 import Constants from "../Constants";
-
-
+import {useMediaQuery,useTheme} from "@mui/material";
 const CostSheet = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const handleToggle = () => setIsExpanded(!isExpanded);
   const handleShowForm = () => setShowForm(true);
-
-
   const [visitRate, setVisitRate] = useState("");
   const [bookingRate, setBookingRate] = useState("");
   const [stampDuty, setStampDuty] = useState("");
-  
   const [formVisible, setFormVisible] = useState(true); 
   const [tableData, setTableData] = useState([]);
-
-
   const data = [
     { reraCarpetArea: "1000", config: "2 BHK" },
     { reraCarpetArea: "1200", config: "3 BHK" },
   ];
-
-  
-const [area, setAreaName] = useState('');
+ const [area, setAreaName] = useState('');
+ const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const handleCloseForm = () => {
     setVisitRate("");
     setBookingRate("");
     setStampDuty("");
-        
     setShowForm(false);    
   };
-  
   const handleDownloadPDFCostSheet = () => {
     if (!data || data.length === 0) {
         console.error("No data available to generate the PDF.");
         return;
     }
-
     console.log("Data:", data); // Debugging step to verify the data structure
-
-    const doc = new jsPDF({ orientation: "landscape", unit: "mm", format: "a3" });
-
-    doc.text("Inventory Report", 14, 15);
-
-    // Only the required columns
+  const doc = new jsPDF({ orientation: "landscape", unit: "mm", format: "a3" });
+   doc.text("Inventory Report", 14, 15);
+  // Only the required columns
     const tableColumns = ["RERA CARPET AREA (SQ FT)", "CONFIG (2 BHK, 3 BHK, 4 BHK)"];
-
     const tableRows = data.map(item => {
         console.log("Row Data:", item.reraCarpetArea, item.config); // Debugging step
         return [item.reraCarpetArea || "N/A", item.config || "N/A"];
@@ -102,13 +90,11 @@ const handleDownloadPDFDeveloper = () => {
   // Updated table columns
   const tableColumns = [
       "TIMESTAMP", 
-     
-      "VISIT RATE", 
+     "VISIT RATE", 
       "BOOKING RATE", 
       "STAMP DUTY"
   ];
-
-  const tableRows = data.map(item => {
+const tableRows = data.map(item => {
       console.log("Row Data:", item.timestamp, item.reraCarpetArea, item.config, item.visitRate, item.bookingRate, item.stampDuty); // Debugging step
       return [
           item.timestamp || "N/A",
@@ -161,10 +147,10 @@ const handleSave = () => {
     return updated;
   });
 
-  toast.success("Form details submitted successfully!", {
-    position: "top-right",
-    autoClose: 3000,
-  });
+  // toast.success("Form details submitted successfully!", {
+  //   position: "top-right",
+  //   autoClose: 3000,
+  // });
 
   handleCloseForm();
 };
@@ -277,7 +263,7 @@ const [page, setPage] = useState(0);
     style={{
       display: 'flex',
       alignItems: 'center',
-      backgroundColor: '#3621a9',
+    background:Constants.primaryColor,
       padding: '8px',
       borderRadius: '20px',  
       margin: '5px',
@@ -291,7 +277,7 @@ const [page, setPage] = useState(0);
       justifyContent: 'flex-start', 
       textTransform: 'none',
       position: 'relative',
-      background: 'linear-gradient(0deg, #4b2ac2 0%, #5c39d3 100%)',  
+      background: Constants.primaryColor,  
       boxShadow:
         'inset 2px 2px 2px 0px rgba(255,255,255,.5), 7px 7px 20px 0px rgba(0,0,0,.1), 4px 4px 5px 0px rgba(0,0,0,.1)',
     }}
@@ -324,22 +310,17 @@ const [page, setPage] = useState(0);
             <h3 style={{ margin: 0 }}>Cost Information</h3>
 
             <div>
+              <TextField
+    variant="outlined"
+    placeholder="Search..."
+    size="small"
+    style={{ width: "250px" }}
+    sx={{border:Constants.formInputBorderColor,
+      display:isMobile ? "none":"block",
+
+    }}
+  />
              
-              <Button variant="contained" sx={{ mr: 1, backgroundColor: "#6a0dad", color: "white", "&:hover": { backgroundColor: "#4b0082" } }}>
-                Previous
-              </Button>
-
-              <Button variant="contained" sx={{ mr: 1, backgroundColor: "#6a0dad", color: "white", "&:hover": { backgroundColor: "#4b0082" } }}>
-                Next
-              </Button>
-
-              <span style={{ marginLeft: "10px" }}>Rows per Page:</span>
-              <select style={{ marginLeft: "5px", padding: "5px", borderRadius: "5px" }}>
-                <option>5</option>
-                <option>10</option>
-                <option>15</option>
-                <option>20</option>
-              </select>
             </div>
           </div>
 
@@ -348,7 +329,7 @@ const [page, setPage] = useState(0);
             <Button
                              variant="contained"
                              sx={{
-                               background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+                               background: Constants.primaryColor,
                                color: "white",
                                fontWeight: "bold",
                                textTransform: "none",
@@ -358,7 +339,7 @@ const [page, setPage] = useState(0);
                                alignItems: "center",  
                                gap: "8px",  
                                "&:hover": {
-                                 background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+                                 background:Constants.primaryColor,
                                },
                              }}
                              onClick={() => {
@@ -402,18 +383,22 @@ const [page, setPage] = useState(0);
 <h3 className="pt-5 pb-3">Developer Entries</h3>
 <div className="button-container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
   <div className="d-flex gap-3">
+     <Stack 
+          direction={isMobile ? "column" : "row"} 
+          spacing={2} // gap
+        >
   <Button 
     onClick={handleShowForm} 
     variant="contained" 
    
-    className="fw-bold"  style={{ background: '#272ba8' }}
+    className="fw-bold"  style={{ background: Constants.primaryColor }}
   >
    +  Create Developer Info
   </Button>
   <Button
                              variant="contained"
                              sx={{
-                               background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+                               background:Constants.primaryColor,
                                color: "white",
                                fontWeight: "bold",
                                textTransform: "none",
@@ -423,7 +408,7 @@ const [page, setPage] = useState(0);
                                alignItems: "center",  // Align icon and text
                                gap: "8px",  // Space between icon and text
                                "&:hover": {
-                                 background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+                                 background:Constants.primaryColor,
                                },
                              }}
                              onClick={() => {
@@ -435,47 +420,24 @@ const [page, setPage] = useState(0);
                              <FaFileDownload size={18} />  {/* Added download icon */}
                              Download PDF
                            </Button>
+                           </Stack>
                            </div>
 
   <div className="right-buttons" style={{ display: 'flex', alignItems: 'center' }}>
-    <Button 
-      variant="contained" 
-      color="secondary" 
-      onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-    >
-      Previous
-    </Button>
-    <Button 
-      variant="contained" 
-      color="secondary" 
-      onClick={() => setCurrentPage(prev => prev + 1)}
-    >
-      Next
-    </Button>
-    
-   
-    <div style={{ marginLeft: '20px' }}>
-        Rows Per Page:
-      <select 
-        value={rowsPerPage} 
-        onChange={(e) => setRowsPerPage(e.target.value)} 
-        style={{ padding: '8px' }}
-      >
-        <option value={5}>5</option>
-        <option value={10}>10</option>
-        <option value={15}>15</option>
-        <option value={20}>20</option>
-      </select>
-    </div>
+      <TextField
+    variant="outlined"
+    placeholder="Search..."
+    size="small"
+    style={{ width: "250px" }}
+    sx={{border:Constants.formInputBorderColor,
+      display:isMobile ? "none":"block",
+
+    }}
+  />
   </div>
 </div>
 
-
-
-
-
-
-  <TableContainer
+ <TableContainer
   component={Paper}
   style={{
     marginTop: '20px',
@@ -485,12 +447,9 @@ const [page, setPage] = useState(0);
 >
 
           <Table >
-          
             <TableHead>
-            
-  <TableRow sx={{background:Constants.primaryColor}}>  
-
-                <TableCell  sx={{ color: "white", fontWeight: "bold" }}>TIMESTAMP</TableCell>
+            <TableRow sx={{background:Constants.primaryColor}}>  
+           <TableCell  sx={{ color: "white", fontWeight: "bold" }}>TIMESTAMP</TableCell>
                 <TableCell  sx={{ color: "white", fontWeight: "bold" }}>VISIT RATE</TableCell>
                 <TableCell  sx={{ color: "white", fontWeight: "bold" }}>BOOKING RATE</TableCell>
                 <TableCell  sx={{ color: "white", fontWeight: "bold" }}>STAMP DUTY</TableCell>
@@ -508,11 +467,11 @@ const [page, setPage] = useState(0);
                   <TableCell>{row.stampDuty}</TableCell>
                 </TableRow>
               ))}
-            </TableBody>
-          </Table>
-      
-
-          <TablePagination
+              <TableFooter>
+                <TableRow>
+                  <TableCell colSpan={4}>
+                     <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+                 <TablePagination
         rowsPerPageOptions={[5, 10, 25]}
         component="div"
         count={tableData.length}
@@ -521,6 +480,23 @@ const [page, setPage] = useState(0);
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
       />
+      </Box>
+      </TableCell>
+      </TableRow>
+              </TableFooter>
+            </TableBody>
+          </Table>
+      
+
+          {/* <TablePagination
+        rowsPerPageOptions={[5, 10, 25]}
+        component="div"
+        count={tableData.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      /> */}
 </TableContainer>
         </>
       )}

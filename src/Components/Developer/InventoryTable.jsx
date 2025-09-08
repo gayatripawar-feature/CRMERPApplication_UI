@@ -1,5 +1,5 @@
 import React, { useState , forwardRef }  from "react";
-import {Box, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Paper, Button, IconButton, Tooltip,  TablePagination,MenuItem,TextField, Grid, Typography } from "@mui/material";
+import {Box, TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Paper, Button, IconButton, Tooltip,  TablePagination,MenuItem,TextField, Grid, Typography, TableFooter } from "@mui/material";
 import { FaTrash } from "react-icons/fa";
 import EditIcon from '@mui/icons-material/Edit';
 import { Delete as DeleteIcon } from "@mui/icons-material";
@@ -517,11 +517,10 @@ Cancel
               </TableRow>
             ))}
           </TableBody>
-        </Table>
-        </Box>
-
-        {/* Fixed pagination below the table */}
-        <TablePagination
+          <TableFooter>
+            <TableRow>
+               <TableCell colSpan={22}>
+                 <TablePagination
         rowsPerPageOptions={[8, 20, 50, 100]}
         component="div"
         count={inventoryData.length}
@@ -532,6 +531,24 @@ Cancel
         showFirstButton
         showLastButton
       />
+      </TableCell>
+            </TableRow>
+          </TableFooter>
+        </Table>
+        </Box>
+
+        {/* Fixed pagination below the table */}
+        {/* <TablePagination
+        rowsPerPageOptions={[8, 20, 50, 100]}
+        component="div"
+        count={inventoryData.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+        showFirstButton
+        showLastButton
+      /> */}
         </Box>
 
       )}

@@ -1,5 +1,5 @@
 import React, { useState, useRef , useEffect } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, TextField, Grid, MenuItem } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, TextField, Grid, MenuItem,Box ,Stack} from '@mui/material';
 import { FaEye, FaFileCsv, FaUpload, FaPlus, FaTrash } from "react-icons/fa";
 import { Inventory } from '@mui/icons-material';
 import InventoryTable from './InventoryTable';
@@ -8,6 +8,7 @@ import { FaFileDownload } from "react-icons/fa";
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import Constants from '../Constants';
+import {useMediaQuery,useTheme} from "@mui/material";
 const fetchLoansData = async () => {
   const response = await fetch('/api/getOCRCollection');
   return response.json();
@@ -30,7 +31,8 @@ const ProjectInventory = () => {
   const [showFirmForm, setShowFirmForm] = useState(false);
   const [partners, setPartners] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-
+const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm")); // true if screen < 600px
   const [showFileInput, setShowFileInput] = useState(false);
   useEffect(() => {
     loadLoansData();
@@ -44,11 +46,11 @@ const ProjectInventory = () => {
 
   const handleToggleSection = (index) => {
     if (index === 1) {
-      downloadSampleCsv();
+      downloadSampleCsv();   // csv download
     } else if (index === 2) {
        if (fileInputRef.current) {
-        fileInputRef.current.click();
-      }
+        fileInputRef.current.click();  //opens filr chooser
+      }  
     } else {
       setExpandedSection(index);
       setShowFileInput(false);
@@ -182,17 +184,8 @@ const ProjectInventory = () => {
       podiumGarde: formValues.podiumGarde,
       timestamp: new Date().toISOString(),
     };
-  setInventoryData([...inventoryData, newItem]); 
-  setShowFirmForm(false);
-  };
-  
-
-  const handleSubmit = () => {
- 
-    console.log(formValues);
-
-    
-    setFormValues({
+    // reset the form 
+     setFormValues({
       projectName: '',
       wing: '',
       floor: '',
@@ -213,25 +206,24 @@ const ProjectInventory = () => {
       balconySanctioned: '',
       podiumGarde: ''
     });
-
-    // Reset partners array after submission
+  setInventoryData([...inventoryData, newItem]); 
     setPartners([{ name: '', age: '', occupation: '' }]);
+  setShowFirmForm(false);
   };
+  
+
+ 
   
   return (
     <div className="main-content">
       <h6 className='col-12'>Dashboard / Developer Module / Project Inventory</h6>
-
-    
-      <div className="d-flex align-items-center mb-2">
-       
-
-<div className="d-flex align-items-center justify-content-between mb-2" style={{ width: "100%" }}>
+ <div className="d-flex align-items-center mb-2">
+       <div className="d-flex align-items-center justify-content-between mb-2" style={{ width: "100%" }}>
 <div className="d-flex align-items-center ">
+ {/* <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
   {sections.map((section, index) => (
     <div 
       key={index} 
-
       style={{ 
         display: 'flex', 
         alignItems: 'center', 
@@ -242,7 +234,7 @@ const ProjectInventory = () => {
         cursor: 'pointer',    
         transition: "width 0.3s ease, background 0.3s ease",
         width: expandedSection === index ? "250px" : "50px", 
-        minWidth: "50px",
+         minWidth: "50px",
         overflow: "hidden",
         whiteSpace: "nowrap",
         fontSize: "14px",
@@ -253,11 +245,13 @@ const ProjectInventory = () => {
         boxShadow:
           "inset 2px 2px 2px 0px rgba(255,255,255,.5), 7px 7px 20px 0px rgba(0,0,0,.1), 4px 4px 5px 0px rgba(0,0,0,.1)",
       }}
+      
       onClick={() => handleToggleSection(index)} 
+
     >
       {React.cloneElement(section.icon, { style: { marginRight: '8px',color: 'white' } })}  
       
-      {/* Conditionally display label based on expandedSection */}
+      
       {expandedSection === index ? (
         <span className="fw-bold text-white p-2 fs-6" style={{ color: 'white', marginLeft: '10px' }}>{section.label}</span>
       ) : null}
@@ -287,19 +281,79 @@ const ProjectInventory = () => {
   
     </div>
   ))}
+  </Box>  */}
+
+ <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+      {sections.map((section, index) => (
+        <div
+          key={index}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            backgroundColor: Constants.primaryColor,
+            padding: "8px",
+            borderRadius: "20px",
+            margin: "5px",
+            cursor: "pointer",
+            transition: "width 0.3s ease, background 0.3s ease",
+            width:
+              expandedSection === index
+                ? isMobile
+                  ? "160px" // expanded on mobile
+                  : "250px" // expanded on desktop
+                : isMobile
+                ? "40px" // collapsed on mobile
+                : "50px", // collapsed on desktop
+            minWidth: isMobile ? "40px" : "50px",
+            overflow: "hidden",
+            whiteSpace: "nowrap",
+            fontSize: isMobile ? "12px" : "14px", // smaller text on mobile
+            justifyContent: "center",
+            textTransform: "none",
+            position: "relative",
+            background: Constants.primaryColor,
+            boxShadow:
+              "inset 2px 2px 2px 0px rgba(255,255,255,.5), 7px 7px 20px 0px rgba(0,0,0,.1), 4px 4px 5px 0px rgba(0,0,0,.1)",
+          }}
+          onClick={() => handleToggleSection(index)}
+        >
+          {React.cloneElement(section.icon, {
+            style: { marginRight: "8px", color: "white" },
+          })}
+
+          {expandedSection === index ? (
+            <span
+              className="fw-bold text-white p-2 fs-6"
+              style={{ color: "white", marginLeft: "10px" }}
+            >
+              {section.label}
+            </span>
+          ) : null}
+        </div>
+      ))}
+    </Box>
+
+
 </div>
- <TextField
+ {/* <TextField
     variant="outlined"
     placeholder="Search Inventory..."
     size="small"
     style={{ width: "250px" }}
-    sx={{border:Constants.formInputBorderColor}}
-  />
+    sx={{border:Constants.formInputBorderColor,
+      display:isMobile ? "none":"block",
+    }}
+  /> */}
 </div>
 {/* File Upload Input */}
 {showFileInput && (
   <div className="m-3">
-    <input type="file" accept=".csv, .xlsx" />
+    <input type="file" accept=".csv, .xlsx" 
+    sx={{
+         width: isMobile ? "160px" : "250px", // expanded
+            minWidth: isMobile ? "40px" : "50px",
+    }}
+    />
   </div>
 )}
 
@@ -321,8 +375,19 @@ const ProjectInventory = () => {
           {!showFirmForm ? (
             <>
               <div className="button-container">
-                <div className='d-flex gap-3'>
-                <Button variant="contained" color="primary" style={{ background: Constants.primaryColor }} onClick={() => setShowFirmForm(true)}>
+                   <Stack 
+      direction={isMobile ? "column" : "row"} 
+      spacing={2} // gap
+    >
+                {/* <div className='d-flex gap-3'> */}
+                <Button variant="contained" color="primary" 
+                 onClick={() => setShowFirmForm(true)}
+                sx={{
+                  background:Constants.primaryColor,
+                   width:  "160px" ,
+            minWidth:  "40px" ,
+                }}
+                >
                   + Inventory Info
                 </Button>
                 <Button
@@ -336,6 +401,8 @@ const ProjectInventory = () => {
                      borderRadius: "8px",
                      display: "flex",
                      alignItems: "center",  
+                     width: isMobile ? "100%" : "160px",
+                     minWidth: "40px" ,
                      gap: "8px",  
                      "&:hover": {
                        background:Constants.primaryColor,
@@ -350,17 +417,21 @@ const ProjectInventory = () => {
                    <FaFileDownload size={18} />  
                    Download PDF
                  </Button>
-                </div>
-               
+                {/* </div> */}
+              </Stack> 
               
               
-                <div className="right-buttons">
-                  <Button variant="contained" color="secondary"  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}>
-                    Previous
-                  </Button>
-                  <Button variant="contained" color="secondary"  onClick={() => setCurrentPage(prev => prev + 1)}>
-                    Next
-                  </Button>
+             
+                <div className='right-buttons'>
+                   <TextField
+    variant="outlined"
+    placeholder="Search Inventory..."
+    size="small"
+    style={{ width: "250px" }}
+    sx={{border:Constants.formInputBorderColor,
+      display:isMobile ? "none":"block",
+    }}
+  />
                 </div>
               </div>
               <div className="">
@@ -665,289 +736,9 @@ const ProjectInventory = () => {
         </div>
       )}
 
-{expandedSection === 1 && (
-        <div className="content-container mt-3">
-          {!showFirmForm ? (
-            <>
-              <div className="button-container ">
-                <Button variant="contained" color="primary" onClick={() => setShowFirmForm(true)}>
-                  + Inventory Info
-                </Button>
-
-                <Button variant="contained" color="primary" onClick={() => setShowFirmForm(true)}>
-                  + Download PDF
-                </Button>
-
-           
-                <div className="right-buttons">
-                  <Button variant="contained" color="secondary" onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}>
-                    Previous
-                  </Button>
-                  <Button variant="contained" color="secondary" onClick={() => setCurrentPage(prev => prev + 1)}>
-                    Next
-                  </Button>
-                </div>
-              </div>
-              <div className="mt-3">
-              <InventoryTable inventoryData={inventoryData} handleDelete={handleDelete} InventoryRef={InventoryRef}/>
-           </div>
-            </>
-          ) : (
-            <div className="firm-form mt-4 p-3 border rounded" 
-            style={{
-              backgroundColor: "#f8f9fa", 
-              border: "1px solid #ccc", 
-            }}
-            >
-             
-              <Grid container spacing={2}>
-                <Grid item xs={12} sm={6} md={4}>
-                  <TextField label="Project Name" fullWidth />
-                  </Grid>
-               <Grid item xs={12} sm={6} md={4}>
-                  <TextField label="Wing" fullWidth /></Grid>
-                <Grid item xs={12} sm={6} md={4}>
-                  <TextField label="Floor" fullWidth /></Grid>
-                <Grid item xs={12} sm={6} md={4}>
-                  <TextField label="Flat No." fullWidth /></Grid>
-               <Grid item xs={12} sm={6} md={4}>
-                  <TextField type="number" label="RERA Carpet Area (Sq Mtr)" fullWidth 
-                inputProps={{ step: "0.01", min: "0.01" }}
-                /></Grid>
-                <Grid item xs={12} sm={6} md={4}>
-                  <TextField type="number" label="RERA Carpet Area (Sq Ft)" fullWidth inputProps={{ step: "0.01", min: "0.01" }}
-                /></Grid>
-              <Grid item xs={12} sm={6} md={4}>
-                  <TextField  type="number" label="Total Saleable Area (Sq. Fts)" fullWidth inputProps={{ step: "0.01", min: "0.01" }}
-                /></Grid>
-               <Grid item xs={12} sm={6} md={4}>
-                  <TextField  type="number" label="Saleable to Carpet Area Ratio (Sq. Fts)" fullWidth inputProps={{ step: "0.01", min: "0.01" }}/></Grid>
-
-             
-              <Grid item xs={12} sm={6} md={4}>
-                  <TextField select label="Type of Units" fullWidth>
-                    {unitTypes.map((type, idx) => (
-                      <MenuItem key={idx} value={type}>{type}</MenuItem>
-                    ))}
-                  </TextField>
-                </Grid>
-
-                <Grid item xs={4}>
-                  <TextField select label="Configuration" fullWidth>
-                    {configurations.map((config, idx) => (
-                      <MenuItem key={idx} value={config}>{config}</MenuItem>
-                    ))}
-                  </TextField>
-                </Grid>
-
-                <Grid item xs={12} sm={6} md={4}>
-                  <TextField select label="Status" fullWidth>
-                    {statusOptions.map((status, idx) => (
-                      <MenuItem key={idx} value={status}>{status}</MenuItem>
-                    ))}
-                  </TextField>
-                </Grid>
-
-              
-               <Grid item xs={12} sm={6} md={4}>
-                  <TextField select label="Select Owner" fullWidth>
-                    {owners.map((owner, idx) => (
-                      <MenuItem key={idx} value={owner}>{owner}</MenuItem>
-                    ))}
-                  </TextField>
-                </Grid>
-
-                
-                <Grid item xs={12} sm={6} md={4}>
-  <TextField
-    type="number"
-    label="ATT. Terrace Carpet Area (Sq Ft)"
-    fullWidth
-    inputProps={{ step: "0.01", min: "0.01" }}
-  />
-</Grid>
-
-                <Grid item xs={12} sm={6} md={4}>
-                  <TextField type="number" label="Balcony Area/Sitout Carpet Area (Sq Ft)" fullWidth 
-                inputProps={{ step: "0.01", min: "0.01" }}/></Grid>
-              <Grid item xs={12} sm={6} md={4}>
-                  <TextField type="number" label="Porch Area (Sq Ft)" fullWidth 
-                inputProps={{ step: "0.01", min: "0.01" }}/></Grid>
-                <Grid item xs={12} sm={6} md={4}>
-                  <TextField  type="number" label="Top Terrace Carpet Area (Sq Ft)" fullWidth inputProps={{ step: "0.01", min: "0.01" }}
-                /></Grid>
-               <Grid item xs={12} sm={6} md={4}>
-                  <TextField type="number" label="Super Built-up Area (Sq Ft)" fullWidth inputProps={{ step: "0.01", min: "0.01" }}
-                /></Grid>
-               <Grid item xs={12} sm={6} md={4}>
-                  <TextField label="OPEN/ENCLOSED BALCONY AS SANCTIONED" fullWidth /></Grid>
-              <Grid item xs={12} sm={6} md={4}>
-                  <TextField label="PODIUM GARDE" fullWidth /></Grid>
-              </Grid>
-
-           
-              {partners.map((_, index) => (
-                <Grid container spacing={2} key={index}>
-                 <Grid item xs={12} sm={6} md={4}>
-                    <TextField label="Name" fullWidth />
-                    </Grid>
-                  <Grid item xs={12} sm={6} md={4}>
-                    <TextField label="Age" fullWidth /></Grid>
-                 <Grid item xs={12} sm={6} md={4}>
-                    <TextField label="Occupation" fullWidth /></Grid>
-                 <Grid item xs={12} sm={6} md={4}>
-                    <Button variant="contained" color="secondary" onClick={() => setPartners(partners.filter((_, i) => i !== index))}>
-                      <FaTrash />
-                    </Button>
-                  </Grid>
-                </Grid>
-              ))}
-
-             
-
-              <Button variant="contained" className="mt-3" color="success" 
-              onClick={() => {
-                handleSubmit(); // your form submission logic
-                setShowFirmForm(false); // hide the form
-              }}
-              >
-                Submit
-              </Button>
-             
-
-            </div> 
-   )}
-        </div>
-      )}
-
-
-{expandedSection === 2 && (
-        <div className="content-container">
-          {!showFirmForm ? (
-            <>
-              <div className="button-container">
-                <Button variant="contained" color="primary" onClick={() => setShowFirmForm(true)}>
-                  + Display Inventory
-                </Button>
-                {/* Pagination Buttons */}
-                <div className="right-buttons">
-                  <Button variant="contained" color="secondary" onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}>
-                    Previous
-                  </Button>
-                  <Button variant="contained" color="secondary" onClick={() => setCurrentPage(prev => prev + 1)}>
-                    Next
-                  </Button>
-                </div>
-              </div>
-              <div className="mt-3">
-              <InventoryTable inventoryData={inventoryData} handleDelete={handleDelete} />
-           </div>
-            </>
-          ) : (
-            <div className="firm-form mt-4 p-3 border rounded">
-              {/* <h5></h5> */}
-              <Grid container spacing={2}>
-                <Grid item xs={4}><TextField label="Project Name" fullWidth /></Grid>
-                <Grid item xs={4}><TextField label="Wing" fullWidth /></Grid>
-                <Grid item xs={4}><TextField label="Floor" fullWidth /></Grid>
-                <Grid item xs={4}><TextField label="Flat No." fullWidth /></Grid>
-                <Grid item xs={4}><TextField type="number" label="RERA Carpet Area (Sq Mtr)" fullWidth 
-                inputProps={{ step: "0.01", min: "0.01" }}
-                /></Grid>
-                <Grid item xs={4}><TextField type="number" label="RERA Carpet Area (Sq Ft)" fullWidth inputProps={{ step: "0.01", min: "0.01" }}
-                /></Grid>
-                <Grid item xs={4}><TextField  type="number" label="Total Saleable Area (Sq. Fts)" fullWidth inputProps={{ step: "0.01", min: "0.01" }}
-                /></Grid>
-                <Grid item xs={4}><TextField  type="number" label="Saleable to Carpet Area Ratio (Sq. Fts)" fullWidth inputProps={{ step: "0.01", min: "0.01" }}/></Grid>
-
-                {/* Type of Units Dropdown */}
-                <Grid item xs={4}>
-                  <TextField select label="Type of Units" fullWidth>
-                    {unitTypes.map((type, idx) => (
-                      <MenuItem key={idx} value={type}>{type}</MenuItem>
-                    ))}
-                  </TextField>
-                </Grid>
-
-                {/* Configuration Dropdown */}
-                <Grid item xs={4}>
-                  <TextField select label="Configuration" fullWidth>
-                    {configurations.map((config, idx) => (
-                      <MenuItem key={idx} value={config}>{config}</MenuItem>
-                    ))}
-                  </TextField>
-                </Grid>
-
-                {/* Status Dropdown */}
-                <Grid item xs={4}>
-                  <TextField select label="Status" fullWidth>
-                    {statusOptions.map((status, idx) => (
-                      <MenuItem key={idx} value={status}>{status}</MenuItem>
-                    ))}
-                  </TextField>
-                </Grid>
-
-                {/* Select Owner Dropdown */}
-                <Grid item xs={4}>
-                  <TextField select label="Select Owner" fullWidth>
-                    {owners.map((owner, idx) => (
-                      <MenuItem key={idx} value={owner}>{owner}</MenuItem>
-                    ))}
-                  </TextField>
-                </Grid>
-
-              
-                <Grid item xs={4}>
-  <TextField
-    type="number"
-    label="ATT. Terrace Carpet Area (Sq Ft)"
-    fullWidth
-    inputProps={{ step: "0.01", min: "0.01" }}
-  />
-</Grid>
-
-                <Grid item xs={4}><TextField type="number" label="Balcony Area/Sitout Carpet Area (Sq Ft)" fullWidth 
-                inputProps={{ step: "0.01", min: "0.01" }}/></Grid>
-                <Grid item xs={4}><TextField type="number" label="Porch Area (Sq Ft)" fullWidth 
-                inputProps={{ step: "0.01", min: "0.01" }}/></Grid>
-                <Grid item xs={4}><TextField  type="number" label="Top Terrace Carpet Area (Sq Ft)" fullWidth inputProps={{ step: "0.01", min: "0.01" }}
-                /></Grid>
-                <Grid item xs={4}><TextField type="number" label="Super Built-up Area (Sq Ft)" fullWidth inputProps={{ step: "0.01", min: "0.01" }}
-                /></Grid>
-                <Grid item xs={4}><TextField label="OPEN/ENCLOSED BALCONY AS SANCTIONED" fullWidth /></Grid>
-                <Grid item xs={4}><TextField label="PODIUM GARDE" fullWidth /></Grid>
-              </Grid>
-
-              {/* Partner Details */}
-           
-              {partners.map((_, index) => (
-                <Grid container spacing={2} key={index}>
-                  <Grid item xs={4}><TextField label="Name" fullWidth /></Grid>
-                  <Grid item xs={4}><TextField label="Age" fullWidth /></Grid>
-                  <Grid item xs={4}><TextField label="Occupation" fullWidth /></Grid>
-                  <Grid item xs={4}>
-                    <Button variant="contained" color="secondary" onClick={() => setPartners(partners.filter((_, i) => i !== index))}>
-                      <FaTrash />
-                    </Button>
-                  </Grid>
-                </Grid>
-              ))}
-
-             
-
-              <Button variant="contained" className="mt-3" color="success" onClick={() => setShowFirmForm(false)}>
-                Submit
-              </Button>
-            </div> 
-
-
-
-
-          )}
-        </div>
-      )}
     </div>
   );
 };
 
 export default ProjectInventory;
+
