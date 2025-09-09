@@ -16,6 +16,7 @@ import ChannelPartnerTable from "./ChannelPartnerTable";
 import { jsPDF } from "jspdf";
 import {  FaFileDownload } from "react-icons/fa";
 import autoTable from "jspdf-autotable";
+import Constants from "../Constants";
  const ChannelPartner = () => {
   const [isExpanded, setIsExpanded] = useState(true); 
   const [showBookingForm, setShowBookingForm] = useState(false);
@@ -168,7 +169,7 @@ import autoTable from "jspdf-autotable";
     padding: '10px 15px',
     textTransform: 'none',
     transition: 'width 0.3s ease, background 0.3s ease',
-    background: 'linear-gradient(0deg, #4b2ac2 0%, #5c39d3 100%)', 
+    background:Constants.primaryColor,
     boxShadow:
       'inset 2px 2px 2px 0px rgba(255,255,255,.5), 7px 7px 20px 0px rgba(0,0,0,.1), 4px 4px 5px 0px rgba(0,0,0,.1)',
     cursor: 'pointer',  
@@ -193,7 +194,7 @@ import autoTable from "jspdf-autotable";
       <Button
         variant="contained"
         color="primary"
-        sx={{ background: "#272ba8" }}
+        sx={{ background: Constants.primaryColor }}
         onClick={() => setShowBookingForm(true)}
       >
         + CP Details Form
@@ -202,7 +203,7 @@ import autoTable from "jspdf-autotable";
     <Button
     variant="contained"
     sx={{
-      background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+      background: Constants.primaryColor,
       color: "white",
       fontWeight: "bold",
       textTransform: "none",
@@ -212,7 +213,7 @@ import autoTable from "jspdf-autotable";
       alignItems: "center",  
       gap: "8px",  
       "&:hover": {
-        background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+        background: Constants.primaryColor,
       },
      
     }}

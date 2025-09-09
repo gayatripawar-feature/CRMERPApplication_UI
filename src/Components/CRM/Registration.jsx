@@ -13,6 +13,7 @@ import { HomeIcon } from 'lucide-react';
 import { FaFileDownload } from "react-icons/fa";
 import autoTable from "jspdf-autotable";
 import CloseIcon from "@mui/icons-material/Close";
+import Constants from '../Constants';
 const fetchLoansData = async () => {
   const response = await fetch('/api/getOCRCollection');
   return response.json();
@@ -527,11 +528,11 @@ const handleFileUpload = (file, index) => {
         justifyContent: "center",
         textTransform: "none",
         position: "relative",
-        background: "linear-gradient(0deg, #4b2ac2 0%, #5c39d3 100%)",
+        background:Constants.primaryColor,
         boxShadow:
           "inset 2px 2px 2px 0px rgba(255,255,255,.5), 7px 7px 20px 0px rgba(0,0,0,.1), 4px 4px 5px 0px rgba(0,0,0,.1)",
         "&:hover": {
-        background: "linear-gradient(0deg, rgb(230, 4, 255) 0%, rgb(245, 182, 24) 100%)",
+        background: Constants.primaryColor,
         },
         "&::after": {
           content: '""',
@@ -558,7 +559,7 @@ const handleFileUpload = (file, index) => {
        <Button
        variant="contained"
        sx={{
-         background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+         background: Constants.primaryColor,
          color: "white",
          fontWeight: "bold",
        
@@ -574,7 +575,7 @@ const handleFileUpload = (file, index) => {
          gap: "6px",
          lineHeight: "1",  
          "&:hover": {
-           background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+           background: Constants.primaryColor,
          },
        }}
        disableElevation  
@@ -688,7 +689,7 @@ const handleFileUpload = (file, index) => {
   <Table sx={{ tableLayout: 'auto', width: '100%' }}>
     <TableHead >
     
- <TableRow sx={{background:"#3621a9"}}>
+ <TableRow sx={{background:Constants.primaryColor}}>
         <TableCell sx={{ color: "white", fontWeight: "bold",whiteSpace: "nowrap"}}>FLAT NO.</TableCell>
         <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>NAME OF ALLOTEE</TableCell>
         <TableCell sx={{ color: "white", fontWeight: "bold",whiteSpace: "nowrap" }}>NAME OF CO-ALLOTEE</TableCell>

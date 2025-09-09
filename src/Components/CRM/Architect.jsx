@@ -8,6 +8,7 @@ import jsPDF from "jspdf";
 import { FaFileDownload } from "react-icons/fa";
 import autoTable from "jspdf-autotable";
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import Constants from '../Constants';
 const fetchLoansData = async () => {
   const response = await fetch('/api/getOCRCollection');
   return response.json();
@@ -190,7 +191,7 @@ return (
     justifyContent: "center",
     textTransform: "none",
     position: "relative",
-    background: "linear-gradient(0deg, #4b2ac2 0%, #5c39d3 100%)",
+    background: Constants.primaryColor,
     boxShadow:
       "inset 2px 2px 2px 0px rgba(255,255,255,.5), 7px 7px 20px 0px rgba(0,0,0,.1), 4px 4px 5px 0px rgba(0,0,0,.1)",
     "&:hover": {
@@ -220,13 +221,13 @@ return (
 
         <div className='d-flex gap-3'>
       <div className="d-flex align-items-center justify-content-between my-3 pt-4 pb-3">
-        <Button variant="contained" className="text-nowrap m-1" style={{ minWidth: "180px", background:"#272ba8"}} color="primary" onClick={() => handleOpenModal(null)}>
+        <Button variant="contained" className="text-nowrap m-1" style={{ minWidth: "180px", background:Constants.primaryColor}} color="primary" onClick={() => handleOpenModal(null)}>
           Add Letter
         </Button>
         <Button
     variant="contained"
     sx={{
-      background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+      background: Constants.primaryColor,
       color: "white",
       fontWeight: "bold",
       textTransform: "none",
@@ -236,7 +237,7 @@ return (
       alignItems: "center",  
       gap: "8px",  
       "&:hover": {
-        background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+        background: Constants.primaryColor,
       },
      
     }}
@@ -315,7 +316,7 @@ return (
  <TableContainer component={Paper} className="mt-4" sx={{ mt: 2, boxShadow: 3, borderRadius: 2 ,maxHeight: 400, overflowY: 'auto'}}>
         <Table>
           <TableHead>
-             <TableRow sx={{background:"#3621a9"}}>
+             <TableRow sx={{background:Constants.primaryColor}}>
               <TableCell sx={{ color: "white", fontWeight: "bold" }}>ACTION</TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold" }}>TIMESTAMP</TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold" }}>SLAB</TableCell>
@@ -330,12 +331,12 @@ return (
   <IconButton
     onClick={() => handleOpenEditModal(loan)}
     sx={{
-      backgroundColor: "#3621a9",  
+      backgroundColor:Constants.primaryColor, 
       color: "white",              
       fontSize: "10px",            
       padding: "3px",              
       '&:hover': {
-        backgroundColor: "#2c1880",  
+        backgroundColor: Constants.primaryColor, 
       }
     }}
   >
@@ -536,7 +537,7 @@ return (
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#1976d2', 
+    backgroundColor:Constants.primaryColor, 
     padding: '10px',
     width: '100%', 
   }}

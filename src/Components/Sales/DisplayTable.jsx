@@ -1,5 +1,6 @@
 import React ,{useState}from "react";
 import { TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Paper ,TablePagination} from "@mui/material";
+import Constants from "../Constants";
 
 const DisplayTable = ({ data }) => {
 
@@ -20,7 +21,7 @@ const DisplayTable = ({ data }) => {
       <Table>
         <TableHead>
         
-           <TableRow sx={{background:"#3621a9"}}>
+           <TableRow sx={{background:Constants.primaryColor}}>
           
             <TableCell  sx={{ color: "white", fontWeight: "bold",whiteSpace: "nowrap" }}>TIMESTAMP</TableCell>
             <TableCell  sx={{ color: "white", fontWeight: "bold",whiteSpace: "nowrap" }}>FIRM NAME</TableCell>

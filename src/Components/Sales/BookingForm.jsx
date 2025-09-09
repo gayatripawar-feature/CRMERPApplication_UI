@@ -23,6 +23,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { FaRegUser } from "react-icons/fa";
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'; 
+import Constants from '../Constants';
 
 const sections = [
     { label: "Booking Display", icon: <FaBuilding size={20} />, createLabel: "Create Firm" },
@@ -832,7 +833,7 @@ const handleCoAllotteeAadharChange = (e) => {
         padding: "10px 15px",
         textTransform: "none",
         transition: "background 0.3s ease",
-        background: "linear-gradient(0deg, #4b2ac2 0%, #5c39d3 100%)",
+        background: Constants.primaryColor,
         boxShadow:
           "inset 2px 2px 2px 0px rgba(255,255,255,.5), 7px 7px 20px 0px rgba(0,0,0,.1), 4px 4px 5px 0px rgba(0,0,0,.1)",
         cursor: "pointer",
@@ -858,7 +859,7 @@ const handleCoAllotteeAadharChange = (e) => {
   <Button 
               variant="contained" 
               color="primary" 
-              style={{ background: '#272ba8' }} 
+              style={{ background: Constants.primaryColor }} 
               className='fw-bold'
               onClick={() => setShowFirmForm(true)}
             >
@@ -867,7 +868,7 @@ const handleCoAllotteeAadharChange = (e) => {
             <Button
     variant="contained"
     sx={{
-      background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+      background: Constants.primaryColor,
       color: "white",
       fontWeight: "bold",
       textTransform: "none",
@@ -877,7 +878,7 @@ const handleCoAllotteeAadharChange = (e) => {
       alignItems: "center",  // Align icon and text
       gap: "8px",  // Space between icon and text
       "&:hover": {
-        background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+        background: Constants.primaryColor,
       },
      
     }}

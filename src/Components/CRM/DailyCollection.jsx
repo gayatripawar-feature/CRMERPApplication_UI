@@ -20,6 +20,7 @@ import { FaFileDownload } from "react-icons/fa";
 
 
 import "jspdf-autotable";
+import Constants from '../Constants';
 
 const fetchLoansData = async () => {
   const response = await fetch('/api/getOCRCollection');
@@ -455,7 +456,7 @@ const handleToggle = () => {
     justifyContent: "center",
     textTransform: "none",
     position: "relative",
-    background: "linear-gradient(0deg, #4b2ac2 0%, #5c39d3 100%)",
+    background: Constants.primaryColor,
     boxShadow:
       "inset 2px 2px 2px 0px rgba(255,255,255,.5), 7px 7px 20px 0px rgba(0,0,0,.1), 4px 4px 5px 0px rgba(0,0,0,.1)",
     "&:hover": {
@@ -488,14 +489,14 @@ const handleToggle = () => {
 
 <div className="d-flex align-items-center justify-content-between my-3 pt-4 pb-3">
   <div>
-  <Button variant="contained" className="text-nowrap  m-2" style={{ minWidth: "150px" ,background:"#272ba8"}} color="primary" onClick={() => handleOpenModal(null)}>
+  <Button variant="contained" className="text-nowrap  m-2" style={{ minWidth: "150px" ,background:Constants.primaryColor,}} color="primary" onClick={() => handleOpenModal(null)}>
    Add Collection
   </Button>
 
           <Button
         variant="contained"
         sx={{
-          background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+          background: Constants.primaryColor,
           color: "white",
           
           fontWeight: "900",
@@ -511,7 +512,7 @@ const handleToggle = () => {
           gap: "6px",
           lineHeight: "1",   
           "&:hover": {
-            background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+            background: Constants.primaryColor,
           },
         }}
         disableElevation  
@@ -535,7 +536,7 @@ const handleToggle = () => {
 <TableContainer component={Paper} className="mt-4" sx={{ mt: 2, boxShadow: 3, borderRadius: 2,maxHeight: 400, overflowY: 'auto' }}>
       <Table >
         <TableHead>
-        <TableRow sx={{background:"#3621a9"}}>
+        <TableRow sx={{background:Constants.primaryColor}}>
             <TableCell  sx={{ color: "white", fontWeight: "bold",whiteSpace: "nowrap"  }}>ACTION</TableCell>
             <TableCell  sx={{ color: "white", fontWeight: "bold",whiteSpace: "nowrap"  }}>	TIMESTAMP</TableCell>
             <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>RECEIPT NO.</TableCell>

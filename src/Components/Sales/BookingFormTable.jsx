@@ -16,6 +16,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { toast } from 'react-toastify';
+import Constants from "../Constants";
 
 const openDocument = (url) => {
   if (!url) return; 
@@ -307,7 +308,7 @@ const handleCoAllotteeAadharChange = (e) => {
       <Table>
         <TableHead>
           {/* <TableRow sx={{ bgcolor: "primary.main" }}> */}
-           <TableRow sx={{background:"#3621a9"}}>
+           <TableRow sx={{background:Constants.primaryColor}}>
             <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>ACTION</TableCell>
             <TableCell  sx={{ color: "white", fontWeight: "bold",whiteSpace: "nowrap" }}>TIMESTAMP</TableCell>
             <TableCell  sx={{ color: "white", fontWeight: "bold",whiteSpace: "nowrap" }}>ENQUIRY NO.</TableCell>

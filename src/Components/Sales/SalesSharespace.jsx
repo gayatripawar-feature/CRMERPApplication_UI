@@ -19,6 +19,7 @@ import { FaFileDownload } from "react-icons/fa";
 import autoTable from "jspdf-autotable";
 
 import { jsPDF } from "jspdf";
+import Constants from '../Constants';
 
 const SalesSharespace = () => {
   const [activeIcon, setActiveIcon] = useState('project');
@@ -281,7 +282,7 @@ const [isExpanded, setIsExpanded] = useState(false);
       textTransform: 'none',
       position: 'relative',
       background: activeIcon === 'project'
-        ? "linear-gradient(0deg, #4b2ac2 0%, #5c39d3 100%)"
+        ? Constants.primaryColor
         : 'transparent',
       boxShadow:
         "inset 2px 2px 2px 0px rgba(255,255,255,.5), 7px 7px 20px 0px rgba(0,0,0,.1), 4px 4px 5px 0px rgba(0,0,0,.1)",
@@ -292,7 +293,7 @@ const [isExpanded, setIsExpanded] = useState(false);
   <div
   className="d-flex justify-content-center align-items-center rounded-circle p-2 shadow"
   style={{
-    background: (activeIcon === 'project' || isCollapsed) ? "#3621a9" : "transparent", 
+    background: (activeIcon === 'project' || isCollapsed) ? Constants.primaryColor : "transparent", 
     padding: '12px', 
   }}
 >
@@ -366,14 +367,14 @@ const [isExpanded, setIsExpanded] = useState(false);
     <button
       className="btn"
       onClick={handleOutShare}
-      style={{ background: "#3621a9", color: "white", padding: "10px 20px", borderRadius: "5px", border: "none" }}
+      style={{ background:Constants.primaryColor, color: "white", padding: "10px 20px", borderRadius: "5px", border: "none" }}
     >
       Out Share
     </button>
      <Button
         variant="contained"
         sx={{
-          background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+          background: Constants.primaryColor,
           color: "white",
           fontWeight: "bold",
           textTransform: "none",
@@ -383,7 +384,7 @@ const [isExpanded, setIsExpanded] = useState(false);
           alignItems: "center",  
           gap: "8px",  
           "&:hover": {
-            background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+            background: Constants.primaryColor,
           },
          
         }}
@@ -547,7 +548,7 @@ const [isExpanded, setIsExpanded] = useState(false);
     <TableContainer component={Paper}>
       <Table className="" size="small" aria-label="project table">
         <TableHead>
-          <TableRow sx={{ background: "#3621a9" }}>
+          <TableRow sx={{ background: Constants.primaryColor }}>
             <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>ACTION</TableCell>
             <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>TIMESTAMP</TableCell>
             <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>SHARE TO</TableCell>
@@ -565,7 +566,7 @@ const [isExpanded, setIsExpanded] = useState(false);
                   onClick={() => handleEdit(row)}
                   sx={{
                     // backgroundColor: "#4CAF50",
-                    backgroundColor: "#2196F3",
+                    backgroundColor:Constants.primaryColor,
                     color: "white",
                     borderRadius: "50%",
                     padding: "4px",
@@ -621,7 +622,7 @@ const [isExpanded, setIsExpanded] = useState(false);
 <Button
     variant="contained"
     sx={{
-      background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+      background: Constants.primaryColor,
       color: "white",
       fontWeight: "bold",
       textTransform: "none",
@@ -631,7 +632,7 @@ const [isExpanded, setIsExpanded] = useState(false);
       alignItems: "center",  
       gap: "8px",  
       "&:hover": {
-        background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+        background:Constants.primaryColor,
       },
      
     }}
@@ -648,7 +649,7 @@ const [isExpanded, setIsExpanded] = useState(false);
         <Table size="small" aria-label="shared table">
           
             <TableHead>
-                <TableRow sx={{ background: "#3621a9" }}>
+                <TableRow sx={{ background: Constants.primaryColor }}>
                     <TableCell sx={{ color: "white", fontWeight: "bold", textAlign: "center" }}>Shared From</TableCell>
                     <TableCell sx={{ color: "white", fontWeight: "bold", textAlign: "center" }}>Timestamp</TableCell>
                     <TableCell sx={{ color: "white", fontWeight: "bold", textAlign: "center" }}>Share To</TableCell>

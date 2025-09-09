@@ -19,6 +19,7 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 import EmailIcon from "@mui/icons-material/Email";
 import AssignmentIcon from "@mui/icons-material/Assignment";
+import Constants from "../Constants";
 
 const data = [
   {
@@ -454,7 +455,7 @@ const handleBudgetChange = (event) => {
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
-              <TableRow sx={{ background: "#3621a9" }}>
+              <TableRow sx={{ background: Constants.primaryColor }}>
                 {/* Header Cells */}
                 <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>ACTION</TableCell>
                 <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>TIMESTAMP</TableCell>

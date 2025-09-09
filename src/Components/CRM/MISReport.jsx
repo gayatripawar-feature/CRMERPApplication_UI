@@ -5,6 +5,7 @@ import { FaFileDownload } from "react-icons/fa";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import autoTable from "jspdf-autotable";
+import Constants from '../Constants';
 const MISReport = () => {
 
   const [flatNo, setFlatNo] = useState('');
@@ -352,13 +353,13 @@ const MISReport = () => {
 
         {/* Submit Button */}
         <div className='d-flex gap-3'>
-        <button type="submit" className="btn btn-primary mt-4">
+        <button type="submit" className="btn  mt-4" style={{background:"#800020",color:"#fff"}}>
           Submit
         </button>
         <Button
   variant="contained"
   sx={{
-    background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+    background: Constants.primaryColor,
     color: "white",
     
     fontWeight: "900",
@@ -375,7 +376,7 @@ const MISReport = () => {
     gap: "6px",
     lineHeight: "1", 
     "&:hover": {
-      background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+      background: Constants.primaryColor,
     },
   }}
   disableElevation   
@@ -394,7 +395,7 @@ const MISReport = () => {
         <Table sx={{ minWidth: 650 }}>
         
           <TableHead>
-            <TableRow sx={{ background: "#3621a9" }}>
+            <TableRow sx={{ background: Constants.primaryColor }}>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>SR NO</TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>FLAT NO</TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>BOOKING DATE</TableCell>

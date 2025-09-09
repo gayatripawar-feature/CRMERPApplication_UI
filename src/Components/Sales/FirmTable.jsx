@@ -7,6 +7,7 @@ import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import EmailIcon from '@mui/icons-material/Email';
 
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import Constants from '../Constants';
 const firms = [
   {
     timestamp: "2025-03-28 10:30 AM",
@@ -53,7 +54,7 @@ const FirmTable = ( {firms}) => {
     <Table>
       <TableHead>
       
-         <TableRow sx={{background:"#3621a9"}}>
+         <TableRow sx={{background:Constants.primaryColor}}>
         
           <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>TIMESTAMP</TableCell>
           <TableCell  sx={{ color: "white", fontWeight: "bold",whiteSpace: "nowrap"  }}>FIRM NAME</TableCell>

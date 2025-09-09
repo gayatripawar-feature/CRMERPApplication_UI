@@ -1,13 +1,14 @@
 
 import React from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import Constants from '../Constants';
 
 const FlatAllotment = ({ data }) => {
   return (
     <TableContainer component={Paper}>
 <Table>
   <TableHead>
-    <TableRow sx={{ background: "#3621a9" }}>
+    <TableRow sx={{ background: Constants.primaryColor }}>
       <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>TIMESTAMP</TableCell>
       <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>PROJECT NAME</TableCell>
       <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>NAME</TableCell>

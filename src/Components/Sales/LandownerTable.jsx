@@ -2,6 +2,7 @@
 import React from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Tooltip } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import Constants from '../Constants';
 
 const LandownerTable = ({ data }) => {
   const handleOpenDocument = (document) => {
@@ -64,7 +65,7 @@ const LandownerTable = ({ data }) => {
     <TableContainer component={Paper}>
       <Table>
         <TableHead>
-          <TableRow sx={{ background: '#3621a9' }}>
+          <TableRow sx={{ background: Constants.primaryColor }}>
             <TableCell sx={{ color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap' }}>TIMESTAMP</TableCell>
             <TableCell sx={{ color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap' }}>PROJECT NAME</TableCell>
             <TableCell sx={{ color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap' }}> NAME</TableCell>

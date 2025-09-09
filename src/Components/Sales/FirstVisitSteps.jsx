@@ -15,6 +15,7 @@ import RevisitStatusTable from './RevisitStatusTable';
 import { jsPDF } from "jspdf";
 import {  FaFileDownload } from "react-icons/fa";
 import autoTable from "jspdf-autotable";
+import Constants from '../Constants';
 const FirstVisitSteps = () => {
   const [activeIcon, setActiveIcon] = useState('project');
   const [showForm, setShowForm] = useState(false);
@@ -238,7 +239,7 @@ const MenuProps = {
       alignItems: 'center',
       justifyContent: 'flex-start',
       transition: 'background 0.3s ease', 
-      background: activeIcon === 'project' ? '#3621a9' : '#f8f9fa', 
+      background: activeIcon === 'project' ? Constants.primaryColor : '#f8f9fa', 
       padding: '8px 16px', // Padding to space out icon and label
      
     }}
@@ -246,19 +247,19 @@ const MenuProps = {
     <div
       className="d-flex justify-content-center align-items-center rounded-circle p-2 shadow"
       style={{
-        background: activeIcon === 'project' ? 'white' : '#3621a9', // Icon background changes to white when active
+        background: activeIcon === 'project' ? 'white' : Constants.primaryColor, // Icon background changes to white when active
         padding: '10px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
       }}
     >
-      <FaProjectDiagram size={26} color={activeIcon === 'project' ? '#3621a9' : 'white'} /> {/* Icon color changes based on active state */}
+      <FaProjectDiagram size={26} color={activeIcon === 'project' ? Constants.primaryColor : 'white'} /> {/* Icon color changes based on active state */}
     </div>
     <div className=''>
     <span
       style={{
-        color: activeIcon === 'project' ? '#fff' : '#3621a9', // Text color changes based on active state
+        color: activeIcon === 'project' ? '#fff' :Constants.primaryColor, // Text color changes based on active state
         fontSize: '16px',
         marginLeft: '8px', // Space between icon and label
       }}
@@ -283,7 +284,7 @@ const MenuProps = {
       alignItems: 'center',
       justifyContent: 'flex-start',
       transition: 'background 0.3s ease', // Smooth background transition
-      background: activeIcon === 'shared' ? '#3621a9' : '#f8f9fa', // Same background color for both
+      background: activeIcon === 'shared' ? Constants.primaryColor : '#f8f9fa', // Same background color for both
       padding: '8px 16px', // Padding to space out icon and label
       // borderRadius: '20px', // Rounded corners for the entire container
     }}
@@ -291,7 +292,7 @@ const MenuProps = {
     <div
       className="d-flex justify-content-center align-items-center rounded-circle p-2 shadow"
       style={{
-        background: activeIcon === 'shared' ? 'white' : '#3621a9', // Icon background changes to white when active
+        background: activeIcon === 'shared' ? 'white' : Constants.primaryColor, // Icon background changes to white when active
         padding: '10px',
         display: 'flex',
         alignItems: 'center',
@@ -302,7 +303,7 @@ const MenuProps = {
     </div>
     <span
       style={{
-        color: activeIcon === 'shared' ? '#fff' : '#3621a9', // Text color changes based on active state
+        color: activeIcon === 'shared' ? '#fff' : Constants.primaryColor, // Text color changes based on active state
         fontSize: '16px',
         marginLeft: '8px', // Space between icon and label
       }}
@@ -319,7 +320,7 @@ const MenuProps = {
     <Button
     variant="contained"
     sx={{
-      background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+      background:Constants.primaryColor,
       color: "white",
       fontWeight: "bold",
       textTransform: "none",
@@ -329,7 +330,7 @@ const MenuProps = {
       alignItems: "center",  // Align icon and text
       gap: "8px",  // Space between icon and text
       "&:hover": {
-        background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+        background: Constants.primaryColor,
       },
      
     }}

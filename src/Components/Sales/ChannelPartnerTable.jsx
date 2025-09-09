@@ -5,6 +5,7 @@ import { TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Paper
 import { Edit, WhatsApp, Email, Visibility ,TrackChanges, Map} from "@mui/icons-material";
 import { DialogTitle, DialogContent, DialogActions, Button, Typography, Select, MenuItem, InputLabel, FormControl } from "@mui/material";
 import { toast } from "react-toastify";
+import Constants from "../Constants";
 const ChannelPartnerTable = ({ data}) => {
   const [status, setStatus] = useState("Active"); 
   const [action, setAction] = useState("");
@@ -205,7 +206,7 @@ const ChannelPartnerTable = ({ data}) => {
     <TableContainer component={Paper}>
       <Table>
         <TableHead>
-          <TableRow sx={{ background: "#3621a9" }}>
+          <TableRow sx={{ background: Constants.primaryColor }}>
             <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap", textAlign: "center" }}>ACTION</TableCell>
             <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap", textAlign: "center" }}>TIMESTAMP</TableCell>
             <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap", textAlign: "center" }}>CP FIRM NAME</TableCell>

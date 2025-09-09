@@ -18,6 +18,7 @@ import {  FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { jsPDF } from "jspdf";
 import { FaFileDownload } from "react-icons/fa";
 import autoTable from "jspdf-autotable";
+import Constants from '../Constants';
 
 
 const fetchLoansData = async () => {
@@ -324,7 +325,7 @@ const Leads = () => {
         display: 'flex',               
         alignItems: 'center',          
         justifyContent: 'flex-start',  
-        backgroundColor: '#3621a9',   
+        backgroundColor: Constants.primaryColor, 
         padding: '10px',
         margin: '10px',
         borderRadius: '20px',         
@@ -333,7 +334,7 @@ const Leads = () => {
         width: expandedSection === index ? '200px' : '50px',  
         height: '50px',                
         transition: 'width 0.3s ease', 
-        background: 'linear-gradient(0deg, #4b2ac2 0%, #5c39d3 100%)', 
+        background: Constants.primaryColor,
         boxShadow: 'inset 2px 2px 2px 0px rgba(255,255,255,.5), 7px 7px 20px 0px rgba(0,0,0,.1), 4px 4px 5px 0px rgba(0,0,0,.1)', // Shadow for depth
       }}
     >
@@ -401,13 +402,13 @@ const Leads = () => {
             <>
               <div className="button-container">
                 <div className='d-flex gap-3'>
-                <Button variant="contained" color="primary" style={{ background: '#272ba8' }} onClick={() => setShowFirmForm(true)}>
+                <Button variant="contained" color="primary" style={{ background: Constants.primaryColor }} onClick={() => setShowFirmForm(true)}>
                   + New Leads
                 </Button>
                 <Button
     variant="contained"
     sx={{
-      background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+      background:Constants.primaryColor,
       color: "white",
       fontWeight: "bold",
       textTransform: "none",
@@ -417,7 +418,7 @@ const Leads = () => {
       alignItems: "center",  
       gap: "8px",  
       "&:hover": {
-        background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+        background: Constants.primaryColor,
       },
      
     }}

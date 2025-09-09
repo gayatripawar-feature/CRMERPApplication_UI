@@ -24,6 +24,7 @@ import {
 } from "@mui/material";
 import { FaEdit, FaWhatsapp, FaEnvelope, FaUserCircle } from "react-icons/fa";
 import { toast } from "react-toastify";
+import Constants from "../Constants";
 
 const NewLeads = ({ inventoryData , setInventoryData}) => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -148,7 +149,7 @@ const handleCloseModal = () => {
           <Table>
             <TableHead>
               
-             <TableRow sx={{background:"#3621a9"}} >
+             <TableRow sx={{background:Constants.primaryColor}} >
                 <TableCell sx={{color: "white", fontWeight: "bold", whiteSpace: "nowrap", padding: "15px"}}>ACTION</TableCell>
                 <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap", padding: "15px"}}>TIMESTAMP</TableCell>
                 <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap", padding: "15px" }}>ASSIGN TO</TableCell>

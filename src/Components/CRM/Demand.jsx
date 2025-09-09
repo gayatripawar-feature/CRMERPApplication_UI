@@ -14,6 +14,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import { IconButton } from "@mui/material";
+import Constants from '../Constants';
 const fetchLoansData = async () => {
   const response = await fetch('/api/getOCRCollection');
   return response.json();
@@ -326,7 +327,7 @@ const [data, setData] = useState([
     justifyContent: "center",
     textTransform: "none",
     position: "relative",
-    background: "linear-gradient(0deg, #4b2ac2 0%, #5c39d3 100%)",
+    background: Constants.primaryColor,
     boxShadow:
       "inset 2px 2px 2px 0px rgba(255,255,255,.5), 7px 7px 20px 0px rgba(0,0,0,.1), 4px 4px 5px 0px rgba(0,0,0,.1)",
     "&:hover": {
@@ -359,13 +360,13 @@ const [data, setData] = useState([
 
 <div className="d-flex align-items-center justify-content-between my-3 pt-4 pb-3">
   <div className='d-flex gap-3'>
-  <Button variant="contained" className="text-nowrap" style={{ minWidth: "150px" ,background:"#272ba8"}} color="primary" onClick={() => handleOpenModal(null)}>
+  <Button variant="contained" className="text-nowrap" style={{ minWidth: "150px" ,background:Constants.primaryColor}} color="primary" onClick={() => handleOpenModal(null)}>
     Demand Letter
   </Button>
         <Button
     variant="contained"
     sx={{
-      background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+      background: Constants.primaryColor,
       color: "white",
       // fontWeight: "bold",
       fontWeight: "900",
@@ -491,7 +492,7 @@ const [data, setData] = useState([
 <TableContainer component={Paper} className="mt-4" sx={{ mt: 2, boxShadow: 3, borderRadius: 2 , overflowY: 'auto',maxHeight: 400}}>
       <Table >
         <TableHead>
-        <TableRow sx={{background:"#3621a9"}}>
+        <TableRow sx={{background:Constants.primaryColor}}>
             <TableCell  sx={{ color: "white", fontWeight: "bold",whiteSpace: "nowrap"  }}>FLAT NO.</TableCell>
             <TableCell  sx={{ color: "white", fontWeight: "bold",whiteSpace: "nowrap"  }}>NAME OF ALLOTEE</TableCell>
             <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>NAME OF CO-ALLOTEE</TableCell>

@@ -11,6 +11,7 @@ import EmailIcon from '@mui/icons-material/Email';
 import { Tooltip } from '@mui/material';
 import { Typography } from 'antd';
 import { toast } from 'react-toastify';
+import Constants from '../Constants';
 
 const firms = [
   {
@@ -468,7 +469,7 @@ const [editData, setEditData] = useState({
         
         <Table>
           <TableHead>
-            <TableRow sx={{ background: "#3621a9" }}>
+            <TableRow sx={{ background: Constants.primaryColor }}>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>ACTION</TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>LAST FOLLOW UP</TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>STATUS</TableCell>

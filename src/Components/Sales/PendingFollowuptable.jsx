@@ -6,6 +6,7 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper
   MenuItem, TextField, Button ,FormControl,InputLabel,Select,Typography,Grid} from '@mui/material';
 import { FaEdit, FaWhatsapp, FaEnvelope, FaUserCircle } from 'react-icons/fa';
 import {toast } from 'react-toastify';
+import Constants from '../Constants';
 const PendingFollowuptable = ({firms, setFirms}) => {
   const [editingIndex, setEditingIndex] = useState(null); 
   const [selectedItem, setSelectedItem] = useState(null); 
@@ -310,7 +311,7 @@ const handleChangePage = (event, newPage) => {
      <Box sx={{ maxHeight: 400, overflowY: 'auto' }}>
         <Table>
           <TableHead>
-            <TableRow sx={{ background: '#3621a9' }}>
+            <TableRow sx={{ background: Constants.primaryColor }}>
               <TableCell sx={{ color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap' }}>ACTION</TableCell>
               <TableCell sx={{ color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap' }}>LAST FOLLOW UP</TableCell>
               <TableCell sx={{ color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap' }}>STATUS</TableCell>

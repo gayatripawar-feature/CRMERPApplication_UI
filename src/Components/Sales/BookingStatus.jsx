@@ -3,13 +3,14 @@
 
 import React from "react";
 import { TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Paper } from "@mui/material";
+import Constants from "../Constants";
 
 const BookingStatus = ({ data }) => {
   return (
     <TableContainer component={Paper}>
       <Table>
         <TableHead>
-          <TableRow sx={{ background: "#3621a9" }}>
+          <TableRow sx={{ background: Constants.primaryColor }}>
             <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>PLANNED</TableCell>
             <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>ACTUAL</TableCell>
             <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>STATUS</TableCell>

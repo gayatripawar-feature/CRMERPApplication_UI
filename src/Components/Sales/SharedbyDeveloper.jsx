@@ -564,7 +564,7 @@ setShowFlatForm(false); // Ensure this is not reset elsewhere if you want the ta
   
 
   const buttonSx = {
-  background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+  background: Constants.primaryColor,
   color: "white",
   fontWeight: "bold",
   textTransform: "none",
@@ -574,7 +574,7 @@ setShowFlatForm(false); // Ensure this is not reset elsewhere if you want the ta
   alignItems: "center",
   gap: "8px",
   "&:hover": {
-    background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+    background: Constants.primaryColor,
   },
 };
 
@@ -608,7 +608,7 @@ setShowFlatForm(false); // Ensure this is not reset elsewhere if you want the ta
           justifyContent: "center",
           textTransform: "none",
           position: "relative",
-          background: "linear-gradient(0deg, #4b2ac2 0%, #5c39d3 100%)",
+          background:Constants.primaryColor,
           boxShadow: "inset 2px 2px 2px 0px rgba(255,255,255,.5), 7px 7px 20px 0px rgba(0,0,0,.1), 4px 4px 5px 0px rgba(0,0,0,.1)",
           margin: 0
         }}

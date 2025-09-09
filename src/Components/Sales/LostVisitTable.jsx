@@ -9,6 +9,7 @@ import EmailIcon from '@mui/icons-material/Email';
 
 import Tooltip from '@mui/material/Tooltip';
 import { Dialog, DialogTitle, DialogContent, TextField, Button,Grid } from '@mui/material';
+import Constants from "../Constants";
 
 
 const data = [
@@ -115,7 +116,7 @@ const [editableRow, setEditableRow] = useState({});
     <TableContainer component={Paper}>
       <Table>
         <TableHead>
-          <TableRow sx={{ background: "#3621a9" }}>
+          <TableRow sx={{ background: Constants.primaryColor }}>
             <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>ACTION</TableCell>
             <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>LAST FOLLOW UP</TableCell>
             <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>STATUS</TableCell>

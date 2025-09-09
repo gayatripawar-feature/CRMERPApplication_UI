@@ -3,6 +3,7 @@
 
 import React from "react";
 import { TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Paper } from "@mui/material";
+import Constants from "../Constants";
 
 const BookedTable = ({ data }) => {
   return (
@@ -10,7 +11,7 @@ const BookedTable = ({ data }) => {
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
-            <TableRow sx={{ background: "#3621a9" }}>
+            <TableRow sx={{ background: Constants.primaryColor }}>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>TIMESTAMP</TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>LEAD NO.</TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>NAME</TableCell>

@@ -10,6 +10,7 @@ import { Card } from 'antd';
 
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import Constants from '../Constants';
 
 const FlatAllotmentReport = () => {
   const [formData, setFormData] = useState({
@@ -107,7 +108,7 @@ const FlatAllotmentReport = () => {
       <h5 className="mb-5">Reports / Flat Allotment Report</h5>
 
      <div className=''>
-      <button onClick={handleDownloadPDF} className='btn btn-primary m-3'>Download Flat Allotement Report</button>
+      <button onClick={handleDownloadPDF} className='btn m-3'style={{background:"#800020",color:"#fff"}}>Download Flat Allotement Report</button>
      </div>
      
       <div className="form-wrapper shadow-lg p-4 rounded" style={{ boxShadow: '0px 0px 15px 5px rgba(255, 255, 255, 0.7)', overflowX: 'auto', whiteSpace: 'nowrap' }}>
@@ -251,7 +252,7 @@ const FlatAllotmentReport = () => {
       
       <div className="row mb-3">
         <div className="col-md-12 text-end">
-          <button type="submit" className="btn btn-primary mt-4 w-25">Submit</button>
+          <button type="submit" className="btn  mt-4 w-25" style={{background:Constants.primaryColor,color:"#fff"}}>Submit</button>
         </div>
       </div>
 

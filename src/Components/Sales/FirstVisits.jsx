@@ -11,6 +11,7 @@ import { jsPDF } from "jspdf";
 import {  FaFileDownload } from "react-icons/fa";
 import autoTable from "jspdf-autotable";
 import FormHelperText from '@mui/material/FormHelperText';
+import Constants from '../Constants';
 
 // API Call Function
 const fetchLoansData = async () => {
@@ -373,7 +374,7 @@ const handleLeadNoChange = (e) => {
         display: 'flex',              
         alignItems: 'center',          
         justifyContent: 'flex-start',  
-        backgroundColor: '#3621a9',    
+        backgroundColor: Constants.primaryColor,
         padding: '10px',
         margin: '10px',
         borderRadius: '20px',          
@@ -382,7 +383,7 @@ const handleLeadNoChange = (e) => {
         width: expandedSection === index ? '200px' : '50px',  // Toggle width based on expanded state
         height: '50px',                // Make the height consistent for both collapsed and expanded
         transition: 'width 0.3s ease', // Smooth transition for the width
-        background: 'linear-gradient(0deg, #4b2ac2 0%, #5c39d3 100%)', // Gradient background
+        background:Constants.primaryColor,
         boxShadow: 'inset 2px 2px 2px 0px rgba(255,255,255,.5), 7px 7px 20px 0px rgba(0,0,0,.1), 4px 4px 5px 0px rgba(0,0,0,.1)', // Shadow for depth
       }}
     >
@@ -450,14 +451,14 @@ const handleLeadNoChange = (e) => {
             
               <div className="button-container">
                 <div className='d-flex gap-3'>
-                <Button variant="contained" color="primary" style={{ background: '#272ba8' }} onClick={() => setShowFirmForm(true)}>
+                <Button variant="contained" color="primary" style={{ background: Constants.primaryColor }} onClick={() => setShowFirmForm(true)}>
                   + New Enquiry
                 </Button>
 
                 <Button
     variant="contained"
     sx={{
-      background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+      background:Constants.primaryColor,
       color: "white",
       fontWeight: "bold",
       textTransform: "none",
@@ -467,7 +468,7 @@ const handleLeadNoChange = (e) => {
       alignItems: "center",  // Align icon and text
       gap: "8px",  // Space between icon and text
       "&:hover": {
-        background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+        background: Constants.primaryColor,
       },
      
     }}

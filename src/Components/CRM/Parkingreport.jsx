@@ -109,7 +109,7 @@ const Parkingreport = () => {
     <div className="container mt-3" style={{ maxHeight: '80vh', overflowY: 'auto' }}>
       <h5 className="mb-5">Reports/Parking Allotment Report</h5>
 
-      <button onClick={handleDownloadPDF} className="btn btn-primary mb-3">
+      <button onClick={handleDownloadPDF} className="btn  mb-3" style={{background:"#800020",color:"#fff"}}>
         Download Parking Report PDF
       </button>
       
@@ -255,7 +255,7 @@ const Parkingreport = () => {
         </div>
 
         <div className="col-md-4 text-end">
-          <button type="submit" className="btn btn-primary mt-4 w-25">Submit</button>
+          <button type="submit" className="btn mt-4 w-25" style={{background:"#800020",color:"#fff"}}>Submit</button>
         </div>
       </div>
 

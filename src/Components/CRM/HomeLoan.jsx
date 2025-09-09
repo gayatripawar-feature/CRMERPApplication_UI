@@ -9,6 +9,7 @@ import "jspdf-autotable";
 import { HomeIcon } from 'lucide-react';
 import { FaFileDownload } from "react-icons/fa";
 import autoTable from "jspdf-autotable";
+import Constants from '../Constants';
 const HomeLoan = () => {
   const [loansData, setLoansData] = useState([
     { 
@@ -702,7 +703,7 @@ const displayLoans = () => {
           justifyContent: "center",
           textTransform: "none",
           position: "relative",
-          background: "linear-gradient(0deg, #4b2ac2 0%, #5c39d3 100%)",
+          background: Constants.primaryColor,
           boxShadow:
             "inset 2px 2px 2px 0px rgba(255,255,255,.5), 7px 7px 20px 0px rgba(0,0,0,.1), 4px 4px 5px 0px rgba(0,0,0,.1)",
           "&:hover": {
@@ -732,7 +733,7 @@ const displayLoans = () => {
       <Button
   variant="contained"
   sx={{
-    background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+    background: Constants.primaryColor,
     color: "white",
     // fontWeight: "bold",
     fontWeight: "900",
@@ -748,7 +749,7 @@ const displayLoans = () => {
     gap: "6px",
     lineHeight: "1",  
     "&:hover": {
-      background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+      background: Constants.primaryColor,
     },
   }}
   disableElevation   
@@ -771,7 +772,7 @@ const displayLoans = () => {
         <Table style={{ tableLayout: 'auto', width: '100%' }}>
           
 <TableHead>
-  <TableRow sx={{ background: "#3621a9" }}>
+  <TableRow sx={{ background: Constants.primaryColor }}>
     <TableCell className="" sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>FLAT NO.</TableCell>
     <TableCell className="" sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>NAME OF ALLOTEE</TableCell>
     <TableCell className="" sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>NAME OF CO-ALLOTEE</TableCell>

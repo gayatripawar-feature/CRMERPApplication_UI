@@ -1595,6 +1595,7 @@ import VisitDownloadPDF from "./VisitDownloadPDF";
 import RateDownloadPDF from "./RateDownloadPDF";
 import AgreementDownload from "./AgreementDownload";
 import PackageDownloadPdf from "./PackageDownloadPdf";
+import Constants from "../Constants";
 
 
 const templates = [
@@ -1603,7 +1604,7 @@ const templates = [
     id: 1,
     title: (
       <div style={{ 
-        backgroundColor: '#0056b3', 
+        backgroundColor: Constants.primaryColor, 
         padding: '15px', 
         borderRadius: '6px', 
         marginBottom: '20px', 
@@ -1627,7 +1628,7 @@ const templates = [
     id: 2,
     title: (
       <div style={{ 
-        backgroundColor: '#0056b3', 
+        backgroundColor: Constants.primaryColor,
         padding: '15px', 
         borderRadius: '6px', 
         marginBottom: '20px', 
@@ -1654,7 +1655,7 @@ const templates = [
     id: 3,
     title: (
       <div style={{ 
-        backgroundColor: '#0056b3', 
+        backgroundColor: Constants.primaryColor,
         padding: '15px', 
         borderRadius: '6px', 
         marginBottom: '20px', 
@@ -1678,7 +1679,7 @@ const templates = [
     id: 4,
     title: (
       <div style={{ 
-        backgroundColor: '#0056b3', 
+        backgroundColor: Constants.primaryColor,
         padding: '15px', 
         borderRadius: '6px', 
         marginBottom: '20px', 
@@ -1703,7 +1704,7 @@ const templates = [
     id: 5,
     title: (
       <div style={{ 
-        backgroundColor: '#0056b3', 
+        backgroundColor:Constants.primaryColor,
         padding: '15px', 
         borderRadius: '6px', 
         marginBottom: '20px', 
@@ -2018,7 +2019,7 @@ const handleDownloadVisitPdf = async () => {
 const modalTitles = {
   visit: (
     <div style={{
-      backgroundColor: '#007bff', 
+      backgroundColor: Constants.primaryColor,
       padding: '10px',
       borderRadius: '4px',
       color: 'white',
@@ -2032,7 +2033,7 @@ const modalTitles = {
   ),
   visitDisplay: (
     <div style={{
-      backgroundColor: '#0056b3', 
+      backgroundColor: Constants.primaryColor, 
       padding: '10px',
       borderRadius: '4px',
       color: 'white',
@@ -2046,7 +2047,7 @@ const modalTitles = {
   ),
   rateApprovalDisplay: (
     <div style={{
-      backgroundColor: '#004085', 
+      backgroundColor: Constants.primaryColor,
       padding: '10px',
       borderRadius: '4px',
       color: 'white',
@@ -2060,7 +2061,7 @@ const modalTitles = {
   ),
   packageDisplay: (
     <div style={{
-      backgroundColor: '#003366', 
+      backgroundColor: Constants.primaryColor,
       padding: '10px',
       borderRadius: '4px',
       color: 'white',
@@ -2074,7 +2075,7 @@ const modalTitles = {
   ),
   agreementDisplay: (
     <div style={{
-      backgroundColor: '#002244', 
+      backgroundColor: Constants.primaryColor,
       padding: '10px',
       borderRadius: '4px',
       color: 'white',

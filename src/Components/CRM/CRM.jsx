@@ -18,6 +18,7 @@ import jsPDF from "jspdf";
 import { toast } from "react-toastify";
 import { FaFileDownload } from "react-icons/fa";
 import autoTable from "jspdf-autotable";
+import Constants from '../Constants';
 
 
 const fetchLoansData = async () => {
@@ -744,7 +745,7 @@ const handleDownloadPDFCRM = () => {
         textTransform: "none",
         position: "relative",
         // background: "linear-gradient(0deg, rgba(22,9,240,1) 0%, rgba(49,110,244,1) 100%)",
-        background: "linear-gradient(0deg, #4b2ac2 0%, #5c39d3 100%)",
+        background: Constants.primaryColor,
         boxShadow:
           "inset 2px 2px 2px 0px rgba(255,255,255,.5), 7px 7px 20px 0px rgba(0,0,0,.1), 4px 4px 5px 0px rgba(0,0,0,.1)",
         "&:hover": {
@@ -776,7 +777,7 @@ const handleDownloadPDFCRM = () => {
          <Button
       variant="contained"
       sx={{
-        background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+        background: Constants.primaryColor,
         color: "white",
         // fontWeight: "bold",
         fontWeight: "900",
@@ -884,7 +885,7 @@ const handleDownloadPDFCRM = () => {
 
       
           
-       <TableRow sx={{background:"#3621a9"}}>
+       <TableRow sx={{background:Constants.primaryColor}}>
         <TableCell sx={{ color: "white", fontWeight: "bold",whiteSpace: "nowrap"  }}>ACTION</TableCell>
         <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>TIMESTAMP</TableCell>
         <TableCell sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>ENQUIRY NO.</TableCell>

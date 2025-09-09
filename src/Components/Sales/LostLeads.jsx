@@ -17,6 +17,7 @@ import autoTable from "jspdf-autotable";
 
 import { jsPDF } from "jspdf";
 import Lostleadstable from "./Lostleadstable";
+import Constants from '../Constants';
 const sections = [
     { label: "Pending Follow Up", icon: <FaBuilding size={20} />, createLabel: "Create Firm" },
     
@@ -565,7 +566,7 @@ const LostLeads = () => {
     className="m-3 fw-bold"
     style={{
       borderRadius: '20px',
-      backgroundColor: '#3621a9', // Add background color
+      backgroundColor: Constants.primaryColor, // Add background color
       color: 'white', // Set text color to white for better contrast
       border: '1px solid #3621a9', // Match the border to background
       transition: "background-color 0.3s ease", // Optional: Add a transition effect for the background color
@@ -597,7 +598,7 @@ const LostLeads = () => {
             <Button 
               variant="contained" 
               color="primary" 
-              style={{ background: '#272ba8' }} 
+              style={{ background: Constants.primaryColor }} 
               className='fw-bold'
               onClick={() => setShowFirmForm(true)}
             >
@@ -607,7 +608,7 @@ const LostLeads = () => {
             <Button
     variant="contained"
     sx={{
-      background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+      background:Constants.primaryColor,
       color: "white",
       fontWeight: "bold",
       textTransform: "none",
@@ -617,7 +618,7 @@ const LostLeads = () => {
       alignItems: "center",  // Align icon and text
       gap: "8px",  // Space between icon and text
       "&:hover": {
-        background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+        background:Constants.primaryColor,
       },
      
     }}

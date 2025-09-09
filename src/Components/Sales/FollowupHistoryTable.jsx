@@ -1,5 +1,6 @@
 import React from "react";
 import { TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Paper, Typography ,Box} from "@mui/material";
+import Constants from "../Constants";
 const FollowupHistoryTable = ({ data }) => {
   return (
     <>
@@ -7,7 +8,7 @@ const FollowupHistoryTable = ({ data }) => {
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
-           <TableRow sx={{ background: "#3621a9" }}>
+           <TableRow sx={{ background: Constants.primaryColor }}>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>STATUS HISTORY</TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>REMARK HISTORY</TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>ASSIGN TO HISTORY</TableCell>
