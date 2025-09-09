@@ -30,7 +30,7 @@ const FlatAllotmentReport = () => {
 
   const [summaryData, setSummaryData] = useState({
     approvalStatusSummary: { approved: 10, rejected: 5 },
-    ownershipSummary: { landowner: 8, developer: 12, investor: 3 },
+    ownershipSummary: { landowner: 8, developer: 12, investor: 10 },
     saleStatusSummary: { sold: 15, unsold: 5 },
     flatTypeSummary: { "1BHK": 5, "2BHK": 8, "3BHK": 4 },
   });

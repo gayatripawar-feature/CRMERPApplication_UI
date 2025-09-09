@@ -467,6 +467,7 @@ const [page, setPage] = useState(0);
                   <TableCell>{row.stampDuty}</TableCell>
                 </TableRow>
               ))}
+               </TableBody>
               <TableFooter>
                 <TableRow>
                   <TableCell colSpan={4}>
@@ -484,7 +485,7 @@ const [page, setPage] = useState(0);
       </TableCell>
       </TableRow>
               </TableFooter>
-            </TableBody>
+           
           </Table>
       
 

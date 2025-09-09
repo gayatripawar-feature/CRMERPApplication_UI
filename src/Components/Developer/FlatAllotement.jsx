@@ -25,6 +25,7 @@ import { toast } from "react-toastify";
 
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { FaTrash } from "react-icons/fa";
+import Constants from "../Constants";
 
 
 const FlatAllotment = () => {
@@ -389,7 +390,7 @@ const FlatAllotment = () => {
       ) : (
         <Table>
           <TableHead>
-            <TableRow sx={{ background: "#3621a9" }}>
+            <TableRow sx={{ background: Constants.primaryColor }}>
               <TableCell sx={{ color: "white", fontWeight: "bold" }}>
                 ACTION
               </TableCell>
@@ -488,10 +489,10 @@ const FlatAllotment = () => {
                         <IconButton
                           size="small"
                           sx={{
-                            backgroundColor: "#1976D2",
+                            backgroundColor:Constants.primaryColor,
                             color: "white",
                             borderRadius: "50%",
-                            "&:hover": { backgroundColor: "#1565C0" },
+                            "&:hover": { backgroundColor:Constants.primaryColor },
                           }}
                           onClick={() => handleEdit(row)}
                         >
@@ -502,10 +503,10 @@ const FlatAllotment = () => {
                         <IconButton
                           size="small"
                           sx={{
-                            backgroundColor: "red",
+                            backgroundColor:Constants.primaryColor,
                             color: "white",
                             borderRadius: "50%",
-                            "&:hover": { backgroundColor: "#b71c1c" },
+                            "&:hover": { backgroundColor: Constants.primaryColor},
                           }}
                           onClick={() => handleDelete(index)}
                         >

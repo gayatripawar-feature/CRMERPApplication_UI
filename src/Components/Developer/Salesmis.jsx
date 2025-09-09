@@ -289,7 +289,7 @@ const handleSearch = (e) => {
 <Button
   variant="contained"
   sx={{
-    background: "linear-gradient(45deg, rgb(139, 107, 255), rgb(178, 83, 255))",
+    background: Constants.primaryColor,
     color: "white",
     fontWeight: "bold",
     textTransform: "none",
@@ -303,7 +303,7 @@ const handleSearch = (e) => {
     alignItems: "center", 
     gap: "4px", 
     "&:hover": {
-      background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+      background: Constants.primaryColor,
     },
   }}
   onClick={() => {

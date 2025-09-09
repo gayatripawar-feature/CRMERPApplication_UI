@@ -6,6 +6,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import { toast } from "react-toastify";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import { FaTrash } from "react-icons/fa";
+import Constants from "../Constants";
 const LandownerTable = ({ data }) => {
   const [editRow, setEditRow] = useState(null);
   const [formData, setFormData] = useState({});
@@ -506,7 +507,7 @@ const LandownerTable = ({ data }) => {
       ) : (
         <Table>
           <TableHead>
-            <TableRow sx={{ background: "#3621a9" }}>
+            <TableRow sx={{ background: Constants.primaryColor }}>
               <TableCell
                 sx={{
                   color: "white",
@@ -698,10 +699,10 @@ const LandownerTable = ({ data }) => {
                       <IconButton
                         size="small"
                         sx={{
-                          backgroundColor: "#1976D2",
+                          backgroundColor: Constants.primaryColor,
                           color: "white",
                           borderRadius: "50%",
-                          "&:hover": { backgroundColor: "#1565C0" },
+                          "&:hover": { backgroundColor: Constants.primaryColor },
                         }}
                         onClick={() => handleEdit(landowner)}
                       >
@@ -712,10 +713,10 @@ const LandownerTable = ({ data }) => {
                       <IconButton
                         size="small"
                         sx={{
-                          backgroundColor: "red",
+                          backgroundColor: Constants.primaryColor,
                           color: "white",
                           borderRadius: "50%",
-                          "&:hover": { backgroundColor: "#b71c1c" },
+                          "&:hover": { backgroundColor: Constants.primaryColor },
                         }}
                         onClick={() => handleDelete(index)}
                       >

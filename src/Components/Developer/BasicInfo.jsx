@@ -13,6 +13,7 @@ import autoTable from "jspdf-autotable";
 import { GetApp as GetAppIcon } from '@mui/icons-material';
 import { PictureAsPdf as PictureAsPdfIcon } from '@mui/icons-material';
 import html2canvas from "html2canvas";
+import Constants from '../Constants';
 const fetchLoansData = async () => {
   const response = await fetch('/api/getOCRCollection');
   return response.json();
@@ -864,7 +865,7 @@ const handleFirmSubmit = () => {
     style={{ 
       display: 'flex', 
       alignItems: 'center', 
-      backgroundColor: '#3621a9', 
+      backgroundColor: Constants.primaryColor,
       padding: '8px', 
       borderRadius: '20px',  
       margin: '5px',
@@ -880,7 +881,7 @@ const handleFirmSubmit = () => {
       justifyContent: "center",
       textTransform: "none",
       position: "relative",
-      background: "linear-gradient(0deg, #4b2ac2 0%, #5c39d3 100%)", // Gradient background
+      background: Constants.primaryColor, // Gradient background
       boxShadow:
         "inset 2px 2px 2px 0px rgba(255,255,255,.5), 7px 7px 20px 0px rgba(0,0,0,.1), 4px 4px 5px 0px rgba(0,0,0,.1)",
     }}
@@ -930,7 +931,7 @@ const handleFirmSubmit = () => {
   <Button 
     variant="contained" 
     color="primary" 
-    style={{ background: "#272ba8" }} 
+    style={{ background: Constants.primaryColor }} 
     className="fw-bold"
     onClick={() => setShowFirmForm(true)}
   >
@@ -940,7 +941,7 @@ const handleFirmSubmit = () => {
   <Button
     variant="contained"
     sx={{
-      background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+      background: Constants.primaryColor,
       color: "white",
       fontWeight: "bold",
       textTransform: "none",
@@ -950,7 +951,7 @@ const handleFirmSubmit = () => {
       alignItems: "center",  
       gap: "8px",  
       "&:hover": {
-        background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+        background: Constants.primaryColor,
       },
      
     }}
@@ -1212,7 +1213,7 @@ const handleFirmSubmit = () => {
       
 <div className='button-container'>
   <div className='d-flex gap-3'>
-  <Button variant="contained" color="primary" style={{ background: '#272ba8' }} className='fw-bold'
+  <Button variant="contained" color="primary" style={{ background: Constants.primaryColor }} className='fw-bold'
 onClick={() => {
    console.log("Before:", showProjectForm);
    setShowProjectForm(true);
@@ -1223,7 +1224,7 @@ onClick={() => {
   <Button
     variant="contained"
     sx={{
-      background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+      background: Constants.primaryColor,
       color: "white",
       fontWeight: "bold",
       textTransform: "none",
@@ -1233,7 +1234,7 @@ onClick={() => {
       alignItems: "center",  
       gap: "8px",  
       "&:hover": {
-        background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+        background:Constants.primaryColor,
       },
     }}
     onClick={() => {
@@ -1440,7 +1441,7 @@ onClick={() => {
        <div className='button-container'>
         <div className='d-flex gap-3'>
 
-        <Button variant="contained" color="primary" style={{ background: '#272ba8' }} className='fw-bold'
+        <Button variant="contained" color="primary" style={{ background: Constants.primaryColor }} className='fw-bold'
 
 
 onClick={() => {
@@ -1455,7 +1456,7 @@ onClick={() => {
 <Button
     variant="contained"
     sx={{
-      background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+      background: Constants.primaryColor,
       color: "white",
       fontWeight: "bold",
       textTransform: "none",
@@ -1465,7 +1466,7 @@ onClick={() => {
       alignItems: "center",  
       gap: "8px",  
       "&:hover": {
-        background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+        background: Constants.primaryColor,
       },
     }}
     onClick={handleDownloadPDFLandowner}
@@ -1809,14 +1810,14 @@ Submit Landowner Info
         <div className="button-container">
  
         <div className='d-flex gap-3'>
-    <Button variant="contained" color="primary" style={{ background: '#272ba8' }} className='fw-bold'
+    <Button variant="contained" color="primary" style={{ background: Constants.primaryColor}} className='fw-bold'
     onClick={() => setShowFlatForm(true)}>
       + Flat Allotment Info
     </Button>
     <Button
     variant="contained"
     sx={{
-      background: "linear-gradient(45deg,rgb(139, 107, 255),rgb(178, 83, 255))",
+      background: Constants.primaryColor,
       color: "white",
       fontWeight: "bold",
       textTransform: "none",
@@ -1826,7 +1827,7 @@ Submit Landowner Info
       alignItems: "center",  // Align icon and text
       gap: "8px",  // Space between icon and text
       "&:hover": {
-        background: "linear-gradient(45deg, #ff8e53, #ff6b6b)",
+        background: Constants.primaryColor,
       },
     }}
     onClick={handleDownloadPDFAllotement}

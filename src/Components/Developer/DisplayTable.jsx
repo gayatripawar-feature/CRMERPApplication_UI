@@ -26,6 +26,7 @@ import {
   FaUpload,
 } from "react-icons/fa";
 import { toast } from "react-toastify";
+import Constants from "../Constants";
 const DisplayTable = ({ data }) => {
   const [selectedItem, setSelectedItem] = useState(null);
   const [firmName, setFirmName] = useState("");
@@ -319,7 +320,7 @@ const DisplayTable = ({ data }) => {
           ></Box>
           <Table>
             <TableHead>
-              <TableRow sx={{ background: "#3621a9" }}>
+              <TableRow sx={{ background: Constants.primaryColor }}>
                 <TableCell
                   sx={{
                     color: "white",
@@ -520,10 +521,10 @@ const DisplayTable = ({ data }) => {
                         <IconButton
                           size="small"
                           sx={{
-                            backgroundColor: "#1976D2",
+                            backgroundColor:Constants.primaryColor,
                             color: "white",
                             borderRadius: "50%",
-                            "&:hover": { backgroundColor: "#1565C0" },
+                            "&:hover": { backgroundColor:Constants.primaryColor },
                           }}
                           onClick={() => handleEdit(item)}
                         >
@@ -534,10 +535,10 @@ const DisplayTable = ({ data }) => {
                         <IconButton
                           size="small"
                           sx={{
-                            backgroundColor: "red",
+                            backgroundColor: Constants.primaryColor,
                             color: "white",
                             borderRadius: "50%",
-                            "&:hover": { backgroundColor: "#b71c1c" },
+                            "&:hover": { backgroundColor:Constants.primaryColor },
                           }}
                           onClick={() => handleDelete(index)}
                         >

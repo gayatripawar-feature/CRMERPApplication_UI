@@ -10,6 +10,7 @@ import { TableContainer, Table, TableHead, TableRow, TableCell, TableBody, Paper
 import {  InputLabel} from "@mui/material";
 import SourceMetrics from "./SourceMetrics";
 import TimeSeriesChart from "./TimeSerieschart";
+import Constants from "../Constants";
 const SalesDashboard = () => {
 const allData = {
     today: [
@@ -224,9 +225,6 @@ useEffect(() => {
         {buttons.map((btn, index) => (
           <div key={index} style={{ margin: "10px" }}>
            
-        
-
-
 
 <Button
   onClick={() => setSelectedTab(btn.label)}
@@ -241,7 +239,7 @@ useEffect(() => {
     alignItems: "center",
     gap: "8px",
     
-   background:" linear-gradient(0deg, #4b2ac2 0%, #5c39d3 100%)",
+   background:Constants.primaryColor,
     border: "none", 
     color: "white", 
   }}
@@ -251,7 +249,7 @@ useEffect(() => {
       width: "35px",
       height: "35px",
       borderRadius: "50%",
-      background:" linear-gradient(0deg, #4b2ac2 0%, #5c39d3 100%)",
+      background:Constants.primaryColor,
       
       display: "flex",
       alignItems: "center",
@@ -295,9 +293,10 @@ useEffect(() => {
               />
               <Button
                 variant="contained"
-                color="primary"
+               
                 onClick={handleFilter}
                 style={{ marginRight: "10px" }}
+                sx={{background:Constants.primaryColor}}
               >
                 Filter
               </Button>
