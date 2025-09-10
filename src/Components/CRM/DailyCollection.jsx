@@ -567,7 +567,7 @@ const handleToggle = () => {
   <IconButton
     onClick={handleEditClick}
     sx={{
-      backgroundColor: "#3621a9",  
+      backgroundColor: Constants.primaryColor, 
       color: "white",              
       fontSize: "14px",            
       padding: "6px",              
