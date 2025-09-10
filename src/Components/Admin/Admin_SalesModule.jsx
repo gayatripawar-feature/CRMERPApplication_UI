@@ -14,6 +14,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import Constants from "../Constants";
 import { useMediaQuery, useTheme } from '@mui/material';
+import axios from "axios";
 const Admin_SalesModule = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -142,30 +143,73 @@ const Admin_SalesModule = () => {
     }
   }, [showForm]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   if (editIndex !== null) {
+  //     const updatedData = [...salesPersons];
+  //     updatedData[editIndex] = formData;
+  //     setSalesPersons(updatedData);
+  //     setEditIndex(null);
+  //   } else {
+  //     setSalesPersons([...salesPersons, formData]);
+  //   }
+  //   console.log("Form Data:", formData);
+  //   setShowForm(false);
+      
+  //   setFormData({
+  //     name: "",
+  //     email: "",
+  //     mobile: "",
+  //     designation: "",
+  //     joiningDate: "",
+  //     status: "",
+  //   });
+  //   toast.success("Updated successfully");
+  //   setOpenEditModal(false);
+  // };
+
+
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  try {
     if (editIndex !== null) {
+      // Update existing record in frontend
       const updatedData = [...salesPersons];
       updatedData[editIndex] = formData;
       setSalesPersons(updatedData);
       setEditIndex(null);
+
+      // Call API for update (if you have one)
+      // await axios.put(`http://localhost:5000/api/sales-person/${id}`, formData);
+      toast.success("Sales Person updated successfully!");
     } else {
-      setSalesPersons([...salesPersons, formData]);
+      // Add new record to backend
+      const response = await axios.post("http://localhost:5000/sales-person", formData);
+      toast.success("Sales Person saved to DB!");
+      console.log("Saved:", response.data);
+
+      // Update frontend table with response
+      setSalesPersons([...salesPersons, { ...formData, id: response.data.id }]);
     }
-    console.log("Form Data:", formData);
-    setShowForm(false);
+
+    // Reset form after save
     setFormData({
       name: "",
       email: "",
       mobile: "",
       designation: "",
       joiningDate: "",
-      status: "",
+      status: "Active",
     });
 
-    toast.success("Updated successfully");
+    setShowForm(false);
     setOpenEditModal(false);
-  };
+  } catch (error) {
+    console.error("Error saving sales person:", error);
+    toast.error("Failed to save data");
+  }
+};
 
   const handleCancel = () => {
     setShowForm(false);

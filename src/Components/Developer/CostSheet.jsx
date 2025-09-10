@@ -146,29 +146,16 @@ const handleSave = () => {
     console.log("Updated table data:", updated);
     return updated;
   });
-
-  // toast.success("Form details submitted successfully!", {
-  //   position: "top-right",
-  //   autoClose: 3000,
-  // });
-
-  handleCloseForm();
+handleCloseForm();
 };
-
-
 const [page, setPage] = useState(0);
-  // const [rowsPerPage, setRowsPerPage] = useState(5); // Show 5 rows per page
-
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
-
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(+event.target.value);
     setPage(0); // Reset page when changing rows per page
   };
-
-
   return (
  <>
     <ToastContainer/>
