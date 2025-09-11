@@ -34,23 +34,12 @@ const Admin_SalesModule = () => {
     joiningDate: "",
     status: "Active",
   });
-    const [salesPersons, setSalesPersons] = useState([
-    {
-      name: 'John Doe',
-      email: 'john@example.com',
-      mobile: '1234567890',
-      designation: 'Sales Executive',
-      joiningDate: '2023-01-15',
-      status: 'Active',
-    },
-
-  ]);
+    const [salesPersons, setSalesPersons] = useState([]);
   const [emailError, setEmailError] = useState('');
   const [nameError, setNameError] = useState('');
   const [error, setError] = useState({
     mobile: '',
   });
-
   // Filter sales persons based on search query
   const filteredSalesPersons = salesPersons.filter(person =>
     person.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -59,14 +48,28 @@ const Admin_SalesModule = () => {
     person.designation.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+
+  // UseEffect to get the records of sales_person from DB : 
+  useEffect(() => {
+  const fetchSalesPersons = async () => {
+    try {
+      const response = await axios.get("http://localhost:5000/get-sales-person");
+      setSalesPersons(response.data); 
+    } catch (err) {
+      console.error("Error fetching sales persons:", err);
+      toast.error("Failed to fetch sales persons");
+    }
+  };
+
+  fetchSalesPersons();
+}, []);
+
   const handleAddNew = () => {
     setShowForm(true);
   };
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     console.log(`Handling change for ${name}: ${value}`);
-
     if (name === "name") {
       const regex = /^[A-Za-z\s]*$/;
       if (regex.test(value) || value === "") {
@@ -143,32 +146,7 @@ const Admin_SalesModule = () => {
     }
   }, [showForm]);
 
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   if (editIndex !== null) {
-  //     const updatedData = [...salesPersons];
-  //     updatedData[editIndex] = formData;
-  //     setSalesPersons(updatedData);
-  //     setEditIndex(null);
-  //   } else {
-  //     setSalesPersons([...salesPersons, formData]);
-  //   }
-  //   console.log("Form Data:", formData);
-  //   setShowForm(false);
-      
-  //   setFormData({
-  //     name: "",
-  //     email: "",
-  //     mobile: "",
-  //     designation: "",
-  //     joiningDate: "",
-  //     status: "",
-  //   });
-  //   toast.success("Updated successfully");
-  //   setOpenEditModal(false);
-  // };
-
-
+  
   const handleSubmit = async (e) => {
   e.preventDefault();
 
@@ -180,13 +158,14 @@ const Admin_SalesModule = () => {
       setSalesPersons(updatedData);
       setEditIndex(null);
 
-      // Call API for update (if you have one)
+      // Call API for update 
       // await axios.put(`http://localhost:5000/api/sales-person/${id}`, formData);
+      
       toast.success("Sales Person updated successfully!");
     } else {
       // Add new record to backend
       const response = await axios.post("http://localhost:5000/sales-person", formData);
-      toast.success("Sales Person saved to DB!");
+      toast.success("Sales Person saved!",);
       console.log("Saved:", response.data);
 
       // Update frontend table with response
