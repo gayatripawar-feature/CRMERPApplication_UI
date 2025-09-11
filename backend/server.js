@@ -118,6 +118,9 @@ app.post("/bankers", async (req, res) => {
 });
 
 
+// GET all bankers
+
+
 
 console.log("server started");
 // Start server

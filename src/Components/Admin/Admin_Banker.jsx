@@ -170,6 +170,8 @@ const handleBankerChange = (index, field, value) => {
 //    handleClose();
 //   };
 
+
+
 const handleSubmit = async (e) => {
   e.preventDefault();
 
@@ -183,44 +185,48 @@ const handleSubmit = async (e) => {
     apfLetter: files.length > 0 ? files : [],
     bankers: bankers,
     timestamp: isEditing
-      ? submittedData[editIndex].timestamp
+      ? submittedData[editIndex]?.timestamp
       : new Date().toLocaleString(),
   };
 
   try {
     if (isEditing && editIndex !== null) {
-      // UPDATE existing banker
+      // Update local state first
+      const updatedList = [...submittedData];
+      updatedList[editIndex] = payload;
+      setSubmittedData(updatedList);
+
+      // Update on backend
       const bankerId = submittedData[editIndex].id;
       const res = await fetch(`http://localhost:5000/bankers/${bankerId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-          
+
       if (!res.ok) throw new Error("Update failed");
       toast.success("Banker details updated successfully!");
     } else {
-      // ADD new banker
+      // Add new banker locally
+      setSubmittedData((prev) => [...prev, payload]);
+
+      // Add on backend
       const res = await fetch("http://localhost:5000/bankers", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
 
-
       if (!res.ok) throw new Error("Insert failed");
       toast.success("Data submitted successfully!");
     }
 
-    // Refetch updated list after save
-    const refreshed = await fetch("http://localhost:5000/bankers");
-    const data = await refreshed.json();
-    setSubmittedData(data);
-
+    // Close the form
     handleClose();
   } catch (err) {
     console.error("Error saving banker:", err);
     toast.error("Error saving banker");
+    handleClose(); // Ensure modal closes even on error
   }
 };
 
@@ -312,6 +318,8 @@ const handleSubmit = async (e) => {
   );
 
   const paginatedData = filteredData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+
+   
 
   return (
     <div className="container my-4">
@@ -613,6 +621,7 @@ const handleSubmit = async (e) => {
                 {paginatedData.length > 0 ? (
                   paginatedData.flatMap((data, index) =>
                     data.bankers.map((banker, bIndex) => (
+                        // (data.bankers || []).map((banker, bIndex) => (
                       <TableRow key={`${index}-${bIndex}`}>
                         <TableCell>
                           <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: isMobile ? "wrap" : "nowrap" }}>
