@@ -100,7 +100,9 @@ const handleClose = () => {
   };
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
  const handleAddBanker = () => {
-    setBankers([...bankers, { bankerName: "", bankerMobile: "" }]);
+    // setBankers([...bankers, { bankerName: "", bankerMobile: "" }]);
+    setBankers([...bankers, { bankerName: name, bankerMobile: mobile }]);
+
   };
 const handleBankerChange = (index, field, value) => {
     const regex = /^[0-9]*$/;
@@ -147,26 +149,81 @@ const handleBankerChange = (index, field, value) => {
       });
     }
   }, [showForm, isEditing]);
-const handleSubmit = (e) => {
-    e.preventDefault();
-   const newBank = {
-      name: formData.name,
-      address: formData.address,
-      apfLetter: files.length > 0 ? files : [],
-      bankers: bankers,
-      timestamp: isEditing ? submittedData[editIndex].timestamp : new Date().toLocaleString()
-    };
-      if (isEditing && editIndex !== null && editIndex !== undefined) {
-      const updatedList = [...submittedData];
-      updatedList[editIndex] = newBank;
-      setSubmittedData(updatedList);
+// const handleSubmit = (e) => {
+//     e.preventDefault();
+//    const newBank = {
+//       name: formData.name,
+//       address: formData.address,
+//       apfLetter: files.length > 0 ? files : [],
+//       bankers: bankers,
+//       timestamp: isEditing ? submittedData[editIndex].timestamp : new Date().toLocaleString()
+//     };
+//       if (isEditing && editIndex !== null && editIndex !== undefined) {
+//       const updatedList = [...submittedData];
+//       updatedList[editIndex] = newBank;
+//       setSubmittedData(updatedList);
+//       toast.success("Banker details updated successfully!");
+//     } else {
+//       setSubmittedData((prev) => [...prev, newBank]);
+//       toast.success("Data submitted successfully!");
+//     }
+//    handleClose();
+//   };
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  const payload = {
+    name: formData.name,
+    address: formData.address,
+    mobile: formData.mobile,
+    designation: formData.designation,
+    // joiningDate: formData.joiningDate,
+    status: formData.status,
+    apfLetter: files.length > 0 ? files : [],
+    bankers: bankers,
+    timestamp: isEditing
+      ? submittedData[editIndex].timestamp
+      : new Date().toLocaleString(),
+  };
+
+  try {
+    if (isEditing && editIndex !== null) {
+      // UPDATE existing banker
+      const bankerId = submittedData[editIndex].id;
+      const res = await fetch(`http://localhost:5000/bankers/${bankerId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+          
+      if (!res.ok) throw new Error("Update failed");
       toast.success("Banker details updated successfully!");
     } else {
-      setSubmittedData((prev) => [...prev, newBank]);
+      // ADD new banker
+      const res = await fetch("http://localhost:5000/bankers", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+
+      if (!res.ok) throw new Error("Insert failed");
       toast.success("Data submitted successfully!");
     }
-   handleClose();
-  };
+
+    // Refetch updated list after save
+    const refreshed = await fetch("http://localhost:5000/bankers");
+    const data = await refreshed.json();
+    setSubmittedData(data);
+
+    handleClose();
+  } catch (err) {
+    console.error("Error saving banker:", err);
+    toast.error("Error saving banker");
+  }
+};
+
   const handleBankerName = (index, field, value) => {
     if (field === "bankerName") {
       const regex = /^[A-Za-z\s]*$/;
@@ -562,7 +619,7 @@ const handleSubmit = (e) => {
                             <IconButton
                               color="primary"
                               style={{
-                                backgroundColor: "#1976d2",
+                                backgroundColor: Constants.primaryColor,
                                 borderRadius: "50%",
                                 padding: isMobile ? "4px" : "6px",
                               }}
@@ -575,7 +632,7 @@ const handleSubmit = (e) => {
                             <IconButton
                               color="error"
                               style={{
-                                backgroundColor: "#d32f2f",
+                                backgroundColor: Constants.primaryColor,
                                 borderRadius: "50%",
                                 padding: isMobile ? "4px" : "6px",
                               }}

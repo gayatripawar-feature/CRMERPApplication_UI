@@ -9,6 +9,7 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.send("Backend server is running 🚀");
 });
+// Admin Module APIs:
 // Api To insert into sales Person - admin module :
 app.post("/sales-person", async (req, res) => {
   try {
@@ -43,6 +44,76 @@ app.get("/get-sales-person", async (req, res) => {
   } catch (err) {
     console.error("Error fetching sales persons:", err.message);
     res.status(500).json({ error: "Database fetch failed" });
+  }
+});
+
+
+// Update Sales Person by ID
+app.put("/update-sales-person/:id", async (req, res) => {
+  const { id } = req.params;
+  const { name, email, mobile, designation, joiningDate, status } = req.body;
+  try {
+    const [result] = await pool.query(
+      `UPDATE sales_persons 
+       SET name = ?, email = ?, mobile = ?, designation = ?, joiningDate = ?, status = ? 
+       WHERE id = ?`,
+      [name, email, mobile, designation, joiningDate, status, id]
+    );
+   if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "Sales person not found" });
+    }
+    res.json({ message: "Sales person updated successfully", id });
+  } catch (error) {
+    console.error("Error updating sales person:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+
+// DELETE /delete-sales-person/:id
+app.delete("/delete-sales-person/:id", async (req, res) => {
+  const { id } = req.params;
+try {
+    // Delete the record from the database
+    const [result] = await pool.query(
+      "DELETE FROM sales_persons WHERE id = ?",
+      [id]
+    );
+   if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "Sales Person not found" });
+    }
+  res.json({ message: "Sales Person deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting sales person:", error);
+    res.status(500).json({ message: "Server error while deleting sales person" });
+  }
+});
+
+// 2) Banker Details API
+
+// Add a banker
+app.post("/bankers", async (req, res) => {
+  const { name, address, mobile, designation,  status, bankers, apfLetter, timestamp } = req.body;
+  console.log("📩 Incoming payload:", req.body); 
+  try {
+    const [result] = await pool.query(
+      `INSERT INTO bankers (name, address, mobile, designation,  status, apfLetter, timestamp) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      [name, address, mobile, designation,  status, JSON.stringify(apfLetter || []), timestamp]
+    );
+    const bankerId = result.insertId;
+   // Insert bankers array in a separate table
+    if (bankers && bankers.length > 0) {
+      for (let b of bankers) {
+        await pool.query(
+          "INSERT INTO banker_contacts (bankerId, bankerName, bankerMobile) VALUES (?, ?, ?)",
+          [bankerId, b.bankerName, b.bankerMobile]
+        );
+      }
+    }
+   res.status(201).json({ message: "Banker added successfully", id: bankerId });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Database error" });
   }
 });
 

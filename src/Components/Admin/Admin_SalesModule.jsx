@@ -153,14 +153,21 @@ const Admin_SalesModule = () => {
   try {
     if (editIndex !== null) {
       // Update existing record in frontend
-      const updatedData = [...salesPersons];
-      updatedData[editIndex] = formData;
-      setSalesPersons(updatedData);
-      setEditIndex(null);
+      // const updatedData = [...salesPersons];
+      // updatedData[editIndex] = formData;
+      // setSalesPersons(updatedData);
+      // setEditIndex(null);
 
       // Call API for update 
       // await axios.put(`http://localhost:5000/api/sales-person/${id}`, formData);
-      
+      const id = salesPersons[editIndex].id; // Ensure each record has an id
+      await axios.put(`http://localhost:5000/update-sales-person/${id}`, formData);
+
+      // Update frontend state
+      const updatedData = [...salesPersons];
+      updatedData[editIndex] = { ...formData, id };
+      setSalesPersons(updatedData);
+      setEditIndex(null);
       toast.success("Sales Person updated successfully!");
     } else {
       // Add new record to backend
@@ -222,13 +229,29 @@ const Admin_SalesModule = () => {
     doc.save("SalesPerson_Report.pdf");
   };
 
-  const handleEdit = (person, index) => {
-    console.log("Selected Row:", person);
-    console.log("Selected Index:", index);
-    setFormData(person);
-    setEditIndex(index);
-    setOpenEditModal(true);
-  };
+  // const handleEdit = (person, index) => {
+  //   console.log("Selected Row:", person);
+  //   console.log("Selected Index:", index);
+  //   // setFormData(person);
+  //   setFormData({
+  //   ...person,
+  //   joiningDate: person.joiningDate ? dayjs(person.joiningDate).format('YYYY-MM-DD') : ''
+  // });
+  //   setEditIndex(index);
+  //   setOpenEditModal(true);
+  // };
+
+
+
+  const handleEdit = (person) => {
+  const index = salesPersons.findIndex(p => p.id === person.id);
+  setEditIndex(index);
+  setFormData({
+    ...person,
+    joiningDate: person.joiningDate ? dayjs(person.joiningDate).format('YYYY-MM-DD') : ''
+  });
+  setOpenEditModal(true);
+};
 
   const handleSaveEdit = () => {
     const updatedData = [...salesPersons];
@@ -239,45 +262,45 @@ const Admin_SalesModule = () => {
     setOpenEditModal(false);
   };
 
-  const handleDelete = (id) => {
-    toast.info(
-      <div>
-        <p>Are you sure you want to delete?</p>
-        <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
-          <button
-            onClick={() => {
-              deleteRow(id);
-              toast.dismiss();
-            }}
-            style={{ background: "red", color: "white", border: "none", padding: "5px 10px", cursor: "pointer" }}
-          >
-            Yes
-          </button>
-          <button
-            onClick={() => toast.dismiss()}
-            style={{ background: "grey", color: "white", border: "none", padding: "5px 10px", cursor: "pointer" }}
-          >
-            No
-          </button>
-        </div>
-      </div>,
-      {
-        position: "top-center",
-        autoClose: false,
-        closeOnClick: false,
-        draggable: false,
-      }
-    );
-  };
+  // const handleDelete = (id) => {
+  //   toast.info(
+  //     <div>
+  //       <p>Are you sure you want to delete?</p>
+  //       <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
+  //         <button
+  //           onClick={() => {
+  //             deleteRow(id);
+  //             toast.dismiss();
+  //           }}
+  //           style={{ background: "red", color: "white", border: "none", padding: "5px 10px", cursor: "pointer" }}
+  //         >
+  //           Yes
+  //         </button>
+  //         <button
+  //           onClick={() => toast.dismiss()}
+  //           style={{ background: "grey", color: "white", border: "none", padding: "5px 10px", cursor: "pointer" }}
+  //         >
+  //           No
+  //         </button>
+  //       </div>
+  //     </div>,
+  //     {
+  //       position: "top-center",
+  //       autoClose: false,
+  //       closeOnClick: false,
+  //       draggable: false,
+  //     }
+  //   );
+  // };
 
-  const deleteRow = (indexToDelete) => {
-    const updatedData = salesPersons.filter((_, index) => index !== indexToDelete);
-    setSalesPersons(updatedData);
-    toast.success("Row deleted successfully!", {
-      position: "top-center",
-      autoClose: 1500,
-    });
-  };
+  // const deleteRow = (indexToDelete) => {
+  //   const updatedData = salesPersons.filter((_, index) => index !== indexToDelete);
+  //   setSalesPersons(updatedData);
+  //   toast.success("Row deleted successfully!", {
+  //     position: "top-center",
+  //     autoClose: 1500,
+  //   });
+  // };
 
   const handleChangePage = (event, newPage) => setPage(newPage);
   const handleChangeRowsPerPage = (event) => {
@@ -289,6 +312,58 @@ const Admin_SalesModule = () => {
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage
   );
+
+  const deleteRow = async (id) => {
+  try {
+    // Call backend API to delete the record
+    await axios.delete(`http://localhost:5000/delete-sales-person/${id}`);
+
+    // Remove from frontend state
+    const updatedData = salesPersons.filter((person) => person.id !== id);
+    setSalesPersons(updatedData);
+
+    toast.success("Sales Person deleted successfully!", {
+      position: "top-center",
+      autoClose: 1500,
+    });
+  } catch (error) {
+    console.error("Error deleting sales person:", error);
+    toast.error("Failed to delete Sales Person", {
+      position: "top-center",
+    });
+  }
+};
+
+const handleDelete = (id) => {
+  toast.info(
+    <div>
+      <p>Are you sure you want to delete?</p>
+      <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
+        <button
+          onClick={() => {
+            deleteRow(id); // id instead of index
+            toast.dismiss();
+          }}
+          style={{ background: "red", color: "white", border: "none", padding: "5px 10px", cursor: "pointer" }}
+        >
+          Yes
+        </button>
+        <button
+          onClick={() => toast.dismiss()}
+          style={{ background: "grey", color: "white", border: "none", padding: "5px 10px", cursor: "pointer" }}
+        >
+          No
+        </button>
+      </div>
+    </div>,
+    {
+      position: "top-center",
+      autoClose: false,
+      closeOnClick: false,
+      draggable: false,
+    }
+  );
+};
 
   return (
     <div className="container my-4">
@@ -582,7 +657,8 @@ const Admin_SalesModule = () => {
                               borderRadius: "50%",
                               padding: isMobile ? "4px" : "6px",
                             }}
-                            onClick={() => handleDelete(index)}
+                            // onClick={() => handleDelete(index)}
+                            onClick={() => handleDelete(person.id)}
                             size="small"
                           >
                             <DeleteIcon style={{ color: "white", fontSize: isMobile ? "16px" : "20px" }} />
