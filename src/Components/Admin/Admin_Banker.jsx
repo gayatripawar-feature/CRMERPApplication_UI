@@ -41,6 +41,7 @@ const Admin_Banker = () => {
 
   const handleEditClick = (parentData, parentIndex) => {
     // Set form data for editing
+     setSelectedBanker(parentData);
     setFormData({
       name: parentData.name || "",
       address: parentData.address || "",
@@ -100,8 +101,8 @@ const handleClose = () => {
   };
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
  const handleAddBanker = () => {
-    // setBankers([...bankers, { bankerName: "", bankerMobile: "" }]);
-    setBankers([...bankers, { bankerName: name, bankerMobile: mobile }]);
+    setBankers([...bankers, { bankerName: "", bankerMobile: "" }]);
+    // setBankers([...bankers, { bankerName: name, bankerMobile: mobile }]);
 
   };
 const handleBankerChange = (index, field, value) => {
@@ -149,6 +150,28 @@ const handleBankerChange = (index, field, value) => {
       });
     }
   }, [showForm, isEditing]);
+
+
+
+
+
+  // To get the bankers :
+  useEffect(() => {
+  const fetchBankers = async () => {
+    try {
+      const res = await fetch("http://localhost:5000/get-bankers");
+      if (!res.ok) throw new Error("Failed to fetch bankers");
+      const data = await res.json();
+      setSubmittedData(data); // store in state for table rendering
+    } catch (err) {
+      console.error("Error fetching bankers:", err);
+      toast.error("Error loading banker data");
+    }
+  };
+
+  
+  fetchBankers();
+}, []);
 // const handleSubmit = (e) => {
 //     e.preventDefault();
 //    const newBank = {
@@ -172,6 +195,124 @@ const handleBankerChange = (index, field, value) => {
 
 
 
+// const handleSubmit = async (e) => {
+//   e.preventDefault();
+
+//   const payload = {
+//     name: formData.name,
+//     address: formData.address,
+//     mobile: formData.mobile,
+//     designation: formData.designation,
+//     // joiningDate: formData.joiningDate,
+//     status: formData.status,
+//     apfLetter: files.length > 0 ? files : [],
+//     bankers: bankers,
+//     timestamp: isEditing
+//       ? submittedData[editIndex]?.timestamp
+//       : new Date().toLocaleString(),
+//   };
+
+//   try {
+//     if (isEditing && editIndex !== null) {
+//       // Update local state first
+//       const updatedList = [...submittedData];
+//       // updatedList[editIndex] = payload;
+//       updatedList[editIndex] = { ...submittedData[editIndex], ...payload };
+//       setSubmittedData(updatedList);
+
+//       // Update on backend
+//       const bankerId = submittedData[editIndex].id;
+//       const res = await fetch(`http://localhost:5000/bankers/${bankerId}`, {
+//         method: "PUT",
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify(payload),
+//       });
+
+//       if (!res.ok) throw new Error("Update failed");
+//       toast.success("Banker details updated successfully!");
+//     } else {
+//       // Add new banker locally
+//       setSubmittedData((prev) => [...prev, payload]);
+
+//       // Add on backend
+//       const res = await fetch("http://localhost:5000/bankers", {
+//         method: "POST",
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify(payload),
+//       });
+
+//       if (!res.ok) throw new Error("Insert failed");
+//       toast.success("Data submitted successfully!");
+//     }
+
+//     // Close the form
+//     handleClose();
+//   } catch (err) {
+//     console.error("Error saving banker:", err);
+//     toast.error("Error saving banker");
+//     handleClose(); // Ensure modal closes even on error
+//   }
+// };
+
+// const handleSubmit = async (e) => {
+//   e.preventDefault();
+
+//   const payload = {
+//     name: formData.name,
+//     address: formData.address,
+//     mobile: formData.mobile,
+//     designation: formData.designation,
+//     status: formData.status,
+//     apfLetter: files.length > 0 ? files : [],
+//     bankers: bankers,
+//     timestamp: isEditing
+//       ? submittedData[editIndex]?.timestamp
+//       : new Date().toLocaleString(),
+//   };
+
+//   try {
+//     if (isEditing && editIndex !== null) {
+//       const bankerId = submittedData[editIndex].id;
+
+//       const res = await fetch(`http://localhost:5000/bankers/${bankerId}`, {
+//         method: "PUT",
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify(payload),
+//       });
+
+//       if (!res.ok) throw new Error("Update failed");
+//       // ✅ Update only that row in state, keeping its position
+//   setSubmittedData((prev) =>
+//     prev.map((row, index) =>
+//       index === editIndex ? { ...row, ...payload, id: bankerId } : row
+//     )
+//   );
+//       toast.success("Banker details updated successfully!");
+//     } else {
+//       const res = await fetch("http://localhost:5000/bankers", {
+//         method: "POST",
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify(payload),
+//       });
+
+//       if (!res.ok) throw new Error("Insert failed");
+//       toast.success("Data submitted successfully!");
+//     }
+
+//     // ✅ Refresh data from backend to ensure frontend matches DB
+//     const refreshed = await fetch("http://localhost:5000/get-bankers");
+//     const data = await refreshed.json();
+//     setSubmittedData(data);
+
+//     handleClose();
+//   } catch (err) {
+//     console.error("Error saving banker:", err);
+//     toast.error("Error saving banker");
+//     handleClose();
+//   }
+// };
+
+
 const handleSubmit = async (e) => {
   e.preventDefault();
 
@@ -180,7 +321,6 @@ const handleSubmit = async (e) => {
     address: formData.address,
     mobile: formData.mobile,
     designation: formData.designation,
-    // joiningDate: formData.joiningDate,
     status: formData.status,
     apfLetter: files.length > 0 ? files : [],
     bankers: bankers,
@@ -190,14 +330,11 @@ const handleSubmit = async (e) => {
   };
 
   try {
-    if (isEditing && editIndex !== null) {
-      // Update local state first
-      const updatedList = [...submittedData];
-      updatedList[editIndex] = payload;
-      setSubmittedData(updatedList);
+    // if (isEditing && editIndex !== null) {
+    //   const bankerId = submittedData[editIndex].id;
+if (isEditing && selectedBanker?.id) {
+  const bankerId = selectedBanker.id; // use unique ID
 
-      // Update on backend
-      const bankerId = submittedData[editIndex].id;
       const res = await fetch(`http://localhost:5000/bankers/${bankerId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
@@ -205,12 +342,19 @@ const handleSubmit = async (e) => {
       });
 
       if (!res.ok) throw new Error("Update failed");
+
+      // ✅ Update only the edited row in state, keep its place
+      setSubmittedData((prev) =>
+        // prev.map((row, index) =>
+          // index === editIndex ? { ...row, ...payload, id: bankerId } : row
+      prev.map(row =>
+      row.id === bankerId ? { ...row, ...payload } : row
+
+        )
+      );
+
       toast.success("Banker details updated successfully!");
     } else {
-      // Add new banker locally
-      setSubmittedData((prev) => [...prev, payload]);
-
-      // Add on backend
       const res = await fetch("http://localhost:5000/bankers", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -219,14 +363,18 @@ const handleSubmit = async (e) => {
 
       if (!res.ok) throw new Error("Insert failed");
       toast.success("Data submitted successfully!");
+
+      // ✅ Only fetch full data after new insert
+      const refreshed = await fetch("http://localhost:5000/get-bankers");
+      const data = await refreshed.json();
+      setSubmittedData(data);
     }
 
-    // Close the form
     handleClose();
   } catch (err) {
     console.error("Error saving banker:", err);
     toast.error("Error saving banker");
-    handleClose(); // Ensure modal closes even on error
+    handleClose();
   }
 };
 
@@ -620,9 +768,11 @@ const handleSubmit = async (e) => {
               <TableBody>
                 {paginatedData.length > 0 ? (
                   paginatedData.flatMap((data, index) =>
-                    data.bankers.map((banker, bIndex) => (
-                        // (data.bankers || []).map((banker, bIndex) => (
-                      <TableRow key={`${index}-${bIndex}`}>
+                    // data.bankers.map((banker, bIndex) => (
+                        (data.bankers || []).map((banker, bIndex) => (
+                      // <TableRow key={`${index}-${bIndex}`}>
+                      <TableRow key={`${data.id}-${bIndex}`}>
+
                         <TableCell>
                           <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: isMobile ? "wrap" : "nowrap" }}>
                             <IconButton

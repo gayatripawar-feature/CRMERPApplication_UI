@@ -119,6 +119,56 @@ app.post("/bankers", async (req, res) => {
 
 
 // GET all bankers
+app.get("/get-bankers", async (req, res) => {
+  try {
+    const [bankers] = await pool.query("SELECT * FROM bankers");
+  // fetch banker contacts
+    const [contacts] = await pool.query("SELECT * FROM banker_contacts");
+  // attach contacts to bankers
+    const result = bankers.map(b => ({
+      ...b,
+      bankers: contacts.filter(c => c.bankerId === b.id) // assuming bankers.id is PK
+    }));
+    res.json(result);
+  } catch (err) {
+    console.error("❌ Error fetching bankers:", err);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+
+// UPDATE banker :
+app.put("/bankers/:id", async (req, res) => {
+  const { id } = req.params;
+  const { name, address, mobile, designation, status, apfLetter, bankers, timestamp } = req.body;
+
+  try {
+    // Update main banker info
+    await pool.query(
+      `UPDATE bankers 
+       SET name=?, address=?, mobile=?, designation=?, status=?, apfLetter=?, timestamp=? 
+       WHERE id=?`,
+      [name, address, mobile, designation, status, JSON.stringify(apfLetter || []), timestamp, id]
+    );
+
+    // Handle banker_contacts (simple way: delete old and insert new)
+    await pool.query("DELETE FROM banker_contacts WHERE bankerId=?", [id]);
+
+    if (bankers && bankers.length > 0) {
+      for (let b of bankers) {
+        await pool.query(
+          "INSERT INTO banker_contacts (bankerId, bankerName, bankerMobile) VALUES (?, ?, ?)",
+          [id, b.bankerName, b.bankerMobile]
+        );
+      }
+    }
+
+    res.json({ message: "Banker updated successfully" });
+  } catch (err) {
+    console.error("Error updating banker:", err);
+    res.status(500).json({ error: "Database error" });
+  }
+});
 
 
 
