@@ -48,7 +48,6 @@ const Admin_SalesModule = () => {
     person.designation.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-
   // UseEffect to get the records of sales_person from DB : 
   useEffect(() => {
   const fetchSalesPersons = async () => {
@@ -152,18 +151,10 @@ const Admin_SalesModule = () => {
 
   try {
     if (editIndex !== null) {
-      // Update existing record in frontend
-      // const updatedData = [...salesPersons];
-      // updatedData[editIndex] = formData;
-      // setSalesPersons(updatedData);
-      // setEditIndex(null);
-
       // Call API for update 
-      // await axios.put(`http://localhost:5000/api/sales-person/${id}`, formData);
-      const id = salesPersons[editIndex].id; // Ensure each record has an id
+     const id = salesPersons[editIndex].id; // check for each record has an id
       await axios.put(`http://localhost:5000/update-sales-person/${id}`, formData);
-
-      // Update frontend state
+       // Update frontend state
       const updatedData = [...salesPersons];
       updatedData[editIndex] = { ...formData, id };
       setSalesPersons(updatedData);
@@ -174,11 +165,9 @@ const Admin_SalesModule = () => {
       const response = await axios.post("http://localhost:5000/sales-person", formData);
       toast.success("Sales Person saved!",);
       console.log("Saved:", response.data);
-
-      // Update frontend table with response
+       // Update frontend table with response
       setSalesPersons([...salesPersons, { ...formData, id: response.data.id }]);
     }
-
     // Reset form after save
     setFormData({
       name: "",
@@ -229,20 +218,6 @@ const Admin_SalesModule = () => {
     doc.save("SalesPerson_Report.pdf");
   };
 
-  // const handleEdit = (person, index) => {
-  //   console.log("Selected Row:", person);
-  //   console.log("Selected Index:", index);
-  //   // setFormData(person);
-  //   setFormData({
-  //   ...person,
-  //   joiningDate: person.joiningDate ? dayjs(person.joiningDate).format('YYYY-MM-DD') : ''
-  // });
-  //   setEditIndex(index);
-  //   setOpenEditModal(true);
-  // };
-
-
-
   const handleEdit = (person) => {
   const index = salesPersons.findIndex(p => p.id === person.id);
   setEditIndex(index);
@@ -262,46 +237,7 @@ const Admin_SalesModule = () => {
     setOpenEditModal(false);
   };
 
-  // const handleDelete = (id) => {
-  //   toast.info(
-  //     <div>
-  //       <p>Are you sure you want to delete?</p>
-  //       <div style={{ display: "flex", justifyContent: "flex-end", gap: "10px" }}>
-  //         <button
-  //           onClick={() => {
-  //             deleteRow(id);
-  //             toast.dismiss();
-  //           }}
-  //           style={{ background: "red", color: "white", border: "none", padding: "5px 10px", cursor: "pointer" }}
-  //         >
-  //           Yes
-  //         </button>
-  //         <button
-  //           onClick={() => toast.dismiss()}
-  //           style={{ background: "grey", color: "white", border: "none", padding: "5px 10px", cursor: "pointer" }}
-  //         >
-  //           No
-  //         </button>
-  //       </div>
-  //     </div>,
-  //     {
-  //       position: "top-center",
-  //       autoClose: false,
-  //       closeOnClick: false,
-  //       draggable: false,
-  //     }
-  //   );
-  // };
-
-  // const deleteRow = (indexToDelete) => {
-  //   const updatedData = salesPersons.filter((_, index) => index !== indexToDelete);
-  //   setSalesPersons(updatedData);
-  //   toast.success("Row deleted successfully!", {
-  //     position: "top-center",
-  //     autoClose: 1500,
-  //   });
-  // };
-
+  
   const handleChangePage = (event, newPage) => setPage(newPage);
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
@@ -315,14 +251,12 @@ const Admin_SalesModule = () => {
 
   const deleteRow = async (id) => {
   try {
-    // Call backend API to delete the record
+    //  backend API to delete the record
     await axios.delete(`http://localhost:5000/delete-sales-person/${id}`);
-
     // Remove from frontend state
     const updatedData = salesPersons.filter((person) => person.id !== id);
     setSalesPersons(updatedData);
-
-    toast.success("Sales Person deleted successfully!", {
+   toast.success("Sales Person deleted successfully!", {
       position: "top-center",
       autoClose: 1500,
     });
@@ -669,7 +603,7 @@ const handleDelete = (id) => {
                       <TableCell>{person.name}</TableCell>
 
 
-                      <>
+                      <>  
                         <TableCell>{person.email}</TableCell>
                         <TableCell>{person.mobile}</TableCell>
                       </>
@@ -855,7 +789,7 @@ const handleDelete = (id) => {
                 variant="outlined"
                 color="secondary"
                 fullWidth={isMobile}
-              // variant={isMobile ? "outlined" : "text"}
+            
               >
                 Cancel
               </Button>

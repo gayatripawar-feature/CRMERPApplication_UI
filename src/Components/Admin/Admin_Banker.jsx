@@ -38,7 +38,6 @@ const Admin_Banker = () => {
   const [viewDocument, setViewDocument] = useState(null);
   const [documentDialogOpen, setDocumentDialogOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-
   const handleEditClick = (parentData, parentIndex) => {
     // Set form data for editing
      setSelectedBanker(parentData);
@@ -83,28 +82,11 @@ const handleClose = () => {
     setBankers([{ bankerName: "", bankerMobile: "" }]);
     setFiles([]);
   };
-
-  // const handleAddNew = () => {
-  //   setIsEditing(false);
-  //   setEditIndex(null);
-  //   setFormData({
-  //     name: "",
-  //     address: "",
-  //     mobile: "",
-  //     designation: "",
-  //     joiningDate: "",
-  //     status: "Active",
-  //   });
-  //   setBankers([{ bankerName: "", bankerMobile: "" }]);
-  //   setFiles([]);
-  //   setShowForm(true);
-  // };
-
-  const handleAddNew = (existingBanker = null) => {
+ const handleAddNew = (existingBanker = null) => {
   if (existingBanker?.id) {
     // Adding banker to existing bank
     setSelectedBanker(existingBanker);
-    setIsEditing(true); // important!
+    setIsEditing(true); 
     setFormData({
       name: existingBanker.name,
       address: existingBanker.address,
@@ -128,11 +110,9 @@ const handleClose = () => {
     setBankers([{ bankerName: "", bankerMobile: "" }]);
     setFiles([]);
   }
-
-  setShowForm(true);
+ setShowForm(true);
 };
-
-  const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
  const handleAddBanker = () => {
     setBankers([...bankers, { bankerName: "", bankerMobile: "" }]);
     // setBankers([...bankers, { bankerName: name, bankerMobile: mobile }]);
@@ -184,10 +164,6 @@ const handleBankerChange = (index, field, value) => {
     }
   }, [showForm, isEditing]);
 
-
-
-
-
   // To get the bankers :
   useEffect(() => {
   const fetchBankers = async () => {
@@ -195,22 +171,18 @@ const handleBankerChange = (index, field, value) => {
       const res = await fetch("http://localhost:5000/get-bankers");
       if (!res.ok) throw new Error("Failed to fetch bankers");
       const data = await res.json();
-      setSubmittedData(data); // store in state for table rendering
+      setSubmittedData(data); // stored in state for table rendering
     } catch (err) {
       console.error("Error fetching bankers:", err);
       toast.error("Error loading banker data");
     }
   };
-
-  
-  fetchBankers();
+ fetchBankers();
 }, []);
-
 
 const handleSubmit = async (e) => {
   e.preventDefault();
-
-  const payload = {
+ const payload = {
     name: formData.name,
     address: formData.address,
     mobile: formData.mobile,
@@ -224,20 +196,15 @@ const handleSubmit = async (e) => {
   };
 
   try {
-    // if (isEditing && editIndex !== null) {
-    //   const bankerId = submittedData[editIndex].id;
-if (isEditing && selectedBanker?.id) {
+   if (isEditing && selectedBanker?.id) {
   const bankerId = selectedBanker.id; // use unique ID
-
-      const res = await fetch(`http://localhost:5000/bankers/${bankerId}`, {
+ const res = await fetch(`http://localhost:5000/bankers/${bankerId}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-
-      if (!res.ok) throw new Error("Update failed");
-
-      // ✅ Update only the edited row in state, keep its place
+     if (!res.ok) throw new Error("Update failed");
+    // ✅ Update only the edited row in state, keep its place
       setSubmittedData((prev) =>
        prev.map(row =>
       // row.id === bankerId ? { ...row, ...payload } : row
@@ -248,8 +215,7 @@ if (isEditing && selectedBanker?.id) {
 
         )
       );
-
-      toast.success("Banker details updated successfully!");
+     toast.success("Banker details updated successfully!");
     } else {
       const res = await fetch("http://localhost:5000/bankers", {
         method: "POST",
@@ -260,7 +226,7 @@ if (isEditing && selectedBanker?.id) {
       if (!res.ok) throw new Error("Insert failed");
       toast.success("Data submitted successfully!");
 
-      // ✅ Only fetch full data after new insert
+      // fetched full data after new insert
       const refreshed = await fetch("http://localhost:5000/get-bankers");
       const data = await refreshed.json();
       setSubmittedData(data);
@@ -362,9 +328,6 @@ if (isEditing && selectedBanker?.id) {
   );
 
   const paginatedData = filteredData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
-
-   
-
   return (
     <div className="container my-4">
       <div className="row mb-3">
@@ -660,84 +623,6 @@ if (isEditing && selectedBanker?.id) {
                   <TableCell sx={{ color: "white", fontWeight: "bold", minWidth: isMobile ? 80 : 100 }}>APF LETTER</TableCell>
                 </TableRow>
               </TableHead>
-
-           {/* <TableBody>
-  {paginatedData.length > 0 ? (
-    paginatedData.map((data, index) => (
-      <TableRow key={data.id || index}>
-        <TableCell>
-          <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: isMobile ? "wrap" : "nowrap" }}>
-            <IconButton
-              color="primary"
-              style={{
-                backgroundColor: Constants.primaryColor,
-                borderRadius: "50%",
-                padding: isMobile ? "4px" : "6px",
-              }}
-              onClick={() => handleEditClick(data, index)}
-              size="small"
-            >
-              <EditIcon style={{ color: "white", fontSize: isMobile ? "16px" : "20px" }} />
-            </IconButton>
-
-            <IconButton
-              color="error"
-              style={{
-                backgroundColor: Constants.primaryColor,
-                borderRadius: "50%",
-                padding: isMobile ? "4px" : "6px",
-              }}
-              onClick={() => handleDeleteClick(index)}
-              size="small"
-            >
-              <DeleteIcon style={{ color: "white", fontSize: isMobile ? "16px" : "20px" }} />
-            </IconButton>
-          </div>
-        </TableCell>
-
-        <TableCell>{data.timestamp || "-"}</TableCell>
-        <TableCell>{data.name}</TableCell>
-        <TableCell>{data.address}</TableCell>
-
-    
-        <TableCell>{(data.bankers || []).map(b => b.bankerName).join(", ")}</TableCell>
-        <TableCell>{(data.bankers || []).map(b => b.bankerMobile).join(", ")}</TableCell>
-
-        <TableCell sx={{ textAlign: "center" }}>
-          {data.apfLetter && data.apfLetter.length > 0 ? (
-            <Tooltip title="View Document" arrow>
-              <IconButton
-                sx={{
-                  background: Constants.primaryColor,
-                  color: "white",
-                  borderRadius: "50%",
-                  width: isMobile ? 28 : 32,
-                  height: isMobile ? 28 : 32,
-                  p: 0.5,
-                  border: "none",
-                }}
-                onClick={() => handleViewDocument(data.apfLetter[0])}
-                size="small"
-              >
-                <Visibility sx={{ fontSize: isMobile ? 16 : 18 }} />
-              </IconButton>
-            </Tooltip>
-          ) : (
-            <Typography variant="body2" color="textSecondary">
-              No file
-            </Typography>
-          )}
-        </TableCell>
-      </TableRow>
-    ))
-  ) : (
-    <TableRow>
-      <TableCell colSpan={7} align="center" sx={{ py: 3 }}>
-        No banker details found
-      </TableCell>
-    </TableRow>
-  )}
-</TableBody> */}
  <TableBody>
   {paginatedData.length > 0 ? (
     paginatedData.map((data, index) => (
