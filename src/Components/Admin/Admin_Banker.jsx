@@ -84,21 +84,54 @@ const handleClose = () => {
     setFiles([]);
   };
 
-  const handleAddNew = () => {
+  // const handleAddNew = () => {
+  //   setIsEditing(false);
+  //   setEditIndex(null);
+  //   setFormData({
+  //     name: "",
+  //     address: "",
+  //     mobile: "",
+  //     designation: "",
+  //     joiningDate: "",
+  //     status: "Active",
+  //   });
+  //   setBankers([{ bankerName: "", bankerMobile: "" }]);
+  //   setFiles([]);
+  //   setShowForm(true);
+  // };
+
+  const handleAddNew = (existingBanker = null) => {
+  if (existingBanker?.id) {
+    // Adding banker to existing bank
+    setSelectedBanker(existingBanker);
+    setIsEditing(true); // important!
+    setFormData({
+      name: existingBanker.name,
+      address: existingBanker.address,
+      mobile: existingBanker.mobile,
+      designation: existingBanker.designation,
+      status: existingBanker.status,
+    });
+    setBankers(existingBanker.bankers);
+    setFiles(existingBanker.apfLetter || []);
+  } else {
+    // Adding a completely new bank
+    setSelectedBanker(null);
     setIsEditing(false);
-    setEditIndex(null);
     setFormData({
       name: "",
       address: "",
       mobile: "",
       designation: "",
-      joiningDate: "",
       status: "Active",
     });
     setBankers([{ bankerName: "", bankerMobile: "" }]);
     setFiles([]);
-    setShowForm(true);
-  };
+  }
+
+  setShowForm(true);
+};
+
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
  const handleAddBanker = () => {
     setBankers([...bankers, { bankerName: "", bankerMobile: "" }]);
@@ -172,145 +205,6 @@ const handleBankerChange = (index, field, value) => {
   
   fetchBankers();
 }, []);
-// const handleSubmit = (e) => {
-//     e.preventDefault();
-//    const newBank = {
-//       name: formData.name,
-//       address: formData.address,
-//       apfLetter: files.length > 0 ? files : [],
-//       bankers: bankers,
-//       timestamp: isEditing ? submittedData[editIndex].timestamp : new Date().toLocaleString()
-//     };
-//       if (isEditing && editIndex !== null && editIndex !== undefined) {
-//       const updatedList = [...submittedData];
-//       updatedList[editIndex] = newBank;
-//       setSubmittedData(updatedList);
-//       toast.success("Banker details updated successfully!");
-//     } else {
-//       setSubmittedData((prev) => [...prev, newBank]);
-//       toast.success("Data submitted successfully!");
-//     }
-//    handleClose();
-//   };
-
-
-
-// const handleSubmit = async (e) => {
-//   e.preventDefault();
-
-//   const payload = {
-//     name: formData.name,
-//     address: formData.address,
-//     mobile: formData.mobile,
-//     designation: formData.designation,
-//     // joiningDate: formData.joiningDate,
-//     status: formData.status,
-//     apfLetter: files.length > 0 ? files : [],
-//     bankers: bankers,
-//     timestamp: isEditing
-//       ? submittedData[editIndex]?.timestamp
-//       : new Date().toLocaleString(),
-//   };
-
-//   try {
-//     if (isEditing && editIndex !== null) {
-//       // Update local state first
-//       const updatedList = [...submittedData];
-//       // updatedList[editIndex] = payload;
-//       updatedList[editIndex] = { ...submittedData[editIndex], ...payload };
-//       setSubmittedData(updatedList);
-
-//       // Update on backend
-//       const bankerId = submittedData[editIndex].id;
-//       const res = await fetch(`http://localhost:5000/bankers/${bankerId}`, {
-//         method: "PUT",
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify(payload),
-//       });
-
-//       if (!res.ok) throw new Error("Update failed");
-//       toast.success("Banker details updated successfully!");
-//     } else {
-//       // Add new banker locally
-//       setSubmittedData((prev) => [...prev, payload]);
-
-//       // Add on backend
-//       const res = await fetch("http://localhost:5000/bankers", {
-//         method: "POST",
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify(payload),
-//       });
-
-//       if (!res.ok) throw new Error("Insert failed");
-//       toast.success("Data submitted successfully!");
-//     }
-
-//     // Close the form
-//     handleClose();
-//   } catch (err) {
-//     console.error("Error saving banker:", err);
-//     toast.error("Error saving banker");
-//     handleClose(); // Ensure modal closes even on error
-//   }
-// };
-
-// const handleSubmit = async (e) => {
-//   e.preventDefault();
-
-//   const payload = {
-//     name: formData.name,
-//     address: formData.address,
-//     mobile: formData.mobile,
-//     designation: formData.designation,
-//     status: formData.status,
-//     apfLetter: files.length > 0 ? files : [],
-//     bankers: bankers,
-//     timestamp: isEditing
-//       ? submittedData[editIndex]?.timestamp
-//       : new Date().toLocaleString(),
-//   };
-
-//   try {
-//     if (isEditing && editIndex !== null) {
-//       const bankerId = submittedData[editIndex].id;
-
-//       const res = await fetch(`http://localhost:5000/bankers/${bankerId}`, {
-//         method: "PUT",
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify(payload),
-//       });
-
-//       if (!res.ok) throw new Error("Update failed");
-//       // ✅ Update only that row in state, keeping its position
-//   setSubmittedData((prev) =>
-//     prev.map((row, index) =>
-//       index === editIndex ? { ...row, ...payload, id: bankerId } : row
-//     )
-//   );
-//       toast.success("Banker details updated successfully!");
-//     } else {
-//       const res = await fetch("http://localhost:5000/bankers", {
-//         method: "POST",
-//         headers: { "Content-Type": "application/json" },
-//         body: JSON.stringify(payload),
-//       });
-
-//       if (!res.ok) throw new Error("Insert failed");
-//       toast.success("Data submitted successfully!");
-//     }
-
-//     // ✅ Refresh data from backend to ensure frontend matches DB
-//     const refreshed = await fetch("http://localhost:5000/get-bankers");
-//     const data = await refreshed.json();
-//     setSubmittedData(data);
-
-//     handleClose();
-//   } catch (err) {
-//     console.error("Error saving banker:", err);
-//     toast.error("Error saving banker");
-//     handleClose();
-//   }
-// };
 
 
 const handleSubmit = async (e) => {
@@ -345,10 +239,12 @@ if (isEditing && selectedBanker?.id) {
 
       // ✅ Update only the edited row in state, keep its place
       setSubmittedData((prev) =>
-        // prev.map((row, index) =>
-          // index === editIndex ? { ...row, ...payload, id: bankerId } : row
-      prev.map(row =>
-      row.id === bankerId ? { ...row, ...payload } : row
+       prev.map(row =>
+      // row.id === bankerId ? { ...row, ...payload } : row
+      // To merge records:
+       row.id === bankerId
+        ? { ...row, bankers: [...row.bankers, ...bankers.filter(b => !row.bankers.includes(b))] }
+        : row
 
         )
       );
@@ -765,85 +661,161 @@ if (isEditing && selectedBanker?.id) {
                 </TableRow>
               </TableHead>
 
-              <TableBody>
-                {paginatedData.length > 0 ? (
-                  paginatedData.flatMap((data, index) =>
-                    // data.bankers.map((banker, bIndex) => (
-                        (data.bankers || []).map((banker, bIndex) => (
-                      // <TableRow key={`${index}-${bIndex}`}>
-                      <TableRow key={`${data.id}-${bIndex}`}>
+           {/* <TableBody>
+  {paginatedData.length > 0 ? (
+    paginatedData.map((data, index) => (
+      <TableRow key={data.id || index}>
+        <TableCell>
+          <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: isMobile ? "wrap" : "nowrap" }}>
+            <IconButton
+              color="primary"
+              style={{
+                backgroundColor: Constants.primaryColor,
+                borderRadius: "50%",
+                padding: isMobile ? "4px" : "6px",
+              }}
+              onClick={() => handleEditClick(data, index)}
+              size="small"
+            >
+              <EditIcon style={{ color: "white", fontSize: isMobile ? "16px" : "20px" }} />
+            </IconButton>
 
-                        <TableCell>
-                          <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: isMobile ? "wrap" : "nowrap" }}>
-                            <IconButton
-                              color="primary"
-                              style={{
-                                backgroundColor: Constants.primaryColor,
-                                borderRadius: "50%",
-                                padding: isMobile ? "4px" : "6px",
-                              }}
-                              onClick={() => handleEditClick(data, index)}
-                              size="small"
-                            >
-                              <EditIcon style={{ color: "white", fontSize: isMobile ? "16px" : "20px" }} />
-                            </IconButton>
+            <IconButton
+              color="error"
+              style={{
+                backgroundColor: Constants.primaryColor,
+                borderRadius: "50%",
+                padding: isMobile ? "4px" : "6px",
+              }}
+              onClick={() => handleDeleteClick(index)}
+              size="small"
+            >
+              <DeleteIcon style={{ color: "white", fontSize: isMobile ? "16px" : "20px" }} />
+            </IconButton>
+          </div>
+        </TableCell>
 
-                            <IconButton
-                              color="error"
-                              style={{
-                                backgroundColor: Constants.primaryColor,
-                                borderRadius: "50%",
-                                padding: isMobile ? "4px" : "6px",
-                              }}
-                              onClick={() => handleDeleteClick(index, bIndex)}
-                              size="small"
-                            >
-                              <DeleteIcon style={{ color: "white", fontSize: isMobile ? "16px" : "20px" }} />
-                            </IconButton>
-                          </div>
-                        </TableCell>
-                        <TableCell>{data.timestamp || "-"}</TableCell>
-                        <TableCell>{data.name}</TableCell>
-                        <TableCell>{data.address}</TableCell>
-                        <TableCell>{banker.bankerName}</TableCell>
-                        <TableCell>{banker.bankerMobile}</TableCell>
+        <TableCell>{data.timestamp || "-"}</TableCell>
+        <TableCell>{data.name}</TableCell>
+        <TableCell>{data.address}</TableCell>
 
-                        <TableCell sx={{ textAlign: "center" }}>
-                          {data.apfLetter && data.apfLetter.length > 0 ? (
-                            <Tooltip title="View Document" arrow>
-                              <IconButton
-                                sx={{
-                                  background: Constants.primaryColor,
-                                  color: "white",
-                                  borderRadius: "50%",
-                                  width: isMobile ? 28 : 32,
-                                  height: isMobile ? 28 : 32,
-                                  p: 0.5,
-                                  border: "none",
-                                }}
-                                onClick={() => handleViewDocument(data.apfLetter[0])}
-                                size="small"
-                              >
-                                <Visibility sx={{ fontSize: isMobile ? 16 : 18 }} />
-                              </IconButton>
-                            </Tooltip>
-                          ) : (
-                            <Typography variant="body2" color="textSecondary">
-                              No file
-                            </Typography>
-                          )}
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  )
-                ) : (
-                  <TableRow>
-                    <TableCell colSpan={7} align="center" sx={{ py: 3 }}>
-                      No banker details found
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
+    
+        <TableCell>{(data.bankers || []).map(b => b.bankerName).join(", ")}</TableCell>
+        <TableCell>{(data.bankers || []).map(b => b.bankerMobile).join(", ")}</TableCell>
+
+        <TableCell sx={{ textAlign: "center" }}>
+          {data.apfLetter && data.apfLetter.length > 0 ? (
+            <Tooltip title="View Document" arrow>
+              <IconButton
+                sx={{
+                  background: Constants.primaryColor,
+                  color: "white",
+                  borderRadius: "50%",
+                  width: isMobile ? 28 : 32,
+                  height: isMobile ? 28 : 32,
+                  p: 0.5,
+                  border: "none",
+                }}
+                onClick={() => handleViewDocument(data.apfLetter[0])}
+                size="small"
+              >
+                <Visibility sx={{ fontSize: isMobile ? 16 : 18 }} />
+              </IconButton>
+            </Tooltip>
+          ) : (
+            <Typography variant="body2" color="textSecondary">
+              No file
+            </Typography>
+          )}
+        </TableCell>
+      </TableRow>
+    ))
+  ) : (
+    <TableRow>
+      <TableCell colSpan={7} align="center" sx={{ py: 3 }}>
+        No banker details found
+      </TableCell>
+    </TableRow>
+  )}
+</TableBody> */}
+ <TableBody>
+  {paginatedData.length > 0 ? (
+    paginatedData.map((data, index) => (
+      // If multiple bankers, map each banker to its own row
+      (data.bankers || []).map((banker, bIndex) => (
+        <TableRow key={`${data.id || index}-${bIndex}`}>
+          {bIndex === 0 && (
+            <>
+              <TableCell rowSpan={data.bankers.length}>
+                <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: isMobile ? "wrap" : "nowrap" }}>
+                  <IconButton
+                    color="primary"
+                    style={{ backgroundColor: Constants.primaryColor, borderRadius: "50%", padding: isMobile ? "4px" : "6px" }}
+                    onClick={() => handleEditClick(data, index)}
+                    size="small"
+                  >
+                    <EditIcon style={{ color: "white", fontSize: isMobile ? "16px" : "20px" }} />
+                  </IconButton>
+
+                  <IconButton
+                    color="error"
+                    style={{ backgroundColor: Constants.primaryColor, borderRadius: "50%", padding: isMobile ? "4px" : "6px" }}
+                    onClick={() => handleDeleteClick(index, bIndex)}
+                    size="small"
+                  >
+                    <DeleteIcon style={{ color: "white", fontSize: isMobile ? "16px" : "20px" }} />
+                  </IconButton>
+                </div>
+              </TableCell>
+
+              <TableCell rowSpan={data.bankers.length}>{data.timestamp || "-"}</TableCell>
+              <TableCell rowSpan={data.bankers.length}>{data.name}</TableCell>
+              <TableCell rowSpan={data.bankers.length}>{data.address}</TableCell>
+            </>
+          )}
+
+          <TableCell>{banker.bankerName}</TableCell>
+          <TableCell>{banker.bankerMobile}</TableCell>
+
+          {bIndex === 0 && (
+            <TableCell rowSpan={data.bankers.length} sx={{ textAlign: "center" }}>
+              {data.apfLetter && data.apfLetter.length > 0 ? (
+                <Tooltip title="View Document" arrow>
+                  <IconButton
+                    sx={{
+                      background: Constants.primaryColor,
+                      color: "white",
+                      borderRadius: "50%",
+                      width: isMobile ? 28 : 32,
+                      height: isMobile ? 28 : 32,
+                      p: 0.5,
+                      border: "none",
+                    }}
+                    onClick={() => handleViewDocument(data.apfLetter[0])}
+                    size="small"
+                  >
+                    <Visibility sx={{ fontSize: isMobile ? 16 : 18 }} />
+                  </IconButton>
+                </Tooltip>
+              ) : (
+                <Typography variant="body2" color="textSecondary">
+                  No file
+                </Typography>
+              )}
+            </TableCell>
+          )}
+        </TableRow>
+      ))
+    ))
+  ) : (
+    <TableRow>
+      <TableCell colSpan={7} align="center" sx={{ py: 3 }}>
+        No banker details found
+      </TableCell>
+    </TableRow>
+  )}
+</TableBody>
+
         
     <TableFooter>
       <TableRow>
