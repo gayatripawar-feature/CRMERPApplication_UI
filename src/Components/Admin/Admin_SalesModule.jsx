@@ -202,7 +202,8 @@ const Admin_SalesModule = () => {
       row.email || "-",
       row.mobile || "-",
       row.designation || "-",
-      row.joiningDate || "-",
+      // row.joiningDate || "-",
+      row.joiningDate ? dayjs(row.joiningDate).format('YYYY-MM-DD') : "-",
       row.status || "-"
     ]);
 
@@ -612,7 +613,11 @@ const handleDelete = (id) => {
                       <TableCell>{person.designation}</TableCell>
 
 
-                      <TableCell>{person.joiningDate}</TableCell>
+                      {/* <TableCell>{person.joiningDate}</TableCell> */}
+                      <TableCell>
+  {person.joiningDate ? dayjs(person.joiningDate).format('YYYY-MM-DD') : '-'}
+</TableCell>
+
 
 
                       <TableCell>

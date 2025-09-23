@@ -220,68 +220,7 @@ const theme = useTheme();
  <div className="d-flex align-items-center mb-2">
        <div className="d-flex align-items-center justify-content-between mb-2" style={{ width: "100%" }}>
 <div className="d-flex align-items-center ">
- {/* <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-  {sections.map((section, index) => (
-    <div 
-      key={index} 
-      style={{ 
-        display: 'flex', 
-        alignItems: 'center', 
-         backgroundColor:Constants.primaryColor,
-        padding: '8px', 
-        borderRadius: '20px',  
-        margin: '5px',
-        cursor: 'pointer',    
-        transition: "width 0.3s ease, background 0.3s ease",
-        width: expandedSection === index ? "250px" : "50px", 
-         minWidth: "50px",
-        overflow: "hidden",
-        whiteSpace: "nowrap",
-        fontSize: "14px",
-       justifyContent: "center",
-        textTransform: "none",
-        position: "relative",
-        background:Constants.primaryColor,
-        boxShadow:
-          "inset 2px 2px 2px 0px rgba(255,255,255,.5), 7px 7px 20px 0px rgba(0,0,0,.1), 4px 4px 5px 0px rgba(0,0,0,.1)",
-      }}
-      
-      onClick={() => handleToggleSection(index)} 
 
-    >
-      {React.cloneElement(section.icon, { style: { marginRight: '8px',color: 'white' } })}  
-      
-      
-      {expandedSection === index ? (
-        <span className="fw-bold text-white p-2 fs-6" style={{ color: 'white', marginLeft: '10px' }}>{section.label}</span>
-      ) : null}
-  
-      <div style={{
-        position: "absolute",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        background: "rgba(255, 255, 255, 0.2)",
-        transform: "scale(0.1)",
-        transition: "transform 0.3s ease",
-        zIndex: -1,
-      }}></div>
-  
-      <div 
-        style={{
-          "&:hover": {
-            background: "linear-gradient(0deg, rgb(230, 4, 255) 0%, rgb(245, 182, 24) 100%)",
-          },
-          "&:hover div": {
-            transform: "scale(1)",
-          },
-        }}
-      ></div>
-  
-    </div>
-  ))}
-  </Box>  */}
 
  <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
       {sections.map((section, index) => (
@@ -335,15 +274,7 @@ const theme = useTheme();
 
 
 </div>
- {/* <TextField
-    variant="outlined"
-    placeholder="Search Inventory..."
-    size="small"
-    style={{ width: "250px" }}
-    sx={{border:Constants.formInputBorderColor,
-      display:isMobile ? "none":"block",
-    }}
-  /> */}
+
 </div>
 {/* File Upload Input */}
 {showFileInput && (
@@ -379,14 +310,29 @@ const theme = useTheme();
       direction={isMobile ? "column" : "row"} 
       spacing={2} // gap
     >
-                {/* <div className='d-flex gap-3'> */}
+               
                 <Button variant="contained" color="primary" 
                  onClick={() => setShowFirmForm(true)}
-                sx={{
-                  background:Constants.primaryColor,
-                   width:  "160px" ,
-            minWidth:  "40px" ,
-                }}
+          
+              sx={{
+    background: Constants.primaryColor,
+    color: "white",
+    fontWeight: "bold",
+    textTransform: "none",
+    padding: "8px 16px",
+    borderRadius: "8px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "8px",
+    whiteSpace: "nowrap",       // 🚀 keeps "+ Inventory Info" on one line
+    width: isMobile ? "100%" : "auto",  // full width on mobile, auto-fit on desktop
+
+    minWidth: "120px",          // ensures button isn’t too small
+    "&:hover": {
+      background: Constants.primaryColor,
+    },
+  }}
                 >
                   + Inventory Info
                 </Button>
@@ -395,14 +341,18 @@ const theme = useTheme();
                    sx={{
                     background:Constants.primaryColor,
                      color: "white",
-                     fontWeight: "bold",
+                    //  fontWeight: "bold",
                      textTransform: "none",
                      padding: "8px 16px",
                      borderRadius: "8px",
                      display: "flex",
                      alignItems: "center",  
-                     width: isMobile ? "100%" : "160px",
-                     minWidth: "40px" ,
+                    //  width: isMobile ? "100%" : "160px",
+                     whiteSpace: "nowrap",
+                     width: isMobile ? "100%" : "auto",
+                    //  minWidth: "40px" ,
+                     minWidth: "120px",
+                   
                      gap: "8px",  
                      "&:hover": {
                        background:Constants.primaryColor,
@@ -417,7 +367,7 @@ const theme = useTheme();
                    <FaFileDownload size={18} />  
                    Download PDF
                  </Button>
-                {/* </div> */}
+              
               </Stack> 
               
               
@@ -440,15 +390,13 @@ const theme = useTheme();
            </div>
             </>
           ) : (
-            <div className="firm-form mt-4 p-3 border rounded" 
+            <div className="projectinventory-form mt-4 p-3 border rounded" 
             style={{
-              // maxHeight: "500px",
-              overflowY: "auto",
-              backgroundColor: "#f8f9fa", 
+                overflowY: "auto",
               border: "1px solid #ccc", 
-
-            }}
+}}
             >
+
               
               <Grid container spacing={2}>
                 
@@ -459,6 +407,7 @@ const theme = useTheme();
   name="projectName"
   value={formValues.projectName}
   onChange={handleFormChange}
+  sx={{border:Constants.formInputBorderColor}}
 />
 </Grid> 
                 
@@ -469,6 +418,7 @@ const theme = useTheme();
     name="wing"
     value={formValues.wing}
     onChange={handleFormChange}
+     sx={{border:Constants.formInputBorderColor}}
   />
 </Grid>
 
@@ -479,6 +429,7 @@ const theme = useTheme();
     name="floor"
     value={formValues.floor}
     onChange={handleFormChange}
+     sx={{border:Constants.formInputBorderColor}}
   />
 </Grid>
 
@@ -490,6 +441,7 @@ const theme = useTheme();
     name="flatNo"
     value={formValues.flatNo}
     onChange={handleFormChange}
+     sx={{border:Constants.formInputBorderColor}}
   />
 </Grid>
 
@@ -504,6 +456,7 @@ const theme = useTheme();
     value={formValues.reraCarpetAreaSqMtr}
     onChange={handleFormChange}
     inputProps={{ step: "0.01", min: "0.01" }}
+     sx={{border:Constants.formInputBorderColor}}
   />
 </Grid>
 
@@ -520,6 +473,7 @@ const theme = useTheme();
       step: "0.01", 
       min: "0.01", 
     }}
+     sx={{border:Constants.formInputBorderColor}}
   />
 </Grid>
 
@@ -537,6 +491,7 @@ const theme = useTheme();
       step: "0.01", 
       min: "0.01", 
     }}
+     sx={{border:Constants.formInputBorderColor}}
   />
 </Grid>
 
@@ -553,6 +508,7 @@ const theme = useTheme();
       step: "0.01", 
       min: "0.01",
     }}
+     sx={{border:Constants.formInputBorderColor}}
   />
 </Grid>
 
@@ -565,6 +521,7 @@ const theme = useTheme();
     name="unitType" 
     value={formValues.unitType} 
     onChange={handleFormChange} 
+     sx={{border:Constants.formInputBorderColor}}
   >
     {unitTypes.map((type, idx) => (
       <MenuItem key={idx} value={type}>
@@ -585,6 +542,7 @@ const theme = useTheme();
     name="configuration" 
     value={formValues.configuration} 
     onChange={handleFormChange} 
+     sx={{border:Constants.formInputBorderColor}}
   >
     {configurations.map((config, idx) => (
       <MenuItem key={idx} value={config}>
@@ -604,6 +562,7 @@ const theme = useTheme();
     name="status" 
     value={formValues.status} 
     onChange={handleFormChange} 
+     sx={{border:Constants.formInputBorderColor}}
   >
     {statusOptions.map((status, idx) => (
       <MenuItem key={idx} value={status}>
@@ -621,6 +580,7 @@ const theme = useTheme();
     name="owner" 
     value={formValues.owner} 
     onChange={handleFormChange} 
+     sx={{border:Constants.formInputBorderColor}}
   >
     {owners.map((owner, idx) => (
       <MenuItem key={idx} value={owner}>
@@ -641,6 +601,7 @@ const theme = useTheme();
     value={formValues.terraceArea} 
     onChange={handleFormChange} 
     inputProps={{ step: "0.01", min: "0.01" }}
+     sx={{border:Constants.formInputBorderColor}}
   />
 </Grid>
 
@@ -654,6 +615,7 @@ const theme = useTheme();
     value={formValues.balconyArea} 
     onChange={handleFormChange} 
     inputProps={{ step: "0.01", min: "0.01" }}
+     sx={{border:Constants.formInputBorderColor}}
   />
 </Grid>
 
@@ -667,6 +629,7 @@ const theme = useTheme();
     value={formValues.porchArea} 
     onChange={handleFormChange} 
     inputProps={{ step: "0.01", min: "0.01" }}
+     sx={{border:Constants.formInputBorderColor}}
   />
 </Grid>
 
@@ -680,6 +643,7 @@ const theme = useTheme();
     value={formValues.topTerraceArea}
     onChange={handleFormChange} 
     inputProps={{ step: "0.01", min: "0.01" }}
+     sx={{border:Constants.formInputBorderColor}}
   />
 </Grid>
 
@@ -692,6 +656,7 @@ const theme = useTheme();
     value={formValues.superBuiltupArea} 
     onChange={handleFormChange} 
     inputProps={{ step: "0.01", min: "0.01" }}
+     sx={{border:Constants.formInputBorderColor}}
   />
 </Grid>
 
@@ -703,6 +668,7 @@ const theme = useTheme();
     name="balconySanctioned" 
     value={formValues.balconySanctioned} 
     onChange={handleFormChange} 
+     sx={{border:Constants.formInputBorderColor}}
   />
 </Grid>
 
@@ -713,6 +679,7 @@ const theme = useTheme();
     name="podiumGarde" 
     value={formValues.podiumGarde} 
     onChange={handleFormChange} 
+     sx={{border:Constants.formInputBorderColor}}
   />
 </Grid>
 
@@ -722,11 +689,14 @@ const theme = useTheme();
 <Button
   variant="contained"
   className="mt-3"
-  color="success"
+  sx={{backgroundColor:Constants.primaryColor}}
   onClick={() => {
     handleFormSubmit();
     setShowFirmForm(false);
-    toast.success("Inventory details are submitted!", { position: "top-right", autoClose: 3000 });
+    toast.success("Inventory details are submitted!", { position: "top-right", autoClose: 3000,
+      className:"successToast",
+      progressClassName: "successToastProgress",
+      });
   }}
 >
   Submit

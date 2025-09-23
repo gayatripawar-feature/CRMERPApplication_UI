@@ -239,6 +239,22 @@ th, td {
 }
 
 
+.successToast {
+  background-color: #fff; /* maroon background */
+          /* white text */
+  font-weight: bold;
+  border-radius: 8px;
+  border-left: 6px solid #800020; /* maroon left line */
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.successToastProgress {
+  background: #FFFFFF; /* white progress bar for contrast */
+}
+
 
 /* Optional: Add responsiveness for smaller screen sizes */
 @media (max-width: 1200px) {
