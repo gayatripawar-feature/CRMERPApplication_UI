@@ -170,6 +170,25 @@ app.put("/bankers/:id", async (req, res) => {
   }
 });
 
+// delete banker :
+// DELETE /bankers/:id
+app.delete("/bankers/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    // Assuming you use MySQL
+    const [result] = await pool.query("DELETE FROM bankers WHERE id = ?", [id]);
+    
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "Banker not found" });
+    }
+
+    res.json({ message: "Banker deleted successfully" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 
 
 console.log("server started");

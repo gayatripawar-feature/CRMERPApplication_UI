@@ -56,16 +56,48 @@ const Admin_Banker = () => {
     // Open the form
     setShowForm(true);
   };
-const handleDeleteClick = (parentIndex, bankerIndex) => {
+// const handleDeleteClick = (parentIndex, bankerIndex) => {
+//     const updatedData = [...submittedData];
+//      if (updatedData[parentIndex].bankers.length === 1) {
+//       updatedData.splice(parentIndex, 1);
+//     } else {
+//       updatedData[parentIndex].bankers.splice(bankerIndex, 1);
+//     }
+//     setSubmittedData(updatedData);
+//     toast.success("Banker details deleted successfully!");
+//   };
+
+const handleDeleteClick = async (parentIndex, bankerIndex) => {
+  try {
+    const bankerToDelete = submittedData[parentIndex];
+    const bankerId = bankerToDelete.id; // Assuming each bank has a unique ID
+    console.log("deleting banker",bankerId);
+    // Call backend DELETE API
+    const res = await fetch(`http://localhost:5000/bankers/${bankerId}`, {
+      method: "DELETE",
+    });
+
+    if (!res.ok) throw new Error("Failed to delete banker");
+
+    // Update frontend state
     const updatedData = [...submittedData];
-     if (updatedData[parentIndex].bankers.length === 1) {
+    
+    if (updatedData[parentIndex].bankers.length === 1) {
+      // Remove entire bank entry if only one banker exists
       updatedData.splice(parentIndex, 1);
     } else {
+      // Remove only the selected banker from bankers array
       updatedData[parentIndex].bankers.splice(bankerIndex, 1);
     }
+
     setSubmittedData(updatedData);
     toast.success("Banker details deleted successfully!");
-  };
+  } catch (err) {
+    console.error("Delete error:", err);
+    toast.error("Failed to delete banker");
+  }
+};
+
 const handleClose = () => {
     setSelectedBanker(null);
     setShowForm(false);
@@ -180,9 +212,72 @@ const handleBankerChange = (index, field, value) => {
  fetchBankers();
 }, []);
 
+// const handleSubmit = async (e) => {
+//   e.preventDefault();
+//  const payload = {
+//     name: formData.name,
+//     address: formData.address,
+//     mobile: formData.mobile,
+//     designation: formData.designation,
+//     status: formData.status,
+//     apfLetter: files.length > 0 ? files : [],
+//     bankers: bankers,
+//     timestamp: isEditing
+//       ? submittedData[editIndex]?.timestamp
+//       : new Date().toLocaleString(),
+//   };
+
+//   try {
+//    if (isEditing && selectedBanker?.id) {
+//   const bankerId = selectedBanker.id; // use unique ID
+//  const res = await fetch(`http://localhost:5000/bankers/${bankerId}`, {
+//         method: "PUT",
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify(payload),
+//       });
+//      if (!res.ok) throw new Error("Update failed");
+//     // ✅ Update only the edited row in state, keep its place
+//       setSubmittedData((prev) =>
+//        prev.map(row =>
+//       // row.id === bankerId ? { ...row, ...payload } : row
+//       // To merge records:
+//        row.id === bankerId
+//         ? { ...row, bankers: [...row.bankers, ...bankers.filter(b => !row.bankers.includes(b))] }
+//         : row
+
+//         )
+//       );
+//      toast.success("Banker details updated successfully!");
+//     } else {
+//       const res = await fetch("http://localhost:5000/bankers", {
+//         method: "POST",
+//         headers: { "Content-Type": "application/json" },
+//         body: JSON.stringify(payload),
+//       });
+
+//       if (!res.ok) throw new Error("Insert failed");
+//       toast.success("Data submitted successfully!");
+
+//       // fetched full data after new insert
+//       const refreshed = await fetch("http://localhost:5000/get-bankers");
+//       const data = await refreshed.json();
+//       setSubmittedData(data);
+//     }
+
+//     handleClose();
+//   } catch (err) {
+//     console.error("Error saving banker:", err);
+//     toast.error("Error saving banker");
+//     handleClose();
+//   }
+// };
+
+
+
 const handleSubmit = async (e) => {
   e.preventDefault();
- const payload = {
+
+  const payload = {
     name: formData.name,
     address: formData.address,
     mobile: formData.mobile,
@@ -190,33 +285,32 @@ const handleSubmit = async (e) => {
     status: formData.status,
     apfLetter: files.length > 0 ? files : [],
     bankers: bankers,
-    timestamp: isEditing
-      ? submittedData[editIndex]?.timestamp
+    timestamp: isEditing && selectedBanker?.timestamp
+      ? selectedBanker.timestamp
       : new Date().toLocaleString(),
   };
 
   try {
-   if (isEditing && selectedBanker?.id) {
-  const bankerId = selectedBanker.id; // use unique ID
- const res = await fetch(`http://localhost:5000/bankers/${bankerId}`, {
+    if (isEditing && selectedBanker?.id) {
+      // Update existing banker
+      const res = await fetch(`http://localhost:5000/bankers/${selectedBanker.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-     if (!res.ok) throw new Error("Update failed");
-    // ✅ Update only the edited row in state, keep its place
-      setSubmittedData((prev) =>
-       prev.map(row =>
-      // row.id === bankerId ? { ...row, ...payload } : row
-      // To merge records:
-       row.id === bankerId
-        ? { ...row, bankers: [...row.bankers, ...bankers.filter(b => !row.bankers.includes(b))] }
-        : row
 
+      if (!res.ok) throw new Error("Update failed");
+
+      // Update the frontend state to reflect the edited row
+      setSubmittedData(prev =>
+        prev.map(row =>
+          row.id === selectedBanker.id ? { ...row, ...payload } : row
         )
       );
-     toast.success("Banker details updated successfully!");
+
+      toast.success("Banker details updated successfully!");
     } else {
+      // Insert new banker
       const res = await fetch("http://localhost:5000/bankers", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -224,19 +318,19 @@ const handleSubmit = async (e) => {
       });
 
       if (!res.ok) throw new Error("Insert failed");
+
       toast.success("Data submitted successfully!");
 
-      // fetched full data after new insert
+      // Refresh the table with latest data
       const refreshed = await fetch("http://localhost:5000/get-bankers");
       const data = await refreshed.json();
       setSubmittedData(data);
     }
 
-    handleClose();
+    handleClose(); // Close form after submit
   } catch (err) {
     console.error("Error saving banker:", err);
     toast.error("Error saving banker");
-    handleClose();
   }
 };
 
