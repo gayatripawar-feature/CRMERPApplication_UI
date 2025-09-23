@@ -171,13 +171,30 @@ const [page, setPage] = useState(0);
   borderRadius: "10px", 
   margin: "auto",  
   backgroundColor: "#f8f9fa",  
-  width: "550px",  
+  // width: "550px",  
+   width: isMobile ? "90%" : "550px", // ✅ Responsive width
   display: "flex",
   flexDirection: "column",
   alignItems: "center",  
 }}>
+    <div
+      className="modal-content p-3"
+      style={{
+        boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
+        borderRadius: "10px",
+        backgroundColor: "#fff",
+      }}
+    >
+   <div
+        className="modal-header text-white"
+        style={{
+          borderTopLeftRadius: "10px",
+          borderTopRightRadius: "10px",
+          backgroundColor: "#800020",
+        }}
+      >
   <h3 className="text-center p-3">Developer Information Form</h3>
-  
+  </div>
   <TextField 
     type="number" 
     fullWidth 
@@ -185,7 +202,7 @@ const [page, setPage] = useState(0);
     variant="outlined" 
     value={visitRate}
     onChange={(e) => setVisitRate(e.target.value)}
-    sx={{ mb: 2, width: "100%" }} 
+    sx={{ mb: 2, width: "100%",  }} 
   />
   <TextField 
     type="number" 
@@ -206,10 +223,25 @@ const [page, setPage] = useState(0);
     sx={{ mb: 2, width: "100%" }} 
   />
 
-  <div style={{ display: "flex", justifyContent: "space-between", width: "90%" }}>
+  <div style={{ display: "flex", 
+   
+     flexDirection: isMobile ? "column" : "row", //  Stack buttons on mobile
+ justifyContent: "space-between",
+  gap: "10px",
+      width: "100%",
+
+    //  width: "90%" 
+    }}>
 
   
-
+<div
+  style={{
+    display: "flex",
+    justifyContent: "flex-start", // aligns buttons to left
+    gap: "10px", // spacing between buttons
+    marginTop: "16px", // top spacing for both buttons
+  }}
+>
 <Button 
   onClick={() => {
     console.log("Save button clicked");
@@ -222,16 +254,19 @@ const [page, setPage] = useState(0);
   }} 
   variant="contained" 
   color="primary"
+  fullWidth={isMobile}
+  sx={{ mt: 2 ,background:Constants.primaryColor}} 
 >
   Save
 </Button>
 
-    <Button onClick={handleCloseForm} variant="contained" color="error">
+    <Button onClick={handleCloseForm} variant="contained" color="error" fullWidth={isMobile} sx={{ mt: 2, }} >
       Cancel
     </Button>
  
- 
+ </div>
   </div>
+</div>
 </div>
 
 
@@ -476,15 +511,7 @@ const [page, setPage] = useState(0);
           </Table>
       
 
-          {/* <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
-        component="div"
-        count={tableData.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      /> */}
+        
 </TableContainer>
         </>
       )}

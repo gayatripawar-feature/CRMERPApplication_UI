@@ -28,7 +28,8 @@ const ProjectInventory = () => {
   const inventoryRef = useRef();
   const [loans, setLoans] = useState([]);
   const [expandedSection, setExpandedSection] = useState(0);
-  const [showFirmForm, setShowFirmForm] = useState(false);
+  // const [showFirmForm, setShowFirmForm] = useState(false);
+  const[showInventoryForm,setShowInventoryForm] = useState(false);
   const [partners, setPartners] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
 const theme = useTheme();
@@ -37,7 +38,7 @@ const theme = useTheme();
   useEffect(() => {
     loadLoansData();
   }, []);
-
+  
   const fileInputRef = useRef(null);
   const loadLoansData = async () => {
     const data = await fetchLoansData();
@@ -208,7 +209,8 @@ const theme = useTheme();
     });
   setInventoryData([...inventoryData, newItem]); 
     setPartners([{ name: '', age: '', occupation: '' }]);
-  setShowFirmForm(false);
+  // setShowFirmForm(false);
+  setShowInventoryForm(false);
   };
   
 
@@ -303,7 +305,8 @@ const theme = useTheme();
 
       {expandedSection === 0 && (
         <div className="content-container">
-          {!showFirmForm ? (
+          {/* {!showFirmForm ? ( */}
+          { !showInventoryForm ? (
             <>
               <div className="button-container">
                    <Stack 
@@ -312,7 +315,10 @@ const theme = useTheme();
     >
                
                 <Button variant="contained" color="primary" 
-                 onClick={() => setShowFirmForm(true)}
+                 onClick={() =>
+                  //  setShowFirmForm(true)
+                  setShowInventoryForm(true)
+                  }
           
               sx={{
     background: Constants.primaryColor,
@@ -390,12 +396,58 @@ const theme = useTheme();
            </div>
             </>
           ) : (
+ 
+          <div
+  className="modal"
+  style={{
+   
+    //  display: showFirmForm ? "block" : "none",
+    display:setShowInventoryForm ? "block" :"none",
+    position: "fixed",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    zIndex: 9999,
+    overflowY: "auto",
+  }}
+>
+  <div
+    className="modal-dialog modal-lg"
+    style={{
+      position: "relative",
+      margin: isMobile ? "10px auto" : "auto",
+      top: isMobile ? "0" : "50%",
+      transform: isMobile ? "none" : "translateY(-50%)",
+      maxWidth: isMobile ? "95%" : "900px",  // ✅ adjust size for your form
+    }}
+  >
+    <div
+      className="modal-content p-3"
+      style={{
+        boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
+        borderRadius: "10px",
+        backgroundColor: "#fff",
+      }}
+    >
+      <div
+        className="modal-header text-white"
+        style={{
+          borderTopLeftRadius: "10px",
+          borderTopRightRadius: "10px",
+          backgroundColor: "#800020",
+        }}
+      >
+        <h5 className="modal-title">Project Inventory Form</h5>
+        
+      </div>
+  <div className="modal-body">
             <div className="projectinventory-form mt-4 p-3 border rounded" 
             style={{
                 overflowY: "auto",
               border: "1px solid #ccc", 
-}}
-            >
+}} >
 
               
               <Grid container spacing={2}>
@@ -685,14 +737,15 @@ const theme = useTheme();
 
               </Grid>
 
-    
+    <Stack direction={isMobile ? "column" : "row"} spacing={2} className="mt-3">
 <Button
   variant="contained"
   className="mt-3"
   sx={{backgroundColor:Constants.primaryColor}}
   onClick={() => {
     handleFormSubmit();
-    setShowFirmForm(false);
+    // setShowFirmForm(false);
+    setShowInventoryForm(false);
     toast.success("Inventory details are submitted!", { position: "top-right", autoClose: 3000,
       className:"successToast",
       progressClassName: "successToastProgress",
@@ -701,7 +754,36 @@ const theme = useTheme();
 >
   Submit
 </Button>
+ <Button
+    variant="outlined"
+    className='mt-3'
+    color="secondary"
+    onClick={() => 
+      // setShowFirmForm(false)
+      setShowInventoryForm(false)
+
+    }
+    sx={{
+      borderColor: Constants.primaryColor,
+      color: Constants.primaryColor,
+      "&:hover": {
+        backgroundColor: Constants.primaryColor,
+        color: "#fff",
+      },
+    }}
+  >
+    Cancel
+  </Button>
+
+  </Stack>
   </div> 
+</div>
+
+</div>
+</div>
+</div>
+
+
           )}
         </div>
       )}

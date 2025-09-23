@@ -406,18 +406,18 @@ const [isExpanded, setIsExpanded] = useState(false);
     <form>
       <table className="table-bordered table-sm">
         <thead>
-          <tr>
-            <th className="fw-bold bg-primary text-center fs-5">Share To</th>
-            <th className="fw-bold bg-primary text-center fs-5">Type of Document</th>
-            <th className="fw-bold bg-primary text-center fs-5">Document</th>
-            <th className="fw-bold bg-primary text-center fs-5">Action</th>
+          <tr style={{ backgroundColor: Constants.primaryColor ,color:"#fff"}}>
+            <th className="fw-bold  text-center fs-5">Share To</th>
+            <th className="fw-bold text-center fs-5">Type of Document</th>
+            <th className="fw-bold text-center fs-5">Document</th>
+            <th className="fw-bold  text-center fs-5">Action</th>
           </tr>
         </thead>
         <tbody>
           {rows.map((row, index) => (
             <tr key={index}>
               <td>
-                <FormControl sx={{ m: 1, width: 300 }}>
+                <FormControl sx={{ m: 1, width: 300 ,border:Constants.formInputBorderColor}}>
                   <InputLabel id="select-share-to-label">Share To</InputLabel>
                   <Select
                     labelId="select-share-to-label"
@@ -428,6 +428,7 @@ const [isExpanded, setIsExpanded] = useState(false);
                     input={<OutlinedInput label="Share To" />}
                     renderValue={(selected) => selected.join(', ')}
                     MenuProps={MenuProps}
+                   
                   >
                     {options.map((option) => (
                       <MenuItem key={option} value={option}>
@@ -443,6 +444,11 @@ const [isExpanded, setIsExpanded] = useState(false);
                   className="form-control"
                   value={row.documentType || ''}
                   onChange={(e) => handleDocumentTypeChange(e, index)}
+                  style={{
+                    border: `1px solid ${Constants.formInputBorderColor}`,
+    borderRadius: "4px", // optional, match your other inputs
+    padding: "0.375rem 0.75rem"
+                  }}
                 >
                   <option value="">Select Type</option>
               
