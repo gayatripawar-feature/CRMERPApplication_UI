@@ -14,7 +14,7 @@ const FollowupHistoryTable = ({ data }) => {
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>ASSIGN TO HISTORY</TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>LEAD DAYS</TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>TIMESTAMP</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>ENQUIRY NO</TableCell>
+            
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>LEAD NO.</TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>NAME</TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>MOBILE/WHATSAPP NO.</TableCell>
@@ -32,7 +32,7 @@ const FollowupHistoryTable = ({ data }) => {
         <TableCell>{row.assignToHistory || 'N/A'}</TableCell>
         <TableCell>{row.leadDays || 'N/A'}</TableCell>
         <TableCell>{row.timestamp || 'N/A'}</TableCell>
-        <TableCell>{row.enquiryNo || 'N/A'}</TableCell>
+        
         <TableCell>{row.leadNo || 'N/A'}</TableCell>
         <TableCell>{row.name || 'N/A'}</TableCell>
         <TableCell>{row.mobileNo || 'N/A'}</TableCell>

@@ -1,12 +1,11 @@
 import React from "react";
-import { TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Paper, Typography } from "@mui/material";
+import { TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Paper, Typography,Box } from "@mui/material";
 import Constants from "../Constants";
 
 const UndefinedTable = ({ data }) => {
   return (
     <>
-     
-<Box sx={{ maxHeight: 400, overflowY: 'auto' }}>
+     <Box sx={{ maxHeight: 400, overflowY: 'auto' }}>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
@@ -19,11 +18,7 @@ const UndefinedTable = ({ data }) => {
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>YOU ARE LOOKING FOR?</TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>	EMAIL</TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>SOURCE NAME.</TableCell>
-              
-
-															
-
-            </TableRow>
+                </TableRow>
           </TableHead>
           <TableBody>
             {data.map((item, index) => (
