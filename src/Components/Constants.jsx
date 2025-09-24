@@ -34,7 +34,7 @@ const Constants = {
    
     formButtonColor: "#800020",
    
-
+    borderColor: "#B22222",
     formInputBorderColor: {
     "& .MuiOutlinedInput-root": {
       "& fieldset": {

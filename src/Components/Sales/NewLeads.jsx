@@ -43,6 +43,7 @@ const NewLeads = ({ inventoryData , setInventoryData}) => {
 
 
   const handleAssignClick = (item) => {
+     setAssignedTo(item.assignTo || "");
     setModalOpen(true);
     setSelectedLead(item);
   };
@@ -118,6 +119,16 @@ const handleCloseModal = () => {
   };
   const handleDropdownSelect = (selectedValue) => {
     setAssignedTo(selectedValue);
+  if (selectedLead) {
+    const updatedInventoryData = inventoryData.map((item) => {
+      if (item.leadNo === selectedLead.leadNo) {
+        return { ...item, assignTo: selectedValue }; // update assignTo
+      }
+      return item;
+    });
+    setInventoryData(updatedInventoryData); // update state
+  }
+
     setSuccessModalOpen(true);
     setModalOpen(false);
   };
@@ -163,8 +174,10 @@ const handleCloseModal = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {inventoryData.map((item, index) => (
-           
+              {/* {inventoryData.map((item, index) => ( */}
+           {inventoryData
+    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+    .map((item, index) => (
 
                 <TableRow key={index}>
                 <TableCell>

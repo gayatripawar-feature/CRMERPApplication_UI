@@ -441,15 +441,20 @@ const [isExpanded, setIsExpanded] = useState(false);
               </td>
               <td>
                 <select
-                  className="form-control"
+                  // className="form-control"
                   value={row.documentType || ''}
                   onChange={(e) => handleDocumentTypeChange(e, index)}
                   style={{
-                    border: `1px solid ${Constants.formInputBorderColor}`,
+                    border: `1px solid ${Constants.borderColor}`,
     borderRadius: "4px", // optional, match your other inputs
-    padding: "0.375rem 0.75rem"
+    padding: "0.375rem 0.75rem",
+    appearance: "none",
+    WebkitAppearance: "none",
+    MozAppearance: "none"
                   }}
                 >
+                 
+
                   <option value="">Select Type</option>
               
                   <option value="MCA certificate">MCA certificate</option>
@@ -519,8 +524,13 @@ const [isExpanded, setIsExpanded] = useState(false);
               <td>
                 <input
                   type="file"
-                  className="form-control"
+                  // className="form-control"
                   onChange={(e) => handleFileChange(e, index)}
+                   style={{
+    border: `1px solid ${Constants.borderColor}`,  // ✅ use your custom color
+    borderRadius: "4px",
+    padding: "0.375rem 0.75rem",
+  }}
                 />
               </td>
               <td>
@@ -534,13 +544,28 @@ const [isExpanded, setIsExpanded] = useState(false);
       </table>
     </form>
 
-    <button className="btn btn-secondary me-2 mt-3" onClick={addRow}>Add Row</button>
+    <button className="btn  me-2 mt-3" onClick={addRow}  style={{
+    backgroundColor: Constants.primaryColor,   
+    color: "#fff",                             
+    border: "none"                            
+  }} >Add Row</button>
 
    
     {isEditing ? (
-      <button className="btn btn-warning me-2 mt-3" onClick={handleUpdate}>Update</button>
+    <button
+  className="btn me-2 mt-3"
+  onClick={handleUpdate}  // or addRow
+  style={{
+    backgroundColor: Constants.primaryColor,
+    color: "#fff",
+    border: "none"
+  }}
+>
+  Update
+</button>
+
     ) : (
-      <button className="btn btn-success me-2 mt-3" onClick={handleSubmit}>Submit</button>
+      <button className="btn btn-success me-2 mt-3" onClick={handleSubmit} style={{backgroundColor:Constants.primaryColor,border:"none"}}  >Submit</button>
     )}
 
     <button className="btn btn-secondary mt-3" onClick={handleCancel}>Cancel</button>
@@ -576,7 +601,7 @@ const [isExpanded, setIsExpanded] = useState(false);
                     color: "white",
                     borderRadius: "50%",
                     padding: "4px",
-                    "&:hover": { backgroundColor: "#388E3C" },
+                    "&:hover": { backgroundColor:Constants.primaryColor },
                   }}
                 >
                   <EditIcon />
