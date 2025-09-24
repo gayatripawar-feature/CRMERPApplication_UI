@@ -1,7 +1,7 @@
 import React from "react";
 import { TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Paper, Typography ,Box} from "@mui/material";
 import Constants from "../Constants";
-const FollowupHistoryTable = ({ data }) => {
+const Leadsfollowup_followuphistory = ({ data }) => {
   return (
     <>
      <Box sx={{ maxHeight: 400, overflowY: 'auto' }}>
@@ -49,4 +49,4 @@ const FollowupHistoryTable = ({ data }) => {
   );
 };
 
-export default FollowupHistoryTable;
+export default Leadsfollowup_followuphistory;

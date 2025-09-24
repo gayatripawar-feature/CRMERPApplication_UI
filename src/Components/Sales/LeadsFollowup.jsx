@@ -1353,7 +1353,8 @@ import DisplayTable from "./DisplayTable";
 import LandownerTable from "./LandownerTable";
 import FlatAllotment from './FlatAllotement';
 import { ToastContainer, toast } from 'react-toastify';
-import FollowupHistoryTable from './FollowupHistoryTable';
+// import FollowupHistoryTable from './FollowupHistoryTable';
+import Leadsfollowup_followuphistory from './leadsfollowup_followuphistory';
 import UndefinedTable from './UndefinedTable';
 import BookedTable from './BookedTable';
 import PendingFollowuptable from './PendingFollowuptable';
@@ -1370,6 +1371,7 @@ import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import Constants from '../Constants';
+
 
 const sections = [
   { label: "Pending Follow Up", icon: <FaUsers size={20} />, createLabel: "Create Firm" },
@@ -1501,7 +1503,8 @@ const LeadsFollowUp = () => {
 
 
   { selectedTab === "firm" && <PendingFollowuptable /> }
-  { selectedTab === "display" && <FollowupHistoryTable /> }
+  // { selectedTab === "display" && <FollowupHistoryTable /> }
+   { selectedTab === "display" && <Leadsfollowup_followuphistory /> }
   { selectedTab === "landowner" && <LandownerTable /> }
   { selectedTab === "allotement" && <FlatAllotement /> }
 
@@ -1844,10 +1847,11 @@ const LeadsFollowUp = () => {
   };
 
   return (
-    <div className="container my-4">
+    <div className="container my-2">
       <h6 className="mb-3 fs-6">Sales Module / Lead Follow Up Management</h6>
 
-      <div className="d-flex flex-column flex-md-row align-items-start align-items-md-center mb-3">
+      {/* <div className="d-flex flex-column flex-md-row align-items-start align-items-md-center mb-3">
+        
         {sections.map((section, index) => (
           <div
             key={index}
@@ -1893,7 +1897,7 @@ const LeadsFollowUp = () => {
               </span>
             ) : null}
 
-            <div style={{
+            {/* <div style={{
               position: "absolute",
               top: 0,
               left: 0,
@@ -1916,55 +1920,117 @@ const LeadsFollowUp = () => {
               }}
             ></div>
           </div>
-        ))}
-      </div>
 
+        ))}
+       
+  <button
+    className="btn"
+    onClick={handleDownloadPDFPending}
+    style={{
+      backgroundColor: Constants.primaryColor,
+      color: "#fff",
+      fontWeight: "bold",
+      borderRadius: "20px",
+      padding: isMobile ? "6px 12px" : "8px 16px",
+      margin: "5px",
+      display: "flex",
+      alignItems: "center",
+      gap: "6px",
+    }}
+  >
+    <FaFileDownload size={isMobile ? 16 : 18} />
+    {isMobile ? "PDF" : "Download PDF"}
+  </button>
+      </div> */}
+
+     {/* Sections Row */}
+<div className="d-flex flex-column flex-md-row align-items-start align-items-md-center mb-3" 
+ style={{
+    justifyContent: "space-between", // ✅ Tabs left, button right
+    width: "100%",
+  }}
+>
+
+<div className="d-flex flex-wrap">
+  {sections.map((section, index) => (
+    <div
+      key={index}
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        backgroundColor: Constants.primaryColor,
+        padding: '8px',
+        borderRadius: '20px',
+        margin: '5px',
+        cursor: 'pointer',
+        transition: "width 0.3s ease, background 0.3s ease",
+        width: expandedSection === index ? (isMobile ? "180px" : "220px") : "50px",
+        minWidth: "50px",
+        overflow: "hidden",
+        whiteSpace: "nowrap",
+        fontSize: isMobile ? "12px" : "14px",
+        justifyContent: "center",
+        textTransform: "none",
+        position: "relative",
+        background: Constants.primaryColor,
+        boxShadow:
+          "inset 2px 2px 2px 0px rgba(255,255,255,.5), 7px 7px 20px 0px rgba(0,0,0,.1), 4px 4px 5px 0px rgba(0,0,0,.1)",
+      }}
+      onClick={() => handleToggleSection(index)}
+    >
+      {React.cloneElement(section.icon, {
+        style: {
+          marginRight: expandedSection === index ? '8px' : '0',
+          fontSize: isMobile ? '16px' : (expandedSection === index ? '20px' : '20px'),
+          color: '#fff',
+          transition: "font-size 0.3s ease",
+        }
+      })}
+
+      {expandedSection === index ? (
+        <span className="p-1 fw-bold" style={{
+          color: 'white',
+          marginLeft: '5px',
+          fontSize: isMobile ? '12px' : '14px'
+        }}>
+          {section.label}
+        </span>
+      ) : null}
+    </div>
+  ))}
+</div>
+  {/* ✅ One Centralized Download PDF Button */}
+  <button
+    className="btn"
+    onClick={() => {
+      if (selectedTab === "firm") handleDownloadPDFPending();
+      else if (selectedTab === "display") handleDownloadPDFHistory();
+      else if (selectedTab === "landowner") handleDownloadPDFUndefined();
+      else if (selectedTab === "allotement") handleDownloadPDFVisit();
+    }}
+    style={{
+      backgroundColor: Constants.primaryColor,
+      color: "#fff",
+      fontWeight: "bold",
+      borderRadius: "20px",
+      padding: isMobile ? "6px 12px" : "8px 16px",
+      margin: "5px",
+      display: "flex",
+      alignItems: "center",
+      gap: "6px",
+    }}
+  >
+    <FaFileDownload size={isMobile ? 16 : 18} />
+    {isMobile ? "PDF" : "Download PDF"}
+  </button>
+</div>
+  
       {expandedSection === 0 && selectedTab === "firm" && (
         <div className="content-container mt-3">
           {!showFirmForm ? (
             <>
 
-              <div className='d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3 gap-2'>
-                <div className={`d-flex ${isMobile ? 'flex-column' : 'flex-row'} gap-2 w-100`}>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    style={{
-                      background: Constants.primaryColor,
-                      width: isMobile ? '100%' : 'auto'
-                    }}
-                    className='fw-bold'
-                    onClick={() => setShowFirmForm(true)}
-                    size={isMobile ? "small" : "medium"}
-                  >
-                    + New Follow UP
-                  </Button>
-                  <Button
-                    variant="contained"
-                    sx={{
-                      background: Constants.primaryColor,
-                      color: "white",
-                      fontWeight: "bold",
-                      textTransform: "none",
-                      padding: isMobile ? "6px 12px" : "8px 16px",
-                      borderRadius: "8px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      gap: "8px",
-                      "&:hover": {
-                        background: Constants.primaryColor,
-                      },
-                      width: isMobile ? '100%' : 'auto'
-                    }}
-                    onClick={handleDownloadPDFPending}
-                    size={isMobile ? "small" : "medium"}
-                  >
-                    <FaFileDownload size={isMobile ? 16 : 18} />
-                    {isMobile ? 'PDF' : 'Download PDF'}
-                  </Button>
-                </div>
-              </div>
+             
 
               <div className="mt-3">
                 <PendingFollowuptable firms={loans} setFirms={setLoans} isMobile={isMobile} isTablet={isTablet} />
@@ -2126,38 +2192,9 @@ const LeadsFollowUp = () => {
         <div className="content-container mt-3">
           {!showProjectForm ? (
             <>
-
-              <div className='d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3 gap-2'>
-                <div className={`d-flex ${isMobile ? 'flex-column' : 'flex-row'} gap-2 w-100`}>
-                  <Button
-                    variant="contained"
-                    sx={{
-                      background: Constants.primaryColor,
-                      color: "white",
-                      fontWeight: "bold",
-                      textTransform: "none",
-                      padding: isMobile ? "6px 12px" : "8px 16px",
-                      borderRadius: "8px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      gap: "8px",
-                      "&:hover": {
-                        background: Constants.primaryColor,
-                      },
-                      width: isMobile ? '100%' : 'auto'
-                    }}
-                    onClick={handleDownloadPDFHistory}
-                    size={isMobile ? "small" : "medium"}
-                  >
-                    <FaFileDownload size={isMobile ? 16 : 18} />
-                    {isMobile ? 'PDF' : 'Download PDF'}
-                  </Button>
-                </div>
-              </div>
-
               <div className='mt-3'>
-                <FollowupHistoryTable data={projectData} isMobile={isMobile} isTablet={isTablet} />
+                {/* <FollowupHistoryTable data={projectData} isMobile={isMobile} isTablet={isTablet} /> */}
+                        <Leadsfollowup_followuphistory data={projectData} isMobile={isMobile} isTablet={isTablet} />
               </div>
             </>
           ) : (
@@ -2170,34 +2207,7 @@ const LeadsFollowUp = () => {
         <div className="content-container mt-3">
           {!showLandownerForm ? (
             <>
-              <div className='d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3 gap-2'>
-                <div className={`d-flex ${isMobile ? 'flex-column' : 'flex-row'} gap-2 w-100`}>
-                  <Button
-                    variant="contained"
-                    sx={{
-                      background: Constants.primaryColor,
-                      color: "white",
-                      fontWeight: "bold",
-                      textTransform: "none",
-                      padding: isMobile ? "6px 12px" : "8px 16px",
-                      borderRadius: "8px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      gap: "8px",
-                      "&:hover": {
-                        background: Constants.primaryColor,
-                      },
-                      width: isMobile ? '100%' : 'auto'
-                    }}
-                    onClick={handleDownloadPDFUndefined}
-                    size={isMobile ? "small" : "medium"}
-                  >
-                    <FaFileDownload size={isMobile ? 16 : 18} />
-                    {isMobile ? 'PDF' : 'Download PDF'}
-                  </Button>
-                </div>
-              </div>
+             
 
               <div className='mt-3'>
                 <UndefinedTable data={Flatdata} isMobile={isMobile} isTablet={isTablet} />
@@ -2213,34 +2223,7 @@ const LeadsFollowUp = () => {
         <div className="content-container mt-3">
           {!showFlatForm ? (
             <>
-              <div className='d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3 gap-2'>
-                <div className={`d-flex ${isMobile ? 'flex-column' : 'flex-row'} gap-2 w-100`}>
-                  <Button
-                    variant="contained"
-                    sx={{
-                      background: Constants.primaryColor,
-                      color: "white",
-                      fontWeight: "bold",
-                      textTransform: "none",
-                      padding: isMobile ? "6px 12px" : "8px 16px",
-                      borderRadius: "8px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      gap: "8px",
-                      "&:hover": {
-                        background: Constants.primaryColor,
-                      },
-                      width: isMobile ? '100%' : 'auto'
-                    }}
-                    onClick={handleDownloadPDFVisit}
-                    size={isMobile ? "small" : "medium"}
-                  >
-                    <FaFileDownload size={isMobile ? 16 : 18} />
-                    {isMobile ? 'PDF' : 'Download PDF'}
-                  </Button>
-                </div>
-              </div>
+             
 
               <div className='mt-3'>
                 <BookedTable data={projectData} isMobile={isMobile} isTablet={isTablet} />

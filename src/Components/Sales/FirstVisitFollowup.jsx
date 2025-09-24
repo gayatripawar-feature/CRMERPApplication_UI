@@ -14,12 +14,13 @@ import BookedTable from './BookedTable';
 
 import FirstvisitfollowupUndefinedTable from './FirstvisitfollowupUndefinedTable';
 import FirstvisitfollowupbookedTable from './FirstvisitfollowupbookedTable';
- 
+import leadsfollowup_followuphistory from './leadsfollowup_followuphistory';
 import {   FaHourglassStart,FaHistory, FaUserCheck, FaQuestionCircle } from 'react-icons/fa'; 
 
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import Constants from '../Constants';
+import Leadsfollowup_followuphistory from './leadsfollowup_followuphistory';
 
 
 
@@ -203,15 +204,17 @@ const FirstvisitFollowup = () => {
       wingNo: '',
       mahareraNo: ''
     });
-  
+     
+    
     
      {/* Table Section */}
      {selectedTab === "firm" && <FirmTable />}
-    //  {selectedTab === "display" && <DisplayTable />}
+    
     {selectedTab === "display" && <FollowupHistoryTable />}
-    //  {selectedTab === "landowner" && <LandownerTable />}
+  
+   
      {selectedTab === "landowner" && <UndefinedTable/>}
-    //  {selectedTab === "allotement" && <FlatAllotement/>}
+    
 
     {selectedTab === "allotement" && <BookedTable />}
   
@@ -219,6 +222,7 @@ const FirstvisitFollowup = () => {
     {/* Table Section */}
 {selectedTab === "firm" && <FirmTable />}
 {selectedTab === "display" && <FollowupHistoryTable />}
+// {selectedTab === "display" && <Leadsfollowup_followuphistory />}
 {selectedTab === "landowner" && <UndefinedTable />}
 {selectedTab === "allotement" && <BookedTable />}
 
@@ -1149,7 +1153,8 @@ const FirstvisitFollowup = () => {
   <div className='mt-3'>
  
   <FollowupHistoryTable data={projectData} />
-
+  
+    {/* < Leadsfollowup_followuphistory data={projectData} /> */}
   </div>
      </>
       ) : (
@@ -1270,7 +1275,7 @@ const FirstvisitFollowup = () => {
   </Button>
  </div>
     </div>
-  
+      
   
           <div className="mt-3">
             
