@@ -1,10 +1,7 @@
-
-
-
-
-
 import React, { useState } from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, MenuItem,TextField, Button,Grid,FormControl,InputLabel,Select} from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, MenuItem,TextField,
+   Dialog, DialogTitle, DialogContent, DialogActions,
+   Button,Grid,FormControl,InputLabel,Select} from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import EmailIcon from '@mui/icons-material/Email';
@@ -37,15 +34,12 @@ const Lostleadstable = ({firms}) => {
       const [firmName, setFirmName] = useState("");
       const [firmNameError, setFirmNameError] = useState("");
        const [closingExecutive, setClosingExecutive] = useState('');
-       
-        const [firmPan, setFirmPan] = useState("");
-           const [firmPanError, setFirmPanError] = useState("");
-            const [assignedTo, setAssignedTo] = useState("");
-              const [leadType, setLeadType] = useState("");
-              const [nameError, setNameError] = useState("");
-
-           
-// const [editData, setEditData] = useState(null);
+       const [firmPan, setFirmPan] = useState("");
+   const [firmPanError, setFirmPanError] = useState("");
+  const [assignedTo, setAssignedTo] = useState("");
+  const [leadType, setLeadType] = useState("");
+const [nameError, setNameError] = useState("");
+ const [openModal, setOpenModal] = useState(false);
 const [editData, setEditData] = useState({
   firmName: '',
   closingExecutive: '',
@@ -57,27 +51,31 @@ const [editData, setEditData] = useState({
   status: '',
 });
 
-
-
-  // Handles clicking the Edit icon
   const handleEdit = (firm) => {
-    setIsEditing(true); // Set editing state to true
-    setSelectedFirm(firm); // Set the selected firm for editing
-    setRemark(firm.remark); // Prepopulate the remark field
+    setIsEditing(true); 
+    setSelectedFirm(firm); 
+    setRemark(firm.remark);
     setEditData({
-      firmName: data.firmName,
-      closingExecutive: data.closingExecutive,
-      firmPan: data.firmPan,
-      name: data.name,
-      newFollowUp: data.newFollowUp,
-      assignedTo: data.assignedTo,
-      leadType: data.leadType,
-      status: data.status
+      firmName: firm.firmName,
+      closingExecutive: firm.closingExecutive,
+      firmPan: firm.firmPan,
+      name: firm.name,
+      newFollowUp: firm.newFollowUp,
+      assignedTo: firm.assignedTo,
+      leadType: firm.leadType,
+      status: firm.status
     });
   };
 
+  const handleUpdate = () => {
+    toast.success("Details are submitted!", { position: "top-right", autoClose: 3000 });
+    setOpenModal(false);
+  };
 
-  
+
+   const handleClose = () => {
+    setOpenModal(false);
+  }; 
   const handleFirmPanChange = (e) => {
     const value = e.target.value;
     setFirmPan(value);
@@ -96,20 +94,16 @@ const [editData, setEditData] = useState({
 
   const handleFirmNameChange = (e) => {
     const value = e.target.value;
-
-    // Regex to check if the value contains any numbers
+  // Regex to check if the value contains any numbers
     if (/\d/.test(value)) {
       setFirmNameError("Firm Name should only contain letters"); // Error message if numbers are present
     } else {
       setFirmNameError(""); // Clear error message if the value is valid
     }
-
-    // Update the firm name in the state
+ // Update the firm name in the state
     setFirmName(value);
   };
-
-
-  // Handles saving the form
+// Handles saving the form
   const handleSave = () => {
     // You can add your save logic here (e.g., update the firm data in a database)
     console.log("Saved Remark:", remark);
@@ -124,8 +118,7 @@ const [editData, setEditData] = useState({
   const handleNameChange = (e) => {
     const value = e.target.value;
     const regex = /^[A-Za-z ]*$/;  // Only Alphabets & Space allowed
-  
-    if (!regex.test(value)) {
+     if (!regex.test(value)) {
       setNameError("Only alphabets are allowed");
     } else {
       setNameError("");
@@ -135,31 +128,14 @@ const [editData, setEditData] = useState({
   };
   
   return (
+    <>
     <TableContainer component={Paper}>
-      {isEditing  ? (
-     
-        <div style={{ padding: '20px' }}>
+      {/* {isEditing  ? (
+      <div style={{ padding: '20px' }}>
           <Paper className="p-4" elevation={4} style={{ borderRadius: "12px", paddingBottom: "20px" }}>
-                  <Typography variant="h5" gutterBottom>
-                
-                  </Typography>
-            
-                 
-                  
-                  <Grid container spacing={2}>
-              {/* <Grid item xs={6}>
-                <TextField
-                  label="Lead No"
-                  fullWidth
-                  variant="outlined"
-                  value={firmName}
-                  onChange={handleFirmNameChange} 
-                  error={!!firmNameError} 
-                  helperText={firmNameError} 
-                  required 
-                />
-              </Grid> */}
-              <Grid item xs={6}>
+                  <Typography variant="h5" gutterBottom></Typography>
+             <Grid container spacing={2}>
+     <Grid item xs={6}>
   <TextField
     label="Lead No"
     fullWidth
@@ -175,10 +151,7 @@ const [editData, setEditData] = useState({
     required 
   />
 </Grid>
-
-             
-               
-              <Grid item xs={6}>
+ <Grid item xs={6}>
   <FormControl fullWidth variant="outlined">
     <InputLabel id="closing-executive-label">Sales Person</InputLabel>
     <Select
@@ -206,17 +179,7 @@ const [editData, setEditData] = useState({
 
           
             
-              {/* <Grid item xs={6}>
-                <TextField
-                  label="Remark"
-                  fullWidth
-                  variant="outlined"
-                  value={firmPan}
-                        onChange={handleFirmPanChange}
-                        error={!!firmPanError}  // Show error if there is an error
-                        helperText={firmPanError}
-                />
-              </Grid> */}
+           
               <Grid item xs={6}>
   <TextField
     label="Remark"
@@ -234,17 +197,7 @@ const [editData, setEditData] = useState({
 </Grid>
 
           
-              {/* <Grid item xs={6}>
-                <TextField
-                  label="Name"
-                  fullWidth
-                  variant="outlined"
-                  onChange={handleNameChange}
-                  error={!!nameError}  // show error if validation fails
-                  helperText={nameError} 
-                        required 
-                />
-              </Grid> */}
+           
              <Grid item xs={6}>
   <TextField
     label="Name"
@@ -263,18 +216,7 @@ const [editData, setEditData] = useState({
 </Grid>
 
               
-              {/* <Grid item xs={6}>
-            <TextField
-              type="datetime-local" // Use datetime-local for date and time input
-              label="New Follow Up"
-              fullWidth
-              variant="outlined"
-              required // Correct way to add required prop
-              InputLabelProps={{
-                shrink: true, // Ensures label is above the input
-              }}
-            />
-          </Grid> */}
+              
           
           <Grid item xs={6}>
   <TextField
@@ -295,28 +237,7 @@ const [editData, setEditData] = useState({
   />
 </Grid>
 
-              {/* <Grid item xs={6}>
-            <FormControl fullWidth variant="outlined">
-              <InputLabel id="assign-to-label">Assign To</InputLabel>
-              <Select
-                labelId="assign-to-label"
-                id="assign-to"
-                value={assignedTo} // Manage the state for "Assign To"
-                onChange={(e) => setAssignedTo(e.target.value)} // Update the state with the selected value
-                label="Assign To"
-                required 
-              >
-                <MenuItem value="Shilpha Mewada 1">Shilpha Mewada 1</MenuItem>
-                <MenuItem value="Tic Tac Toe Sohan">Tic Tac Toe Sohan</MenuItem>
-                <MenuItem value="Shilpha Mewada">Shilpha Mewada</MenuItem>
-                <MenuItem value="VIVEK TAPKIR">VIVEK TAPKIR</MenuItem>
-                <MenuItem value="Shubham Taware">Shubham Taware</MenuItem>
-                <MenuItem value="Ashwini Khot">Ashwini Khot</MenuItem>
-                <MenuItem value="Amol Pawar">Amol Pawar</MenuItem>
-                <MenuItem value="Sachin Awale">Sachin Awale</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid> */}
+             
           
           <Grid item xs={6}>
   <FormControl fullWidth variant="outlined">
@@ -347,24 +268,7 @@ const [editData, setEditData] = useState({
 
           
           
-              {/* <Grid item xs={6}>
-            <FormControl fullWidth variant="outlined">
-              <InputLabel id="lead-type-label ">Lead type</InputLabel>
-              <Select
-                labelId="lead-type-label"
-                id="lead-type"
-                value={leadType}
-                onChange={(e) => setLeadType(e.target.value)} // Update the state with the selected value
-                label="Lead type"
-                
-              >
-                <MenuItem value="Hot">Hot</MenuItem>
-                <MenuItem value="Warm">Warm</MenuItem>
-                <MenuItem value="Lost">Lost</MenuItem>
-                <MenuItem value="Cold">Cold</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid> */}
+            
           
           <Grid item xs={6}>
   <FormControl fullWidth variant="outlined">
@@ -389,26 +293,7 @@ const [editData, setEditData] = useState({
 </Grid>
 
           
-              {/* <Grid item xs={6}>
-            <FormControl fullWidth variant="outlined">
-              <InputLabel id="status-label">Status</InputLabel>
-              <Select
-                labelId="status-label"
-                id="status"
-                value={status}
-                onChange={(e) => setStatus(e.target.value)} // Update the state with the selected value
-                label="Status"
-              >
-                <MenuItem value="Follow Up">Follow Up</MenuItem>
-                <MenuItem value="Not interested">Not interested</MenuItem>
-                <MenuItem value="Callback Request">Callback Request</MenuItem>
-                <MenuItem value="Unreachable">Unreachable</MenuItem>
-                <MenuItem value="Booked property in other project">Booked property in other project</MenuItem>
-                <MenuItem value="Not Answer">Not Answer</MenuItem>
-                <MenuItem value="Invalid number">Invalid number</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid> */}
+           
 
 <Grid item xs={6}>
   <FormControl fullWidth variant="outlined">
@@ -449,11 +334,10 @@ const [editData, setEditData] = useState({
   className="m-3"
   color="success"
   onClick={() => {
-    // Simply show the toast message without calling validation functions
+    
     toast.success("Details are submitted!", { position: "top-right", autoClose: 3000 });
     
-    // Close the form after submission
-    // setShowFirmForm(false); // Close the form after update
+    
    
       setIsEditing(false); 
     
@@ -465,7 +349,7 @@ const [editData, setEditData] = useState({
                 </Paper>
           </div>
        
-      ) : (
+      ) : ( */}
         
         <Table>
           <TableHead>
@@ -490,27 +374,20 @@ const [editData, setEditData] = useState({
                 <TableCell>
                   <div style={{ display: "flex", gap: "3px", alignItems: "center" }}>
                     <Tooltip title="Edit">
-                      {/* <IconButton
-                        size="small"
-                        sx={{ backgroundColor: "#1976D2", color: "white", borderRadius: "50%", "&:hover": { backgroundColor: "#1565C0" } }}
-                        onClick={() => 
-                          handleEdit(firm)
-                        }
-                      >
-                        <EditIcon sx={{ fontSize: "18px" }} />
-                      </IconButton> */}
+                     
                       <IconButton
   size="small"
   sx={{
-    backgroundColor: "#1976D2",
+    backgroundColor:Constants.primaryColor,
     color: "white",
     borderRadius: "50%",
-    "&:hover": { backgroundColor: "#1565C0" },
+    "&:hover": { backgroundColor: Constants.primaryColor},
   }}
   onClick={() => {
     handleEdit(firm);
     setEditData(firm);  // Assuming 'firm' is the correct row object
-    setIsEditing(true);
+    // setIsEditing(true);
+     setOpenModal(true); 
   }}
 >
   <EditIcon sx={{ fontSize: "18px" }} />
@@ -522,10 +399,10 @@ const [editData, setEditData] = useState({
                       <IconButton
                         size="small"
                         sx={{
-                          backgroundColor: "#25D366",
+                          backgroundColor: Constants.primaryColor,
                           borderRadius: "50%",
                           color: "white",
-                          "&:hover": { backgroundColor: "#1EBE57" },
+                          "&:hover": { backgroundColor: Constants.primaryColor },
                           width: "32px",
                           height: "32px"
                         }}
@@ -534,21 +411,7 @@ const [editData, setEditData] = useState({
                       </IconButton>
                     </Tooltip>
 
-                    <Tooltip title="Email" arrow>
-                      <IconButton
-                        size="small"
-                        sx={{
-                          backgroundColor: "#EA4335",
-                          borderRadius: "50%",
-                          color: "white",
-                          "&:hover": { backgroundColor: "#D93025" },
-                          width: "32px",
-                          height: "32px"
-                        }}
-                      >
-                        <EmailIcon sx={{ fontSize: "20px" }} />
-                      </IconButton>
-                    </Tooltip>
+                  
                   </div>
                 </TableCell>
 
@@ -567,9 +430,137 @@ const [editData, setEditData] = useState({
             ))}
           </TableBody>
         </Table>
-      )}
+      {/* )} */}
     </TableContainer>
-    
+
+
+   
+      <Dialog open={openModal} onClose={handleClose} fullWidth maxWidth="md">
+        <DialogTitle sx={{ background: Constants.primaryColor, color: "#fff" }}>
+          Edit Follow Up
+        </DialogTitle>
+        <DialogContent dividers>
+          <Grid container spacing={2} sx={{ mt: 1 }}>
+            <Grid item xs={6}>
+              <TextField
+                label="Lead No"
+                fullWidth
+                variant="outlined"
+                value={editData.firmName}
+                onChange={handleFirmNameChange}
+                error={!!firmNameError}
+                helperText={firmNameError}
+                sx={{border:Constants.formInputBorderColor}}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <FormControl fullWidth sx={{border:Constants.formInputBorderColor}}>
+                <InputLabel>Sales Person</InputLabel>
+                <Select
+                  value={editData.closingExecutive}
+                  onChange={(e) => setEditData({ ...editData, closingExecutive: e.target.value })}
+                  label="Sales Person"
+                >
+                  <MenuItem value="Shilpha Mewada">Shilpha Mewada</MenuItem>
+                  <MenuItem value="VIVEK TAPKIR">VIVEK TAPKIR</MenuItem>
+                  <MenuItem value="Shubham Taware">Shubham Taware</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                label="Remark"
+                fullWidth
+                variant="outlined"
+                value={editData.firmPan}
+                onChange={handleFirmPanChange}
+                error={!!firmPanError}
+                helperText={firmPanError}
+                sx={{border:Constants.formInputBorderColor}}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                label="Name"
+                fullWidth
+                variant="outlined"
+                value={editData.name}
+                onChange={handleNameChange}
+                error={!!nameError}
+                helperText={nameError}
+                sx={{border:Constants.formInputBorderColor}}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                type="datetime-local"
+                label="New Follow Up"
+                fullWidth
+                variant="outlined"
+                value={editData.newFollowUp}
+                onChange={(e) => setEditData({ ...editData, newFollowUp: e.target.value })}
+                InputLabelProps={{ shrink: true }}
+                sx={{border:Constants.formInputBorderColor}}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <FormControl fullWidth sx={{border:Constants.formInputBorderColor}}>
+                <InputLabel>Assign To</InputLabel>
+                <Select
+                  value={editData.assignedTo}
+                  onChange={(e) => setEditData({ ...editData, assignedTo: e.target.value })}
+                  label="Assign To"
+                >
+                  <MenuItem value="Shilpha Mewada">Shilpha Mewada</MenuItem>
+                  <MenuItem value="Ashwini Khot">Ashwini Khot</MenuItem>
+                  <MenuItem value="Amol Pawar">Amol Pawar</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={6}>
+              <FormControl fullWidth sx={{border:Constants.formInputBorderColor}}>
+                <InputLabel>Lead Type</InputLabel>
+                <Select
+                  value={editData.leadType}
+                  onChange={(e) => setEditData({ ...editData, leadType: e.target.value })}
+                  label="Lead Type"
+                >
+                  <MenuItem value="Hot">Hot</MenuItem>
+                  <MenuItem value="Warm">Warm</MenuItem>
+                  <MenuItem value="Lost">Lost</MenuItem>
+                  <MenuItem value="Cold">Cold</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={6}>
+              <FormControl fullWidth sx={{border:Constants.formInputBorderColor}}>
+                <InputLabel>Status</InputLabel>
+                <Select
+                  value={editData.status}
+                  onChange={(e) => setEditData({ ...editData, status: e.target.value })}
+                  
+                  label="Status"
+                >
+                  <MenuItem value="Follow Up">Follow Up</MenuItem>
+                  <MenuItem value="Not interested">Not interested</MenuItem>
+                    <MenuItem value="Callback request">Callback Request</MenuItem>
+                  <MenuItem value="Unreachable">Unreachable</MenuItem>
+                  <MenuItem value="Invalid number">Invalid number</MenuItem>
+                   <MenuItem value="Invalid number">Booked Property in other Project</MenuItem>
+  <MenuItem value="Notanswer">Not Answer</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+          </Grid>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="error">Cancel</Button>
+          <Button variant="contained" sx={{ background: Constants.primaryColor }} onClick={handleUpdate}>
+            Update
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 };
 

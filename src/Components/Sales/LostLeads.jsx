@@ -1,7 +1,3 @@
-
-
-
-
 import React, { useState, useEffect } from 'react';
 import {Input, Table, TableBody, TableCell, TableContainer, Typography,IconButton,TableHead, TableRow, Paper,Box,Tabs, Tab, Button, TextField, Grid ,MenuItem,FormControl,Select, InputLabel} from '@mui/material';
 import { FaEye, FaBuilding, FaFileDownload, FaPlus, FaTrash,FaUpload } from "react-icons/fa";
@@ -14,7 +10,8 @@ import FollowupHistoryTable from './FollowupHistoryTable';
 import UndefinedTable from './UndefinedTable';
 import BookedTable from './BookedTable';
 import autoTable from "jspdf-autotable";
-
+import { Dialog, DialogTitle, DialogContent, DialogActions } from "@mui/material";
+import CloseIcon from '@mui/icons-material/Close';
 import { jsPDF } from "jspdf";
 import Lostleadstable from "./Lostleadstable";
 import Constants from '../Constants';
@@ -22,18 +19,13 @@ const sections = [
     { label: "Pending Follow Up", icon: <FaBuilding size={20} />, createLabel: "Create Firm" },
     
   ];
-  const tabNames = [ "firm"]; 
-
+const tabNames = [ "firm"]; 
 const LostLeads = () => {
-
-
-     
-    const [loans, setLoans] = useState([]);
+   const [loans, setLoans] = useState([]);
     const [leadType, setLeadType] = useState("");
     const [assignedTo, setAssignedTo] = useState(""); 
     const [expandedSection, setExpandedSection] = useState(0); 
     const [showFirmForm, setShowFirmForm] = useState(false);
-   
     const [showProjectForm, setShowProjectForm] = useState(false);
     const [phases, setPhases] = useState([]);
     const [showLandownerForm, setShowLandownerForm] = useState(false); 
@@ -50,41 +42,31 @@ const LostLeads = () => {
     const [nameError, setNameError] = useState('');
     const [mobileNoError, setMobileNoError] = useState('');
     const [panError, setPanError] = useState("");
-  
     const [firmName, setFirmName] = useState("");
     const [firmNameError, setFirmNameError] = useState("");
-  
-    const [mobileError, setMobileError] = useState("");
+   const [mobileError, setMobileError] = useState("");
     const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState("");
-  
-    const [firmPan, setFirmPan] = useState("");
+   const [firmPan, setFirmPan] = useState("");
     const [firmPanError, setFirmPanError] = useState("");
-    
     const [ageError, setAgeError] = useState("");
     const [occupationError, setOccupationError] = useState(""); 
-  
-    const [closingExecutive, setClosingExecutive] = useState('');
+  const [remark, setRemark] = useState("");
+const [remarkError, setRemarkError] = useState("");
+const [closingExecutive, setClosingExecutive] = useState('');
     const [accountNo, setAccountNo] = useState("");
   const [accountNoError, setAccountNoError] = useState("");
-  
   const [ifscCode, setIfscCode] = useState(""); 
   const [ifscCodeError, setIfscCodeError] = useState("");
   const [status, setStatus] = useState({});
-  
-
-
-    const [fileNames, setFileNames] = useState({
+  const [fileNames, setFileNames] = useState({
       firmPanNoDocument: "",
       firmGstNoDocument: "",
       firmLightBillForAddressProof: "",
     });
-  
-  
     const handleFirmPanChange = (e) => {
       const value = e.target.value;
       setFirmPan(value);
-      
       const panRegex = /^[A-Za-z]{5}\d{4}[A-Za-z]{1}$/;
       if (!panRegex.test(value)) {
         setFirmPanError("Invalid PAN format. Format should be: AAAAA1234A");
@@ -92,9 +74,7 @@ const LostLeads = () => {
         setFirmPanError(""); 
       }
     };
-  
-    
-     const handleFileChange = (e, key) => {
+   const handleFileChange = (e, key) => {
       const file = e.target.files[0]; 
       if (file) {
         setFileNames((prevState) => ({
@@ -103,61 +83,45 @@ const LostLeads = () => {
         }));
       }
     };
-  
-    const handleAgeChange = (e, index) => {
+   const handleAgeChange = (e, index) => {
       const value = e.target.value;
       const updatedPartners = [...partners];
       updatedPartners[index].age = value; 
       setPartners(updatedPartners); 
-    
       validateAge(value); 
     };
-  
-    const handleStatusChange = (event, leadId) => {
+  const handleStatusChange = (event, leadId) => {
         setStatus({
           ...status,
           [leadId]: event.target.value
         });
       };
-  
-  
-    const handleOccupationChange = (e, index) => {
+  const handleOccupationChange = (e, index) => {
       const value = e.target.value;
       const updatedPartners = [...partners];
       updatedPartners[index].occupation = value; 
       setPartners(updatedPartners); 
     };
-  
-    
-  
-  
-    const [partners, setPartners] = useState([
+  const [partners, setPartners] = useState([
       { name: "", age: "", occupation: "", mobile: "", email: "", address: "", pan: "", aadhaar: "" }
     ]);
-    
-    useEffect(() => {
+     useEffect(() => {
       console.log("Updated Selected Tab:", selectedTab);
-      loadLoansData();
+      // loadLoansData();
     }, []);
-  
-    const loadLoansData = async () => {
-      const data = await fetchLoansData();
-      setLoans(data);
-    };
-  
-  
-  const handleTabClick = (index) => {
+  //  const loadLoansData = async () => {
+  //     const data = await fetchLoansData();
+  //     setLoans(data);
+  //   };
+ const handleTabClick = (index) => {
       console.log("Clicked Section Index:", index);
       console.log("Selected Tab Before Update:", selectedTab);
       setSelectedTab(tabNames[index]); 
   };
-  
-    const handleTabChange = (_, newValue) => {
+   const handleTabChange = (_, newValue) => {
       setSelectedTab(newValue);
     };
-  
-  
-    const handleToggleSection = (index) => {
+   const handleToggleSection = (index) => {
       if (sections[index].label === "Download PDF") {
         handleDownloadPDF();
         return;
@@ -165,34 +129,22 @@ const LostLeads = () => {
       console.log("Clicked Section Index:", index);
       console.log("Selected Tab Before Update:", selectedTab);
       setExpandedSection(index);  
-      // setExpandedSection(expandedSection === index ? null : index);
-  
-     
-    if (sections[index].label === "Follow Up History") {
+      if (sections[index].label === "Follow Up History") {
       setSelectedTab("display");
   } 
-  
-  
-    
-      setShowFirmForm(false);
+    setShowFirmForm(false);
       setShowProjectForm(false); 
       setShowLandownerForm(false); 
-      
       setShowFlatForm(false);
     };
-  
-    const [newPhase, setNewPhase] = useState({
+   const [newPhase, setNewPhase] = useState({
       phaseNo: '',
       wingNo: '',
       mahareraNo: ''
     });
-  
-    
-     {/* Table Section */}
+    {/* Table Section */}
      {selectedTab === "firm" && <FirmTable />}
-   
-  
-    const handleDownloadPDF = () => {
+   const handleDownloadPDF = () => {
       const link = document.createElement("a");
       link.href = "/path/to/demand_letter.pdf";
       link.download = "Demand_Letter.pdf";
@@ -266,9 +218,7 @@ const LostLeads = () => {
         return newPartners;
       });
     };
-    
-  
-    const handleNameChange = (event) => {
+      const handleNameChange = (event) => {
       const value = event.target.value;
   
      
@@ -280,50 +230,35 @@ const LostLeads = () => {
   
       setName(value);
     };
-  
-   
-    const handleMobileNoChange = (event) => {
+     const handleMobileNoChange = (event) => {
       const value = event.target.value;
-    
-      if (/[^0-9]/.test(value)) {
+        if (/[^0-9]/.test(value)) {
         setMobileError('Mobile number should only contain digits.');
       } else if (value.length > 10) {
         setMobileError('Mobile number cannot exceed 10 digits.');
       } else {
         setMobileError(''); 
       }
-    
-     
       setMobileNo(value);
     };
-    
-  
-    const handleAccountNoChange = (e) => {
+     const handleAccountNoChange = (e) => {
       const value = e.target.value;
-      
-      // Regular expression to check if the value is numeric and has a valid length (e.g., 10-16 digits)
+       // Regular expression to check if the value is numeric and has a valid length (e.g., 10-16 digits)
       const accountNoRegex = /^[0-9]{10,16}$/; // 10 to 16 digits
-    
       if (value && !accountNoRegex.test(value)) {
         setAccountNoError("Account number must be between 10 to 16 digits.");
       } else {
         setAccountNoError(""); // Clear the error if valid
       }
-    
-      // Update the account number in the state
+    // Update the account number in the state
       setAccountNo(value);
     };
-  
-    
-   
+
     const validatePAN = (pan) => {
       const panPattern = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/; // PAN format: 5 letters, 4 digits, 1 letter
       return panPattern.test(pan);
     };
-  
-    
-  
-    const handlePartnerNameChange = (e, index) => {
+     const handlePartnerNameChange = (e, index) => {
       const value = e.target.value;
       const partnerCopy = [...partners];
       
@@ -337,25 +272,20 @@ const LostLeads = () => {
       partnerCopy[index] = { ...partnerCopy[index], name: value };
       setPartners(partnerCopy);
     };
-  
-  
-    const handleFirmNameChange = (e) => {
-      const value = e.target.value;
-  
-    
-      if (/\d/.test(value)) {
-        setFirmNameError("Lead No should only contain letters"); 
-      } else {
-        setFirmNameError("");
-      }
-  
-    
-      setFirmName(value);
-    };
-  
-  
-  
-    const validateFirmName = () => {
+  const handleLeadNoChange = (e) => {
+  const value = e.target.value;
+
+  // Regex to allow only letters and numbers (alphanumeric)
+  if (/[^a-zA-Z0-9]/.test(value)) {
+    setFirmNameError("Lead No should only contain letters and numbers");
+  } else {
+    setFirmNameError("");
+  }
+
+  setFirmName(value);
+};
+
+ const validateFirmName = () => {
       if (!firmName.trim()) {
         setFirmNameError("Firm Name is required.");
         return false;
@@ -424,18 +354,21 @@ const LostLeads = () => {
         setAgeError("");
       }
     };
-    const handleRemarkChange = (e) => {
-      const value = e.target.value;
-      const alphanumericRegex = /^[a-zA-Z0-9]*$/;
-    
-      if (!alphanumericRegex.test(value)) {
-        setFirmPanError("Only letters and numbers are allowed");
-      } else {
-        setFirmPanError("");
-      }
-    
-      setFirmPan(value);
-    };
+   const handleRemarkChange = (e) => {
+  const value = e.target.value;
+
+  // Only letters and numbers allowed
+  const alphanumericRegex = /^[a-zA-Z0-9\s]*$/;
+
+  if (!alphanumericRegex.test(value)) {
+    setRemarkError("Only letters and numbers are allowed");
+  } else {
+    setRemarkError("");
+  }
+
+  setRemark(value);
+};
+
     
     
     const handleIfscCodeChange = (e) => {
@@ -629,14 +562,7 @@ const LostLeads = () => {
           
 
           
-            {/* <div className="right-buttons">
-              <Button variant="contained" color="secondary" onClick={handlePrevious}>
-                Previous
-              </Button>
-              <Button variant="contained" color="secondary" onClick={handleNext}>
-                Next
-              </Button>
-            </div> */}
+          
           </div>
   
           <div className="mt-3">
@@ -648,227 +574,217 @@ const LostLeads = () => {
      
   
       <div className="firm-form mt-4 p-3" style={{ maxHeight: "500px", overflowY: "auto", paddingRight: "10px" }}>
-      <Paper className="p-4" elevation={4} style={{ borderRadius: "12px", paddingBottom: "20px" }}>
-        <Typography variant="h5" gutterBottom>
-      
-        </Typography>
-  
-       
-        
-        <Grid container spacing={2}>
-    <Grid item xs={6}>
-      <TextField
-        label="Lead No"
-        fullWidth
-        variant="outlined"
-        value={firmName}
-        onChange={handleFirmNameChange} 
-        error={!!firmNameError} 
-        helperText={firmNameError} 
-        required 
-      />
-    </Grid>
-   
-      <Grid item xs={6}>
-        <FormControl fullWidth variant="outlined">
-          <InputLabel id="closing-executive-label">Sales Person</InputLabel>
-          <Select
-            labelId="closing-executive-label"
-            id="closing-executive"
-            value={closingExecutive}
-            onChange={handleClosingExecutiveChange}
-            label="Select Sales Person"
-          >
-            {/* Sales Person options */}
-            <MenuItem value="Shilpha Mewada 1">Shilpha Mewada 1</MenuItem>
-            <MenuItem value="Tic Tac Toe Sohan">Tic Tac Toe Sohan</MenuItem>
-            <MenuItem value="Shilpha Mewada">Shilpha Mewada</MenuItem>
-            <MenuItem value="VIVEK TAPKIR">VIVEK TAPKIR</MenuItem>
-            <MenuItem value="Shubham Taware">Shubham Taware</MenuItem>
-            <MenuItem value="Ashwini Khot">Ashwini Khot</MenuItem>
-            <MenuItem value="Amol Pawar">Amol Pawar</MenuItem>
-            <MenuItem value="Sachin Awale">Sachin Awale</MenuItem>
-          </Select>
-        </FormControl>
-      </Grid>
-    {/* </Grid> */}
-
-  
-    {/* <Grid item xs={6}>
-      <TextField
-        label="Remark"
-        fullWidth
-        variant="outlined"
-        value={firmPan}
-              // onChange={handleFirmPanChange}
-              // error={!!firmPanError}  // Show error if there is an error
-              // helperText={firmPanError}
-      />
-    </Grid> */}
-
-<Grid item xs={6}>
-  <TextField
-    label="Remark"
-    fullWidth
-    variant="outlined"
-    value={firmPan}
-    onChange={handleRemarkChange}
-    error={!!firmPanError}
-    helperText={firmPanError}
-  />
-</Grid>
+     
 
 
-    <Grid item xs={6}>
-  <TextField
-    label="Name"
-    fullWidth
-    variant="outlined"
-    value={name}
-    onChange={handleNameChange}
-    error={!!nameError}  // show error if validation fails
-    helperText={nameError}  // show error message
-    required 
-  />
-</Grid>
-
-   
-    
-    <Grid item xs={6}>
-  <TextField
-    type="datetime-local" // Use datetime-local for date and time input
-    label="New Follow Up"
-    fullWidth
-    variant="outlined"
-    required // Correct way to add required prop
-    InputLabelProps={{
-      shrink: true, // Ensures label is above the input
-    }}
-  />
-</Grid>
-
-
-    <Grid item xs={6}>
-  <FormControl fullWidth variant="outlined">
-    <InputLabel id="assign-to-label">Assign To</InputLabel>
-    <Select
-      labelId="assign-to-label"
-      id="assign-to"
-      value={assignedTo} // Manage the state for "Assign To"
-      onChange={(e) => setAssignedTo(e.target.value)} // Update the state with the selected value
-      label="Assign To"
-      required 
-    >
-      <MenuItem value="Shilpha Mewada 1">Shilpha Mewada 1</MenuItem>
-      <MenuItem value="Tic Tac Toe Sohan">Tic Tac Toe Sohan</MenuItem>
-      <MenuItem value="Shilpha Mewada">Shilpha Mewada</MenuItem>
-      <MenuItem value="VIVEK TAPKIR">VIVEK TAPKIR</MenuItem>
-      <MenuItem value="Shubham Taware">Shubham Taware</MenuItem>
-      <MenuItem value="Ashwini Khot">Ashwini Khot</MenuItem>
-      <MenuItem value="Amol Pawar">Amol Pawar</MenuItem>
-      <MenuItem value="Sachin Awale">Sachin Awale</MenuItem>
-    </Select>
-  </FormControl>
-</Grid>
-
-    
-
-
-    <Grid item xs={6}>
-  <FormControl fullWidth variant="outlined">
-    <InputLabel id="lead-type-label ">Lead type</InputLabel>
-    <Select
-      labelId="lead-type-label"
-      id="lead-type"
-      value={leadType}
-      onChange={(e) => setLeadType(e.target.value)} // Update the state with the selected value
-      label="Lead type"
-      
-    >
-      <MenuItem value="Hot">Hot</MenuItem>
-      <MenuItem value="Warm">Warm</MenuItem>
-      <MenuItem value="Lost">Lost</MenuItem>
-      <MenuItem value="Cold">Cold</MenuItem>
-    </Select>
-  </FormControl>
-</Grid>
-
-
-
-    <Grid item xs={6}>
-  <FormControl fullWidth variant="outlined">
-    <InputLabel id="status-label">Status</InputLabel>
-    <Select
-      labelId="status-label"
-      id="status"
-      value={status}
-      onChange={(e) => setStatus(e.target.value)} // Update the state with the selected value
-      label="Status"
-    >
-      <MenuItem value="Follow Up">Follow Up</MenuItem>
-      <MenuItem value="Not interested">Not interested</MenuItem>
-      <MenuItem value="Callback Request">Callback Request</MenuItem>
-      <MenuItem value="Unreachable">Unreachable</MenuItem>
-      <MenuItem value="Booked property in other project">Booked property in other project</MenuItem>
-      <MenuItem value="Not Answer">Not Answer</MenuItem>
-      <MenuItem value="Invalid number">Invalid number</MenuItem>
-    </Select>
-  </FormControl>
-</Grid>
-
-  </Grid>
-  
-  
-
-  
-  
-  
-  
-       
-        <Button
-  variant="contained"
-  className="m-3"
-  color="success"
-  onClick={() => {
-    // Validate required fields
+      <Dialog
+  open={showFirmForm}      // control with state
+  onClose={() => {
+    // Prevent closing if required fields are empty
     if (!firmName || !name || !assignedTo || !leadType || !status) {
       toast.error("Please fill all required fields!", { position: "top-right" });
       return;
     }
-
-    // Push to the 'loans' state
-    const newEntry = {
-      leadNo: firmName,
-      salesPerson: closingExecutive,
-      remark: firmPan,
-      name: name,
-      followUp: new Date().toISOString(), // Or actual date field if you're using one
-      assignedTo,
-      leadType,
-      status,
-    };
-
-    setLoans(prev => [...prev, newEntry]);
-
-    // Toast
-    toast.success("Details submitted!", { position: "top-right", autoClose: 3000 });
-
-    // Reset fields (optional)
-    setFirmName("");
-    setClosingExecutive("");
-    setFirmPan("");
-    setName("");
-    setAssignedTo("");
-    setLeadType("");
-    setStatus("");
-
-    setShowFirmForm(false); // Hide form if needed
+    setShowFirmForm(false);
   }}
+  maxWidth="md"
+  fullWidth
 >
-  Submit
-</Button>
+  <DialogTitle sx={{background:Constants.primaryColor,color:"#fff", display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between"}}>New Follow Up
+      <IconButton
+    aria-label="close"
+    onClick={() => setShowFirmForm(false)}
+    sx={{
+      color: "#fff",
+    }}
+  >
+    <CloseIcon />
+  </IconButton>
+    </DialogTitle>
 
-      </Paper>
+  <DialogContent dividers>
+    <Grid container spacing={2}>
+      <Grid item xs={6}>
+        <TextField
+          label="Lead No"
+          fullWidth
+          variant="outlined"
+          value={firmName}
+          onChange={handleLeadNoChange}
+          error={!!firmNameError}
+          helperText={firmNameError}
+          sx={{border:Constants.formInputBorderColor}}
+         
+        />
+      </Grid>
+
+      <Grid item xs={6}>
+        <FormControl fullWidth   sx={{border:Constants.formInputBorderColor}} >
+          <InputLabel>Sales Person</InputLabel>
+          <Select
+            value={closingExecutive}
+            onChange={handleClosingExecutiveChange}
+            label="Sales Person"
+          >
+              <MenuItem value="mainsales">Main Sales</MenuItem>
+            <MenuItem value="ranjeet">Ranjeet Kamble</MenuItem>
+            <MenuItem value="yogita">Yogita Dalvi</MenuItem>
+            <MenuItem value="shubhangi">Shubhangi Patil</MenuItem>
+            <MenuItem value="ajay">Ajay Kate</MenuItem>
+            <MenuItem value="Tester">Tester</MenuItem>
+          
+          </Select>
+         
+        </FormControl>
+      </Grid>
+   
+   <Grid item xs={6}>
+    <TextField
+    label="Remark"
+     fullWidth
+          variant="outlined"
+          value={remark}
+          onChange={handleRemarkChange}
+          error={!!remarkError}
+          helperText={remarkError}
+           sx={{border:Constants.formInputBorderColor}}
+    >
+
+    </TextField>
+   </Grid>
+      <Grid item xs={6}>
+        <TextField
+          label="Name"
+          fullWidth
+          variant="outlined"
+          value={name}
+          onChange={handleNameChange}
+          error={!!nameError}
+          helperText={nameError}
+            sx={{border:Constants.formInputBorderColor}}
+        />
+      </Grid>
+
+      <Grid item xs={6}>
+        <TextField
+          type="datetime-local"
+          label="Next Follow Up"
+          fullWidth
+          variant="outlined"
+          InputLabelProps={{ shrink: true }}
+           sx={{border:Constants.formInputBorderColor}}
+        />
+      </Grid>
+
+      <Grid item xs={6}>
+        <FormControl fullWidth sx={{border:Constants.formInputBorderColor}}>
+          <InputLabel>Assign To</InputLabel>
+          <Select
+            value={assignedTo}
+            onChange={(e) => setAssignedTo(e.target.value)}
+            label="Assign To"
+          >
+            <MenuItem value="mainsales">Main Sales</MenuItem>
+            <MenuItem value="ranjeet">Ranjeet Kamble</MenuItem>
+            <MenuItem value="yogita">Yogita Dalvi</MenuItem>
+            <MenuItem value="shubhangi">Shubhangi Patil</MenuItem>
+            <MenuItem value="ajay">Ajay Kate</MenuItem>
+            <MenuItem value="Tester">Tester</MenuItem>
+          </Select>
+        
+        </FormControl>
+      </Grid>
+
+      <Grid item xs={6}>
+        <FormControl fullWidth sx={{border:Constants.formInputBorderColor}}>
+          <InputLabel>Lead Type</InputLabel>
+          <Select value={leadType} onChange={(e) => setLeadType(e.target.value)} label="Lead Type">
+            <MenuItem value="Hot">Hot</MenuItem>
+            <MenuItem value="Warm">Warm</MenuItem>
+            <MenuItem value="Lost">Lost</MenuItem>
+            <MenuItem value="Cold">Cold</MenuItem>
+          </Select>
+   
+        </FormControl>
+      </Grid>
+
+      <Grid item xs={6}>
+        <FormControl fullWidth error={!status} sx={{border:Constants.formInputBorderColor}}>
+          <InputLabel>Status</InputLabel>
+          <Select value={status} onChange={(e) => setStatus(e.target.value)}
+           label="Status"
+            >
+            <MenuItem value="Follow Up">Follow Up</MenuItem>
+            <MenuItem value="Not interested">Not interested</MenuItem>
+             <MenuItem value="Callback request">Callback request</MenuItem>
+             <MenuItem value="Unreachable">Unreachable</MenuItem>
+             <MenuItem value="booked">Booked Property In other Project</MenuItem>
+              <MenuItem value="Not Answer">Not Answer</MenuItem>
+              <MenuItem value="invalid number">Invalid Number</MenuItem>
+          </Select>
+         
+        </FormControl>
+      </Grid>
+    </Grid>
+  </DialogContent>
+
+  <DialogActions>
+    <Button
+      variant="contained"
+      sx={{background:Constants.primaryColor}}
+      onClick={() => {
+        // if (!firmName || !name || !assignedTo || !leadType || !status) {
+        //   toast.error("Please fill all required fields!", { position: "top-right" });
+        //   return;
+        // }
+
+        // const newEntry = {
+        //   leadNo: firmName,
+        //   salesPerson: closingExecutive,
+        //   remark,
+        //   name,
+        //   assignedTo,
+        //   leadType,
+        //   status,
+        // };
+           const newEntry = {
+  leadNo: firmName || "",
+  salesPerson: closingExecutive || "",
+  remark: remark || "",
+  name: name || "",
+  assignedTo: assignedTo?.name || "", // if it's an object
+  leadType: leadType || "",
+  status: status || "",
+};
+
+        setLoans((prev) => [...prev, newEntry]);
+
+        toast.success("Details submitted!", { position: "top-right", autoClose: 3000 });
+
+        setFirmName("");
+        setClosingExecutive("");
+        setName("");
+        setAssignedTo("");
+        setLeadType("");
+        setStatus("");
+  setRemark("");
+
+        setShowFirmForm(false);
+      }}
+    >
+      Submit
+    </Button>
+    <Button
+      onClick={() => setShowFirmForm(false)}
+      color="secondary"
+    >
+      Cancel
+    </Button>
+  </DialogActions>
+</Dialog>
+
     </div>
       
       )}
