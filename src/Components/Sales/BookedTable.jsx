@@ -21,6 +21,7 @@ const BookedTable = ({ data }) => {
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>EMAIL</TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>SOURCE NAME</TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>LOCATION</TableCell>
+              <TableCell sx={{color:"white",fontWeight:"bold",whiteSpace:"nowrap"}}>ASSIGN TO</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -35,6 +36,7 @@ const BookedTable = ({ data }) => {
                 <TableCell>{item.email}</TableCell>
                 <TableCell>{item.sourceName}</TableCell>
                 <TableCell>{item.location}</TableCell>
+                <TableCell>{item.assignTo}</TableCell>
               </TableRow>
             ))}
           </TableBody>

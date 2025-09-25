@@ -550,11 +550,7 @@ const LostLeads = () => {
       <div className="main-content">
         <h6>Sales Module / Lost Leads Follow Up Management</h6>
        
-     
-   
-      
-  
-  
+
         <div className="d-flex align-items-center mb-3">
         
 {sections.map((section, index) => (
@@ -568,7 +564,7 @@ const LostLeads = () => {
       borderRadius: '20px',
       backgroundColor: Constants.primaryColor, // Add background color
       color: 'white', // Set text color to white for better contrast
-      border: '1px solid #3621a9', // Match the border to background
+      // border: '1px solid #3621a9', // Match the border to background
       transition: "background-color 0.3s ease", // Optional: Add a transition effect for the background color
     }}
     startIcon={
@@ -590,7 +586,7 @@ const LostLeads = () => {
   
        
   {expandedSection === 0 && selectedTab === "firm" && (
-    <div className="content-container mt-3">
+    <div className="content-container mt-2">
       {!showFirmForm ? (
         <>
           <div className='button-container'>
@@ -633,14 +629,14 @@ const LostLeads = () => {
           
 
           
-            <div className="right-buttons">
+            {/* <div className="right-buttons">
               <Button variant="contained" color="secondary" onClick={handlePrevious}>
                 Previous
               </Button>
               <Button variant="contained" color="secondary" onClick={handleNext}>
                 Next
               </Button>
-            </div>
+            </div> */}
           </div>
   
           <div className="mt-3">
