@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, MenuItem,TextField,
+  TablePagination,Box,
    Dialog, DialogTitle, DialogContent, DialogActions,
    Button,Grid,FormControl,InputLabel,Select} from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
@@ -40,6 +41,9 @@ const Lostleadstable = ({firms}) => {
   const [leadType, setLeadType] = useState("");
 const [nameError, setNameError] = useState("");
  const [openModal, setOpenModal] = useState(false);
+  const [page, setPage] = useState(0); // Current page
+  const [rowsPerPage, setRowsPerPage] = useState(5); // Rows per page
+
 const [editData, setEditData] = useState({
   firmName: '',
   closingExecutive: '',
@@ -126,7 +130,22 @@ const [editData, setEditData] = useState({
   
     setName(value);
   };
+
+
+   // Handle page change
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  // Handle rows per page change
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0); // Reset to first page
+  };
   
+    // Slice the array for pagination
+  const displayedFirms = firms.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
+
   return (
     <>
     <TableContainer component={Paper}>
@@ -350,7 +369,7 @@ const [editData, setEditData] = useState({
           </div>
        
       ) : ( */}
-        
+        <Box sx={{ maxHeight: 400, overflowY: 'auto' }}>
         <Table>
           <TableHead>
             <TableRow sx={{ background: Constants.primaryColor }}>
@@ -430,7 +449,19 @@ const [editData, setEditData] = useState({
             ))}
           </TableBody>
         </Table>
-      {/* )} */}
+     </Box>
+     {/* Pagination Component */}
+    
+        <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={firms.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      
     </TableContainer>
 
 
@@ -441,7 +472,7 @@ const [editData, setEditData] = useState({
         </DialogTitle>
         <DialogContent dividers>
           <Grid container spacing={2} sx={{ mt: 1 }}>
-            <Grid item xs={6}>
+          <Grid item xs={12} sm={6}>
               <TextField
                 label="Lead No"
                 fullWidth
@@ -453,7 +484,7 @@ const [editData, setEditData] = useState({
                 sx={{border:Constants.formInputBorderColor}}
               />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={12} sm={6}>
               <FormControl fullWidth sx={{border:Constants.formInputBorderColor}}>
                 <InputLabel>Sales Person</InputLabel>
                 <Select
@@ -461,13 +492,16 @@ const [editData, setEditData] = useState({
                   onChange={(e) => setEditData({ ...editData, closingExecutive: e.target.value })}
                   label="Sales Person"
                 >
-                  <MenuItem value="Shilpha Mewada">Shilpha Mewada</MenuItem>
-                  <MenuItem value="VIVEK TAPKIR">VIVEK TAPKIR</MenuItem>
-                  <MenuItem value="Shubham Taware">Shubham Taware</MenuItem>
+                  <MenuItem value="mainsales">Main Sales</MenuItem>
+                             <MenuItem value="ranjeet">Ranjeet Kamble</MenuItem>
+                             <MenuItem value="yogita">Yogita Dalvi</MenuItem>
+                             <MenuItem value="shubhangi">Shubhangi Patil</MenuItem>
+                             <MenuItem value="ajay">Ajay Kate</MenuItem>
+                             <MenuItem value="Tester">Tester</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
-            <Grid item xs={6}>
+           <Grid item xs={12} sm={6}>
               <TextField
                 label="Remark"
                 fullWidth
@@ -479,7 +513,7 @@ const [editData, setEditData] = useState({
                 sx={{border:Constants.formInputBorderColor}}
               />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={12} sm={6}>
               <TextField
                 label="Name"
                 fullWidth
@@ -491,7 +525,7 @@ const [editData, setEditData] = useState({
                 sx={{border:Constants.formInputBorderColor}}
               />
             </Grid>
-            <Grid item xs={6}>
+           <Grid item xs={12} sm={6}>
               <TextField
                 type="datetime-local"
                 label="New Follow Up"
@@ -503,7 +537,7 @@ const [editData, setEditData] = useState({
                 sx={{border:Constants.formInputBorderColor}}
               />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={12} sm={6}>
               <FormControl fullWidth sx={{border:Constants.formInputBorderColor}}>
                 <InputLabel>Assign To</InputLabel>
                 <Select
@@ -511,13 +545,16 @@ const [editData, setEditData] = useState({
                   onChange={(e) => setEditData({ ...editData, assignedTo: e.target.value })}
                   label="Assign To"
                 >
-                  <MenuItem value="Shilpha Mewada">Shilpha Mewada</MenuItem>
-                  <MenuItem value="Ashwini Khot">Ashwini Khot</MenuItem>
-                  <MenuItem value="Amol Pawar">Amol Pawar</MenuItem>
+                 <MenuItem value="mainsales">Main Sales</MenuItem>
+                            <MenuItem value="ranjeet">Ranjeet Kamble</MenuItem>
+                            <MenuItem value="yogita">Yogita Dalvi</MenuItem>
+                            <MenuItem value="shubhangi">Shubhangi Patil</MenuItem>
+                            <MenuItem value="ajay">Ajay Kate</MenuItem>
+                            <MenuItem value="Tester">Tester</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
-            <Grid item xs={6}>
+           <Grid item xs={12} sm={6}>
               <FormControl fullWidth sx={{border:Constants.formInputBorderColor}}>
                 <InputLabel>Lead Type</InputLabel>
                 <Select
@@ -532,7 +569,7 @@ const [editData, setEditData] = useState({
                 </Select>
               </FormControl>
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={12} sm={6}>
               <FormControl fullWidth sx={{border:Constants.formInputBorderColor}}>
                 <InputLabel>Status</InputLabel>
                 <Select

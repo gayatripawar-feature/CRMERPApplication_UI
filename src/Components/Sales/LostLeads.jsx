@@ -54,11 +54,16 @@ const LostLeads = () => {
   const [remark, setRemark] = useState("");
 const [remarkError, setRemarkError] = useState("");
 const [closingExecutive, setClosingExecutive] = useState('');
+const [nextFollowUp, setNextFollowUp] = useState("");
+
     const [accountNo, setAccountNo] = useState("");
   const [accountNoError, setAccountNoError] = useState("");
   const [ifscCode, setIfscCode] = useState(""); 
   const [ifscCodeError, setIfscCodeError] = useState("");
   const [status, setStatus] = useState({});
+  const [fromDate, setFromDate] = useState("");
+const [toDate, setToDate] = useState("");
+
   const [fileNames, setFileNames] = useState({
       firmPanNoDocument: "",
       firmGstNoDocument: "",
@@ -479,6 +484,17 @@ const [closingExecutive, setClosingExecutive] = useState('');
         doc.save("FollowUP_Report.pdf");
     };
     
+
+    const filteredLoans = loans.filter((loan) => {
+  if (!fromDate && !toDate) return true;
+  const nextFollowUpDate = loan.nextFollowUp ? loan.nextFollowUp.split("T")[0] : ""; // keep only date part
+  if (fromDate && nextFollowUpDate < fromDate) return false;
+  if (toDate && nextFollowUpDate > toDate) return false;
+  return true;
+});
+
+
+
     return (
       <div className="main-content">
         <h6>Sales Module / Lost Leads Follow Up Management</h6>
@@ -522,7 +538,7 @@ const [closingExecutive, setClosingExecutive] = useState('');
     <div className="content-container mt-2">
       {!showFirmForm ? (
         <>
-          <div className='button-container'>
+          <div className='button-container' style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap' }}>
             <div className='d-flex gap-3'>
             <Button 
               variant="contained" 
@@ -557,17 +573,46 @@ const [closingExecutive, setClosingExecutive] = useState('');
     <FaFileDownload size={18} />  {/* Added download icon */}
     Download PDF
   </Button>
-
-            </div>
+ </div>
           
-
+   {/* Right side date filters */}
+  <div className='d-flex gap-2'>
+    <Grid container spacing={2}>
+     <Grid item xs={12} sm={6}>
+    <TextField
+      type="date"
+      label="From"
+      size="small"
+      variant="outlined"
+      value={fromDate}
+      onChange={(e) => setFromDate(e.target.value)}
+      InputLabelProps={{ shrink: true }}
+      sx={{border:Constants.formInputBorderColor}}
+    />
+    </Grid>
+    <Grid item xs={12} sm={6}>
+    <TextField
+      type="date"
+      label="To"
+      size="small"
+      variant="outlined"
+      value={toDate}
+      onChange={(e) => setToDate(e.target.value)}
+      InputLabelProps={{ shrink: true }}
+      sx={{border:Constants.formInputBorderColor}}
+    />
+    </Grid>
+    </Grid>
+  </div>
           
           
           </div>
   
           <div className="mt-3">
             {/* <FirmTable firms={loans} /> */}
-          <Lostleadstable firms={loans} />
+          {/* <Lostleadstable firms={loans} /> */}
+          <Lostleadstable firms={filteredLoans} />
+
           </div>
         </>
       ) : (
@@ -606,7 +651,8 @@ const [closingExecutive, setClosingExecutive] = useState('');
 
   <DialogContent dividers>
     <Grid container spacing={2}>
-      <Grid item xs={6}>
+      {/* <Grid item xs={6}> */}
+      <Grid item xs={12} sm={6}>
         <TextField
           label="Lead No"
           fullWidth
@@ -620,7 +666,8 @@ const [closingExecutive, setClosingExecutive] = useState('');
         />
       </Grid>
 
-      <Grid item xs={6}>
+      {/* <Grid item xs={6}> */}
+      <Grid item xs={12} sm={6}>
         <FormControl fullWidth   sx={{border:Constants.formInputBorderColor}} >
           <InputLabel>Sales Person</InputLabel>
           <Select
@@ -640,7 +687,8 @@ const [closingExecutive, setClosingExecutive] = useState('');
         </FormControl>
       </Grid>
    
-   <Grid item xs={6}>
+   {/* <Grid item xs={6}> */}
+   <Grid item xs={12} sm={6}>
     <TextField
     label="Remark"
      fullWidth
@@ -654,7 +702,8 @@ const [closingExecutive, setClosingExecutive] = useState('');
 
     </TextField>
    </Grid>
-      <Grid item xs={6}>
+      {/* <Grid item xs={6}> */}
+      <Grid item xs={12} sm={6}>
         <TextField
           label="Name"
           fullWidth
@@ -667,18 +716,22 @@ const [closingExecutive, setClosingExecutive] = useState('');
         />
       </Grid>
 
-      <Grid item xs={6}>
+      {/* <Grid item xs={6}> */}
+      <Grid item xs={12} sm={6}>
         <TextField
           type="datetime-local"
           label="Next Follow Up"
           fullWidth
           variant="outlined"
+           value={nextFollowUp}                 // bind value
+  onChange={(e) => setNextFollowUp(e.target.value)} 
           InputLabelProps={{ shrink: true }}
            sx={{border:Constants.formInputBorderColor}}
         />
       </Grid>
 
-      <Grid item xs={6}>
+      {/* <Grid item xs={6}> */}
+      <Grid item xs={12} sm={6}>
         <FormControl fullWidth sx={{border:Constants.formInputBorderColor}}>
           <InputLabel>Assign To</InputLabel>
           <Select
@@ -697,7 +750,8 @@ const [closingExecutive, setClosingExecutive] = useState('');
         </FormControl>
       </Grid>
 
-      <Grid item xs={6}>
+      {/* <Grid item xs={6}> */}
+      <Grid item xs={12} sm={6}>
         <FormControl fullWidth sx={{border:Constants.formInputBorderColor}}>
           <InputLabel>Lead Type</InputLabel>
           <Select value={leadType} onChange={(e) => setLeadType(e.target.value)} label="Lead Type">
@@ -710,7 +764,8 @@ const [closingExecutive, setClosingExecutive] = useState('');
         </FormControl>
       </Grid>
 
-      <Grid item xs={6}>
+      {/* <Grid item xs={6}> */}
+      <Grid item xs={12} sm={6}>
         <FormControl fullWidth error={!status} sx={{border:Constants.formInputBorderColor}}>
           <InputLabel>Status</InputLabel>
           <Select value={status} onChange={(e) => setStatus(e.target.value)}
@@ -757,6 +812,7 @@ const [closingExecutive, setClosingExecutive] = useState('');
   assignedTo: assignedTo?.name || "", // if it's an object
   leadType: leadType || "",
   status: status || "",
+   nextFollowUp: nextFollowUp || "", // add this
 };
 
         setLoans((prev) => [...prev, newEntry]);

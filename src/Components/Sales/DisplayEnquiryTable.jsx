@@ -1,5 +1,9 @@
 import React, { useState } from "react";
 import {
+   Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
   TableContainer,
   Table,
   TableHead,
@@ -11,13 +15,17 @@ import {
   IconButton,
   TextField,
   Button,
+  TablePagination,
+  Box,
   Grid,
   FormControl,
   InputLabel,Select,
   MenuItem,
+  FormHelperText 
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import EmailIcon from "@mui/icons-material/Email";
+import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import Constants from "../Constants";
 
@@ -66,7 +74,9 @@ const DisplayEnquiryTable = ({data}) => {
       const [alternateContact, setAlternateContact] = useState("");
        const [whatsappNo, setWhatsappNo] = useState("");
        const [name, setName] = useState("");
-  
+  const [page, setPage] = useState(0);
+const [rowsPerPage, setRowsPerPage] = useState(5);
+
   const handleEdit = (row) => {
     setSelectedItem(row); 
     setIsEditing(true); 
@@ -198,19 +208,23 @@ const handleBudgetChange = (event) => {
       {isEditing ? (
        
 
-        <div
-  className="firm-form mt-4 p-3 border rounded"
-  style={{
-    maxHeight: "500px",
-    overflowY: "auto",
-    backgroundColor: "#f8f9fa",
-    border: "1px solid #ccc",
-  }}
->
+//         <div
+//   className="firm-form mt-4 p-3 border rounded"
+//   style={{
+//     maxHeight: "500px",
+//     overflowY: "auto",
+//     backgroundColor: "#f8f9fa",
+//     border: "1px solid #ccc",
+//   }}
+// >
+    <Dialog open={open} onClose={handleCancel} maxWidth="md" fullWidth>
+      <DialogTitle sx={{background:Constants.primaryColor,color:"#fff"}}>Edit Enquiry</DialogTitle>
+      <DialogContent dividers sx={{ maxHeight: "70vh" }}>
   <Grid container spacing={2}>
    
-    <Grid item xs={4}>
-      <FormControl fullWidth error={!!error}>
+    {/* <Grid item xs={4}> */}
+    <Grid item xs={12} sm={6} md={4}>
+      <FormControl fullWidth error={!!error} sx={{border:Constants.formInputBorderColor}}>
         <InputLabel>Lead No.</InputLabel>
         <Select value={leadNo} onChange={handleChange} label="Lead No.">
           <MenuItem value="Lead 9">Lead 9</MenuItem>
@@ -226,7 +240,8 @@ const handleBudgetChange = (event) => {
     </Grid>
 
    
-       <Grid item xs={4}>
+       {/* <Grid item xs={4}> */}
+       <Grid item xs={12} sm={6} md={4}>
      <TextField
        label="Name"
        fullWidth
@@ -234,12 +249,13 @@ const handleBudgetChange = (event) => {
        onChange={handleNameChange}
        error={nameError}
        helperText={nameError ? "Only letters are allowed" : ""}
+       sx={{border:Constants.formInputBorderColor}}
      />
    </Grid>
    
 
    
-    <Grid item xs={4}>
+    <Grid item xs={12} sm={6} md={4}>
       <TextField
         label="Mobile No."
         fullWidth
@@ -247,10 +263,11 @@ const handleBudgetChange = (event) => {
         onChange={handleMobileChange}
         error={!!mobileError}
         helperText={mobileError}
+        sx={{border:Constants.formInputBorderColor}}
       />
     </Grid>
 
-       <Grid item xs={4}>
+       <Grid item xs={12} sm={6} md={4}>
      <TextField
        label="Alternate Contact No."
        fullWidth
@@ -268,12 +285,13 @@ const handleBudgetChange = (event) => {
            ? "Mobile number must be 10 digits"
            : ""
        }
+       sx={{border:Constants.formInputBorderColor}}
      />
    </Grid>
    
 
    
-      <Grid item xs={4}>
+     <Grid item xs={12} sm={6} md={4}>
     <TextField
       type="text"
       label="WhatsApp No"
@@ -292,41 +310,43 @@ const handleBudgetChange = (event) => {
           ? "Mobile number must be 10 digits"
           : ""
       }
+      sx={{border:Constants.formInputBorderColor}}
     />
   </Grid>
   
   
-    <Grid item xs={4}>
+   <Grid item xs={12} sm={6} md={4}>
       <TextField label="Email" fullWidth 
       value={email}
       onChange={handleEmailChange}
       error={!!emailError} 
       helperText={emailError}
+      sx={{border:Constants.formInputBorderColor}}
       />
     </Grid>
 
   
-    <Grid item xs={4}>
-      <TextField label="Address" fullWidth />
+    <Grid item xs={12} sm={6} md={4}>
+      <TextField label="Address" fullWidth  sx={{border:Constants.formInputBorderColor}}/>
     </Grid>
 
-    <Grid item xs={4}>
-      <TextField label="Company" fullWidth />
-    </Grid>
-
-   
-    <Grid item xs={4}>
-      <TextField label="Reference by / Source" fullWidth />
+   <Grid item xs={12} sm={6} md={4}>
+      <TextField label="Company" fullWidth sx={{border:Constants.formInputBorderColor}}/>
     </Grid>
 
    
-    <Grid item xs={4}>
-      <TextField label="Name of CP (if Channel Partner)" fullWidth />
+    <Grid item xs={12} sm={6} md={4}>
+      <TextField label="Reference by / Source" fullWidth sx={{border:Constants.formInputBorderColor}}/>
+    </Grid>
+
+   
+  <Grid item xs={12} sm={6} md={4}>
+      <TextField label="Name of CP (if Channel Partner)" fullWidth sx={{border:Constants.formInputBorderColor}}/>
     </Grid>
 
   
-    <Grid item xs={4}>
-      <FormControl fullWidth error={!!error}>
+   <Grid item xs={12} sm={6} md={4}>
+      <FormControl fullWidth error={!!error} sx={{border:Constants.formInputBorderColor}}>
         <InputLabel>Sales Executive Name</InputLabel>
         <Select
           value={salesExec}
@@ -346,8 +366,8 @@ const handleBudgetChange = (event) => {
       </FormControl>
     </Grid>
 
-    <Grid item xs={4}>
-      <FormControl fullWidth error={!!error}>
+   <Grid item xs={12} sm={6} md={4}>
+      <FormControl fullWidth error={!!error} sx={{border:Constants.formInputBorderColor}}>
         <InputLabel>Interested In</InputLabel>
         <Select
           value={interestedIn}
@@ -371,8 +391,8 @@ const handleBudgetChange = (event) => {
 
     
     
-        <Grid item xs={4}>
-          <FormControl fullWidth error={!!error}>
+        <Grid item xs={12} sm={6} md={4}>
+          <FormControl fullWidth error={!!error} sx={{border:Constants.formInputBorderColor}}>
             <InputLabel>Budget (Approx.)</InputLabel>
             <Select value={budget} onChange={handleBudgetChange} label="Budget (Approx.)">
               <MenuItem value="45 L - 50 L">45 L - 50 L</MenuItem>
@@ -388,8 +408,8 @@ const handleBudgetChange = (event) => {
         </Grid>
     
      
-        <Grid item xs={4}>
-          <FormControl fullWidth error={!!error}>
+        <Grid item xs={12} sm={6} md={4}>
+          <FormControl fullWidth error={!!error} sx={{border:Constants.formInputBorderColor}}>
             <InputLabel>Planning To Buy Within?</InputLabel>
             <Select
               value={planningToBuy}
@@ -405,8 +425,8 @@ const handleBudgetChange = (event) => {
         </Grid>
     
        
-        <Grid item xs={4}>
-          <FormControl fullWidth error={!!error}>
+       <Grid item xs={12} sm={6} md={4}>
+          <FormControl fullWidth error={!!error} sx={{border:Constants.formInputBorderColor}}>
             <InputLabel>Occupation</InputLabel>
             <Select value={occupation} onChange={handleOccupationChange} label="Occupation">
               <MenuItem value="Service / Job">Service / Job</MenuItem>
@@ -419,8 +439,8 @@ const handleBudgetChange = (event) => {
         </Grid>
     
         
-        <Grid item xs={4}>
-          <FormControl fullWidth error={!!error}>
+       <Grid item xs={12} sm={6} md={4}>
+          <FormControl fullWidth error={!!error} sx={{border:Constants.formInputBorderColor}}>
             <InputLabel>Reason For Purchase</InputLabel>
             <Select
               value={reasonForPurchase}
@@ -435,24 +455,28 @@ const handleBudgetChange = (event) => {
         </Grid>
     
       
-        <Grid item xs={4}>
-          <TextField label="Customer Feedback & Complete Followup Details" fullWidth />
+      <Grid item xs={12} sm={6} md={4}>
+          <TextField label="Customer Feedback & Complete Followup Details" fullWidth sx={{border:Constants.formInputBorderColor}}/>
         </Grid>
   </Grid>
 
- 
+ </DialogContent>
+   <DialogActions>
   <div className="mt-3">
-    <Button variant="contained" color="success" onClick={handleSave}>
+    <Button variant="contained"  onClick={handleSave} sx={{background:Constants.primaryColor}}>
  Update
     </Button>
     <Button variant="outlined" color="error" onClick={handleCancel} style={{ marginLeft: "8px" }}>
       Cancel
     </Button>
   </div>
-</div>
+  </DialogActions>
+  </Dialog>
+
 
       ) : (
         <TableContainer component={Paper}>
+          <Box sx={{ maxHeight: 400, overflowY: 'auto' }}>
           <Table>
             <TableHead>
               <TableRow sx={{ background: Constants.primaryColor }}>
@@ -481,7 +505,10 @@ const handleBudgetChange = (event) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {data.map((item, index) => (
+              {/* {data.map((item, index) => ( */}
+              {data
+  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+  .map((item, index) => (
                 <TableRow key={index}>
                   <TableCell>
                     <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
@@ -489,31 +516,35 @@ const handleBudgetChange = (event) => {
                         <IconButton
                           size="small"
                           sx={{
-                            backgroundColor: "#1976D2",
+                            backgroundColor: Constants.primaryColor,
                             color: "white",
                             borderRadius: "50%",
-                            "&:hover": { backgroundColor: "#1565C0" },
+                            "&:hover": { backgroundColor: Constants.primaryColor},
                           }}
                           onClick={() => handleEdit(item)}
                         >
                           <EditIcon sx={{ fontSize: "18px" }} />
                         </IconButton>
                       </Tooltip>
-                      <Tooltip title="Email">
-                        <IconButton
-                          size="small"
-                          sx={{
-                            backgroundColor: "#EA4335",
-                            color: "white",
-                            borderRadius: "50%",
-                            "&:hover": { backgroundColor: "#D93025" },
-                          }}
-                          onClick={() => handleEmail(item)}
-                        >
-                          <EmailIcon sx={{ fontSize: "18px" }} />
-                        </IconButton>
-                      </Tooltip>
-                      <Tooltip title="Assign To">
+        <Tooltip title="WhatsApp">
+  <IconButton
+    size="small"
+    sx={{
+      backgroundColor: Constants.primaryColor ,// WhatsApp green
+      color: "white",
+      borderRadius: "50%",
+      "&:hover": { backgroundColor: Constants.primaryColor },
+    }}
+    onClick={() => {
+      const phone = item.mobileNo?.replace(/\D/g, ""); // remove non-digits
+      const message = encodeURIComponent("Hello, I’m contacting you regarding your lead.");
+      window.open(`https://wa.me/${phone}?text=${message}`, "_blank");
+    }}
+  >
+    <WhatsAppIcon sx={{ fontSize: "18px" }} />
+  </IconButton>
+</Tooltip>
+                      {/* <Tooltip title="Assign To">
                         <IconButton
                           size="small"
                           sx={{
@@ -526,7 +557,7 @@ const handleBudgetChange = (event) => {
                         >
                           <AssignmentIcon sx={{ fontSize: "18px" }} />
                         </IconButton>
-                      </Tooltip>
+                      </Tooltip> */}
                     </div>
                   </TableCell>
 
@@ -555,8 +586,26 @@ const handleBudgetChange = (event) => {
               ))}
             </TableBody>
           </Table>
+          </Box>
+            <Box display="flex" justifyContent="flex-end" mt={2}>
+  <TablePagination
+    rowsPerPageOptions={[5, 10, 25]}
+    component="div"
+    count={data.length}
+    rowsPerPage={rowsPerPage}
+    page={page}
+    onPageChange={(event, newPage) => setPage(newPage)}
+    onRowsPerPageChange={(event) => {
+      setRowsPerPage(parseInt(event.target.value, 10));
+      setPage(0);
+    }}
+  />
+</Box>
         </TableContainer>
+        
       )}
+    
+
     </div>
   );
 };
