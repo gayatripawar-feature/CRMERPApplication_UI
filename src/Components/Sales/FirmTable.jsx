@@ -47,7 +47,7 @@ const handleOpenDocument = (url) => {
   }
 };
 
-const FirmTable = ( {firms}) => {
+const FirstVisitsPendingfollowup = ( {firms}) => {
    console.log("Received firms data:", firms); 
   return (
     <TableContainer component={Paper}>
@@ -181,4 +181,4 @@ const FirmTable = ( {firms}) => {
   );
 };
 
-export default FirmTable;
+export default FirstVisitsPendingfollowup;

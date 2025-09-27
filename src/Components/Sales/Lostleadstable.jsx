@@ -414,7 +414,7 @@ const [editData, setEditData] = useState({
 
                     </Tooltip>
 
-                    <Tooltip title="WhatsApp" arrow>
+                    {/* <Tooltip title="WhatsApp" arrow>
                       <IconButton
                         size="small"
                         sx={{
@@ -428,7 +428,29 @@ const [editData, setEditData] = useState({
                       >
                         <WhatsAppIcon sx={{ fontSize: "20px" }} />
                       </IconButton>
-                    </Tooltip>
+                    </Tooltip> */}
+                 <Tooltip title="WhatsApp" arrow>
+  <a
+    href={`https://wa.me/${firm.mobileNo}?text=Hello ${firm.name}`}
+    target="_blank"
+    rel="noopener noreferrer"
+    style={{ textDecoration: "none" }}
+  >
+    <IconButton
+      size="small"
+      sx={{
+        backgroundColor: Constants.primaryColor,
+        borderRadius: "50%",
+        color: "white",
+        "&:hover": { backgroundColor: Constants.primaryColor },
+        width: "32px",
+        height: "32px",
+      }}
+    >
+      <WhatsAppIcon sx={{ fontSize: "20px" }} />
+    </IconButton>
+  </a>
+</Tooltip>
 
                   
                   </div>

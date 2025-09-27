@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import RolePermissions from "./RolePermissions";
+import Constants from "./Constants";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -86,10 +87,14 @@ const handleLogin = (e) => {
               width: "100%",
               padding: "12px",
               margin: "10px 0",
-              border: "1px solid #ccc",
+              // border: "1px solid #ccc",
+               border: `1px solid ${Constants.borderColor}`, 
               borderRadius: "8px",
               fontSize: "14px",
+              outline: "none",
+              
             }}
+            
           />
           <input
             type="password"
@@ -101,9 +106,10 @@ const handleLogin = (e) => {
               width: "100%",
               padding: "12px",
               margin: "10px 0",
-              border: "1px solid #ccc",
+             border: `1px solid ${Constants.borderColor}`, 
               borderRadius: "8px",
               fontSize: "14px",
+              outline: "none",
             }}
           />
           <button
@@ -112,7 +118,7 @@ const handleLogin = (e) => {
               width: "100%",
               padding: "12px",
               marginTop: "15px",
-              backgroundColor: "#3551ebff",
+              backgroundColor: Constants.primaryColor,
               color: "white",
               border: "none",
               borderRadius: "8px",

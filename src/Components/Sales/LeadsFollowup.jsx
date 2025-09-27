@@ -1348,7 +1348,7 @@ import {
   useMediaQuery, useTheme, Dialog, DialogTitle, DialogContent, DialogActions
 } from '@mui/material';
 import { FaEye, FaBuilding, FaFileDownload, FaPlus, FaTrash, FaUpload } from "react-icons/fa";
-import FirmTable from './FirmTable';
+import FirmTable from './FirstVisitsPendingfollowup';
 import DisplayTable from "./DisplayTable";
 import LandownerTable from "./LandownerTable";
 import FlatAllotment from './FlatAllotement';

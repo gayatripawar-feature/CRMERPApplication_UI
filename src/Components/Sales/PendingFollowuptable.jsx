@@ -705,7 +705,7 @@ const handleEditClick = (firm) => {
                   // onClick={() => handleEditClick(index)}
                   onClick={() => handleEditClick(firm)} 
                   sx={{
-                    backgroundColor: 'primary.main',
+                    backgroundColor:Constants.primaryColor,
                     padding: '5px',
                     borderRadius: '50%',
                     color: 'white',
@@ -720,7 +720,7 @@ const handleEditClick = (firm) => {
                   color="success"
                   onClick={() => window.open(`https://wa.me/${firm.mobileNo || ''}`, '_blank')}
                   sx={{
-                    backgroundColor: 'success.main',
+                    backgroundColor: Constants.primaryColor,
                     padding: '5px',
                     borderRadius: '50%',
                     color: 'white',
@@ -788,7 +788,9 @@ const handleEditClick = (firm) => {
             top: '50%',
             left: '50%',
             transform: 'translate(-50%, -50%)',
-            width: 950,
+            // width: 950,
+              width: { xs: "90%", sm: "80%", md: "950px" },
+                maxWidth: "95vw",
             bgcolor: 'background.paper',
             p: 4,
             borderRadius: 2,
