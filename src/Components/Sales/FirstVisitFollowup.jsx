@@ -2739,7 +2739,7 @@ const FirstvisitFollowup = () => {
   const [phases, setPhases] = useState([]);
   const [showLandownerForm, setShowLandownerForm] = useState(false);
   const [showFlatForm, setShowFlatForm] = useState(false);
-  const [selectedTab, setSelectedTab] = useState("firm");
+  const [selectedTab, setSelectedTab] = useState("pending");
   const [projectData, setProjectData] = useState([]);
   const [FlatAllotement, setFlatAllotement] = useState([false]);
   const [selectedProject, setSelectedProject] = useState("");
