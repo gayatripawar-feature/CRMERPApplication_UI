@@ -252,7 +252,10 @@ const FlatAllotmentReport = () => {
       
       <div className="row mb-3">
         <div className="col-md-12 text-end">
-          <button type="submit" className="btn  mt-4 w-25" style={{background:Constants.primaryColor,color:"#fff"}}>Submit</button>
+          <button type="submit" className="btn  mt-4 w-25" 
+          style={{background:Constants.primaryColor,color:"#fff"}}
+          
+          >Submit</button>
         </div>
       </div>
 

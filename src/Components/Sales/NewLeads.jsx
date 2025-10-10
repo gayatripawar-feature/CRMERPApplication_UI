@@ -710,13 +710,52 @@ const NewLeads = ({ inventoryData, setInventoryData, isMobile, isTablet, handleD
                       </Typography>
                     )}
                   </TableCell>
-                  <TableCell>{item.leadNo}</TableCell>
+                  {/* <TableCell>{item.leadNo}</TableCell>
                   <TableCell>{item.name}</TableCell>
                   <TableCell>{item.mobile}</TableCell>
                   <TableCell>{item.lookingFor}</TableCell>
                   <TableCell>{item.email}</TableCell>
                   <TableCell>{item.sourceName}</TableCell>
-                  <TableCell>{item.location}</TableCell>
+                  <TableCell>{item.location}</TableCell> */}
+                  
+                  <TableCell>{item.id}</TableCell>                 
+{/* <TableCell>{item.name}</TableCell>
+<TableCell>{item.phone}</TableCell>           
+<TableCell>{item.interest}</TableCell>          
+<TableCell>{item.email}</TableCell>
+<TableCell>{item.source}</TableCell>           
+<TableCell>{item.address}</TableCell>            */}
+{/* 
+ <TableCell>{item.Name}</TableCell>
+  <TableCell>{item.Phone}</TableCell>
+   <TableCell>{item.Interest}</TableCell>
+  <TableCell>{item.Email}</TableCell>
+    <TableCell>{item.Source}</TableCell>
+  <TableCell>{item.Address}</TableCell> */}
+ 
+<TableCell>{item.name}</TableCell>
+<TableCell>{item.phone}</TableCell>
+<TableCell>{item.interest}</TableCell>
+<TableCell>{item.email}</TableCell>
+<TableCell>{item.source}</TableCell>
+<TableCell>{item.address}</TableCell>
+
+  {/* <TableCell>{item.UpdatedBy}</TableCell> */}
+
+
+
+
+
+
+{/* <TableCell>{item.id}</TableCell>          
+<TableCell>{item.Name}</TableCell>      
+<TableCell>{item.Phone}</TableCell>       
+<TableCell>{item.Interest}</TableCell>    
+<TableCell>{item.Email}</TableCell>       
+<TableCell>{item.Source}</TableCell>      
+<TableCell>{item.Address}</TableCell>      */}
+
+
                 </TableRow>
               ))
             )}

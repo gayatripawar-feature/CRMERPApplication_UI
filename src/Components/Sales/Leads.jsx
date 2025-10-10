@@ -4,34 +4,68 @@ import {
   Paper, Button, TextField, Grid, MenuItem, Box, Tooltip, IconButton,
   useMediaQuery, useTheme, Dialog, DialogTitle, DialogContent, DialogActions
 } from '@mui/material';
-import { FaEye, FaFileCsv, FaUpload, FaPlus, FaTrash } from "react-icons/fa";
+import { FaEye, FaFileCsv, FaUpload ,FaFileDownload } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import NewLeads from './NewLeads';
 import { jsPDF } from "jspdf";
-import { FaFileDownload } from "react-icons/fa";
 import autoTable from "jspdf-autotable";
 import Constants from '../Constants';
-
-const fetchLoansData = async () => {
-  const response = await fetch('/api/getOCRCollection');
-  return response.json();
-};
-
 const unitTypes = ["Actual Site", "Hoarding", "Facebook", "Instagram", "Website", "Print Media", "Radio", "Google add", "Exhibition", "Online Portal", "Direct call", "Pamphlet", "Channel Partner", "References", "Other"];
-
 const sections = [
   { label: "Display Leads", icon: <FaEye size={24} />, bgColor: "primary.main" },
   { label: "Sample CSV", icon: <FaFileCsv size={24} />, bgColor: "success.main" },
   { label: "Upload Excel", icon: <FaUpload size={24} />, bgColor: "secondary.main" },
 ];
 
+// To get the data from api/leads:
+const fetchLeadsData = async () => {
+  try {
+    // const response = await fetch('http://localhost:5174/api/Leads'); // hosted API URL
+     const response = await fetch('/api/Leads');
+    if (!response.ok) {
+      console.log('checking api response');
+      console.log(await response.text());
+      throw new Error('Network response was not ok');
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching leads:', error);
+    return [];
+  }
+};
+
+// to submit the data or post API-api/leads:
+const createLead = async (leadData) => {
+  try {
+    const response = await fetch('/api/leads', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(leadData),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Failed to submit lead: ${errorText}`);
+    }
+
+    const savedLead = await response.json();
+    return savedLead;
+
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
 const Leads = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
  const [leadCounter, setLeadCounter] = useState(0);
-
-  const [loans, setLoans] = useState([]);
+const [loans, setLoans] = useState([]);
   const [expandedSection, setExpandedSection] = useState(0);
   const [showFirmForm, setShowFirmForm] = useState(false);
   const [name, setName] = useState('');
@@ -41,14 +75,17 @@ const Leads = () => {
   const [email, setEmail] = useState('');
   const [mobileError, setMobileError] = useState('');
   const [emailError, setEmailError] = useState('');
-
   useEffect(() => {
-    loadLoansData();
-  }, []);
+  const loadLeads = async () => {
+    const data = await fetchLeadsData();
+    // setLoans(data); // or setInventoryData(data) if you want to show in your table
+    setInventoryData(data);
+  };
 
-  const fileInputRef = useRef(null);
-
-  const [formData, setFormData] = useState({
+  loadLeads();
+}, []);
+const fileInputRef = useRef(null);
+const [formData, setFormData] = useState({
     name: '',
     mobile: '',
     email: '',
@@ -57,29 +94,11 @@ const Leads = () => {
     lookingFor: '',
     partners: [],
   });
-
-  const [inventoryData, setInventoryData] = useState([]);
-
-  const loadLoansData = async () => {
+ const [inventoryData, setInventoryData] = useState([]);
+ const loadLoansData = async () => {
     const data = await fetchLoansData();
     setLoans(data);
   };
-
-  // const handleToggleSection = (index) => {
-  //   setExpandedSection(index);
-  //   if (index === 1) {
-  //     downloadSampleCsv();
-  //   } else if (index === 2) {
-  //     if (fileInputRef.current) {
-  //       fileInputRef.current.click();
-  //     }
-  //   } else {
-      
-  //     setShowFileInput(false);
-  //   }
-  // };
-
-
    const handleToggleSection = (index) => {
   if (index === 1) {
     // Sample CSV action
@@ -129,6 +148,7 @@ const Leads = () => {
 
     setName(value);
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    console.log("handleChange:", e.target.name, value, formData);
   };
 
   const validateMobile = (value) => {
@@ -215,35 +235,139 @@ const Leads = () => {
     autoClose: 3000,
   });
 };
-  const handleFormSubmit = () => {
-    console.log("submit");
+  // const handleFormSubmit = () => {
+  //   console.log("submit");
 
-    // Validate required fields
-    if (!formData.name || !formData.mobile || !formData.lookingFor || !formData.sourceName) {
-      toast.error("Please fill in all required fields", { position: "top-right", autoClose: 3000 });
-      return;
-    }
+  //   // Validate required fields
+  //   if (!formData.name || !formData.mobile || !formData.lookingFor || !formData.sourceName) {
+  //     toast.error("Please fill in all required fields", { position: "top-right", autoClose: 3000 });
+  //     return;
+  //   }
      
-    // Increment counter
+  //   // Increment counter
+  // const newCounter = leadCounter + 1;
+  // setLeadCounter(newCounter);
+
+  // // Format lead number with leading zeros
+  // const formattedLeadNo = `LEAD-${String(newCounter).padStart(2, '0')}`;
+
+  //   // Create a new lead object with a unique leadNo
+  //   const newLead = {
+  //     ...formData,
+  //     timestamp: new Date().toLocaleString(),
+  //     assignTo: '',
+  //     // leadNo: `LD${Date.now()}`,
+  //     leadNo: formattedLeadNo,
+  //   };
+
+  //   // Add the new lead to the BEGINNING of the inventoryData state (top of table)
+  //   setInventoryData([newLead, ...inventoryData]);
+
+  //   // Clear form data after submission
+  //   setFormData({
+  //     name: '',
+  //     mobile: '',
+  //     email: '',
+  //     location: '',
+  //     sourceName: '',
+  //     lookingFor: '',
+  //     partners: [],
+  //   });
+
+  //   // Clear individual state variables
+  //   setName('');
+  //   setMobile('');
+  //   setEmail('');
+
+  //   // Show success message
+  //   toast.success("Leads details are submitted!", {
+  //     position: "top-right",
+  //     autoClose: 3000,
+  //   });
+  //   // Close form only after successful submission
+  // setShowFirmForm(false);
+  // };
+
+  
+
+  const handleFormSubmit = async () => {
+  // Validate required fields
+  console.log("Submitting formData:", formData);
+  if (!formData.name || !formData.mobile || !formData.lookingFor || !formData.sourceName) {
+    toast.error("Please fill in all required fields", { position: "top-right", autoClose: 3000 });
+    return;
+  }
+
   const newCounter = leadCounter + 1;
   setLeadCounter(newCounter);
-
-  // Format lead number with leading zeros
   const formattedLeadNo = `LEAD-${String(newCounter).padStart(2, '0')}`;
 
-    // Create a new lead object with a unique leadNo
-    const newLead = {
-      ...formData,
-      timestamp: new Date().toLocaleString(),
-      assignTo: '',
-      // leadNo: `LD${Date.now()}`,
-      leadNo: formattedLeadNo,
-    };
+  // const newLead = {
+  //   ...formData,
+  //   timestamp: new Date().toISOString(),
+  //   assignTo: '',
+  //   leadNo: formattedLeadNo,
+  // };
 
-    // Add the new lead to the BEGINNING of the inventoryData state (top of table)
-    setInventoryData([newLead, ...inventoryData]);
+//   const newLead = {
+//   Name: formData.name,
+//   Mobile: formData.mobile,
+//   Email: formData.email,
+//   Source: formData.sourceName,   // map frontend field
+//   Address: formData.location,    // map frontend field
+//   Interest: formData.lookingFor, // map frontend field
+//   UpdatedBy: "System",           // must provide something
+//   Timestamp: new Date().toISOString(),
+//   AssignTo: '',                  // optional
+//   LeadNo: formattedLeadNo
+// };
 
-    // Clear form data after submission
+// const newLead = {
+//   name: formData.name,
+//   mobile: formData.mobile,
+//   email: formData.email,
+//   sourceName: formData.sourceName,
+//   location: formData.location,
+//   lookingFor: formData.lookingFor,
+//   updatedBy: "System",
+//   timestamp: new Date().toISOString(),
+//   assignTo: '',
+//   leadNo: formattedLeadNo
+// };
+// -------
+
+// const newLead = {
+//   Name: formData.name,          // optional, depends on API
+//   Mobile: formData.mobile,
+//   Email: formData.email,
+//   Source: formData.sourceName,   // map correctly
+//   Address: formData.location,    // map correctly
+//   Interest: formData.lookingFor, // map correctly
+//   UpdatedBy: "System",
+//   Timestamp: new Date().toISOString(),
+//   AssignTo: '',
+//   LeadNo: formattedLeadNo
+// };
+// -----------
+const newLead = {
+  Name: formData.name,
+  Mobile: formData.mobile,
+  Email: formData.email,
+  Source: formData.sourceName,
+  Address: formData.location,
+  Interest: formData.lookingFor,
+  UpdatedBy: "System",
+  Timestamp: new Date().toISOString(),
+  AssignTo: '',
+  LeadNo: formattedLeadNo
+};
+
+
+  try {
+    const savedLead = await createLead(newLead); // call external function
+    console.log("saving lead data ",savedLead);
+    setInventoryData([savedLead, ...inventoryData]);
+
     setFormData({
       name: '',
       mobile: '',
@@ -253,22 +377,18 @@ const Leads = () => {
       lookingFor: '',
       partners: [],
     });
-
-    // Clear individual state variables
     setName('');
     setMobile('');
     setEmail('');
 
-    // Show success message
-    toast.success("Leads details are submitted!", {
-      position: "top-right",
-      autoClose: 3000,
-    });
-    // Close form only after successful submission
-  setShowFirmForm(false);
-  };
+    toast.success("Lead submitted successfully!", { position: "top-right", autoClose: 3000 });
+    setShowFirmForm(false);
 
-  
+  } catch (error) {
+    toast.error("Failed to submit lead. Please try again.", { position: "top-right", autoClose: 3000 });
+  }
+};
+
 
   return (
     <div className="container my-2">
