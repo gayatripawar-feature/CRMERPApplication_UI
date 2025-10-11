@@ -10,6 +10,7 @@ import NewLeads from './NewLeads';
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import Constants from '../Constants';
+import { FaTimes } from 'react-icons/fa';
 const unitTypes = ["Actual Site", "Hoarding", "Facebook", "Instagram", "Website", "Print Media", "Radio", "Google add", "Exhibition", "Online Portal", "Direct call", "Pamphlet", "Channel Partner", "References", "Other"];
 const sections = [
   { label: "Display Leads", icon: <FaEye size={24} />, bgColor: "primary.main" },
@@ -21,7 +22,9 @@ const sections = [
 const fetchLeadsData = async () => {
   try {
     // const response = await fetch('http://localhost:5174/api/Leads'); // hosted API URL
-     const response = await fetch('/api/Leads');
+
+    //  const response = await fetch('/api/Leads');
+   const response = await fetch('/api/leads');
     if (!response.ok) {
       console.log('checking api response');
       console.log(await response.text());
@@ -71,10 +74,12 @@ const [loans, setLoans] = useState([]);
   const [name, setName] = useState('');
   const [error, setError] = useState('');
   const [showFileInput, setShowFileInput] = useState(false);
-  const [mobile, setMobile] = useState('');
+  // const [mobile, setMobile] = useState('');
+  const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [mobileError, setMobileError] = useState('');
   const [emailError, setEmailError] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   useEffect(() => {
   const loadLeads = async () => {
     const data = await fetchLeadsData();
@@ -87,12 +92,14 @@ const [loans, setLoans] = useState([]);
 const fileInputRef = useRef(null);
 const [formData, setFormData] = useState({
     name: '',
-    mobile: '',
+    // mobile: '',
+     phone: '',
     email: '',
     location: '',
     sourceName: '',
     lookingFor: '',
     partners: [],
+     SourceDetails: "",
   });
  const [inventoryData, setInventoryData] = useState([]);
  const loadLoansData = async () => {
@@ -173,7 +180,8 @@ const [formData, setFormData] = useState({
     const value = e.target.value;
     setMobile(value);
     validateMobile(value);
-    setFormData({ ...formData, mobile: e.target.value });
+    // setFormData({ ...formData, mobile: e.target.value });
+    setFormData({ ...formData, phone: e.target.value });
   };
 
   const handleEmailChange = (e) => {
@@ -235,65 +243,14 @@ const [formData, setFormData] = useState({
     autoClose: 3000,
   });
 };
-  // const handleFormSubmit = () => {
-  //   console.log("submit");
 
-  //   // Validate required fields
-  //   if (!formData.name || !formData.mobile || !formData.lookingFor || !formData.sourceName) {
-  //     toast.error("Please fill in all required fields", { position: "top-right", autoClose: 3000 });
-  //     return;
-  //   }
-     
-  //   // Increment counter
-  // const newCounter = leadCounter + 1;
-  // setLeadCounter(newCounter);
 
-  // // Format lead number with leading zeros
-  // const formattedLeadNo = `LEAD-${String(newCounter).padStart(2, '0')}`;
 
-  //   // Create a new lead object with a unique leadNo
-  //   const newLead = {
-  //     ...formData,
-  //     timestamp: new Date().toLocaleString(),
-  //     assignTo: '',
-  //     // leadNo: `LD${Date.now()}`,
-  //     leadNo: formattedLeadNo,
-  //   };
-
-  //   // Add the new lead to the BEGINNING of the inventoryData state (top of table)
-  //   setInventoryData([newLead, ...inventoryData]);
-
-  //   // Clear form data after submission
-  //   setFormData({
-  //     name: '',
-  //     mobile: '',
-  //     email: '',
-  //     location: '',
-  //     sourceName: '',
-  //     lookingFor: '',
-  //     partners: [],
-  //   });
-
-  //   // Clear individual state variables
-  //   setName('');
-  //   setMobile('');
-  //   setEmail('');
-
-  //   // Show success message
-  //   toast.success("Leads details are submitted!", {
-  //     position: "top-right",
-  //     autoClose: 3000,
-  //   });
-  //   // Close form only after successful submission
-  // setShowFirmForm(false);
-  // };
-
-  
 
   const handleFormSubmit = async () => {
   // Validate required fields
   console.log("Submitting formData:", formData);
-  if (!formData.name || !formData.mobile || !formData.lookingFor || !formData.sourceName) {
+  if (!formData.name || !formData.phone || !formData.lookingFor || !formData.sourceName) {
     toast.error("Please fill in all required fields", { position: "top-right", autoClose: 3000 });
     return;
   }
@@ -302,64 +259,24 @@ const [formData, setFormData] = useState({
   setLeadCounter(newCounter);
   const formattedLeadNo = `LEAD-${String(newCounter).padStart(2, '0')}`;
 
-  // const newLead = {
-  //   ...formData,
-  //   timestamp: new Date().toISOString(),
-  //   assignTo: '',
-  //   leadNo: formattedLeadNo,
-  // };
-
-//   const newLead = {
-//   Name: formData.name,
-//   Mobile: formData.mobile,
-//   Email: formData.email,
-//   Source: formData.sourceName,   // map frontend field
-//   Address: formData.location,    // map frontend field
-//   Interest: formData.lookingFor, // map frontend field
-//   UpdatedBy: "System",           // must provide something
-//   Timestamp: new Date().toISOString(),
-//   AssignTo: '',                  // optional
-//   LeadNo: formattedLeadNo
-// };
-
-// const newLead = {
-//   name: formData.name,
-//   mobile: formData.mobile,
-//   email: formData.email,
-//   sourceName: formData.sourceName,
-//   location: formData.location,
-//   lookingFor: formData.lookingFor,
-//   updatedBy: "System",
-//   timestamp: new Date().toISOString(),
-//   assignTo: '',
-//   leadNo: formattedLeadNo
-// };
-// -------
-
-// const newLead = {
-//   Name: formData.name,          // optional, depends on API
-//   Mobile: formData.mobile,
-//   Email: formData.email,
-//   Source: formData.sourceName,   // map correctly
-//   Address: formData.location,    // map correctly
-//   Interest: formData.lookingFor, // map correctly
-//   UpdatedBy: "System",
-//   Timestamp: new Date().toISOString(),
-//   AssignTo: '',
-//   LeadNo: formattedLeadNo
-// };
-// -----------
+ 
 const newLead = {
   Name: formData.name,
   Mobile: formData.mobile,
+  // Phone:formData.mobile,
+  // Phone: formData.phone,  
+  // Phone: Number(formData.phone),
   Email: formData.email,
   Source: formData.sourceName,
+   SourceDetails: sourceDetails, 
   Address: formData.location,
   Interest: formData.lookingFor,
   UpdatedBy: "System",
   Timestamp: new Date().toISOString(),
   AssignTo: '',
-  LeadNo: formattedLeadNo
+  LeadNo: formattedLeadNo,
+  //  SourceDetails: formData.SourceDetails,
+  
 };
 
 
@@ -370,15 +287,17 @@ const newLead = {
 
     setFormData({
       name: '',
-      mobile: '',
+      
       email: '',
       location: '',
       sourceName: '',
       lookingFor: '',
       partners: [],
+      SourceDetails: '',
     });
     setName('');
-    setMobile('');
+    // setMobile('');
+    setPhone('');
     setEmail('');
 
     toast.success("Lead submitted successfully!", { position: "top-right", autoClose: 3000 });
@@ -461,7 +380,7 @@ const newLead = {
         />
       </div>
 
-      {/* {expandedSection === 0 && ( */}
+      
         <div className="content-container mt-1">
           {!showFirmForm ? (
             <>
@@ -497,7 +416,7 @@ const newLead = {
                   </Button>
                 </div>
                  {/* Right side: Search Box */}
-  <TextField
+  {/* <TextField
     label="Search Leads"
     variant="outlined"
    size="small"
@@ -518,10 +437,22 @@ const newLead = {
         }))
       );
     }}
-  />
+  /> */}
+
+  <TextField
+  label="Search Lead"
+  variant="outlined"
+  size="small"
+  value={searchQuery}
+  onChange={(e) => setSearchQuery(e.target.value.toLowerCase())}
+  sx={{
+    minWidth: isMobile ? "100%" : "300px",
+    border: Constants.formInputBorderColor,
+  }}
+/>
               </div>
               <div className="mt-3">
-                <NewLeads
+                {/* <NewLeads
                   // inventoryData={inventoryData.filter(item => Object.keys(item).length > 0)}
                   inventoryData={inventoryData.filter(item => item.visible !== false)}
 
@@ -529,7 +460,27 @@ const newLead = {
                   setInventoryData={setInventoryData}
                   isMobile={isMobile}
                   isTablet={isTablet}
-                />
+                /> */}
+                <NewLeads
+  inventoryData={inventoryData.filter((item) => {
+    const query = searchQuery.trim();
+    if (!query) return true;
+
+    return (
+      item.leadNo?.toLowerCase().includes(query) ||
+      item.name?.toLowerCase().includes(query) ||
+      
+      String(item.phone || '').toLowerCase().includes(query) ||
+      // String(item.mobile || '').toLowerCase().includes(query) ||
+      item.assignTo?.toLowerCase().includes(query)
+    );
+  })}
+  handleDelete={handleDelete}
+  setInventoryData={setInventoryData}
+  isMobile={isMobile}
+  isTablet={isTablet}
+/>
+
               </div>
             </>
           ) : (
@@ -540,7 +491,21 @@ const newLead = {
               maxWidth="md"
               fullScreen={isMobile}
             >
-              <DialogTitle>Add New Lead</DialogTitle>
+              <DialogTitle sx={{
+    backgroundColor: Constants.primaryColor,
+    color: 'white',
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: '8px 16px',
+  }}>Add New Lead
+    <IconButton
+    onClick={() => setShowFirmForm(false)}
+    sx={{ color: 'white' }}
+  >
+    <FaTimes />
+  </IconButton>
+  </DialogTitle>
               <DialogContent>
                 <Grid container spacing={2} sx={{ mt: 1 }}>
                   <Grid item xs={12} sm={6}>
@@ -572,18 +537,34 @@ const newLead = {
                   </Grid>
 
                   <Grid item xs={12} sm={6}>
-                    <TextField
+                    {/* <TextField
                       label="Mobile No. / WhatsApp No."
                       fullWidth
                       required
-                      value={mobile}
+                      value={formData.mobile}
                       onChange={handleMobileChange}
                       error={!!mobileError}
                       helperText={mobileError}
                       size={isMobile ? "small" : "medium"}
                       sx={{ border: Constants.formInputBorderColor }}
 
-                    />
+                    /> */}
+
+                    <TextField
+  label="Mobile No. / WhatsApp No."
+  fullWidth
+  required
+  value={formData.phone}
+  onChange={(e) => {
+    const value = e.target.value;
+    setFormData({ ...formData, phone: value });
+    validateMobile(value);
+  }}
+  error={!!mobileError}
+  helperText={mobileError}
+   sx={{ border: Constants.formInputBorderColor }}
+/>
+
                   </Grid>
 
                   <Grid item xs={12} sm={6}>
@@ -633,6 +614,75 @@ const newLead = {
                       ))}
                     </TextField>
                   </Grid>
+
+
+
+
+{/* Conditional fields based on sourceName */}
+{formData.sourceName === "Channel Partner" && (
+  <>
+    <Grid item xs={12} sm={6}>
+      <TextField
+        label="Firm Name"
+        fullWidth
+        required
+        value={formData.firmName || ""}
+        onChange={(e) => setFormData({ ...formData, firmName: e.target.value })}
+        size={isMobile ? "small" : "medium"}
+        sx={{ border: Constants.formInputBorderColor }}
+      />
+    </Grid>
+    <Grid item xs={12} sm={6}>
+      <TextField
+        label="Person Name"
+        fullWidth
+        value={formData.personName || ""}
+        onChange={(e) => setFormData({ ...formData, personName: e.target.value })}
+        size={isMobile ? "small" : "medium"}
+        sx={{ border: Constants.formInputBorderColor }}
+      />
+    </Grid>
+    <Grid item xs={12} sm={6}>
+      <TextField
+        label="Mobile No."
+        fullWidth
+        value={formData.partnerMobile || ""}
+        onChange={(e) => setFormData({ ...formData, partnerMobile: e.target.value })}
+        size={isMobile ? "small" : "medium"}
+        sx={{ border: Constants.formInputBorderColor }}
+      />
+    </Grid>
+  </>
+)}
+
+{formData.sourceName === "References" && (
+  <Grid item xs={12} sm={6}>
+    <TextField
+      label="Reference Name"
+      fullWidth
+      value={formData.referenceName || ""}
+      required
+      onChange={(e) => setFormData({ ...formData, referenceName: e.target.value })}
+      size={isMobile ? "small" : "medium"}
+      sx={{ border: Constants.formInputBorderColor }}
+    />
+  </Grid>
+)}
+
+{formData.sourceName === "Other" && (
+  <Grid item xs={12} sm={6}>
+    <TextField
+      label="Other Source Name"
+      fullWidth
+      value={formData.otherSource || ""}
+      required
+      onChange={(e) => setFormData({ ...formData, otherSource: e.target.value })}
+      size={isMobile ? "small" : "medium"}
+      sx={{ border: Constants.formInputBorderColor }}
+    />
+  </Grid>
+)}
+                 
                 </Grid>
               </DialogContent>
               <DialogActions>
