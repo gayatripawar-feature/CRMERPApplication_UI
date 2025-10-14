@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import {
   TableContainer,
   Table,
@@ -80,46 +80,120 @@ const NewLeads = ({ inventoryData, setInventoryData, isMobile, isTablet, handleD
     setAssignedTo(""); // Reset assignedTo when opening the modal
   };
 
-  const handleCloseModal = () => {
-    if (!editMode && assignedTo && selectedLead) {
-      const updatedInventoryData = inventoryData.map((item) => {
-        // if (item.leadNo === selectedLead.leadNo) {
-        if (item.id === selectedLead.id) { 
-          return { ...item, assignTo: assignedTo };
-        }
-        return item;
+
+
+
+
+
+
+  
+
+const handleCloseModal = async () => {
+  console.log("🔹 handleCloseModal called");
+  console.log("editMode:", editMode);
+  console.log("assignedTo:", assignedTo);
+  console.log("selectedLead:", selectedLead);
+  console.log("editedLead:", editedLead);
+  console.log("inventoryData before update:", inventoryData);
+console.log("inventoryData fetched:", inventoryData);
+
+  // Handle Assign
+  if (!editMode && assignedTo && selectedLead) {
+    console.log("➡️ Assign mode");
+
+    // 1️⃣ Update UI
+    const updatedInventoryData = inventoryData.map((item) => {
+      if (item.id === selectedLead.id) {
+        console.log(`Updating lead id=${item.id} with assignedTo=${assignedTo}`);
+        // return { ...item, assignedTo: assignedTo };
+        return {
+  ...item,
+  leadEnagagements: [
+    ...(item.leadEnagagements || []),
+    {
+      id: Date.now(), // or from API response
+      assignedTo: assignedTo,
+      assignedBy: "Admin",
+      leadId: item.id,
+      assignedDate: new Date().toISOString(),
+      status: "Assigned"
+    }
+  ]
+};
+
+      }
+      return item;
+    });
+    console.log("Updated inventoryData (UI):", updatedInventoryData);
+    setInventoryData(updatedInventoryData);
+
+    // 2️⃣ Call API to save assignment
+    try {
+      console.log("Calling API to assign lead...");
+      const response = await fetch(`/api/leads/${selectedLead.id}/assignments`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          assignedTo: assignedTo, 
+          assignedBy: "Admin",
+          leadId: selectedLead.id
+        }),
       });
-      setInventoryData(updatedInventoryData);
-    // Show success modal instead of toast
-      setSuccessModalOpen(true);
 
-      // Don't close the assign modal yet, let the success modal handle it
-      return;
-    } else if (editMode && editedLead) {
-      const updatedInventoryData = inventoryData.map((item) => {
-        if (item.leadNo === editedLead.leadNo) {
-          return editedLead;
-        }
-        return item;
-      });
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Failed to assign lead: ${errorText}`);
+      }
 
-      setInventoryData(updatedInventoryData);
-
-      toast.success("Details updated successfully!", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-      });
-
-      setEditMode(false);
-      setEditedLead(null);
+      const savedLead = await response.json();
+      console.log("API response savedLead:", savedLead);
+      toast.success("Lead assigned successfully!");
+    } catch (error) {
+      console.error("API assign error:", error);
+      toast.error(`Failed to assign lead. ${error.message}`);
     }
 
-    setModalOpen(false);
-    setAssignedTo("");
-  };
+    // Show success modal
+    console.log("Opening success modal...");
+    setSuccessModalOpen(true);
+    return;
+  }
+
+  // Handle Edit
+  if (editMode && editedLead) {
+    console.log("➡️ Edit mode");
+
+    const updatedInventoryData = inventoryData.map((item) => {
+      if (item.leadNo === editedLead.leadNo) {
+        console.log(`Updating leadNo=${item.leadNo} with editedLead`, editedLead);
+        return editedLead;
+      }
+      return item;
+    });
+
+    console.log("Updated inventoryData (edit):", updatedInventoryData);
+    setInventoryData(updatedInventoryData);
+
+    toast.success("Details updated successfully!", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+    });
+
+    setEditMode(false);
+    setEditedLead(null);
+  }
+
+  // Cleanup
+  console.log("Closing modal and resetting state...");
+  setModalOpen(false);
+  setAssignedTo("");
+  setSelectedLead(null);
+};
+
+
 
   const handleSuccessModalClose = () => {
     setSuccessModalOpen(false);
@@ -333,41 +407,61 @@ const NewLeads = ({ inventoryData, setInventoryData, isMobile, isTablet, handleD
                     
                   </TableCell>
                  
-                  <TableCell>
-                    {item.assignTo ? (
-                      item.assignTo
-                    ) : (
-                      <Typography variant="body2" color="textSecondary">
-                        Not assigned
-                      </Typography>
-                    )}
-                  </TableCell>
+                 <TableCell>
+  {item.leadEnagagements && item.leadEnagagements.length > 0
+    ? item.leadEnagagements.reduce((latest, curr) =>
+        new Date(curr.assignedDate) > new Date(latest.assignedDate) ? curr : latest
+      ).assignedTo
+    : (
+      <Typography variant="body2" color="textSecondary">
+        Not assigned
+      </Typography>
+    )}
+</TableCell>
+
                 
                   
-                  <TableCell>{item.id}</TableCell>                 
+                  {/* <TableCell>{item.id}</TableCell>                  */}
+                  <TableCell>{`Lead- ${String(item.id).padStart(2, '0')}`}</TableCell>
+
 <TableCell>{item.name}</TableCell>
 
 
 
 <TableCell>{item.phone?.toString() || "-"}</TableCell>
+{/* <TableCell>{item.phone && item.phone !== 0 ? item.phone.toString() : "-"}</TableCell> */}
+
+
+
 
 <TableCell>{item.interest}</TableCell>
 <TableCell>{item.email}</TableCell>
 <TableCell>{item.source}</TableCell>
 <TableCell>{item.address}</TableCell>
  
- <TableCell>{formatTimestamp(item.lastUpdatedDate)}</TableCell>
+{/* 
 <TableCell>
-  {row.sourceName === "Channel Partner"
-    ? `${row.firmName || ""}; ${row.personName || ""}; ${row.partnerMobile || ""}`
-    : row.sourceName === "References"
-    ? row.referenceName || "-"
-    : row.sourceName === "Other"
-    ? row.otherSource || "-"
+  {item.sourceName === "Channel Partner"
+    ? `${item.firmName || ""}; ${item.personName || ""}; ${item.partnerMobile || ""}`
+    : item.sourceName === "References"
+    ? item.referenceName || "-"
+    : item.sourceName === "Other"
+    ? item.otherSource || "-"
+    : "-"}
+</TableCell> */}
+
+<TableCell>
+  {item.sourceDetails && item.sourceDetails.trim() !== ""
+    ? item.sourceDetails
     : "-"}
 </TableCell>
 
+ {/* <TableCell>{formatTimestamp(item.lastUpdatedDate)}</TableCell> */}
 
+
+<TableCell>
+  {formatTimestamp(item.Timestamp || item.lastUpdatedDate)}
+</TableCell>
 
 
 

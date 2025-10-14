@@ -11,10 +11,11 @@ import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import Constants from '../Constants';
 import { FaTimes } from 'react-icons/fa';
+import * as XLSX from "xlsx";
 const unitTypes = ["Actual Site", "Hoarding", "Facebook", "Instagram", "Website", "Print Media", "Radio", "Google add", "Exhibition", "Online Portal", "Direct call", "Pamphlet", "Channel Partner", "References", "Other"];
 const sections = [
   { label: "Display Leads", icon: <FaEye size={24} />, bgColor: "primary.main" },
-  { label: "Sample CSV", icon: <FaFileCsv size={24} />, bgColor: "success.main" },
+  { label: "Sample Excel", icon: <FaFileCsv size={24} />, bgColor: "success.main" },
   { label: "Upload Excel", icon: <FaUpload size={24} />, bgColor: "secondary.main" },
 ];
 
@@ -89,6 +90,9 @@ const [loans, setLoans] = useState([]);
 
   loadLeads();
 }, []);
+
+
+
 const fileInputRef = useRef(null);
 const [formData, setFormData] = useState({
     name: '',
@@ -100,6 +104,12 @@ const [formData, setFormData] = useState({
     lookingFor: '',
     partners: [],
      SourceDetails: "",
+
+      firmName: '',
+  personName: '',
+  partnerMobile: '',
+  referenceName: '',
+  otherSource: '',
   });
  const [inventoryData, setInventoryData] = useState([]);
  const loadLoansData = async () => {
@@ -244,6 +254,9 @@ const [formData, setFormData] = useState({
   });
 };
 
+useEffect(() => {
+  console.log("Table data updated:", inventoryData);
+}, [inventoryData]);
 
 
 
@@ -259,41 +272,79 @@ const [formData, setFormData] = useState({
   setLeadCounter(newCounter);
   const formattedLeadNo = `LEAD-${String(newCounter).padStart(2, '0')}`;
 
+
+  let sourceDetails = "";
+
+if (formData.sourceName === "Channel Partner") {
+  sourceDetails = `${formData.firmName || ""}; ${formData.personName || ""}; ${formData.partnerMobile || ""}`;
+} else if (formData.sourceName === "References") {
+  sourceDetails = formData.referenceName || "";
+} else if (formData.sourceName === "Other") {
+  sourceDetails = formData.otherSource || "";
+}
  
 const newLead = {
   Name: formData.name,
-  Mobile: formData.mobile,
-  // Phone:formData.mobile,
-  // Phone: formData.phone,  
-  // Phone: Number(formData.phone),
+  
+// Mobile: formData.phone,
+
+   phone: Number(formData.phone),
   Email: formData.email,
-  Source: formData.sourceName,
-   SourceDetails: sourceDetails, 
   Address: formData.location,
   Interest: formData.lookingFor,
+  Source: formData.sourceName,
+  // SourceDetails: formData.SourceDetails,  
+  SourceDetails: sourceDetails, 
   UpdatedBy: "System",
-  Timestamp: new Date().toISOString(),
-  AssignTo: '',
-  LeadNo: formattedLeadNo,
-  //  SourceDetails: formData.SourceDetails,
+  // Timestamp: new Date().toISOString(),
+  // AssignTo: '',
+  // LeadNo: formattedLeadNo,
   
+
+
+  // 
+  firmName: formData.firmName || "",
+  personName: formData.personName || "",
+  partnerMobile: formData.partnerMobile || "",
+  referenceName: formData.referenceName || "",
+  otherSource: formData.otherSource || "",
 };
 
 
   try {
     const savedLead = await createLead(newLead); // call external function
-    console.log("saving lead data ",savedLead);
+    console.log("Saved lead from API:", savedLead); 
     setInventoryData([savedLead, ...inventoryData]);
+    
+//     setInventoryData([{
+//   ...savedLead,
+//   phone: savedLead.Phone
+// }, ...inventoryData]);
+ 
+
 
     setFormData({
-      name: '',
+      // name: '',
       
-      email: '',
-      location: '',
-      sourceName: '',
-      lookingFor: '',
-      partners: [],
-      SourceDetails: '',
+      // email: '',
+      // location: '',
+      // sourceName: '',
+      // lookingFor: '',
+      // partners: [],
+      // SourceDetails: '',
+
+        name: "",
+    phone: "",
+    email: "",
+    location: "",
+    sourceName: "",
+    lookingFor: "",
+    firmName: "",
+    personName: "",
+    partnerMobile: "",
+    referenceName: "",
+    otherSource: "",
+    SourceDetails: "",
     });
     setName('');
     // setMobile('');
@@ -306,6 +357,197 @@ const newLead = {
   } catch (error) {
     toast.error("Failed to submit lead. Please try again.", { position: "top-right", autoClose: 3000 });
   }
+};
+
+// const handleFileUpload = async (e) => {
+//   const file = e.target.files[0];
+//   if (!file) return;
+
+//   const reader = new FileReader();
+//   reader.onload = async (evt) => {
+//     const bstr = evt.target.result;
+//     const workbook = XLSX.read(bstr, { type: "binary" });
+
+//     // Assuming first sheet
+//     const sheetName = workbook.SheetNames[0];
+//     const worksheet = workbook.Sheets[sheetName];
+
+//     // Convert sheet to JSON
+//     const jsonData = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
+//     console.log("Excel data:", jsonData);
+
+//     // Loop through each row and send to API
+//     for (let row of jsonData) {
+//       // Map Excel columns to DB columns
+//       const sourceDetails = row["Source Name"] === "Channel Partner"
+//         ? `${row["Firm Name"] || ""}; ${row["Person Name"] || ""}; ${row["Partner Mobile"] || ""}`
+//         : row["Source Name"] === "References"
+//         ? row["Reference Name"] || ""
+//         : row["Source Name"] === "Other"
+//         ? row["Other Source"] || ""
+//         : "";
+
+
+//          // Use Excel timestamp if present, otherwise use current time
+//       const timestamp = row["Timestamp"] 
+//         ? new Date(row["Timestamp"]).toISOString() 
+//         : new Date().toISOString();
+
+//       const leadData = {
+//         Name: row["Name"] || "",
+//         Phone: Number(row["Mobile No."] || 0),
+//         Email: row["Email"] || "",
+//         Address: row["Location"] || "",
+//         Interest: row["Are You Looking For"] || "",
+//         Source: row["Source Name"] || "",
+//         SourceDetails: sourceDetails,
+//         UpdatedBy: "System",
+//         LeadNo: `LEAD-${String(leadCounter + 1).padStart(2, "0")}`,
+//         AssignTo: "",
+//          Timestamp: timestamp,
+//       };
+
+//       try {
+//         const savedLead = await createLead(leadData);
+//         setInventoryData((prev) => [savedLead, ...prev]);
+//         setLeadCounter((prev) => prev + 1);
+//       } catch (err) {
+//         console.error("Error uploading lead:", err);
+//       }
+//     }
+
+//     toast.success("Excel data uploaded successfully!", { position: "top-right", autoClose: 3000 });
+//   };
+
+//   reader.readAsBinaryString(file);
+// };
+
+
+// const handleFileUpload = async (e) => {
+//   const file = e.target.files[0];
+//   if (!file) return;
+
+//   const reader = new FileReader();
+//   reader.onload = async (evt) => {
+//     const arrayBuffer = evt.target.result;
+//     const workbook = XLSX.read(arrayBuffer, { type: "array" }); // use type 'array'
+
+//     const sheetName = workbook.SheetNames[0];
+//     const worksheet = workbook.Sheets[sheetName];
+
+//     // Convert sheet to JSON
+//     const jsonData = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
+//     console.log("Excel data:", jsonData);
+
+//     for (let row of jsonData) {
+//       console.log("Processing row:", row);
+
+//       const sourceDetails = row["Source Name"] === "Channel Partner"
+//         ? `${row["Firm Name"] || ""}; ${row["Person Name"] || ""}; ${row["Partner Mobile"] || ""}`
+//         : row["Source Name"] === "References"
+//         ? row["Reference Name"] || ""
+//         : row["Source Name"] === "Other"
+//         ? row["Other Source"] || ""
+//         : "";
+
+//       // Use Excel timestamp exactly as-is
+//       const timestamp = row["Timestamp"] || new Date().toISOString();
+//       console.log("Final Timestamp for API:", timestamp);
+
+//       const leadData = {
+//         Name: row["Name"] || "",
+//         Phone: Number(row["Mobile No."] || 0),
+//         Email: row["Email"] || "",
+//         Address: row["Location"] || "",
+//         Interest: row["Are You Looking For"] || "",
+//         Source: row["Source Name"] || "",
+//         SourceDetails: sourceDetails,
+//         UpdatedBy: "System",
+//         LeadNo: `LEAD-${String(leadCounter + 1).padStart(2, "0")}`,
+//         AssignTo: "",
+//         Timestamp: timestamp, // <-- raw value from Excel
+//       };
+
+//       try {
+//         const savedLead = await createLead(leadData);
+//         setInventoryData((prev) => [savedLead, ...prev]);
+//         setLeadCounter((prev) => prev + 1);
+//       } catch (err) {
+//         console.error("Error uploading lead:", err);
+//       }
+//     }
+
+//     toast.success("Excel data uploaded successfully!", { position: "top-right", autoClose: 3000 });
+//   };
+
+//   reader.readAsArrayBuffer(file);
+// };
+
+const handleFileUpload = async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = async (evt) => {
+    const arrayBuffer = evt.target.result;
+    const workbook = XLSX.read(arrayBuffer, { type: "array" });
+
+    const sheetName = workbook.SheetNames[0];
+    const worksheet = workbook.Sheets[sheetName];
+
+    const jsonData = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
+    console.log("Excel data:", jsonData);
+
+    for (let row of jsonData) {
+      console.log("Processing row:", row);
+
+      const sourceDetails = row["Source Name"] === "Channel Partner"
+        ? `${row["Firm Name"] || ""}; ${row["Person Name"] || ""}; ${row["Partner Mobile"] || ""}`
+        : row["Source Name"] === "References"
+        ? row["Reference Name"] || ""
+        : row["Source Name"] === "Other"
+        ? row["Other Source"] || ""
+        : "";
+
+      // Use Excel timestamp if present, else fallback to system timestamp
+      const timestamp = row["Timestamp"] ? row["Timestamp"] : new Date().toISOString();
+      console.log("Final Timestamp for API:", timestamp);
+
+      const leadData = {
+        Name: row["Name"] || "",
+        Phone: Number(row["Mobile No."] || 0),
+        Email: row["Email"] || "",
+        Address: row["Location"] || "",
+        Interest: row["Are You Looking For"] || "",
+        Source: row["Source Name"] || "",
+        SourceDetails: sourceDetails,
+        UpdatedBy: "System",
+        LeadNo: `LEAD-${String(leadCounter + 1).padStart(2, "0")}`,
+        AssignTo: "",
+        Timestamp: timestamp, 
+      frontendTimestamp: timestamp
+      };
+
+      try {
+        const savedLead = await createLead(leadData);
+        // overwrite timestamp only in frontend table
+        setInventoryData((prev) => [
+          { ...savedLead, Timestamp: timestamp },
+          ...prev,
+        ]);
+        setLeadCounter((prev) => prev + 1);
+      } catch (err) {
+        console.error("Error uploading lead:", err);
+      }
+    }
+
+    toast.success("Excel data uploaded successfully!", {
+      position: "top-right",
+      autoClose: 3000,
+    });
+  };
+
+  reader.readAsArrayBuffer(file);
 };
 
 
@@ -374,9 +616,7 @@ const newLead = {
           accept=".csv, .xlsx"
           ref={fileInputRef}
           style={{ display: 'none' }}
-          onChange={(e) => {
-            console.log('File selected:', e.target.files[0]);
-          }}
+          onChange={handleFileUpload}
         />
       </div>
 
@@ -415,29 +655,7 @@ const newLead = {
                     {isMobile ? 'PDF' : 'Download PDF'}
                   </Button>
                 </div>
-                 {/* Right side: Search Box */}
-  {/* <TextField
-    label="Search Leads"
-    variant="outlined"
-   size="small"
-  sx={{ minWidth: isMobile ? '100%' : '250px' ,
-    border:Constants.formInputBorderColor,
-  }}
-    onChange={(e) => {
-      const value = e.target.value.toLowerCase();
-      // Filter inventoryData based on name, mobile, or lookingFor- serach for the leadno,name,mobile,lookingFor
-      setInventoryData(prev => 
-        prev.map(item => ({
-          ...item,
-          visible: !value || 
-            (item.leadNo?.toLowerCase().includes(value)) ||
-            (item.name?.toLowerCase().includes(value)) ||
-            (item.mobile?.toLowerCase().includes(value)) ||
-            (item.lookingFor?.toLowerCase().includes(value))
-        }))
-      );
-    }}
-  /> */}
+                 
 
   <TextField
   label="Search Lead"
@@ -451,6 +669,7 @@ const newLead = {
   }}
 />
               </div>
+               
               <div className="mt-3">
                 {/* <NewLeads
                   // inventoryData={inventoryData.filter(item => Object.keys(item).length > 0)}
@@ -461,18 +680,60 @@ const newLead = {
                   isMobile={isMobile}
                   isTablet={isTablet}
                 /> */}
-                <NewLeads
+              
+                {/* <NewLeads
   inventoryData={inventoryData.filter((item) => {
     const query = searchQuery.trim();
     if (!query) return true;
 
+    inventoryData.forEach(item => {
+  if (!item.phone && !item.Mobile) {
+    console.warn("Missing phone/Mobile in lead:", item);
+  }
+});
+
+  const firmName = item.firmName?.toLowerCase() || "";
+  const channelPartnerName = item.personName?.toLowerCase() || "";
+  const sourceDetails = item.sourceDetails?.toLowerCase() || "";
+    firmName.includes(query) ||
+    channelPartnerName.includes(query) ||
+    sourceDetails.includes(query)
     return (
-      item.leadNo?.toLowerCase().includes(query) ||
       item.name?.toLowerCase().includes(query) ||
+      String(item.phone || '').toLowerCase().includes(query) 
+
       
-      String(item.phone || '').toLowerCase().includes(query) ||
-      // String(item.mobile || '').toLowerCase().includes(query) ||
-      item.assignTo?.toLowerCase().includes(query)
+    );
+  })}
+  handleDelete={handleDelete}
+  setInventoryData={setInventoryData}
+  isMobile={isMobile}
+  isTablet={isTablet}
+/> */}
+
+{/* Searching by only lead name, phone, Channel partner name */}
+<NewLeads
+  inventoryData={inventoryData.filter((item) => {
+    const query = searchQuery.trim().toLowerCase();
+    if (!query) return true;
+
+    // Optional: log if phone is missing
+    if (!item.phone && !item.Mobile) {
+      console.warn("Missing phone/Mobile in lead:", item);
+    }
+
+    // const firmName = item.firmName?.toLowerCase() || "";
+    const channelPartnerName = item.personName?.toLowerCase() || "";
+    // const sourceDetails = item.sourceDetails?.toLowerCase() || "";
+    const name = item.name?.toLowerCase() || "";
+    const phone = String(item.phone || "").toLowerCase();
+
+    return (
+      name.includes(query) ||
+      phone.includes(query) ||
+      // firmName.includes(query) ||
+      channelPartnerName.includes(query) 
+      // sourceDetails.includes(query)
     );
   })}
   handleDelete={handleDelete}
@@ -480,6 +741,7 @@ const newLead = {
   isMobile={isMobile}
   isTablet={isTablet}
 />
+
 
               </div>
             </>
@@ -537,18 +799,7 @@ const newLead = {
                   </Grid>
 
                   <Grid item xs={12} sm={6}>
-                    {/* <TextField
-                      label="Mobile No. / WhatsApp No."
-                      fullWidth
-                      required
-                      value={formData.mobile}
-                      onChange={handleMobileChange}
-                      error={!!mobileError}
-                      helperText={mobileError}
-                      size={isMobile ? "small" : "medium"}
-                      sx={{ border: Constants.formInputBorderColor }}
-
-                    /> */}
+                 
 
                     <TextField
   label="Mobile No. / WhatsApp No."

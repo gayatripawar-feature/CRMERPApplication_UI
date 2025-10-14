@@ -538,7 +538,7 @@ const handleEditClick = (firm) => {
   return (
     <>
 
-     <Box sx={{ mb: 2 }}>
+     {/* <Box sx={{ mb: 2 }}>
         <Grid container spacing={2} alignItems="center">
           <Grid item xs={12} sm={3}>
             <TextField
@@ -572,7 +572,7 @@ const handleEditClick = (firm) => {
             </Button>
           </Grid>
         </Grid>
-      </Box>
+      </Box> */}
 
       <TableContainer component={Paper}>
         <Box sx={{ maxHeight: 400, overflowY: 'auto' }}>

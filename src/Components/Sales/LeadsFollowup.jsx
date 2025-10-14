@@ -1379,7 +1379,7 @@ const sections = [
   { label: "Undefined", icon: <MdLocationCity size={20} />, createLabel: "Create Landowner Info" },
   { label: "Visit Scheduled", icon: <GiHouseKeys size={20} />, createLabel: "Create Flat Allotment Info" },
 ];
-const tabNames = ["firm", "display", "landowner", "allotement"];
+const tabNames = ["pendingfollowup", "followuphistory", "undefined", "visit"];
 
 const LeadsFollowUp = () => {
   const theme = useTheme();
@@ -1393,7 +1393,7 @@ const LeadsFollowUp = () => {
   const [phases, setPhases] = useState([]);
   const [showLandownerForm, setShowLandownerForm] = useState(false);
   const [showFlatForm, setShowFlatForm] = useState(false);
-  const [selectedTab, setSelectedTab] = useState("firm");
+  const [selectedTab, setSelectedTab] = useState("pendingfollowup");
   const [projectData, setProjectData] = useState([]);
   const [FlatAllotement, setFlatAllotement] = useState([false]);
   const [selectedProject, setSelectedProject] = useState('');
@@ -1427,6 +1427,9 @@ const LeadsFollowUp = () => {
   const [ifscCodeError, setIfscCodeError] = useState("");
   const [status, setStatus] = useState({});
   const [firms, setFirms] = useState([]);
+const [startDate, setStartDate] = useState(null);
+const [endDate, setEndDate] = useState(null);
+const [searchTerm, setSearchTerm] = useState('');
 
   const [fileNames, setFileNames] = useState({
     firmPanNoDocument: "",
@@ -1457,13 +1460,13 @@ const LeadsFollowUp = () => {
 
   useEffect(() => {
     console.log("Updated Selected Tab:", selectedTab);
-    loadLoansData();
+    // loadLoansData();
   }, []);
 
-  const loadLoansData = async () => {
-    const data = await fetchLoansData();
-    setLoans(data);
-  };
+  // const loadLoansData = async () => {
+  //   const data = await fetchLoansData();
+  //   setLoans(data);
+  // };
 
 
 
@@ -1481,13 +1484,13 @@ const LeadsFollowUp = () => {
 
 
     if (sections[index].label === "Follow Up History") {
-      setSelectedTab("display");
+      setSelectedTab("followuphistory");
     } else if (sections[index].label === "Pending Follow Up") {
-      setSelectedTab("firm");
+      setSelectedTab("pendingfollowup");
     } else if (sections[index].label === "Undefined") {
-      setSelectedTab("landowner");
+      setSelectedTab("undefined");
     } else if (sections[index].label === "Visit Scheduled") {
-      setSelectedTab("allotement");
+      setSelectedTab("visit");
     }
 
 
@@ -1502,11 +1505,18 @@ const LeadsFollowUp = () => {
 
 
 
-  { selectedTab === "firm" && <PendingFollowuptable /> }
-  // { selectedTab === "display" && <FollowupHistoryTable /> }
-   { selectedTab === "display" && <Leadsfollowup_followuphistory /> }
-  { selectedTab === "landowner" && <LandownerTable /> }
-  { selectedTab === "allotement" && <FlatAllotement /> }
+  // { selectedTab === "firm" && <PendingFollowuptable /> }
+ 
+  //  { selectedTab === "display" && <Leadsfollowup_followuphistory /> }
+  // { selectedTab === "landowner" && <LandownerTable /> }
+  // { selectedTab === "allotement" && <FlatAllotement /> }
+
+
+    { selectedTab === "pendingfollowup" && <PendingFollowuptable /> }
+ 
+   { selectedTab === "followuphistory" && <Leadsfollowup_followuphistory /> }
+  { selectedTab === "undefined" && <LandownerTable /> }
+  { selectedTab === "visit" && <FlatAllotement /> }
 
   const handleDownloadPDF = () => {
     const link = document.createElement("a");
@@ -1846,6 +1856,25 @@ const LeadsFollowUp = () => {
     setShowFirmForm(false);
   };
 
+
+
+    // Filter loans based on startDate, endDate, and searchTerm
+const filteredLoans = loans.filter(loan => {
+  const nextFollowUp = loan.nextFollowUp ? dayjs(loan.nextFollowUp) : null;
+
+  const isWithinDateRange = nextFollowUp
+    ? (!startDate || nextFollowUp.isSameOrAfter(startDate, 'day')) &&
+      (!endDate || nextFollowUp.isSameOrBefore(endDate, 'day'))
+    : false; // if no nextFollowUp date, exclude it
+
+  const matchesSearch = searchTerm
+    ? loan.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (loan.leadNo && loan.leadNo.toString().includes(searchTerm))
+    : true;
+
+  return isWithinDateRange && matchesSearch;
+});
+
   return (
     <div className="container my-2">
       <h6 className="mb-3 fs-6">Sales Module / Lead Follow Up Management</h6>
@@ -1906,14 +1935,17 @@ const LeadsFollowUp = () => {
     </div>
   ))}
 </div>
+
+{/* Right: PDF button + Date Pickers + Search */}
+  
   {/* ✅ One Centralized Download PDF Button */}
   <button
     className="btn"
     onClick={() => {
-      if (selectedTab === "firm") handleDownloadPDFPending();
-      else if (selectedTab === "display") handleDownloadPDFHistory();
-      else if (selectedTab === "landowner") handleDownloadPDFUndefined();
-      else if (selectedTab === "allotement") handleDownloadPDFVisit();
+      if (selectedTab === "pendingfollowup") handleDownloadPDFPending();
+      else if (selectedTab === "followuphistory") handleDownloadPDFHistory();
+      else if (selectedTab === "undefined") handleDownloadPDFUndefined();
+      else if (selectedTab === "visit") handleDownloadPDFVisit();
     }}
     style={{
       backgroundColor: Constants.primaryColor,
@@ -1930,17 +1962,77 @@ const LeadsFollowUp = () => {
     <FaFileDownload size={isMobile ? 16 : 18} />
     {isMobile ? "PDF" : "Download PDF"}
   </button>
+  </div>
+
+  <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '8px' }}>
+  <LocalizationProvider dateAdapter={AdapterDayjs}>
+    <DatePicker
+      label="Start Date"
+      value={startDate}
+      onChange={(newValue) => setStartDate(newValue)}
+      slotProps={{
+        textField: {
+          size: 'small',
+          sx: { 
+             minWidth: { xs: '120px', sm: '150px', md: '180px' },
+            '& .MuiInputBase-root': { 
+           border:Constants.formInputBorderColor,
+            padding:"0px 8px",
+          }} // small height
+        }
+      }}
+    />
+    <DatePicker
+      label="End Date"
+      value={endDate}
+      onChange={(newValue) => setEndDate(newValue)}
+      slotProps={{
+        textField: {
+          size: 'small',
+          sx: { 
+             minWidth: { xs: '120px', sm: '150px', md: '180px' },
+             '& .MuiInputBase-root': { 
+              border:Constants.formInputBorderColor,
+            padding:"0px 8px",  } 
+          },
+           '& .MuiOutlinedInput-root': {
+          '& fieldset': {
+            borderColor: Constants.formInputBorderColor, // normal border color
+          },
+          '&:hover fieldset': {
+            borderColor: Constants.formInputBorderColor, // hover border color
+          },
+          '&.Mui-focused fieldset': {
+            borderColor: Constants.formInputBorderColor, // focused border color
+          },
+        },
+        }
+      }}
+    />
+  </LocalizationProvider>
+
+  <TextField
+    size="small"
+    placeholder="Search..."
+    value={searchTerm}
+    onChange={(e) => setSearchTerm(e.target.value)}
+    sx={{ 
+       minWidth: { xs: '120px', sm: '150px', md: '180px' },
+      '& .MuiInputBase-root': { padding:"0px 8px"},border:Constants.formInputBorderColor }}
+  />
 </div>
+
+
+
   
-      {expandedSection === 0 && selectedTab === "firm" && (
+      {expandedSection === 0 && selectedTab === "pendingfollowup" && (
         <div className="content-container mt-3">
           {!showFirmForm ? (
             <>
-
-             
-
               <div className="mt-3">
-                <PendingFollowuptable firms={loans} setFirms={setLoans} isMobile={isMobile} isTablet={isTablet} />
+                {/* <PendingFollowuptable firms={loans} setFirms={setLoans} isMobile={isMobile} isTablet={isTablet} /> */}
+                <PendingFollowuptable firms={filteredLoans} setFirms={setLoans} isMobile={isMobile} isTablet={isTablet} />
+
               </div>
             </>
           ) : (
@@ -1951,151 +2043,11 @@ const LeadsFollowUp = () => {
               maxWidth="md"
               fullScreen={isMobile}
             >
-              <DialogTitle>Add New Follow Up</DialogTitle>
-              <DialogContent>
-                <Grid container spacing={2} sx={{ mt: 1 }}>
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      label="Lead No"
-                      fullWidth
-                      variant="outlined"
-                      value={formData.leadNo}
-                      onChange={handleLeadNoChange}
-                      error={!!leadNoError}
-                      helperText={leadNoError}
-                      size={isMobile ? "small" : "medium"}
-                      sx={{ border: Constants.formInputBorderColor }}
-                    />
-                  </Grid>
-
-
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      label="Name"
-                      fullWidth
-                      variant="outlined"
-
-                      value={formData.name}
-                      onChange={handleNameChange}
-                      error={!!nameError}
-                      helperText={nameError}
-                      size={isMobile ? "small" : "medium"}
-                      sx={{ border: Constants.formInputBorderColor }}
-
-                    />
-                  </Grid>
-
-                  <Grid item xs={12} sm={6}>
-                    <TextField
-                      label="Remark"
-                      fullWidth
-                      variant="outlined"
-                      value={formData.remark}
-                      onChange={(e) => setFormData({ ...formData, remark: e.target.value })}
-                      size={isMobile ? "small" : "medium"}
-                      sx={{ border: Constants.formInputBorderColor }}
-
-                    />
-                  </Grid>
-
-                  <Grid item xs={12} sm={6}>
-                    <FormControl fullWidth variant="outlined" size={isMobile ? "small" : "medium"} sx={{ border: Constants.formInputBorderColor }} required
-                    >
-                      <InputLabel id="lead-type-label">Lead Type</InputLabel>
-                      <Select
-                        labelId="lead-type-label"
-                        id="lead-type"
-                        label="Lead Type"
-                        value={formData.leadType}
-                        onChange={(e) => {
-                          setFormData({ ...formData, leadType: e.target.value });
-                          setValidationErrors({ ...validationErrors, leadType: '' });
-                        }}
-                        fullWidth
-                        variant="outlined"
-                        sx={{
-                          '& .MuiSelect-icon': {
-                            color: Constants.primaryColor
-                          }
-                        }}
-                      >
-                        <MenuItem value="Hot">Hot</MenuItem>
-                        <MenuItem value="Cold">Cold</MenuItem>
-                        <MenuItem value="Warm">Warm</MenuItem>
-                        <MenuItem value="Lost">Lost</MenuItem>
-
-                      </Select>
-                      {validationErrors.leadType && (
-                        <Typography variant="caption" color="error">
-                          {validationErrors.leadType}
-                        </Typography>
-                      )}
-                    </FormControl>
-                  </Grid>
-
-
-
-                  <Grid item xs={12} sm={6}>
-                    <FormControl fullWidth variant="outlined" size={isMobile ? "small" : "medium"} sx={{ border: Constants.formInputBorderColor }} required
-                    >
-                      <InputLabel id="status-label">Status</InputLabel>
-                      <Select
-                        labelId="status-label"
-                        id="status"
-                        label="Status"
-                        value={formData.status}
-                        onChange={(e) => {
-                          setFormData({ ...formData, status: e.target.value });
-                          setValidationErrors({ ...validationErrors, status: '' });
-                        }}
-                        fullWidth
-                        variant="outlined"
-                        sx={{
-                          '& .MuiSelect-icon': {
-                            color: Constants.primaryColor
-                          }
-                        }}
-                      >
-                        <MenuItem value="Follow Up">Follow Up</MenuItem>
-                        <MenuItem value="Not Interested">Not Interested</MenuItem>
-                        <MenuItem value="Callback Request">Callback Request</MenuItem>
-                        <MenuItem value="Unreachable">Unreachable</MenuItem>
-                        <MenuItem value="Booked History in Other Project">Booked History in Other Project</MenuItem>
-                        <MenuItem value="Not Answer">Not Answer</MenuItem>
-                        <MenuItem value="Invalid Number">Invalid Number</MenuItem>
-                      </Select>
-                      {validationErrors.status && (
-                        <Typography variant="caption" color="error">
-                          {validationErrors.status}
-                        </Typography>
-                      )}
-                    </FormControl>
-                  </Grid>
-
-
-                </Grid>
-              </DialogContent>
-              <DialogActions>
-                <Button onClick={() => setShowFirmForm(false)} color="secondary">
-                  Cancel
-                </Button>
-                <Button
-                  variant="contained"
-
-                  style={{ backgroundColor: Constants.primaryColor, color: "#ecf0f1" }}
-
-                  onClick={() => {
-                    handleSubmit();
-                  }}
-                >
-                  Submit
-                </Button>
-              </DialogActions>
             </Dialog>
           )}
         </div>
       )}
-      {expandedSection === 1 && selectedTab === "display" && (
+      {expandedSection === 1 && selectedTab === "followuphistory" && (
         <div className="content-container mt-3">
           {!showProjectForm ? (
             <>
@@ -2110,7 +2062,7 @@ const LeadsFollowUp = () => {
           )}
         </div>
       )}
-      {expandedSection === 2 && selectedTab === "landowner" && (
+      {expandedSection === 2 && selectedTab === "undefined" && (
         <div className="content-container mt-3">
           {!showLandownerForm ? (
             <>
@@ -2126,7 +2078,7 @@ const LeadsFollowUp = () => {
           )}
         </div>
       )}
-      {expandedSection === 3 && selectedTab === "allotement" && (
+      {expandedSection === 3 && selectedTab === "visit" && (
         <div className="content-container mt-3">
           {!showFlatForm ? (
             <>
