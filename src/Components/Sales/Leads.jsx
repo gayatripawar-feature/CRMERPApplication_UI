@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import {
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
   Paper, Button, TextField, Grid, MenuItem, Box, Tooltip, IconButton,
-  useMediaQuery, useTheme, Dialog, DialogTitle, DialogContent, DialogActions
+  useMediaQuery, useTheme, Dialog, DialogTitle, DialogContent, DialogActions,TablePagination,
 } from '@mui/material';
 import { FaEye, FaFileCsv, FaUpload ,FaFileDownload } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
@@ -81,6 +81,10 @@ const [loans, setLoans] = useState([]);
   const [mobileError, setMobileError] = useState('');
   const [emailError, setEmailError] = useState('');
   const [searchQuery, setSearchQuery] = useState("");
+  // duplicate mobile no :
+  const [showDuplicateModal, setShowDuplicateModal] = useState(false);
+const [duplicateDetails, setDuplicateDetails] = useState([]);
+
   useEffect(() => {
   const loadLeads = async () => {
     const data = await fetchLeadsData();
@@ -136,9 +140,20 @@ const [formData, setFormData] = useState({
   setShowFileInput(false);
 };
 
-  const handleDelete = (index) => {
-    setInventoryData(inventoryData.filter((_, i) => i !== index));
-  };
+  // const handleDelete = (index) => {
+  //   setInventoryData(inventoryData.filter((_, i) => i !== index));
+  // };
+  const handleDelete = async (leadId) => {
+  if (!window.confirm("Are you sure you want to delete this lead?")) return;
+
+  const success = await deleteLeadApi(leadId);
+  console.log("backend delete called");
+  if (success) {
+    setInventoryData(inventoryData.filter((lead) => lead.id !== leadId));
+    toast.success("Lead deleted successfully!", { position: "top-right", autoClose: 3000 });
+  }
+};
+
 
   const downloadSampleCsv = () => {
     const headers = "Name,Mobile No.,Source Name,Location,Are You Looking For\n";
@@ -259,7 +274,7 @@ useEffect(() => {
 }, [inventoryData]);
 
 
-
+// working functions :
   const handleFormSubmit = async () => {
   // Validate required fields
   console.log("Submitting formData:", formData);
@@ -267,6 +282,35 @@ useEffect(() => {
     toast.error("Please fill in all required fields", { position: "top-right", autoClose: 3000 });
     return;
   }
+// Check for duplicate mobile
+  const existingLead = inventoryData.find(
+    (lead) => String(lead.phone) === String(formData.phone)
+  );
+
+ if (existingLead) {
+   setFormData({
+    name: "",
+    phone: "",
+    email: "",
+    location: "",
+    sourceName: "",
+    lookingFor: "",
+    firmName: "",
+    personName: "",
+    partnerMobile: "",
+    referenceName: "",
+    otherSource: "",
+    SourceDetails: "",
+  });
+  setDuplicateDetails([{
+      id: existingLead.id || "-",
+    name: existingLead.name || "-",
+    sourceDetails: existingLead.sourceDetails || "-",
+    source:existingLead.source || "-",
+  }]);
+  setShowDuplicateModal(true);
+  return;
+}
 
   const newCounter = leadCounter + 1;
   setLeadCounter(newCounter);
@@ -365,77 +409,12 @@ const newLead = {
 
 //   const reader = new FileReader();
 //   reader.onload = async (evt) => {
-//     const bstr = evt.target.result;
-//     const workbook = XLSX.read(bstr, { type: "binary" });
-
-//     // Assuming first sheet
-//     const sheetName = workbook.SheetNames[0];
-//     const worksheet = workbook.Sheets[sheetName];
-
-//     // Convert sheet to JSON
-//     const jsonData = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
-//     console.log("Excel data:", jsonData);
-
-//     // Loop through each row and send to API
-//     for (let row of jsonData) {
-//       // Map Excel columns to DB columns
-//       const sourceDetails = row["Source Name"] === "Channel Partner"
-//         ? `${row["Firm Name"] || ""}; ${row["Person Name"] || ""}; ${row["Partner Mobile"] || ""}`
-//         : row["Source Name"] === "References"
-//         ? row["Reference Name"] || ""
-//         : row["Source Name"] === "Other"
-//         ? row["Other Source"] || ""
-//         : "";
-
-
-//          // Use Excel timestamp if present, otherwise use current time
-//       const timestamp = row["Timestamp"] 
-//         ? new Date(row["Timestamp"]).toISOString() 
-//         : new Date().toISOString();
-
-//       const leadData = {
-//         Name: row["Name"] || "",
-//         Phone: Number(row["Mobile No."] || 0),
-//         Email: row["Email"] || "",
-//         Address: row["Location"] || "",
-//         Interest: row["Are You Looking For"] || "",
-//         Source: row["Source Name"] || "",
-//         SourceDetails: sourceDetails,
-//         UpdatedBy: "System",
-//         LeadNo: `LEAD-${String(leadCounter + 1).padStart(2, "0")}`,
-//         AssignTo: "",
-//          Timestamp: timestamp,
-//       };
-
-//       try {
-//         const savedLead = await createLead(leadData);
-//         setInventoryData((prev) => [savedLead, ...prev]);
-//         setLeadCounter((prev) => prev + 1);
-//       } catch (err) {
-//         console.error("Error uploading lead:", err);
-//       }
-//     }
-
-//     toast.success("Excel data uploaded successfully!", { position: "top-right", autoClose: 3000 });
-//   };
-
-//   reader.readAsBinaryString(file);
-// };
-
-
-// const handleFileUpload = async (e) => {
-//   const file = e.target.files[0];
-//   if (!file) return;
-
-//   const reader = new FileReader();
-//   reader.onload = async (evt) => {
 //     const arrayBuffer = evt.target.result;
-//     const workbook = XLSX.read(arrayBuffer, { type: "array" }); // use type 'array'
+//     const workbook = XLSX.read(arrayBuffer, { type: "array" });
 
 //     const sheetName = workbook.SheetNames[0];
 //     const worksheet = workbook.Sheets[sheetName];
 
-//     // Convert sheet to JSON
 //     const jsonData = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
 //     console.log("Excel data:", jsonData);
 
@@ -450,8 +429,8 @@ const newLead = {
 //         ? row["Other Source"] || ""
 //         : "";
 
-//       // Use Excel timestamp exactly as-is
-//       const timestamp = row["Timestamp"] || new Date().toISOString();
+//       // Use Excel timestamp if present, else fallback to system timestamp
+//       const timestamp = row["Timestamp"] ? row["Timestamp"] : new Date().toISOString();
 //       console.log("Final Timestamp for API:", timestamp);
 
 //       const leadData = {
@@ -465,23 +444,32 @@ const newLead = {
 //         UpdatedBy: "System",
 //         LeadNo: `LEAD-${String(leadCounter + 1).padStart(2, "0")}`,
 //         AssignTo: "",
-//         Timestamp: timestamp, // <-- raw value from Excel
+//         Timestamp: timestamp, 
+//       frontendTimestamp: timestamp
 //       };
 
 //       try {
 //         const savedLead = await createLead(leadData);
-//         setInventoryData((prev) => [savedLead, ...prev]);
+//         // overwrite timestamp only in frontend table
+//         setInventoryData((prev) => [
+//           { ...savedLead, Timestamp: timestamp },
+//           ...prev,
+//         ]);
 //         setLeadCounter((prev) => prev + 1);
 //       } catch (err) {
 //         console.error("Error uploading lead:", err);
 //       }
 //     }
 
-//     toast.success("Excel data uploaded successfully!", { position: "top-right", autoClose: 3000 });
+//     toast.success("Excel data uploaded successfully!", {
+//       position: "top-right",
+//       autoClose: 3000,
+//     });
 //   };
 
 //   reader.readAsArrayBuffer(file);
 // };
+
 
 const handleFileUpload = async (e) => {
   const file = e.target.files[0];
@@ -498,9 +486,24 @@ const handleFileUpload = async (e) => {
     const jsonData = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
     console.log("Excel data:", jsonData);
 
-    for (let row of jsonData) {
-      console.log("Processing row:", row);
+    const duplicatesFromFile = [];
 
+    for (let row of jsonData) {
+      const phone = String(row["Mobile No."] || "").trim();
+
+      // Check if phone already exists in inventoryData
+      const existingLead = inventoryData.find(lead => String(lead.phone) === phone);
+      if (existingLead) {
+        duplicatesFromFile.push({
+          id: existingLead.id || "-",
+          name: existingLead.name || "-",
+          source: existingLead.source || "-",
+          sourceDetails: existingLead.sourceDetails || "-",
+        });
+        continue; // skip this row
+      }
+
+      // Build source details
       const sourceDetails = row["Source Name"] === "Channel Partner"
         ? `${row["Firm Name"] || ""}; ${row["Person Name"] || ""}; ${row["Partner Mobile"] || ""}`
         : row["Source Name"] === "References"
@@ -509,13 +512,11 @@ const handleFileUpload = async (e) => {
         ? row["Other Source"] || ""
         : "";
 
-      // Use Excel timestamp if present, else fallback to system timestamp
       const timestamp = row["Timestamp"] ? row["Timestamp"] : new Date().toISOString();
-      console.log("Final Timestamp for API:", timestamp);
 
       const leadData = {
         Name: row["Name"] || "",
-        Phone: Number(row["Mobile No."] || 0),
+        Phone: Number(phone || 0),
         Email: row["Email"] || "",
         Address: row["Location"] || "",
         Interest: row["Are You Looking For"] || "",
@@ -524,13 +525,12 @@ const handleFileUpload = async (e) => {
         UpdatedBy: "System",
         LeadNo: `LEAD-${String(leadCounter + 1).padStart(2, "0")}`,
         AssignTo: "",
-        Timestamp: timestamp, 
-      frontendTimestamp: timestamp
+        Timestamp: timestamp,
+        frontendTimestamp: timestamp,
       };
 
       try {
         const savedLead = await createLead(leadData);
-        // overwrite timestamp only in frontend table
         setInventoryData((prev) => [
           { ...savedLead, Timestamp: timestamp },
           ...prev,
@@ -539,6 +539,12 @@ const handleFileUpload = async (e) => {
       } catch (err) {
         console.error("Error uploading lead:", err);
       }
+    }
+
+    // Show duplicate modal if any duplicates were found
+    if (duplicatesFromFile.length > 0) {
+      setDuplicateDetails(duplicatesFromFile);
+      setShowDuplicateModal(true);
     }
 
     toast.success("Excel data uploaded successfully!", {
@@ -550,6 +556,70 @@ const handleFileUpload = async (e) => {
   reader.readAsArrayBuffer(file);
 };
 
+
+// pagination :
+
+  // Pagination state
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  // Calculate the current page data
+  const paginatedData = inventoryData.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage
+  );
+  
+
+  const filteredData = inventoryData.filter((item) => {
+  const query = searchQuery.trim().toLowerCase();
+  if (!query) return true;
+
+  const channelPartnerName = item.personName?.toLowerCase() || "";
+  const sourceDetails = item.sourceDetails?.toLowerCase() || "";
+  const name = item.name?.toLowerCase() || "";
+  const phone = String(item.phone || "").toLowerCase();
+
+  return (
+    name.includes(query) ||
+    phone.includes(query) ||
+    channelPartnerName.includes(query) ||
+    sourceDetails.includes(query)
+  );
+});
+
+const paginatedFilteredData = filteredData.slice(
+  page * rowsPerPage,
+  page * rowsPerPage + rowsPerPage
+);
+
+// delete lead api :
+const deleteLeadApi = async (id) => {
+  try {
+    const response = await fetch(`/api/leads/${id}`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Failed to delete lead: ${errorText}`);
+    }
+
+    return true; // deletion successful
+  } catch (error) {
+    console.error(error);
+    toast.error("Failed to delete lead. Please try again.", { position: "top-right", autoClose: 3000 });
+    return false;
+  }
+};
 
   return (
     <div className="container my-2">
@@ -656,7 +726,7 @@ const handleFileUpload = async (e) => {
                   </Button>
                 </div>
                  
-
+{/* <div className="d-flex flex-column flex-md-row justify-content-between align-items-center mb-3 gap-2">
   <TextField
   label="Search Lead"
   variant="outlined"
@@ -664,10 +734,100 @@ const handleFileUpload = async (e) => {
   value={searchQuery}
   onChange={(e) => setSearchQuery(e.target.value.toLowerCase())}
   sx={{
-    minWidth: isMobile ? "100%" : "300px",
+    minWidth: isMobile ? "100%" : "200px",
     border: Constants.formInputBorderColor,
   }}
 />
+
+  <TablePagination
+    rowsPerPageOptions={[5, 10, 25]}
+    component="div"
+    // count={inventoryData.length}
+    count={filteredData.length}
+    rowsPerPage={rowsPerPage}
+    page={page}
+    onPageChange={handleChangePage}
+    onRowsPerPageChange={handleChangeRowsPerPage}
+    labelDisplayedRows={({ from, to, count }) =>
+      `${from}-${to} of ${count} entries`
+    }
+    sx={{
+      width: 'auto',
+      '& .MuiTablePagination-toolbar': {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 1,
+        padding: '0px',
+      },
+      '& .MuiTablePagination-spacer': {
+        display: 'none',
+      },
+      '& .MuiTablePagination-actions': {
+        marginLeft: '8px'
+      },
+      '& .MuiTablePagination-selectLabel, & .MuiTablePagination-displayedRows': {
+        fontSize: isMobile ? '12px' : '14px'
+      }
+    }}
+  />  
+</div> */}
+  <div
+    className="d-flex align-items-center mb-3"
+    style={{
+      justifyContent: isMobile ? "flex-start" : "flex-end",
+      gap: "8px",
+      flexWrap: "nowrap", // <--- KEY CHANGE: Prevents elements from wrapping to the next line
+      overflowX: "auto", // Allows horizontal scrolling if content is wider than screen
+    }}
+  >
+    <TextField
+      label="Search Lead"
+      variant="outlined"
+      size="small"
+      value={searchQuery}
+      onChange={(e) => setSearchQuery(e.target.value.toLowerCase())}
+      sx={{
+        // 3. Set a consistent, constrained width to allow space for the pagination, even on mobile.
+        width: isMobile ? "150px" : "200px", // <--- KEY CHANGE: Fixed width to prevent 100% width on mobile
+        border: Constants.formInputBorderColor,
+        flexShrink: 0, // Prevents the search field from shrinking too much
+      }}
+    />
+
+    <TablePagination
+      rowsPerPageOptions={[5, 10, 25]}
+      component="div"
+      count={filteredData.length} // Should be the total count (e.g., 50)
+      rowsPerPage={rowsPerPage}
+      page={page}
+      onPageChange={handleChangePage}
+      onRowsPerPageChange={handleChangeRowsPerPage}
+      labelRowsPerPage="Rows:"
+      labelDisplayedRows={({ from, to, count }) => `${from}-${to} of ${count} entries`}
+      sx={{
+        minWidth: 200, // Ensure enough space for all pagination controls
+        flexShrink: 0, // Prevents the pagination control from shrinking too much
+        // Original styles for internal layout
+        '& .MuiTablePagination-toolbar': {
+          flexDirection: 'row',
+          alignItems: 'center',
+          gap: '4px',
+          padding: '0px',
+        },
+        '& .MuiTablePagination-spacer': {
+          display: 'none',
+        },
+        '& .MuiTablePagination-actions': {
+          marginLeft: '4px',
+        },
+        '& .MuiTablePagination-selectLabel, & .MuiTablePagination-displayedRows': {
+          fontSize: isMobile ? '12px' : '14px',
+        },
+      }}
+    />
+  </div>
+
+
               </div>
                
               <div className="mt-3">
@@ -712,7 +872,7 @@ const handleFileUpload = async (e) => {
 /> */}
 
 {/* Searching by only lead name, phone, Channel partner name */}
-<NewLeads
+{/* <NewLeads
   inventoryData={inventoryData.filter((item) => {
     const query = searchQuery.trim().toLowerCase();
     if (!query) return true;
@@ -740,8 +900,15 @@ const handleFileUpload = async (e) => {
   setInventoryData={setInventoryData}
   isMobile={isMobile}
   isTablet={isTablet}
-/>
+/> */}
 
+<NewLeads
+  inventoryData={paginatedFilteredData}
+  handleDelete={handleDelete}
+  setInventoryData={setInventoryData}
+  isMobile={isMobile}
+  isTablet={isTablet}
+/>
 
               </div>
             </>
@@ -959,7 +1126,34 @@ const handleFileUpload = async (e) => {
             </Dialog>
           )}
         </div>
-      {/* // )} */}
+      
+   <Dialog open={showDuplicateModal} onClose={() => setShowDuplicateModal(false)}>
+  <DialogTitle>Duplicate Mobile Number</DialogTitle>
+  <DialogContent>
+    <p>The mobile number you entered already exists For:</p>
+    {duplicateDetails.map((lead, idx) => {
+      console.log("Duplicate lead details (modal):", lead);
+      return (
+        <Box key={idx} sx={{ mb: 1, p: 1, border: '1px solid #ccc', borderRadius: 1 }}>
+          <div><strong>Lead ID:</strong> {lead.id || "-"}</div>
+          <div><strong>Name:</strong> {lead.name || "-"}</div>
+           <div><strong>Source :</strong> {lead.source || "-"}</div>
+          <div><strong>Source Details:</strong> {lead.sourceDetails || "-"}</div>
+        </Box>
+      );
+    })}
+  </DialogContent>
+  <DialogActions>
+    <Button onClick={() => setShowDuplicateModal(false)} variant="contained" color="primary">
+      OK
+    </Button>
+  </DialogActions>
+</Dialog>
+
+
+
+
+
       <ToastContainer
         position="top-right"
         autoClose={3000}

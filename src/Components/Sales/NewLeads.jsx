@@ -396,7 +396,9 @@ console.log("inventoryData fetched:", inventoryData);
                       <Tooltip title="Delete" arrow>
                         <IconButton
                           color="error"
-                          onClick={() => handleDeleteClick(item)}
+                          // onClick={() => handleDeleteClick(item)}
+                           onClick={() => handleDelete(item.id)} 
+                          
                           sx={{ backgroundColor: Constants.primaryColor, color: "white", p: 0.5 }}
                           size={isMobile ? "small" : "medium"}
                         >
@@ -482,7 +484,7 @@ console.log("inventoryData fetched:", inventoryData);
                   }}
                 >
                  
-                  <TablePagination
+                  {/* <TablePagination
   rowsPerPageOptions={[5, 10, 25]}
   component="div"
   count={inventoryData.length}
@@ -510,7 +512,39 @@ console.log("inventoryData fetched:", inventoryData);
       fontSize: isMobile ? '12px' : '14px'
     }
   }}
-/>
+/> */}
+{/* <TablePagination
+  rowsPerPageOptions={[5, 10, 25]}
+  component="div"
+  count={inventoryData.length}
+  rowsPerPage={rowsPerPage}
+  page={page}
+  onPageChange={handleChangePage}
+  onRowsPerPageChange={handleChangeRowsPerPage}
+  labelDisplayedRows={({ from, to, count }) =>
+    `${from}-${to} of ${count} entries`
+  }
+  sx={{
+    width: 'auto',
+    '& .MuiTablePagination-toolbar': {
+      flexDirection: isMobile ? 'column' : 'row',
+      alignItems: isMobile ? 'flex-start' : 'center',
+      gap: isMobile ? 2 : 0,
+      padding: isMobile ? '8px 0' : '16px 0'
+    },
+    '& .MuiTablePagination-spacer': {
+      display: isMobile ? 'none' : 'block',
+      flex: 'none'
+    },
+    '& .MuiTablePagination-actions': {
+      marginLeft: isMobile ? 0 : 'auto'
+    },
+    '& .MuiTablePagination-selectLabel, & .MuiTablePagination-displayedRows': {
+      fontSize: isMobile ? '12px' : '14px'
+    }
+  }}
+/> */}
+
                 </Box>
               </TableCell>
             </TableRow>
