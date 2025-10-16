@@ -4,7 +4,9 @@ import {
   Paper, Button, TextField, Grid, MenuItem, Box, Tooltip, IconButton,
   useMediaQuery, useTheme, Dialog, DialogTitle, DialogContent, DialogActions,TablePagination,
 } from '@mui/material';
-import { FaEye, FaFileCsv, FaUpload ,FaFileDownload } from "react-icons/fa";
+import { FaEye, FaFileCsv, FaFileExcel,FaUpload ,FaFileDownload } from "react-icons/fa";
+
+
 import { ToastContainer, toast } from "react-toastify";
 import NewLeads from './NewLeads';
 import { jsPDF } from "jspdf";
@@ -15,7 +17,7 @@ import * as XLSX from "xlsx";
 const unitTypes = ["Actual Site", "Hoarding", "Facebook", "Instagram", "Website", "Print Media", "Radio", "Google add", "Exhibition", "Online Portal", "Direct call", "Pamphlet", "Channel Partner", "References", "Other"];
 const sections = [
   { label: "Display Leads", icon: <FaEye size={24} />, bgColor: "primary.main" },
-  { label: "Sample Excel", icon: <FaFileCsv size={24} />, bgColor: "success.main" },
+  { label: "Sample Excel", icon: <FaFileExcel size={24} />, bgColor: "success.main" },
   { label: "Upload Excel", icon: <FaUpload size={24} />, bgColor: "secondary.main" },
 ];
 
@@ -32,6 +34,8 @@ const fetchLeadsData = async () => {
       throw new Error('Network response was not ok');
     }
     const data = await response.json();
+    console.log("data",data);
+    console.log("data length",data.length);
     return data;
   } catch (error) {
     console.error('Error fetching leads:', error);
@@ -84,11 +88,14 @@ const [loans, setLoans] = useState([]);
   // duplicate mobile no :
   const [showDuplicateModal, setShowDuplicateModal] = useState(false);
 const [duplicateDetails, setDuplicateDetails] = useState([]);
+const[openMonthModal,setOpenMonthModal]=useState(false);
+const [selectedReportType, setSelectedReportType] = useState("");
+const[selectedMonth,setSelectedMonth] =useState("");
 
   useEffect(() => {
   const loadLeads = async () => {
     const data = await fetchLeadsData();
-    // setLoans(data); // or setInventoryData(data) if you want to show in your table
+    // setLoans(data); // or setInventoryData(data) if you want to show in your table 
     setInventoryData(data);
   };
 
@@ -217,11 +224,10 @@ const [formData, setFormData] = useState({
   };
 
  
-  const handleDownloadPDFLeads = () => {
-  // Use inventoryData instead of loans
+
+const handleDownloadPDFLeads = () => {
   console.log("Inventory data before mapping:", inventoryData);
 
-  // Check if there's data to export
   if (inventoryData.length === 0) {
     toast.error("No leads data to download", {
       position: "top-right",
@@ -232,24 +238,34 @@ const [formData, setFormData] = useState({
 
   const doc = new jsPDF("landscape");
   doc.setFontSize(14);
-  doc.text("Leads Report", 14, 15);
+  const pageWidth = doc.internal.pageSize.getWidth();
+  doc.text("Leads Report", pageWidth / 2, 15, { align: "center" });
 
   const tableColumn = [
-    "Timestamp", "Assign To", "Lead No", "Name", "Mobile / WhatsApp",
-    "Looking For", "Email", "Source Name", "Location"
+    "Timestamp",
+    "Assign To",
+    "Lead No",
+    "Name",
+    "Mobile / WhatsApp",
+    "Looking For",
+    "Email",
+    "Source Name",
+    "Location",
   ];
+   console.log("Sample lead record:", inventoryData[0]);
 
-  const tableRows = inventoryData.map(row => [
-    row.timestamp || "-",
-    row.assignTo || "-",
-    row.leadNo || "-",
-    row.name || "-",
-    row.mobile || "-",
-    row.lookingFor || "-",
-    row.email || "-",
-    row.sourceName || "-",
-    row.location || "-"
-  ]);
+ const tableRows = inventoryData.map((row) => [
+  row.lastUpdatedDate || "-",    
+  row.AssignTo || "-",           
+  row.id ? `LEAD-${row.id}` : "-", 
+  row.name || "-",               
+  row.phone || "-",             
+  row.interest || "-",       
+  row.email || "-",              
+  row.source || "-",             
+  row.address || "-",           
+]);
+
 
   console.log("Formatted Table Rows:", tableRows);
 
@@ -258,11 +274,22 @@ const [formData, setFormData] = useState({
     head: [tableColumn],
     body: tableRows,
     styles: { fontSize: 10, cellPadding: 3 },
-    headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+    headStyles: { fillColor: [128, 0, 0], textColor: [255, 255, 255] },
+     didDrawPage: function (data) {
+      // Add centered page number at the bottom
+      const pageCount = doc.internal.getNumberOfPages();
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const pageHeight = doc.internal.pageSize.getHeight();
+
+      const pageNumberText = `Page ${doc.internal.getCurrentPageInfo().pageNumber} of ${pageCount}`;
+      
+      doc.setFontSize(10);
+      doc.text(pageNumberText, pageWidth / 2, pageHeight - 10, { align: "center" });
+    },
   });
 
   doc.save("Leads_Report.pdf");
-  
+
   toast.success("PDF downloaded successfully!", {
     position: "top-right",
     autoClose: 3000,
@@ -274,201 +301,6 @@ useEffect(() => {
 }, [inventoryData]);
 
 
-// working functions :
-  const handleFormSubmit = async () => {
-  // Validate required fields
-  console.log("Submitting formData:", formData);
-  if (!formData.name || !formData.phone || !formData.lookingFor || !formData.sourceName) {
-    toast.error("Please fill in all required fields", { position: "top-right", autoClose: 3000 });
-    return;
-  }
-// Check for duplicate mobile
-  const existingLead = inventoryData.find(
-    (lead) => String(lead.phone) === String(formData.phone)
-  );
-
- if (existingLead) {
-   setFormData({
-    name: "",
-    phone: "",
-    email: "",
-    location: "",
-    sourceName: "",
-    lookingFor: "",
-    firmName: "",
-    personName: "",
-    partnerMobile: "",
-    referenceName: "",
-    otherSource: "",
-    SourceDetails: "",
-  });
-  setDuplicateDetails([{
-      id: existingLead.id || "-",
-    name: existingLead.name || "-",
-    sourceDetails: existingLead.sourceDetails || "-",
-    source:existingLead.source || "-",
-  }]);
-  setShowDuplicateModal(true);
-  return;
-}
-
-  const newCounter = leadCounter + 1;
-  setLeadCounter(newCounter);
-  const formattedLeadNo = `LEAD-${String(newCounter).padStart(2, '0')}`;
-
-
-  let sourceDetails = "";
-
-if (formData.sourceName === "Channel Partner") {
-  sourceDetails = `${formData.firmName || ""}; ${formData.personName || ""}; ${formData.partnerMobile || ""}`;
-} else if (formData.sourceName === "References") {
-  sourceDetails = formData.referenceName || "";
-} else if (formData.sourceName === "Other") {
-  sourceDetails = formData.otherSource || "";
-}
- 
-const newLead = {
-  Name: formData.name,
-  
-// Mobile: formData.phone,
-
-   phone: Number(formData.phone),
-  Email: formData.email,
-  Address: formData.location,
-  Interest: formData.lookingFor,
-  Source: formData.sourceName,
-  // SourceDetails: formData.SourceDetails,  
-  SourceDetails: sourceDetails, 
-  UpdatedBy: "System",
-  // Timestamp: new Date().toISOString(),
-  // AssignTo: '',
-  // LeadNo: formattedLeadNo,
-  
-
-
-  // 
-  firmName: formData.firmName || "",
-  personName: formData.personName || "",
-  partnerMobile: formData.partnerMobile || "",
-  referenceName: formData.referenceName || "",
-  otherSource: formData.otherSource || "",
-};
-
-
-  try {
-    const savedLead = await createLead(newLead); // call external function
-    console.log("Saved lead from API:", savedLead); 
-    setInventoryData([savedLead, ...inventoryData]);
-    
-//     setInventoryData([{
-//   ...savedLead,
-//   phone: savedLead.Phone
-// }, ...inventoryData]);
- 
-
-
-    setFormData({
-      // name: '',
-      
-      // email: '',
-      // location: '',
-      // sourceName: '',
-      // lookingFor: '',
-      // partners: [],
-      // SourceDetails: '',
-
-        name: "",
-    phone: "",
-    email: "",
-    location: "",
-    sourceName: "",
-    lookingFor: "",
-    firmName: "",
-    personName: "",
-    partnerMobile: "",
-    referenceName: "",
-    otherSource: "",
-    SourceDetails: "",
-    });
-    setName('');
-    // setMobile('');
-    setPhone('');
-    setEmail('');
-
-    toast.success("Lead submitted successfully!", { position: "top-right", autoClose: 3000 });
-    setShowFirmForm(false);
-
-  } catch (error) {
-    toast.error("Failed to submit lead. Please try again.", { position: "top-right", autoClose: 3000 });
-  }
-};
-
-// const handleFileUpload = async (e) => {
-//   const file = e.target.files[0];
-//   if (!file) return;
-
-//   const reader = new FileReader();
-//   reader.onload = async (evt) => {
-//     const arrayBuffer = evt.target.result;
-//     const workbook = XLSX.read(arrayBuffer, { type: "array" });
-
-//     const sheetName = workbook.SheetNames[0];
-//     const worksheet = workbook.Sheets[sheetName];
-
-//     const jsonData = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
-//     console.log("Excel data:", jsonData);
-
-//     for (let row of jsonData) {
-//       console.log("Processing row:", row);
-
-//       const sourceDetails = row["Source Name"] === "Channel Partner"
-//         ? `${row["Firm Name"] || ""}; ${row["Person Name"] || ""}; ${row["Partner Mobile"] || ""}`
-//         : row["Source Name"] === "References"
-//         ? row["Reference Name"] || ""
-//         : row["Source Name"] === "Other"
-//         ? row["Other Source"] || ""
-//         : "";
-
-//       // Use Excel timestamp if present, else fallback to system timestamp
-//       const timestamp = row["Timestamp"] ? row["Timestamp"] : new Date().toISOString();
-//       console.log("Final Timestamp for API:", timestamp);
-
-//       const leadData = {
-//         Name: row["Name"] || "",
-//         Phone: Number(row["Mobile No."] || 0),
-//         Email: row["Email"] || "",
-//         Address: row["Location"] || "",
-//         Interest: row["Are You Looking For"] || "",
-//         Source: row["Source Name"] || "",
-//         SourceDetails: sourceDetails,
-//         UpdatedBy: "System",
-//         LeadNo: `LEAD-${String(leadCounter + 1).padStart(2, "0")}`,
-//         AssignTo: "",
-//         Timestamp: timestamp, 
-//       frontendTimestamp: timestamp
-//       };
-
-//       try {
-//         const savedLead = await createLead(leadData);
-//         // overwrite timestamp only in frontend table
-//         setInventoryData((prev) => [
-//           { ...savedLead, Timestamp: timestamp },
-//           ...prev,
-//         ]);
-//         setLeadCounter((prev) => prev + 1);
-//       } catch (err) {
-//         console.error("Error uploading lead:", err);
-//       }
-//     }
-
-//     toast.success("Excel data uploaded successfully!", {
-//       position: "top-right",
-//       autoClose: 3000,
-//     });
-//   };
-
-//   reader.readAsArrayBuffer(file);
-// };
 
 
 const handleFileUpload = async (e) => {
@@ -556,6 +388,119 @@ const handleFileUpload = async (e) => {
   reader.readAsArrayBuffer(file);
 };
 
+const monthNames = [
+  "January","February","March","April","May","June",
+  "July","August","September","October","November","December"
+];
+
+const handleFormSubmit = async () => {
+    //  Validate required fields
+    console.log("Submitting formData:", formData);
+    if (!formData.name || !formData.phone || !formData.lookingFor || !formData.sourceName) {
+        toast.error("Please fill in all required fields", { position: "top-right", autoClose: 3000 });
+        return;
+    }
+
+    //  Check for duplicate mobile
+    const existingLead = inventoryData.find(
+        (lead) => String(lead.phone) === String(formData.phone)
+    );
+
+    if (existingLead) {
+        setFormData({
+            name: "", phone: "", email: "", location: "", sourceName: "",
+            lookingFor: "", firmName: "", personName: "", partnerMobile: "",
+            referenceName: "", otherSource: "", SourceDetails: "",
+        });
+        setDuplicateDetails([{
+            id: existingLead.id || "-",
+            name: existingLead.name || "-",
+            sourceDetails: existingLead.sourceDetails || "-",
+            source: existingLead.source || "-",
+        }]);
+        setShowDuplicateModal(true);
+        return;
+    }
+
+    // 3️⃣ Prepare source details
+    let sourceDetails = "";
+    if (formData.sourceName === "Channel Partner") {
+        sourceDetails = `${formData.firmName || ""}; ${formData.personName || ""}; ${formData.partnerMobile || ""}`;
+    } else if (formData.sourceName === "References") {
+        sourceDetails = formData.referenceName || "";
+    } else if (formData.sourceName === "Other") {
+        sourceDetails = formData.otherSource || "";
+    }
+
+    // 4️⃣ Construct payload for API
+    const newLead = {
+        Name: formData.name,
+        phone: Number(formData.phone),
+        Email: formData.email,
+        Address: formData.location,
+        Interest: formData.lookingFor,
+        Source: formData.sourceName,
+        SourceDetails: sourceDetails,
+        UpdatedBy: "System",
+        firmName: formData.firmName || "",
+        personName: formData.personName || "",
+        partnerMobile: formData.partnerMobile || "",
+        referenceName: formData.referenceName || "",
+        otherSource: formData.otherSource || "",
+    };
+
+    try {
+        // 5️⃣ Call backend API
+        const savedLead = await createLead(newLead); 
+        console.log("Saved lead from API:", savedLead);
+
+        // 6️⃣ Format API response for table
+        const formattedLead = {
+            id: savedLead.id || savedLead._id,
+            name: savedLead.Name,
+            phone: savedLead.phone || savedLead.Mobile,
+            email: savedLead.Email,
+            location: savedLead.Address,
+            lookingFor: savedLead.Interest,
+            source: savedLead.Source,
+            sourceDetails: savedLead.SourceDetails,
+            LeadNo: savedLead.LeadNo ? `LEAD-${String(savedLead.LeadNo).padStart(2, '0')}` : "-",
+            Timestamp: savedLead.Timestamp,
+            UpdatedBy: savedLead.UpdatedBy,
+            firmName: savedLead.firmName || '',
+            personName: savedLead.personName || '',
+            partnerMobile: savedLead.partnerMobile || '',
+            referenceName: savedLead.referenceName || '',
+            otherSource: savedLead.otherSource || '',
+        };
+
+        // 7️⃣ Update state immediately
+        // setInventoryData([formattedLead, ...inventoryData]);
+
+         // ✅ REFETCH latest leads from backend
+    const latestData = await fetchLeadsData();
+    alert(JSON.stringify(latestData, null, 2));
+    setInventoryData(latestData);
+
+        // 8️⃣ Clear form
+        setFormData({
+            name: "", phone: "", email: "", location: "", sourceName: "",
+            lookingFor: "", firmName: "", personName: "", partnerMobile: "",
+            referenceName: "", otherSource: "", SourceDetails: "",
+        });
+        setName('');
+        setPhone('');
+        setEmail('');
+        setShowFirmForm(false);
+
+        toast.success("Lead submitted successfully!", { position: "top-right", autoClose: 3000 });
+    } catch (error) {
+        console.error("Submission error:", error);
+        toast.error("Failed to submit lead. Please try again.", { position: "top-right", autoClose: 3000 });
+    }
+};
+
+
 
 // pagination :
 
@@ -573,10 +518,12 @@ const handleFileUpload = async (e) => {
   };
 
   // Calculate the current page data
-  const paginatedData = inventoryData.slice(
-    page * rowsPerPage,
-    page * rowsPerPage + rowsPerPage
-  );
+  // const paginatedData = inventoryData.slice(
+  //   page * rowsPerPage,
+  //   page * rowsPerPage + rowsPerPage
+  // );
+ 
+
   
 
   const filteredData = inventoryData.filter((item) => {
@@ -600,6 +547,12 @@ const paginatedFilteredData = filteredData.slice(
   page * rowsPerPage,
   page * rowsPerPage + rowsPerPage
 );
+ console.log("paginated filtered data ",paginatedFilteredData.length);
+ console.log("Inventory data",inventoryData.length);
+const paginatedData = filteredData.slice(
+  page * rowsPerPage,
+  page * rowsPerPage + rowsPerPage
+);
 
 // delete lead api :
 const deleteLeadApi = async (id) => {
@@ -620,6 +573,416 @@ const deleteLeadApi = async (id) => {
     return false;
   }
 };
+
+
+// Downlaod Excel Monthewise Functions :
+const handleDownloadSalesPersonExcel = (month) => {
+  try {
+    setOpenMonthModal(false);
+
+    if (!month) {
+      toast.error("Please select a month before downloading.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      return;
+    }
+
+    const year = new Date().getFullYear();
+    const monthIndex = new Date(`${month} 1, ${year}`).getMonth();
+
+    // 🗓 Define weeks (Friday → Thursday)
+    const weeks = [];
+    const firstDayOfMonth = new Date(year, monthIndex, 1);
+    const lastDayOfMonth = new Date(year, monthIndex + 1, 0);
+
+    const firstFriday = new Date(firstDayOfMonth);
+    while (firstFriday.getDay() !== 5) firstFriday.setDate(firstFriday.getDate() - 1);
+
+    let currentStart = new Date(firstFriday);
+    while (currentStart <= lastDayOfMonth) {
+      const currentEnd = new Date(currentStart);
+      currentEnd.setDate(currentStart.getDate() + 6);
+
+      const sD = String(currentStart.getDate()).padStart(2, "0");
+      const sM = String(currentStart.getMonth() + 1).padStart(2, "0");
+      const eD = String(currentEnd.getDate()).padStart(2, "0");
+      const eM = String(currentEnd.getMonth() + 1).padStart(2, "0");
+
+      weeks.push({
+        start: new Date(currentStart),
+        end: new Date(currentEnd),
+        label: `Week ${weeks.length + 1} (${sD}/${sM} - ${eD}/${eM})`,
+      });
+
+      currentStart.setDate(currentStart.getDate() + 7);
+    }
+
+    // 🧩 Fixed category list
+    const categorySources = {
+      "Direct Walk-in": ["Actual Site", "Direct Call"],
+      "Site Branding": ["Hoarding", "Exhibition", "Pamphlet", "Online Portal"],
+      "Channel Partner": ["Channel Partner"],
+      "Referral Program": ["References", "Reference"],
+      "Digital Media": [
+        "Facebook",
+        "Instagram",
+        "Website",
+        "Print Media",
+        "Radio",
+        "Google Add",
+      ],
+    };
+
+    // Build lowercase lookup map
+    const categoryMap = {};
+    Object.entries(categorySources).forEach(([cat, arr]) => {
+      arr.forEach((s) => (categoryMap[s.toLowerCase()] = cat));
+    });
+
+    // Initialize counts
+    const categoryCounts = {};
+    Object.keys(categorySources).forEach((cat) => {
+      categoryCounts[cat] = new Array(weeks.length).fill(0);
+    });
+
+    // Parse timestamp function (safe)
+    const parseTimestampToDate = (ts) => {
+      if (!ts) return null;
+      const d1 = new Date(ts);
+      if (!isNaN(d1)) return d1;
+
+      // fallback: "14/10/2025, 10:30 AM"
+      const parts = String(ts).split(",")[0].split(/[-/]/);
+      if (parts.length < 3) return null;
+      let [a, b, c] = parts.map((x) => parseInt(x));
+      if (c < 100) c += 2000;
+      const d = new Date(c, b - 1, a);
+      return isNaN(d) ? null : d;
+    };
+
+    // 🔢 Count leads
+    inventoryData.forEach((lead) => {
+      if (!lead.timestamp || !lead.sourceName) return;
+      const date = parseTimestampToDate(lead.timestamp);
+      if (!date || date.getMonth() !== monthIndex) return;
+
+      const src = lead.sourceName?.trim().toLowerCase();
+      const category = categoryMap[src];
+      if (!category) return;
+
+      const weekIndex = weeks.findIndex((w) => date >= w.start && date <= w.end);
+      if (weekIndex === -1) return;
+
+      categoryCounts[category][weekIndex]++;
+    });
+
+    // 🧮 Prepare Excel Data
+    const reportTitle = `Source Wise Lead Report (${month})`;
+    const headerRow = ["Source Name", ...weeks.map((w) => w.label), "Expenses"];
+    const data = [[reportTitle], [], headerRow];
+
+    const fixedCategories = [
+      "Direct Walk-in",
+      "Site Branding",
+      "Channel Partner",
+      "Referral Program",
+      "Digital Media",
+    ];
+
+   fixedCategories.forEach((cat) => {
+  const counts = categoryCounts[cat] || new Array(weeks.length).fill(0);
+  data.push([cat, ...counts, 0]); // Expenses always 0
+});
+
+
+    // Total row
+    const totals = ["Total"];
+    for (let i = 0; i < weeks.length; i++) {
+      const weekTotal = Object.values(categoryCounts).reduce(
+        (sum, arr) => sum + (arr[i] || 0),
+        0
+      );
+      totals.push(weekTotal);
+    }
+    const grandTotal = Object.values(categoryCounts)
+      .flat()
+      .reduce((a, b) => a + b, 0);
+totals.push(0); // Expenses total also 0
+    data.push(totals);
+
+    // 📘 Excel Creation
+    const ws = XLSX.utils.aoa_to_sheet(data);
+    ws["!merges"] = [
+      { s: { r: 0, c: 0 }, e: { r: 0, c: headerRow.length - 1 } },
+    ];
+    ws["!cols"] = headerRow.map(() => ({ wch: 22 }));
+
+    // Apply Styles
+    const headerRowIndex = 2;
+    const totalRowIndex = data.length - 1;
+
+    for (const cellAddr of Object.keys(ws)) {
+      if (cellAddr[0] === "!") continue;
+      const cell = ws[cellAddr];
+      if (!cell.s) cell.s = {};
+      const { r } = XLSX.utils.decode_cell(cellAddr);
+
+      if (r === 0) {
+        // title row
+        cell.s = {
+          font: { bold: true, sz: 16, color: { rgb: "FFFFFF" } },
+          fill: { fgColor: { rgb: "305496" } },
+          alignment: { horizontal: "center", vertical: "center" },
+        };
+      } else if (r === headerRowIndex) {
+        // header
+        cell.s = {
+          font: { bold: true, color: { rgb: "FFFFFF" } },
+          fill: { fgColor: { rgb: "4472C4" } },
+          alignment: { horizontal: "center" },
+          border: {
+            top: { style: "thin" },
+            bottom: { style: "thin" },
+            left: { style: "thin" },
+            right: { style: "thin" },
+          },
+        };
+      } else if (r === totalRowIndex) {
+        // total row
+        cell.s = {
+          font: { bold: true },
+          fill: { fgColor: { rgb: "FFD966" } },
+          alignment: { horizontal: "center" },
+          border: {
+            top: { style: "thin" },
+            bottom: { style: "thin" },
+            left: { style: "thin" },
+            right: { style: "thin" },
+          },
+        };
+      } else {
+        // regular rows
+        cell.s = {
+          alignment: { horizontal: "center" },
+          border: {
+            top: { style: "thin" },
+            bottom: { style: "thin" },
+            left: { style: "thin" },
+            right: { style: "thin" },
+          },
+        };
+      }
+    }
+
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Source Report");
+    XLSX.writeFile(wb, `Source_Wise_Report_${month}_${year}.xlsx`);
+
+    toast.success(
+      `Sales Person Wise Report for ${month} downloaded successfully!`,
+      { position: "top-right", autoClose: 3000 }
+    );
+  } catch (error) {
+    console.error("Excel download error:", error);
+    toast.error("Error generating Excel report. Check console.", {
+      position: "top-right",
+      autoClose: 3000,
+    });
+  }
+};
+
+
+const handleDownloadExcelLeads = (month) => {
+  try {
+    setOpenMonthModal(false);
+
+    if (!month) {
+      toast.error("Please select a month before downloading.", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      return;
+    }
+
+    const year = new Date().getFullYear();
+    const monthIndex = new Date(`${month} 1, ${year}`).getMonth();
+
+    // 🗓 Define weeks (Friday → Thursday)
+    const weeks = [];
+    const firstDayOfMonth = new Date(year, monthIndex, 1);
+    const lastDayOfMonth = new Date(year, monthIndex + 1, 0);
+    const firstFriday = new Date(firstDayOfMonth);
+    while (firstFriday.getDay() !== 5) firstFriday.setDate(firstFriday.getDate() - 1);
+
+    let currentStart = new Date(firstFriday);
+    while (currentStart <= lastDayOfMonth) {
+      const currentEnd = new Date(currentStart);
+      currentEnd.setDate(currentStart.getDate() + 6);
+
+      const sD = String(currentStart.getDate()).padStart(2, "0");
+      const sM = String(currentStart.getMonth() + 1).padStart(2, "0");
+      const eD = String(currentEnd.getDate()).padStart(2, "0");
+      const eM = String(currentEnd.getMonth() + 1).padStart(2, "0");
+
+      weeks.push({
+        start: new Date(currentStart),
+        end: new Date(currentEnd),
+        label: `Week ${weeks.length + 1} (${sD}/${sM} - ${eD}/${eM})`,
+      });
+
+      currentStart.setDate(currentStart.getDate() + 7);
+    }
+
+    // ✅ Fixed 6 source/salesperson categories
+    const fixedSources = [
+      "Main Sales",
+      "Ranjeet Rajkumar Kamble",
+      "Yogita Satish Dalvi",
+      "Shubhangi Omkar Patil",
+      "Ajay Ravindra Kate",
+      "Tester",
+    ];
+
+    // Initialize counts
+    const sourceCounts = {};
+    fixedSources.forEach((src) => {
+      sourceCounts[src] = new Array(weeks.length).fill(0);
+    });
+
+    // Safe timestamp parser
+    const parseTimestampToDate = (ts) => {
+      if (!ts) return null;
+      const d1 = new Date(ts);
+      if (!isNaN(d1)) return d1;
+
+      const parts = String(ts).split(",")[0].split(/[-/]/);
+      if (parts.length < 3) return null;
+      let [a, b, c] = parts.map((x) => parseInt(x));
+      if (c < 100) c += 2000;
+      const d = new Date(c, b - 1, a);
+      return isNaN(d) ? null : d;
+    };
+
+    // 🔢 Count leads per salesperson per week
+    inventoryData.forEach((lead) => {
+      if (!lead.timestamp || !lead.assignTo) return;
+      const date = parseTimestampToDate(lead.timestamp);
+      if (!date || date.getMonth() !== monthIndex) return;
+
+      const assigned = lead.assignTo.trim();
+      if (!fixedSources.includes(assigned)) return;
+
+      const weekIndex = weeks.findIndex((w) => date >= w.start && date <= w.end);
+      if (weekIndex === -1) return;
+
+      sourceCounts[assigned][weekIndex]++;
+    });
+
+    // 🧮 Prepare Excel Data
+    const reportTitle = `Sales person wise Lead Report (${month})`;
+    const headerRow = ["Sales person", ...weeks.map((w) => w.label), "Expenses"];
+    const data = [[reportTitle], [], headerRow];
+
+   fixedSources.forEach((src) => {
+  const counts = sourceCounts[src] || new Array(weeks.length).fill(0);
+  data.push([src, ...counts, 0]); // last column = 0
+});
+
+
+    // Total row (sum across all 6 people)
+    const totals = ["Total"];
+    for (let i = 0; i < weeks.length; i++) {
+      const weekTotal = Object.values(sourceCounts).reduce(
+        (sum, arr) => sum + (arr[i] || 0),
+        0
+      );
+      totals.push(weekTotal);
+    }
+    const grandTotal = Object.values(sourceCounts)
+      .flat()
+      .reduce((a, b) => a + b, 0);
+totals.push(0); // Expenses total = 0
+    data.push(totals);
+
+    // 📘 Create Excel Sheet
+    const ws = XLSX.utils.aoa_to_sheet(data);
+    ws["!merges"] = [{ s: { r: 0, c: 0 }, e: { r: 0, c: headerRow.length - 1 } }];
+    ws["!cols"] = headerRow.map(() => ({ wch: 22 }));
+
+    // 🎨 Styles
+    const headerRowIndex = 2;
+    const totalRowIndex = data.length - 1;
+
+    for (const cellAddr of Object.keys(ws)) {
+      if (cellAddr[0] === "!") continue;
+      const cell = ws[cellAddr];
+      if (!cell.s) cell.s = {};
+      const { r } = XLSX.utils.decode_cell(cellAddr);
+
+      if (r === 0) {
+        cell.s = {
+          font: { bold: true, sz: 16, color: { rgb: "FFFFFF" } },
+          fill: { fgColor: { rgb: "305496" } },
+          alignment: { horizontal: "center", vertical: "center" },
+        };
+      } else if (r === headerRowIndex) {
+        cell.s = {
+          font: { bold: true, color: { rgb: "FFFFFF" } },
+          fill: { fgColor: { rgb: "4472C4" } },
+          alignment: { horizontal: "center" },
+          border: {
+            top: { style: "thin" },
+            bottom: { style: "thin" },
+            left: { style: "thin" },
+            right: { style: "thin" },
+          },
+        };
+      } else if (r === totalRowIndex) {
+        cell.s = {
+          font: { bold: true },
+          fill: { fgColor: { rgb: "FFD966" } },
+          alignment: { horizontal: "center" },
+          border: {
+            top: { style: "thin" },
+            bottom: { style: "thin" },
+            left: { style: "thin" },
+            right: { style: "thin" },
+          },
+        };
+      } else {
+        cell.s = {
+          alignment: { horizontal: "center" },
+          border: {
+            top: { style: "thin" },
+            bottom: { style: "thin" },
+            left: { style: "thin" },
+            right: { style: "thin" },
+          },
+        };
+      }
+    }
+
+    // 📤 Export File
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Sales Report");
+    XLSX.writeFile(wb, `Sales_person_Wise_Lead_Report_${month}_${year}.xlsx`);
+
+    toast.success(`Source Wise Lead Report for ${month} downloaded successfully!`, {
+      position: "top-right",
+      autoClose: 3000,
+    });
+  } catch (error) {
+    console.error("Excel download error:", error);
+    toast.error("Error generating Source Wise Excel report. Check console.", {
+      position: "top-right",
+      autoClose: 3000,
+    });
+  }
+};
+
+
+
 
   return (
     <div className="container my-2">
@@ -700,6 +1063,7 @@ const deleteLeadApi = async (id) => {
                     variant="contained"
                     style={{ background: Constants.primaryColor, minWidth: isMobile ? '100%' : 'auto' }}
                     onClick={() => setShowFirmForm(true)}
+                    sx={{fontWeight:"bold"}}
                   >
                     + New Leads
                   </Button>
@@ -719,65 +1083,41 @@ const deleteLeadApi = async (id) => {
                       minWidth: isMobile ? '100%' : 'auto',
                     }}
                     onClick={handleDownloadPDFLeads}
-                    // disabled={inventoryData.length === 0}
+                    
                   >
                     <FaFileDownload size={18} />
-                    {isMobile ? 'PDF' : 'Download PDF'}
+                    {isMobile ? 'PDF' : 'Download Table PDF'}
                   </Button>
+                   <Button
+  variant="contained"
+  sx={{
+    background: "#800020",
+    color: "white",
+    fontWeight: "bold",
+    textTransform: "none",
+    padding: "8px 16px",
+    borderRadius: "8px",
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",
+    "&:hover": { background: "#800020" },
+    minWidth: isMobile ? '100%' : 'auto',
+  }}
+  onClick={() => setOpenMonthModal(true)}
+>
+  <FaFileDownload size={18} />
+  {isMobile ? 'Excel' : 'Download Monthwise Report'}
+</Button>
                 </div>
                  
-{/* <div className="d-flex flex-column flex-md-row justify-content-between align-items-center mb-3 gap-2">
-  <TextField
-  label="Search Lead"
-  variant="outlined"
-  size="small"
-  value={searchQuery}
-  onChange={(e) => setSearchQuery(e.target.value.toLowerCase())}
-  sx={{
-    minWidth: isMobile ? "100%" : "200px",
-    border: Constants.formInputBorderColor,
-  }}
-/>
 
-  <TablePagination
-    rowsPerPageOptions={[5, 10, 25]}
-    component="div"
-    // count={inventoryData.length}
-    count={filteredData.length}
-    rowsPerPage={rowsPerPage}
-    page={page}
-    onPageChange={handleChangePage}
-    onRowsPerPageChange={handleChangeRowsPerPage}
-    labelDisplayedRows={({ from, to, count }) =>
-      `${from}-${to} of ${count} entries`
-    }
-    sx={{
-      width: 'auto',
-      '& .MuiTablePagination-toolbar': {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 1,
-        padding: '0px',
-      },
-      '& .MuiTablePagination-spacer': {
-        display: 'none',
-      },
-      '& .MuiTablePagination-actions': {
-        marginLeft: '8px'
-      },
-      '& .MuiTablePagination-selectLabel, & .MuiTablePagination-displayedRows': {
-        fontSize: isMobile ? '12px' : '14px'
-      }
-    }}
-  />  
-</div> */}
   <div
     className="d-flex align-items-center mb-3"
     style={{
       justifyContent: isMobile ? "flex-start" : "flex-end",
       gap: "8px",
-      flexWrap: "nowrap", // <--- KEY CHANGE: Prevents elements from wrapping to the next line
-      overflowX: "auto", // Allows horizontal scrolling if content is wider than screen
+      flexWrap: "nowrap", 
+      overflowX: "auto", 
     }}
   >
     <TextField
@@ -797,7 +1137,8 @@ const deleteLeadApi = async (id) => {
     <TablePagination
       rowsPerPageOptions={[5, 10, 25]}
       component="div"
-      count={filteredData.length} // Should be the total count (e.g., 50)
+      count={inventoryData.length} 
+      // count={paginatedFilteredData.length} 
       rowsPerPage={rowsPerPage}
       page={page}
       onPageChange={handleChangePage}
@@ -830,82 +1171,15 @@ const deleteLeadApi = async (id) => {
 
               </div>
                
-              <div className="mt-3">
-                {/* <NewLeads
-                  // inventoryData={inventoryData.filter(item => Object.keys(item).length > 0)}
-                  inventoryData={inventoryData.filter(item => item.visible !== false)}
-
-                  handleDelete={handleDelete}
-                  setInventoryData={setInventoryData}
-                  isMobile={isMobile}
-                  isTablet={isTablet}
-                /> */}
+              <div className="mt-2 mb-5">
               
-                {/* <NewLeads
-  inventoryData={inventoryData.filter((item) => {
-    const query = searchQuery.trim();
-    if (!query) return true;
-
-    inventoryData.forEach(item => {
-  if (!item.phone && !item.Mobile) {
-    console.warn("Missing phone/Mobile in lead:", item);
-  }
-});
-
-  const firmName = item.firmName?.toLowerCase() || "";
-  const channelPartnerName = item.personName?.toLowerCase() || "";
-  const sourceDetails = item.sourceDetails?.toLowerCase() || "";
-    firmName.includes(query) ||
-    channelPartnerName.includes(query) ||
-    sourceDetails.includes(query)
-    return (
-      item.name?.toLowerCase().includes(query) ||
-      String(item.phone || '').toLowerCase().includes(query) 
-
-      
-    );
-  })}
-  handleDelete={handleDelete}
-  setInventoryData={setInventoryData}
-  isMobile={isMobile}
-  isTablet={isTablet}
-/> */}
-
-{/* Searching by only lead name, phone, Channel partner name */}
-{/* <NewLeads
-  inventoryData={inventoryData.filter((item) => {
-    const query = searchQuery.trim().toLowerCase();
-    if (!query) return true;
-
-    // Optional: log if phone is missing
-    if (!item.phone && !item.Mobile) {
-      console.warn("Missing phone/Mobile in lead:", item);
-    }
-
-    // const firmName = item.firmName?.toLowerCase() || "";
-    const channelPartnerName = item.personName?.toLowerCase() || "";
-    // const sourceDetails = item.sourceDetails?.toLowerCase() || "";
-    const name = item.name?.toLowerCase() || "";
-    const phone = String(item.phone || "").toLowerCase();
-
-    return (
-      name.includes(query) ||
-      phone.includes(query) ||
-      // firmName.includes(query) ||
-      channelPartnerName.includes(query) 
-      // sourceDetails.includes(query)
-    );
-  })}
-  handleDelete={handleDelete}
-  setInventoryData={setInventoryData}
-  isMobile={isMobile}
-  isTablet={isTablet}
-/> */}
 
 <NewLeads
   inventoryData={paginatedFilteredData}
+  paginatedFilteredData={paginatedFilteredData}
   handleDelete={handleDelete}
   setInventoryData={setInventoryData}
+  fetchLeadsData={fetchLeadsData}
   isMobile={isMobile}
   isTablet={isTablet}
 />
@@ -992,8 +1266,7 @@ const deleteLeadApi = async (id) => {
                       fullWidth
                       value={email}
                       onChange={handleEmailChange}
-                      // error={!!emailError}
-                      // helperText={emailError}
+                      
                       size={isMobile ? "small" : "medium"}
                       sx={{ border: Constants.formInputBorderColor }}
 
@@ -1127,6 +1400,8 @@ const deleteLeadApi = async (id) => {
           )}
         </div>
       
+
+
    <Dialog open={showDuplicateModal} onClose={() => setShowDuplicateModal(false)}>
   <DialogTitle>Duplicate Mobile Number</DialogTitle>
   <DialogContent>
@@ -1151,6 +1426,171 @@ const deleteLeadApi = async (id) => {
 </Dialog>
 
 
+<Dialog
+  open={openMonthModal}
+  onClose={() => setOpenMonthModal(false)}
+  maxWidth="xs"
+  fullWidth
+  PaperProps={{
+    sx: {
+      borderRadius: "16px",
+      padding: "10px",
+      boxShadow: "0px 8px 30px rgba(0,0,0,0.2)",
+      backgroundColor: "#fff",
+    },
+  }}
+>
+  <DialogTitle
+    sx={{
+      fontWeight: "bold",
+      fontSize: "1.3rem",
+      color: Constants.primaryColor,
+      textAlign: "center",
+      borderBottom: "1px solid #eee",
+      paddingBottom: "10px",
+    }}
+  >
+    Select Report Details
+  </DialogTitle>
+
+<DialogContent
+  sx={{
+    mt: 3,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    gap: 3,
+  }}
+>
+  {/* Put both selects in one row */}
+  <Box
+    sx={{
+      display: "flex",
+      flexDirection: "row",
+      gap: 2,
+      width: "100%",
+      justifyContent: "center",
+      alignItems: "center",
+    }}
+  >
+    {/* Report Type */}
+    <TextField
+      select
+      label="Select"
+      fullWidth
+      value={selectedReportType}
+      onChange={(e) => setSelectedReportType(e.target.value)}
+      sx={{
+        "& .MuiInputLabel-root": {
+          color: Constants.primaryColor,
+          fontWeight: 600,
+        },
+        "& .MuiOutlinedInput-root": {
+          borderRadius: "10px",
+          "& fieldset": { borderColor: Constants.primaryColor },
+          "&:hover fieldset": { borderColor: "#a33344" },
+          "&.Mui-focused fieldset": {
+            borderColor: Constants.primaryColor,
+            borderWidth: "2px",
+          },
+        },
+      }}
+    >
+<MenuItem value="">Select</MenuItem>
+<MenuItem value="sales">Source wise</MenuItem>
+<MenuItem value="source">Sales person Wise</MenuItem>
+
+    </TextField>
+
+    {/* Month Selection */}
+    <TextField
+      select
+      label="Month"
+      fullWidth
+      value={selectedMonth}
+      onChange={(e) => setSelectedMonth(e.target.value)}
+      sx={{
+        "& .MuiInputLabel-root": {
+          color: Constants.primaryColor,
+          fontWeight: 600,
+        },
+        "& .MuiOutlinedInput-root": {
+          borderRadius: "10px",
+          "& fieldset": { borderColor: Constants.primaryColor },
+          "&:hover fieldset": { borderColor: "#a33344" },
+          "&.Mui-focused fieldset": {
+            borderColor: Constants.primaryColor,
+            borderWidth: "2px",
+          },
+        },
+      }}
+    >
+      {monthNames.map((month, idx) => (
+        <MenuItem key={idx} value={month}>
+          {month}
+        </MenuItem>
+      ))}
+    </TextField>
+  </Box>
+</DialogContent>
+  <DialogActions
+    sx={{
+      justifyContent: "center",
+      pb: 2,
+      gap: 2,
+    }}
+  >
+    <Button
+      onClick={() => setOpenMonthModal(false)}
+      variant="outlined"
+      sx={{
+        borderColor: Constants.primaryColor,
+        color: Constants.primaryColor,
+        fontWeight: "bold",
+        textTransform: "none",
+        borderRadius: "8px",
+        px: 3,
+      }}
+    >
+      Cancel
+    </Button>
+   <Button
+  variant="contained"
+  sx={{
+    backgroundColor: Constants.primaryColor,
+    color: "#fff",
+    fontWeight: "bold",
+    textTransform: "none",
+    borderRadius: "8px",
+    px: 3,
+    "&:hover": { backgroundColor: Constants.primaryColor, opacity: 0.9 },
+  }}
+  onClick={() => {
+    if (!selectedReportType) {
+      toast.error("Please select report type", { position: "top-right" });
+      return;
+    }
+    if (!selectedMonth) {
+      toast.error("Please select a month", { position: "top-right" });
+      return;
+    }
+
+    // ✅ Correct logic — call the real Excel download function
+if (selectedReportType === "sales") {
+  handleDownloadSalesPersonExcel(selectedMonth);
+} else if (selectedReportType === "source") {
+  handleDownloadExcelLeads(selectedMonth);
+}
+
+    
+  }}
+  
+>
+  Download
+</Button>
+
+  </DialogActions>
+</Dialog>
 
 
 

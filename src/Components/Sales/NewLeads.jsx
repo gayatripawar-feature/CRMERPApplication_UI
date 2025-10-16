@@ -28,7 +28,7 @@ import { FaEdit, FaWhatsapp, FaEnvelope, FaUserCircle, FaTrash } from "react-ico
 import { toast } from "react-toastify";
 import Constants from "../Constants";
 
-const NewLeads = ({ inventoryData, setInventoryData, isMobile, isTablet, handleDelete }) => {
+const NewLeads = ({ inventoryData, setInventoryData, isMobile, isTablet, handleDelete,fetchLeadsData,paginatedFilteredData}) => {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
@@ -51,12 +51,14 @@ const NewLeads = ({ inventoryData, setInventoryData, isMobile, isTablet, handleD
 
 
   // // Source options for the select dropdown
-  const sourceOptions = ["Actual Site", "Hoarding", "Facebook", "Instagram", "Website", "Print Media", "Radio", "Google add", "Exhibition", "Online Portal", "Direct call", "Pamphlet", "Channel Partner", "References", "Other"];
+  const sourceOptions = ["Actual Site", "Hoarding", "Facebook", "Instagram", "Website", "Print Media", "Radio", "Google add", "Exhibition", "Online Portal", "Direct Call", "Pamphlet", "Channel Partner", "References", "Other"];
 
 
   // Pagination state
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+
+
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -80,14 +82,6 @@ const NewLeads = ({ inventoryData, setInventoryData, isMobile, isTablet, handleD
     setAssignedTo(""); // Reset assignedTo when opening the modal
   };
 
-
-
-
-
-
-
-  
-
 const handleCloseModal = async () => {
   console.log("🔹 handleCloseModal called");
   console.log("editMode:", editMode);
@@ -99,33 +93,36 @@ console.log("inventoryData fetched:", inventoryData);
 
   // Handle Assign
   if (!editMode && assignedTo && selectedLead) {
-    console.log("➡️ Assign mode");
+    console.log("Assign mode");
 
-    // 1️⃣ Update UI
-    const updatedInventoryData = inventoryData.map((item) => {
-      if (item.id === selectedLead.id) {
-        console.log(`Updating lead id=${item.id} with assignedTo=${assignedTo}`);
-        // return { ...item, assignedTo: assignedTo };
-        return {
-  ...item,
-  leadEnagagements: [
-    ...(item.leadEnagagements || []),
-    {
-      id: Date.now(), // or from API response
-      assignedTo: assignedTo,
-      assignedBy: "Admin",
-      leadId: item.id,
-      assignedDate: new Date().toISOString(),
-      status: "Assigned"
-    }
-  ]
-};
+    //  Update UI
+//     const updatedInventoryData = inventoryData.map((item) => {
+//       if (item.id === selectedLead.id) {
+//         console.log(`Updating lead id=${item.id} with assignedTo=${assignedTo}`);
+        
+//         return {
+//           // lead object from inventoryData-item
+//   ...item,                  
+//   leadEnagagements: [
+//     ...(item.leadEnagagements || []),   //check if its alreday present if not then assign a new array for latest assignment.
+//     {
+//       id: Date.now(), 
+//       assignedTo: assignedTo,
+//       assignedBy: "Admin",
+//       leadId: item.id,
+//       assignedDate: new Date().toISOString(),
+//       status: "Assigned"
+//     }
+//   ]
+// };
 
-      }
-      return item;
-    });
-    console.log("Updated inventoryData (UI):", updatedInventoryData);
-    setInventoryData(updatedInventoryData);
+//       }
+//       return item;
+//     });
+
+
+    // console.log("Updated inventoryData (UI):", updatedInventoryData);
+    // setInventoryData(updatedInventoryData);
 
     // 2️⃣ Call API to save assignment
     try {
@@ -145,9 +142,18 @@ console.log("inventoryData fetched:", inventoryData);
         throw new Error(`Failed to assign lead: ${errorText}`);
       }
 
-      const savedLead = await response.json();
-      console.log("API response savedLead:", savedLead);
+      // const savedLead = await response.json();
+      // console.log("API response savedLead:", savedLead);
+// /  REFRESH leads from backend
+//  await fetchLeadsData(); // fetch updated inventoryData
+
+//  Fetch updated leads from backend
+      const latestData = await fetchLeadsData(); // backend have already leadEnagagements
+      setInventoryData(latestData);
+
       toast.success("Lead assigned successfully!");
+
+
     } catch (error) {
       console.error("API assign error:", error);
       toast.error(`Failed to assign lead. ${error.message}`);
@@ -195,37 +201,48 @@ console.log("inventoryData fetched:", inventoryData);
 
 
 
+
   const handleSuccessModalClose = () => {
     setSuccessModalOpen(false);
     setModalOpen(false);
     setAssignedTo("");
     setSelectedLead(null);
+    
   };
+
+  
+
 
   const handleEmailBlur = () => {
-    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-    if (!emailRegex.test(editedLead.email)) {
-      setEmailError(true);
-      setEmailHelperText("Please enter a valid email address.");
-    } else {
-      setEmailError(false);
-      setEmailHelperText("");
-    }
-  };
+  const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+  const email = editedLead?.email || ""; // safely get email
+  if (!emailRegex.test(email)) {
+    setEmailError(true);
+    setEmailHelperText("Please enter a valid email address.");
+  } else {
+    setEmailError(false);
+    setEmailHelperText("");
+  }
+};
+  
+
 
   const handleMobileBlur = () => {
-    const mobileRegex = /^[0-9]{10}$/;
-    if (!mobileRegex.test(editedLead.mobile)) {
-      setMobileError(true);
-      setMobileHelperText("Please enter a valid 10-digit mobile number.");
-    } else {
-      setMobileError(false);
-      setMobileHelperText("");
-    }
-  };
-
+  const mobile = editedLead?.phone || "";
+  const mobileRegex = /^[0-9]{10}$/;
+  if (!mobileRegex.test(mobile)) {
+    setMobileError(true);
+    setMobileHelperText("Please enter a valid 10-digit mobile number.");
+  } else {
+    setMobileError(false);
+    setMobileHelperText("");
+  }
+};
   const handleEditClick = (item) => {
     setEditMode(true);
+     console.log("Original item.source:", item.source);
+      console.log("Source options:", sourceOptions); 
+      
     setEditedLead({ ...item });
     setModalOpen(true);
   };
@@ -286,6 +303,7 @@ console.log("inventoryData fetched:", inventoryData);
           maxHeight: isMobile ? 400 : 600,
           width: '100%',
           overflow: 'auto',
+          
           '&::-webkit-scrollbar': {
             width: isMobile ? "4px" : "6px",
             height: isMobile ? '4px' : '6px',
@@ -308,7 +326,8 @@ console.log("inventoryData fetched:", inventoryData);
       whiteSpace: "nowrap",    
       overflow: "hidden",
       textOverflow: "ellipsis",
-      verticalAlign: "middle"  
+      verticalAlign: "middle",  
+  
     }
   }}
   >
@@ -330,7 +349,7 @@ console.log("inventoryData fetched:", inventoryData);
           </TableHead>
           <TableBody>
             {/* {inventoryData.length === 0 ? ( */}
-               {paginatedData.length === 0 ? (
+                  {paginatedFilteredData.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={10} align="center" sx={{ py: 4 }}>
                   <Typography variant="h6" color="textSecondary">
@@ -342,7 +361,7 @@ console.log("inventoryData fetched:", inventoryData);
                 </TableCell>
               </TableRow>
             ) : (
-              paginatedData.map((item, index) => (
+            paginatedFilteredData.map((item, index) => (
                 <TableRow key={index}>
                   <TableCell>
                     <div style={{ display: "flex", gap: "5px", flexWrap: isMobile ? "wrap" : "nowrap" }}>
@@ -409,11 +428,22 @@ console.log("inventoryData fetched:", inventoryData);
                     
                   </TableCell>
                  
-                 <TableCell>
+                 {/* To shows the lastest data of asssignmenet */}
+                 {/* <TableCell>
   {item.leadEnagagements && item.leadEnagagements.length > 0
     ? item.leadEnagagements.reduce((latest, curr) =>
         new Date(curr.assignedDate) > new Date(latest.assignedDate) ? curr : latest
       ).assignedTo
+    : (
+      <Typography variant="body2" color="textSecondary">
+        Not assigned
+      </Typography>
+    )}
+</TableCell> */}
+{/* As lead assignment will be done only once  */}
+<TableCell>
+  {item.leadEnagagements && item.leadEnagagements.length > 0
+    ? item.leadEnagagements[0].assignedTo
     : (
       <Typography variant="body2" color="textSecondary">
         Not assigned
@@ -424,33 +454,14 @@ console.log("inventoryData fetched:", inventoryData);
                 
                   
                   {/* <TableCell>{item.id}</TableCell>                  */}
-                  <TableCell>{`Lead- ${String(item.id).padStart(2, '0')}`}</TableCell>
+                  <TableCell>{`Lead - ${String(item.id).padStart(2, '0')}`}</TableCell>
 
 <TableCell>{item.name}</TableCell>
-
-
-
 <TableCell>{item.phone?.toString() || "-"}</TableCell>
-{/* <TableCell>{item.phone && item.phone !== 0 ? item.phone.toString() : "-"}</TableCell> */}
-
-
-
-
 <TableCell>{item.interest}</TableCell>
 <TableCell>{item.email}</TableCell>
 <TableCell>{item.source}</TableCell>
 <TableCell>{item.address}</TableCell>
- 
-{/* 
-<TableCell>
-  {item.sourceName === "Channel Partner"
-    ? `${item.firmName || ""}; ${item.personName || ""}; ${item.partnerMobile || ""}`
-    : item.sourceName === "References"
-    ? item.referenceName || "-"
-    : item.sourceName === "Other"
-    ? item.otherSource || "-"
-    : "-"}
-</TableCell> */}
 
 <TableCell>
   {item.sourceDetails && item.sourceDetails.trim() !== ""
@@ -458,15 +469,9 @@ console.log("inventoryData fetched:", inventoryData);
     : "-"}
 </TableCell>
 
- {/* <TableCell>{formatTimestamp(item.lastUpdatedDate)}</TableCell> */}
-
-
 <TableCell>
   {formatTimestamp(item.Timestamp || item.lastUpdatedDate)}
 </TableCell>
-
-
-
                 </TableRow>
               ))
             )}
@@ -484,66 +489,7 @@ console.log("inventoryData fetched:", inventoryData);
                   }}
                 >
                  
-                  {/* <TablePagination
-  rowsPerPageOptions={[5, 10, 25]}
-  component="div"
-  count={inventoryData.length}
-  rowsPerPage={rowsPerPage}
-  page={page}
-  onPageChange={handleChangePage}
-  onRowsPerPageChange={handleChangeRowsPerPage}
-  labelDisplayedRows={() => `${page + 1} of ${Math.ceil(inventoryData.length / rowsPerPage)}`}
-  sx={{
-    width: 'auto',
-    '& .MuiTablePagination-toolbar': {
-      flexDirection: isMobile ? 'column' : 'row',
-      alignItems: isMobile ? 'flex-start' : 'center',
-      gap: isMobile ? 2 : 0,
-      padding: isMobile ? '8px 0' : '16px 0'
-    },
-    '& .MuiTablePagination-spacer': {
-      display: isMobile ? 'none' : 'block',
-      flex: 'none'
-    },
-    '& .MuiTablePagination-actions': {
-      marginLeft: isMobile ? 0 : 'auto'
-    },
-    '& .MuiTablePagination-selectLabel, & .MuiTablePagination-displayedRows': {
-      fontSize: isMobile ? '12px' : '14px'
-    }
-  }}
-/> */}
-{/* <TablePagination
-  rowsPerPageOptions={[5, 10, 25]}
-  component="div"
-  count={inventoryData.length}
-  rowsPerPage={rowsPerPage}
-  page={page}
-  onPageChange={handleChangePage}
-  onRowsPerPageChange={handleChangeRowsPerPage}
-  labelDisplayedRows={({ from, to, count }) =>
-    `${from}-${to} of ${count} entries`
-  }
-  sx={{
-    width: 'auto',
-    '& .MuiTablePagination-toolbar': {
-      flexDirection: isMobile ? 'column' : 'row',
-      alignItems: isMobile ? 'flex-start' : 'center',
-      gap: isMobile ? 2 : 0,
-      padding: isMobile ? '8px 0' : '16px 0'
-    },
-    '& .MuiTablePagination-spacer': {
-      display: isMobile ? 'none' : 'block',
-      flex: 'none'
-    },
-    '& .MuiTablePagination-actions': {
-      marginLeft: isMobile ? 0 : 'auto'
-    },
-    '& .MuiTablePagination-selectLabel, & .MuiTablePagination-displayedRows': {
-      fontSize: isMobile ? '12px' : '14px'
-    }
-  }}
-/> */}
+                 
 
                 </Box>
               </TableCell>
@@ -593,9 +539,9 @@ console.log("inventoryData fetched:", inventoryData);
               <TextField
                 label="Mobile"
                 fullWidth
-                value={editedLead?.mobile || ""}
+                value={editedLead?.phone|| ""}
                 onChange={(e) =>
-                  setEditedLead({ ...editedLead, mobile: e.target.value })
+                  setEditedLead({ ...editedLead, phone: e.target.value })
                 }
                 onBlur={handleMobileBlur}
                 error={mobileError}
@@ -623,9 +569,9 @@ console.log("inventoryData fetched:", inventoryData);
               <TextField
                 label="Looking For"
                 fullWidth
-                value={editedLead?.lookingFor || ""}
+                value={editedLead?.interest || ""}
                 onChange={(e) =>
-                  setEditedLead({ ...editedLead, lookingFor: e.target.value })
+                  setEditedLead({ ...editedLead, interest: e.target.value })
                 }
                 margin="normal"
                 size={isMobile ? "small" : "medium"}
@@ -637,9 +583,9 @@ console.log("inventoryData fetched:", inventoryData);
                 select
                 label="Source Name"
                 fullWidth
-                value={editedLead?.sourceName || ""}
+                value={editedLead?.source || ""}
                 onChange={(e) =>
-                  setEditedLead({ ...editedLead, sourceName: e.target.value })
+                  setEditedLead({ ...editedLead, source : e.target.value })
                 }
                 margin="normal"
                 size={isMobile ? "small" : "medium"}
@@ -651,18 +597,85 @@ console.log("inventoryData fetched:", inventoryData);
                   </MenuItem>
                 ))}
               </TextField>
-
-              <TextField
+ <TextField
                 label="Location"
                 fullWidth
-                value={editedLead?.location || ""}
+                value={editedLead?.address || ""}
                 onChange={(e) =>
-                  setEditedLead({ ...editedLead, location: e.target.value })
+                  setEditedLead({ ...editedLead, address: e.target.value })
                 }
                 margin="normal"
                 size={isMobile ? "small" : "medium"}
                 sx={{ border: Constants.formInputBorderColor }}
               />
+
+ {/* Conditional fields for special sources */}
+      {editedLead?.sourceName === "Channel Partner" && (
+        <>
+          <TextField
+            label="Firm Name"
+            fullWidth
+            value={editedLead?.firmName || ""}
+            onChange={(e) =>
+              setEditedLead({ ...editedLead, firmName: e.target.value })
+            }
+            margin="normal"
+            size={isMobile ? "small" : "medium"}
+            sx={{border:Constants.formInputBorderColor}}
+          />
+          <TextField
+            label="Person Name"
+            fullWidth
+            value={editedLead?.personName || ""}
+            onChange={(e) =>
+              setEditedLead({ ...editedLead, personName: e.target.value })
+            }
+            margin="normal"
+            size={isMobile ? "small" : "medium"}
+            sx={{border:Constants.formInputBorderColor}}
+          />
+          <TextField
+            label="Partner Mobile"
+            fullWidth
+            value={editedLead?.partnerMobile || ""}
+            onChange={(e) =>
+              setEditedLead({ ...editedLead, partnerMobile: e.target.value })
+            }
+            margin="normal"
+            size={isMobile ? "small" : "medium"}
+            sx={{border:Constants.formInputBorderColor}}
+          />
+        </>
+      )}
+
+      {editedLead?.sourceName === "References" && (
+        <TextField
+          label="Reference Name"
+          fullWidth
+          value={editedLead?.referenceName || ""}
+          onChange={(e) =>
+            setEditedLead({ ...editedLead, referenceName: e.target.value })
+          }
+          margin="normal"
+          size={isMobile ? "small" : "medium"}
+          sx={{border:Constants.formInputBorderColor}}
+        />
+      )}
+
+      {editedLead?.sourceName === "Other" && (
+        <TextField
+          label="Other Source"
+          fullWidth
+          value={editedLead?.otherSource || ""}
+          onChange={(e) =>
+            setEditedLead({ ...editedLead, otherSource: e.target.value })
+          }
+          margin="normal"
+          size={isMobile ? "small" : "medium"}
+          sx={{border:Constants.formInputBorderColor}}
+        />
+      )}
+             
             </Box>
           ) : (
             <Box sx={{
@@ -738,7 +751,7 @@ console.log("inventoryData fetched:", inventoryData);
           <div style={{ marginBottom: "10px" }}>
            <strong style={{display: "block",textAlign: "center",fontSize: "1.1rem",paddingBottom: "10px",}}>Lead Details:</strong>
 
-            <p><strong className="">Lead No:</strong> {selectedLead?.leadNo}</p>
+            <p><strong className="">Lead No:</strong> {selectedLead?.id}</p>
             <p><strong>Name:</strong> {selectedLead?.name}</p>
             <p><strong>Assigned To:</strong> {assignedTo}</p>
           </div>
