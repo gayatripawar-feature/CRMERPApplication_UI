@@ -51,29 +51,29 @@ const NewLeads = ({ inventoryData, setInventoryData, isMobile, isTablet, handleD
 
 
   // // Source options for the select dropdown
-  const sourceOptions = ["Actual Site", "Hoarding", "Facebook", "Instagram", "Website", "Print Media", "Radio", "Google add", "Exhibition", "Online Portal", "Direct Call", "Pamphlet", "Channel Partner", "References", "Other"];
+  const sourceOptions = ["Actual Site", "Hoarding", "Facebook", "Instagram", "Website", "Print Media", "Radio", "Google add", "Exhibition", "Online Portal", "Direct call", "Pamphlet", "Channel Partner", "References", "Other"];
 
 
   // Pagination state
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  // const [page, setPage] = useState(0);
+  // const [rowsPerPage, setRowsPerPage] = useState(5);
 
 
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
+  // const handleChangePage = (event, newPage) => {
+  //   setPage(newPage);
+  // };
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
+  // const handleChangeRowsPerPage = (event) => {
+  //   setRowsPerPage(parseInt(event.target.value, 10));
+  //   setPage(0);
+  // };
 
-  // Calculate the current page data
-  const paginatedData = inventoryData.slice(
-    page * rowsPerPage,
-    page * rowsPerPage + rowsPerPage
-  );
+  // // Calculate the current page data
+  // const paginatedData = inventoryData.slice(
+  //   page * rowsPerPage,
+  //   page * rowsPerPage + rowsPerPage
+  // );
 
   const handleAssignClick = (item) => {
     setModalOpen(true);
@@ -166,31 +166,90 @@ console.log("inventoryData fetched:", inventoryData);
   }
 
   // Handle Edit
+  // if (editMode && editedLead) {
+  //   console.log("➡️ Edit mode");
+
+  //   const updatedInventoryData = inventoryData.map((item) => {
+  //     if (item.leadNo === editedLead.leadNo) {
+  //       console.log(`Updating leadNo=${item.leadNo} with editedLead`, editedLead);
+  //       return editedLead;
+  //     }
+  //     return item;
+  //   });
+
+  //   console.log("Updated inventoryData (edit):", updatedInventoryData);
+  //   setInventoryData(updatedInventoryData);
+
+  //   toast.success("Details updated successfully!", {
+  //     position: "top-right",
+  //     autoClose: 5000,
+  //     hideProgressBar: false,
+  //     closeOnClick: true,
+  //     pauseOnHover: true,
+  //   });
+
+  //   setEditMode(false);
+  //   setEditedLead(null);
+  // }
+
   if (editMode && editedLead) {
-    console.log("➡️ Edit mode");
+  try {
+    console.log("➡️ Edit mode: updating lead...");
 
-    const updatedInventoryData = inventoryData.map((item) => {
-      if (item.leadNo === editedLead.leadNo) {
-        console.log(`Updating leadNo=${item.leadNo} with editedLead`, editedLead);
-        return editedLead;
-      }
-      return item;
+
+    let updatedSourceDetails = "";
+
+if (editedLead.source === "Channel Partner") {
+  updatedSourceDetails = [editedLead.firmName, editedLead.personName, editedLead.partnerMobile]
+    .filter(Boolean)
+    .join(";");
+} else if (editedLead.source === "References") {
+  updatedSourceDetails = editedLead.referenceName || "";
+} else if (editedLead.source === "Other") {
+  updatedSourceDetails = editedLead.otherSource || "";
+} else {
+  // updatedSourceDetails = editedLead.sourceDetails || "";
+   // For all other sources (like Direct Call), clear sourceDetails
+      updatedSourceDetails = "";
+} 
+
+
+    // 1️⃣ PATCH API call
+    const response = await fetch(`/api/leads/${editedLead.id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        ...editedLead,
+          sourceDetails: updatedSourceDetails,
+        updatedBy:"Admin"}),
     });
+    console.log("patch api");
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Failed to update lead: ${errorText}`);
+    }
 
-    console.log("Updated inventoryData (edit):", updatedInventoryData);
+    const updatedLead = await response.json(); // backend returns updated lead
+
+    // 2️⃣ Update UI with latest backend data
+    const updatedInventoryData = inventoryData.map((item) =>
+      item.id === updatedLead.id ? updatedLead : item
+    );
     setInventoryData(updatedInventoryData);
 
-    toast.success("Details updated successfully!", {
-      position: "top-right",
-      autoClose: 5000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-    });
-
+    toast.success("Lead updated successfully!");
+     //  Fetch latest data from backend to update UI
+    const latestData = await fetchLeadsData(); // make sure fetchLeadsData returns full array
+    setInventoryData(latestData);
+    //  Reset edit state
     setEditMode(false);
     setEditedLead(null);
+    setModalOpen(false);
+  } catch (error) {
+    console.error("API update error:", error);
+    toast.error(`Failed to update lead. ${error.message}`);
   }
+}
 
   // Cleanup
   console.log("Closing modal and resetting state...");
@@ -238,14 +297,47 @@ console.log("inventoryData fetched:", inventoryData);
     setMobileHelperText("");
   }
 };
-  const handleEditClick = (item) => {
+  // const handleEditClick = (item) => {
+  //   setEditMode(true);
+  //    console.log("Original item.source:", item.source);
+  //     console.log("Source options:", sourceOptions); 
+  //     setEditedLead({ ...item });
+  //   setModalOpen(true);
+  // };
+
+  const handleEditClick = async (item) => {
+  try {
     setEditMode(true);
-     console.log("Original item.source:", item.source);
-      console.log("Source options:", sourceOptions); 
-      
-    setEditedLead({ ...item });
+    const response = await fetch(`/api/leads/${item.id}`); // GET lead by Id
+    if (!response.ok) throw new Error("Failed to fetch lead details");
+    const leadData = await response.json();
+    console.log("edit icon clicked");
+    // ====== Parse sourceDetails for edit form ======
+    let firmName = "", personName = "", partnerMobile = "", referenceName = "", otherSource = "";
+    if (leadData.source === "Channel Partner") {
+      [firmName, personName, partnerMobile] = (leadData.sourceDetails || "").split(";").map(s => s.trim());
+    } else if (leadData.source === "References") {
+      referenceName = leadData.sourceDetails || "";
+    } else if (leadData.source === "Other") {
+      otherSource = leadData.sourceDetails || "";
+    }
+
+    setEditedLead({
+      ...leadData,
+      firmName,
+      personName,
+      partnerMobile,
+      referenceName,
+      otherSource
+    });
+    // setEditedLead(leadData); // populate modal with backend data
     setModalOpen(true);
-  };
+  } catch (error) {
+    console.error("Error fetching lead details:", error);
+    toast.error("Failed to load lead details.");
+  }
+};
+
 
   const handleDeleteClick = (item) => {
     setLeadToDelete(item);
@@ -348,8 +440,8 @@ console.log("inventoryData fetched:", inventoryData);
             </TableRow>
           </TableHead>
           <TableBody>
-            {/* {inventoryData.length === 0 ? ( */}
-                  {paginatedFilteredData.length === 0 ? (
+            {inventoryData.length === 0 ? (
+                 
               <TableRow>
                 <TableCell colSpan={10} align="center" sx={{ py: 4 }}>
                   <Typography variant="h6" color="textSecondary">
@@ -610,7 +702,7 @@ console.log("inventoryData fetched:", inventoryData);
               />
 
  {/* Conditional fields for special sources */}
-      {editedLead?.sourceName === "Channel Partner" && (
+      {editedLead?.source === "Channel Partner" && (
         <>
           <TextField
             label="Firm Name"
@@ -648,7 +740,7 @@ console.log("inventoryData fetched:", inventoryData);
         </>
       )}
 
-      {editedLead?.sourceName === "References" && (
+      {editedLead?.source === "References" && (
         <TextField
           label="Reference Name"
           fullWidth
@@ -662,7 +754,7 @@ console.log("inventoryData fetched:", inventoryData);
         />
       )}
 
-      {editedLead?.sourceName === "Other" && (
+      {editedLead?.source === "Other" && (
         <TextField
           label="Other Source"
           fullWidth
@@ -693,13 +785,21 @@ console.log("inventoryData fetched:", inventoryData);
                 <MenuItem value="" disabled>
                   Select Sales Executive
                 </MenuItem>
-                <MenuItem value="Shilpa Amewada 1">Shilpa Mewada 1</MenuItem>
+                {/* <MenuItem value="Shilpa Amewada 1">Shilpa Mewada 1</MenuItem>
                 <MenuItem value="Tic Tac Toe">Tic Tac Toe</MenuItem>
                 <MenuItem value="Shilpa Mewada">Shilpa Mewada</MenuItem>
                 <MenuItem value="Vivek Tapkir">Vivek Tapkir</MenuItem>
                 <MenuItem value="Shubham Taware">Shubham Taware</MenuItem>
                 <MenuItem value="A Mol Pawar">Amol Pawar</MenuItem>
-                <MenuItem value="Sachin Awale">Sachin Awale</MenuItem>
+                <MenuItem value="Sachin Awale">Sachin Awale</MenuItem> */}
+
+                    <MenuItem value="Main Sales">Main Sales</MenuItem>
+                <MenuItem value="Ranjeet Rajkumar Kambale">Ranjeet Rajkumar Kambale</MenuItem>
+                <MenuItem value="Yogita Satish Dalvi">Yogita Satish Dalvi</MenuItem>
+                <MenuItem value="Shubhangi Omkar Patil">Shubhangi Omkar Patil</MenuItem>
+                <MenuItem value="Ajay Ravindra Kate">Ajay Ravindra Kate</MenuItem>
+                <MenuItem value="Tester">Tester</MenuItem>
+              
               </Select>
             </Box>
           )}

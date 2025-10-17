@@ -96,6 +96,8 @@ const[selectedMonth,setSelectedMonth] =useState("");
   const loadLeads = async () => {
     const data = await fetchLeadsData();
     // setLoans(data); // or setInventoryData(data) if you want to show in your table 
+     console.log("Fetched leads:", data);       // Entire array
+    console.log("Total leads count:", data.length);
     setInventoryData(data);
   };
 
@@ -298,6 +300,8 @@ const handleDownloadPDFLeads = () => {
 
 useEffect(() => {
   console.log("Table data updated:", inventoryData);
+    console.log("inventoryData length:", inventoryData.length);
+  console.log("inventoryData IDs:", inventoryData.map(l => l.id || l._id));
 }, [inventoryData]);
 
 
@@ -865,19 +869,70 @@ const handleDownloadExcelLeads = (month) => {
     };
 
     // 🔢 Count leads per salesperson per week
-    inventoryData.forEach((lead) => {
-      if (!lead.timestamp || !lead.assignTo) return;
-      const date = parseTimestampToDate(lead.timestamp);
-      if (!date || date.getMonth() !== monthIndex) return;
+  //   inventoryData.forEach((lead) => {
+  //     // if (!lead.timestamp || !lead.assignTo) return;
+  //      const ts = lead.Timestamp || lead.lastUpdatedDate; // use correct timestamp field
+  // const assignTo = lead.AssignTo || lead.assignTo;   // use correct assignTo field
 
-      const assigned = lead.assignTo.trim();
-      if (!fixedSources.includes(assigned)) return;
+  // if (!ts || !assignTo) return;
+  //     const date = parseTimestampToDate(lead.timestamp);
+  //     if (!date || date.getMonth() !== monthIndex) return;
 
-      const weekIndex = weeks.findIndex((w) => date >= w.start && date <= w.end);
-      if (weekIndex === -1) return;
+  //     const assigned = lead.assignTo.trim();
+  //     if (!fixedSources.includes(assigned)) return;
 
-      sourceCounts[assigned][weekIndex]++;
-    });
+  //     const weekIndex = weeks.findIndex((w) => date >= w.start && date <= w.end);
+  //     if (weekIndex === -1) return;
+
+  //     sourceCounts[assigned][weekIndex]++;
+  //   });
+
+inventoryData.forEach((lead, index) => {
+  const ts = lead.Timestamp || lead.lastUpdatedDate;
+  const assignTo = lead.AssignTo || lead.assignTo;
+
+  console.log(`Lead[${index}] raw data:`, lead);
+
+  if (!ts) {
+    console.log(`Lead[${index}] skipped: no timestamp`);
+    return;
+  }
+  if (!assignTo) {
+    console.log(`Lead[${index}] skipped: no assignTo`);
+    return;
+  }
+
+  const date = parseTimestampToDate(ts);
+  if (!date) {
+    console.log(`Lead[${index}] skipped: invalid date (${ts})`);
+    return;
+  }
+
+  const monthIndexOfLead = date.getMonth();
+  if (monthIndexOfLead !== monthIndex) {
+    console.log(`Lead[${index}] skipped: month mismatch (${monthIndexOfLead} !== ${monthIndex})`);
+    return;
+  }
+
+  const assigned = assignTo.trim();
+  if (!fixedSources.includes(assigned)) {
+    console.log(`Lead[${index}] skipped: assignTo not in fixedSources (${assigned})`);
+    return;
+  }
+
+  const weekIndex = weeks.findIndex((w) => date >= w.start && date <= w.end);
+  if (weekIndex === -1) {
+    console.log(`Lead[${index}] skipped: week not found (${date})`);
+    return;
+  }
+
+  console.log(`Lead[${index}] counted: assignTo=${assigned}, weekIndex=${weekIndex}`);
+  sourceCounts[assigned][weekIndex]++;
+});
+
+console.log("Final counts object:", sourceCounts);
+
+
 
     // 🧮 Prepare Excel Data
     const reportTitle = `Sales person wise Lead Report (${month})`;
@@ -981,10 +1036,15 @@ totals.push(0); // Expenses total = 0
   }
 };
 
+console.log("Filtered data count:", filteredData.length);
+console.log("Filtered data IDs:", filteredData.map(l => l.id || l._id));
+console.log("Paginated data count:", paginatedFilteredData.length);
+console.log("Paginated data IDs:", paginatedFilteredData.map(l => l.id || l._id));
 
 
 
   return (
+    <>
     <div className="container my-2">
       <h6 className="mb-2 fs-6">Sales Module / Lead Management</h6>
 
@@ -1067,7 +1127,7 @@ totals.push(0); // Expenses total = 0
                   >
                     + New Leads
                   </Button>
-                  <Button
+                  {/* <Button
                     variant="contained"
                     sx={{
                       background: Constants.primaryColor,
@@ -1087,7 +1147,7 @@ totals.push(0); // Expenses total = 0
                   >
                     <FaFileDownload size={18} />
                     {isMobile ? 'PDF' : 'Download Table PDF'}
-                  </Button>
+                  </Button> */}
                    <Button
   variant="contained"
   sx={{
@@ -1111,7 +1171,7 @@ totals.push(0); // Expenses total = 0
                 </div>
                  
 
-  <div
+<div
     className="d-flex align-items-center mb-3"
     style={{
       justifyContent: isMobile ? "flex-start" : "flex-end",
@@ -1134,39 +1194,68 @@ totals.push(0); // Expenses total = 0
       }}
     />
 
-    <TablePagination
-      rowsPerPageOptions={[5, 10, 25]}
-      component="div"
-      count={inventoryData.length} 
-      // count={paginatedFilteredData.length} 
-      rowsPerPage={rowsPerPage}
-      page={page}
-      onPageChange={handleChangePage}
-      onRowsPerPageChange={handleChangeRowsPerPage}
-      labelRowsPerPage="Rows:"
-      labelDisplayedRows={({ from, to, count }) => `${from}-${to} of ${count} entries`}
-      sx={{
-        minWidth: 200, // Ensure enough space for all pagination controls
-        flexShrink: 0, // Prevents the pagination control from shrinking too much
-        // Original styles for internal layout
-        '& .MuiTablePagination-toolbar': {
-          flexDirection: 'row',
-          alignItems: 'center',
-          gap: '4px',
-          padding: '0px',
-        },
-        '& .MuiTablePagination-spacer': {
-          display: 'none',
-        },
-        '& .MuiTablePagination-actions': {
-          marginLeft: '4px',
-        },
-        '& .MuiTablePagination-selectLabel, & .MuiTablePagination-displayedRows': {
-          fontSize: isMobile ? '12px' : '14px',
-        },
-      }}
-    />
-  </div>
+   
+  <TablePagination
+    rowsPerPageOptions={[5, 10, 25]}
+    component="div"
+    count={filteredData.length}
+    rowsPerPage={rowsPerPage}
+    page={page}
+    onPageChange={handleChangePage}
+    onRowsPerPageChange={handleChangeRowsPerPage}
+    labelRowsPerPage="Rows per page:"
+    labelDisplayedRows={({ from, to, count }) => `${from}–${to} of ${count} entries`}
+    sx={{
+      "& .MuiTablePagination-toolbar": {
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center", // ✅ aligns vertically
+        gap: "8px",
+        flexWrap: "nowrap",
+        minHeight: "36px",
+        padding: 0,
+      },
+      "& .MuiTablePagination-spacer": { display: "none" },
+      "& .MuiTablePagination-selectLabel, & .MuiTablePagination-displayedRows": {
+        whiteSpace: "nowrap",
+        fontSize: "0.9rem",
+        color: "#800020",
+        fontWeight: 600,
+        lineHeight: "1.2rem",
+        margin: 0,
+        padding: 0,
+        display: "flex",
+        alignItems: "center",
+      },
+      "& .MuiTablePagination-input": {
+        display: "inline-flex",
+        alignItems: "center",
+        margin: 0,
+        height: "32px",
+      },
+      "& .MuiTablePagination-input .MuiInputBase-root": {
+        height: "32px",
+        display: "flex",
+        alignItems: "center",
+        padding: 0,
+        margin: 0,
+      },
+      "& .MuiTablePagination-input .MuiSelect-select": {
+        paddingTop: "4px",
+        paddingBottom: "4px",
+        display: "flex",
+        alignItems: "center",
+      },
+      "& .MuiTablePagination-actions": {
+        marginLeft: "8px",
+        display: "flex",
+        alignItems: "center",
+      },
+    }}
+  />
+
+  </div> 
+
 
 
               </div>
@@ -1435,6 +1524,7 @@ totals.push(0); // Expenses total = 0
     sx: {
       borderRadius: "16px",
       padding: "10px",
+       overflow: "visible",
       boxShadow: "0px 8px 30px rgba(0,0,0,0.2)",
       backgroundColor: "#fff",
     },
@@ -1460,6 +1550,7 @@ totals.push(0); // Expenses total = 0
     flexDirection: "column",
     alignItems: "center",
     gap: 3,
+     overflow: "visible",
   }}
 >
   {/* Put both selects in one row */}
@@ -1471,6 +1562,7 @@ totals.push(0); // Expenses total = 0
       width: "100%",
       justifyContent: "center",
       alignItems: "center",
+       overflow: "visible",
     }}
   >
     {/* Report Type */}
@@ -1480,6 +1572,9 @@ totals.push(0); // Expenses total = 0
       fullWidth
       value={selectedReportType}
       onChange={(e) => setSelectedReportType(e.target.value)}
+        SelectProps={{
+          MenuProps: { disablePortal: true }, // ✅ prevents hiding under dialog
+        }}
       sx={{
         "& .MuiInputLabel-root": {
           color: Constants.primaryColor,
@@ -1509,6 +1604,9 @@ totals.push(0); // Expenses total = 0
       fullWidth
       value={selectedMonth}
       onChange={(e) => setSelectedMonth(e.target.value)}
+       SelectProps={{
+          MenuProps: { disablePortal: true }, // ✅ keeps dropdown above modal
+        }}
       sx={{
         "& .MuiInputLabel-root": {
           color: Constants.primaryColor,
@@ -1606,6 +1704,9 @@ if (selectedReportType === "sales") {
         pauseOnHover
       />
     </div>
+
+<p>Total Records :{inventoryData.length}</p>
+    </>
   );
 };
 
