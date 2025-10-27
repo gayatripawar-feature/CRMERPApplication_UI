@@ -14,8 +14,7 @@ import {
   MenuItem,
   Button,
   TextField,
-  TablePagination,
-  Box,
+ Box,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -47,33 +46,18 @@ const NewLeads = ({ inventoryData, setInventoryData, isMobile, isTablet, handleD
   const [mobileError, setMobileError] = useState(false);
   const [mobileHelperText, setMobileHelperText] = useState("");
 
-
-
-
-  // // Source options for the select dropdown
+  //  Source options for the select dropdown
   const sourceOptions = ["Actual Site", "Hoarding", "Facebook", "Instagram", "Website", "Print Media", "Radio", "Google add", "Exhibition", "Online Portal", "Direct call", "Pamphlet", "Channel Partner", "References", "Other"];
 
 
-  // Pagination state
-  // const [page, setPage] = useState(0);
-  // const [rowsPerPage, setRowsPerPage] = useState(5);
-
-
-
-  // const handleChangePage = (event, newPage) => {
-  //   setPage(newPage);
-  // };
-
-  // const handleChangeRowsPerPage = (event) => {
-  //   setRowsPerPage(parseInt(event.target.value, 10));
-  //   setPage(0);
-  // };
-
-  // // Calculate the current page data
-  // const paginatedData = inventoryData.slice(
-  //   page * rowsPerPage,
-  //   page * rowsPerPage + rowsPerPage
-  // );
+  const salesExecutives = [
+    "Main Sales",
+    "Ranjeet Rajkumar Kambale",
+    "Yogita Satish Dalvi",
+    "Shubhangi Omkar Patil",
+    "Ajay Ravindra Kate",
+    "Tester",
+  ];
 
   const handleAssignClick = (item) => {
     setModalOpen(true);
@@ -94,37 +78,7 @@ console.log("inventoryData fetched:", inventoryData);
   // Handle Assign
   if (!editMode && assignedTo && selectedLead) {
     console.log("Assign mode");
-
-    //  Update UI
-//     const updatedInventoryData = inventoryData.map((item) => {
-//       if (item.id === selectedLead.id) {
-//         console.log(`Updating lead id=${item.id} with assignedTo=${assignedTo}`);
-        
-//         return {
-//           // lead object from inventoryData-item
-//   ...item,                  
-//   leadEnagagements: [
-//     ...(item.leadEnagagements || []),   //check if its alreday present if not then assign a new array for latest assignment.
-//     {
-//       id: Date.now(), 
-//       assignedTo: assignedTo,
-//       assignedBy: "Admin",
-//       leadId: item.id,
-//       assignedDate: new Date().toISOString(),
-//       status: "Assigned"
-//     }
-//   ]
-// };
-
-//       }
-//       return item;
-//     });
-
-
-    // console.log("Updated inventoryData (UI):", updatedInventoryData);
-    // setInventoryData(updatedInventoryData);
-
-    // 2️⃣ Call API to save assignment
+    //  Call API to save assignment
     try {
       console.log("Calling API to assign lead...");
       const response = await fetch(`/api/leads/${selectedLead.id}/assignments`, {
@@ -141,11 +95,6 @@ console.log("inventoryData fetched:", inventoryData);
         const errorText = await response.text();
         throw new Error(`Failed to assign lead: ${errorText}`);
       }
-
-      // const savedLead = await response.json();
-      // console.log("API response savedLead:", savedLead);
-// /  REFRESH leads from backend
-//  await fetchLeadsData(); // fetch updated inventoryData
 
 //  Fetch updated leads from backend
       const latestData = await fetchLeadsData(); // backend have already leadEnagagements
@@ -165,32 +114,7 @@ console.log("inventoryData fetched:", inventoryData);
     return;
   }
 
-  // Handle Edit
-  // if (editMode && editedLead) {
-  //   console.log("➡️ Edit mode");
-
-  //   const updatedInventoryData = inventoryData.map((item) => {
-  //     if (item.leadNo === editedLead.leadNo) {
-  //       console.log(`Updating leadNo=${item.leadNo} with editedLead`, editedLead);
-  //       return editedLead;
-  //     }
-  //     return item;
-  //   });
-
-  //   console.log("Updated inventoryData (edit):", updatedInventoryData);
-  //   setInventoryData(updatedInventoryData);
-
-  //   toast.success("Details updated successfully!", {
-  //     position: "top-right",
-  //     autoClose: 5000,
-  //     hideProgressBar: false,
-  //     closeOnClick: true,
-  //     pauseOnHover: true,
-  //   });
-
-  //   setEditMode(false);
-  //   setEditedLead(null);
-  // }
+  
 
   if (editMode && editedLead) {
   try {
@@ -214,7 +138,7 @@ if (editedLead.source === "Channel Partner") {
 } 
 
 
-    // 1️⃣ PATCH API call
+    //  PATCH API call
     const response = await fetch(`/api/leads/${editedLead.id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
@@ -231,7 +155,7 @@ if (editedLead.source === "Channel Partner") {
 
     const updatedLead = await response.json(); // backend returns updated lead
 
-    // 2️⃣ Update UI with latest backend data
+    //  Update UI with latest backend data
     const updatedInventoryData = inventoryData.map((item) =>
       item.id === updatedLead.id ? updatedLead : item
     );
@@ -297,13 +221,7 @@ if (editedLead.source === "Channel Partner") {
     setMobileHelperText("");
   }
 };
-  // const handleEditClick = (item) => {
-  //   setEditMode(true);
-  //    console.log("Original item.source:", item.source);
-  //     console.log("Source options:", sourceOptions); 
-  //     setEditedLead({ ...item });
-  //   setModalOpen(true);
-  // };
+ 
 
   const handleEditClick = async (item) => {
   try {
@@ -545,7 +463,7 @@ if (editedLead.source === "Channel Partner") {
 
                 
                   
-                  {/* <TableCell>{item.id}</TableCell>                  */}
+               
                   <TableCell>{`Lead - ${String(item.id).padStart(2, '0')}`}</TableCell>
 
 <TableCell>{item.name}</TableCell>
@@ -571,20 +489,7 @@ if (editedLead.source === "Channel Partner") {
           {/* Footer with Pagination aligned right */}
           <TableFooter>
             <TableRow>
-              <TableCell colSpan={10} sx={{ p: 0, border: "none" }}>
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "flex-end",
-                    width: "100%",
-                    backgroundColor: "background.paper",
-                  }}
-                >
-                 
-                 
-
-                </Box>
-              </TableCell>
+              <TableCell colSpan={10} sx={{ p: 0, border: "none" }}> </TableCell>
             </TableRow>
           </TableFooter>
         </Table>
@@ -785,20 +690,13 @@ if (editedLead.source === "Channel Partner") {
                 <MenuItem value="" disabled>
                   Select Sales Executive
                 </MenuItem>
-                {/* <MenuItem value="Shilpa Amewada 1">Shilpa Mewada 1</MenuItem>
-                <MenuItem value="Tic Tac Toe">Tic Tac Toe</MenuItem>
-                <MenuItem value="Shilpa Mewada">Shilpa Mewada</MenuItem>
-                <MenuItem value="Vivek Tapkir">Vivek Tapkir</MenuItem>
-                <MenuItem value="Shubham Taware">Shubham Taware</MenuItem>
-                <MenuItem value="A Mol Pawar">Amol Pawar</MenuItem>
-                <MenuItem value="Sachin Awale">Sachin Awale</MenuItem> */}
+               
 
-                    <MenuItem value="Main Sales">Main Sales</MenuItem>
-                <MenuItem value="Ranjeet Rajkumar Kambale">Ranjeet Rajkumar Kambale</MenuItem>
-                <MenuItem value="Yogita Satish Dalvi">Yogita Satish Dalvi</MenuItem>
-                <MenuItem value="Shubhangi Omkar Patil">Shubhangi Omkar Patil</MenuItem>
-                <MenuItem value="Ajay Ravindra Kate">Ajay Ravindra Kate</MenuItem>
-                <MenuItem value="Tester">Tester</MenuItem>
+                   {salesExecutives.map((name, index) => (
+        <MenuItem key={index} value={name}>
+          {name}
+        </MenuItem>
+      ))}
               
               </Select>
             </Box>

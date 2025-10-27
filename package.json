@@ -29,7 +29,9 @@
     "date-fns": "^2.30.0",
     "dayjs": "^1.11.13",
     "dotenv": "^17.2.1",
+    "exceljs": "^4.4.0",
     "express": "^5.1.0",
+    "file-saver": "^2.0.5",
     "framer-motion": "^12.23.12",
     "html2canvas": "^1.4.1",
     "html2pdf.js": "^0.10.3",
@@ -52,7 +54,8 @@
     "react-to-print": "^3.0.5",
     "react-toastify": "^11.0.5",
     "recharts": "^2.15.1",
-    "xlsx": "^0.18.5"
+    "xlsx": "^0.18.5",
+    "xlsx-style": "^0.8.13"
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",
