@@ -13,6 +13,7 @@ import {
   Select,
   MenuItem,
   Button,
+  Grid,
   TextField,
  Box,
   Dialog,
@@ -26,6 +27,7 @@ import {
 import { FaEdit, FaWhatsapp, FaEnvelope, FaUserCircle, FaTrash } from "react-icons/fa";
 import { toast } from "react-toastify";
 import Constants from "../Constants";
+import CloseIcon from "@mui/icons-material/Close";
 
 const NewLeads = ({ inventoryData, setInventoryData, isMobile, isTablet, handleDelete,fetchLeadsData,paginatedFilteredData}) => {
   const theme = useTheme();
@@ -332,29 +334,32 @@ if (editedLead.source === "Channel Partner") {
       >
         <Table aria-label="sticky table" size={isMobile ? "small" : "medium"}   
         sx={{
+           
     "& .MuiTableCell-root": {
       whiteSpace: "nowrap",    
       overflow: "hidden",
       textOverflow: "ellipsis",
       verticalAlign: "middle",  
+      // border: "1px solid #ddd", // 🔹 adds border to every cell
+      // padding: "8px 12px",
   
     }
   }}
   >
           <TableHead>
             <TableRow sx={{ background: Constants.primaryColor }}>
-              <TableCell align="center" sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>Actions</TableCell>
+              <TableCell  sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>Actions</TableCell>
              
-              <TableCell align="center"  sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>Assign To</TableCell>
+              <TableCell   sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>Assign To</TableCell>
               <TableCell align="center" sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>Lead No</TableCell>
-              <TableCell align="center" sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>Name</TableCell>
+              <TableCell  sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>Name</TableCell>
               <TableCell align="center" sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>Mobile / WhatsApp</TableCell>
-              <TableCell align="center" sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>Looking For</TableCell>
-              <TableCell align="center" sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>Email</TableCell>
-              <TableCell align="center" sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>Source Name</TableCell>
-              <TableCell align="center" sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>Location</TableCell>
-               <TableCell align="center" sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>Source Details</TableCell>
-               <TableCell align="center" sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>Timestamp</TableCell>
+              <TableCell  sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>Looking For</TableCell>
+              <TableCell  sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>Email</TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>Source Name</TableCell>
+              <TableCell  sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>Location</TableCell>
+               <TableCell  sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>Source Details</TableCell>
+               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>Timestamp</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -495,6 +500,7 @@ if (editedLead.source === "Channel Partner") {
         </Table>
 
 
+ 
       </TableContainer>
 
       <Dialog
@@ -509,18 +515,39 @@ if (editedLead.source === "Channel Partner") {
         maxWidth="sm"
         fullScreen={fullScreen}
       >
-        <DialogTitle>
+        <DialogTitle sx={{background:Constants.primaryColor,color:"#fff", display: "flex",
+      alignItems: "center",
+      justifyContent: "space-between",
+      pr: 1,
+      }}>
           {editMode ? "Edit Lead Details" : "Assign Lead To"}
+           <IconButton
+      onClick={() => {
+        setModalOpen(false);
+        setEditMode(false);
+        setEditedLead(null);
+        setAssignedTo("");
+      }}
+      sx={{
+        color: "#fff",
+        "&:hover": { backgroundColor: "rgba(255,255,255,0.2)" },
+      }}
+      size="small"
+    >
+      <CloseIcon />
+    </IconButton>
         </DialogTitle>
         <DialogContent>
           {editMode ? (
             <Box 
             sx={{
-                maxWidth: 300,   // max width for the select box
+                // maxWidth: 300,   // max width for the select box
           width: "100%",   // make it responsive on mobile
-          margin: "0 auto",
+          // margin: "0 auto",
                mt: 2 
                }}>
+                 <Grid container spacing={2}>
+                 <Grid item xs={12} sm={6}>
               <TextField
                 label="Name"
                 fullWidth
@@ -530,9 +557,14 @@ if (editedLead.source === "Channel Partner") {
                 }
                 margin="normal"
                 size={isMobile ? "small" : "medium"}
-                sx={{ border: Constants.formInputBorderColor }}
+                sx={{
+                  
+                  border: Constants.formInputBorderColor }}
 
               />
+              </Grid>
+                 <Grid item xs={12} sm={6}>
+
               <TextField
                 label="Mobile"
                 fullWidth
@@ -548,6 +580,9 @@ if (editedLead.source === "Channel Partner") {
                 sx={{ border: Constants.formInputBorderColor }}
 
               />
+              </Grid>
+                 <Grid item xs={12} sm={6}>
+
               <TextField
                 label="Email"
                 fullWidth
@@ -563,6 +598,8 @@ if (editedLead.source === "Channel Partner") {
                 sx={{ border: Constants.formInputBorderColor }}
 
               />
+              </Grid>
+               <Grid item xs={12} sm={6}>
               <TextField
                 label="Looking For"
                 fullWidth
@@ -575,7 +612,8 @@ if (editedLead.source === "Channel Partner") {
                 sx={{ border: Constants.formInputBorderColor }}
 
               />
-
+</Grid>
+ <Grid item xs={12} sm={6}>
               <TextField
                 select
                 label="Source Name"
@@ -594,6 +632,8 @@ if (editedLead.source === "Channel Partner") {
                   </MenuItem>
                 ))}
               </TextField>
+              </Grid>
+               <Grid item xs={12} sm={6}>
  <TextField
                 label="Location"
                 fullWidth
@@ -605,10 +645,11 @@ if (editedLead.source === "Channel Partner") {
                 size={isMobile ? "small" : "medium"}
                 sx={{ border: Constants.formInputBorderColor }}
               />
-
+</Grid>
  {/* Conditional fields for special sources */}
       {editedLead?.source === "Channel Partner" && (
         <>
+         <Grid item xs={12} sm={6}>
           <TextField
             label="Firm Name"
             fullWidth
@@ -620,6 +661,8 @@ if (editedLead.source === "Channel Partner") {
             size={isMobile ? "small" : "medium"}
             sx={{border:Constants.formInputBorderColor}}
           />
+          </Grid>
+           <Grid item xs={12} sm={6}>
           <TextField
             label="Person Name"
             fullWidth
@@ -631,6 +674,8 @@ if (editedLead.source === "Channel Partner") {
             size={isMobile ? "small" : "medium"}
             sx={{border:Constants.formInputBorderColor}}
           />
+          </Grid>
+           <Grid item xs={12} sm={6}>
           <TextField
             label="Partner Mobile"
             fullWidth
@@ -642,10 +687,12 @@ if (editedLead.source === "Channel Partner") {
             size={isMobile ? "small" : "medium"}
             sx={{border:Constants.formInputBorderColor}}
           />
+          </Grid>
         </>
       )}
 
       {editedLead?.source === "References" && (
+         <Grid item xs={12} sm={6}>
         <TextField
           label="Reference Name"
           fullWidth
@@ -657,6 +704,7 @@ if (editedLead.source === "Channel Partner") {
           size={isMobile ? "small" : "medium"}
           sx={{border:Constants.formInputBorderColor}}
         />
+        </Grid>
       )}
 
       {editedLead?.source === "Other" && (
@@ -672,7 +720,7 @@ if (editedLead.source === "Channel Partner") {
           sx={{border:Constants.formInputBorderColor}}
         />
       )}
-             
+            </Grid> 
             </Box>
           ) : (
             <Box sx={{

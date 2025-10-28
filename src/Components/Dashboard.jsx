@@ -20,11 +20,11 @@ const Dashboard = () => {
   const recognitionRef = useRef(null);
   const [listening, setListening] = useState(false);
   const [results, setResults] = useState([]);
-const [collapsed, setCollapsed] = useState(() => {
-  // Always collapsed on small screens
-  return window.innerWidth <= 768;
-});
- const [sections, setSections] = useState({
+  const [collapsed, setCollapsed] = useState(() => {
+    // Always collapsed on small screens
+    return window.innerWidth <= 768;
+  });
+  const [sections, setSections] = useState({
     admin: false,
     developer: false,
     sales: false,
@@ -33,12 +33,12 @@ const [collapsed, setCollapsed] = useState(() => {
   const [showVoiceRecognition, setShowVoiceRecognition] = useState(false);
   const navigate = useNavigate();
   const toggleSidebar = useCallback(() => {
-  if (window.innerWidth > 768) {
-    setCollapsed((prev) => !prev);   // expand/collapse only on tablet/laptop
-  } else {
-    setCollapsed(true);  // force collapsed on mobile
-  }
-}, []);
+    if (window.innerWidth > 768) {
+      setCollapsed((prev) => !prev);   // expand/collapse only on tablet/laptop
+    } else {
+      setCollapsed(true);  // force collapsed on mobile
+    }
+  }, []);
 
 
   // const toggleSection = useCallback((section) => {
@@ -46,15 +46,15 @@ const [collapsed, setCollapsed] = useState(() => {
   // }, []);
   const toggleSection = useCallback((section) => {
     setSections((prev) => {
-        const newState = {};
-         for (const key in prev) {
-            newState[key] = false;
-        }
-       
-        newState[section] = !prev[section];
-        return newState;
+      const newState = {};
+      for (const key in prev) {
+        newState[key] = false;
+      }
+
+      newState[section] = !prev[section];
+      return newState;
     });
-}, []);
+  }, []);
   const handleLogout = useCallback(() => {
     localStorage.removeItem('authToken');
     navigate('/login');
@@ -81,7 +81,7 @@ const [collapsed, setCollapsed] = useState(() => {
     });
     return commands;
   };
-// functions for path  and voice system for their respective modules:
+  // functions for path  and voice system for their respective modules:
   const buildVoiceCommands = (allowedMenus, navigate) => {
     const commands = {};
     allowedMenus.forEach(menu => {
@@ -92,12 +92,12 @@ const [collapsed, setCollapsed] = useState(() => {
         });
       }
     });
- return commands;
+    return commands;
   };
   // 🔹 Build search data only for allowed menus
   const buildSearchData = (allowedMenus) => {
     const searchList = [];
-  allowedMenus.forEach(menu => {
+    allowedMenus.forEach(menu => {
       if (menu.subItems) {
         menu.subItems.forEach(item => {
           searchList.push({
@@ -107,64 +107,64 @@ const [collapsed, setCollapsed] = useState(() => {
         });
       }
     });
-  return searchList;
+    return searchList;
   };
   // ✅ Build commands & search data dynamically
   const allCommandRoutes = buildAllVoiceCommands(RolePermissions); // 🔹 all
   const commandRoutes = buildVoiceCommands(allowedMenus, navigate);  // filtred
   const moduleData = buildSearchData(allowedMenus);
   // for path system :moduleData
- const handleSearch = (event) => {
-  const searchTerm = event.target.value.toLowerCase();
-  setQuery(searchTerm);
-   if (searchTerm) {
-    const filteredResults = moduleData.filter((item) =>
-      item.label.toLowerCase().includes(searchTerm)
-    );
-    setResults(filteredResults);
-  } else {
-    setResults([]);
-  }
-};
-const handleRedirect = (path) => {
+  const handleSearch = (event) => {
+    const searchTerm = event.target.value.toLowerCase();
+    setQuery(searchTerm);
+    if (searchTerm) {
+      const filteredResults = moduleData.filter((item) =>
+        item.label.toLowerCase().includes(searchTerm)
+      );
+      setResults(filteredResults);
+    } else {
+      setResults([]);
+    }
+  };
+  const handleRedirect = (path) => {
     navigate(path);
     setQuery("");
     setResults([]);
   };
 
-// for voice system => commandRoutes
-useEffect(() => {
+  // for voice system => commandRoutes
+  useEffect(() => {
     if (!recognitionRef.current && ("webkitSpeechRecognition" in window || "SpeechRecognition" in window)) {
       recognitionRef.current = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
       const recognition = recognitionRef.current;
       recognition.continuous = false;
       recognition.interimResults = false;
       recognition.lang = "en-US";
-         recognition.onstart = () => {
+      recognition.onstart = () => {
         setListening(true);
       };
-     recognition.onend = () => {
+      recognition.onend = () => {
         setListening(false);
       };
- recognition.onresult = (event) => {
+      recognition.onresult = (event) => {
         let command = event.results[0][0].transcript.trim().toLowerCase();
         console.log("🎤 Recognized command:", command);
-      let matchedPath = null;
+        let matchedPath = null;
         for (const key in allCommandRoutes) {
           if (command.includes(key)) {
             matchedPath = allCommandRoutes[key];
             break;
           }
         }
-   if (!matchedPath) {
-         toast.error("❓ Command not recognized");
+        if (!matchedPath) {
+          toast.error("❓ Command not recognized");
           speak("Command not recognized");
           return;
         }
-    const hasAccess = moduleData.some(
+        const hasAccess = moduleData.some(
           (item) => item.value.toLowerCase() === matchedPath.toLowerCase()
         );
-     if (hasAccess) {
+        if (hasAccess) {
           speak(`Redirecting to ${command}`, () => {
             handleRedirect(matchedPath);
           });
@@ -172,11 +172,11 @@ useEffect(() => {
           toast.error("🚫 You don’t have access to this module");
           speak("You don’t have access to this module");
         }
-     setTimeout(() => {
+        setTimeout(() => {
           setListening(false);
         }, 1000);
       };
-  recognition.onerror = () => {
+      recognition.onerror = () => {
         setListening(false);
       };
     }
@@ -190,7 +190,7 @@ useEffect(() => {
         recognitionRef.current.stop();
       }
     };
-  speech.onend = () => {
+    speech.onend = () => {
       if (callback) {
         callback();
       } else {
@@ -201,8 +201,8 @@ useEffect(() => {
     };
     window.speechSynthesis.cancel();
     window.speechSynthesis.speak(speech);
-};
-const startListening = () => {
+  };
+  const startListening = () => {
     if (recognitionRef.current && !listening) {
       console.log("🎤 Starting recognition...");
       recognitionRef.current.start();
@@ -210,39 +210,39 @@ const startListening = () => {
   };
   return (
     <div className="d-flex flex-column vh-100 ">
-   <nav className="navbar  px-3" style={{ background: Constants.primaryColor }}>
-   <div className="d-flex align-items-center">
-   {/* <button className="btn  me-3 " onClick={toggleSidebar} style={{ cursor: "pointer" }}> */}
-    <div className="btn  me-3 " onClick={toggleSidebar} style={{ cursor: "pointer" }}>
- <img
-      src="/unnamed.png"
-      alt="Profile"
-      className="rounded-circle profile"
-    />
-</div>
+      <nav className="navbar  px-3" style={{ background: Constants.primaryColor }}>
+        <div className="d-flex align-items-center">
+          {/* <button className="btn  me-3 " onClick={toggleSidebar} style={{ cursor: "pointer" }}> */}
+          <div className="btn  me-3 " onClick={toggleSidebar} style={{ cursor: "pointer" }}>
+            <img
+              src="/unnamed.png"
+              alt="Profile"
+              className="rounded-circle profile"
+            />
+          </div>
           {/* </button> */}
           <span className="navbar-brand mb-0 h1 text-white">CRM ERP</span>
         </div>
- <div className="position-relative">
-  <div className="mx-auto w-100 d-none d-md-block">
+        <div className="position-relative">
+          <div className="mx-auto w-100 d-none d-md-block">
             <input
               type="text"
               className="form-control ps-5"
               placeholder="Search..."
               onChange={handleSearch}
             />
- <FaMicrophone
+            <FaMicrophone
               size={30}
               className={`position-absolute top-50 end-0 translate-middle-y p-1 ${listening ? "text-success" : "text-secondary"}`}
               style={{ cursor: "pointer", marginRight: "10px" }}
               onClick={startListening}
             />
-  </div>
- {results.length > 0 && (
+          </div>
+          {results.length > 0 && (
             <ul
               className="list-group mt-2 position-absolute bg-white w-100 shadow"
               style={{ zIndex: 1050, maxHeight: "200px", overflowY: "auto" }}   >
-             {results.map((item, index) => (
+              {results.map((item, index) => (
                 <li
                   key={index}
                   className="list-group-item cursor-pointer"
@@ -257,7 +257,7 @@ const startListening = () => {
           )}
         </div>
         <div className="d-flex align-items-center">
-    {/* <img
+          {/* <img
       src="/unnamed.png"
       alt="Profile"
       className="rounded-circle profile"
@@ -265,29 +265,29 @@ const startListening = () => {
         </div>
       </nav>
       <div className="d-flex w-100">
-      <div
+        <div
           className=" text-white p-3 d-flex flex-column"
           style={{
             width: collapsed ? '80px' : '250px',
             height: '100vh',
             transition: 'width 0.3s',
             flexShrink: 0,
-            background:Constants.primaryColor,
+            background: Constants.primaryColor,
             overflowY: 'auto',
             scrollbarWidth: 'none',
-             position: "relative", 
+            position: "relative",
           }}
         >
-     <ul className="nav flex-column">
-{(role === "admin" || role === "developer") && (
-    <SidebarItem
-      to="/dashboard"
-      icon={<FaTachometerAlt />}
-      label="Dashboard"
-      collapsed={collapsed}
-    />
-  )}
-          
+          <ul className="nav flex-column">
+            {(role === "admin" || role === "developer") && (
+              <SidebarItem
+                to="/dashboard"
+                icon={<FaTachometerAlt />}
+                label="Dashboard"
+                collapsed={collapsed}
+              />
+            )}
+
             {allowedMenus.map((menu, idx) => (
               <SidebarDropdown
                 key={idx}
@@ -301,27 +301,34 @@ const startListening = () => {
             ))}
           </ul>
           <div style={{ marginTop: "auto", marginBottom: "50px" }}>
-  <button className="btn w-100 d-flex align-items-center justify-content-center" onClick={handleLogout} style={{ background: "#fbcbd7ff" }}>
+            <button className="btn w-100 d-flex align-items-center justify-content-center" onClick={handleLogout} style={{ background: "#fbcbd7ff" }}>
               <FaSignOutAlt className="me-2" />
               {!collapsed && 'SignOut'}
             </button>
           </div>
         </div>
-<div
+        <div
           className="main-content flex-grow-1 p-3 "
           style={{
-           paddingLeft: collapsed ? "80px" : "250px",
+            paddingLeft: collapsed ? "80px" : "250px",
             transition: "margin-left 0.3s ease-in-out",
             width: collapsed ? "calc(100% - 80px)" : "calc(100% - 250px)",
             background: "#fff",
             minHeight: "100vh",
-            borderRadius: "10px",
+           borderRadius: "10px",
             boxShadow: "0 0 10px rgba(0, 0, 0, 0.1)",
 
           }}
         >
           <Outlet />
+
+          {/* Global Footer */}
+          {/* <footer className="text-center py-2 mt-3" style={{ borderTop: "1px solid #ddd", fontSize: "14px", color: "#666", }} >
+            © Created and Maintained By Artemis NextGen </footer> */}
         </div>
+
+
+
       </div>
     </div>
 

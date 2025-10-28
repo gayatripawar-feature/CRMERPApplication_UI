@@ -1,19 +1,7 @@
 import React from "react";
-import { TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Paper, Typography ,Box,TablePagination} from "@mui/material";
+import { TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Paper,  Box} from "@mui/material";
 import Constants from "../Constants";
 const Leadsfollowup_followuphistory = ({ data }) => {
-
-  const [page, setPage] = React.useState(0);
-const [rowsPerPage, setRowsPerPage] = React.useState(5); // default rows per page
-
-const handleChangePage = (event, newPage) => {
-  setPage(newPage);
-};
-
-const handleChangeRowsPerPage = (event) => {
-  setRowsPerPage(parseInt(event.target.value, 10));
-  setPage(0);
-};
 
   return (
     <>
@@ -41,40 +29,24 @@ const handleChangeRowsPerPage = (event) => {
           <TableBody>
             {data.map((item, index) => (
               <TableRow key={index}>
-              <TableCell>{row.statusHistory || 'N/A'}</TableCell>
-        <TableCell>{row.remarkHistory || 'N/A'}</TableCell>
-        <TableCell>{row.assignToHistory || 'N/A'}</TableCell>
-        <TableCell>{row.leadDays || 'N/A'}</TableCell>
-        <TableCell>{row.timestamp || 'N/A'}</TableCell>
+              <TableCell>{item.statusHistory || 'N/A'}</TableCell>
+        <TableCell>{item.remarkHistory || 'N/A'}</TableCell>
+        <TableCell>{item.assignToHistory || 'N/A'}</TableCell>
+        <TableCell>{item.leadDays || 'N/A'}</TableCell>
+        <TableCell>{item.timestamp || 'N/A'}</TableCell>
         {/* <TableCell>{row.enquiryNo || 'N/A'}</TableCell> */}
-        <TableCell>{row.leadNo || 'N/A'}</TableCell>
-        <TableCell>{row.name || 'N/A'}</TableCell>
-        <TableCell>{row.mobileNo || 'N/A'}</TableCell>
-        <TableCell>{row.lookingFor || 'N/A'}</TableCell>
-        <TableCell>{row.email || 'N/A'}</TableCell>
-        <TableCell>{row.sourceName || 'N/A'}</TableCell>
+        <TableCell>{item.leadNo || 'N/A'}</TableCell>
+        <TableCell>{item.name || 'N/A'}</TableCell>
+        <TableCell>{item.mobileNo || 'N/A'}</TableCell>
+        <TableCell>{item.lookingFor || 'N/A'}</TableCell>
+        <TableCell>{item.email || 'N/A'}</TableCell>
+        <TableCell>{item.sourceName || 'N/A'}</TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
 </Box>
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end', p: 1 }}>
-     
-
-      <TablePagination
-  component="div"
-  // count={firms.length}
-   count={data.length} 
-  page={page}
-  onPageChange={handleChangePage}
-  rowsPerPage={rowsPerPage}
-  onRowsPerPageChange={handleChangeRowsPerPage}
-  rowsPerPageOptions={[]} 
-  showFirstButton
-  showLastButton
-/>
-
-      </Box>
+       
       </TableContainer>
       </Box>
     </>
