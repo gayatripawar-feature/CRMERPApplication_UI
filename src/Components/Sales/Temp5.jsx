@@ -201,7 +201,8 @@ const Template = () => {
   const [openModal, setOpenModal] = useState(false);
   const [modalContent, setModalContent] = useState(null);
   const [showPdfComponent, setShowPdfComponent] = useState(false);
-
+const [eligibilityResult, setEligibilityResult] = useState(null);
+  const [eligibilityMessage, setEligibilityMessage] = useState("");
   const [formData, setFormData] = useState({
     projectName: "",
     wing: "",
@@ -210,28 +211,9 @@ const Template = () => {
     date: "",
   });
 
-  //  State for home loan eligibility form
-  const [loanData, setLoanData] = useState({
-    takeHomeSalary: "",
-    currentEmis: "",
-    interestRate: "",
-    loanTenure: "",
-  });
-  const [eligibilityResult, setEligibilityResult] = useState(null);
-
+  
   //  Function to calculate loan eligibility
-  const calculateLoanEligibility = () => {
-    const salary = parseFloat(loanData.takeHomeSalary) || 0;
-    const emis = parseFloat(loanData.currentEmis) || 0;
-    const interestRate = parseFloat(loanData.interestRate) || 0;
-    const tenure = parseFloat(loanData.loanTenure) || 0;
 
-    if (!salary || !interestRate || !tenure || !emis) {
-      alert("Please fill all required fields");
-      return;
-    }
-    setEligibilityResult(true);
-  };
 
   const displayRef = useRef();
   const componentRef = useRef();
@@ -1069,6 +1051,58 @@ Negotiation Calculation(Package Wise)
       setShowPdfComponent(false);
     }, 300);
   };
+
+
+  // /  State for home loan eligibility form
+  const [loanData, setLoanData] = useState({
+    takeHomeSalary: "",
+    currentEmis: "",
+    interestRate: "",
+    loanTenure: "",
+  });
+
+  
+
+  //  Function to calculate loan eligibility
+  const calculateLoanEligibility = () => {
+    const income = parseFloat(loanData.takeHomeSalary) || 0;
+    const obligations = parseFloat(loanData.currentEmis) || 0;
+    const annualRate = parseFloat(loanData.interestRate) || 0;
+    const tenureYears = parseFloat(loanData.loanTenure) || 0;
+    const ratio = 65;
+
+    // Validation
+    if (!income || !annualRate || !tenureYears) {
+      alert("Please fill all required fields");
+      return;
+    }
+
+    // Step 1: Eligible EMI
+    let maxEmi = income * (ratio / 100) - obligations;
+    if (maxEmi <= 0) {
+      setEligibilityMessage("Not eligible for loan (obligations too high).");
+      setEligibilityResult(false);
+      return;
+    }
+
+    // Step 2: Convert inputs
+    let monthlyRate = annualRate / 12 / 100;
+    let n = tenureYears * 12;
+
+    // Step 3: Reverse EMI formula to get eligible Loan Amount
+    let loanAmount =
+      maxEmi * ((1 - Math.pow(1 + monthlyRate, -n)) / monthlyRate);
+
+    // Set the result
+    setEligibilityMessage(
+      `You are eligible for loan amount of Rs. <b>${loanAmount.toFixed(
+        0
+      )}</b> and your EMI will be <b>${maxEmi.toFixed(0)}</b>`
+    );
+    setEligibilityResult(true);
+  };
+
+
 
   return (
     <div
@@ -2247,7 +2281,7 @@ Negotiation Calculation(Package Wise)
                 </div>
               </Box>
             )}
-            {modalContent === "homeLoanEligibility" && (
+          {modalContent === "homeLoanEligibility" && (
               <div style={{ padding: "20px" }}>
                 <Form>
                   <Row>
@@ -2261,7 +2295,6 @@ Negotiation Calculation(Package Wise)
                         </Form.Label>
                         <Form.Control
                           type="number"
-                          // placeholder="Enter monthly take home salary"
                           value={loanData.takeHomeSalary}
                           onChange={(e) =>
                             setLoanData({
@@ -2279,7 +2312,6 @@ Negotiation Calculation(Package Wise)
                         </Form.Label>
                         <Form.Control
                           type="number"
-                          // placeholder="Enter total current EMIs"
                           value={loanData.currentEmis}
                           onChange={(e) =>
                             setLoanData({
@@ -2300,7 +2332,6 @@ Negotiation Calculation(Package Wise)
                         <Form.Control
                           type="number"
                           step="0.1"
-                          // placeholder="Enter expected interest rate"
                           value={loanData.interestRate}
                           onChange={(e) =>
                             setLoanData({
@@ -2319,7 +2350,6 @@ Negotiation Calculation(Package Wise)
                         </Form.Label>
                         <Form.Control
                           type="number"
-                          // placeholder="Enter loan tenure in years"
                           value={loanData.loanTenure}
                           onChange={(e) =>
                             setLoanData({
@@ -2349,15 +2379,18 @@ Negotiation Calculation(Package Wise)
                   </div>
                 </Form>
 
-                {eligibilityResult && (
+                {eligibilityResult !== null && (
                   <div
                     className="mt-4"
                     style={{ fontSize: "12px", color: "#6c757d" }}
                   >
-                    <p>
-                      You are Eligible for Home Loan of Rs<strong>__</strong>
-                      and you EMI will be <strong>__</strong> .
-                    </p>
+                    {eligibilityResult ? (
+                      <p
+                        dangerouslySetInnerHTML={{ __html: eligibilityMessage }}
+                      />
+                    ) : (
+                      <p>{eligibilityMessage}</p>
+                    )}
                   </div>
                 )}
               </div>

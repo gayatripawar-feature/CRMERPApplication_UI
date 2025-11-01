@@ -1084,7 +1084,8 @@ const Leads = () => {
                         alignItems: "center",
                       },
                     }}
-                  /> </div>
+                  />
+                </div>
               </div>
               <div className="mt-2 mb-5">
                 <NewLeads
@@ -1323,6 +1324,8 @@ const Leads = () => {
               overflow: "visible",
               boxShadow: "0px 8px 30px rgba(0,0,0,0.2)",
               backgroundColor: "#fff",
+              width: { xs: "95%", sm: "auto" },
+              mx: "auto",
             },
           }}
         >
@@ -1351,7 +1354,8 @@ const Leads = () => {
             <Box
               sx={{
                 display: "flex",
-                flexDirection: "row",
+                // flexDirection: "row",
+                flexDirection: { xs: "column", sm: "row" },
                 gap: 2,
                 width: "100%",
                 justifyContent: "center",
@@ -1427,6 +1431,7 @@ const Leads = () => {
               justifyContent: "center",
               pb: 2,
               gap: 2,
+              flexWrap: "wrap",
             }}>
             <Button
               onClick={() => setOpenMonthModal(false)}
