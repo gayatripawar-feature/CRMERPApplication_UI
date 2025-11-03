@@ -22,22 +22,94 @@ const sections = [
 ];
 
 // To get the data from api/leads:
+// const fetchLeadsData = async () => {
+//   try {
+//     // const response = await fetch('http://localhost:5174/api/Leads'); // hosted API URL
+//     // const response = await fetch('/api/leads');   //before
+
+
+// const response = await fetch("http://localhost:5174/api/leads", {
+//   method: "GET",
+//   credentials: "include", // important to send the cookie
+// });
+
+
+//     if (!response.ok) {
+//       const errorText = await response.text(); 
+//       console.log('checking api response');
+//        console.log('Status:', response.status);
+//     console.log('Status Text:', response.statusText);
+//      console.log("Headers:", Object.fromEntries(response.headers.entries()));
+//       console.log(await response.text());
+//       console.log("Response Body:", errorText);
+//       throw new Error('Network response was not ok');
+
+//     }
+//     const data = await response.json();
+//     console.log("data", data);
+//      console.log("✅ Data fetched successfully:", data);
+//     console.log("data length", data.length);
+//     return data;
+//   } catch (error) {
+//     console.error('Error fetching leads:', error);
+//     return [];
+//   }
+// };
+
+
 const fetchLeadsData = async () => {
+  console.log(" Starting fetchLeadsData()...");
+  const url = "https://localhost:5289/sales/api/leads";
+  console.log(" Fetching from URL:", url);
   try {
-    // const response = await fetch('http://localhost:5174/api/Leads'); // hosted API URL
-    //  const response = await fetch('/api/Leads');
-    const response = await fetch('/api/leads');
+    console.log("Current Location:", window.location.href);
+    console.log(" Current Origin:", window.location.origin);
+    console.log(" API Origin:", new URL(url).origin);
+    console.log(" Current document cookies:", document.cookie);
+    const response = await fetch(url, {
+      method: "GET",
+      credentials: "include", // important for cookie auth
+    });
+
+    console.log(" Fetch call completed. Checking response...");
+    console.log(" Response object:", response);
+
     if (!response.ok) {
-      console.log('checking api response');
-      console.log(await response.text());
-      throw new Error('Network response was not ok');
+      console.warn(" Response not OK!");
+      console.log("Status Code:", response.status);
+      console.log("Status Text:", response.statusText);
+      console.log("Headers:", Object.fromEntries(response.headers.entries()));
+
+      try {
+        const errorText = await response.text();
+        console.log("Response Body:", errorText);
+      } catch (readError) {
+        console.error(" Error reading response body:", readError);
+      }
+
+      throw new Error(` Network response was not ok. Status: ${response.status}`);
     }
-    const data = await response.json();
-    console.log("data", data);
-    console.log("data length", data.length);
+
+    console.log(" Response OK, attempting to parse JSON...");
+
+    let data;
+    try {
+      data = await response.json();
+      console.log(" Parsed JSON successfully.");
+    } catch (jsonError) {
+      console.error(" Failed to parse JSON:", jsonError);
+      throw new Error("Invalid JSON response from server.");
+    }
+
+    console.log(" Final data:", data);
+    console.log(" Data length:", Array.isArray(data) ? data.length : "N/A");
+
     return data;
   } catch (error) {
-    console.error('Error fetching leads:', error);
+    console.error(" ERROR in fetchLeadsData():", error);
+    if (error.name === "TypeError") {
+      console.warn(" Likely a network or HTTPS-related issue (CORS, SSL, or connection refused).");
+    }
     return [];
   }
 };
@@ -45,11 +117,13 @@ const fetchLeadsData = async () => {
 // to submit the data or post API-api/leads:
 const createLead = async (leadData) => {
   try {
-    const response = await fetch('/api/leads', {
+    // const response = await fetch('/api/leads', {
+    const response = await fetch('https://localhost:5289/sales/api/leads', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
+       credentials: 'include',
       body: JSON.stringify(leadData),
     });
     if (!response.ok) {
@@ -460,8 +534,10 @@ const Leads = () => {
   // delete lead api :
   const deleteLeadApi = async (id) => {
     try {
-      const response = await fetch(`/api/leads/${id}`, {
+      // const response = await fetch(`/api/leads/${id}`, {
+      const response =  await fetch(`https://localhost:5289/sales/api/leads/${id}`,{
         method: "DELETE",
+        credentials: "include",
       });
       if (!response.ok) {
         const errorText = await response.text();

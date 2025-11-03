@@ -569,79 +569,26 @@ const Dashboard = () => {
     });
   }, []);
 
-  // const handleLogout = useCallback(() => {
-  //   localStorage.removeItem('authToken');
-  //   navigate('/login');
-
-  // }, [navigate]);
-
-
-
-  const handleLogout = useCallback(async () => {
-    try {
-      //  Clear backend session
-      await fetch("http://localhost:5288/api/auth/logout", {
-        method: "POST",
-        credentials: "include",
-      });
-
-      //  Clear frontend session
-      setSession({ authenticated: false, name: null });
-      localStorage.removeItem("authToken");
-      console.log("logging out ");
-      //  Logout from Azure and go back to login page
-      window.location.href =
-         "https://login.microsoftonline.com/common/oauth2/v2.0/logout?post_logout_redirect_uri=http://localhost:5288/api/auth/login";
+// SI function:
+  // const handleLogout = () => {
+  //   const form = document.createElement('form');
+  //   form.method = 'POST';
+  //   form.action = 'https://localhost:5289/api/auth/logout'; // BFF logout endpoint
+  //   // if you require CSRF/session id as query param, add it here:
+  //   // form.action += '?sessionId=' + encodeURIComponent(sessionId);
+  //   document.body.appendChild(form);
+  //   form.submit();
+  // }
 
 
-    } catch (error) {
-      console.error("Logout failed:", error);
-    }
-  }, []);
-
-
-  // const handleLogout = useCallback(async () => {
-  //   try {
-  //     console.log("Logging out...");
-
-  //     // 1️⃣ Tell backend to log out (and clear cookies)
-  //     const response = await fetch("http://localhost:5288/api/auth/logout", {
-  //       method: "POST",
-  //       credentials: "include",
-  //     });
-
-  //     // 2️⃣ Clear local frontend session data
-  //     setSession({ authenticated: false, name: null });
-  //     localStorage.removeItem("authToken");
-
-  //     // 3️⃣ Redirect handled by backend — if backend returns redirect URL, follow it
-  //     if (response.redirected) {
-  //       window.location.href = response.url;
-  //     } else {
-  //       // fallback, in case redirect is blocked
-  //       window.location.href = "http://localhost:5288/api/auth/login";
-  //     }
-
-  //   } catch (error) {
-  //     console.error("Logout failed:", error);
-  //   }
-  // }, []);
-
-
-  
-//   const handleLogout = () => {
-//   try {
-//     // Clear frontend session first
-//     localStorage.removeItem("authToken");
-//     sessionStorage.clear();
-
-//     // Redirect browser directly to your backend logout endpoint
-//     // The backend will clear cookies & then redirect to Microsoft logout
-//     window.location.href = "http://localhost:5288/api/auth/logout";
-//   } catch (error) {
-//     console.error("Logout failed:", error);
-//   }
-// };
+  const handleLogout = () => {
+  const form = document.createElement("form");
+  form.method = "POST";
+  // Backend logout endpoint with redirect back to Home page
+  form.action = "https://localhost:5289/api/auth/logout?returnUrl=https://localhost:5173/";
+  document.body.appendChild(form);
+  form.submit();
+};
 
 
 
@@ -649,58 +596,7 @@ const Dashboard = () => {
     console.log("Closing the voice navigation.");
     setShowVoiceRecognition(false);
   };
-  // const role = localStorage.getItem("userRole");
-  // const allowedMenus = RolePermissions[role] || [];
-  //  Build ALL commands (for all modules, not filtered by role)
-  // const buildAllVoiceCommands = (rolePermissions) => {
-  //   const commands = {};
-  //   Object.values(rolePermissions).forEach(menus => {
-  //     menus.forEach(menu => {
-  //       if (menu.subItems) {
-  //         menu.subItems.forEach(item => {
-  //           const command = item.label.toLowerCase();
-  //           commands[command] = item.to;
-  //         });
-  //       }
-  //     });
-  //   });
-  //   return commands;
-  // };
-  // functions for path  and voice system for their respective modules:
-  // const buildVoiceCommands = (allowedMenus, navigate) => {
-  //   const commands = {};
-  //   allowedMenus.forEach(menu => {
-  //     if (menu.subItems) {
-  //       menu.subItems.forEach(item => {
-  //         const command = item.label.toLowerCase(); // Example: "Leads"
-  //         commands[command] = item.to;             // Example: "/dashboard/sales/leads"
-  //       });
-  //     }
-  //   });
-  //   return commands;
-  // };
-  // //  Build search data only for allowed menus
-  // const buildSearchData = (allowedMenus) => {
-  //   const searchList = [];
-  //   allowedMenus.forEach(menu => {
-  //     if (menu.subItems) {
-  //       menu.subItems.forEach(item => {
-  //         searchList.push({
-  //           label: item.label,   // e.g. "Leads"
-  //           value: item.to       // e.g. "/dashboard/sales/leads"
-  //         });
-  //       });
-  //     }
-  //   });
-  //   return searchList;
-  // };
-  // // ✅ Build commands & search data dynamically
-  // const allCommandRoutes = buildAllVoiceCommands(RolePermissions); // 🔹 all
-  // const commandRoutes = buildVoiceCommands(allowedMenus, navigate);  // filtred
-  // const moduleData = buildSearchData(allowedMenus);
 
-  //   console.log("Role:", localStorage.getItem("userRole"));
-  // console.log("Allowed Menus:", RolePermissions[localStorage.getItem("userRole")]);
 
   // for path system :moduleData
   const handleSearch = (event) => {
@@ -976,23 +872,7 @@ const Dashboard = () => {
           }}
         >
           <ul className="nav flex-column">
-            {/* {(role === "admin" || role === "developer") && (
-              <SidebarItem
-                to="/dashboard"
-                icon={<FaTachometerAlt />}
-                label="Dashboard"
-                collapsed={collapsed}
-              />
-            )} */}
-            {/* <SidebarItem
-  to="/dashboard"
-  icon={<FaTachometerAlt />}
-  label="Dashboard"
-  collapsed={collapsed}
-/> */}
 
-            {/* {allowedMenus.map((menu, idx) => ( */}
-            {/* {allMenus.map((menu, idx) => ( */}
             {allMenus.common?.map((menu, idx) => (
 
               < SidebarDropdown

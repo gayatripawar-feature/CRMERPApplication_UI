@@ -83,9 +83,11 @@ console.log("inventoryData fetched:", inventoryData);
     //  Call API to save assignment
     try {
       console.log("Calling API to assign lead...");
-      const response = await fetch(`/api/leads/${selectedLead.id}/assignments`, {
+      // const response = await fetch(`/api/leads/${selectedLead.id}/assignments`, {
+       const response = await fetch(`https://localhost:5289/sales/api/leads/${selectedLead.id}/assignments`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: 'include', 
         body: JSON.stringify({
           assignedTo: assignedTo, 
           assignedBy: "Admin",
@@ -141,9 +143,11 @@ if (editedLead.source === "Channel Partner") {
 
 
     //  PATCH API call
-    const response = await fetch(`/api/leads/${editedLead.id}`, {
+    // const response = await fetch(`/api/leads/${editedLead.id}`, {
+    const response = await fetch(`https://localhost:5289/sales/api/leads/${editedLead.id}`,{
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
+       credentials: 'include',
       body: JSON.stringify({
         ...editedLead,
           sourceDetails: updatedSourceDetails,
@@ -228,7 +232,11 @@ if (editedLead.source === "Channel Partner") {
   const handleEditClick = async (item) => {
   try {
     setEditMode(true);
-    const response = await fetch(`/api/leads/${item.id}`); // GET lead by Id
+    // const response = await fetch(`/api/leads/${item.id}`); // GET lead by Id
+    const response = await fetch(`https://localhost:5289/sales/api/leads/${item.id}`,{
+      method: 'GET',
+      credentials: 'include',
+    });
     if (!response.ok) throw new Error("Failed to fetch lead details");
     const leadData = await response.json();
     console.log("edit icon clicked");

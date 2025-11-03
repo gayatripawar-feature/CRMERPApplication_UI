@@ -164,8 +164,8 @@ import React from "react";
 
 const LoginPage = () => {
   const handleLogin = () => {
-     window.location.href = "http://localhost:5288/api/auth/login?returnUrl=http://localhost:5173/dashboard";
-     
+    window.location.href = "https://localhost:5289/api/auth/login?returnUrl=https://localhost:5173/dashboard";
+
   };
 
   return (
