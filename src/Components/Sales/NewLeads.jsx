@@ -28,10 +28,13 @@ import { FaEdit, FaWhatsapp, FaEnvelope, FaUserCircle, FaTrash } from "react-ico
 import { toast } from "react-toastify";
 import Constants from "../Constants";
 import CloseIcon from "@mui/icons-material/Close";
-
+import { useSession } from "../SessionContext";
 const NewLeads = ({ inventoryData, setInventoryData, isMobile, isTablet, handleDelete,fetchLeadsData,paginatedFilteredData}) => {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+
+ const session = useSession();
+
 
   const [modalOpen, setModalOpen] = useState(false);
   const [assignedTo, setAssignedTo] = useState("");
@@ -90,7 +93,9 @@ console.log("inventoryData fetched:", inventoryData);
         credentials: 'include', 
         body: JSON.stringify({
           assignedTo: assignedTo, 
-          assignedBy: "Admin",
+          // assignedTo:session.id,
+          // assignedBy: "Admin",
+          assignedBy:session.id,
           leadId: selectedLead.id
         }),
       });

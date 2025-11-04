@@ -39,9 +39,12 @@ import MISReport from "./Components/CRM/MISReport";
 import DashboardHome from "./Components/DashboardHome/DashboardHome";
 import LoginPage from "./Components/Login";
 import Home from "./Components/Home";
+
+import { SessionProvider } from "./Components/SessionContext"; 
 const App = () => {
   const [session, setSession] = useState({
     authenticated: false,
+    id: null,
     name: null,
     loading: true,
   });
@@ -57,8 +60,30 @@ const App = () => {
 
 
     //  Check session on app load
+    //     const refreshSession = async () => {
+    //       console.log(" Checking app session & Microsoft SSO state...");
+    //     try {
+    //         //  Check your backend session (ASP.NET cookie)
+    //         const response = await fetch("https://localhost:5289/api/auth/session", {
+    //           credentials: "include", // includes your .AspNetCore cookie
+    //         });
+    //     if (response.ok) {
+    //           const data = await response.json();
+    //           console.log(" Backend session active:", data);
+    //            setSession({ ...data, loading: false });
+    //         } else {
+    //           console.warn(" Backend session invalid or expired. Checking SSO...");
+    //           setSession({ authenticated: false, name: null, loading: false });
+    //         }
+    //       } catch (error) {
+    //         console.error(" Session check failed:", error);
+    //         setSession({ authenticated: false, name: null, loading: false });
+    // }
+    //     };
+
+    //  Check session on app load
     const refreshSession = async () => {
-      console.log(" Checking app session & Microsoft SSO state...");
+      console.log("🔍 Checking app session & Microsoft SSO state...");
 
       try {
         //  Check your backend session (ASP.NET cookie)
@@ -66,20 +91,42 @@ const App = () => {
           credentials: "include", // includes your .AspNetCore cookie
         });
 
+        console.log("🌐 Fetch call completed. Status:", response.status, response.statusText);
+
         if (response.ok) {
           const data = await response.json();
-          console.log(" Backend session active:", data);
-           setSession({ ...data, loading: false });
+          console.log("✅ Backend session active:", data);
+
+          // 🔎 Deep inspection: check ID type
+          if (data.id) {
+            console.log("🧩 ID detected:", data.id);
+
+            // Check what kind of ID this might be
+            if (data.id.startsWith("-")) {
+              console.warn("⚠️ This ID starts with '-', likely a 'sub' (subject ID) — not the Azure Object ID.");
+            } else if (data.id.includes("-") && data.id.length === 36) {
+              console.log("✅ This looks like a valid Azure Object ID (GUID).");
+            } else if (data.id.length > 20 && !data.id.includes("-")) {
+              console.log("ℹ️ This looks like a base64-like subject ID (App-specific).");
+            } else {
+              console.log("❓ Unknown ID format:", data.id);
+            }
+          } else {
+            console.warn("⚠️ No ID field found in session data.");
+          }
+
+          setSession({ ...data, loading: false });
         } else {
           console.warn(" Backend session invalid or expired. Checking SSO...");
           setSession({ authenticated: false, name: null, loading: false });
         }
       } catch (error) {
-        console.error(" Session check failed:", error);
+        console.error("❌ Session check failed:", error);
         setSession({ authenticated: false, name: null, loading: false });
-}
+      }
     };
- refreshSession();
+
+    refreshSession();
   }, []);
 
   // const checkMicrosoftSSOCookies = async () => {
@@ -115,11 +162,12 @@ const App = () => {
   }
   // If authenticated, render dashboard and routes
   return (
+    <SessionProvider value={session}>
     <Router>
       <ToastContainer position="top-right" autoClose={3000} />
-    <Routes>
-      <Route path="/" element={<Home />} />
-      {/*  Dashboard + Nested Routes */}
+      <Routes>
+        <Route path="/" element={<Home />} />
+        {/*  Dashboard + Nested Routes */}
         <Route
           path="/dashboard/*"
           element={
@@ -172,6 +220,7 @@ const App = () => {
         </Route>
       </Routes>
     </Router>
+    </SessionProvider>
   );
 };
 
