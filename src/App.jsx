@@ -40,7 +40,7 @@ import DashboardHome from "./Components/DashboardHome/DashboardHome";
 import LoginPage from "./Components/Login";
 import Home from "./Components/Home";
 
-import { SessionProvider } from "./Components/SessionContext"; 
+import { SessionProvider } from "./Components/SessionContext";
 const App = () => {
   const [session, setSession] = useState({
     authenticated: false,
@@ -163,63 +163,63 @@ const App = () => {
   // If authenticated, render dashboard and routes
   return (
     <SessionProvider value={session}>
-    <Router>
-      <ToastContainer position="top-right" autoClose={3000} />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        {/*  Dashboard + Nested Routes */}
-        <Route
-          path="/dashboard/*"
-          element={
-            session.authenticated ? <Dashboard /> : <Navigate to="/" />
-          }
-        >
-          <Route index element={<DashboardHome />} />
+      <Router>
+        <ToastContainer position="top-right" autoClose={3000} />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          {/*  Dashboard + Nested Routes */}
+          <Route
+            path="/dashboard/*"
+            element={
+              session.authenticated ? <Dashboard /> : <Navigate to="/" />
+            }
+          >
+            <Route index element={<DashboardHome />} />
 
-          {/* Admin Routes */}
-          <Route path="admin/salesperson" element={<Admin_SalesModule />} />
-          <Route path="admin/banker" element={<Admin_Banker />} />
+            {/* Admin Routes */}
+            <Route path="admin/salesperson" element={<Admin_SalesModule />} />
+            <Route path="admin/banker" element={<Admin_Banker />} />
 
-          {/* Developer Routes */}
-          <Route path="developer/sharespace" element={<ShareSpace />} />
-          <Route path="developer/basicinfo" element={<BasicInfo />} />
-          <Route path="developer/projectinventory" element={<ProjectInventory />} />
-          <Route path="developer/costsheet" element={<CostSheet />} />
-          <Route path="developer/salesmis" element={<Salesmis />} />
-          <Route path="developer/marketing" element={<Marketing />} />
+            {/* Developer Routes */}
+            <Route path="developer/sharespace" element={<ShareSpace />} />
+            <Route path="developer/basicinfo" element={<BasicInfo />} />
+            <Route path="developer/projectinventory" element={<ProjectInventory />} />
+            <Route path="developer/costsheet" element={<CostSheet />} />
+            <Route path="developer/salesmis" element={<Salesmis />} />
+            <Route path="developer/marketing" element={<Marketing />} />
 
-          {/* Sales Routes */}
-          <Route path="sales/lostvisits" element={<LostVisitsModule />} />
-          <Route path="sales/salesdashboard" element={<SalesDashboard />} />
-          <Route path="sales/sharespace" element={<SalesSharespace />} />
-          <Route path="sales/sharedbydeveloper" element={<SharedbyDeveloper />} />
-          <Route path="sales/leads" element={<Leads />} />
-          <Route path="sales/leadsfollowup" element={<LeadsFollowUp />} />
-          <Route path="sales/LostLeads" element={<LostLeads />} />
-          <Route path="sales/firstvisits" element={<FirstVisits />} />
-          <Route path="sales/firstvisitfollowup" element={<FirstVisitFollowup />} />
-          <Route path="sales/FirstVisitSteps" element={<FirstVisitSteps />} />
-          <Route path="sales/saleslostvisits" element={<SalesLostVisits />} />
-          <Route path="sales/salestemplates" element={<Temp5 />} />
-          <Route path="sales/bookingform" element={<BookingForm />} />
-          <Route path="sales/channelpartner" element={<ChannelPartner />} />
-          <Route path="sales/salescalander" element={<SalesCalendar />} />
+            {/* Sales Routes */}
+            <Route path="sales/lostvisits" element={<LostVisitsModule />} />
+            <Route path="sales/salesdashboard" element={<SalesDashboard />} />
+            <Route path="sales/sharespace" element={<SalesSharespace />} />
+            <Route path="sales/sharedbydeveloper" element={<SharedbyDeveloper />} />
+            <Route path="sales/leads" element={<Leads />} />
+            <Route path="sales/leadsfollowup" element={<LeadsFollowUp />} />
+            <Route path="sales/LostLeads" element={<LostLeads />} />
+            <Route path="sales/firstvisits" element={<FirstVisits />} />
+            <Route path="sales/firstvisitfollowup" element={<FirstVisitFollowup />} />
+            <Route path="sales/FirstVisitSteps" element={<FirstVisitSteps />} />
+            <Route path="sales/saleslostvisits" element={<SalesLostVisits />} />
+            <Route path="sales/salestemplates" element={<Temp5 />} />
+            <Route path="sales/bookingform" element={<BookingForm />} />
+            <Route path="sales/channelpartner" element={<ChannelPartner />} />
+            <Route path="sales/salescalander" element={<SalesCalendar />} />
 
-          {/* CRM Routes */}
-          <Route path="crm/CRM" element={<CRM />} />
-          <Route path="crm/registration" element={<Registration />} />
-          <Route path="crm/HomeLoan" element={<HomeLoan />} />
-          <Route path="crm/ocr" element={<OCR />} />
-          <Route path="crm/Agreement" element={<Agreement />} />
-          <Route path="crm/architect" element={<Architect />} />
-          <Route path="crm/Demand" element={<Demand />} />
-          <Route path="crm/dailycollection" element={<DailyCollection />} />
-          <Route path="crm/flatallotmentreport" element={<FlatAllotementReport />} />
-          <Route path="crm/parkingreport" element={<Parkingreport />} />
-          <Route path="crm/misreport" element={<MISReport />} />
-        </Route>
-      </Routes>
-    </Router>
+            {/* CRM Routes */}
+            <Route path="crm/CRM" element={<CRM />} />
+            <Route path="crm/registration" element={<Registration />} />
+            <Route path="crm/HomeLoan" element={<HomeLoan />} />
+            <Route path="crm/ocr" element={<OCR />} />
+            <Route path="crm/Agreement" element={<Agreement />} />
+            <Route path="crm/architect" element={<Architect />} />
+            <Route path="crm/Demand" element={<Demand />} />
+            <Route path="crm/dailycollection" element={<DailyCollection />} />
+            <Route path="crm/flatallotmentreport" element={<FlatAllotementReport />} />
+            <Route path="crm/parkingreport" element={<Parkingreport />} />
+            <Route path="crm/misreport" element={<MISReport />} />
+          </Route>
+        </Routes>
+      </Router>
     </SessionProvider>
   );
 };
