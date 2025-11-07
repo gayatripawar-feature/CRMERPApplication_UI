@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import {TextField, Grid, useMediaQuery, useTheme,} from '@mui/material';
-import {  FaFileDownload } from "react-icons/fa";
+import { TextField, Grid, useMediaQuery, useTheme, } from '@mui/material';
+import { FaFileDownload } from "react-icons/fa";
 import { ToastContainer, toast } from 'react-toastify';
 import Leadsfollowup_followuphistory from './leadsfollowup_followuphistory';
 import UndefinedTable from './UndefinedTable';
@@ -29,17 +29,17 @@ const LeadsFollowUp = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
   // const [loans, setLoans] = useState([]);
-  const[leads,setLeads] = useState([]);
+  const [leads, setLeads] = useState([]);
   const [expandedSection, setExpandedSection] = useState(0);
   const [selectedTab, setSelectedTab] = useState("pendingfollowup");
   // const [projectData, setProjectData] = useState([]);
   // const [FlatAllotement, setFlatAllotement] = useState([false]);
-//  const [Flatdata, setFlatdata] = useState([]);
- const [startDate, setStartDate] = useState(null);
-const [endDate, setEndDate] = useState(null);
-const [searchTerm, setSearchTerm] = useState('');
-const [filteredLeads, setFilteredLeads] = useState([]);
-const [selectedLead, setSelectedLead] = useState(null);
+  //  const [Flatdata, setFlatdata] = useState([]);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredLeads, setFilteredLeads] = useState([]);
+  const [selectedLead, setSelectedLead] = useState(null);
 
   const { id: userId, name: userName, authenticated } = useSession() || {};
   const handleToggleSection = (index) => {
@@ -50,20 +50,22 @@ const [selectedLead, setSelectedLead] = useState(null);
     console.log("Clicked Section Index:", index);
     console.log("Selected Tab Before Update:", selectedTab);
     setExpandedSection(index);
-   if (sections[index].label === "Follow Up History") {
+    if (sections[index].label === "Follow Up History") {
       setSelectedTab("followuphistory");
     } else if (sections[index].label === "Pending Follow Up") {
       setSelectedTab("pendingfollowup");
+      fetchUserLeads();
     } else if (sections[index].label === "Undefined") {
       setSelectedTab("undefined");
     } else if (sections[index].label === "Visit Scheduled") {
       setSelectedTab("visit");
+      fetchVisitScheduledLeads(); 
     }
-     };
+  };
 
- 
-const handleDownloadPDFPending = () => {
-    
+
+  const handleDownloadPDFPending = () => {
+
     const doc = new jsPDF("landscape");
     doc.setFontSize(14);
     doc.text("Pending Follow-up Report", 14, 15);
@@ -73,7 +75,7 @@ const handleDownloadPDFPending = () => {
       "Assign To", "Lead No.", "Name", "Mobile No. / WhatsApp No.",
       "You Are Looking For?", "Email", "Source Name"
     ];
-   // Map data into rows
+    // Map data into rows
     const tableRows = leads.map(row => [
       row.lastFollowUp || "-",
       row.status || "-",
@@ -87,19 +89,19 @@ const handleDownloadPDFPending = () => {
       row.email || "-",
       row.sourceName || "-"
     ]);
-  console.log("Formatted Table Rows:", tableRows);
-  autoTable(doc, {
+    console.log("Formatted Table Rows:", tableRows);
+    autoTable(doc, {
       startY: 25,
       head: [tableColumn],
       body: tableRows,
       styles: { fontSize: 10, cellPadding: 3 },
       headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
     });
-  doc.save("PendingFollowup_Report.pdf");
+    doc.save("PendingFollowup_Report.pdf");
   };
-const handleDownloadPDFHistory = () => {
+  const handleDownloadPDFHistory = () => {
     console.log("Leads data before mapping:", leads);
-   const doc = new jsPDF("landscape");
+    const doc = new jsPDF("landscape");
     doc.setFontSize(14);
     doc.text("Follow-up History Report", 14, 15);
     // Columns for the first page
@@ -107,16 +109,16 @@ const handleDownloadPDFHistory = () => {
       "STATUS HISTORY", "REMARK HISTORY", "ASSIGN TO HISTORY", "LEAD DAYS", "TIMESTAMP",
       "ENQUIRY NO", "LEAD NO.", "SALES EXECUTIVE NAME", "NAME", "MOBILE", "WHATSAPP NO."
     ];
-   // Columns for the second page
+    // Columns for the second page
     const secondPageColumns = [
       "EMAIL", "ADDRESS", "OCCUPATION", "COMPANY",
       "INTERESTED IN", "BUDGET (APPROX.)", "REASON FOR PURCHASE", "REFERENCE BY / SOURCE",
       "NAME OF CP ", "PLANNING TO BUY WITHIN?", "CUSTOMER FEEDBACK"
     ];
-   // Limit the number of rows to fit within 2 pages
+    // Limit the number of rows to fit within 2 pages
     const maxRowsPerPage = 15;
     const totalRows = Math.min(leads.length, maxRowsPerPage * 2);
- // Mapping data for the first page
+    // Mapping data for the first page
     const firstPageRows = leads.slice(0, totalRows).map(row => [
       row.statusHistory || "-",
       row.remarkHistory || "-",
@@ -129,7 +131,7 @@ const handleDownloadPDFHistory = () => {
       row.name || "-",
       row.mobile || "-"
     ]);
- // Mapping data for the second page
+    // Mapping data for the second page
     const secondPageRows = leads.slice(0, totalRows).map(row => [
       row.whatsappNo || "-",
       row.alternateContactNo || "-",
@@ -148,7 +150,7 @@ const handleDownloadPDFHistory = () => {
 
     console.log("Formatted Table Rows for First Page:", firstPageRows);
     console.log("Formatted Table Rows for Second Page:", secondPageRows);
-// Generate the first page
+    // Generate the first page
     autoTable(doc, {
       startY: 25,
       head: [firstPageColumns],
@@ -157,7 +159,7 @@ const handleDownloadPDFHistory = () => {
       headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
       margin: { top: 20 }
     });
-// Add a new page for the remaining columns
+    // Add a new page for the remaining columns
     doc.addPage();
     doc.text("Pending Follow-up Report (Continued)", 14, 15);
 
@@ -170,13 +172,13 @@ const handleDownloadPDFHistory = () => {
       headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
       margin: { top: 20 }
     });
-  doc.save("Followup_History_Report.pdf");
+    doc.save("Followup_History_Report.pdf");
   };
   const handleDownloadPDFUndefined = () => {
     const doc = new jsPDF("landscape");
     doc.setFontSize(14);
     doc.text("Undefined Report", 14, 15);
-     // Merged columns for a single page
+    // Merged columns for a single page
     const tableColumns = [
       "STATUS HISTORY", "REMARK HISTORY", "LEAD NO", "NAME", "MOBILE NO.",
       "YOU ARE LOOKING FOR?", "EMAIL", "SOURCE NAME"
@@ -254,379 +256,449 @@ const handleDownloadPDFHistory = () => {
     doc.save("VisitScheduled_Report.pdf");
   };
 
- 
 
 
-    // Filter records based on startDate, endDate, and searchTerm
-const filteredRecords = leads.filter(lead => {
-  const nextFollowUp = lead.nextFollowUp ? dayjs(lead.nextFollowUp) : null;
 
-  const isWithinDateRange = nextFollowUp
-    ? (!startDate || nextFollowUp.isSameOrAfter(startDate, 'day')) &&
+  // Filter records based on startDate, endDate, and searchTerm
+  const filteredRecords = leads.filter(lead => {
+    const nextFollowUp = lead.nextFollowUp ? dayjs(lead.nextFollowUp) : null;
+
+    const isWithinDateRange = nextFollowUp
+      ? (!startDate || nextFollowUp.isSameOrAfter(startDate, 'day')) &&
       (!endDate || nextFollowUp.isSameOrBefore(endDate, 'day'))
-    // : false; // if no nextFollowUp date, exclude it
-    :true //show all when no date range applied
+      // : false; // if no nextFollowUp date, exclude it
+      : true //show all when no date range applied
 
-  const matchesSearch = searchTerm
-    ? lead.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    const matchesSearch = searchTerm
+      ? lead.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       (lead.leadNo && lead.leadNo.toString().includes(searchTerm))
-    : true;
+      : true;
 
-  return isWithinDateRange && matchesSearch;
-}); 
-
-
+    return isWithinDateRange && matchesSearch;
+  });
 
 
 
-    const fetchUserLeads = async () => {
-      try {
-        if (!authenticated || !userId) {
-          console.warn("⚠️ No active session or user ID found");
-          setFilteredLeads([]);
-          // setLoading(false);
-          return;
-        }
 
-        console.log("👤 Logged-in User ID:", userId);
 
-        // Fetch all leads from backend
-        const response = await fetch("https://localhost:5289/sales/api/leads", {
-          credentials: "include",
-        });
+  // const fetchUserLeads = async () => {
+  //   try {
+  //     if (!authenticated || !userId) {
+  //       console.warn("⚠️ No active session or user ID found");
+  //       setFilteredLeads([]);
+  //       // setLoading(false);
+  //       return;
+  //     }
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch leads");
-        }
+  //     console.log("👤 Logged-in User ID:", userId);
 
-        const data = await response.json();
-        console.log(" All leads fetched:", data);
+  //     // Fetch all leads from backend
+  //     const response = await fetch("https://localhost:5289/sales/api/leads", {
+  //       credentials: "include",
+  //     });
 
-        // Filter leads assigned to the logged-in user
-        const userLeads = data?.filter(
-          (lead) =>
-            lead.leadEnagagements &&
-            lead.leadEnagagements.some((eng) => eng.assignedTo === userId)
-        );
+  //     if (!response.ok) {
+  //       throw new Error("Failed to fetch leads");
+  //     }
 
-        console.log("🎯 Filtered user leads:", userLeads);
-        // console.log(JSON.stringify(userLeads, null, 2));
+  //     const data = await response.json();
+  //     console.log(" All leads fetched:", data);
 
-        setFilteredLeads(userLeads);
-      } catch (error) {
-        console.error("❌ Error fetching user leads:", error);
-      } finally {
-        // setLoading(false);
-      }
-    
+  //     // Filter leads assigned to the logged-in user
+  //     const userLeads = data?.filter(
+  //       (lead) =>
+  //         lead.leadEnagagements &&
+  //         lead.leadEnagagements.some((eng) => eng.assignedTo === userId)
+  //     );
+
+  //     console.log("🎯 Filtered user leads:", userLeads);
+  //     // console.log(JSON.stringify(userLeads, null, 2));
+
+
+
+  //     setFilteredLeads(userLeads);
+  //   } catch (error) {
+  //     console.error("❌ Error fetching user leads:", error);
+  //   } finally {
+  //     // setLoading(false);
+  //   }
+
+  // };
+
+
+
+  const fetchUserLeads = async () => {
+  try {
+    if (!authenticated || !userId) {
+      console.warn("⚠️ No active session or user ID found");
+      setFilteredLeads([]);
+      return []; // ✅ return empty array for consistency
+    }
+
+    console.log("👤 Logged-in User ID:", userId);
+
+    // ✅ Fetch all leads from backend
+    const response = await fetch("https://localhost:5289/sales/api/leads", {
+      credentials: "include",
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch leads");
+    }
+
+    const data = await response.json();
+    console.log("📦 All leads fetched:", data);
+
+    // ✅ Filter leads assigned to the logged-in user
+    const userLeads = data?.filter(
+      (lead) =>
+        lead.leadEnagagements &&
+        lead.leadEnagagements.some((eng) => eng.assignedTo === userId)
+    );
+
+    console.log("🎯 Filtered user leads:", userLeads);
+
+    // ✅ Update state
+    setFilteredLeads(userLeads);
+
+    // ✅ Return leads so child (PendingFollowuptable) can log them
+    return userLeads;
+  } catch (error) {
+    console.error("❌ Error fetching user leads:", error);
+    return null; // return something so it never stays undefined
+  }
 };
-  //   fetchUserLeads();
-  // }, [userId, authenticated]);
 
-useEffect(() => {
-  fetchUserLeads();
-}, [userId, authenticated]);
+  useEffect(() => {
+    fetchUserLeads();
+  }, [userId, authenticated]);
+
+
+  const fetchVisitScheduledLeads = async () => {
+  try {
+    const response = await fetch("https://localhost:5289/sales/api/leads", {
+      credentials: "include",
+    });
+    if (!response.ok) throw new Error("Failed to fetch leads");
+
+    const data = await response.json();
+    console.log("🎯 All Leads:", data);
+
+    // ✅ Filter for only visit scheduled
+    const visitScheduled = data.filter(
+      (lead) =>
+        lead.status?.toLowerCase() === "visit_scheduled" ||
+        lead.status?.toLowerCase() === "visit scheduled"
+    );
+
+    console.log("📅 Visit Scheduled Leads:", visitScheduled);
+    setFilteredLeads(visitScheduled);
+    setLeads(visitScheduled);
+  } catch (error) {
+    console.error("❌ Error fetching Visit Scheduled leads:", error);
+  }
+};
 
   return (
     <div className="container my-2">
       <h6 className="mb-3 fs-6">Sales Module / Lead Follow Up Management</h6>
-<div className="d-flex flex-column flex-md-row align-items-start align-items-md-center mb-3" 
- style={{
-    justifyContent: "space-between", 
-    width: "100%",
-  }}
->
+      <div className="d-flex flex-column flex-md-row align-items-start align-items-md-center mb-3"
+        style={{
+          justifyContent: "space-between",
+          width: "100%",
+        }}
+      >
 
-<div className="d-flex flex-wrap">
-  {sections.map((section, index) => (
-    <div
-      key={index}
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        backgroundColor: Constants.primaryColor,
-        padding: '8px',
-        borderRadius: '20px',
-        margin: '5px',
-        cursor: 'pointer',
-        transition: "width 0.3s ease, background 0.3s ease",
-        width: expandedSection === index ? (isMobile ? "180px" : "220px") : "50px",
-        minWidth: "50px",
-        overflow: "hidden",
-        whiteSpace: "nowrap",
-        fontSize: isMobile ? "12px" : "14px",
-        justifyContent: "center",
-        textTransform: "none",
-        position: "relative",
-        background: Constants.primaryColor,
-        boxShadow:
-          "inset 2px 2px 2px 0px rgba(255,255,255,.5), 7px 7px 20px 0px rgba(0,0,0,.1), 4px 4px 5px 0px rgba(0,0,0,.1)",
-      }}
-      onClick={() => handleToggleSection(index)}
-    >
-      {React.cloneElement(section.icon, {
-        style: {
-          marginRight: expandedSection === index ? '8px' : '0',
-          fontSize: isMobile ? '16px' : (expandedSection === index ? '20px' : '20px'),
-          color: '#fff',
-          transition: "font-size 0.3s ease",
-        }
-      })}
+        <div className="d-flex flex-wrap">
+          {sections.map((section, index) => (
+            <div
+              key={index}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                backgroundColor: Constants.primaryColor,
+                padding: '8px',
+                borderRadius: '20px',
+                margin: '5px',
+                cursor: 'pointer',
+                transition: "width 0.3s ease, background 0.3s ease",
+                width: expandedSection === index ? (isMobile ? "180px" : "220px") : "50px",
+                minWidth: "50px",
+                overflow: "hidden",
+                whiteSpace: "nowrap",
+                fontSize: isMobile ? "12px" : "14px",
+                justifyContent: "center",
+                textTransform: "none",
+                position: "relative",
+                background: Constants.primaryColor,
+                boxShadow:
+                  "inset 2px 2px 2px 0px rgba(255,255,255,.5), 7px 7px 20px 0px rgba(0,0,0,.1), 4px 4px 5px 0px rgba(0,0,0,.1)",
+              }}
+              onClick={() => handleToggleSection(index)}
+            >
+              {React.cloneElement(section.icon, {
+                style: {
+                  marginRight: expandedSection === index ? '8px' : '0',
+                  fontSize: isMobile ? '16px' : (expandedSection === index ? '20px' : '20px'),
+                  color: '#fff',
+                  transition: "font-size 0.3s ease",
+                }
+              })}
 
-      {expandedSection === index ? (
-        <span className="p-1 fw-bold" style={{
-          color: 'white',
-          marginLeft: '5px',
-          fontSize: isMobile ? '12px' : '14px'
-        }}>
-          {section.label}
-        </span>
-      ) : null}
-    </div>
-  ))}
-</div>
-
-
-  <button
-    className="btn"
-    onClick={() => {
-      if (selectedTab === "pendingfollowup") handleDownloadPDFPending();
-      else if (selectedTab === "followuphistory") handleDownloadPDFHistory();
-      else if (selectedTab === "undefined") handleDownloadPDFUndefined();
-      else if (selectedTab === "visit") handleDownloadPDFVisit();
-    }}
-    style={{
-      backgroundColor: Constants.primaryColor,
-      color: "#fff",
-      fontWeight: "bold",
-      borderRadius: "20px",
-      padding: isMobile ? "6px 12px" : "8px 16px",
-      margin: "5px",
-      display: "flex",
-      alignItems: "center",
-      gap: "6px",
-    }}
-  >
-    <FaFileDownload size={isMobile ? 16 : 18} />
-    {isMobile ? "PDF" : "Download PDF"}
-  </button>
-  </div>
-<div
-  style={{
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    flexWrap: "wrap",
-    marginTop: "10px",
-    gap: "10px",
-  }}
->
-  {/*  Left side — Date Range */}
-  <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-     <DatePicker
-  label="Start Date"
-  value={startDate}
-  onChange={(newValue) => setStartDate(newValue)}
-  slotProps={{
-    textField: {
-      size: "small",
-      sx: {
-        width: "150px",
-        "& .MuiInputBase-root": {
-          border: `0px solid ${Constants.primaryColor}`, // ✅ primary color border
-          borderRadius: "4px", 
-          padding: "0px 8px",
-        },
-        "& .MuiOutlinedInput-notchedOutline": {
-          borderColor: Constants.primaryColor, 
-        },
-        "&:hover .MuiOutlinedInput-notchedOutline": {
-          borderColor: Constants.primaryColor,
-        },
-        "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-          borderColor: Constants.primaryColor,
-        },
-        "& .MuiInputLabel-root": {
-          color: Constants.primaryColor,
-        },
-        "& .MuiInputBase-input": {
-          color: Constants.primaryColor,
-        },
-      },
-    },
-  }}
-/>
-
-      <DatePicker
-  label="End Date"
-  value={endDate}
-  onChange={(newValue) => setEndDate(newValue)}
-  slotProps={{
-    textField: {
-      size: "small",
-      sx: {
-        width: "150px",
-        "& .MuiInputBase-root": {
-          border: `0px solid ${Constants.primaryColor}`, 
-          borderRadius: "4px",
-          padding: "0px 8px",
-        },
-        "& .MuiOutlinedInput-notchedOutline": {
-          borderColor: Constants.primaryColor, 
-        },
-        "&:hover .MuiOutlinedInput-notchedOutline": {
-          borderColor: Constants.primaryColor,
-        },
-        "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-          borderColor: Constants.primaryColor,
-        },
-      },
-    },
-  }}
-/>
-
-    </LocalizationProvider>
-  </div>
-
-  <div
-    style={{
-      display: "flex",
-      alignItems: "center",
-      gap: "10px",
-      flexWrap: "wrap",
-    }}
-  >
-  
-    <TextField
-      size="small"
-      placeholder="Search"
-      value={searchTerm}
-      onChange={(e) => setSearchTerm(e.target.value)}
-      sx={{
-        width:"180px",
-        "& .MuiInputBase-root": { padding: "0px 8px" },
-        border: Constants.formInputBorderColor,
-      }}
-    />
-
-   
-<div
-  style={{
-    display: "flex",
-    alignItems: "center",
-    gap: "8px",
-    fontSize: "14px",
-    color: "#800000", 
-    justifyContent: "flex-end",
-    marginTop: "8px",
-  }}
->
-  <span style={{ fontWeight: "500" }}>Rows per page:</span>
-
-  <select
-    style={{
-      border: "1px solid #800000",
-      borderRadius: "4px",
-      padding: "2px 6px",
-      outline: "none",
-      color: "#800000",
-    }}
-    defaultValue={5}
-  >
-    <option value={5}>5</option>
-    <option value={10}>10</option>
-    <option value={25}>25</option>
-  </select>
-
-  <span>0–0 of 0 entries</span>
-
-  {/* Navigation arrows */}
-  <button
-    style={{
-      border: "none",
-      background: "transparent",
-      cursor: "pointer",
-      color: "gray",
-      fontSize: "18px",
-      padding: "0 4px",
-    }}
-  >
-    &#8249;
-  </button>
-  <button
-    style={{
-      border: "none",
-      background: "transparent",
-      cursor: "pointer",
-      color: "gray",
-      fontSize: "18px",
-      padding: "0 4px",
-    }}
-  >
-    &#8250;
-  </button>
-</div>
-
-  </div>
-</div>
+              {expandedSection === index ? (
+                <span className="p-1 fw-bold" style={{
+                  color: 'white',
+                  marginLeft: '5px',
+                  fontSize: isMobile ? '12px' : '14px'
+                }}>
+                  {section.label}
+                </span>
+              ) : null}
+            </div>
+          ))}
+        </div>
 
 
-  
-     
+        <button
+          className="btn"
+          onClick={() => {
+            if (selectedTab === "pendingfollowup") handleDownloadPDFPending();
+            else if (selectedTab === "followuphistory") handleDownloadPDFHistory();
+            else if (selectedTab === "undefined") handleDownloadPDFUndefined();
+            else if (selectedTab === "visit") handleDownloadPDFVisit();
+          }}
+          style={{
+            backgroundColor: Constants.primaryColor,
+            color: "#fff",
+            fontWeight: "bold",
+            borderRadius: "20px",
+            padding: isMobile ? "6px 12px" : "8px 16px",
+            margin: "5px",
+            display: "flex",
+            alignItems: "center",
+            gap: "6px",
+          }}
+        >
+          <FaFileDownload size={isMobile ? 16 : 18} />
+          {isMobile ? "PDF" : "Download PDF"}
+        </button>
+      </div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexWrap: "wrap",
+          marginTop: "10px",
+          gap: "10px",
+        }}
+      >
+        {/*  Left side — Date Range */}
+        <div style={{ display: "flex", alignItems: "center", gap: "8px", flexWrap: "wrap" }}>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker
+              label="Start Date"
+              value={startDate}
+              onChange={(newValue) => setStartDate(newValue)}
+              slotProps={{
+                textField: {
+                  size: "small",
+                  sx: {
+                    width: "150px",
+                    "& .MuiInputBase-root": {
+                      border: `0px solid ${Constants.primaryColor}`, // ✅ primary color border
+                      borderRadius: "4px",
+                      padding: "0px 8px",
+                    },
+                    "& .MuiOutlinedInput-notchedOutline": {
+                      borderColor: Constants.primaryColor,
+                    },
+                    "&:hover .MuiOutlinedInput-notchedOutline": {
+                      borderColor: Constants.primaryColor,
+                    },
+                    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                      borderColor: Constants.primaryColor,
+                    },
+                    "& .MuiInputLabel-root": {
+                      color: Constants.primaryColor,
+                    },
+                    "& .MuiInputBase-input": {
+                      color: Constants.primaryColor,
+                    },
+                  },
+                },
+              }}
+            />
+
+            <DatePicker
+              label="End Date"
+              value={endDate}
+              onChange={(newValue) => setEndDate(newValue)}
+              slotProps={{
+                textField: {
+                  size: "small",
+                  sx: {
+                    width: "150px",
+                    "& .MuiInputBase-root": {
+                      border: `0px solid ${Constants.primaryColor}`,
+                      borderRadius: "4px",
+                      padding: "0px 8px",
+                    },
+                    "& .MuiOutlinedInput-notchedOutline": {
+                      borderColor: Constants.primaryColor,
+                    },
+                    "&:hover .MuiOutlinedInput-notchedOutline": {
+                      borderColor: Constants.primaryColor,
+                    },
+                    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                      borderColor: Constants.primaryColor,
+                    },
+                  },
+                },
+              }}
+            />
+
+          </LocalizationProvider>
+        </div>
+
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "10px",
+            flexWrap: "wrap",
+          }}
+        >
+
+          <TextField
+            size="small"
+            placeholder="Search"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            sx={{
+              width: "180px",
+              "& .MuiInputBase-root": { padding: "0px 8px" },
+              border: Constants.formInputBorderColor,
+            }}
+          />
+
+
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "8px",
+              fontSize: "14px",
+              color: "#800000",
+              justifyContent: "flex-end",
+              marginTop: "8px",
+            }}
+          >
+            <span style={{ fontWeight: "500" }}>Rows per page:</span>
+
+            <select
+              style={{
+                border: "1px solid #800000",
+                borderRadius: "4px",
+                padding: "2px 6px",
+                outline: "none",
+                color: "#800000",
+              }}
+              defaultValue={5}
+            >
+              <option value={5}>5</option>
+              <option value={10}>10</option>
+              <option value={25}>25</option>
+            </select>
+
+            <span>0–0 of 0 entries</span>
+
+            {/* Navigation arrows */}
+            <button
+              style={{
+                border: "none",
+                background: "transparent",
+                cursor: "pointer",
+                color: "gray",
+                fontSize: "18px",
+                padding: "0 4px",
+              }}
+            >
+              &#8249;
+            </button>
+            <button
+              style={{
+                border: "none",
+                background: "transparent",
+                cursor: "pointer",
+                color: "gray",
+                fontSize: "18px",
+                padding: "0 4px",
+              }}
+            >
+              &#8250;
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+
+
+
       {expandedSection === 0 && selectedTab === "pendingfollowup" && (
-  <div className="content-container mt-3">
-    <div className="mt-3">
-      <PendingFollowuptable
-        data={filteredLeads}
-        
-         onSelectLead={setSelectedLead} 
-        isMobile={isMobile}
-        isTablet={isTablet}
-        fetchUserLeads={fetchUserLeads}
-      />
-    </div>
-  </div>
-)}
+        <div className="content-container mt-3">
+          <div className="mt-3">
+            <PendingFollowuptable
+              data={filteredLeads}
 
-   {expandedSection === 1 && selectedTab === "followuphistory" && (
-  <div className="content-container mt-3">
-    <div className="mt-3">
-      <Leadsfollowup_followuphistory
-        // data={projectData}
-         data={filteredRecords}
-        isMobile={isMobile}
-        isTablet={isTablet}
-      />
-    </div>
-  </div>
-)}
+              onSelectLead={setSelectedLead}
+              isMobile={isMobile}
+              isTablet={isTablet}
+              fetchUserLeads={fetchUserLeads}
+            />
+          </div>
+        </div>
+      )}
 
-    {expandedSection === 2 && selectedTab === "undefined" && (
-  <div className="content-container mt-3">
-    <div className="mt-3">
-      <UndefinedTable
-        // data={Flatdata}
-         data={filteredRecords}
-        isMobile={isMobile}
-        isTablet={isTablet}
-      />
-    </div>
-  </div>
-)}
+      {expandedSection === 1 && selectedTab === "followuphistory" && (
+        <div className="content-container mt-3">
+          <div className="mt-3">
+            <Leadsfollowup_followuphistory
+              // data={projectData}
+              data={filteredRecords}
+              isMobile={isMobile}
+              isTablet={isTablet}
+            />
+          </div>
+        </div>
+      )}
 
-     {expandedSection === 3 && selectedTab === "visit" && (
-  <div className="content-container mt-3">
-    <div className="mt-3">
-      <BookedTable
-        // data={projectData}
-         data={filteredRecords}
-        isMobile={isMobile}
-        isTablet={isTablet}
-      />
-    </div>
-  </div>
-)}
+      {expandedSection === 2 && selectedTab === "undefined" && (
+        <div className="content-container mt-3">
+          <div className="mt-3">
+            <UndefinedTable
+              // data={Flatdata}
+              data={filteredRecords}
+              isMobile={isMobile}
+              isTablet={isTablet}
+            />
+          </div>
+        </div>
+      )}
+
+      {expandedSection === 3 && selectedTab === "visit" && (
+        <div className="content-container mt-3">
+          <div className="mt-3">
+            <BookedTable
+               data={filteredLeads}
+              // data={filteredRecords}
+              isMobile={isMobile}
+              isTablet={isTablet}
+            />
+          </div>
+        </div>
+      )}
 
 
 

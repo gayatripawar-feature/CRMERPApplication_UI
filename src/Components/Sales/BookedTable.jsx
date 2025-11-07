@@ -12,7 +12,7 @@ const BookedTable = ({ data }) => {
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>LEAD NO.</TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>NAME</TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>MOBILE/WHATSAPP NO.</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>YOU ARE LOOKING FOR?</TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}> LOOKING FOR?</TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>EMAIL</TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>SOURCE NAME</TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>LOCATION</TableCell>
@@ -22,15 +22,20 @@ const BookedTable = ({ data }) => {
           <TableBody>
             {data.map((item, index) => (
               <TableRow key={index}>
-                <TableCell>{item.timestamp}</TableCell>
-                <TableCell>{item.leadNo}</TableCell>
+                <TableCell>{item.lastUpdatedDate}</TableCell>
+                <TableCell>{item.id}</TableCell>
                 <TableCell>{item.name}</TableCell>
-                <TableCell>{item.mobile}</TableCell>
-                 <TableCell>{item.youAreLookingFor}</TableCell>
+                <TableCell>{item.phone}</TableCell>
+                 <TableCell>{item.interest}</TableCell>
                 <TableCell>{item.email}</TableCell>
-                <TableCell>{item.sourceName}</TableCell>
-                <TableCell>{item.location}</TableCell>
-                <TableCell>{item.assignTo}</TableCell>
+                <TableCell>{item.source}</TableCell>
+                <TableCell>{item.address || "-"}</TableCell>
+                {/* <TableCell>{item.assignedTo}</TableCell> */}
+                <TableCell>
+        {item.leadEnagagements?.length > 0
+          ? item.leadEnagagements[0].assignedTo
+          : "-"}
+      </TableCell>
               </TableRow>
             ))}
           </TableBody>

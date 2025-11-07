@@ -15,6 +15,7 @@ const PendingFollowuptable = ({ data, onSelectLead, fetchUserLeads }) => {
   const [editingItem, setEditingItem] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
   const { id: userId, name: userName } = useSession() || {};
+
   const [editFormData, setEditFormData] = useState({
     id: '',
     name: '',
@@ -46,23 +47,102 @@ const PendingFollowuptable = ({ data, onSelectLead, fetchUserLeads }) => {
     },
   ]);
 
-  // const handleEditClick = (firm) => {
-  //   setEditingItem(firm); // set the row to edit   
-  // };
+
+
   const handleEditClick = (firm) => {
-    setEditingItem(firm); // set the row to edit
-    setEditFormData({
+    console.group("🟢 HANDLE EDIT CLICK");
+    console.log("➡️ firm received from table:", firm);
+    console.log("🧩 Checking firm before opening modal:", JSON.stringify(firm, null, 2));
+
+
+    if (!firm) {
+      console.warn("⚠️ No firm data passed to handleEditClick");
+      return;
+    }
+
+    // Check if DB data fields exist
+    console.log("🧩 firm fields check:", {
       id: firm.id,
+
       name: firm.name,
       remark: firm.remark,
       leadType: firm.leadType,
       status: firm.status,
-      nextFollowUpDate: firm.nextFollowUp || '',
-      visitScheduledDate: '',
+      nextFollowUp: firm.nextFollowUp,
+      // leadEngagements: firm.leadEnagagements,
+      leadEngagements: firm.leadEngagements || firm.leadEnagagements,
+
     });
+
+    setEditingItem(firm);
+    // Extract engagement info from backend response 
+    const engagements = firm.leadEngagements || firm.leadEnagagements;
+    const latestEng = engagements?.[engagements.length - 1] || null;
+    console.log("🧾 latestEng from firm:", latestEng);
+    console.log("🔍 Keys in latestEng:", Object.keys(latestEng));
+    console.log("🧩 Checking Type value:", latestEng?.type || latestEng?.Type);
+
+    console.log("🔍 Type field check:", latestEng.type, latestEng.Type);
+    console.log("🧾 All engagements for firm:", firm.leadEngagements);
+
+    // const formatDateForInput = (dateString) => {
+    //   if (!dateString) return "";
+    //   const d = new Date(dateString);
+    //   if (isNaN(d.getTime())) return "";
+    //   // ✅ Extract YYYY-MM-DD and HH:mm for datetime-local input
+    //   const iso = d.toISOString();
+    //   return iso.slice(0, 16); // Example: "2025-11-07T00:00"
+    // };
+
+
+    const formatDateForInput = (dateString) => {
+      if (!dateString) return "";
+      const d = new Date(dateString);
+      if (isNaN(d.getTime())) return "";
+
+      // ✅ Adjust to local time instead of UTC
+      const offset = d.getTimezoneOffset();
+      const localDate = new Date(d.getTime() - offset * 60 * 1000);
+      return localDate.toISOString().slice(0, 16);
+    };
+
+    // Fill edit form from either root lead data or latest engagement
+    setEditFormData({
+      id: firm.id || latestEng?.leadId || "",
+      name: firm.name || "",
+      remark: firm.remark || latestEng?.remarks || "",
+
+      // leadType: latestEng?.type || '', 
+      leadType: normalizeLeadType(latestEng?.type),
+
+
+      status: normalizeStatus(firm.status || latestEng?.status),
+
+      nextFollowUpDate: formatDateForInput(latestEng?.nextFollowUp || firm.nextFollowUp),
+      // visitScheduledDate: latestEng?.visitScheduledDate || "",
+      visitScheduledDate: formatDateForInput(latestEng?.visitScheduledDate || ""),
+    });
+
+    console.log("📋 Final editFormData set to:", {
+      id: firm.id || latestEng?.leadId || "",
+      name: firm.name || "",
+      remark: firm.remark || latestEng?.remarks || "",
+      leadType: firm.leadType || latestEng?.type || "",
+      status: firm.status || latestEng?.status || "",
+      nextFollowUpDate:
+        firm.nextFollowUp ||
+        latestEng?.nextFollowUp ||
+        "",
+      visitScheduledDate: latestEng?.visitScheduledDate || "",
+    });
+
     onSelectLead(firm);
-    setModalOpen(true);   // open modal
+    console.log("🧩 Final computed leadType (to be shown in modal):", firm.leadType || latestEng?.type);
+
+    setModalOpen(true);
+    console.groupEnd();
   };
+
 
   const handleSelectItem = (item) => {
     setSelectedItem(item);
@@ -83,123 +163,26 @@ const PendingFollowuptable = ({ data, onSelectLead, fetchUserLeads }) => {
   });
 
 
+  const normalizeLeadType = (type) => {
+    if (!type) return "";
+    const t = type.toUpperCase();
+    if (t === "HOT") return "hot";
+    if (t === "WARM") return "warm";
+    if (t === "COLD") return "cold";
+    if (t === "LOST") return "lost";
+    return "undefined";
+  };
 
-  //   const handleSave = () => {
-  //   // Simple validation example
-  //   if ( !editFormData.status || !editFormData.leadType || !editFormData.nextFollowUpDate || !!editFormData.visitScheduledDate) {
-  //     toast.error("Please fill all required fields!", {
-  //       position: "top-right",
-  //       autoClose: 3000,
-  //     });
-  //     return; // DO NOT close modal
-  //   }
-
-
-  //   // Update the firms array
-  //   const index = firms.findIndex(f => f.leadNo === editingItem.leadNo);
-  //   if (index !== -1) {
-  //     firms[index] = { ...firms[index], ...editFormData };
-  //   }
-
-
-  //   handleModalClose(); // Only close modal after valid data
-  //   toast.success("Values updated successfully!", {
-  //     position: "top-right",
-  //     autoClose: 3000,
-  //   });
-  // };
-
-
-  // const userLeads = data?.filter((lead) =>
-  //   lead.leadEnagagements &&
-  //   lead.leadEnagagements.some(
-  //     (eng) => eng.assignedTo === userId
-  //   )
-  // );
-
-
-
-
-
-
-
-  // const handleSave = async () => {
-  //   console.group("🔍 HANDLE SAVE TRIGGERED");
-
-  //   console.log(" editFormData:", editFormData);
-  //   console.log(" userId:", userId, " |  userName:", userName);
-  //   console.log("🧩 Constants.baseURL:", Constants?.baseURL);
-
-  //   // ✅ Basic validation
-  //   if (
-  //     !editFormData.status ||
-  //     !editFormData.leadType ||
-  //     (editFormData.status === "Follow Up" && !editFormData.nextFollowUpDate) ||
-  //     (editFormData.status === "Visit Scheduled" && !editFormData.visitScheduledDate)
-  //   ) {
-  //     console.warn("⚠️ Validation failed:", editFormData);
-  //     toast.error("Please fill all required fields!", {
-  //       position: "top-right",
-  //       autoClose: 3000,
-  //     });
-  //     return;
-  //   }
-
-  //   try {
-  //     // ✅ Prepare payload (matches backend DTO: LeadEngagementRequest)
-  //     const payload = {
-  //       id: editFormData.id, // Engagement ID
-  //       leadId: editFormData.id, // Lead ID (same if you don’t have both yet)
-  //       status: editFormData.status.replace(/\s+/g, "_").toUpperCase(),
-  //       type: editFormData.leadType.toUpperCase(),
-  //       remarks: editFormData.remark,
-  //       nextFollowUp: editFormData.nextFollowUpDate || null,
-  //       visitScheduledDate: editFormData.visitScheduledDate || null,
-  //       updatedBy: userName || "System",
-  //     };
-
-  //     console.log("🧾 Sending payload:", payload);
-
-  //     // ✅ API CALL
-  //     // `https://localhost:5289/api/leads/${editFormData.id}/engagements`
-  //     // const response = await fetch(`https://localhost:5289/api/leads/${editFormData.leadId}/engagements`,
-  //     const response = await fetch(`https://localhost:5289/sales/api/leads/${editFormData.leadId || editFormData.id}/engagements`, {
-
-
-  //         method: "POST", // ✅ matches your backend endpoint
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         credentials: "include",
-  //         body: JSON.stringify(payload),
-  //       }
-  //     );
-
-  //     console.log("📡 Response Status:", response.status);
-
-
-  //     if (!response.ok) {
-  //       const errorText = await response.text();
-  //       console.error("❌ Update failed. Response:", errorText);
-  //       throw new Error("Update failed");
-  //     }
-
-  //     toast.success("Follow-up updated successfully!", {
-  //       position: "top-right",
-  //       autoClose: 3000,
-  //     });
-
-  //     setModalOpen(false);
-  //   } catch (error) {
-  //     console.error("Error updating follow-up:", error);
-  //     toast.error("Failed to update follow-up", {
-  //       position: "top-right",
-  //       autoClose: 3000,
-  //     });
-  //   }
-  // };
-
-
+  const normalizeStatus = (status) => {
+    if (!status) return "";
+    const s = status.toUpperCase().replace(/_/g, " ");
+    if (s === "FOLLOW UP") return "Follow Up";
+    if (s === "NOT INTERESTED") return "Not Interested";
+    if (s === "BOOKED PROPERTY IN OTHER PROJECT") return "Booked property In Other Project";
+    if (s === "INVALID NUMBER") return "Invalid Number";
+    if (s === "VISIT SCHEDULED") return "Visit Scheduled";
+    return "";
+  };
 
 
 
@@ -240,6 +223,7 @@ const PendingFollowuptable = ({ data, onSelectLead, fetchUserLeads }) => {
       };
 
       console.log("🧾 Sending payload:", payload);
+      console.log("📤 JSON body being sent to API:", JSON.stringify(payload, null, 2));
 
       // ✅ API CALL
       const response = await fetch(
@@ -256,6 +240,8 @@ const PendingFollowuptable = ({ data, onSelectLead, fetchUserLeads }) => {
 
       console.log("📡 Response Status:", response.status);
 
+
+
       if (!response.ok) {
         const errorText = await response.text();
         console.error("❌ Update failed. Response:", errorText);
@@ -266,37 +252,44 @@ const PendingFollowuptable = ({ data, onSelectLead, fetchUserLeads }) => {
       const updatedLead = await response.json();
       console.log("✅ Updated Lead:", updatedLead);
 
-      // // 🔹 Update local state (if you're displaying leads in a table)
-      // setLeads((prevLeads) =>
-      //   prevLeads.map((lead) =>
-      //     lead.id === updatedLead.id ? { ...lead, ...updatedLead } : lead
-      //   )
-      // );
-
-      // 🔹 Update form state
-      // setFormData({
-      //   status: updatedLead.status,
-      //   nextFollowUp: updatedLead.nextFollowUp
-      //     ? dayjs(updatedLead.nextFollowUp)
-      //     : null,
-      //   remark: updatedLead.remark || "",
-      // });
+      // ✅ 1. Update local form state immediately (instant UI feedback)
+      setEditFormData((prev) => ({
+        ...prev,
+        status: normalizeStatus(payload.status || prev.status),
+        remark: payload.remarks || prev.remark,
+        nextFollowUpDate: payload.nextFollowUp,
+        visitScheduledDate: payload.visitScheduledDate,
+        leadType: payload.type, // 🔥 make sure type updates in the form instantly
+      }));
 
       //  await fetchUserLeads();
-      if (fetchUserLeads) {
-        await fetchUserLeads();
-        console.log("🔄 Refetched latest leads after update");
-      }
+      // if (fetchUserLeads) {
+      //   await fetchUserLeads();
+      //     console.log("Fetched leads:", response.data);
+      //   console.log("🔄 Refetched latest leads after update");
+      // }
 
       toast.success("Follow-up updated successfully!", {
         position: "top-right",
         autoClose: 3000,
       });
 
+      // ✅ Refresh table after saving
+      if (fetchUserLeads) {
+        console.log("🔄 Refetching latest leads...");
+        console.log("🔄 Refetching latest leads...");
+        const refreshed = await fetchUserLeads();
+        console.log("✅ Refetched Data:", refreshed);
+      }
+
       setEditFormData((prev) => ({
         ...prev,
-        status: payload.status,
-        remark: payload.remarks,
+        // status: payload.status,
+        // remark: payload.remarks,
+        // status: normalizeStatus(payload.status || latestEng?.status),
+        status: normalizeStatus(payload.status || editingItem?.status),
+        // remark: payload.remark || latestEng?.remarks || "",
+        remark: payload.remark || editingItem?.remarks || "",
         nextFollowUpDate: payload.nextFollowUp,
         visitScheduledDate: payload.visitScheduledDate
       }));
@@ -314,6 +307,10 @@ const PendingFollowuptable = ({ data, onSelectLead, fetchUserLeads }) => {
 
 
 
+
+  const filteredLeads = data.filter(
+    (lead) => lead.status?.toUpperCase() !== "VISIT_SCHEDULED"
+  );
 
 
   return (
@@ -339,66 +336,116 @@ const PendingFollowuptable = ({ data, onSelectLead, fetchUserLeads }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {/* { filteredFirms
-      .map((firm, index) => ( */}
-              {data.map((firm, index) => (
 
-                <TableRow key={index} onClick={() => handleSelectItem(firm)}>
-                  <TableCell sx={{ padding: '15px' }}>
-                    <div style={{ display: 'flex', gap: '5px' }}>
-                      <Tooltip title="Edit" arrow>
-                        <IconButton
-                          color="primary"
-                          onClick={() => handleEditClick(firm)}
-                          sx={{
-                            backgroundColor: Constants.primaryColor,
-                            padding: '5px',
-                            borderRadius: '50%',
-                            color: 'white',
-                            fontSize: '16px',
-                          }}
-                        >
-                          <FaPhoneAlt />
-                        </IconButton>
-                      </Tooltip>
-                      <Tooltip title="WhatsApp" arrow>
-                        <IconButton
-                          color="success"
-                          onClick={() => window.open(`https://wa.me/${firm.mobileNo || ''}`, '_blank')}
-                          sx={{
-                            backgroundColor: Constants.primaryColor,
-                            padding: '5px',
-                            borderRadius: '50%',
-                            color: 'white',
-                            fontSize: '18px',
-                          }}
-                        >
-                          <FaWhatsapp />
-                        </IconButton>
-                      </Tooltip>
+              {/* {data.map((firm, index) => { */}
+              {filteredLeads.map((firm, index) => {
 
-                    </div>
-                  </TableCell>
+                console.group(`🧩 Lead Row [${index}]`);
+                console.log("➡️ Full firm object:", firm);
+                console.log("🔑 Keys in firm:", Object.keys(firm));
+                console.log("📎 leadEnagagements:", firm.leadEnagagements);
+                console.log("📎 leadEngagements:", firm.leadEngagements);
+
+                console.log("📌 leadEnagagements?.length:", firm.leadEnagagements?.length);
+                console.log("🔎 firm.leadEnagagements[0]:", firm.leadEnagagements?.[0]);
 
 
-                  {/* <TableCell>{firm.id || '-'}</TableCell> */}
-                  <TableCell sx={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '120px' }}>{firm.id ? `Lead - ${firm.id}` : '-'}</TableCell>
+                console.groupEnd();
+                return (
+                  <TableRow key={index} onClick={() => handleSelectItem(firm)}>
+                    <TableCell sx={{ padding: '15px' }}>
+                      <div style={{ display: 'flex', gap: '5px' }}>
+                        <Tooltip title="Edit" arrow>
+                          <IconButton
+                            color="primary"
+                            onClick={() => handleEditClick(firm)}
+                            sx={{
+                              backgroundColor: Constants.primaryColor,
+                              padding: '5px',
+                              borderRadius: '50%',
+                              color: 'white',
+                              fontSize: '16px',
+                            }}
+                          >
+                            <FaPhoneAlt />
+                          </IconButton>
+                        </Tooltip>
+                        <Tooltip title="WhatsApp" arrow>
+                          <IconButton
+                            color="success"
+                            onClick={() => window.open(`https://wa.me/${firm.mobileNo || ''}`, '_blank')}
+                            sx={{
+                              backgroundColor: Constants.primaryColor,
+                              padding: '5px',
+                              borderRadius: '50%',
+                              color: 'white',
+                              fontSize: '18px',
+                            }}
+                          >
+                            <FaWhatsapp />
+                          </IconButton>
+                        </Tooltip>
 
-                  <TableCell>{firm.name || '-'}</TableCell>
-                  <TableCell>{firm.phone || '-'}</TableCell>
-                  <TableCell>{firm.email || '-'}</TableCell>
+                      </div>
+                    </TableCell>
 
-                  <TableCell>{firm.lastFollowUp || '-'}</TableCell>
-                  <TableCell>{firm.nextFollowUp || '-'}</TableCell>
-                  {/* <TableCell>{firm.status || '-'}</TableCell> */}
-                  {/* <TableCell>{firm.remark || '-'}</TableCell> */}
-                  <TableCell>{firm.leadEnagagements?.[0]?.remarks || "-"}</TableCell>
-                  {/* <TableCell>{firm.assignTo || '-'}</TableCell> */}
-                  {/* <TableCell>{firm.leadEnagagements?.[0]?.assignedTo || "-"}</TableCell> */}
-                  <TableCell>{firm.interest || '-'}</TableCell>
-                  <TableCell>{firm.source || '-'}</TableCell>
-                </TableRow>
-              ))}
+
+                    {/* <TableCell>{firm.id || '-'}</TableCell> */}
+                    <TableCell sx={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '120px' }}>{firm.id ? `Lead - ${firm.id}` : '-'}</TableCell>
+
+                    <TableCell>{firm.name || '-'}</TableCell>
+                    <TableCell>{firm.phone || '-'}</TableCell>
+                    <TableCell>{firm.email || '-'}</TableCell>
+
+                    {/* <TableCell>{firm.lastFollowUp || '-'}</TableCell>
+                  <TableCell>{firm.nextFollowUp || '-'}</TableCell> */}
+
+
+                    {/* <TableCell>
+  {firm.leadEnagagements?.[0]?.visitScheduledDate
+    ? new Date(firm.leadEnagagements[0].visitScheduledDate).toLocaleDateString()
+    : "-"}
+</TableCell> */}
+                    {/* 🕓 Last Follow Up - only previous follow up date */}
+                    <TableCell>
+                      {firm.leadEnagagements?.length > 1
+                        ? new Date(
+                          firm.leadEnagagements[firm.leadEnagagements.length - 2]?.nextFollowUp
+                        ).toLocaleDateString()
+                        : "-"}
+                    </TableCell>
+
+                    {/* <TableCell>
+  {firm.leadEnagagements?.[0]?.nextFollowUp
+    ? new Date(firm.leadEnagagements[0].nextFollowUp).toLocaleDateString()
+    : "-"}
+</TableCell> */}
+                    {/* 🗓️ Next Follow Up - show nextFollowUp or visitScheduledDate */}
+                    <TableCell>
+                      {firm.leadEnagagements?.[firm.leadEnagagements.length - 1]?.nextFollowUp
+                        ? new Date(
+                          firm.leadEnagagements[firm.leadEnagagements.length - 1]?.nextFollowUp
+                        ).toLocaleDateString()
+                        : firm.leadEnagagements?.[firm.leadEnagagements.length - 1]
+                          ?.visitScheduledDate
+                          ? new Date(
+                            firm.leadEnagagements[firm.leadEnagagements.length - 1]
+                              ?.visitScheduledDate
+                          ).toLocaleDateString()
+                          : "-"}
+                    </TableCell>
+
+                    {/* <TableCell>{firm.status || '-'}</TableCell> */}
+                    {/* <TableCell>{firm.remark || '-'}</TableCell> */}
+                    <TableCell>{firm.leadEnagagements?.[0]?.remarks || "-"}</TableCell>
+                    {/* <TableCell>{firm.assignTo || '-'}</TableCell> */}
+                    {/* <TableCell>{firm.leadEnagagements?.[0]?.assignedTo || "-"}</TableCell> */}
+                    <TableCell>{firm.interest || '-'}</TableCell>
+                    <TableCell>{firm.source || '-'}</TableCell>
+                  </TableRow>
+                );
+              })}
+
             </TableBody>
           </Table>
 
