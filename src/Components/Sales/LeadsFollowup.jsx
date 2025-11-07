@@ -57,6 +57,7 @@ const LeadsFollowUp = () => {
       fetchUserLeads();
     } else if (sections[index].label === "Undefined") {
       setSelectedTab("undefined");
+      fetchUndefinedLeads();
     } else if (sections[index].label === "Visit Scheduled") {
       setSelectedTab("visit");
       fetchVisitScheduledLeads(); 
@@ -399,6 +400,35 @@ const LeadsFollowUp = () => {
   }
 };
 
+
+ const fetchUndefinedLeads = async () => {
+  try {
+    const response = await fetch("https://localhost:5289/sales/api/leads", {
+      credentials: "include",
+    });
+    if (!response.ok) throw new Error("Failed to fetch leads");
+
+    const data = await response.json();
+    console.log("🎯 All Leads:", data);
+
+    // ✅ Filter for only undefined
+    const undefinedLeads = data.filter(
+  (lead) =>
+    lead.status?.toLowerCase() === "invalid number" ||
+    lead.status?.toLowerCase() === "invalid_number" ||
+    lead.status?.toLowerCase() === "invalidnumber"
+);
+
+   
+
+    console.log("📅 Visit Scheduled Leads:", visitScheduled);
+    setFilteredLeads(visitScheduled);
+    setLeads(visitScheduled);
+  } catch (error) {
+    console.error("❌ Error fetching Visit Scheduled leads:", error);
+  }
+};
+
   return (
     <div className="container my-2">
       <h6 className="mb-3 fs-6">Sales Module / Lead Follow Up Management</h6>
@@ -678,8 +708,8 @@ const LeadsFollowUp = () => {
         <div className="content-container mt-3">
           <div className="mt-3">
             <UndefinedTable
-              // data={Flatdata}
-              data={filteredRecords}
+              data={filteredLeads}
+              // data={filteredRecords}
               isMobile={isMobile}
               isTablet={isTablet}
             />

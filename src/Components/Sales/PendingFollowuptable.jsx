@@ -25,12 +25,7 @@ const PendingFollowuptable = ({ data, onSelectLead, fetchUserLeads }) => {
     nextFollowUpDate: '',
     visitScheduledDate: '',
   });
-
-
-
-
   const [modalOpen, setModalOpen] = useState(false);
-
   const [firms] = useState([
     {
       leadNo: 'LD001',
@@ -46,24 +41,17 @@ const PendingFollowuptable = ({ data, onSelectLead, fetchUserLeads }) => {
       sourceName: 'Facebook Ads',
     },
   ]);
-
-
-
   const handleEditClick = (firm) => {
     console.group("🟢 HANDLE EDIT CLICK");
     console.log("➡️ firm received from table:", firm);
     console.log("🧩 Checking firm before opening modal:", JSON.stringify(firm, null, 2));
-
-
     if (!firm) {
       console.warn("⚠️ No firm data passed to handleEditClick");
       return;
     }
-
     // Check if DB data fields exist
     console.log("🧩 firm fields check:", {
       id: firm.id,
-
       name: firm.name,
       remark: firm.remark,
       leadType: firm.leadType,
@@ -85,16 +73,6 @@ const PendingFollowuptable = ({ data, onSelectLead, fetchUserLeads }) => {
     console.log("🔍 Type field check:", latestEng.type, latestEng.Type);
     console.log("🧾 All engagements for firm:", firm.leadEngagements);
 
-    // const formatDateForInput = (dateString) => {
-    //   if (!dateString) return "";
-    //   const d = new Date(dateString);
-    //   if (isNaN(d.getTime())) return "";
-    //   // ✅ Extract YYYY-MM-DD and HH:mm for datetime-local input
-    //   const iso = d.toISOString();
-    //   return iso.slice(0, 16); // Example: "2025-11-07T00:00"
-    // };
-
-
     const formatDateForInput = (dateString) => {
       if (!dateString) return "";
       const d = new Date(dateString);
@@ -111,18 +89,13 @@ const PendingFollowuptable = ({ data, onSelectLead, fetchUserLeads }) => {
       id: firm.id || latestEng?.leadId || "",
       name: firm.name || "",
       remark: firm.remark || latestEng?.remarks || "",
-
       // leadType: latestEng?.type || '', 
       leadType: normalizeLeadType(latestEng?.type),
-
-
       status: normalizeStatus(firm.status || latestEng?.status),
-
       nextFollowUpDate: formatDateForInput(latestEng?.nextFollowUp || firm.nextFollowUp),
       // visitScheduledDate: latestEng?.visitScheduledDate || "",
       visitScheduledDate: formatDateForInput(latestEng?.visitScheduledDate || ""),
     });
-
     console.log("📋 Final editFormData set to:", {
       id: firm.id || latestEng?.leadId || "",
       name: firm.name || "",
@@ -135,19 +108,14 @@ const PendingFollowuptable = ({ data, onSelectLead, fetchUserLeads }) => {
         "",
       visitScheduledDate: latestEng?.visitScheduledDate || "",
     });
-
     onSelectLead(firm);
     console.log("🧩 Final computed leadType (to be shown in modal):", firm.leadType || latestEng?.type);
-
     setModalOpen(true);
     console.groupEnd();
   };
-
-
   const handleSelectItem = (item) => {
     setSelectedItem(item);
   };
-
   const handleModalClose = () => {
     setModalOpen(false);
     setEditingItem(null);
@@ -184,9 +152,6 @@ const PendingFollowuptable = ({ data, onSelectLead, fetchUserLeads }) => {
     return "";
   };
 
-
-
-
   const handleSave = async () => {
     console.group("🔍 HANDLE SAVE TRIGGERED");
 
@@ -210,10 +175,10 @@ const PendingFollowuptable = ({ data, onSelectLead, fetchUserLeads }) => {
     }
 
     try {
-      // ✅ Prepare payload (matches backend DTO: LeadEngagementRequest)
+      //  Prepare payload (matches backend DTO: LeadEngagementRequest)
       const payload = {
         id: editFormData.id, // Engagement ID
-        leadId: editFormData.leadId || editFormData.id, // Lead ID fallback
+        leadId: editFormData.leadId || editFormData.id, // Lead ID 
         status: editFormData.status.trim().replace(/\s+/g, "_").toUpperCase(),
         type: editFormData.leadType.trim().toUpperCase(),
         remarks: editFormData.remark?.trim() || "",
@@ -225,11 +190,11 @@ const PendingFollowuptable = ({ data, onSelectLead, fetchUserLeads }) => {
       console.log("🧾 Sending payload:", payload);
       console.log("📤 JSON body being sent to API:", JSON.stringify(payload, null, 2));
 
-      // ✅ API CALL
+      // 
       const response = await fetch(
         `https://localhost:5289/sales/api/leads/${payload.leadId}/engagements`,
         {
-          method: "POST", // ✅ matches your backend endpoint
+          method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
@@ -239,42 +204,31 @@ const PendingFollowuptable = ({ data, onSelectLead, fetchUserLeads }) => {
       );
 
       console.log("📡 Response Status:", response.status);
-
-
-
       if (!response.ok) {
         const errorText = await response.text();
         console.error("❌ Update failed. Response:", errorText);
         throw new Error("Update failed");
       }
 
-      // ✅ If update successful — parse response
+      //  If update successful — parse response
       const updatedLead = await response.json();
       console.log("✅ Updated Lead:", updatedLead);
 
-      // ✅ 1. Update local form state immediately (instant UI feedback)
+      // . Update local form state immediately (instant UI feedback)
       setEditFormData((prev) => ({
         ...prev,
         status: normalizeStatus(payload.status || prev.status),
         remark: payload.remarks || prev.remark,
         nextFollowUpDate: payload.nextFollowUp,
         visitScheduledDate: payload.visitScheduledDate,
-        leadType: payload.type, // 🔥 make sure type updates in the form instantly
+        leadType: payload.type, //  make sure type updates in the form instantly
       }));
-
-      //  await fetchUserLeads();
-      // if (fetchUserLeads) {
-      //   await fetchUserLeads();
-      //     console.log("Fetched leads:", response.data);
-      //   console.log("🔄 Refetched latest leads after update");
-      // }
-
       toast.success("Follow-up updated successfully!", {
         position: "top-right",
         autoClose: 3000,
       });
 
-      // ✅ Refresh table after saving
+      //  Refresh table after saving
       if (fetchUserLeads) {
         console.log("🔄 Refetching latest leads...");
         console.log("🔄 Refetching latest leads...");

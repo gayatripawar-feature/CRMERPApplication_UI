@@ -25,12 +25,12 @@ const UndefinedTable = ({ data }) => {
               <TableRow key={index}>
                 <TableCell>{item.statushistory}</TableCell>
                 <TableCell>{item.remarkhistory}</TableCell>
-                <TableCell>{item.leadno}</TableCell>
+                <TableCell>{item.id}</TableCell>
                 <TableCell>{item.name}</TableCell>
-                <TableCell>{item.whatsappNo}</TableCell>
-                <TableCell>{item.lookingFor}</TableCell>
-                <TableCell>{item.email}</TableCell>
-                <TableCell>{item.sourcename}</TableCell>
+                <TableCell>{item.phone}</TableCell>
+                <TableCell>{item.interest}</TableCell>
+                <TableCell>{item.email || '-'}</TableCell>
+                <TableCell>{item.source}</TableCell>
                
               </TableRow>
             ))}
