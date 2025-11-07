@@ -16,6 +16,7 @@ import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import Constants from '../Constants';
+import { useSession } from "../SessionContext";
 const sections = [
   { label: "Pending Follow Up", icon: <FaUsers size={20} />, createLabel: "Create Firm" },
   { label: "Follow Up History", icon: <AiOutlineProject size={20} />, createLabel: "Create Project" },
@@ -37,7 +38,10 @@ const LeadsFollowUp = () => {
  const [startDate, setStartDate] = useState(null);
 const [endDate, setEndDate] = useState(null);
 const [searchTerm, setSearchTerm] = useState('');
+const [filteredLeads, setFilteredLeads] = useState([]);
+const [selectedLead, setSelectedLead] = useState(null);
 
+  const { id: userId, name: userName, authenticated } = useSession() || {};
   const handleToggleSection = (index) => {
     if (sections[index].label === "Download PDF") {
       handleDownloadPDF();
@@ -270,6 +274,58 @@ const filteredRecords = leads.filter(lead => {
 
   return isWithinDateRange && matchesSearch;
 }); 
+
+
+
+
+
+    const fetchUserLeads = async () => {
+      try {
+        if (!authenticated || !userId) {
+          console.warn("⚠️ No active session or user ID found");
+          setFilteredLeads([]);
+          // setLoading(false);
+          return;
+        }
+
+        console.log("👤 Logged-in User ID:", userId);
+
+        // Fetch all leads from backend
+        const response = await fetch("https://localhost:5289/sales/api/leads", {
+          credentials: "include",
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch leads");
+        }
+
+        const data = await response.json();
+        console.log(" All leads fetched:", data);
+
+        // Filter leads assigned to the logged-in user
+        const userLeads = data?.filter(
+          (lead) =>
+            lead.leadEnagagements &&
+            lead.leadEnagagements.some((eng) => eng.assignedTo === userId)
+        );
+
+        console.log("🎯 Filtered user leads:", userLeads);
+        // console.log(JSON.stringify(userLeads, null, 2));
+
+        setFilteredLeads(userLeads);
+      } catch (error) {
+        console.error("❌ Error fetching user leads:", error);
+      } finally {
+        // setLoading(false);
+      }
+    
+};
+  //   fetchUserLeads();
+  // }, [userId, authenticated]);
+
+useEffect(() => {
+  fetchUserLeads();
+}, [userId, authenticated]);
 
   return (
     <div className="container my-2">
@@ -522,9 +578,12 @@ const filteredRecords = leads.filter(lead => {
   <div className="content-container mt-3">
     <div className="mt-3">
       <PendingFollowuptable
-        data={filteredRecords}
+        data={filteredLeads}
+        
+         onSelectLead={setSelectedLead} 
         isMobile={isMobile}
         isTablet={isTablet}
+        fetchUserLeads={fetchUserLeads}
       />
     </div>
   </div>
