@@ -1033,7 +1033,7 @@ label: "CRM",
           {/* </button> */}
           <span className="navbar-brand mb-0 h1 text-white">CRM ERP</span>
         </div>
-        <div className="position-relative">
+        <div className=" position-relative">
           <div className="mx-auto w-100 d-none d-md-block">
             <input
               type="text"
@@ -1065,7 +1065,10 @@ label: "CRM",
 
             </ul>
           )}
-        </div>
+  </div>
+    
+
+  
         <div className="d-flex align-items-center">
           {/* <img
       src="/unnamed.png"

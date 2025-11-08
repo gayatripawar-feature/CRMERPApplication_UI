@@ -42,36 +42,36 @@ const PendingFollowuptable = ({ data, onSelectLead, fetchUserLeads }) => {
     },
   ]);
   const handleEditClick = (firm) => {
-    console.group("🟢 HANDLE EDIT CLICK");
-    console.log("➡️ firm received from table:", firm);
-    console.log("🧩 Checking firm before opening modal:", JSON.stringify(firm, null, 2));
+    // console.group("🟢 HANDLE EDIT CLICK");
+    // console.log("➡️ firm received from table:", firm);
+    // console.log("🧩 Checking firm before opening modal:", JSON.stringify(firm, null, 2));
     if (!firm) {
       console.warn("⚠️ No firm data passed to handleEditClick");
       return;
     }
     // Check if DB data fields exist
-    console.log("🧩 firm fields check:", {
-      id: firm.id,
-      name: firm.name,
-      remark: firm.remark,
-      leadType: firm.leadType,
-      status: firm.status,
-      nextFollowUp: firm.nextFollowUp,
-      // leadEngagements: firm.leadEnagagements,
-      leadEngagements: firm.leadEngagements || firm.leadEnagagements,
+    // console.log("🧩 firm fields check:", {
+    //   id: firm.id,
+    //   name: firm.name,
+    //   remark: firm.remark,
+    //   leadType: firm.leadType,
+    //   status: firm.status,
+    //   nextFollowUp: firm.nextFollowUp,
+    //   // leadEngagements: firm.leadEnagagements,
+    //   leadEngagements: firm.leadEngagements || firm.leadEnagagements,
 
-    });
+    // });
 
     setEditingItem(firm);
     // Extract engagement info from backend response 
     const engagements = firm.leadEngagements || firm.leadEnagagements;
     const latestEng = engagements?.[engagements.length - 1] || null;
-    console.log("🧾 latestEng from firm:", latestEng);
-    console.log("🔍 Keys in latestEng:", Object.keys(latestEng));
-    console.log("🧩 Checking Type value:", latestEng?.type || latestEng?.Type);
+    // console.log("🧾 latestEng from firm:", latestEng);
+    // console.log("🔍 Keys in latestEng:", Object.keys(latestEng));
+    // console.log("🧩 Checking Type value:", latestEng?.type || latestEng?.Type);
 
-    console.log("🔍 Type field check:", latestEng.type, latestEng.Type);
-    console.log("🧾 All engagements for firm:", firm.leadEngagements);
+    // console.log("🔍 Type field check:", latestEng.type, latestEng.Type);
+    // console.log("🧾 All engagements for firm:", firm.leadEngagements);
 
     const formatDateForInput = (dateString) => {
       if (!dateString) return "";
@@ -96,18 +96,18 @@ const PendingFollowuptable = ({ data, onSelectLead, fetchUserLeads }) => {
       // visitScheduledDate: latestEng?.visitScheduledDate || "",
       visitScheduledDate: formatDateForInput(latestEng?.visitScheduledDate || ""),
     });
-    console.log("📋 Final editFormData set to:", {
-      id: firm.id || latestEng?.leadId || "",
-      name: firm.name || "",
-      remark: firm.remark || latestEng?.remarks || "",
-      leadType: firm.leadType || latestEng?.type || "",
-      status: firm.status || latestEng?.status || "",
-      nextFollowUpDate:
-        firm.nextFollowUp ||
-        latestEng?.nextFollowUp ||
-        "",
-      visitScheduledDate: latestEng?.visitScheduledDate || "",
-    });
+    // console.log("📋 Final editFormData set to:", {
+    //   id: firm.id || latestEng?.leadId || "",
+    //   name: firm.name || "",
+    //   remark: firm.remark || latestEng?.remarks || "",
+    //   leadType: firm.leadType || latestEng?.type || "",
+    //   status: firm.status || latestEng?.status || "",
+    //   nextFollowUpDate:
+    //     firm.nextFollowUp ||
+    //     latestEng?.nextFollowUp ||
+    //     "",
+    //   visitScheduledDate: latestEng?.visitScheduledDate || "",
+    // });
     onSelectLead(firm);
     console.log("🧩 Final computed leadType (to be shown in modal):", firm.leadType || latestEng?.type);
     setModalOpen(true);
@@ -153,11 +153,11 @@ const PendingFollowuptable = ({ data, onSelectLead, fetchUserLeads }) => {
   };
 
   const handleSave = async () => {
-    console.group("🔍 HANDLE SAVE TRIGGERED");
+    // console.group("🔍 HANDLE SAVE TRIGGERED");
 
-    console.log(" editFormData:", editFormData);
-    console.log(" userId:", userId, " | userName:", userName);
-    console.log("🧩 Constants.baseURL:", Constants?.baseURL);
+    // console.log(" editFormData:", editFormData);
+    // console.log(" userId:", userId, " | userName:", userName);
+    // console.log("🧩 Constants.baseURL:", Constants?.baseURL);
 
     // ✅ Basic validation
     if (
@@ -296,12 +296,12 @@ const PendingFollowuptable = ({ data, onSelectLead, fetchUserLeads }) => {
 
                 console.group(`🧩 Lead Row [${index}]`);
                 console.log("➡️ Full firm object:", firm);
-                console.log("🔑 Keys in firm:", Object.keys(firm));
-                console.log("📎 leadEnagagements:", firm.leadEnagagements);
-                console.log("📎 leadEngagements:", firm.leadEngagements);
+                // console.log("🔑 Keys in firm:", Object.keys(firm));
+                // console.log("📎 leadEnagagements:", firm.leadEnagagements);
+                // console.log("📎 leadEngagements:", firm.leadEngagements);
 
-                console.log("📌 leadEnagagements?.length:", firm.leadEnagagements?.length);
-                console.log("🔎 firm.leadEnagagements[0]:", firm.leadEnagagements?.[0]);
+                // console.log("📌 leadEnagagements?.length:", firm.leadEnagagements?.length);
+                // console.log("🔎 firm.leadEnagagements[0]:", firm.leadEnagagements?.[0]);
 
 
                 console.groupEnd();
@@ -406,7 +406,13 @@ const PendingFollowuptable = ({ data, onSelectLead, fetchUserLeads }) => {
         </Box>
       </TableContainer>
 
-      <Modal open={modalOpen} onClose={handleModalClose}>
+      {/* <Modal open={modalOpen} onClose={handleModalClose}> */}
+      <Modal
+  open={modalOpen}
+  onClose={() => {}} //  Disable default close when clicking backdrop or pressing Esc
+  disableEscapeKeyDown
+  disableEnforceFocus
+>
         <Box
           sx={{
             position: 'absolute',

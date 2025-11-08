@@ -19,8 +19,8 @@ const Leadsfollowup_followuphistory = ({ data }) => {
               {/* <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>ENQUIRY NO</TableCell> */}
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>LEAD NO.</TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>NAME</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>MOBILE/WHATSAPP NO.</TableCell>
-              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>YOU ARE LOOKING FOR?</TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>MOBILE/WHATSAPP NO</TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}> LOOKING FOR?</TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>	EMAIL</TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>SOURCE NAME</TableCell>
             
@@ -29,18 +29,58 @@ const Leadsfollowup_followuphistory = ({ data }) => {
           <TableBody>
             {data.map((item, index) => (
               <TableRow key={index}>
-              <TableCell>{item.statusHistory || 'N/A'}</TableCell>
-        <TableCell>{item.remarkHistory || 'N/A'}</TableCell>
-        <TableCell>{item.assignToHistory || 'N/A'}</TableCell>
-        <TableCell>{item.leadDays || 'N/A'}</TableCell>
-        <TableCell>{item.timestamp || 'N/A'}</TableCell>
+             
+              {/* <TableCell>
+                    {item.statusHistory
+                      ?.split(",\n")
+                      .map((line, i) => <div key={i}>{line}</div>)}
+                  </TableCell>
+       
+         <TableCell>
+                    {item.remarkHistory
+                      ?.split(",\n")
+                      .map((line, i) => <div key={i}>{line}</div>)}
+                  </TableCell>
+        
+          <TableCell>
+                    {item.assignToHistory
+                      ?.split(",\n")
+                      .map((line, i) => <div key={i}>{line}</div>)}
+                  </TableCell> */}
+
+                 <TableCell>
+  <div
+    dangerouslySetInnerHTML={{ __html: item.statusHistory }}
+    style={{ whiteSpace: "pre-line" }}
+  />
+</TableCell>
+
+<TableCell>
+  <div
+    dangerouslySetInnerHTML={{ __html: item.remarkHistory }}
+    style={{ whiteSpace: "pre-line" }}
+  />
+</TableCell>
+
+<TableCell>
+  <div
+    dangerouslySetInnerHTML={{ __html: item.assignToHistory }}
+    style={{ whiteSpace: "pre-line" }}
+  />
+</TableCell>
+
+
+        <TableCell>{item.leadDays }</TableCell>
+        <TableCell>{item.lastUpdatedDate }</TableCell>
         {/* <TableCell>{row.enquiryNo || 'N/A'}</TableCell> */}
-        <TableCell>{item.leadNo || 'N/A'}</TableCell>
-        <TableCell>{item.name || 'N/A'}</TableCell>
-        <TableCell>{item.mobileNo || 'N/A'}</TableCell>
-        <TableCell>{item.lookingFor || 'N/A'}</TableCell>
-        <TableCell>{item.email || 'N/A'}</TableCell>
-        <TableCell>{item.sourceName || 'N/A'}</TableCell>
+     <TableCell>{item.leadNo !== "-" ? `Lead - ${item.leadNo}` : "-"}</TableCell>
+
+
+        <TableCell>{item.name }</TableCell>
+        <TableCell>{item.phone }</TableCell>
+        <TableCell>{item.interest }</TableCell>
+        <TableCell>{item.email }</TableCell>
+        <TableCell>{item.source }</TableCell>
               </TableRow>
             ))}
           </TableBody>

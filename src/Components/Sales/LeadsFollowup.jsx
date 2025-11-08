@@ -52,6 +52,7 @@ const LeadsFollowUp = () => {
     setExpandedSection(index);
     if (sections[index].label === "Follow Up History") {
       setSelectedTab("followuphistory");
+      fetchFollowupHistoryLeads();
     } else if (sections[index].label === "Pending Follow Up") {
       setSelectedTab("pendingfollowup");
       fetchUserLeads();
@@ -60,7 +61,7 @@ const LeadsFollowUp = () => {
       fetchUndefinedLeads();
     } else if (sections[index].label === "Visit Scheduled") {
       setSelectedTab("visit");
-      fetchVisitScheduledLeads(); 
+      fetchVisitScheduledLeads();
     }
   };
 
@@ -329,46 +330,46 @@ const LeadsFollowUp = () => {
 
 
   const fetchUserLeads = async () => {
-  try {
-    if (!authenticated || !userId) {
-      console.warn("⚠️ No active session or user ID found");
-      setFilteredLeads([]);
-      return []; // ✅ return empty array for consistency
+    try {
+      if (!authenticated || !userId) {
+        console.warn("⚠️ No active session or user ID found");
+        setFilteredLeads([]);
+        return []; // ✅ return empty array for consistency
+      }
+
+      // console.log("👤 Logged-in User ID:", userId);
+
+      // ✅ Fetch all leads from backend
+      const response = await fetch("https://localhost:5289/sales/api/leads", {
+        credentials: "include",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch leads");
+      }
+
+      const data = await response.json();
+      // console.log("📦 All leads fetched:", data);
+
+      // ✅ Filter leads assigned to the logged-in user
+      const userLeads = data?.filter(
+        (lead) =>
+          lead.leadEnagagements &&
+          lead.leadEnagagements.some((eng) => eng.assignedTo === userId)
+      );
+
+      // console.log("🎯 Filtered user leads:", userLeads);
+
+      // ✅ Update state
+      setFilteredLeads(userLeads);
+
+      // ✅ Return leads so child (PendingFollowuptable) can log them
+      return userLeads;
+    } catch (error) {
+      console.error("❌ Error fetching user leads:", error);
+      return null; // return something so it never stays undefined
     }
-
-    console.log("👤 Logged-in User ID:", userId);
-
-    // ✅ Fetch all leads from backend
-    const response = await fetch("https://localhost:5289/sales/api/leads", {
-      credentials: "include",
-    });
-
-    if (!response.ok) {
-      throw new Error("Failed to fetch leads");
-    }
-
-    const data = await response.json();
-    console.log("📦 All leads fetched:", data);
-
-    // ✅ Filter leads assigned to the logged-in user
-    const userLeads = data?.filter(
-      (lead) =>
-        lead.leadEnagagements &&
-        lead.leadEnagagements.some((eng) => eng.assignedTo === userId)
-    );
-
-    console.log("🎯 Filtered user leads:", userLeads);
-
-    // ✅ Update state
-    setFilteredLeads(userLeads);
-
-    // ✅ Return leads so child (PendingFollowuptable) can log them
-    return userLeads;
-  } catch (error) {
-    console.error("❌ Error fetching user leads:", error);
-    return null; // return something so it never stays undefined
-  }
-};
+  };
 
   useEffect(() => {
     fetchUserLeads();
@@ -376,58 +377,399 @@ const LeadsFollowUp = () => {
 
 
   const fetchVisitScheduledLeads = async () => {
+    try {
+      const response = await fetch("https://localhost:5289/sales/api/leads", {
+        credentials: "include",
+      });
+      if (!response.ok) throw new Error("Failed to fetch leads");
+
+      const data = await response.json();
+      // console.log("🎯 All Leads:", data);
+
+      // ✅ Filter for only visit scheduled
+      const visitScheduled = data.filter(
+        (lead) =>
+          lead.status?.toLowerCase() === "visit_scheduled" ||
+          lead.status?.toLowerCase() === "visit scheduled"
+      );
+
+      // console.log("📅 Visit Scheduled Leads:", visitScheduled);
+      setFilteredLeads(visitScheduled);
+      setLeads(visitScheduled);
+    } catch (error) {
+      console.error("❌ Error fetching Visit Scheduled leads:", error);
+    }
+  };
+
+
+  const fetchUndefinedLeads = async () => {
+    try {
+      const response = await fetch("https://localhost:5289/sales/api/leads", {
+        credentials: "include",
+      });
+      if (!response.ok) throw new Error("Failed to fetch leads");
+
+      const data = await response.json();
+      // console.log("🎯 All Leads:", data);
+
+      // ✅ Filter for only undefined
+      const undefinedLeads = data.filter(
+        (lead) =>
+          lead.status?.toLowerCase() === "invalid number" ||
+          lead.status?.toLowerCase() === "invalid_number" ||
+          lead.status?.toLowerCase() === "invalidnumber"
+      );
+
+
+
+      // console.log("📅 Visit Scheduled Leads:", visitScheduled);
+      // setFilteredLeads(visitScheduled);
+      setFilteredLeads(undefinedLeads);
+      // setLeads(visitScheduled);
+      setLeads(undefinedLeads);
+    } catch (error) {
+      console.error(" Error fetching Visit Scheduled leads:", error);
+    }
+  };
+
+
+
+// correct :
+// const fetchFollowupHistoryLeads = async () => {
+//   console.log("🚀 Starting FOLLOW-UP HISTORY fetch...");
+
+//   try {
+//     const response = await fetch("https://localhost:5289/sales/api/leads", {
+//       credentials: "include",
+//     });
+
+//     if (!response.ok) throw new Error("❌ Network response was not ok");
+
+//     const data = await response.json();
+//     console.log("🧠 Raw API data received:", data);
+
+//     const formatDate = (dateStr) => {
+//       if (!dateStr || dateStr === "0001-01-01T00:00:00") return "-";
+//       const d = new Date(dateStr);
+//       return isNaN(d)
+//         ? "-"
+//         : d.toLocaleString("en-IN", { dateStyle: "short", timeStyle: "medium" });
+//     };
+
+//     const formattedData = data.flatMap((lead, i) => {
+//       const engagements = lead.leadEngagements || lead.leadEnagagements || [];
+
+//       console.group(`📋 Lead [${i}] ➡️ ID: ${lead.id}, Name: ${lead.name}`);
+//       console.log("🔁 Engagement count:", engagements.length);
+//       console.log("📅 Lead-level lastUpdatedDate:", lead.lastUpdatedDate);
+//       console.log("📅 Lead createdDate:", lead.createdDate);
+//       console.log("🧾 Lead status:", lead.status, "| remarks:", lead.remarks);
+//       console.groupEnd();
+
+//       // 🧭 If no engagements, still show one basic row
+//       if (engagements.length === 0) {
+//         const lastDate = lead.lastUpdatedDate || lead.createdDate || null;
+//         return [
+//           {
+//             leadNo: lead.id || "-",
+//             name: lead.name || "-",
+//             phone: lead.phone || "-",
+//             email: lead.email || "-",
+//             source: lead.source || "-",
+//             leadDays: lead.createdDate
+//               ? Math.ceil(
+//                   (new Date() - new Date(lead.createdDate)) /
+//                     (1000 * 60 * 60 * 24)
+//                 )
+//               : "-",
+//             time: formatDate(lastDate),
+//             statusHistory: `${formatDate(lastDate)} - ${lead.status || "-"}`,
+//             remarkHistory: `${formatDate(lastDate)} - ${lead.remarks || "-"}`,
+//             assignToHistory: `${formatDate(lastDate)} - ${
+//               lead.lastUpdatedBy || "-"
+//             }`,
+//           },
+//         ];
+//       }
+
+//       // ✅ Build full history for that lead (all follow-ups)
+//       const engagementHistory = engagements.map((eng, j) => {
+//         // 👇 check what fields we actually have in engagement
+//         console.group(`🔍 Engagement [${j}] of Lead ID ${lead.id}`);
+//         console.log("Full engagement object:", eng);
+//         console.groupEnd();
+
+//         const engDate =
+//           eng.timestamp ||
+//           eng.updatedDate ||
+//           eng._assignedDate ||
+//           eng.assignedDate ||
+//           lead.lastUpdatedDate ||
+//           lead.createdDate;
+
+//         return {
+//           leadNo: lead.id || "-",
+//           name: lead.name || "-",
+//           phone: lead.phone || "-",
+//           email: lead.email || "-",
+//           source: lead.source || "-",
+//           leadDays: lead.createdDate
+//             ? Math.ceil(
+//                 (new Date() - new Date(lead.createdDate)) /
+//                   (1000 * 60 * 60 * 24)
+//               )
+//             : "-",
+//           time: formatDate(engDate),
+//           // statusHistory: `${formatDate(engDate)} - ${eng.status || "-"}`,
+//           // remarkHistory: `${formatDate(engDate)} - ${eng.remarks || "-"}`,
+//           // assignToHistory: `${formatDate(engDate)} - ${
+//           //   eng.assignedToName || eng.assignedTo || "-"
+//           // }`,
+
+          
+//         };
+//       });
+
+//       // 🧾 Include base info (the original lead creation)
+//       const baseEntry = {
+//         leadNo: lead.id || "-",
+//         name: lead.name || "-",
+//         phone: lead.phone || "-",
+//         email: lead.email || "-",
+//         source: lead.source || "-",
+//         leadDays: lead.createdDate
+//           ? Math.ceil(
+//               (new Date() - new Date(lead.createdDate)) /
+//                 (1000 * 60 * 60 * 24)
+//             )
+//           : "-",
+//         time: formatDate(lead.createdDate),
+//         statusHistory: `${formatDate(lead.lastUpdatedDate)} - ${
+//           lead.status || "-"
+//         }`,
+//         remarkHistory: `${formatDate(lead.lastUpdatedDate)} - ${
+//           lead.remarks || "-"
+//         }`,
+//         assignToHistory: `${formatDate(lead.lastUpdatedDate)} - ${
+//           lead.lastUpdatedBy || "-"
+//         }`,
+//       };
+
+//       // Combine base + all follow-ups
+//       return [baseEntry, ...engagementHistory];
+//     });
+
+//     console.log("✅ Final formatted data count:", formattedData.length);
+//     console.log("🧩 Sample formatted data:", formattedData.slice(0, 5));
+//     setFilteredLeads(formattedData);
+//     setLeads(formattedData);
+//   } catch (error) {
+//     console.error("🔥 Error fetching follow-up history:", error);
+//   }
+// };
+
+
+// const fetchFollowupHistoryLeads = async () => {
+//   console.log("🚀 Starting FOLLOW-UP HISTORY fetch...");
+
+//   try {
+//     const response = await fetch("https://localhost:5289/sales/api/leads", {
+//       credentials: "include",
+//     });
+
+//     if (!response.ok) throw new Error("❌ Network response was not ok");
+
+//     const data = await response.json();
+//     console.log("🧠 Raw API data received:", data);
+
+//     const formatDate = (dateStr) => {
+//       if (!dateStr || dateStr === "0001-01-01T00:00:00") return "-";
+//       const d = new Date(dateStr);
+//       return isNaN(d)
+//         ? "-"
+//         : d.toLocaleString("en-IN", { dateStyle: "short", timeStyle: "medium" });
+//     };
+
+//     // Using map() now to ensure exactly one output row per lead
+//     const formattedData = data.map((lead, i) => {
+//       // Handle potential field name variations
+//       const engagements = lead.leadEngagements || lead.leadEnagagements || [];
+
+//       // Arrays to store history entries, starting with the lead's current/latest state
+//       const statusHistory = [];
+//       const remarkHistory = [];
+//       const assignToHistory = [];
+
+//       // 1. Add the Lead's current/latest status as the first entry
+//       const lastUpdatedDate = lead.lastUpdatedDate || lead.createdDate;
+//       const formattedLastUpdated = formatDate(lastUpdatedDate);
+
+//       if (lead.status || lead.remarks || lead.lastUpdatedBy) {
+//         statusHistory.push(
+//           `${formattedLastUpdated} - ${lead.status || "- "}`
+//         );
+//         remarkHistory.push(
+//           `${formattedLastUpdated} - ${lead.remarks || ""}`
+//         );
+//         assignToHistory.push(
+//           `${formattedLastUpdated} - ${lead.lastUpdatedBy || " "}`
+//         );
+//       }
+
+//       // 2. Aggregate all engagement history
+//       engagements.forEach((eng) => {
+//         const engDate =
+//           eng.timestamp ||
+//           eng.updatedDate ||
+//           eng._assignedDate ||
+//           eng.assignedDate ||
+//           lead.lastUpdatedDate ||
+//           lead.createdDate;
+
+//         const formattedEngDate = formatDate(engDate);
+
+//         // Add Engagement Status/Remark/Assignee
+//         statusHistory.push(`${formattedEngDate} - ${eng.status || "-"}`);
+//         remarkHistory.push(`${formattedEngDate} - ${eng.remarks || "-"}`);
+//         assignToHistory.push(
+//           `${formattedEngDate} - ${eng.assignedToName || eng.assignedTo || "-"}`
+//         );
+//       });
+
+//       // Define the separator string to act as a horizontal line between history items
+//       const separator = "\n---\n";
+
+//       // 3. Return a single aggregated object for this lead
+//       const leadDays = lead.createdDate
+//         ? Math.ceil(
+//             (new Date() - new Date(lead.createdDate)) / (1000 * 60 * 60 * 24)
+//           )
+//         : "-";
+
+//       return {
+//         leadNo: lead.id || "-",
+//         name: lead.name || "-",
+//         phone: lead.phone || "-",
+//         email: lead.email || "-",
+//         source: lead.source || "-",
+//         leadDays: leadDays,
+//         time: formattedLastUpdated, // Last updated time
+        
+//         // 4. Concatenate all history entries using the separator
+//         statusHistory: statusHistory.join(separator),
+//         remarkHistory: remarkHistory.join(separator),
+//         assignToHistory: assignToHistory.join(separator),
+//       };
+//     }); // End of data.map
+
+//     console.log("✅ Final formatted data count:", formattedData.length);
+//     console.log("🧩 Sample formatted data:", formattedData.slice(0, 5));
+//     setFilteredLeads(formattedData);
+//     setLeads(formattedData);
+//   } catch (error) {
+//     console.error("🔥 Error fetching follow-up history:", error);
+//   }
+// };
+
+const fetchFollowupHistoryLeads = async () => {
   try {
     const response = await fetch("https://localhost:5289/sales/api/leads", {
       credentials: "include",
     });
-    if (!response.ok) throw new Error("Failed to fetch leads");
+    if (!response.ok) throw new Error("Network response not ok");
 
     const data = await response.json();
-    console.log("🎯 All Leads:", data);
 
-    // ✅ Filter for only visit scheduled
-    const visitScheduled = data.filter(
-      (lead) =>
-        lead.status?.toLowerCase() === "visit_scheduled" ||
-        lead.status?.toLowerCase() === "visit scheduled"
-    );
+    const formatDate = (dateStr) => {
+      if (!dateStr || dateStr === "0001-01-01T00:00:00") return "-";
+      const d = new Date(dateStr);
+      return isNaN(d)
+        ? "-"
+        : d.toLocaleString("en-IN", {
+            dateStyle: "short",
+            timeStyle: "short",
+          });
+    };
 
-    console.log("📅 Visit Scheduled Leads:", visitScheduled);
-    setFilteredLeads(visitScheduled);
-    setLeads(visitScheduled);
-  } catch (error) {
-    console.error("❌ Error fetching Visit Scheduled leads:", error);
-  }
-};
+    const formattedData = data.map((lead) => {
+      const leadBase = {
+        leadNo: lead.id || "-",
+        name: lead.name || "-",
+        phone: lead.phone || "-",
+        email: lead.email || "-",
+        source: lead.source || "-",
+        leadDays: lead.createdDate
+          ? Math.ceil(
+              (new Date() - new Date(lead.createdDate)) /
+                (1000 * 60 * 60 * 24)
+            )
+          : "-",
+      };
 
+      const allHistory = [];
 
- const fetchUndefinedLeads = async () => {
-  try {
-    const response = await fetch("https://localhost:5289/sales/api/leads", {
-      credentials: "include",
+      // Current record
+      if (lead.lastUpdatedDate || lead.status || lead.remarks) {
+        allHistory.push({
+          date: lead.lastUpdatedDate || lead.createdDate,
+          status: lead.status || "",
+          remark: lead.remarks || "",
+          assignedTo: lead.lastUpdatedBy || "",
+        });
+      }
+
+      // Engagement records
+      const engagements = lead.leadEngagements || lead.leadEnagagements || [];
+      engagements.forEach((eng) => {
+        const engDate =
+          eng.timestamp ||
+          eng.updatedDate ||
+          eng.assignedDate ||
+          lead.lastUpdatedDate ||
+          lead.createdDate;
+
+        allHistory.push({
+          date: engDate,
+          status: eng.status || "",
+          remark: eng.remarks || "",
+          assignedTo: eng.assignedToName || eng.assignedTo || "",
+        });
+      });
+
+      // Sort latest first
+      allHistory.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+      // Create multi-line HTML (with <br/>)
+      const statusHistory = allHistory
+        .map((h) => `${formatDate(h.date)} - ${h.status}`)
+        .join("<br/>");
+
+      const remarkHistory = allHistory
+        .map((h) => `${formatDate(h.date)} - ${h.remark}`)
+        .join("<br/>");
+
+      const assignToHistory = allHistory
+        .map((h) => `${formatDate(h.date)} - ${h.assignedTo}`)
+        .join("<br/>");
+
+      return {
+        ...leadBase,
+        time: formatDate(lead.lastUpdatedDate || lead.createdDate),
+        statusHistory,
+        remarkHistory,
+        assignToHistory,
+      };
     });
-    if (!response.ok) throw new Error("Failed to fetch leads");
 
-    const data = await response.json();
-    console.log("🎯 All Leads:", data);
-
-    // ✅ Filter for only undefined
-    const undefinedLeads = data.filter(
-  (lead) =>
-    lead.status?.toLowerCase() === "invalid number" ||
-    lead.status?.toLowerCase() === "invalid_number" ||
-    lead.status?.toLowerCase() === "invalidnumber"
-);
-
-   
-
-    console.log("📅 Visit Scheduled Leads:", visitScheduled);
-    setFilteredLeads(visitScheduled);
-    setLeads(visitScheduled);
+    setFilteredLeads(formattedData);
+    setLeads(formattedData);
   } catch (error) {
-    console.error("❌ Error fetching Visit Scheduled leads:", error);
+    console.error("Error fetching follow-up history:", error);
   }
 };
+
+
+
 
   return (
     <div className="container my-2">
@@ -696,7 +1038,8 @@ const LeadsFollowUp = () => {
           <div className="mt-3">
             <Leadsfollowup_followuphistory
               // data={projectData}
-              data={filteredRecords}
+              // data={filteredRecords}
+              data={filteredLeads}
               isMobile={isMobile}
               isTablet={isTablet}
             />
@@ -721,7 +1064,7 @@ const LeadsFollowUp = () => {
         <div className="content-container mt-3">
           <div className="mt-3">
             <BookedTable
-               data={filteredLeads}
+              data={filteredLeads}
               // data={filteredRecords}
               isMobile={isMobile}
               isTablet={isTablet}
