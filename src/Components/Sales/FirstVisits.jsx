@@ -54,7 +54,7 @@
 //   const [budget, setBudget] = useState('');
 //   const [reasonForPurchase, setReasonForPurchase] = useState('');
 //   const [emailError, setEmailError] = useState('')
-  
+
 //   const [nameError, setNameError] = useState(false);
 //   const [alternateContact, setAlternateContact] = useState("");
 //   const [whatsappNo, setWhatsappNo] = useState("");
@@ -120,10 +120,10 @@
 
 //   const downloadSampleCsv = () => {
 //     const sampleData = `Sales Exp.,Name,Mobile,Alternate Mobile Number,WhatsApp No.,Email,Address,Occupation,Company,Interested In,Budget,Reason,Reference,Name of CP,Planning to Buy,Follow Up Details\n`;
-  
+
 //     const blob = new Blob([sampleData], { type: "text/csv" });
 //     const url = URL.createObjectURL(blob);
-  
+
 //     const a = document.createElement("a");
 //     a.href = url;
 //     a.download = "lead_template.csv";
@@ -131,24 +131,24 @@
 //     a.click();
 //     document.body.removeChild(a);
 //   };
-  
+
 
 //   const handleChange = (e) => {
 //     const value = e.target.value;
-    
-  
+
+
 //     const regex = /[\d\s]/;
 
-   
+
 //     if (regex.test(value)) {
 //       setError('Name should not contain digits or spaces');
 //     } else {
 //       setError(''); 
 //     }
 
-    
+
 //   };
-  
+
 
 
 //   const handleSubmit = () => {
@@ -166,9 +166,9 @@
 //       occupation,
 //       reasonForPurchase,
 //     };
-  
+
 //     console.log("Submitting new firm data:", newFirmData);
-  
+
 //     // Validation logs
 //     if (!name || nameError || mobileError || emailError) {
 //       console.log("Validation failed", {
@@ -179,18 +179,18 @@
 //       toast.error("Please fix validation errors before submitting.");
 //       return;
 //     }
-  
+
 //     setFirms(prev => {
 //       const updatedFirms = [...prev, newFirmData];
 //       console.log("Updated firms list after submit:", updatedFirms);
 //       return updatedFirms;
 //     });
-  
+
 //     toast.success("Details are submitted!", {
 //       position: "top-right",
 //       autoClose: 3000,
 //     });
-  
+
 //     // Reset form values
 //     setLeadNo("");
 //     setName("");
@@ -204,10 +204,10 @@
 //     setPlanningToBuy("");
 //     setOccupation("");
 //     setReasonForPurchase("");
-  
+
 //     setShowFirmForm(false);
 //   };
-  
+
 // const handleUpdateItem = (index, updatedItem) => {
 //   const updatedData = [...inventoryData];
 //   updatedData[index] = updatedItem;
@@ -216,12 +216,12 @@
 
 // };
 
-  
+
 //   const handleSalesExecChange = (event) => {
 //     setSalesExec(event.target.value);
 //     setError(''); 
 //   };
- 
+
 //   const validateMobile = (value) => {
 //     const regex = /^[0-9]{10}$/;  
 //     if (!regex.test(value)) {
@@ -234,7 +234,7 @@
 //   const handleNameChange = (e) => {
 //     const value = e.target.value;
 //     const regex = /^[A-Za-z\s]*$/;  // Only letters and spaces
-  
+
 //     if (regex.test(value)) {
 //       setName(value);
 //       setNameError(false);
@@ -359,13 +359,13 @@
 //     <div className="main-content">
 //       <h6>Sales Module / Lead Management</h6>
 
-    
+
 //       <div className="d-flex align-items-center mb-3">
-       
+
 
 
 // <div className="d-flex align-items-center mb-3">
- 
+
 
 // {sections.map((section, index) => (
 //   <Tooltip key={index} title={section.label} arrow>
@@ -418,7 +418,7 @@
 
 
 
-    
+
 // </div>
 
 // {/* File Upload Input */}
@@ -448,7 +448,7 @@
 //         <div className="content-container mt-0">
 //           {!showFirmForm ? (
 //             <>
-            
+
 //               <div className="button-container">
 //                 <div className='d-flex gap-3'>
 //                 <Button variant="contained" color="primary" style={{ background: Constants.primaryColor }} onClick={() => setShowFirmForm(true)}>
@@ -470,7 +470,7 @@
 //       "&:hover": {
 //         background: Constants.primaryColor,
 //       },
-     
+
 //     }}
 //     // onClick={() => handledow(firms)}
 //     onClick={handleDownloadPDFLeads}
@@ -479,7 +479,7 @@
 //     Download PDF
 //   </Button>
 //                 </div>
-              
+
 //                 {/* Pagination Buttons */}
 //                 <div className="right-buttons">
 //                   <Button variant="contained" color="secondary"  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}>
@@ -491,13 +491,13 @@
 //                 </div>
 //               </div>
 //               <div className="mt-3">
-             
+
 //               <DisplayEnquiryTable data={firms} />
 
 //            </div>
 //             </>
 //           ) : (
- 
+
 
 // <div
 //   className="firm-form mt-4 p-3 border rounded"
@@ -538,7 +538,7 @@
 // </Grid>
 
 
-  
+
 //     <Grid item xs={4}>
 //       <TextField
 //         label="Mobile No."
@@ -572,7 +572,7 @@
 // </Grid>
 
 
-   
+
 //     <Grid item xs={4}>
 //   <TextField
 //     type="text"
@@ -581,7 +581,7 @@
 //     value={whatsappNo}
 //     onChange={(e) => {
 //       const value = e.target.value;
-      
+
 //       if (/^\d{0,10}$/.test(value)) {
 //         setWhatsappNo(value);
 //       }
@@ -596,7 +596,7 @@
 // </Grid>
 
 
-  
+
 //     <Grid item xs={4}>
 //       <TextField label="Email" fullWidth 
 //       value={email}
@@ -606,12 +606,12 @@
 //       />
 //     </Grid>
 
-   
+
 //     <Grid item xs={4}>
 //       <TextField label="Address" fullWidth />
 //     </Grid>
 
-    
+
 //     <Grid item xs={4}>
 //       <TextField label="Company" fullWidth />
 //     </Grid>
@@ -620,12 +620,12 @@
 //       <TextField label="Reference by / Source" fullWidth />
 //     </Grid>
 
-    
+
 //     <Grid item xs={4}>
 //       <TextField label="Name of CP (if Channel Partner)" fullWidth />
 //     </Grid>
 
-    
+
 //     <Grid item xs={4}>
 //       <FormControl fullWidth >
 //         <InputLabel>Sales Executive Name</InputLabel>
@@ -666,7 +666,7 @@
 //       </FormControl>
 //     </Grid>
 
-   
+
 //     <Grid item xs={4}>
 //       <FormControl fullWidth >
 //         <InputLabel>Budget (Approx.)</InputLabel>
@@ -683,7 +683,7 @@
 //       </FormControl>
 //     </Grid>
 
-  
+
 //     <Grid item xs={4}>
 //       <FormControl fullWidth >
 //         <InputLabel>Planning To Buy Within?</InputLabel>
@@ -700,7 +700,7 @@
 //       </FormControl>
 //     </Grid>
 
-    
+
 //     <Grid item xs={4}>
 //       <FormControl fullWidth >
 //         <InputLabel>Occupation</InputLabel>
@@ -714,7 +714,7 @@
 //       </FormControl>
 //     </Grid>
 
-   
+
 //     <Grid item xs={4}>
 //       <FormControl fullWidth >
 //         <InputLabel>Reason For Purchase</InputLabel>
@@ -730,7 +730,7 @@
 //       </FormControl>
 //     </Grid>
 
-    
+
 //     <Grid item xs={4}>
 //       <TextField label="Customer Feedback & Complete Followup Details" fullWidth />
 //     </Grid>
@@ -759,12 +759,12 @@
 //     //     reasonForPurchase,
 //     //     // Include others as needed...
 //     //   };
-    
+
 //     //   setFirms(prev => [...prev, newFirmData]);
 //     //   setShowFirmForm(false);
 //     //   toast.success("Details are submitted!", { position: "top-right", autoClose: 3000 });
 //    onClick={handleSubmit}
-    
+
 //     // }}
 //   >
 //     Submit
@@ -784,9 +784,9 @@
 //             <>
 //               <div className="button-container">
 //                 <Button variant="contained" color="primary" onClick={() => setShowFirmForm(true)}>
-                  
+
 //                 </Button>
-              
+
 //                 <div className="right-buttons">
 //                   <Button variant="contained" color="secondary" onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}>
 //                     Previous
@@ -798,7 +798,7 @@
 //               </div>
 //               <div className="mt-3">
 //               <InventoryTable inventoryData={inventoryData} handleDelete={handleDelete} />
-              
+
 //            </div>
 //             </>
 //           ) : (
@@ -808,7 +808,7 @@
 //               border: "1px solid #ccc",
 //             }}
 //             >
-             
+
 //               <Grid container spacing={2}>
 //                 <Grid item xs={4}><TextField label="Project Name" fullWidth /></Grid>
 //                 <Grid item xs={4}><TextField label="Wing" fullWidth /></Grid>
@@ -823,7 +823,7 @@
 //                 /></Grid>
 //                 <Grid item xs={4}><TextField  type="number" label="Saleable to Carpet Area Ratio (Sq. Fts)" fullWidth inputProps={{ step: "0.01", min: "0.01" }}/></Grid>
 
-               
+
 //                 <Grid item xs={4}>
 //                   <TextField select label="Type of Units" fullWidth>
 //                     {unitTypes.map((type, idx) => (
@@ -832,7 +832,7 @@
 //                   </TextField>
 //                 </Grid>
 
-             
+
 //                 <Grid item xs={4}>
 //                   <TextField select label="Configuration" fullWidth>
 //                     {configurations.map((config, idx) => (
@@ -849,7 +849,7 @@
 //                   </TextField>
 //                 </Grid>
 
-        
+
 //                 <Grid item xs={4}>
 //                   <TextField select label="Select Owner" fullWidth>
 //                     {owners.map((owner, idx) => (
@@ -858,7 +858,7 @@
 //                   </TextField>
 //                 </Grid>
 
-               
+
 //                 <Grid item xs={4}>
 //   <TextField
 //     type="number"
@@ -880,8 +880,8 @@
 //                 <Grid item xs={4}><TextField label="PODIUM GARDE" fullWidth /></Grid>
 //               </Grid>
 
-            
-           
+
+
 //               {partners.map((_, index) => (
 //                 <Grid container spacing={2} key={index}>
 //                   <Grid item xs={4}><TextField label="Name" fullWidth /></Grid>
@@ -895,12 +895,12 @@
 //                 </Grid>
 //               ))}
 
-             
+
 
 //               <Button variant="contained" className="mt-3" color="success" onClick={() => setShowFirmForm(false)}>
 //                 Submit
 //               </Button>
-             
+
 
 //             </div> 
 
@@ -920,7 +920,7 @@
 //                 <Button variant="contained" color="primary" onClick={() => setShowFirmForm(true)}>
 //                   + Display Inventory
 //                 </Button>
-                
+
 //                 <div className="right-buttons">
 //                   <Button variant="contained" color="secondary" onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}>
 //                     Previous
@@ -936,7 +936,7 @@
 //             </>
 //           ) : (
 //             <div className="firm-form mt-4 p-3 border rounded">
-              
+
 //               <Grid container spacing={2}>
 //                 <Grid item xs={4}><TextField label="Project Name" fullWidth /></Grid>
 //                 <Grid item xs={4}><TextField label="Wing" fullWidth /></Grid>
@@ -951,7 +951,7 @@
 //                 /></Grid>
 //                 <Grid item xs={4}><TextField  type="number" label="Saleable to Carpet Area Ratio (Sq. Fts)" fullWidth inputProps={{ step: "0.01", min: "0.01" }}/></Grid>
 
-                
+
 //                 <Grid item xs={4}>
 //                   <TextField select label="Type of Units" fullWidth>
 //                     {unitTypes.map((type, idx) => (
@@ -960,7 +960,7 @@
 //                   </TextField>
 //                 </Grid>
 
-              
+
 //                 <Grid item xs={4}>
 //                   <TextField select label="Configuration" fullWidth>
 //                     {configurations.map((config, idx) => (
@@ -969,7 +969,7 @@
 //                   </TextField>
 //                 </Grid>
 
-                
+
 //                 <Grid item xs={4}>
 //                   <TextField select label="Status" fullWidth>
 //                     {statusOptions.map((status, idx) => (
@@ -978,7 +978,7 @@
 //                   </TextField>
 //                 </Grid>
 
-                
+
 //                 <Grid item xs={4}>
 //                   <TextField select label="Select Owner" fullWidth>
 //                     {owners.map((owner, idx) => (
@@ -987,7 +987,7 @@
 //                   </TextField>
 //                 </Grid>
 
-              
+
 //                 <Grid item xs={4}>
 //   <TextField
 //     type="number"
@@ -1009,8 +1009,8 @@
 //                 <Grid item xs={4}><TextField label="PODIUM GARDE" fullWidth /></Grid>
 //               </Grid>
 
-            
-           
+
+
 //               {partners.map((_, index) => (
 //                 <Grid container spacing={2} key={index}>
 //                   <Grid item xs={4}><TextField label="Name" fullWidth /></Grid>
@@ -1024,7 +1024,7 @@
 //                 </Grid>
 //               ))}
 
-             
+
 
 //               <Button variant="contained" className="mt-3" color="success" onClick={() => setShowFirmForm(false)}>
 //                 Submit
@@ -1179,16 +1179,16 @@ const FirstVisits = () => {
   const [referenceBySource, setReferenceBySource] = useState("");
   const [nameOfCp, setNameOfCp] = useState("");
   const [customerFeedback, setCustomerFeedback] = useState("");
- const [leads, setLeads] = useState([]);
-  // useEffect(() => {
-  //   loadLoansData();
-  // }, []);
+  //  const [leads, setLeads] = useState([]);
+  const [leads, setLeads] = useState({ scheduled: [], done: [] });
+  const [remarks, setRemarks] = useState();
+
 
 
   useEffect(() => {
     console.log("fetching visit Scheduled leads ");
-  fetchVisitScheduledLeads();
-}, []);
+    fetchVisitScheduledLeads();
+  }, []);
 
   const fileInputRef = useRef(null);
 
@@ -1252,82 +1252,369 @@ const FirstVisits = () => {
       setError("");
     }
   };
+// first
+  // const handleSubmit = () => {
+  //   // Validate required fields
+  //   if (!leadNo) {
+  //     toast.error("Lead No. is required", {
+  //       position: "top-right",
+  //       autoClose: 3000,
+  //     });
+  //     return;
+  //   }
 
-  const handleSubmit = () => {
-    // Validate required fields
-    if (!leadNo) {
-      toast.error("Lead No. is required", {
-        position: "top-right",
-        autoClose: 3000,
-      });
-      return;
-    }
+  //   if (!interestedIn) {
+  //     toast.error("Interested In is required", {
+  //       position: "top-right",
+  //       autoClose: 3000,
+  //     });
+  //     return;
+  //   }
 
-    if (!interestedIn) {
-      toast.error("Interested In is required", {
-        position: "top-right",
-        autoClose: 3000,
-      });
-      return;
-    }
+  //   if (!occupation) {
+  //     toast.error("Occupation is required", {
+  //       position: "top-right",
+  //       autoClose: 3000,
+  //     });
+  //     return;
+  //   }
 
-    if (!occupation) {
-      toast.error("Occupation is required", {
-        position: "top-right",
-        autoClose: 3000,
-      });
-      return;
-    }
+  //   if (!referenceBySource) {
+  //     toast.error("Reference by/Source is required", {
+  //       position: "top-right",
+  //       autoClose: 3000,
+  //     });
+  //     return;
+  //   }
 
-    if (!referenceBySource) {
-      toast.error("Reference by/Source is required", {
-        position: "top-right",
-        autoClose: 3000,
-      });
-      return;
-    }
+  //   const newFirmData = {
+  //     // Map form fields to table expected properties
+  //     remarkHistory: new Date().toLocaleString("en-IN", {
+  //       year: "numeric",
+  //       month: "2-digit",
+  //       day: "2-digit",
+  //       hour: "2-digit",
+  //       minute: "2-digit",
+  //       hour12: true,
+  //     }),
+  //     enquiryNo: "",
+  //     leadNo: leadNo,
+  //     assignToHistory: "",
+  //     name: name,
+  //     mobile: mobile,
+  //     whatsappNo: whatsappNo,
+  //     email: email,
+  //     address: address,
+  //     occupation: occupation,
+  //     company: company,
+  //     interestedIn: interestedIn,
+  //     budget: budget,
+  //     referenceBySource: referenceBySource,
+  //     nameOfCp: nameOfCp,
+  //     planningToBuyWithin: planningToBuy,
+  //   };
 
-    const newFirmData = {
-      // Map form fields to table expected properties
-      remarkHistory: new Date().toLocaleString("en-IN", {
-        year: "numeric",
-        month: "2-digit",
-        day: "2-digit",
-        hour: "2-digit",
-        minute: "2-digit",
-        hour12: true,
-      }),
-      enquiryNo: "",
-      leadNo: leadNo,
-      assignToHistory: "",
-      name: name,
-      mobile: mobile,
-      whatsappNo: whatsappNo,
-      email: email,
-      address: address,
-      occupation: occupation,
-      company: company,
-      interestedIn: interestedIn,
-      budget: budget,
-      referenceBySource: referenceBySource,
-      nameOfCp: nameOfCp,
-      planningToBuyWithin: planningToBuy,
-    };
+  //   console.log("Submitting new firm data:", newFirmData);
 
-    console.log("Submitting new firm data:", newFirmData);
+  //   setFirms((prev) => {
+  //     const updatedFirms = [newFirmData, ...prev]; // New item first
+  //     console.log("Updated firms list after submit:", updatedFirms);
+  //     return updatedFirms;
+  //   });
 
-    setFirms((prev) => {
-      const updatedFirms = [newFirmData, ...prev]; // New item first
-      console.log("Updated firms list after submit:", updatedFirms);
-      return updatedFirms;
+  //   toast.success("Details are submitted!", {
+  //     position: "top-right",
+  //     autoClose: 3000,
+  //   });
+
+  //   // Reset form values
+  //   setLeadNo("");
+  //   setName("");
+  //   setMobile("");
+  //   setWhatsappNo("");
+  //   setEmail("");
+  //   setInterestedIn("");
+  //   setBudget("");
+  //   setPlanningToBuy("");
+  //   setOccupation("");
+  //   setReasonForPurchase("");
+  //   setAddress("");
+  //   setCompany("");
+  //   setReferenceBySource("");
+  //   setNameOfCp("");
+
+  //   setShowFirmForm(false);
+  // };
+
+// second :
+// const handleSubmit = async () => {
+//   // ✅ Step 1: Validate required fields
+//   if (!leadNo) return toast.error("Lead No. is required");
+//   if (!interestedIn) return toast.error("Interested In is required");
+//   if (!occupation) return toast.error("Occupation is required");
+//   if (!referenceBySource) return toast.error("Reference by/Source is required");
+
+//   // ✅ Step 2: Prepare payload
+//   const payload = {
+//     leadNo,
+//     name,
+//     mobile,
+//     whatsappNo,
+//     email,
+//     address,
+//     occupation,
+//     company,
+//     interestedIn,
+//     budget,
+//     referenceBySource,
+//     nameOfCp,
+//     planningToBuyWithin: planningToBuy,
+//     remarkHistory: new Date().toISOString(),
+//   };
+
+//   console.log("📤 Sending Enquiry POST Request:", payload);
+
+//   // ✅ Step 3: Send API call
+//   try {
+//     const response = await fetch("https://localhost:5289/sales/api/enquiries", {
+//       method: "POST",
+//       headers: { "Content-Type": "application/json" },
+//       credentials: "include",
+//       body: JSON.stringify(payload),
+//     });
+
+//     if (!response.ok) {
+//       const errorText = await response.text();
+//       throw new Error(`Server responded with ${response.status}: ${errorText}`);
+//     }
+
+//     const newLead = await response.json();
+//     console.log("✅ Enquiry saved successfully:", newLead);
+
+//     // ✅ Step 4: Add to local leads list (Visit Done)
+//     setLeads((prev) => ({
+//       ...prev,
+//       done: [...prev.done, newLead],
+//     }));
+
+//     toast.success("Enquiry submitted successfully!");
+
+//     // ✅ Step 5: Reset fields
+//     setLeadNo("");
+//     setName("");
+//     setMobile("");
+//     setWhatsappNo("");
+//     setEmail("");
+//     setInterestedIn("");
+//     setBudget("");
+//     setPlanningToBuy("");
+//     setOccupation("");
+//     setReasonForPurchase("");
+//     setAddress("");
+//     setCompany("");
+//     setReferenceBySource("");
+//     setNameOfCp("");
+//     setRemarks("");
+
+//     setShowFirmForm(false);
+
+//     // ✅ Step 6: Refresh leads (optional)
+//     fetchVisitScheduledLeads();
+//   } catch (error) {
+//     console.error("❌ Error submitting enquiry:", error);
+//     toast.error("Failed to submit enquiry. Please try again.");
+//   }
+// };
+
+
+// const handleSubmit = async () => {
+//   // ✅ Step 1: Validate required fields
+//   if (!leadNo) return toast.error("Lead No. is required");
+//   if (!interestedIn) return toast.error("Interested In is required");
+//   if (!occupation) return toast.error("Occupation is required");
+//   if (!referenceBySource) return toast.error("Reference by/Source is required");
+
+//   // ✅ Step 2: Prepare payload (as per /api/enquiries schema)
+//   const now = new Date().toISOString();
+
+//   const payload = {
+//     id: 0,
+//     name: name || "",
+//     phone: mobile ? parseInt(mobile) : 0,
+//     whatsapp: whatsappNo ? parseInt(whatsappNo) : 0,
+//     email: email || "",
+//     address: address || "",
+//     occupation: occupation || "",
+//     company: company || "",
+//     interest: interestedIn || "",
+//     budgetInLakh: budget ? parseFloat(budget) : 0,
+//     intendedPurchasePeriodMonths: planningToBuy
+//       ? parseInt(planningToBuy)
+//       : 0,
+//     lastSiteVisit: now,
+//     source: referenceBySource || "Walk-in", // ✅ required
+//     remarks: remarks || "",
+//     status: "Visit Done", // ✅ required
+//     updatedBy: "system",
+
+//     // ✅ include required nested object
+//     salesEnagagement: {
+//       id: 0,
+//       assignedTo: "b", // replace dynamically with logged-in user ID
+//       assignedDate: now,
+//       assignedBy: "system",
+//       enquiryId: 0,
+//       nextFollowUp: now,
+//       status: "Visit Done",
+//       remarks: remarks || "",
+//       enquiry: {
+//   id: 0,
+//   name: name || "",
+  
+// }
+
+//     },
+//   };
+
+//   console.log("📤 Sending Enquiry POST Request:", payload);
+
+//   // ✅ Step 3: API call
+//   try {
+//     const response = await fetch("https://localhost:5289/sales/api/enquiries", {
+//       method: "POST",
+//       headers: { "Content-Type": "application/json" },
+//       credentials: "include",
+//       body: JSON.stringify(payload),
+//     });
+
+//     if (!response.ok) {
+//       const errorText = await response.text();
+//       throw new Error(`Server responded with ${response.status}: ${errorText}`);
+//     }
+
+//     const newLead = await response.json();
+//     console.log("✅ Enquiry saved successfully:", newLead);
+
+//     // ✅ Step 4: Add to Visit Done list
+//     setLeads((prev) => ({
+//       ...prev,
+//       done: [...(prev.done || []), newLead],
+//     }));
+
+//     toast.success("Enquiry submitted successfully!");
+
+//     // ✅ Step 5: Reset form fields
+//     setLeadNo("");
+//     setName("");
+//     setMobile("");
+//     setWhatsappNo("");
+//     setEmail("");
+//     setInterestedIn("");
+//     setBudget("");
+//     setPlanningToBuy("");
+//     setOccupation("");
+//     setReasonForPurchase("");
+//     setAddress("");
+//     setCompany("");
+//     setReferenceBySource("");
+//     setNameOfCp("");
+//     setRemarks("");
+//     setShowFirmForm(false);
+
+//     // ✅ Step 6: Optional - refresh latest leads from backend
+//     fetchVisitScheduledLeads();
+//   } catch (error) {
+//     console.error("❌ Error submitting enquiry:", error);
+//     toast.error("Failed to submit enquiry. Please try again.");
+//   }
+// };
+
+
+const handleSubmit = async () => {
+  if (!leadNo) return toast.error("Lead No. is required");
+  if (!interestedIn) return toast.error("Interested In is required");
+  if (!occupation) return toast.error("Occupation is required");
+  if (!referenceBySource) return toast.error("Reference by/Source is required");
+
+  const now = new Date().toISOString();
+
+  const payload = {
+    id: 0,
+    name: name || "",
+    phone: mobile ? parseInt(mobile) : 0,
+    whatsapp: whatsappNo ? parseInt(whatsappNo) : 0,
+    email: email || "unknown@example.com", // ✅ required
+    address: address || "N/A", // ✅ required
+    occupation: occupation || "N/A", // ✅ required
+    company: company || "N/A", // ✅ required
+    interest: interestedIn || "N/A", // ✅ required
+    budgetInLakh: budget ? parseFloat(budget) : 0,
+    intendedPurchasePeriodMonths: planningToBuy ? parseInt(planningToBuy) : 0,
+    lastSiteVisit: now,
+    source: referenceBySource || "Walk-in", // ✅ required
+    remarks: remarks || "Visit done", // ✅ required
+    status: "Visit Done", // ✅ required
+    updatedBy: "system",
+
+    // ✅ required nested object
+    salesEnagagement: {
+      id: 0,
+      assignedTo: "b", // replace with logged-in user ID
+      assignedDate: now,
+      assignedBy: "system",
+      enquiryId: 0,
+      nextFollowUp: now,
+      status: "Visit Done",
+      remarks: remarks || "Visit completed",
+
+      // ✅ fully populated enquiry object to satisfy backend model
+      enquiry: {
+        id: 0,
+        name: name || "",
+        phone: mobile ? parseInt(mobile) : 0,
+        email: email || "unknown@example.com",
+        address: address || "N/A",
+        company: company || "N/A",
+        occupation: occupation || "N/A",
+        interest: interestedIn || "N/A",
+        status: "Visit Done",
+        source: referenceBySource || "Walk-in",
+        remarks: remarks || "Visit done",
+        bookings: [], // ✅ empty array required by backend
+        lastUpdatedBy: "system", // ✅ required
+        salesEnagagements: [], // ✅ empty array required by backend
+        createdDate: now,
+        updatedDate: now,
+      },
+    },
+  };
+
+  console.log("📤 Sending Enquiry POST Request:", payload);
+
+  try {
+    const response = await fetch("https://localhost:5289/sales/api/enquiries", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify(payload),
     });
 
-    toast.success("Details are submitted!", {
-      position: "top-right",
-      autoClose: 3000,
-    });
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Server responded with ${response.status}: ${errorText}`);
+    }
 
-    // Reset form values
+    const newLead = await response.json();
+    console.log("✅ Enquiry saved successfully:", newLead);
+
+    setLeads((prev) => ({
+      ...prev,
+      done: [...(prev.done || []), newLead],
+    }));
+
+    toast.success("Enquiry submitted successfully!");
+
+    // Reset
     setLeadNo("");
     setName("");
     setMobile("");
@@ -1342,9 +1629,426 @@ const FirstVisits = () => {
     setCompany("");
     setReferenceBySource("");
     setNameOfCp("");
-
+    setRemarks("");
     setShowFirmForm(false);
-  };
+
+    fetchVisitScheduledLeads();
+  } catch (error) {
+    console.error("❌ Error submitting enquiry:", error);
+    toast.error("Failed to submit enquiry. Please try again.");
+  }
+};
+
+
+//   const handleSubmit = async () => {
+//     //  Step 1: Basic validation
+//     if (!leadNo || !interestedIn || !occupation || !referenceBySource) {
+//       toast.error("Please fill all required fields", {
+//         position: "top-right",
+//         autoClose: 3000,
+//       });
+//       return;
+//     }
+
+//     // ✅ Step 2: Create the JSON body based on your provided API schema
+//     const payload = {
+//       id: 0,
+//       name: name || "",
+//       phone: mobile ? parseInt(mobile) : 0,
+//       whatsapp: whatsappNo ? parseInt(whatsappNo) : 0,
+//       email: email || "",
+//       address: address || "",
+//       occupation: occupation || "",
+//       company: company || "",
+//       interest: interestedIn || "",
+//       budgetInLakh: budget ? parseFloat(budget) : 0,
+//       intendedPurchasePeriodMonths: planningToBuy
+//         ? parseInt(planningToBuy)
+//         : 0,
+//       lastSiteVisit: new Date().toISOString(),
+//       source: referenceBySource || "",
+//       remarks: remarks || "",
+//       status: "Visit Done", // you can adjust this dynamically
+
+//       // updatedBy: "system", // you can replace this with logged-in user ID or name
+//       // sourceDetails: "Walk-in lead", // 
+
+
+
+//       salesEnagagement: {
+//         id: 0,
+//         assignedTo: "b", // replace with logged-in user or dynamic value
+//         assignedDate: new Date().toISOString(),
+//         assignedBy: "system", // replace dynamically
+//         enquiryId: 0,
+//         nextFollowUp: new Date().toISOString(),
+//         status: "Visit Done",
+//         remarks: remarks || "",
+//         enquiry: null,
+//       },
+//     };
+
+//     console.log("📤 Sending POST request:", payload);
+
+//     // ✅ Step 3: Make the POST API call
+//     try {
+//       const response = await fetch("https://localhost:5289/sales/api/enquiries", {
+//         method: "POST",
+//         headers: {
+//           "Content-Type": "application/json",
+//         },
+//         credentials: "include", // optional if API requires auth cookies
+//         body: JSON.stringify(payload),
+//       });
+
+//       if (!response.ok) {
+//         const errorText = await response.text();
+//         throw new Error(`Server responded with ${response.status}: ${errorText}`);
+//       }
+
+//       const data = await response.json();
+//       console.log("✅ API POST Success:", data);
+
+//       toast.success("Enquiry submitted successfully!", {
+//         position: "top-right",
+//         autoClose: 3000,
+//       });
+
+
+//       //STEP 4: Append the new record into your "Visit Done" table list
+//       // so that it shows immediately even if its status isn't "Visit Done"
+//       console.log(" Before appending new lead, existing leads.done:", leads?.done);
+//       // setLeads((prevLeads) => {
+//       //   console.log("🧩 Inside setLeads updater, previous state:", prevLeads);
+//       //   const updated = {
+//       //     ...prevLeads,
+//       //     done: [...(prevLeads.done || []), data],
+//       //   };
+//       //   console.log("✅ Updated leads state (done array):", updated.done);
+//       //   return updated;
+//       // });
+// if (typeof data === "number") {
+//   // If only ID returned, fetch full object
+//   const newLeadResponse = await fetch(`https://localhost:5289/sales/api/leads/${data}`);
+//   const newLead = await newLeadResponse.json();
+
+//   setLeads((prevLeads) => ({
+//     ...prevLeads,
+//     done: [...(prevLeads.done || []), newLead],
+//   }));
+// } else {
+//   // If full object returned
+//   setLeads((prevLeads) => ({
+//     ...prevLeads,
+//     done: [...(prevLeads.done || []), data],
+//   }));
+// }
+
+//       // Reset form fields after success
+//       setLeadNo("");
+//       setName("");
+//       setMobile("");
+//       setWhatsappNo("");
+//       setEmail("");
+//       setInterestedIn("");
+//       setBudget("");
+//       setPlanningToBuy("");
+//       setOccupation("");
+//       setReasonForPurchase("");
+//       setAddress("");
+//       setCompany("");
+//       setReferenceBySource("");
+//       setNameOfCp("");
+//       setRemarks("");
+//       setShowFirmForm(false);
+
+//       // Optionally refetch the updated data
+//       fetchVisitScheduledLeads();
+//     } catch (error) {
+//       console.error("❌ POST API Error:", error);
+//       toast.error("Failed to submit enquiry. Please try again.", {
+//         position: "top-right",
+//         autoClose: 3000,
+//       });
+//     }
+//   };
+
+
+
+
+// const handleSubmit = async () => {
+//   // ✅ Step 1: Basic validation
+//   if (!leadNo || !interestedIn || !occupation || !referenceBySource) {
+//     toast.error("Please fill all required fields", {
+//       position: "top-right",
+//       autoClose: 3000,
+//     });
+//     return;
+//   }
+
+//   // ✅ Step 2: Prepare payload exactly as per /api/enquiries schema
+//   const now = new Date().toISOString();
+
+//   const payload = {
+//     id: 0,
+//     name: name || "",
+//     phone: mobile ? parseInt(mobile) : 0,
+//     whatsapp: whatsappNo ? parseInt(whatsappNo) : 0,
+//     email: email || "",
+//     address: address || "",
+//     occupation: occupation || "",
+//     company: company || "",
+//     interest: interestedIn || "",
+//     budgetInLakh: budget ? parseFloat(budget) : 0,
+//     intendedPurchasePeriodMonths: planningToBuy
+//       ? parseInt(planningToBuy)
+//       : 0,
+//     lastSiteVisit: now,
+//     source: referenceBySource || "",
+//     remarks: remarks || "",
+//     status: "Visit Done",
+//     updatedBy: "system",
+//     sourceDetails: "Walk-in lead",
+
+//     // ✅ Nested salesEnagagement structure
+//     salesEnagagement: {
+//       id: 0,
+//       assignedTo: "b", // Replace with actual user ID dynamically
+//       assignedDate: now,
+//       assignedBy: "system",
+//       enquiryId: 0,
+//       nextFollowUp: now,
+//       status: "Visit Done",
+//       remarks: remarks || "",
+//       enquiry: {
+//         id: 0,
+//         name: name || "",
+//         phone: mobile ? parseInt(mobile) : 0,
+//         whatsapp: whatsappNo ? parseInt(whatsappNo) : 0,
+//         email: email || "",
+//         address: address || "",
+//         occupation: occupation || "",
+//         company: company || "",
+//         interest: interestedIn || "",
+//         budgetInLakh: budget ? parseFloat(budget) : 0,
+//         intendedPurchasePeriodMonths: planningToBuy
+//           ? parseInt(planningToBuy)
+//           : 0,
+//         lastSiteVisit: now,
+//         source: referenceBySource || "",
+//         remarks: remarks || "",
+//         status: "Visit Done",
+//         lastUpdatedBy: "system",
+//         lastUpdatedDate: now,
+//         salesEnagagements: [],
+//         bookings: [],
+//       },
+//     },
+//   };
+
+//   console.log("📤 Sending POST request to /api/enquiries:", payload);
+
+//   // ✅ Step 3: Send API call
+//   try {
+//     const response = await fetch("https://localhost:5289/sales/api/enquiries", {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       credentials: "include",
+//       body: JSON.stringify(payload),
+//     });
+
+//     if (!response.ok) {
+//       const errorText = await response.text();
+//       throw new Error(`Server responded with ${response.status}: ${errorText}`);
+//     }
+
+//     const data = await response.json();
+//     console.log("✅ API POST Success:", data);
+
+//     toast.success("Enquiry submitted successfully!", {
+//       position: "top-right",
+//       autoClose: 3000,
+//     });
+//   const newLead = await response.json();
+//     // ✅ Append to "Visit Done" list for table visibility
+//     setLeads((prevLeads) => {
+//       const updated = {
+//         ...prevLeads,
+//         done: [...(prevLeads.done || []), data],
+//       };
+//       console.log("✅ Updated leads state (done array):", updated.done);
+//       return updated;
+//     });
+
+//     // ✅ Reset fields
+//     setLeadNo("");
+//     setName("");
+//     setMobile("");
+//     setWhatsappNo("");
+//     setEmail("");
+//     setInterestedIn("");
+//     setBudget("");
+//     setPlanningToBuy("");
+//     setOccupation("");
+//     setReasonForPurchase("");
+//     setAddress("");
+//     setCompany("");
+//     setReferenceBySource("");
+//     setNameOfCp("");
+//     setRemarks("");
+//     setShowFirmForm(false);
+
+//     // ✅ Optionally refresh leads list
+//     fetchVisitScheduledLeads();
+//   } catch (error) {
+//     console.error("❌ POST API Error:", error);
+//     toast.error("Failed to submit enquiry. Please try again.", {
+//       position: "top-right",
+//       autoClose: 3000,
+//     });
+//   }
+// };
+
+
+
+// const handleSubmit = async () => {
+//   // ✅ Step 1: Basic validation
+//   if (!leadNo || !interestedIn || !occupation || !referenceBySource) {
+//     toast.error("Please fill all required fields", {
+//       position: "top-right",
+//       autoClose: 3000,
+//     });
+//     return;
+//   }
+
+//   // ✅ Step 2: Prepare payload exactly as per /api/enquiries schema
+//   const now = new Date().toISOString();
+
+//   const payload = {
+//     id: 0,
+//     name: name || "",
+//     phone: mobile ? parseInt(mobile) : 0,
+//     whatsapp: whatsappNo ? parseInt(whatsappNo) : 0,
+//     email: email || "",
+//     address: address || "",
+//     occupation: occupation || "",
+//     company: company || "",
+//     interest: interestedIn || "",
+//     budgetInLakh: budget ? parseFloat(budget) : 0,
+//     intendedPurchasePeriodMonths: planningToBuy
+//       ? parseInt(planningToBuy)
+//       : 0,
+//     lastSiteVisit: now,
+//     source: referenceBySource || "",
+//     remarks: remarks || "",
+//     status: "Visit Done",
+//     updatedBy: "system",
+//     sourceDetails: "Walk-in lead",
+
+//     // ✅ Nested salesEnagagement structure
+//     salesEnagagement: {
+//       id: 0,
+//       assignedTo: "b", // Replace with actual user ID dynamically if available
+//       assignedDate: now,
+//       assignedBy: "system",
+//       enquiryId: 0,
+//       nextFollowUp: now,
+//       status: "Visit Done",
+//       remarks: remarks || "",
+//       enquiry: {
+//         id: 0,
+//         name: name || "",
+//         phone: mobile ? parseInt(mobile) : 0,
+//         whatsapp: whatsappNo ? parseInt(whatsappNo) : 0,
+//         email: email || "",
+//         address: address || "",
+//         occupation: occupation || "",
+//         company: company || "",
+//         interest: interestedIn || "",
+//         budgetInLakh: budget ? parseFloat(budget) : 0,
+//         intendedPurchasePeriodMonths: planningToBuy
+//           ? parseInt(planningToBuy)
+//           : 0,
+//         lastSiteVisit: now,
+//         source: referenceBySource || "",
+//         remarks: remarks || "",
+//         status: "Visit Done",
+//         lastUpdatedBy: "system",
+//         lastUpdatedDate: now,
+//         salesEnagagements: [],
+//         bookings: [],
+//       },
+//     },
+//   };
+
+//   console.log("📤 Sending POST request to /api/enquiries:", payload);
+
+//   // ✅ Step 3: Send API call
+//   try {
+//     const response = await fetch("https://localhost:5289/sales/api/enquiries", {
+//       method: "POST",
+//       headers: {
+//         "Content-Type": "application/json",
+//       },
+//       credentials: "include",
+//       body: JSON.stringify(payload),
+//     });
+
+//     if (!response.ok) {
+//       const errorText = await response.text();
+//       throw new Error(`Server responded with ${response.status}: ${errorText}`);
+//     }
+
+//     // ✅ Read response only once
+//     const newLead = await response.json();
+//     console.log("✅ API POST Success (new lead):", newLead);
+
+//     toast.success("Enquiry submitted successfully!", {
+//       position: "top-right",
+//       autoClose: 3000,
+//     });
+
+//     // ✅ Append new lead to existing "Visit Done" list
+//     setLeads((prev) => {
+//       const updated = {
+//         ...prev,
+//         done: [...prev.done, newLead],
+//       };
+//       console.log("✅ Updated leads state (done array):", updated.done);
+//       return updated;
+//     });
+
+//     // ✅ Reset all fields
+//     setLeadNo("");
+//     setName("");
+//     setMobile("");
+//     setWhatsappNo("");
+//     setEmail("");
+//     setInterestedIn("");
+//     setBudget("");
+//     setPlanningToBuy("");
+//     setOccupation("");
+//     setReasonForPurchase("");
+//     setAddress("");
+//     setCompany("");
+//     setReferenceBySource("");
+//     setNameOfCp("");
+//     setRemarks("");
+//     setShowFirmForm(false);
+
+//     // ✅ Optionally refresh leads list
+//     fetchVisitScheduledLeads();
+
+//   } catch (error) {
+//     console.error("❌ POST API Error:", error);
+//     toast.error("Failed to submit enquiry. Please try again.", {
+//       position: "top-right",
+//       autoClose: 3000,
+//     });
+//   }
+// };
 
   const validateMobile = (value) => {
     const regex = /^[0-9]{10}$/;
@@ -1484,9 +2188,36 @@ const FirstVisits = () => {
     });
   };
 
+  // const handleLeadNoChange = (e) => {
+  //   setLeadNo(e.target.value);
+  // };
+
   const handleLeadNoChange = (e) => {
-    setLeadNo(e.target.value);
+    const selectedId = e.target.value;
+    setLeadNo(selectedId);
+
+    // find selected lead details from leads.scheduled
+    const selectedLead = leads.scheduled.find((lead) => lead.id === selectedId);
+
+    if (selectedLead) {
+      setName(selectedLead.name || "");
+
+      setMobile(selectedLead.phone?.toString() || "");
+      setWhatsappNo(selectedLead.phone?.toString() || "");
+      setEmail(selectedLead.email || "");
+      setAddress(selectedLead.address || "");
+      setCompany(selectedLead.company || "");
+      setInterestedIn(selectedLead.interest || "");
+      setBudget(selectedLead.budget || "");
+      setOccupation(selectedLead.occupation || "");
+      setReferenceBySource(selectedLead.source || "");
+      setNameOfCp(selectedLead.nameOfCp || "");
+      setPlanningToBuy(selectedLead.planningToBuyWithin || "");
+      setRemarks(selectedLead.remarks || "");
+
+    }
   };
+
 
   const handleDeleteFirm = (firmToDelete, index) => {
     // Use index to delete the specific row
@@ -1536,7 +2267,7 @@ const FirstVisits = () => {
 
 
 
-   const fetchVisitScheduledLeads = async () => {
+  const fetchVisitScheduledLeads = async () => {
     try {
       const response = await fetch("https://localhost:5289/sales/api/leads", {
         credentials: "include",
@@ -1544,22 +2275,36 @@ const FirstVisits = () => {
       if (!response.ok) throw new Error("Failed to fetch leads");
 
       const data = await response.json();
-      // console.log("🎯 All Leads:", data);
-
-      // ✅ Filter for only visit scheduled
-      const visitScheduled = data.filter(
+      console.log("🔍 All Lead Statuses from API:");
+      data.forEach((lead) => {
+        console.log(`Lead ID: ${lead.id}, Status: "${lead.status}"`);
+      });
+      // Filter Visit Scheduled leads (for dropdown)
+      const visitScheduledLeads = data.filter(
         (lead) =>
-          lead.status?.toLowerCase() === "visit_scheduled" ||
-          lead.status?.toLowerCase() === "visit scheduled"
+          lead.status?.toLowerCase() === "visit scheduled" ||
+          lead.status?.toLowerCase() === "visit_scheduled"
       );
 
-      // console.log("📅 Visit Scheduled Leads:", visitScheduled);
-      // setFilteredLeads(visitScheduled);
-      setLeads(visitScheduled);
+      // Filter Visit Done leads (for table)
+      const visitDoneLeads = data.filter(
+        (lead) =>
+          lead.status?.toLowerCase() === "visit done" ||
+          lead.status?.toLowerCase() === "visit_done"
+      );
+
+      setLeads({
+        scheduled: visitScheduledLeads,
+        done: visitDoneLeads,
+      });
+
+      console.log("✅ Visit Scheduled (for dropdown):", visitScheduledLeads);
+      console.log("✅ Visit Done (for table):", visitDoneLeads);
     } catch (error) {
-      console.error(" Error fetching Visit Scheduled leads:", error);
+      console.error("❌ Error fetching Visit Scheduled/Done leads:", error);
     }
   };
+
 
 
   return (
@@ -1587,8 +2332,8 @@ const FirstVisits = () => {
                       ? "180px"
                       : "200px"
                     : isMobile
-                    ? "40px"
-                    : "50px",
+                      ? "40px"
+                      : "50px",
                 height: isMobile ? "40px" : "50px",
                 transition: "width 0.3s ease",
                 background: Constants.primaryColor,
@@ -1647,9 +2392,8 @@ const FirstVisits = () => {
             <>
               <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3 gap-2">
                 <div
-                  className={`d-flex ${
-                    isMobile ? "flex-column" : "flex-row"
-                  } gap-2 w-100`}
+                  className={`d-flex ${isMobile ? "flex-column" : "flex-row"
+                    } gap-2 w-100`}
                 >
                   <Button
                     variant="contained"
@@ -1690,9 +2434,13 @@ const FirstVisits = () => {
               </div>
               <div className="mt-3">
                 <DisplayEnquiryTable
-                  // data={firms}
+
                   //  data={loans}
-                  data={leads}
+                  // data={leads}
+                  // data={leads.done}
+                  data={[...firms, ...leads.done]}
+
+
                   isMobile={isMobile}
                   isTablet={isTablet}
                   onDelete={(item, index) => handleDeleteFirm(item, index)} // Pass index
@@ -1723,7 +2471,7 @@ const FirstVisits = () => {
                       required
                     >
                       <InputLabel>Lead No.</InputLabel>
-                      <Select
+                      {/* <Select
                         value={leadNo}
                         onChange={handleLeadNoChange}
                         label="Lead No."
@@ -1736,11 +2484,29 @@ const FirstVisits = () => {
                         <MenuItem value="Lead 9">Lead 9</MenuItem>
                         <MenuItem value="Lead 16">Lead 16</MenuItem>
                         <MenuItem value="Lead 25">Lead 25</MenuItem>
-                        <MenuItem value="Lead 26">Lead 26</MenuItem>
-                        <MenuItem value="Lead 27">Lead 27</MenuItem>
-                        <MenuItem value="Lead 4">Lead 4</MenuItem>
-                        <MenuItem value="Lead 3">Lead 3</MenuItem>
+                        
+                      </Select> */}
+                      <Select
+                        value={leadNo}
+                        onChange={handleLeadNoChange}
+                        label="Lead No."
+                        sx={{
+                          "& .MuiSelect-icon": {
+                            color: Constants.primaryColor,
+                          },
+                        }}
+                      >
+                        {leads.scheduled.length > 0 ? (
+                          leads.scheduled.map((lead) => (
+                            <MenuItem key={lead.id} value={lead.id}>
+                              {lead.leadNo || lead.id}
+                            </MenuItem>
+                          ))
+                        ) : (
+                          <MenuItem disabled>No Visit Scheduled Leads</MenuItem>
+                        )}
                       </Select>
+
                       {error && <FormHelperText>{error}</FormHelperText>}
                     </FormControl>
                   </Grid>
@@ -1874,14 +2640,9 @@ const FirstVisits = () => {
                           },
                         }}
                       >
-                        <MenuItem value="2 BHK (Under construction)">
-                          2 BHK (Under construction)
-                        </MenuItem>
-                        <MenuItem value="3 BHK (Under Construction)">
-                          3 BHK (Under Construction)
-                        </MenuItem>
-                        <MenuItem value="2BHK">2BHK</MenuItem>
-                        <MenuItem value="3BHK">3BHK</MenuItem>
+
+                        <MenuItem value="2 BHK">2BHK</MenuItem>
+                        <MenuItem value="3 BHK">3BHK</MenuItem>
                         <MenuItem value="Other">Other</MenuItem>
                       </Select>
                     </FormControl>

@@ -151,6 +151,7 @@ const PendingFollowuptable = ({ data, onSelectLead, fetchUserLeads }) => {
     return "Booked property In Other Project";
     if (s === "INVALID NUMBER") return "Invalid Number";
     if (s === "VISIT SCHEDULED") return "Visit Scheduled";
+    if(s === "VISIT DONE") return "Visit Done";
     return "";
   };
 

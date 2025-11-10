@@ -594,6 +594,7 @@ const [editData, setEditData] = useState({
                   <MenuItem value="Warm">Warm</MenuItem>
                   <MenuItem value="Lost">Lost</MenuItem>
                   <MenuItem value="Cold">Cold</MenuItem>
+                  <MenuItem value="Undefined">Undefined</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
@@ -608,11 +609,13 @@ const [editData, setEditData] = useState({
                 >
                   <MenuItem value="Follow Up">Follow Up</MenuItem>
                   <MenuItem value="Not interested">Not interested</MenuItem>
-                    <MenuItem value="Callback request">Callback Request</MenuItem>
-                  <MenuItem value="Unreachable">Unreachable</MenuItem>
-                  <MenuItem value="Invalid number">Invalid number</MenuItem>
-                   <MenuItem value="Invalid number">Booked Property in other Project</MenuItem>
-  <MenuItem value="Notanswer">Not Answer</MenuItem>
+                   
+                  
+                   <MenuItem value="Booked Property in other Project">Booked Property in other Project</MenuItem>
+  <MenuItem value="Invalid number">Invalid Number</MenuItem>
+  <MenuItem value="Visit Scheduled" >Visit Scheduled</MenuItem>
+   <MenuItem value="Visit Done" >Visit Done</MenuItem>
+    <MenuItem value="Booked">Booked</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
