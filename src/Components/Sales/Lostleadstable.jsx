@@ -29,6 +29,12 @@ const firms = [
 ];
 
 const Lostleadstable = ({firms}) => {
+  // const Lostleadstable = ({data}) => {
+    // const Lostleadstable = ({ data = [] }) => {
+      // console.log("📊 LostLeads received:", data);
+
+  // const firms = Array.isArray(data) ? data : [];
+
   const [isEditing, setIsEditing] = useState(false); // State to track whether we are editing
   const [selectedFirm, setSelectedFirm] = useState(null); 
   const [remark, setRemark] = useState('');
@@ -458,15 +464,15 @@ const [editData, setEditData] = useState({
 
                 <TableCell>{firm.lastFollowUp}</TableCell> {/* Last Follow Up */}
                 <TableCell>{firm.status}</TableCell> {/* Status */}
-                <TableCell>{firm.remark}</TableCell> {/* Remark */}
+                <TableCell>{firm.remarks}</TableCell> {/* Remark */}
                 <TableCell>{firm.nextFollowUp}</TableCell> {/* Next Follow Up */}
-                <TableCell>{firm.assignTo}</TableCell> {/* Assign To */}
-                <TableCell>{firm.leadNo}</TableCell> {/* Lead No */}
+                <TableCell>{firm.assignedTo}</TableCell> {/* Assign To */}
+                <TableCell>{firm.id}</TableCell> {/* Lead No */}
                 <TableCell>{firm.name}</TableCell> {/* Name */}
-                <TableCell>{firm.mobileNo}</TableCell> {/* Mobile No / WhatsApp No */}
-                <TableCell>{firm.lookingFor}</TableCell> {/* You Are Looking For? */}
+                <TableCell>{firm.phone}</TableCell> {/* Mobile No / WhatsApp No */}
+                <TableCell>{firm.interest}</TableCell> {/* You Are Looking For? */}
                 <TableCell>{firm.email}</TableCell> {/* Email */}
-                <TableCell>{firm.sourceName}</TableCell> {/* Source Name */}
+                <TableCell>{firm.source}</TableCell> {/* Source Name */}
               </TableRow>
             ))}
           </TableBody>

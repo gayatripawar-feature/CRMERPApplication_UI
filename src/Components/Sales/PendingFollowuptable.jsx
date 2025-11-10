@@ -146,7 +146,9 @@ const PendingFollowuptable = ({ data, onSelectLead, fetchUserLeads }) => {
     const s = status.toUpperCase().replace(/_/g, " ");
     if (s === "FOLLOW UP") return "Follow Up";
     if (s === "NOT INTERESTED") return "Not Interested";
-    if (s === "BOOKED PROPERTY IN OTHER PROJECT") return "Booked property In Other Project";
+    // if (s === "BOOKED PROPERTY IN OTHER PROJECT") return "Booked property In Other Project";
+     if (s === "BOOKED PROPERTY IN OTHER PROJECT" || s === "BOOKED ANOTHER PROPERTY")
+    return "Booked property In Other Project";
     if (s === "INVALID NUMBER") return "Invalid Number";
     if (s === "VISIT SCHEDULED") return "Visit Scheduled";
     return "";
@@ -179,7 +181,12 @@ const PendingFollowuptable = ({ data, onSelectLead, fetchUserLeads }) => {
       const payload = {
         id: editFormData.id, // Engagement ID
         leadId: editFormData.leadId || editFormData.id, // Lead ID 
-        status: editFormData.status.trim().replace(/\s+/g, "_").toUpperCase(),
+        // status: editFormData.status.trim().replace(/\s+/g, "_").toUpperCase(),
+        status:
+  editFormData.status === "Booked property In Other Project"
+    ? "BOOKED_ANOTHER_PROPERTY"
+    : editFormData.status.trim().replace(/\s+/g, "_").toUpperCase(),
+
         type: editFormData.leadType.trim().toUpperCase(),
         remarks: editFormData.remark?.trim() || "",
         nextFollowUp: editFormData.nextFollowUpDate || null,
@@ -491,6 +498,8 @@ const PendingFollowuptable = ({ data, onSelectLead, fetchUserLeads }) => {
                   <MenuItem value="Booked property In Other Project">Booked property In Other Project</MenuItem>
                   <MenuItem value="Invalid Number">Invalid Number</MenuItem>
                   <MenuItem value="Visit Scheduled">Visit Scheduled</MenuItem>
+                     <MenuItem value="Visit Done">Visit Done</MenuItem>
+                        <MenuItem value="booked">Booked</MenuItem>
                 </TextField>
               </Grid>
 

@@ -20,8 +20,13 @@ const sections = [
     
   ];
 const tabNames = [ "firm"]; 
-const LostLeads = () => {
+const LostLeads = ({data}) => {
    const [loans, setLoans] = useState([]);
+
+
+   
+  const combinedLeads = [...data, ...loans];
+
     const [leadType, setLeadType] = useState("");
     const [assignedTo, setAssignedTo] = useState(""); 
     const [expandedSection, setExpandedSection] = useState(0); 
@@ -485,22 +490,29 @@ const [toDate, setToDate] = useState("");
     };
     
 
-    const filteredLoans = loans.filter((loan) => {
-  if (!fromDate && !toDate) return true;
-  const nextFollowUpDate = loan.nextFollowUp ? loan.nextFollowUp.split("T")[0] : ""; // keep only date part
-  if (fromDate && nextFollowUpDate < fromDate) return false;
-  if (toDate && nextFollowUpDate > toDate) return false;
-  return true;
-});
+//     const filteredLoans = loans.filter((loan) => {
+//   if (!fromDate && !toDate) return true;
+//   const nextFollowUpDate = loan.nextFollowUp ? loan.nextFollowUp.split("T")[0] : ""; // keep only date part
+//   if (fromDate && nextFollowUpDate < fromDate) return false;
+//   if (toDate && nextFollowUpDate > toDate) return false;
+//   return true;
+// });
 
 
+  const filteredLoans = combinedLeads.filter((loan) => {
+    if (!fromDate && !toDate) return true;
+    const nextFollowUpDate = loan.nextFollowUp ? loan.nextFollowUp.split("T")[0] : "";
+    if (fromDate && nextFollowUpDate < fromDate) return false;
+    if (toDate && nextFollowUpDate > toDate) return false;
+    return true;
+  });
 
     return (
       <div className="main-content">
-        <h6>Sales Module / Lost Leads Follow Up Management</h6>
+        {/* <h6>Sales Module / Lost Leads Follow Up Management</h6> */}
        
 
-        <div className="d-flex align-items-center mb-3">
+        {/* <div className="d-flex align-items-center mb-3">
         
 {sections.map((section, index) => (
   <Button
@@ -525,11 +537,7 @@ const [toDate, setToDate] = useState("");
   >
     {expandedSection === index ? section.label : null}
   </Button>
-))}
-
-
-      
-        </div>
+))} </div> */}
   
         
   
@@ -539,7 +547,7 @@ const [toDate, setToDate] = useState("");
       {!showFirmForm ? (
         <>
           <div className='button-container' style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap' }}>
-            <div className='d-flex gap-3'>
+             <div className='d-flex gap-3'>
             <Button 
               variant="contained" 
               color="primary" 
@@ -570,15 +578,15 @@ const [toDate, setToDate] = useState("");
     // onClick={() => handledow(firms)}
     onClick={handleDownloadPDFNew}
   >
-    <FaFileDownload size={18} />  {/* Added download icon */}
+    <FaFileDownload size={18} /> 
     Download PDF
   </Button>
- </div>
+ </div> 
           
    {/* Right side date filters */}
   <div className='d-flex gap-2'>
-    <Grid container spacing={2}>
-     <Grid item xs={12} sm={6}>
+    {/* <Grid container spacing={2}>
+     {/* <Grid item xs={12} sm={6}>
     <TextField
       type="date"
       label="From"
@@ -589,8 +597,8 @@ const [toDate, setToDate] = useState("");
       InputLabelProps={{ shrink: true }}
       sx={{border:Constants.formInputBorderColor}}
     />
-    </Grid>
-    <Grid item xs={12} sm={6}>
+    </Grid> */}
+    {/* <Grid item xs={12} sm={6}>
     <TextField
       type="date"
       label="To"
@@ -601,17 +609,17 @@ const [toDate, setToDate] = useState("");
       InputLabelProps={{ shrink: true }}
       sx={{border:Constants.formInputBorderColor}}
     />
-    </Grid>
-    </Grid>
+   
+    </Grid> */}
   </div>
           
           
           </div>
   
           <div className="mt-3">
-            {/* <FirmTable firms={loans} /> */}
-          {/* <Lostleadstable firms={loans} /> */}
+           
           <Lostleadstable firms={filteredLoans} />
+           {/* <Lostleadstable firms={data} /> */}
 
           </div>
         </>
@@ -759,6 +767,7 @@ const [toDate, setToDate] = useState("");
             <MenuItem value="Warm">Warm</MenuItem>
             <MenuItem value="Lost">Lost</MenuItem>
             <MenuItem value="Cold">Cold</MenuItem>
+               <MenuItem value="undefined">Undefined</MenuItem>
           </Select>
    
         </FormControl>
@@ -773,11 +782,15 @@ const [toDate, setToDate] = useState("");
             >
             <MenuItem value="Follow Up">Follow Up</MenuItem>
             <MenuItem value="Not interested">Not interested</MenuItem>
-             <MenuItem value="Callback request">Callback request</MenuItem>
-             <MenuItem value="Unreachable">Unreachable</MenuItem>
+           
              <MenuItem value="booked">Booked Property In other Project</MenuItem>
-              <MenuItem value="Not Answer">Not Answer</MenuItem>
+             
               <MenuItem value="invalid number">Invalid Number</MenuItem>
+              
+              <MenuItem value="invalid number">Visit Scheduled</MenuItem>
+              <MenuItem value="invalid number">Visit Done</MenuItem>
+              <MenuItem value="invalid number">Booked</MenuItem>
+
           </Select>
          
         </FormControl>

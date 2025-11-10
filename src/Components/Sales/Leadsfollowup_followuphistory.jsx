@@ -51,21 +51,21 @@ const Leadsfollowup_followuphistory = ({ data }) => {
                  <TableCell>
   <div
     dangerouslySetInnerHTML={{ __html: item.statusHistory }}
-    style={{ whiteSpace: "pre-line" }}
+    style={{ whiteSpace: "no-wrap" }}
   />
 </TableCell>
 
 <TableCell>
   <div
     dangerouslySetInnerHTML={{ __html: item.remarkHistory }}
-    style={{ whiteSpace: "pre-line" }}
+    style={{ whiteSpace: "no-wrap" }}
   />
 </TableCell>
 
 <TableCell>
   <div
     dangerouslySetInnerHTML={{ __html: item.assignToHistory }}
-    style={{ whiteSpace: "pre-line" }}
+    style={{ whiteSpace: "no-wrap" }}
   />
 </TableCell>
 

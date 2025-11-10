@@ -1179,10 +1179,16 @@ const FirstVisits = () => {
   const [referenceBySource, setReferenceBySource] = useState("");
   const [nameOfCp, setNameOfCp] = useState("");
   const [customerFeedback, setCustomerFeedback] = useState("");
+ const [leads, setLeads] = useState([]);
+  // useEffect(() => {
+  //   loadLoansData();
+  // }, []);
+
 
   useEffect(() => {
-    loadLoansData();
-  }, []);
+    console.log("fetching visit Scheduled leads ");
+  fetchVisitScheduledLeads();
+}, []);
 
   const fileInputRef = useRef(null);
 
@@ -1528,6 +1534,34 @@ const FirstVisits = () => {
     });
   };
 
+
+
+   const fetchVisitScheduledLeads = async () => {
+    try {
+      const response = await fetch("https://localhost:5289/sales/api/leads", {
+        credentials: "include",
+      });
+      if (!response.ok) throw new Error("Failed to fetch leads");
+
+      const data = await response.json();
+      // console.log("🎯 All Leads:", data);
+
+      // ✅ Filter for only visit scheduled
+      const visitScheduled = data.filter(
+        (lead) =>
+          lead.status?.toLowerCase() === "visit_scheduled" ||
+          lead.status?.toLowerCase() === "visit scheduled"
+      );
+
+      // console.log("📅 Visit Scheduled Leads:", visitScheduled);
+      // setFilteredLeads(visitScheduled);
+      setLeads(visitScheduled);
+    } catch (error) {
+      console.error(" Error fetching Visit Scheduled leads:", error);
+    }
+  };
+
+
   return (
     <div className="container my-4">
       <h6 className="mb-3 fs-6">Sales Module / Lead Management</h6>
@@ -1656,7 +1690,9 @@ const FirstVisits = () => {
               </div>
               <div className="mt-3">
                 <DisplayEnquiryTable
-                  data={firms}
+                  // data={firms}
+                  //  data={loans}
+                  data={leads}
                   isMobile={isMobile}
                   isTablet={isTablet}
                   onDelete={(item, index) => handleDeleteFirm(item, index)} // Pass index
