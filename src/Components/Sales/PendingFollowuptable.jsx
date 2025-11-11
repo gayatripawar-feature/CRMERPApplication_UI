@@ -41,6 +41,15 @@ const PendingFollowuptable = ({ data, onSelectLead, fetchUserLeads }) => {
       sourceName: 'Facebook Ads',
     },
   ]);
+
+
+  const [visitDoneModalOpen, setVisitDoneModalOpen] = useState(false);
+  const [visitDoneData, setVisitDoneData] = useState({
+    occupation: "",
+    interestedIn: "",
+  });
+
+
   const handleEditClick = (firm) => {
     // console.group("🟢 HANDLE EDIT CLICK");
     // console.log("➡️ firm received from table:", firm);
@@ -147,11 +156,11 @@ const PendingFollowuptable = ({ data, onSelectLead, fetchUserLeads }) => {
     if (s === "FOLLOW UP") return "Follow Up";
     if (s === "NOT INTERESTED") return "Not Interested";
     // if (s === "BOOKED PROPERTY IN OTHER PROJECT") return "Booked property In Other Project";
-     if (s === "BOOKED PROPERTY IN OTHER PROJECT" || s === "BOOKED ANOTHER PROPERTY")
-    return "Booked property In Other Project";
+    if (s === "BOOKED PROPERTY IN OTHER PROJECT" || s === "BOOKED ANOTHER PROPERTY")
+      return "Booked property In Other Project";
     if (s === "INVALID NUMBER") return "Invalid Number";
     if (s === "VISIT SCHEDULED") return "Visit Scheduled";
-    if(s === "VISIT DONE") return "Visit Done";
+    if (s === "VISIT DONE") return "Visit Done";
     return "";
   };
 
@@ -184,9 +193,9 @@ const PendingFollowuptable = ({ data, onSelectLead, fetchUserLeads }) => {
         leadId: editFormData.leadId || editFormData.id, // Lead ID 
         // status: editFormData.status.trim().replace(/\s+/g, "_").toUpperCase(),
         status:
-  editFormData.status === "Booked property In Other Project"
-    ? "BOOKED_ANOTHER_PROPERTY"
-    : editFormData.status.trim().replace(/\s+/g, "_").toUpperCase(),
+          editFormData.status === "Booked property In Other Project"
+            ? "BOOKED_ANOTHER_PROPERTY"
+            : editFormData.status.trim().replace(/\s+/g, "_").toUpperCase(),
 
         type: editFormData.leadType.trim().toUpperCase(),
         remarks: editFormData.remark?.trim() || "",
@@ -220,7 +229,70 @@ const PendingFollowuptable = ({ data, onSelectLead, fetchUserLeads }) => {
 
       //  If update successful — parse response
       const updatedLead = await response.json();
-      console.log("✅ Updated Lead:", updatedLead);
+      console.log(" Updated Lead:", updatedLead);
+
+
+      if (editFormData.status === "Visit Done") {
+  console.log("🟢 Lead marked as Visit Done – adding to Enquiries table...");
+
+  const enquiryPayload = {
+    id: editingItem?.id,
+    name: editingItem?.name,
+    phone: editingItem?.phone,
+    whatsapp: editingItem?.whatsapp,
+    email: editingItem?.email,
+    address: editingItem?.address,
+    occupation: visitDoneData?.occupation || editingItem?.occupation || "N/A",
+    company: editingItem?.company,
+    interest: visitDoneData?.interestedIn || editingItem?.interest || "",
+    budgetInLakh: editingItem?.budgetInLakh || 0,
+    intendedPurchasePeriodMonths: editingItem?.intendedPurchasePeriodMonths || 0,
+    lastSiteVisit: new Date().toISOString(),
+    source: editingItem?.source || "N/A",
+    remarks: editFormData.remark || editingItem?.remarks || "",
+    status: "Visit Done",
+    salesEngagement: {
+      assignedTo: userName || "system",
+      assignedBy: userName || "system",
+      assignedDate: new Date().toISOString(),
+      nextFollowUp: new Date().toISOString(),
+      enquiryId: editingItem?.id,
+      status: "Active",
+      remarks: "Auto-created from Visit Done lead",
+    },
+  };
+
+  console.log("📤 Sending Enquiry POST Request:", enquiryPayload);
+
+  try {
+    const enquiryResponse = await fetch(
+      "https://localhost:5289/sales/api/enquiries",
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(enquiryPayload),
+      }
+    );
+
+    if (!enquiryResponse.ok) {
+      const errText = await enquiryResponse.text();
+      console.error("❌ Failed to save enquiry:", errText);
+      toast.error("Failed to add lead to Enquiry table!");
+    } else {
+      const enquiryResult = await enquiryResponse.json();
+      console.log("✅ Enquiry saved successfully:", enquiryResult);
+      toast.success("Lead added to Enquiry table!");
+    }
+  } catch (err) {
+    console.error("🚨 Error saving enquiry:", err);
+    toast.error("Error while saving enquiry!");
+  }
+}
+
 
       // . Update local form state immediately (instant UI feedback)
       setEditFormData((prev) => ({
@@ -274,6 +346,155 @@ const PendingFollowuptable = ({ data, onSelectLead, fetchUserLeads }) => {
     (lead) => lead.status?.toUpperCase() !== "VISIT_SCHEDULED"
   );
 
+ 
+
+
+//   const handleUpdateEnquiry = async () => {
+//   try {
+//   const payload = {
+//   id: editingItem.id,
+//   name: editingItem.name,
+//   phone: editingItem.phone,
+//   whatsapp: editingItem.whatsapp,
+//   email: editingItem.email,
+//   address: editingItem.address,
+//   occupation: visitDoneData.occupation,
+//   company: editingItem.company,
+//   interest: visitDoneData.interestedIn,
+//   budgetInLakh: editingItem.budgetInLakh || 0,
+//   intendedPurchasePeriodMonths: editingItem.intendedPurchasePeriodMonths || 0,
+//   lastSiteVisit: editingItem.lastSiteVisit || new Date().toISOString(),
+//   source: editingItem.source || "N/A",
+//   remarks: editingItem.remarks || "",
+//   status: editingItem.status || "Visit Done",
+//   salesEngagement: {
+//     assignedTo: editingItem.salesEngagement?.assignedTo || "system",
+//     assignedBy: editingItem.salesEngagement?.assignedBy || "system",
+//     assignedDate: editingItem.salesEngagement?.assignedDate || new Date().toISOString(),
+//     nextFollowUp: editingItem.salesEngagement?.nextFollowUp || new Date().toISOString(),
+//     enquiryId: editingItem.id,
+//     status: editingItem.salesEngagement?.status || "Active",
+//     remarks: editingItem.salesEngagement?.remarks || "Updated from Visit Done modal",
+//   },
+// };
+
+
+//     const response = await fetch(
+//       `https://localhost:5289/sales/api/enquiries/${editingItem.id}`,
+//       {
+//         method: "PATCH",
+//         headers: {
+//           "Accept": "application/json",
+//           "Content-Type": "application/json",
+//         },
+//         credentials: "include",
+//         body: JSON.stringify(payload),
+//       }
+//     );
+
+//     if (!response.ok) {
+//       const errText = await response.text();
+//       console.error("❌ Backend error text:", errText);
+//       throw new Error(`Failed to update enquiry (status ${response.status})`);
+//     }
+
+//     const updated = await response.json();
+//     console.log("✅ Enquiry updated successfully:", updated);
+//     toast.success("Enquiry updated successfully!");
+//     setVisitDoneModalOpen(false);
+//     fetchUserLeads && fetchUserLeads();
+//   } catch (error) {
+//     console.error("❌ Error updating enquiry:", error);
+//     toast.error("Failed to update enquiry");
+//   }
+// };
+
+
+// const handleUpdateEnquiry = async () => {
+//   try {
+//      console.group("🟢 handleUpdateEnquiry Triggered");
+//     console.log("✳️ Editing Item:", editingItem);
+//     console.log("✳️ Visit Done Data:", visitDoneData);
+
+//     const payload = {
+//       id: editingItem.id,
+//       name: editingItem.name,
+//       phone: editingItem.phone,
+//       whatsapp: editingItem.whatsapp,
+//       email: editingItem.email,
+//       address: editingItem.address,
+//       occupation: visitDoneData.occupation,
+//       company: editingItem.company,
+//       interest: visitDoneData.interestedIn,
+//       budgetInLakh: editingItem.budgetInLakh || 0,
+//       intendedPurchasePeriodMonths: editingItem.intendedPurchasePeriodMonths || 0,
+//       lastSiteVisit: editingItem.lastSiteVisit || new Date().toISOString(),
+//       source: editingItem.source || "N/A",
+//       remarks: editingItem.remarks || "",
+//       status: editingItem.status || "Visit Done",
+//       salesEngagement: {
+//         assignedTo: editingItem.salesEngagement?.assignedTo || "system",
+//         assignedBy: editingItem.salesEngagement?.assignedBy || "system",
+//         assignedDate:
+//           editingItem.salesEngagement?.assignedDate || new Date().toISOString(),
+//         nextFollowUp:
+//           editingItem.salesEngagement?.nextFollowUp || new Date().toISOString(),
+//         enquiryId: editingItem.id,
+//         status: editingItem.salesEngagement?.status || "Active",
+//         remarks:
+//           editingItem.salesEngagement?.remarks ||
+//           "Updated from Visit Done modal",
+//       },
+//     };
+
+//     console.log("📤 Sending PATCH request:", payload);
+     
+
+//     const response = await fetch(
+//       `https://localhost:5289/sales/api/enquiries/${editingItem.id}`,
+//       {
+//         method: "PATCH",
+//         headers: {
+//           Accept: "application/json",
+//           "Content-Type": "application/json",
+//         },
+//         credentials: "include",
+//         body: JSON.stringify(payload),
+//       }
+//     );
+
+//       console.log("📡 Response Status:", response.status);
+
+//     if (!response.ok) {
+//       const errText = await response.text();
+//       console.error("❌ Backend error text:", errText);
+//       throw new Error(`Failed to update enquiry (status ${response.status})`);
+//     }
+
+//     // ✅ Handle empty or non-JSON responses safely
+//     const text = await response.text();
+//     let updated = null;
+//     if (text) {
+//       try {
+//         updated = JSON.parse(text);
+//       } catch (err) {
+//         console.warn("⚠️ Response is not valid JSON, ignoring parse error.");
+//       }
+//     }
+
+//     console.log("✅ Enquiry updated successfully:", updated);
+//     toast.success("Enquiry updated successfully!");
+
+//     // Close modal and refresh list
+//     setVisitDoneModalOpen(false);
+//     if (fetchUserLeads) {
+//       fetchUserLeads();
+//     }
+//   } catch (error) {
+//     console.error("❌ Error updating enquiry:", error);
+//     toast.error("Failed to update enquiry");
+//   }
+// };
 
   return (
     <>
@@ -416,11 +637,11 @@ const PendingFollowuptable = ({ data, onSelectLead, fetchUserLeads }) => {
 
       {/* <Modal open={modalOpen} onClose={handleModalClose}> */}
       <Modal
-  open={modalOpen}
-  onClose={() => {}} //  Disable default close when clicking backdrop or pressing Esc
-  disableEscapeKeyDown
-  disableEnforceFocus
->
+        open={modalOpen}
+        onClose={() => { }} //  Disable default close when clicking backdrop or pressing Esc
+        disableEscapeKeyDown
+        disableEnforceFocus
+      >
         <Box
           sx={{
             position: 'absolute',
@@ -489,7 +710,15 @@ const PendingFollowuptable = ({ data, onSelectLead, fetchUserLeads }) => {
                   fullWidth
                   label="Status"
                   value={editFormData.status}
-                  onChange={(e) => setEditFormData({ ...editFormData, status: e.target.value })}
+                  // onChange={(e) => setEditFormData({ ...editFormData, status: e.target.value })}
+                  onChange={(e) => {
+                    const newStatus = e.target.value;
+                    setEditFormData({ ...editFormData, status: newStatus });
+
+                    if (newStatus === "Visit Done") {
+                      setVisitDoneModalOpen(true);
+                    }
+                  }}
                   required
                   sx={{ border: Constants.formInputBorderColor }}
                 >
@@ -499,8 +728,8 @@ const PendingFollowuptable = ({ data, onSelectLead, fetchUserLeads }) => {
                   <MenuItem value="Booked property In Other Project">Booked property In Other Project</MenuItem>
                   <MenuItem value="Invalid Number">Invalid Number</MenuItem>
                   <MenuItem value="Visit Scheduled">Visit Scheduled</MenuItem>
-                     <MenuItem value="Visit Done">Visit Done</MenuItem>
-                        <MenuItem value="booked">Booked</MenuItem>
+                  <MenuItem value="Visit Done">Visit Done</MenuItem>
+                  <MenuItem value="booked">Booked</MenuItem>
                 </TextField>
               </Grid>
 
@@ -557,6 +786,96 @@ const PendingFollowuptable = ({ data, onSelectLead, fetchUserLeads }) => {
             </Grid>
           )}
         </Box></Modal>
+
+
+      {/* <Modal
+        open={visitDoneModalOpen}
+        onClose={() => setVisitDoneModalOpen(false)}
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            bgcolor: "background.paper",
+            p: 4,
+            borderRadius: 2,
+            boxShadow: 24,
+            width: { xs: "90%", sm: "400px" },
+          }}
+        >
+          <h3 style={{ marginBottom: "15px", color: Constants.primaryColor }}>
+            Customer Information
+          </h3>
+
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <TextField
+                select
+                fullWidth
+                label="Occupation"
+                value={visitDoneData.occupation}
+                onChange={(e) =>
+                  setVisitDoneData({ ...visitDoneData, occupation: e.target.value })
+                }
+                sx={{ border: Constants.formInputBorderColor }}
+              >
+                <MenuItem value="Service / Job">Service / Job</MenuItem>
+                <MenuItem value="Business / Self employed">Business / Self employed</MenuItem>
+                <MenuItem value="Professional">Professional</MenuItem>
+                <MenuItem value="Other">Other</MenuItem>
+              </TextField>
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                select
+                fullWidth
+                label="Interested In"
+                value={visitDoneData.interestedIn}
+                onChange={(e) =>
+                  setVisitDoneData({
+                    ...visitDoneData,
+                    interestedIn: e.target.value,
+                  })
+
+                }
+                sx={{ border: Constants.formInputBorderColor }}
+              >
+                <MenuItem value="1 BHK">1 BHK</MenuItem>
+                <MenuItem value="2 BHK">2 BHK</MenuItem>
+                <MenuItem value="3 BHK">3 BHK</MenuItem>
+                <MenuItem value="4 BHK">4 BHK</MenuItem>
+                <MenuItem value="Other">Other</MenuItem>
+              </TextField>
+            </Grid>
+
+            <Grid item xs={12} sx={{ display: "flex", gap: 2, justifyContent: "flex-end" }}>
+              <Button
+                variant="contained"
+                sx={{ backgroundColor: Constants.primaryColor }}
+                onClick={() => {
+                  console.log("✅ Visit Done Data:", visitDoneData);
+                  setVisitDoneModalOpen(false);
+                }}
+                // onClick={handleUpdateEnquiry}
+              >
+                Save
+              </Button>
+
+
+              <Button
+                variant="outlined"
+                color="secondary"
+                onClick={() => setVisitDoneModalOpen(false)}
+              >
+                Cancel
+              </Button>
+            </Grid>
+          </Grid>
+        </Box>
+      </Modal> */}
+
       <ToastContainer />
     </>
   );

@@ -487,8 +487,8 @@ const DisplayEnquiryTable = ({ data }) => {
                   <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>TIMESTAMP</TableCell>
                   <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>ENQUIRY NO.</TableCell>
                   <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>LEAD NO.</TableCell>
-                  <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>ASSIGN TO</TableCell>
-                  <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>SALES EXE.</TableCell>
+                  {/* <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>ASSIGN TO</TableCell> */}
+                  {/* <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>SALES EXE.</TableCell> */}
                   <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>NAME</TableCell>
                   <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>MOBILE</TableCell>
                   <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>ALTERNATE CO. No</TableCell>
@@ -564,23 +564,25 @@ const DisplayEnquiryTable = ({ data }) => {
                       </TableCell>
 
                       {/* Other table cells */}
-                      <TableCell>{item.remarkHistory}</TableCell>
-                      <TableCell>{item.enquiryNo}</TableCell>
+                      <TableCell>{item.lastUpdatedDate}</TableCell>
                       <TableCell>{item.id}</TableCell>
-                      <TableCell>{item.assignedTo}</TableCell>
-                      <TableCell>{item.salesExecutiveName}</TableCell>
+                      {/* <TableCell>{item.id}</TableCell> */}
+                      {/* <TableCell>{item.id || "-"}</TableCell> */}
+                       <TableCell>{item.leadNo || item.id || "-"}</TableCell>
+                      {/* <TableCell>{item.assignedTo}</TableCell>
+                      <TableCell>{item.salesExecutiveName}</TableCell> */}
                       <TableCell>{item.name}</TableCell>
                       <TableCell>{item.phone}</TableCell>
                       <TableCell>{item.alternateContactNo}</TableCell>
                       <TableCell>{item.whatsappNo}</TableCell>
                       <TableCell>{item.email}</TableCell>
-                      <TableCell>{item.location}</TableCell>
+                      <TableCell>{item.address}</TableCell>
                       <TableCell>{item.occupation}</TableCell>
                       <TableCell>{item.company}</TableCell>
-                      <TableCell>{item.interestedIn}</TableCell>
+                      <TableCell>{item.interest}</TableCell>
                       <TableCell>{item.budget}</TableCell>
                       <TableCell>{item.reasonForPurchase}</TableCell>
-                      <TableCell>{item.referenceBySource}</TableCell>
+                      <TableCell>{item.source}</TableCell>
                       <TableCell>{item.nameOfCp}</TableCell>
                       <TableCell>{item.planningToBuyWithin}</TableCell>
                       <TableCell>{item.customerFeedback}</TableCell>

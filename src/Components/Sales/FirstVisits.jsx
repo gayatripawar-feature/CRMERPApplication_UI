@@ -1083,6 +1083,7 @@ import {
 } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import DisplayEnquiryTable from "./DisplayEnquiryTable";
+import { FaHourglassStart, FaHistory, FaUserCheck, FaQuestionCircle } from 'react-icons/fa';
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import FormHelperText from "@mui/material/FormHelperText";
@@ -1093,6 +1094,7 @@ const fetchLoansData = async () => {
   const response = await fetch("/api/getOCRCollection");
   return response.json();
 };
+
 
 // Dropdown Options
 const statusOptions = ["Approved", "Unapproved"];
@@ -1133,15 +1135,35 @@ const sections = [
     icon: <FaEye size={24} />,
     bgColor: "primary.main",
   },
+  // {
+  //   label: "Sample CSV",
+  //   icon: <FaFileCsv size={24} />,
+  //   bgColor: "success.main",
+  // },
+  // {
+  //   label: "Upload Excel",
+  //   icon: <FaUpload size={24} />,
+  //   bgColor: "secondary.main",
+  // },
   {
-    label: "Sample CSV",
-    icon: <FaFileCsv size={24} />,
-    bgColor: "success.main",
+    label: "Pending Follow Up",
+    icon: <FaHourglassStart size={20} />,
+    createLabel: "Create Firm",
   },
   {
-    label: "Upload Excel",
-    icon: <FaUpload size={24} />,
-    bgColor: "secondary.main",
+    label: "Follow Up History",
+    icon: <FaHistory size={20} />,
+    createLabel: "Create Project",
+  },
+  {
+    label: "Booked",
+    icon: <FaUserCheck size={20} />,
+    createLabel: "Create Landowner Info",
+  },
+  {
+    label: "Undefined",
+    icon: <FaQuestionCircle size={20} />,
+    createLabel: "Create Flat Allotment Info",
   },
 ];
 
@@ -1182,13 +1204,18 @@ const FirstVisits = () => {
   //  const [leads, setLeads] = useState([]);
   const [leads, setLeads] = useState({ scheduled: [], done: [] });
   const [remarks, setRemarks] = useState();
+const [selectedLead, setSelectedLead] = useState(null);
+
 
 
 
   useEffect(() => {
     console.log("fetching visit Scheduled leads ");
     fetchVisitScheduledLeads();
+    fetchEnquiries();
   }, []);
+
+  
 
   const fileInputRef = useRef(null);
 
@@ -1252,195 +1279,28 @@ const FirstVisits = () => {
       setError("");
     }
   };
-  // first
-  // const handleSubmit = () => {
-  //   // Validate required fields
-  //   if (!leadNo) {
-  //     toast.error("Lead No. is required", {
-  //       position: "top-right",
-  //       autoClose: 3000,
-  //     });
-  //     return;
-  //   }
-
-  //   if (!interestedIn) {
-  //     toast.error("Interested In is required", {
-  //       position: "top-right",
-  //       autoClose: 3000,
-  //     });
-  //     return;
-  //   }
-
-  //   if (!occupation) {
-  //     toast.error("Occupation is required", {
-  //       position: "top-right",
-  //       autoClose: 3000,
-  //     });
-  //     return;
-  //   }
-
-  //   if (!referenceBySource) {
-  //     toast.error("Reference by/Source is required", {
-  //       position: "top-right",
-  //       autoClose: 3000,
-  //     });
-  //     return;
-  //   }
-
-  //   const newFirmData = {
-  //     // Map form fields to table expected properties
-  //     remarkHistory: new Date().toLocaleString("en-IN", {
-  //       year: "numeric",
-  //       month: "2-digit",
-  //       day: "2-digit",
-  //       hour: "2-digit",
-  //       minute: "2-digit",
-  //       hour12: true,
-  //     }),
-  //     enquiryNo: "",
-  //     leadNo: leadNo,
-  //     assignToHistory: "",
-  //     name: name,
-  //     mobile: mobile,
-  //     whatsappNo: whatsappNo,
-  //     email: email,
-  //     address: address,
-  //     occupation: occupation,
-  //     company: company,
-  //     interestedIn: interestedIn,
-  //     budget: budget,
-  //     referenceBySource: referenceBySource,
-  //     nameOfCp: nameOfCp,
-  //     planningToBuyWithin: planningToBuy,
-  //   };
-
-  //   console.log("Submitting new firm data:", newFirmData);
-
-  //   setFirms((prev) => {
-  //     const updatedFirms = [newFirmData, ...prev]; // New item first
-  //     console.log("Updated firms list after submit:", updatedFirms);
-  //     return updatedFirms;
-  //   });
-
-  //   toast.success("Details are submitted!", {
-  //     position: "top-right",
-  //     autoClose: 3000,
-  //   });
-
-  //   // Reset form values
-  //   setLeadNo("");
-  //   setName("");
-  //   setMobile("");
-  //   setWhatsappNo("");
-  //   setEmail("");
-  //   setInterestedIn("");
-  //   setBudget("");
-  //   setPlanningToBuy("");
-  //   setOccupation("");
-  //   setReasonForPurchase("");
-  //   setAddress("");
-  //   setCompany("");
-  //   setReferenceBySource("");
-  //   setNameOfCp("");
-
-  //   setShowFirmForm(false);
-  // };
-
-  // second :
-  // const handleSubmit = async () => {
-  //   // ✅ Step 1: Validate required fields
-  //   if (!leadNo) return toast.error("Lead No. is required");
-  //   if (!interestedIn) return toast.error("Interested In is required");
-  //   if (!occupation) return toast.error("Occupation is required");
-  //   if (!referenceBySource) return toast.error("Reference by/Source is required");
-
-  //   // ✅ Step 2: Prepare payload
-  //   const payload = {
-  //     leadNo,
-  //     name,
-  //     mobile,
-  //     whatsappNo,
-  //     email,
-  //     address,
-  //     occupation,
-  //     company,
-  //     interestedIn,
-  //     budget,
-  //     referenceBySource,
-  //     nameOfCp,
-  //     planningToBuyWithin: planningToBuy,
-  //     remarkHistory: new Date().toISOString(),
-  //   };
-
-  //   console.log("📤 Sending Enquiry POST Request:", payload);
-
-  //   // ✅ Step 3: Send API call
-  //   try {
-  //     const response = await fetch("https://localhost:5289/sales/api/enquiries", {
-  //       method: "POST",
-  //       headers: { "Content-Type": "application/json" },
-  //       credentials: "include",
-  //       body: JSON.stringify(payload),
-  //     });
-
-  //     if (!response.ok) {
-  //       const errorText = await response.text();
-  //       throw new Error(`Server responded with ${response.status}: ${errorText}`);
-  //     }
-
-  //     const newLead = await response.json();
-  //     console.log("✅ Enquiry saved successfully:", newLead);
-
-  //     // ✅ Step 4: Add to local leads list (Visit Done)
-  //     setLeads((prev) => ({
-  //       ...prev,
-  //       done: [...prev.done, newLead],
-  //     }));
-
-  //     toast.success("Enquiry submitted successfully!");
-
-  //     // ✅ Step 5: Reset fields
-  //     setLeadNo("");
-  //     setName("");
-  //     setMobile("");
-  //     setWhatsappNo("");
-  //     setEmail("");
-  //     setInterestedIn("");
-  //     setBudget("");
-  //     setPlanningToBuy("");
-  //     setOccupation("");
-  //     setReasonForPurchase("");
-  //     setAddress("");
-  //     setCompany("");
-  //     setReferenceBySource("");
-  //     setNameOfCp("");
-  //     setRemarks("");
-
-  //     setShowFirmForm(false);
-
-  //     // ✅ Step 6: Refresh leads (optional)
-  //     fetchVisitScheduledLeads();
-  //   } catch (error) {
-  //     console.error("❌ Error submitting enquiry:", error);
-  //     toast.error("Failed to submit enquiry. Please try again.");
-  //   }
-  // };
 
 
   const fetchEnquiries = async () => {
-  try {
-    const response = await fetch("https://localhost:5289/sales/api/enquiries", {
-      credentials: "include",
-    });
-    if (!response.ok) throw new Error("Failed to fetch enquiries");
+    try {
+      const response = await fetch("https://localhost:5289/sales/api/enquiries", {
+        credentials: "include",
+      });
+      if (!response.ok) throw new Error("Failed to fetch enquiries");
 
-    const data = await response.json();
-    console.log("📥 Enquiries fetched from backend:", data);
-    setFirms(data); // Update your table state
-  } catch (error) {
-    console.error("❌ Error fetching enquiries:", error);
-  }
-};
+      const data = await response.json();
+      console.log("📥 Enquiries fetched from backend:", data);
+      // Debug each enquiry
+      data.forEach((enq, index) => {
+        console.log(
+          `➡️ Enquiry[${index}] - id: ${enq.id}, leadNo: ${enq.leadNo}, name: ${enq.name}, status: ${enq.status}`
+        );
+      });
+      setFirms(data); // Update your table state
+    } catch (error) {
+      console.error("❌ Error fetching enquiries:", error);
+    }
+  };
 
 
   const handleSubmit = async () => {
@@ -1504,7 +1364,9 @@ const FirstVisits = () => {
 
 
     const payload = {
+
       id: 0,
+       leadNo: selectedLead?.id || "-",
       name: name || "",
       phone: mobile ? parseInt(mobile) : 0,
       whatsapp: whatsappNo ? parseInt(whatsappNo) : 0,
@@ -1555,14 +1417,22 @@ const FirstVisits = () => {
       const newLead = await response.json();
       console.log(" Enquiry saved successfully:", newLead);
 
-      setLeads((prev) => ({
-        ...prev,
-        done: [...(prev.done || []), newLead],
-      }));
 
-      setFirms((prev) => [newLead, ...prev]);
+      // setLeads((prev) => ({
+      //   ...prev,
+      //   done: [...(prev.done || []), newLead],
+      // }));
+
+      // const enrichedLead = { ...newLead, id};
+      // setFirms((prev) => [newLead, ...prev]);
+      // setFirms((prev) => [enrichedLead, ...prev]);
       console.log("✅ Saving data into table (firms):", newLead);
       console.log("🧾 Updated firms list:", firms);
+      
+// console.log("Fetched enquiries:", enquiries.map(e => ({
+//   id: e.id,
+//   leadNo: e.leadNo
+// })));
       toast.success("Enquiry submitted successfully!");
 
       // Reset
@@ -1740,12 +1610,14 @@ const FirstVisits = () => {
 
   const handleLeadNoChange = (e) => {
     const selectedId = e.target.value;
+    console.log("🔹 Selected Lead ID from dropdown:", selectedId);
     setLeadNo(selectedId);
 
     // find selected lead details from leads.scheduled
     const selectedLead = leads.scheduled.find((lead) => lead.id === selectedId);
 
     if (selectedLead) {
+       setSelectedLead(selectedLead); 
       setName(selectedLead.name || "");
 
       setMobile(selectedLead.phone?.toString() || "");
@@ -1816,15 +1688,17 @@ const FirstVisits = () => {
   const fetchVisitScheduledLeads = async () => {
     try {
       const response = await fetch("https://localhost:5289/sales/api/leads", {
-      // const response = await fetch("https://localhost:5289/sales/api/enquiries", {
+        // const response = await fetch("https://localhost:5289/sales/api/enquiries", {
         credentials: "include",
       });
       if (!response.ok) throw new Error("Failed to fetch leads");
 
       const data = await response.json();
       console.log("🔍 All Lead Statuses from API:");
-      data.forEach((lead) => {
-        console.log(`Lead ID: ${lead.id}, Status: "${lead.status}"`);
+      data.forEach((lead, i) => {
+        console.log(
+          `🧩 Lead[${i}] - id: ${lead.id}, leadNo: ${lead.leadNo}, status: ${lead.status}`
+        );
       });
       // Filter Visit Scheduled leads (for dropdown)
       const visitScheduledLeads = data.filter(
@@ -1853,10 +1727,9 @@ const FirstVisits = () => {
   };
 
 
-
   return (
-    <div className="container my-4">
-      <h6 className="mb-3 fs-6">Sales Module / Lead Management</h6>
+    <div className="container my-2">
+      <h6 className="mb-2 fs-6">Sales Module / Enquiry Management</h6>
 
       <div className="d-flex flex-column flex-md-row align-items-start align-items-md-center mb-3">
         {sections.map((section, index) => (
@@ -2314,6 +2187,9 @@ const FirstVisits = () => {
           )}
         </div>
       )}
+
+
+
       <ToastContainer
         position="top-right"
         autoClose={3000}
