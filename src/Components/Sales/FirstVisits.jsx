@@ -1252,7 +1252,7 @@ const FirstVisits = () => {
       setError("");
     }
   };
-// first
+  // first
   // const handleSubmit = () => {
   //   // Validate required fields
   //   if (!leadNo) {
@@ -1346,709 +1346,255 @@ const FirstVisits = () => {
   //   setShowFirmForm(false);
   // };
 
-// second :
-// const handleSubmit = async () => {
-//   // ✅ Step 1: Validate required fields
-//   if (!leadNo) return toast.error("Lead No. is required");
-//   if (!interestedIn) return toast.error("Interested In is required");
-//   if (!occupation) return toast.error("Occupation is required");
-//   if (!referenceBySource) return toast.error("Reference by/Source is required");
+  // second :
+  // const handleSubmit = async () => {
+  //   // ✅ Step 1: Validate required fields
+  //   if (!leadNo) return toast.error("Lead No. is required");
+  //   if (!interestedIn) return toast.error("Interested In is required");
+  //   if (!occupation) return toast.error("Occupation is required");
+  //   if (!referenceBySource) return toast.error("Reference by/Source is required");
 
-//   // ✅ Step 2: Prepare payload
-//   const payload = {
-//     leadNo,
-//     name,
-//     mobile,
-//     whatsappNo,
-//     email,
-//     address,
-//     occupation,
-//     company,
-//     interestedIn,
-//     budget,
-//     referenceBySource,
-//     nameOfCp,
-//     planningToBuyWithin: planningToBuy,
-//     remarkHistory: new Date().toISOString(),
-//   };
+  //   // ✅ Step 2: Prepare payload
+  //   const payload = {
+  //     leadNo,
+  //     name,
+  //     mobile,
+  //     whatsappNo,
+  //     email,
+  //     address,
+  //     occupation,
+  //     company,
+  //     interestedIn,
+  //     budget,
+  //     referenceBySource,
+  //     nameOfCp,
+  //     planningToBuyWithin: planningToBuy,
+  //     remarkHistory: new Date().toISOString(),
+  //   };
 
-//   console.log("📤 Sending Enquiry POST Request:", payload);
+  //   console.log("📤 Sending Enquiry POST Request:", payload);
 
-//   // ✅ Step 3: Send API call
-//   try {
-//     const response = await fetch("https://localhost:5289/sales/api/enquiries", {
-//       method: "POST",
-//       headers: { "Content-Type": "application/json" },
-//       credentials: "include",
-//       body: JSON.stringify(payload),
-//     });
+  //   // ✅ Step 3: Send API call
+  //   try {
+  //     const response = await fetch("https://localhost:5289/sales/api/enquiries", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       credentials: "include",
+  //       body: JSON.stringify(payload),
+  //     });
 
-//     if (!response.ok) {
-//       const errorText = await response.text();
-//       throw new Error(`Server responded with ${response.status}: ${errorText}`);
-//     }
+  //     if (!response.ok) {
+  //       const errorText = await response.text();
+  //       throw new Error(`Server responded with ${response.status}: ${errorText}`);
+  //     }
 
-//     const newLead = await response.json();
-//     console.log("✅ Enquiry saved successfully:", newLead);
+  //     const newLead = await response.json();
+  //     console.log("✅ Enquiry saved successfully:", newLead);
 
-//     // ✅ Step 4: Add to local leads list (Visit Done)
-//     setLeads((prev) => ({
-//       ...prev,
-//       done: [...prev.done, newLead],
-//     }));
+  //     // ✅ Step 4: Add to local leads list (Visit Done)
+  //     setLeads((prev) => ({
+  //       ...prev,
+  //       done: [...prev.done, newLead],
+  //     }));
 
-//     toast.success("Enquiry submitted successfully!");
+  //     toast.success("Enquiry submitted successfully!");
 
-//     // ✅ Step 5: Reset fields
-//     setLeadNo("");
-//     setName("");
-//     setMobile("");
-//     setWhatsappNo("");
-//     setEmail("");
-//     setInterestedIn("");
-//     setBudget("");
-//     setPlanningToBuy("");
-//     setOccupation("");
-//     setReasonForPurchase("");
-//     setAddress("");
-//     setCompany("");
-//     setReferenceBySource("");
-//     setNameOfCp("");
-//     setRemarks("");
+  //     // ✅ Step 5: Reset fields
+  //     setLeadNo("");
+  //     setName("");
+  //     setMobile("");
+  //     setWhatsappNo("");
+  //     setEmail("");
+  //     setInterestedIn("");
+  //     setBudget("");
+  //     setPlanningToBuy("");
+  //     setOccupation("");
+  //     setReasonForPurchase("");
+  //     setAddress("");
+  //     setCompany("");
+  //     setReferenceBySource("");
+  //     setNameOfCp("");
+  //     setRemarks("");
 
-//     setShowFirmForm(false);
+  //     setShowFirmForm(false);
 
-//     // ✅ Step 6: Refresh leads (optional)
-//     fetchVisitScheduledLeads();
-//   } catch (error) {
-//     console.error("❌ Error submitting enquiry:", error);
-//     toast.error("Failed to submit enquiry. Please try again.");
-//   }
-// };
-
-
-// const handleSubmit = async () => {
-//   // ✅ Step 1: Validate required fields
-//   if (!leadNo) return toast.error("Lead No. is required");
-//   if (!interestedIn) return toast.error("Interested In is required");
-//   if (!occupation) return toast.error("Occupation is required");
-//   if (!referenceBySource) return toast.error("Reference by/Source is required");
-
-//   // ✅ Step 2: Prepare payload (as per /api/enquiries schema)
-//   const now = new Date().toISOString();
-
-//   const payload = {
-//     id: 0,
-//     name: name || "",
-//     phone: mobile ? parseInt(mobile) : 0,
-//     whatsapp: whatsappNo ? parseInt(whatsappNo) : 0,
-//     email: email || "",
-//     address: address || "",
-//     occupation: occupation || "",
-//     company: company || "",
-//     interest: interestedIn || "",
-//     budgetInLakh: budget ? parseFloat(budget) : 0,
-//     intendedPurchasePeriodMonths: planningToBuy
-//       ? parseInt(planningToBuy)
-//       : 0,
-//     lastSiteVisit: now,
-//     source: referenceBySource || "Walk-in", // ✅ required
-//     remarks: remarks || "",
-//     status: "Visit Done", // ✅ required
-//     updatedBy: "system",
-
-//     // ✅ include required nested object
-//     salesEnagagement: {
-//       id: 0,
-//       assignedTo: "b", // replace dynamically with logged-in user ID
-//       assignedDate: now,
-//       assignedBy: "system",
-//       enquiryId: 0,
-//       nextFollowUp: now,
-//       status: "Visit Done",
-//       remarks: remarks || "",
-//       enquiry: {
-//   id: 0,
-//   name: name || "",
-  
-// }
-
-//     },
-//   };
-
-//   console.log("📤 Sending Enquiry POST Request:", payload);
-
-//   // ✅ Step 3: API call
-//   try {
-//     const response = await fetch("https://localhost:5289/sales/api/enquiries", {
-//       method: "POST",
-//       headers: { "Content-Type": "application/json" },
-//       credentials: "include",
-//       body: JSON.stringify(payload),
-//     });
-
-//     if (!response.ok) {
-//       const errorText = await response.text();
-//       throw new Error(`Server responded with ${response.status}: ${errorText}`);
-//     }
-
-//     const newLead = await response.json();
-//     console.log("✅ Enquiry saved successfully:", newLead);
-
-//     // ✅ Step 4: Add to Visit Done list
-//     setLeads((prev) => ({
-//       ...prev,
-//       done: [...(prev.done || []), newLead],
-//     }));
-
-//     toast.success("Enquiry submitted successfully!");
-
-//     // ✅ Step 5: Reset form fields
-//     setLeadNo("");
-//     setName("");
-//     setMobile("");
-//     setWhatsappNo("");
-//     setEmail("");
-//     setInterestedIn("");
-//     setBudget("");
-//     setPlanningToBuy("");
-//     setOccupation("");
-//     setReasonForPurchase("");
-//     setAddress("");
-//     setCompany("");
-//     setReferenceBySource("");
-//     setNameOfCp("");
-//     setRemarks("");
-//     setShowFirmForm(false);
-
-//     // ✅ Step 6: Optional - refresh latest leads from backend
-//     fetchVisitScheduledLeads();
-//   } catch (error) {
-//     console.error("❌ Error submitting enquiry:", error);
-//     toast.error("Failed to submit enquiry. Please try again.");
-//   }
-// };
+  //     // ✅ Step 6: Refresh leads (optional)
+  //     fetchVisitScheduledLeads();
+  //   } catch (error) {
+  //     console.error("❌ Error submitting enquiry:", error);
+  //     toast.error("Failed to submit enquiry. Please try again.");
+  //   }
+  // };
 
 
-const handleSubmit = async () => {
-  if (!leadNo) return toast.error("Lead No. is required");
-  if (!interestedIn) return toast.error("Interested In is required");
-  if (!occupation) return toast.error("Occupation is required");
-  if (!referenceBySource) return toast.error("Reference by/Source is required");
-
-  const now = new Date().toISOString();
-
-  const payload = {
-    id: 0,
-    name: name || "",
-    phone: mobile ? parseInt(mobile) : 0,
-    whatsapp: whatsappNo ? parseInt(whatsappNo) : 0,
-    email: email || "unknown@example.com", // ✅ required
-    address: address || "N/A", // ✅ required
-    occupation: occupation || "N/A", // ✅ required
-    company: company || "N/A", // ✅ required
-    interest: interestedIn || "N/A", // ✅ required
-    budgetInLakh: budget ? parseFloat(budget) : 0,
-    intendedPurchasePeriodMonths: planningToBuy ? parseInt(planningToBuy) : 0,
-    lastSiteVisit: now,
-    source: referenceBySource || "Walk-in", // ✅ required
-    remarks: remarks || "Visit done", // ✅ required
-    status: "Visit Done", // ✅ required
-    updatedBy: "system",
-
-    // ✅ required nested object
-    salesEnagagement: {
-      id: 0,
-      assignedTo: "b", // replace with logged-in user ID
-      assignedDate: now,
-      assignedBy: "system",
-      enquiryId: 0,
-      nextFollowUp: now,
-      status: "Visit Done",
-      remarks: remarks || "Visit completed",
-
-      // ✅ fully populated enquiry object to satisfy backend model
-      enquiry: {
-        id: 0,
-        name: name || "",
-        phone: mobile ? parseInt(mobile) : 0,
-        email: email || "unknown@example.com",
-        address: address || "N/A",
-        company: company || "N/A",
-        occupation: occupation || "N/A",
-        interest: interestedIn || "N/A",
-        status: "Visit Done",
-        source: referenceBySource || "Walk-in",
-        remarks: remarks || "Visit done",
-        bookings: [], // ✅ empty array required by backend
-        lastUpdatedBy: "system", // ✅ required
-        salesEnagagements: [], // ✅ empty array required by backend
-        createdDate: now,
-        updatedDate: now,
-      },
-    },
-  };
-
-  console.log("📤 Sending Enquiry POST Request:", payload);
-
+  const fetchEnquiries = async () => {
   try {
     const response = await fetch("https://localhost:5289/sales/api/enquiries", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
       credentials: "include",
-      body: JSON.stringify(payload),
     });
+    if (!response.ok) throw new Error("Failed to fetch enquiries");
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`Server responded with ${response.status}: ${errorText}`);
-    }
-
-    const newLead = await response.json();
-    console.log("✅ Enquiry saved successfully:", newLead);
-
-    setLeads((prev) => ({
-      ...prev,
-      done: [...(prev.done || []), newLead],
-    }));
-
-    toast.success("Enquiry submitted successfully!");
-
-    // Reset
-    setLeadNo("");
-    setName("");
-    setMobile("");
-    setWhatsappNo("");
-    setEmail("");
-    setInterestedIn("");
-    setBudget("");
-    setPlanningToBuy("");
-    setOccupation("");
-    setReasonForPurchase("");
-    setAddress("");
-    setCompany("");
-    setReferenceBySource("");
-    setNameOfCp("");
-    setRemarks("");
-    setShowFirmForm(false);
-
-    fetchVisitScheduledLeads();
+    const data = await response.json();
+    console.log("📥 Enquiries fetched from backend:", data);
+    setFirms(data); // Update your table state
   } catch (error) {
-    console.error("❌ Error submitting enquiry:", error);
-    toast.error("Failed to submit enquiry. Please try again.");
+    console.error("❌ Error fetching enquiries:", error);
   }
 };
 
 
-//   const handleSubmit = async () => {
-//     //  Step 1: Basic validation
-//     if (!leadNo || !interestedIn || !occupation || !referenceBySource) {
-//       toast.error("Please fill all required fields", {
-//         position: "top-right",
-//         autoClose: 3000,
-//       });
-//       return;
-//     }
+  const handleSubmit = async () => {
+    if (!leadNo) return toast.error("Lead No. is required");
+    if (!interestedIn) return toast.error("Interested In is required");
+    if (!occupation) return toast.error("Occupation is required");
+    if (!referenceBySource) return toast.error("Reference by/Source is required");
 
-//     // ✅ Step 2: Create the JSON body based on your provided API schema
-//     const payload = {
-//       id: 0,
-//       name: name || "",
-//       phone: mobile ? parseInt(mobile) : 0,
-//       whatsapp: whatsappNo ? parseInt(whatsappNo) : 0,
-//       email: email || "",
-//       address: address || "",
-//       occupation: occupation || "",
-//       company: company || "",
-//       interest: interestedIn || "",
-//       budgetInLakh: budget ? parseFloat(budget) : 0,
-//       intendedPurchasePeriodMonths: planningToBuy
-//         ? parseInt(planningToBuy)
-//         : 0,
-//       lastSiteVisit: new Date().toISOString(),
-//       source: referenceBySource || "",
-//       remarks: remarks || "",
-//       status: "Visit Done", // you can adjust this dynamically
+    const now = new Date().toISOString();
 
-//       // updatedBy: "system", // you can replace this with logged-in user ID or name
-//       // sourceDetails: "Walk-in lead", // 
+    // const payload = {
+    //   id: 0,
+    //   name: name || "",
+    //   phone: mobile ? parseInt(mobile) : 0,
+    //   whatsapp: whatsappNo ? parseInt(whatsappNo) : 0,
+    //   email: email || "unknown@example.com", // ✅ required
+    //   address: address || "N/A", // ✅ required
+    //   occupation: occupation || "N/A", // ✅ required
+    //   company: company || "N/A", // ✅ required
+    //   interest: interestedIn || "N/A", // ✅ required
+    //   budgetInLakh: budget ? parseFloat(budget) : 0,
+    //   intendedPurchasePeriodMonths: planningToBuy ? parseInt(planningToBuy) : 0,
+    //   lastSiteVisit: now,
+    //   source: referenceBySource || "Walk-in", // ✅ required
+    //   remarks: remarks || "Visit done", // ✅ required
+    //   status: "Visit Done", // ✅ required
+    //   updatedBy: "system",
 
+    //   // ✅ required nested object
+    //   salesEnagagement: {
+    //     id: 0,
+    //     assignedTo: "b", // replace with logged-in user ID
+    //     assignedDate: now,
+    //     assignedBy: "system",
+    //     enquiryId: 0,
+    //     nextFollowUp: now,
+    //     status: "Visit Done",
+    //     remarks: remarks || "Visit completed",
 
-
-//       salesEnagagement: {
-//         id: 0,
-//         assignedTo: "b", // replace with logged-in user or dynamic value
-//         assignedDate: new Date().toISOString(),
-//         assignedBy: "system", // replace dynamically
-//         enquiryId: 0,
-//         nextFollowUp: new Date().toISOString(),
-//         status: "Visit Done",
-//         remarks: remarks || "",
-//         enquiry: null,
-//       },
-//     };
-
-//     console.log("📤 Sending POST request:", payload);
-
-//     // ✅ Step 3: Make the POST API call
-//     try {
-//       const response = await fetch("https://localhost:5289/sales/api/enquiries", {
-//         method: "POST",
-//         headers: {
-//           "Content-Type": "application/json",
-//         },
-//         credentials: "include", // optional if API requires auth cookies
-//         body: JSON.stringify(payload),
-//       });
-
-//       if (!response.ok) {
-//         const errorText = await response.text();
-//         throw new Error(`Server responded with ${response.status}: ${errorText}`);
-//       }
-
-//       const data = await response.json();
-//       console.log("✅ API POST Success:", data);
-
-//       toast.success("Enquiry submitted successfully!", {
-//         position: "top-right",
-//         autoClose: 3000,
-//       });
+    //     // ✅ fully populated enquiry object to satisfy backend model
+    //     enquiry: {
+    //       id: 0,
+    //       name: name || "",
+    //       phone: mobile ? parseInt(mobile) : 0,
+    //       email: email || "unknown@example.com",
+    //       address: address || "N/A",
+    //       company: company || "N/A",
+    //       occupation: occupation || "N/A",
+    //       interest: interestedIn || "N/A",
+    //       status: "Visit Done",
+    //       source: referenceBySource || "Walk-in",
+    //       remarks: remarks || "Visit done",
+    //       bookings: [], // ✅ empty array required by backend
+    //       lastUpdatedBy: "system", // ✅ required
+    //       salesEnagagements: [], // ✅ empty array required by backend
+    //       createdDate: now,
+    //       updatedDate: now,
+    //     },
+    //   },
+    // };
 
 
-//       //STEP 4: Append the new record into your "Visit Done" table list
-//       // so that it shows immediately even if its status isn't "Visit Done"
-//       console.log(" Before appending new lead, existing leads.done:", leads?.done);
-//       // setLeads((prevLeads) => {
-//       //   console.log("🧩 Inside setLeads updater, previous state:", prevLeads);
-//       //   const updated = {
-//       //     ...prevLeads,
-//       //     done: [...(prevLeads.done || []), data],
-//       //   };
-//       //   console.log("✅ Updated leads state (done array):", updated.done);
-//       //   return updated;
-//       // });
-// if (typeof data === "number") {
-//   // If only ID returned, fetch full object
-//   const newLeadResponse = await fetch(`https://localhost:5289/sales/api/leads/${data}`);
-//   const newLead = await newLeadResponse.json();
+    const payload = {
+      id: 0,
+      name: name || "",
+      phone: mobile ? parseInt(mobile) : 0,
+      whatsapp: whatsappNo ? parseInt(whatsappNo) : 0,
+      email: email || "unknown@example.com",
+      address: address || "N/A",
+      occupation: occupation || "N/A",
+      company: company || "N/A",
+      interest: interestedIn || "N/A",
+      budgetInLakh: budget ? parseFloat(budget) : 0,
+      intendedPurchasePeriodMonths: planningToBuy ? parseInt(planningToBuy) : 0,
+      lastSiteVisit: new Date().toISOString(),
+      source: referenceBySource || "Walk-in",
+      remarks: remarks || "Visit done",
+      status: "Visit Done",
+      lastUpdatedBy: "system",
+      lastUpdatedDate: new Date().toISOString(),
 
-//   setLeads((prevLeads) => ({
-//     ...prevLeads,
-//     done: [...(prevLeads.done || []), newLead],
-//   }));
-// } else {
-//   // If full object returned
-//   setLeads((prevLeads) => ({
-//     ...prevLeads,
-//     done: [...(prevLeads.done || []), data],
-//   }));
-// }
+      // ✅ The backend expects a list of SalesEnagagement objects
+      // ✅ correct
+      SalesEngagement: {
+        id: 0,
+        assignedTo: "b",
+        assignedDate: new Date().toISOString(),
+        assignedBy: "system",
+        enquiryId: 0,
+        nextFollowUp: new Date().toISOString(),
+        status: "Visit Done",
+        remarks: remarks || "Visit completed"
+      }
 
-//       // Reset form fields after success
-//       setLeadNo("");
-//       setName("");
-//       setMobile("");
-//       setWhatsappNo("");
-//       setEmail("");
-//       setInterestedIn("");
-//       setBudget("");
-//       setPlanningToBuy("");
-//       setOccupation("");
-//       setReasonForPurchase("");
-//       setAddress("");
-//       setCompany("");
-//       setReferenceBySource("");
-//       setNameOfCp("");
-//       setRemarks("");
-//       setShowFirmForm(false);
+    };
 
-//       // Optionally refetch the updated data
-//       fetchVisitScheduledLeads();
-//     } catch (error) {
-//       console.error("❌ POST API Error:", error);
-//       toast.error("Failed to submit enquiry. Please try again.", {
-//         position: "top-right",
-//         autoClose: 3000,
-//       });
-//     }
-//   };
+    console.log("📤 Sending Enquiry POST Request:", payload);
 
+    try {
+      const response = await fetch("https://localhost:5289/sales/api/enquiries", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(payload),
+      });
 
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Server responded with ${response.status}: ${errorText}`);
+      }
 
+      const newLead = await response.json();
+      console.log(" Enquiry saved successfully:", newLead);
 
-// const handleSubmit = async () => {
-//   // ✅ Step 1: Basic validation
-//   if (!leadNo || !interestedIn || !occupation || !referenceBySource) {
-//     toast.error("Please fill all required fields", {
-//       position: "top-right",
-//       autoClose: 3000,
-//     });
-//     return;
-//   }
+      setLeads((prev) => ({
+        ...prev,
+        done: [...(prev.done || []), newLead],
+      }));
 
-//   // ✅ Step 2: Prepare payload exactly as per /api/enquiries schema
-//   const now = new Date().toISOString();
+      setFirms((prev) => [newLead, ...prev]);
+      console.log("✅ Saving data into table (firms):", newLead);
+      console.log("🧾 Updated firms list:", firms);
+      toast.success("Enquiry submitted successfully!");
 
-//   const payload = {
-//     id: 0,
-//     name: name || "",
-//     phone: mobile ? parseInt(mobile) : 0,
-//     whatsapp: whatsappNo ? parseInt(whatsappNo) : 0,
-//     email: email || "",
-//     address: address || "",
-//     occupation: occupation || "",
-//     company: company || "",
-//     interest: interestedIn || "",
-//     budgetInLakh: budget ? parseFloat(budget) : 0,
-//     intendedPurchasePeriodMonths: planningToBuy
-//       ? parseInt(planningToBuy)
-//       : 0,
-//     lastSiteVisit: now,
-//     source: referenceBySource || "",
-//     remarks: remarks || "",
-//     status: "Visit Done",
-//     updatedBy: "system",
-//     sourceDetails: "Walk-in lead",
+      // Reset
+      setLeadNo("");
+      setName("");
+      setMobile("");
+      setWhatsappNo("");
+      setEmail("");
+      setInterestedIn("");
+      setBudget("");
+      setPlanningToBuy("");
+      setOccupation("");
+      setReasonForPurchase("");
+      setAddress("");
+      setCompany("");
+      setReferenceBySource("");
+      setNameOfCp("");
+      setRemarks("");
+      setShowFirmForm(false);
 
-//     // ✅ Nested salesEnagagement structure
-//     salesEnagagement: {
-//       id: 0,
-//       assignedTo: "b", // Replace with actual user ID dynamically
-//       assignedDate: now,
-//       assignedBy: "system",
-//       enquiryId: 0,
-//       nextFollowUp: now,
-//       status: "Visit Done",
-//       remarks: remarks || "",
-//       enquiry: {
-//         id: 0,
-//         name: name || "",
-//         phone: mobile ? parseInt(mobile) : 0,
-//         whatsapp: whatsappNo ? parseInt(whatsappNo) : 0,
-//         email: email || "",
-//         address: address || "",
-//         occupation: occupation || "",
-//         company: company || "",
-//         interest: interestedIn || "",
-//         budgetInLakh: budget ? parseFloat(budget) : 0,
-//         intendedPurchasePeriodMonths: planningToBuy
-//           ? parseInt(planningToBuy)
-//           : 0,
-//         lastSiteVisit: now,
-//         source: referenceBySource || "",
-//         remarks: remarks || "",
-//         status: "Visit Done",
-//         lastUpdatedBy: "system",
-//         lastUpdatedDate: now,
-//         salesEnagagements: [],
-//         bookings: [],
-//       },
-//     },
-//   };
-
-//   console.log("📤 Sending POST request to /api/enquiries:", payload);
-
-//   // ✅ Step 3: Send API call
-//   try {
-//     const response = await fetch("https://localhost:5289/sales/api/enquiries", {
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       credentials: "include",
-//       body: JSON.stringify(payload),
-//     });
-
-//     if (!response.ok) {
-//       const errorText = await response.text();
-//       throw new Error(`Server responded with ${response.status}: ${errorText}`);
-//     }
-
-//     const data = await response.json();
-//     console.log("✅ API POST Success:", data);
-
-//     toast.success("Enquiry submitted successfully!", {
-//       position: "top-right",
-//       autoClose: 3000,
-//     });
-//   const newLead = await response.json();
-//     // ✅ Append to "Visit Done" list for table visibility
-//     setLeads((prevLeads) => {
-//       const updated = {
-//         ...prevLeads,
-//         done: [...(prevLeads.done || []), data],
-//       };
-//       console.log("✅ Updated leads state (done array):", updated.done);
-//       return updated;
-//     });
-
-//     // ✅ Reset fields
-//     setLeadNo("");
-//     setName("");
-//     setMobile("");
-//     setWhatsappNo("");
-//     setEmail("");
-//     setInterestedIn("");
-//     setBudget("");
-//     setPlanningToBuy("");
-//     setOccupation("");
-//     setReasonForPurchase("");
-//     setAddress("");
-//     setCompany("");
-//     setReferenceBySource("");
-//     setNameOfCp("");
-//     setRemarks("");
-//     setShowFirmForm(false);
-
-//     // ✅ Optionally refresh leads list
-//     fetchVisitScheduledLeads();
-//   } catch (error) {
-//     console.error("❌ POST API Error:", error);
-//     toast.error("Failed to submit enquiry. Please try again.", {
-//       position: "top-right",
-//       autoClose: 3000,
-//     });
-//   }
-// };
+      // fetchVisitScheduledLeads();
+      fetchEnquiries();
+    } catch (error) {
+      console.error("❌ Error submitting enquiry:", error);
+      toast.error("Failed to submit enquiry. Please try again.");
+    }
+  };
 
 
 
-// const handleSubmit = async () => {
-//   // ✅ Step 1: Basic validation
-//   if (!leadNo || !interestedIn || !occupation || !referenceBySource) {
-//     toast.error("Please fill all required fields", {
-//       position: "top-right",
-//       autoClose: 3000,
-//     });
-//     return;
-//   }
 
-//   // ✅ Step 2: Prepare payload exactly as per /api/enquiries schema
-//   const now = new Date().toISOString();
 
-//   const payload = {
-//     id: 0,
-//     name: name || "",
-//     phone: mobile ? parseInt(mobile) : 0,
-//     whatsapp: whatsappNo ? parseInt(whatsappNo) : 0,
-//     email: email || "",
-//     address: address || "",
-//     occupation: occupation || "",
-//     company: company || "",
-//     interest: interestedIn || "",
-//     budgetInLakh: budget ? parseFloat(budget) : 0,
-//     intendedPurchasePeriodMonths: planningToBuy
-//       ? parseInt(planningToBuy)
-//       : 0,
-//     lastSiteVisit: now,
-//     source: referenceBySource || "",
-//     remarks: remarks || "",
-//     status: "Visit Done",
-//     updatedBy: "system",
-//     sourceDetails: "Walk-in lead",
-
-//     // ✅ Nested salesEnagagement structure
-//     salesEnagagement: {
-//       id: 0,
-//       assignedTo: "b", // Replace with actual user ID dynamically if available
-//       assignedDate: now,
-//       assignedBy: "system",
-//       enquiryId: 0,
-//       nextFollowUp: now,
-//       status: "Visit Done",
-//       remarks: remarks || "",
-//       enquiry: {
-//         id: 0,
-//         name: name || "",
-//         phone: mobile ? parseInt(mobile) : 0,
-//         whatsapp: whatsappNo ? parseInt(whatsappNo) : 0,
-//         email: email || "",
-//         address: address || "",
-//         occupation: occupation || "",
-//         company: company || "",
-//         interest: interestedIn || "",
-//         budgetInLakh: budget ? parseFloat(budget) : 0,
-//         intendedPurchasePeriodMonths: planningToBuy
-//           ? parseInt(planningToBuy)
-//           : 0,
-//         lastSiteVisit: now,
-//         source: referenceBySource || "",
-//         remarks: remarks || "",
-//         status: "Visit Done",
-//         lastUpdatedBy: "system",
-//         lastUpdatedDate: now,
-//         salesEnagagements: [],
-//         bookings: [],
-//       },
-//     },
-//   };
-
-//   console.log("📤 Sending POST request to /api/enquiries:", payload);
-
-//   // ✅ Step 3: Send API call
-//   try {
-//     const response = await fetch("https://localhost:5289/sales/api/enquiries", {
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       credentials: "include",
-//       body: JSON.stringify(payload),
-//     });
-
-//     if (!response.ok) {
-//       const errorText = await response.text();
-//       throw new Error(`Server responded with ${response.status}: ${errorText}`);
-//     }
-
-//     // ✅ Read response only once
-//     const newLead = await response.json();
-//     console.log("✅ API POST Success (new lead):", newLead);
-
-//     toast.success("Enquiry submitted successfully!", {
-//       position: "top-right",
-//       autoClose: 3000,
-//     });
-
-//     // ✅ Append new lead to existing "Visit Done" list
-//     setLeads((prev) => {
-//       const updated = {
-//         ...prev,
-//         done: [...prev.done, newLead],
-//       };
-//       console.log("✅ Updated leads state (done array):", updated.done);
-//       return updated;
-//     });
-
-//     // ✅ Reset all fields
-//     setLeadNo("");
-//     setName("");
-//     setMobile("");
-//     setWhatsappNo("");
-//     setEmail("");
-//     setInterestedIn("");
-//     setBudget("");
-//     setPlanningToBuy("");
-//     setOccupation("");
-//     setReasonForPurchase("");
-//     setAddress("");
-//     setCompany("");
-//     setReferenceBySource("");
-//     setNameOfCp("");
-//     setRemarks("");
-//     setShowFirmForm(false);
-
-//     // ✅ Optionally refresh leads list
-//     fetchVisitScheduledLeads();
-
-//   } catch (error) {
-//     console.error("❌ POST API Error:", error);
-//     toast.error("Failed to submit enquiry. Please try again.", {
-//       position: "top-right",
-//       autoClose: 3000,
-//     });
-//   }
-// };
 
   const validateMobile = (value) => {
     const regex = /^[0-9]{10}$/;
@@ -2270,6 +1816,7 @@ const handleSubmit = async () => {
   const fetchVisitScheduledLeads = async () => {
     try {
       const response = await fetch("https://localhost:5289/sales/api/leads", {
+      // const response = await fetch("https://localhost:5289/sales/api/enquiries", {
         credentials: "include",
       });
       if (!response.ok) throw new Error("Failed to fetch leads");
