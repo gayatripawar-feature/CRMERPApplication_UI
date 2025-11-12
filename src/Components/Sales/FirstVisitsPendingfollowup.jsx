@@ -253,7 +253,8 @@ const formatDateTime = (dateString) => {
 };
 
 export const FirstVisitsPendingfollowup = ({
-  firms,
+  // firms,
+  data =[],
   onUpdate,
   onDelete,
 }) => {
@@ -416,7 +417,7 @@ export const FirstVisitsPendingfollowup = ({
   };
 
   // Paginate the data
-  const paginatedData = firms.slice(
+  const paginatedData = data.slice(
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage
   );
@@ -426,7 +427,7 @@ export const FirstVisitsPendingfollowup = ({
       <TableContainer
         component={Paper}
         sx={{
-          maxHeight: isMobile ? 400 : 600,
+          maxHeight: isMobile ? 400 : 400,
           width: "100%",
           overflow: "auto",
           "&::-webkit-scrollbar": {
@@ -671,7 +672,7 @@ export const FirstVisitsPendingfollowup = ({
             </TableRow>
           </TableHead>
           <TableBody>
-            {firms.length === 0 ? (
+            {data.length === 0 ? (
               <TableRow>
                 <TableCell
                   colSpan={25}
@@ -767,7 +768,7 @@ export const FirstVisitsPendingfollowup = ({
                   </TableCell>
                   <TableCell>{row.lastFollowUp || "-"}</TableCell>
                   <TableCell>{row.status || "-"}</TableCell>
-                  <TableCell>{row.remark || "-"}</TableCell>
+                  <TableCell>{row.remarks || "-"}</TableCell>
                   <TableCell>
                     {row.nextFollowUp
                       ? formatDateTime(row.nextFollowUp)
@@ -776,20 +777,20 @@ export const FirstVisitsPendingfollowup = ({
                       : "-"}
                   </TableCell>
                   <TableCell>
-                    <TableCell>{row.assignTo || "-"}</TableCell>
+                    <TableCell>{row.assignedTo || "-"}</TableCell>
                   </TableCell>
-                  <TableCell>{row.enquiryNo || "-"}</TableCell>
-                  <TableCell>{row.leadNo || "-"}</TableCell>
+                  <TableCell>{row.enquiryId || "-"}</TableCell>
+                  <TableCell>{row.id|| "-"}</TableCell>
                   <TableCell>{row.name || "-"}</TableCell>
                   <TableCell>{row.salesExecutive || "-"}</TableCell>
-                  <TableCell>{row.mobileNo || "-"}</TableCell>
+                  <TableCell>{row.phone || "-"}</TableCell>
                   <TableCell>{row.alternateContactNo || "-"}</TableCell>
                   <TableCell>{row.whatsappNo || "-"}</TableCell>
                   <TableCell>{row.email || "-"}</TableCell>
                   <TableCell>{row.address || "-"}</TableCell>
                   <TableCell>{row.occupation || "-"}</TableCell>
                   <TableCell>{row.company || "-"}</TableCell>
-                  <TableCell>{row.interrestedIN || "-"}</TableCell>
+                  <TableCell>{row.interest || "-"}</TableCell>
                   <TableCell>{row.budget || "-"}</TableCell>
                   <TableCell>{row.reasonForPurchase || "-"}</TableCell>
                   <TableCell>{row.referenceBy || "-"}</TableCell>
@@ -814,7 +815,7 @@ export const FirstVisitsPendingfollowup = ({
                   <TablePagination
                     rowsPerPageOptions={[5, 10, 25]}
                     component="div"
-                    count={firms.length}
+                    count={data.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     onPageChange={handleChangePage}
