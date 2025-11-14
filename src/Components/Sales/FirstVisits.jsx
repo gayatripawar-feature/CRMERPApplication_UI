@@ -1729,6 +1729,9 @@ import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import FormHelperText from "@mui/material/FormHelperText";
 import Constants from "../Constants";
+import FirstvisitfollowupUndefinedTable from "./FirstvisitfollowupUndefinedTable";
+import FirstvisitfollowupbookedTable from "./FirstvisitfollowupbookedTable";
+import { FirstVisitFollowupHistoryTable } from "./FirstVisitFollowupHistoryTable";
 
 // API Call Function
 const fetchLoansData = async () => {
@@ -1786,11 +1789,11 @@ const sections = [
   //   icon: <FaUpload size={24} />,
   //   bgColor: "secondary.main",
   // },
-  {
-    label: "Pending Follow Up",
-    icon: <FaHourglassStart size={20} />,
-    createLabel: "Create Firm",
-  },
+  // {
+  //   label: "Pending Follow Up",
+  //   icon: <FaHourglassStart size={20} />,
+  //   createLabel: "Create Firm",
+  // },
   {
     label: "Follow Up History",
     icon: <FaHistory size={20} />,
@@ -1823,6 +1826,7 @@ const FirstVisits = () => {
   const [showFileInput, setShowFileInput] = useState(false);
   const [leadNo, setLeadNo] = useState("");
   const [salesExec, setSalesExec] = useState("");
+  const [projectData, setProjectData] = useState([]);
   const [mobile, setMobile] = useState("");
   const [email, setEmail] = useState("");
   const [mobileError, setMobileError] = useState("");
@@ -1842,12 +1846,13 @@ const FirstVisits = () => {
   const [referenceBySource, setReferenceBySource] = useState("");
   const [nameOfCp, setNameOfCp] = useState("");
   const [customerFeedback, setCustomerFeedback] = useState("");
+  const [showLandownerForm, setShowLandownerForm] = useState(false);
   //  const [leads, setLeads] = useState([]);
   const [leads, setLeads] = useState({ scheduled: [], done: [] });
   const [remarks, setRemarks] = useState();
 const [selectedLead, setSelectedLead] = useState(null);
-
-
+const [showProjectForm, setShowProjectForm] = useState(false);
+const [showFlatForm, setShowFlatForm] = useState(false);
 
 
   useEffect(() => {
@@ -1883,32 +1888,39 @@ const [selectedLead, setSelectedLead] = useState(null);
     setOccupation(event.target.value);
   };
 
+  // const handleToggleSection = (index) => {
+  //   if (index === 1) {
+  //     // downloadSampleCsv();
+  //   } else if (index === 2) {
+  //     // if (fileInputRef.current) {
+  //     //   fileInputRef.current.click();
+  //     // }
+  //   } else {
+  //     setExpandedSection(index);
+  //     setShowFileInput(false);
+  //   }
+  // };
+
+  // const downloadSampleCsv = () => {
+  //   const sampleData = `Sales Exp.,Name,Mobile,Alternate Mobile Number,WhatsApp No.,Email,Address,Occupation,Company,Interested In,Budget,Reason,Reference,Name of CP,Planning to Buy,Follow Up Details\n`;
+
+  //   const blob = new Blob([sampleData], { type: "text/csv" });
+  //   const url = URL.createObjectURL(blob);
+
+  //   const a = document.createElement("a");
+  //   a.href = url;
+  //   a.download = "lead_template.csv";
+  //   document.body.appendChild(a);
+  //   a.click();
+  //   document.body.removeChild(a);
+  // };
+
+
+
   const handleToggleSection = (index) => {
-    if (index === 1) {
-      downloadSampleCsv();
-    } else if (index === 2) {
-      if (fileInputRef.current) {
-        fileInputRef.current.click();
-      }
-    } else {
-      setExpandedSection(index);
-      setShowFileInput(false);
-    }
-  };
-
-  const downloadSampleCsv = () => {
-    const sampleData = `Sales Exp.,Name,Mobile,Alternate Mobile Number,WhatsApp No.,Email,Address,Occupation,Company,Interested In,Budget,Reason,Reference,Name of CP,Planning to Buy,Follow Up Details\n`;
-
-    const blob = new Blob([sampleData], { type: "text/csv" });
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "lead_template.csv";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-  };
+  setExpandedSection(index);
+  setShowFileInput(false);
+};
 
   const handleChange = (e) => {
     const value = e.target.value;
@@ -1952,56 +1964,7 @@ const [selectedLead, setSelectedLead] = useState(null);
 
     const now = new Date().toISOString();
 
-    // const payload = {
-    //   id: 0,
-    //   name: name || "",
-    //   phone: mobile ? parseInt(mobile) : 0,
-    //   whatsapp: whatsappNo ? parseInt(whatsappNo) : 0,
-    //   email: email || "unknown@example.com", // ✅ required
-    //   address: address || "N/A", // ✅ required
-    //   occupation: occupation || "N/A", // ✅ required
-    //   company: company || "N/A", // ✅ required
-    //   interest: interestedIn || "N/A", // ✅ required
-    //   budgetInLakh: budget ? parseFloat(budget) : 0,
-    //   intendedPurchasePeriodMonths: planningToBuy ? parseInt(planningToBuy) : 0,
-    //   lastSiteVisit: now,
-    //   source: referenceBySource || "Walk-in", // ✅ required
-    //   remarks: remarks || "Visit done", // ✅ required
-    //   status: "Visit Done", // ✅ required
-    //   updatedBy: "system",
-
-    //   // ✅ required nested object
-    //   salesEnagagement: {
-    //     id: 0,
-    //     assignedTo: "b", // replace with logged-in user ID
-    //     assignedDate: now,
-    //     assignedBy: "system",
-    //     enquiryId: 0,
-    //     nextFollowUp: now,
-    //     status: "Visit Done",
-    //     remarks: remarks || "Visit completed",
-
-    //     // ✅ fully populated enquiry object to satisfy backend model
-    //     enquiry: {
-    //       id: 0,
-    //       name: name || "",
-    //       phone: mobile ? parseInt(mobile) : 0,
-    //       email: email || "unknown@example.com",
-    //       address: address || "N/A",
-    //       company: company || "N/A",
-    //       occupation: occupation || "N/A",
-    //       interest: interestedIn || "N/A",
-    //       status: "Visit Done",
-    //       source: referenceBySource || "Walk-in",
-    //       remarks: remarks || "Visit done",
-    //       bookings: [], // ✅ empty array required by backend
-    //       lastUpdatedBy: "system", // ✅ required
-    //       salesEnagagements: [], // ✅ empty array required by backend
-    //       createdDate: now,
-    //       updatedDate: now,
-    //     },
-    //   },
-    // };
+    
 
 
     const payload = {
@@ -2499,7 +2462,10 @@ const [selectedLead, setSelectedLead] = useState(null);
                   //  data={loans}
                   // data={leads}
                   // data={leads.done}
-                  data={[...firms, ...leads.done]}
+                  // data={[...firms, ...leads.done]}
+                  // leads.done means only leads whose status is visist done and 
+
+                  data={leads.done}
 
 
                   isMobile={isMobile}
@@ -2828,9 +2794,188 @@ const [selectedLead, setSelectedLead] = useState(null);
           )}
         </div>
       )}
+      
+      {expandedSection === 1 && (
+        <>
+        <div className="content-container mt-3">
+    {!showProjectForm ? (
+      <>
+        {/* Top Row: Title + Download PDF Button */}
+        <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3 gap-2">
+          
+          {/* Section Title */}
+          <Typography
+            variant={isMobile ? "h6" : "h5"}
+            component="h2"
+            sx={{
+              fontWeight: "bold",
+              paddingTop: "6px",
+              width: isMobile ? "100%" : "auto",
+            }}
+          >
+            Enquiry History
+          </Typography>
 
+          {/* Download PDF Button */}
+          <Button
+            variant="contained"
+            sx={{
+              background: Constants.primaryColor,
+              color: "white",
+              fontWeight: "bold",
+              textTransform: "none",
+              padding: isMobile ? "6px 12px" : "8px 16px",
+              borderRadius: "8px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "8px",
+              "&:hover": { background: Constants.primaryColor },
+              marginTop: isMobile ? 8 : 0,
+            }}
+            // onClick={handleDownloadPDFFollowup}
+            size={isMobile ? "small" : "medium"}
+          >
+            <FaFileDownload size={isMobile ? 16 : 18} />
+            {isMobile ? "PDF" : "Download PDF"}
+          </Button>
+        </div>
 
-    
+        {/* Table Section */}
+        <div className="mt-3">
+          <FirstVisitFollowupHistoryTable
+            data={projectData}
+            isMobile={isMobile}
+            isTablet={isTablet}
+          />
+        </div>
+      </>
+    ) : (
+      <div></div>
+    )}
+  </div>
+        </>
+      )}
+
+    {expandedSection === 2 && (
+      <div className="content-container mt-3">
+    {!showLandownerForm ? (
+      <>
+        {/* Top Row: Title + Download PDF Button */}
+        <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3 gap-2">
+          
+          {/* Section Title */}
+          <Typography
+            variant={isMobile ? "h6" : "h5"}
+            component="h2"
+            sx={{
+              fontWeight: "bold",
+              paddingTop: "8px",
+              width: isMobile ? "100%" : "auto",
+            }}
+          >
+            Booked Enquiries
+          </Typography>
+
+          {/* Download PDF Button */}
+          <Button
+            variant="contained"
+            sx={{
+              background: Constants.primaryColor,
+              color: "white",
+              fontWeight: "bold",
+              textTransform: "none",
+              padding: isMobile ? "6px 12px" : "8px 16px",
+              borderRadius: "8px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "8px",
+              "&:hover": { background: Constants.primaryColor },
+              marginTop: isMobile ? 8 : 0,
+            }}
+            // onClick={handleDownloadPDFBooked}
+            size={isMobile ? "small" : "medium"}
+          >
+            <FaFileDownload size={isMobile ? 16 : 18} />
+            {isMobile ? "PDF" : "Download PDF"}
+          </Button>
+        </div>
+
+        {/* Table Section */}
+        <div className="mt-3">
+          <FirstvisitfollowupbookedTable
+            data={projectData}
+            isMobile={isMobile}
+            isTablet={isTablet}
+          />
+        </div>
+      </>
+    ) : (
+      <div></div>
+    )}
+  </div>
+    )}
+
+  {expandedSection === 3 && (
+   <div className="content-container mt-3">
+    {!showFlatForm ? (
+      <>
+        {/* Top Row: Title + Download PDF Button */}
+        <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3 gap-2">
+          
+          {/* Section Title */}
+          <Typography
+            variant={isMobile ? "h6" : "h5"}
+            component="h2"
+            sx={{
+              fontWeight: "bold",
+              paddingTop: "6px",
+              width: isMobile ? "100%" : "auto",
+            }}
+          >
+            Lost Enquiries
+          </Typography>
+
+          {/* Download PDF Button */}
+          <Button
+            variant="contained"
+            sx={{
+              background: Constants.primaryColor,
+              color: "white",
+              fontWeight: "bold",
+              textTransform: "none",
+              padding: isMobile ? "6px 12px" : "8px 16px",
+              borderRadius: "8px",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "8px",
+              "&:hover": { background: Constants.primaryColor },
+              marginTop: isMobile ? 8 : 0,
+            }}
+            // onClick={handleDownloadPDFUndefined}
+            size={isMobile ? "small" : "medium"}
+          >
+            <FaFileDownload size={isMobile ? 16 : 18} />
+            {isMobile ? "PDF" : "Download PDF"}
+          </Button>
+        </div>
+
+        {/* Table Section */}
+        <div className="mt-3">
+          <FirstvisitfollowupUndefinedTable
+            data={projectData}
+            isMobile={isMobile}
+            isTablet={isTablet}
+          />
+        </div>
+      </>
+    ) : (
+      <div></div>
+    )}
+  </div>
+  )}
 
 
       <ToastContainer

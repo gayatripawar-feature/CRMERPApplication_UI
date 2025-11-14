@@ -38,7 +38,7 @@
 //   timestamp :" ",
 //   name :" ",
 // }
- 
+
 // ];
 
 // const handleOpenDocument = (url) => {
@@ -53,9 +53,9 @@
 //     <TableContainer component={Paper}>
 //     <Table>
 //       <TableHead>
-      
+
 //          <TableRow sx={{background:Constants.primaryColor}}>
-        
+
 //           <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>TIMESTAMP</TableCell>
 //           <TableCell  sx={{ color: "white", fontWeight: "bold",whiteSpace: "nowrap"  }}>FIRM NAME</TableCell>
 //           <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>FIRM ADDRESS</TableCell>
@@ -64,7 +64,7 @@
 //           <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>FIRM PAN</TableCell>
 //           <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>FIRM GST</TableCell>
 //           <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>FIRM LIGHT BILL</TableCell>
-       
+
 //           <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>NAME</TableCell>
 //           <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>AGE</TableCell>
 //           <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>OCCUPATION</TableCell>
@@ -117,7 +117,7 @@
 
 //               <TableCell sx={{ color: "black", fontWeight: "bold" }}>{firm.partner || " "}</TableCell>
 //               <TableCell sx={{ color: "black", fontWeight: "bold" }}>{firm.age}</TableCell>
-          
+
 
 // <TableCell></TableCell>
 // <TableCell></TableCell>
@@ -177,7 +177,7 @@
 //         </TableBody>
 //     </Table>
 //   </TableContainer>
-  
+
 //   );
 // };
 
@@ -254,7 +254,7 @@ const formatDateTime = (dateString) => {
 
 export const FirstVisitsPendingfollowup = ({
   // firms,
-  data =[],
+  data = [],
   onUpdate,
   onDelete,
 }) => {
@@ -764,6 +764,8 @@ export const FirstVisitsPendingfollowup = ({
                           />
                         </IconButton>
                       </Tooltip>
+
+
                     </div>
                   </TableCell>
                   <TableCell>{row.lastFollowUp || "-"}</TableCell>
@@ -773,14 +775,14 @@ export const FirstVisitsPendingfollowup = ({
                     {row.nextFollowUp
                       ? formatDateTime(row.nextFollowUp)
                       : row.visitScheduledDate
-                      ? formatDateTime(row.visitScheduledDate)
-                      : "-"}
+                        ? formatDateTime(row.visitScheduledDate)
+                        : "-"}
                   </TableCell>
                   <TableCell>
                     <TableCell>{row.assignedTo || "-"}</TableCell>
                   </TableCell>
                   <TableCell>{row.enquiryId || "-"}</TableCell>
-                  <TableCell>{row.id|| "-"}</TableCell>
+                  <TableCell>{row.id || "-"}</TableCell>
                   <TableCell>{row.name || "-"}</TableCell>
                   <TableCell>{row.salesExecutive || "-"}</TableCell>
                   <TableCell>{row.phone || "-"}</TableCell>
@@ -836,9 +838,9 @@ export const FirstVisitsPendingfollowup = ({
                         marginLeft: isMobile ? 0 : "auto",
                       },
                       "& .MuiTablePagination-selectLabel, & .MuiTablePagination-displayedRows":
-                        {
-                          fontSize: isMobile ? "12px" : "14px",
-                        },
+                      {
+                        fontSize: isMobile ? "12px" : "14px",
+                      },
                     }}
                   />
                 </Box>
