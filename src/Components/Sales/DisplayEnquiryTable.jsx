@@ -9,7 +9,7 @@ import {
   TableHead,
   TableBody,
   TableRow,
-   useMediaQuery,
+  useMediaQuery,
   useTheme,
   TableCell,
   Paper,
@@ -23,13 +23,14 @@ import {
   FormControl,
   InputLabel, Select,
   MenuItem,
-  FormHelperText
+  FormHelperText,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import EmailIcon from "@mui/icons-material/Email";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import Constants from "../Constants";
+import { toast } from "react-toastify";
 
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 const data = [
@@ -85,18 +86,18 @@ const DisplayEnquiryTable = ({ data }) => {
   const [status, setStatus] = useState("");
   const [CPName, setCPName] = useState(" ");
   const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
-    const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
 
 
   //  Sales Engagement-related fields
-const [assignedTo, setAssignedTo] = useState("");
-const [assignedBy, setAssignedBy] = useState("");
-const [nextFollowUpDate, setNextFollowUpDate] = useState("");
-const [engagementStatus, setEngagementStatus] = useState("");
-const [engagementRemarks, setEngagementRemarks] = useState("");
-const [intendedPurchasePeriodMonths, setIntendedPurchasePeriodMonths] = useState("");
- const [editModalOpen, setEditModalOpen] = useState(false);
+  const [assignedTo, setAssignedTo] = useState("");
+  const [assignedBy, setAssignedBy] = useState("");
+  const [nextFollowUpDate, setNextFollowUpDate] = useState("");
+  const [engagementStatus, setEngagementStatus] = useState("");
+  const [engagementRemarks, setEngagementRemarks] = useState("");
+  const [intendedPurchasePeriodMonths, setIntendedPurchasePeriodMonths] = useState("");
+  const [editModalOpen, setEditModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
   const [editFormData, setEditFormData] = useState({
     enquiryNo: "",
@@ -108,10 +109,10 @@ const [intendedPurchasePeriodMonths, setIntendedPurchasePeriodMonths] = useState
     visitScheduledDate: "",
   });
 
-   const [showNextFollowUpEdit, setShowNextFollowUpEdit] = useState(false);
-    const [showVisitScheduledDateEdit, setShowVisitScheduledDateEdit] =
-      useState(false);
-   const handleEditClose = () => {
+  const [showNextFollowUpEdit, setShowNextFollowUpEdit] = useState(false);
+  const [showVisitScheduledDateEdit, setShowVisitScheduledDateEdit] =
+    useState(false);
+  const handleEditClose = () => {
     setEditModalOpen(false);
     setEditingItem(null);
     setEditFormData({
@@ -258,10 +259,10 @@ const [intendedPurchasePeriodMonths, setIntendedPurchasePeriodMonths] = useState
         budgetInLakh: Number(budget) || 0,
         // intendedPurchasePeriodMonths: Number(purchasePeriod) || 0,
         //  intendedPurchasePeriodMonths: Number(planningToBuy) || 0,
-        intendedPurchasePeriodMonths:Number(intendedPurchasePeriodMonths) || 0,
+        intendedPurchasePeriodMonths: Number(intendedPurchasePeriodMonths) || 0,
         lastSiteVisit: new Date().toISOString(),
         source: source || "",
-         remarks: reasonForPurchase || "", 
+        remarks: reasonForPurchase || "",
         status: status || "NEW",
 
         // nested object
@@ -278,7 +279,7 @@ const [intendedPurchasePeriodMonths, setIntendedPurchasePeriodMonths] = useState
 
       // ✅ PATCH request to update enquiry
       const response = await fetch(`https://localhost:5289/sales/api/enquiries/${selectedItem.id}`, {
-      // const response = await fetch(`https://localhost:5289/sales/api/enquiries/${row.id}`,{
+        // const response = await fetch(`https://localhost:5289/sales/api/enquiries/${row.id}`,{
 
         method: "PATCH",
         headers: {
@@ -413,7 +414,7 @@ const [intendedPurchasePeriodMonths, setIntendedPurchasePeriodMonths] = useState
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-   const handleEditSubmit = () => {
+  const handleEditSubmit = () => {
     if (editingItem && onUpdate) {
       const updatedItem = {
         ...editingItem,
@@ -425,7 +426,7 @@ const [intendedPurchasePeriodMonths, setIntendedPurchasePeriodMonths] = useState
     }
   };
 
-    const handleEditClick = (item, index) => {
+  const handlefollowupClick = (item, index) => {
     setEditingItem({ ...item, index });
     setEditFormData({
       enquiryNo: item.enquiryNo || "",
@@ -459,6 +460,111 @@ const [intendedPurchasePeriodMonths, setIntendedPurchasePeriodMonths] = useState
 
     setEditModalOpen(true);
   };
+
+  // const handlefollowupClick = async (item, index) => {
+  //   try {
+  //     setEditingItem({ ...item, index });
+  //       console.log("ITEM CLICKED:", item);
+
+  //       const enquiryId =
+  //   item.id ||
+  //   item.enquiryId ||
+  //   item.enquiryNo ||
+  //   item.leadId ||
+  //   (item.leadEnagagements?.[0]?.leadId ?? undefined);
+
+  // console.log("RESOLVED ENQUIRY ID:", enquiryId);
+
+  // if (!enquiryId) {
+  //   console.error("❌ No Enquiry ID found in item:", item);
+  //   toast.error("No enquiry ID available");
+  //   return;
+  // }
+  //     // 🔥 1) CALL API WITH CREDENTIALS INCLUDED
+  //     const res = await fetch(
+  //       `https://localhost:5289/api/enquiries/${enquiryId}`,
+  //       {
+  //         method: "GET",
+  //         credentials: "include",   // <-- HERE
+  //       }
+  //     );
+
+  //     if (!res.ok) {
+  //       throw new Error("API returned error: " + res.status);
+  //     }
+
+  //     const enquiry = await res.json();
+
+  //     // 🔥 2) AUTO POPULATE FORM
+  //     setEditFormData({
+  //       enquiryNo: enquiry.enquiryNo || "",
+  //       remark: enquiry.remark || "",
+  //       name: enquiry.name || "",
+  //       nextFollowUp: enquiry.nextFollowUp || "",
+  //       visitType: enquiry.visitType || "",
+  //       status: enquiry.status || "",
+  //       visitScheduledDate: enquiry.visitScheduledDate || "",
+  //     });
+
+  //     // 🔥 3) Set visibility based on status
+  //     const statusesThatRequireNextFollowUp = [
+  //       "Callback request",
+  //       "Unreachable",
+  //       "Not answered",
+  //       "Follow up",
+  //     ];
+
+  //     const statusesThatRequireVisitScheduledDate = [
+  //       "Re-visit",
+  //       "Visit postponed",
+  //     ];
+
+  //     setShowNextFollowUpEdit(
+  //       statusesThatRequireNextFollowUp.includes(enquiry.status)
+  //     );
+
+  //     setShowVisitScheduledDateEdit(
+  //       statusesThatRequireVisitScheduledDate.includes(enquiry.status)
+  //     );
+
+  //     // 🔥 4) Open modal
+
+
+  //     setEditModalOpen(true);
+  //   } catch (error) {
+  //     console.error("❌ Fetch Error:", error);
+  //     toast.error("Failed to load enquiry details");
+  //   }
+  // };
+
+
+  const handleEditChange = (field, value) => {
+    setEditFormData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+
+    // --- logic for Status field ---
+    if (field === "status") {
+      const nextFollowUpStatuses = [
+        "Follow up",
+        "Unreachable",
+        "Not answered",
+        "Callback request"
+      ];
+
+      const visitScheduledStatuses = [
+        "Re-visit",
+        "Visit postponed"
+      ];
+
+      setShowNextFollowUpEdit(nextFollowUpStatuses.includes(value));
+      setShowVisitScheduledDateEdit(visitScheduledStatuses.includes(value));
+    }
+  };
+
+
+
   return (
     <div>
       {isEditing ? (
@@ -814,7 +920,7 @@ const [intendedPurchasePeriodMonths, setIntendedPurchasePeriodMonths] = useState
                                 borderRadius: "50%",
                                 "&:hover": { backgroundColor: Constants.primaryColor },
                               }}
-                              onClick={() => handleEditClick(item, index)}
+                              onClick={() => handlefollowupClick(item, index)}
                             >
                               <AccessTimeIcon sx={{ fontSize: "18px" }} />
                             </IconButton>
@@ -902,173 +1008,168 @@ const [intendedPurchasePeriodMonths, setIntendedPurchasePeriodMonths] = useState
           </Box>
 
 
-           <Dialog
-                  open={editModalOpen}
-                  onClose={handleEditClose}
-                  fullWidth
-                  maxWidth="md"
-                  fullScreen={fullScreen}
-                >
-                  <DialogTitle>Edit Follow Up</DialogTitle>
-                  <DialogContent>
-                    <Grid container spacing={2} sx={{ mt: 1 }}>
-                      <Grid item xs={12} sm={6}>
-                        <TextField
-                          label="Enquiry No"
-                          fullWidth
-                          variant="outlined"
-                          value={editFormData.enquiryNo}
-                          onChange={(e) => handleEditChange("enquiryNo", e.target.value)}
-                          size={isMobile ? "small" : "medium"}
-                          sx={{ border: Constants.formInputBorderColor }}
-                        />
-                      </Grid>
-          
-                      <Grid item xs={12} sm={6}>
-                        <TextField
-                          label="Name"
-                          fullWidth
-                          variant="outlined"
-                          value={editFormData.name}
-                          onChange={(e) => handleEditChange("name", e.target.value)}
-                          size={isMobile ? "small" : "medium"}
-                          sx={{ border: Constants.formInputBorderColor }}
-                        />
-                      </Grid>
-          
-                      <Grid item xs={12} sm={6}>
-                        <TextField
-                          label="Remark"
-                          fullWidth
-                          variant="outlined"
-                          value={editFormData.remark}
-                          onChange={(e) => handleEditChange("remark", e.target.value)}
-                          size={isMobile ? "small" : "medium"}
-                          sx={{ border: Constants.formInputBorderColor }}
-                        />
-                      </Grid>
-          
-                      <Grid item xs={12} sm={6}>
-                        <FormControl
-                          fullWidth
-                          variant="outlined"
-                          size={isMobile ? "small" : "medium"}
-                          sx={{ border: Constants.formInputBorderColor }}
-                        >
-                          <InputLabel id="edit-visit-type-label">Visit Type</InputLabel>
-                          <Select
-                            labelId="edit-visit-type-label"
-                            id="edit-visit-type"
-                            label="Visit Type"
-                            value={editFormData.visitType}
-                            onChange={(e) =>
-                              handleEditChange("visitType", e.target.value)
-                            }
-                            sx={{
-                              "& .MuiSelect-icon": {
-                                color: Constants.primaryColor,
-                              },
-                            }}
-                          >
-                            <MenuItem value="hot">Hot</MenuItem>
-                            <MenuItem value="warm">Warm</MenuItem>
-                            <MenuItem value="cold">Cold</MenuItem>
-                            <MenuItem value="lost">Lost</MenuItem>
-                            <MenuItem value="booked">Booked</MenuItem>
-                            <MenuItem value="undefined">Undefined</MenuItem>
-                          </Select>
-                        </FormControl>
-                      </Grid>
-          
-                      <Grid item xs={12} sm={6}>
-                        <FormControl
-                          fullWidth
-                          variant="outlined"
-                          size={isMobile ? "small" : "medium"}
-                          sx={{ border: Constants.formInputBorderColor }}
-                        >
-                          <InputLabel id="edit-status-label">Status</InputLabel>
-                          <Select
-                            labelId="edit-status-label"
-                            id="edit-status"
-                            label="Status"
-                            value={editFormData.status}
-                            onChange={(e) => handleEditChange("status", e.target.value)}
-                            sx={{
-                              "& .MuiSelect-icon": {
-                                color: Constants.primaryColor,
-                              },
-                            }}
-                          >
-                            <MenuItem value="Follow up">Follow up</MenuItem>
-                            <MenuItem value="Not interested">Not interested</MenuItem>
-                            <MenuItem value="Callback request">Callback request</MenuItem>
-                            <MenuItem value="Unreachable">Unreachable</MenuItem>
-                            <MenuItem value="Booked property in other project">
-                              Booked property in other project
-                            </MenuItem>
-                            <MenuItem value="Not answered">Not answered</MenuItem>
-                            <MenuItem value="Re-visit">Re-visit</MenuItem>
-                            <MenuItem value="Visit postponed">Visit postponed</MenuItem>
-                            <MenuItem value="Visit cancelled">Visit cancelled</MenuItem>
-                            <MenuItem value="Visit done">Visit done</MenuItem>
-                          </Select>
-                        </FormControl>
-                      </Grid>
-          
-                      {showNextFollowUpEdit && (
-                        <Grid item xs={12} sm={6}>
-                          <TextField
-                            type="datetime-local"
-                            label="Next Follow Up"
-                            fullWidth
-                            variant="outlined"
-                            value={editFormData.nextFollowUp}
-                            onChange={(e) =>
-                              handleEditChange("nextFollowUp", e.target.value)
-                            }
-                            InputLabelProps={{ shrink: true }}
-                            size={isMobile ? "small" : "medium"}
-                            sx={{ border: Constants.formInputBorderColor }}
-                          />
-                        </Grid>
-                      )}
-          
-                      {showVisitScheduledDateEdit && (
-                        <Grid item xs={12} sm={6}>
-                          <TextField
-                            type="datetime-local"
-                            label="Visit Scheduled Date"
-                            fullWidth
-                            variant="outlined"
-                            value={editFormData.visitScheduledDate}
-                            onChange={(e) =>
-                              handleEditChange("visitScheduledDate", e.target.value)
-                            }
-                            InputLabelProps={{ shrink: true }}
-                            size={isMobile ? "small" : "medium"}
-                            sx={{ border: Constants.formInputBorderColor }}
-                          />
-                        </Grid>
-                      )}
-                    </Grid>
-                  </DialogContent>
-                  <DialogActions>
-                    <Button onClick={handleEditClose} color="secondary">
-                      Cancel
-                    </Button>
-                    <Button
-                      onClick={handleEditSubmit}
-                      variant="contained"
-                      style={{
-                        backgroundColor: Constants.primaryColor,
-                        color: "#ecf0f1",
+          <Dialog
+            open={editModalOpen}
+            onClose={handleEditClose}
+            fullWidth
+            maxWidth="md"
+            fullScreen={fullScreen}
+          >
+            <DialogTitle>Edit Follow Up</DialogTitle>
+            <DialogContent>
+              <Grid container spacing={2} sx={{ mt: 1 }}>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    label="Enquiry No"
+                    fullWidth
+                    variant="outlined"
+                    value={editFormData.enquiryNo}
+                    onChange={(e) => handleEditChange("enquiryNo", e.target.value)}
+                    size={isMobile ? "small" : "medium"}
+                    sx={{ border: Constants.formInputBorderColor }}
+                  />
+                </Grid>
+
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    label="Name"
+                    fullWidth
+                    variant="outlined"
+                    value={editFormData.name}
+                    onChange={(e) => handleEditChange("name", e.target.value)}
+                    size={isMobile ? "small" : "medium"}
+                    sx={{ border: Constants.formInputBorderColor }}
+                  />
+                </Grid>
+
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    label="Remark"
+                    fullWidth
+                    variant="outlined"
+                    value={editFormData.remark}
+                    onChange={(e) => handleEditChange("remark", e.target.value)}
+                    size={isMobile ? "small" : "medium"}
+                    sx={{ border: Constants.formInputBorderColor }}
+                  />
+                </Grid>
+
+                <Grid item xs={12} sm={6}>
+                  <FormControl
+                    fullWidth
+                    variant="outlined"
+                    size={isMobile ? "small" : "medium"}
+                    sx={{ border: Constants.formInputBorderColor }}
+                  >
+                    <InputLabel id="edit-visit-type-label">Visit Type</InputLabel>
+                    <Select
+                      labelId="edit-visit-type-label"
+                      id="edit-visit-type"
+                      label="Visit Type"
+                      value={editFormData.visitType}
+                      onChange={(e) =>
+                        handleEditChange("visitType", e.target.value)
+                      }
+                      sx={{
+                        "& .MuiSelect-icon": {
+                          color: Constants.primaryColor,
+                        },
                       }}
                     >
-                      Update
-                    </Button>
-                  </DialogActions>
-                </Dialog>
+                      <MenuItem value="hot">Hot</MenuItem>
+                      <MenuItem value="warm">Warm</MenuItem>
+                      <MenuItem value="cold">Cold</MenuItem>
+                      <MenuItem value="lost">Lost</MenuItem>
+                      <MenuItem value="booked">Booked</MenuItem>
+                      <MenuItem value="undefined">Undefined</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+
+                <Grid item xs={12} sm={6}>
+                  <FormControl
+                    fullWidth
+                    variant="outlined"
+                    size={isMobile ? "small" : "medium"}
+                    sx={{ border: Constants.formInputBorderColor }}
+                  >
+                    <InputLabel id="edit-status-label">Status</InputLabel>
+                    <Select
+                      labelId="edit-status-label"
+                      id="edit-status"
+                      label="Status"
+                      value={editFormData.status}
+                      onChange={(e) => handleEditChange("status", e.target.value)}
+                      sx={{
+                        "& .MuiSelect-icon": {
+                          color: Constants.primaryColor,
+                        },
+                      }}
+                    >
+                      <MenuItem value="Follow up">Follow up</MenuItem>
+                      <MenuItem value="Not interested">Not interested </MenuItem>
+                      <MenuItem value="Booked Other project">Booked Property In Other Project </MenuItem>
+                      <MenuItem value="Re-visit">Re-visit</MenuItem>
+                      <MenuItem value="Visit postponed">Visit postponed</MenuItem>
+
+                      <MenuItem value="Visit done">Visit done</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Grid>
+
+                {showNextFollowUpEdit && (
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      type="datetime-local"
+                      label="Next Follow Up"
+                      fullWidth
+                      variant="outlined"
+                      value={editFormData.nextFollowUp}
+                      onChange={(e) =>
+                        handleEditChange("nextFollowUp", e.target.value)
+                      }
+                      InputLabelProps={{ shrink: true }}
+                      size={isMobile ? "small" : "medium"}
+                      sx={{ border: Constants.formInputBorderColor }}
+                    />
+                  </Grid>
+                )}
+
+                {showVisitScheduledDateEdit && (
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      type="datetime-local"
+                      label="Visit Scheduled Date"
+                      fullWidth
+                      variant="outlined"
+                      value={editFormData.visitScheduledDate}
+                      onChange={(e) =>
+                        handleEditChange("visitScheduledDate", e.target.value)
+                      }
+                      InputLabelProps={{ shrink: true }}
+                      size={isMobile ? "small" : "medium"}
+                      sx={{ border: Constants.formInputBorderColor }}
+                    />
+                  </Grid>
+                )}
+              </Grid>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleEditClose} color="secondary">
+                Cancel
+              </Button>
+              <Button
+                onClick={handleEditSubmit}
+                variant="contained"
+                style={{
+                  backgroundColor: Constants.primaryColor,
+                  color: "#ecf0f1",
+                }}
+              >
+                Update
+              </Button>
+            </DialogActions>
+          </Dialog>
         </TableContainer>
 
       )}
