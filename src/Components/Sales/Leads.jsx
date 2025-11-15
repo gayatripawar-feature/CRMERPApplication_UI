@@ -477,7 +477,7 @@ const Leads = () => {
       };
       // REFETCH latest leads from backend
       const latestData = await fetchLeadsData();
-      alert(JSON.stringify(latestData, null, 2));
+      // alert(JSON.stringify(latestData, null, 2));
       setInventoryData(latestData);
       console.log(latestData[1]);
       //  Clear form

@@ -165,6 +165,7 @@ const FirstVisits = () => {
   const [selectedLead, setSelectedLead] = useState(null);
   const [showProjectForm, setShowProjectForm] = useState(false);
   const [showFlatForm, setShowFlatForm] = useState(false);
+const [enquiries, setEnquiries] = useState([]);
 
 
   useEffect(() => {
@@ -387,7 +388,9 @@ const FirstVisits = () => {
 
       const data = await response.json();
       setFirms(data);
-      return data;   // <-- IMPORTANT
+      // If not set belwo line then it wont shows the submitted enquiries.
+      setEnquiries(data); 
+      return data;   
     } catch (err) {
       console.error(err);
     }
@@ -473,6 +476,8 @@ const FirstVisits = () => {
             body: JSON.stringify(payload),
           }
         );
+        const saved = await response.json();        // <── GET NEW ENQUIRY
+      setEnquiries(prev => [...prev, saved]); 
 
         toast.success("Enquiry added successfully!");
       }
@@ -796,17 +801,77 @@ const FirstVisits = () => {
   // };
 
 
+// const handleLeadNoChange = (e) => {
+//   const selectedLeadNo = e.target.value;
+//   setLeadNo(selectedLeadNo);
+
+//   // 1️⃣ Check enquiry using the NEW value directly
+//   const existingEnquiry = firms.find(
+//     f => Number(f.leadId) === Number(selectedLeadNo)
+//   );
+
+//   if (existingEnquiry) {
+//     console.log("🟢 FOUND existing enquiry:", existingEnquiry);
+//     setName(existingEnquiry.name);
+//     setMobile(existingEnquiry.phone);
+//     setWhatsappNo(existingEnquiry.whatsapp);
+//     setEmail(existingEnquiry.email);
+//     setAddress(existingEnquiry.address);
+//     setCompany(existingEnquiry.company);
+//     setInterestedIn(existingEnquiry.interest);
+//     setBudget(existingEnquiry.budgetInLakh);
+//     setOccupation(existingEnquiry.occupation);
+//     setReferenceBySource(existingEnquiry.source);
+//     setPlanningToBuy(existingEnquiry.intendedPurchasePeriodMonths);
+//     setRemarks(existingEnquiry.remarks);
+//     return;
+//   }
+
+//   // 2️⃣ If no enquiry found → load scheduled lead
+//   const lead = leads.scheduled.find(
+//     (l) => Number(l.id) === Number(selectedLeadNo)
+//   );
+
+//   console.log("🆕 No enquiry found, loading lead:", lead);
+
+//   setSelectedLead(lead);
+
+//   setName(lead?.name || "");
+//   setMobile(lead?.phone || "");
+//   setWhatsappNo(lead?.whatsapp || "");
+//   setEmail(lead?.email || "");
+//   setAddress(lead?.address || "");
+//   setCompany(lead?.company || "");
+//   setInterestedIn(lead?.interest || "");
+//   setBudget(lead?.budgetInLakh || "");
+//   setOccupation(lead?.occupation || "");
+//   setReferenceBySource(lead?.source || "");
+//   setPlanningToBuy(lead?.intendedPurchasePeriodMonths || "");
+//   setRemarks("");
+// };
+
+
+
 const handleLeadNoChange = (e) => {
   const selectedLeadNo = e.target.value;
+
+  console.log("🟡 DROPDOWN CHANGED — Selected Lead No:", selectedLeadNo);
+  console.log("📌 firms loaded (Enquiries count):", firms.length, firms);
+
   setLeadNo(selectedLeadNo);
 
   // 1️⃣ Check enquiry using the NEW value directly
+  console.log("🔍 Searching enquiry for LeadNo:", selectedLeadNo);
+
   const existingEnquiry = firms.find(
-    f => Number(f.leadId) === Number(selectedLeadNo)
+    (f) => Number(f.leadId) === Number(selectedLeadNo)
   );
 
+  console.log("🧾 Matched enquiry:", existingEnquiry);
+
   if (existingEnquiry) {
-    console.log("🟢 FOUND existing enquiry:", existingEnquiry);
+    console.log("🟢 FOUND existing enquiry → loading enquiry data");
+
     setName(existingEnquiry.name);
     setMobile(existingEnquiry.phone);
     setWhatsappNo(existingEnquiry.whatsapp);
@@ -827,7 +892,7 @@ const handleLeadNoChange = (e) => {
     (l) => Number(l.id) === Number(selectedLeadNo)
   );
 
-  console.log("🆕 No enquiry found, loading lead:", lead);
+  console.log("🔴 NO ENQUIRY FOUND → loading scheduled lead:", lead);
 
   setSelectedLead(lead);
 
@@ -844,8 +909,6 @@ const handleLeadNoChange = (e) => {
   setPlanningToBuy(lead?.intendedPurchasePeriodMonths || "");
   setRemarks("");
 };
-
-
 
 
   const handleDeleteFirm = (firmToDelete, index) => {
@@ -1074,7 +1137,10 @@ const handleLeadNoChange = (e) => {
                   // data={[...firms, ...leads.done]}
                   // leads.done means only leads whose status is visist done and 
 
-                  data={leads.done}
+                  // data={leads.done}
+
+                  data={[...enquiries, ...leads.done]}
+                  fetchEnquiries={fetchEnquiries}
 
 
                   isMobile={isMobile}
