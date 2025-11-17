@@ -497,6 +497,7 @@ const DisplayEnquiryTable = ({ data, fetchEnquiries }) => {
   //   setSelectedItem(null);
   // };
 
+
   // const handleUpdate = async () => {
   //   if (!selectedItem || !selectedItem.id) {
   //     alert("No enquiry selected to update");
@@ -506,195 +507,173 @@ const DisplayEnquiryTable = ({ data, fetchEnquiries }) => {
   //   try {
   //     console.log("🟡 Updating enquiry details...");
 
+  //     // Build payload correctly
+  //     const updatedPayload = {
+  //       id: selectedItem.id,
+  //       name,
+  //       phone: Number(mobile),
+  //       whatsapp: Number(whatsappNo),
+  //       email,
+  //       address,
+  //       occupation,
+  //       company,
+  //       interest: interestedIn,
+  //       budgetInLakh: Number(budget),
+  //       intendedPurchasePeriodMonths: Number(planningToBuy),
+  //       lastSiteVisit: new Date().toISOString(),
+  //       source,
+  //       remarks: reasonForPurchase,
+  //       status,
+  //       leadId: Number(leadNo) || null,
+
+  //       SalesEngagement: {
+  //         assignedTo,
+  //         assignedDate: new Date().toISOString(),
+  //         assignedBy,
+  //         enquiryId: selectedItem.id,
+  //         nextFollowUp: nextFollowUpDate || new Date().toISOString(),
+  //         status: engagementStatus,
+  //         remarks: engagementRemarks
+  //       }
+  //     };
 
 
 
-  //     // const updatedPayload = {
-  //     //   id: selectedItem.id,
-  //     //   name,
-  //     //   phone: Number(mobile),
-  //     //   whatsapp: Number(whatsappNo),
-  //     //   email,
-  //     //   address,
-  //     //   occupation,
-  //     //   company,
-  //     //   interest: interestedIn,
-  //     //   budgetInLakh: Number(budget),
-  //     //   intendedPurchasePeriodMonths: Number(planningToBuy),
-  //     //   lastSiteVisit: new Date().toISOString(),
-  //     //   source,
-  //     //   remarks: reasonForPurchase,
-  //     //   status,
-  //     //   leadId: Number(leadNo) || null,
-
-  //     //   // salesEngagements: [
-  //     //   //   {
-  //     //   //     assignedTo,
-  //     //   //     assignedDate: new Date().toISOString(),
-  //     //   //     assignedBy,
-  //     //   //     enquiryId: selectedItem.id,
-  //     //   //     nextFollowUp: nextFollowUpDate || new Date().toISOString(),
-  //     //   //     status: engagementStatus,
-  //     //   //     remarks: engagementRemarks
-  //     //   //   }
-  //     //   // ]
-  //     //   SalesEngagement: {
-  //     //     assignedTo,
-  //     //     assignedDate: new Date().toISOString(),
-  //     //     assignedBy,
-  //     //     enquiryId: selectedItem.id,
-  //     //     nextFollowUp: nextFollowUpDate || new Date().toISOString(),
-  //     //     status: engagementStatus,
-  //     //     remarks: engagementRemarks
-  //     //   }
-  //     // };
-
-
-
-  //     // ✅ PATCH request to update enquiry
-  //     const response = await fetch(`https://localhost:5289/sales/api/enquiries/${selectedItem.id}`, {
-  //       // const response = await fetch(`https://localhost:5289/sales/api/enquiries/${row.id}`,{
-
-  //       method: "PATCH",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       credentials: "include",
-  //       body: JSON.stringify(updatedPayload),
-  //     });
+  //     const response = await fetch(
+  //       `https://localhost:5289/sales/api/enquiries/${selectedItem.id}`,
+  //       {
+  //         method: "PATCH",
+  //         headers: { "Content-Type": "application/json" },
+  //         credentials: "include",
+  //         body: JSON.stringify(updatedPayload)
+  //       }
+  //     );
 
   //     if (!response.ok) throw new Error("Failed to update enquiry");
 
-  //     const updatedData = await response.json();
-  //     console.log("✅ Updated Enquiry Details:", updatedData);
+  //     //  Read updated enquiry returned by backend
+  //     const updatedServerData = await response.json();
+  //     console.log(" Server Updated Enquiry:", updatedServerData);
 
-  //     //  Update local state with response
-  //     // setLeadNo(updatedData.id || "");
-  //     setLeadNo(updatedData.leadId || "");
-  //     setName(updatedData.name || "");
-  //     setMobile(updatedData.phone?.toString() || "");
-  //     setWhatsappNo(updatedData.whatsapp?.toString() || "");
+  //     //  Re-fetch fresh enquiry list from server
+  //     const refreshed = await fetchEnquiries(); // ensure you have this function
+  //     console.log(" Refresh List:", refreshed);
+  //     // setData(refreshed);
 
-  //     setEmail(updatedData.email || "");
-  //     setAddress(updatedData.address || "");
-  //     setOccupation(updatedData.occupation || "");
-  //     setCompany(updatedData.company || "");
-  //     setInterestedIn(updatedData.interest || "");
-  //     setBudget(updatedData.budgetInLakh?.toString() || "");
-  //     setPlanningToBuy(updatedData.intendedPurchasePeriodMonths || "");
-  //     setReasonForPurchase(updatedData.reasonForPurchase || "");
-  //     setStatus(updatedData.status || "");
-  //     setSource(updatedData.source || "");
-  //     setSalesExec(updatedData.lastUpdatedBy || "");
+  //     //  Find updated record in list
+  //     const updatedEnquiry = refreshed.find(
+  //       e => Number(e.id) === Number(selectedItem.id)
+  //     );
+  //     console.log("🎯 Updated Found:", updatedEnquiry);
 
+  //     // Update table state
+  //     // setLoans(refreshed);
+
+  //     // Update edit form fields
+  //     if (updatedEnquiry) {
+  //       setLeadNo(updatedEnquiry.leadId || "");
+  //       setName(updatedEnquiry.name || "");
+  //       setMobile(updatedEnquiry.phone?.toString() || "");
+  //       setWhatsappNo(updatedEnquiry.whatsapp?.toString() || "");
+  //       setEmail(updatedEnquiry.email || "");
+  //       setAddress(updatedEnquiry.address || "");
+  //       setOccupation(updatedEnquiry.occupation || "");
+  //       setCompany(updatedEnquiry.company || "");
+  //       setInterestedIn(updatedEnquiry.interest || "");
+  //       setBudget(updatedEnquiry.budgetInLakh?.toString() || "");
+  //       setPlanningToBuy(updatedEnquiry.intendedPurchasePeriodMonths || "");
+  //       setReasonForPurchase(updatedEnquiry.remarks || "");
+  //       setStatus(updatedEnquiry.status || "");
+  //       setSource(updatedEnquiry.source || "");
+  //     }
+
+  //     // 6️⃣ Close modal
   //     alert("✅ Enquiry updated successfully!");
   //     setIsEditing(false);
   //     setSelectedItem(null);
+
   //   } catch (error) {
   //     console.error("❌ Error updating enquiry:", error);
   //     alert("Failed to update enquiry details. Please try again.");
   //   }
   // };
 
-  const handleUpdate = async () => {
-    if (!selectedItem || !selectedItem.id) {
-      alert("No enquiry selected to update");
-      return;
+ const handleUpdate = async () => {
+  if (!selectedItem?.id) {
+    alert("No enquiry ID found for update.");
+    return;
+  }
+
+  const payload = {
+    id: selectedItem.id,
+    name,
+    phone: mobile,
+    whatsapp: whatsappNo,
+    email,
+    address,
+    occupation,
+    company,
+    interest: interestedIn,
+    budgetInLakh: budget,
+    intendedPurchasePeriodMonths: planningToBuy,
+    remarks: reasonForPurchase,
+    status,
+    source,
+    lastUpdatedBy: salesExec,
+
+    //  FIX: include existing sales engagements
+  SalesEngagement: selectedItem.salesEngagements?.length
+  ? {
+      assignedTo: selectedItem.salesEngagements[0].assignedTo,
+      assignedDate: selectedItem.salesEngagements[0].assignedDate,
+      assignedBy: selectedItem.salesEngagements[0].assignedBy,
+      enquiryId: selectedItem.salesEngagements[0].enquiryId,
+      nextFollowUp: selectedItem.salesEngagements[0].nextFollowUp,
+      status: selectedItem.salesEngagements[0].status,
+      remarks: selectedItem.salesEngagements[0].remarks
+    }
+  : {
+      assignedTo: salesExec || "",      // REQUIRED
+      assignedDate: new Date(),         // REQUIRED
+      assignedBy: salesExec || "",      // REQUIRED
+      enquiryId: selectedItem.id,       // REQUIRED
+      nextFollowUp: null,               // OPTIONAL
+      status: status || "Open",         // REQUIRED
+      // remarks: remarks || ""            // OPTIONAL
     }
 
-    try {
-      console.log("🟡 Updating enquiry details...");
 
-      // Build payload correctly
-      const updatedPayload = {
-        id: selectedItem.id,
-        name,
-        phone: Number(mobile),
-        whatsapp: Number(whatsappNo),
-        email,
-        address,
-        occupation,
-        company,
-        interest: interestedIn,
-        budgetInLakh: Number(budget),
-        intendedPurchasePeriodMonths: Number(planningToBuy),
-        lastSiteVisit: new Date().toISOString(),
-        source,
-        remarks: reasonForPurchase,
-        status,
-        leadId: Number(leadNo) || null,
-
-        SalesEngagement: {
-          assignedTo,
-          assignedDate: new Date().toISOString(),
-          assignedBy,
-          enquiryId: selectedItem.id,
-          nextFollowUp: nextFollowUpDate || new Date().toISOString(),
-          status: engagementStatus,
-          remarks: engagementRemarks
-        }
-      };
-
-
-
-      const response = await fetch(
-        `https://localhost:5289/sales/api/enquiries/${selectedItem.id}`,
-        {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
-          body: JSON.stringify(updatedPayload)
-        }
-      );
-
-      if (!response.ok) throw new Error("Failed to update enquiry");
-
-      //  Read updated enquiry returned by backend
-      const updatedServerData = await response.json();
-      console.log(" Server Updated Enquiry:", updatedServerData);
-
-      //  Re-fetch fresh enquiry list from server
-      const refreshed = await fetchEnquiries(); // ensure you have this function
-      console.log(" Refresh List:", refreshed);
-      // setData(refreshed);
-
-      //  Find updated record in list
-      const updatedEnquiry = refreshed.find(
-        e => Number(e.id) === Number(selectedItem.id)
-      );
-      console.log("🎯 Updated Found:", updatedEnquiry);
-
-      // Update table state
-      // setLoans(refreshed);
-
-      // Update edit form fields
-      if (updatedEnquiry) {
-        setLeadNo(updatedEnquiry.leadId || "");
-        setName(updatedEnquiry.name || "");
-        setMobile(updatedEnquiry.phone?.toString() || "");
-        setWhatsappNo(updatedEnquiry.whatsapp?.toString() || "");
-        setEmail(updatedEnquiry.email || "");
-        setAddress(updatedEnquiry.address || "");
-        setOccupation(updatedEnquiry.occupation || "");
-        setCompany(updatedEnquiry.company || "");
-        setInterestedIn(updatedEnquiry.interest || "");
-        setBudget(updatedEnquiry.budgetInLakh?.toString() || "");
-        setPlanningToBuy(updatedEnquiry.intendedPurchasePeriodMonths || "");
-        setReasonForPurchase(updatedEnquiry.remarks || "");
-        setStatus(updatedEnquiry.status || "");
-        setSource(updatedEnquiry.source || "");
-      }
-
-      // 6️⃣ Close modal
-      alert("✅ Enquiry updated successfully!");
-      setIsEditing(false);
-      setSelectedItem(null);
-
-    } catch (error) {
-      console.error("❌ Error updating enquiry:", error);
-      alert("Failed to update enquiry details. Please try again.");
-    }
   };
+
+  console.log("🔄 UPDATE PAYLOAD:", payload);
+
+  try {
+    const response = await fetch(
+      `https://localhost:5289/sales/api/enquiries/${selectedItem.id}`,
+      {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(payload),
+      }
+    );
+
+    if (!response.ok) throw new Error("Failed to update enquiry");
+
+    const updated = await response.json();
+    console.log("✅ UPDATED ENQUIRY:", updated);
+
+    alert("Enquiry updated successfully!");
+    setIsEditing(false);
+    setSelectedItem(null);
+    fetchEnquiries();
+
+  } catch (err) {
+    console.error("❌ Update Error:", err);
+    alert("Failed to update enquiry.");
+  }
+};
+
 
 
   const handleCancel = () => {
@@ -704,10 +683,7 @@ const DisplayEnquiryTable = ({ data, fetchEnquiries }) => {
 
 
   const validateEmail = (value) => {
-
-
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
-
     if (!regex.test(value)) {
       setEmailError('Please enter a valid email address');
     } else {
