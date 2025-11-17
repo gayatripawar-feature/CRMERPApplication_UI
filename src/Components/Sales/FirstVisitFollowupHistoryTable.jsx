@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState ,useEffect} from "react";
 import {
   TableContainer,
   Table,
@@ -16,7 +16,7 @@ import {
 } from "@mui/material";
 import Constants from "../Constants";
 
-export const FirstVisitFollowupHistoryTable = ({ data }) => {
+export const FirstVisitFollowupHistoryTable = ({ data = [],fetchVisitFollowUpHistory}) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const isTablet = useMediaQuery(theme.breakpoints.down("md"));
@@ -37,6 +37,14 @@ export const FirstVisitFollowupHistoryTable = ({ data }) => {
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage
   );
+
+
+  useEffect(() => {
+     console.log("Child component mounted");
+    
+  
+});
+
 
   return (
     <>

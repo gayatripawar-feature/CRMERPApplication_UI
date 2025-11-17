@@ -129,93 +129,7 @@ const DisplayEnquiryTable = ({ data, fetchEnquiries }) => {
   //   setSelectedItem(row);
   //   setIsEditing(true);
   // };
-  // const handleEdit = async (row) => {
-  //   try {
-  //     setIsEditing(true);
-  //     setSelectedItem(row);
 
-  //     // Fetch full enquiry details by ID
-  //     // const response = await fetch(`/api/enquiries/${row.id}`);
-  //     const response = await fetch("https://localhost:5289/sales/api/enquiries/${row.id}");
-  //     if (!response.ok) throw new Error("Failed to fetch enquiry details");
-
-  //     const data = await response.json();
-
-  //     // ✅ Auto-fill all fields with fresh data from backend
-  //     setLeadNo(data.leadNo || data.id || "");
-  //     setName(data.name || "");
-  //     setMobile(data.phone?.toString() || "");
-  //     setAlternateContact(data.alternateContactNo?.toString() || "");
-  //     setWhatsappNo(data.whatsappNo?.toString() || "");
-  //     setEmail(data.email || "");
-  //     setOccupation(data.occupation || "");
-  //     setBudget(data.budgetInLakh || data.budget || "");
-  //     setInterestedIn(data.interest || "");
-  //     setCompany(data.company || "");
-  //     setReasonForPurchase(data.reasonForPurchase || "");
-  //     setPlanningToBuy(data.intendedPurchasePeriodMonths || data.planningToBuyWithin || "");
-  //     setSalesExec(data.salesExecutiveName || data.assignedTo || "");
-
-  //   } catch (error) {
-  //     console.error("Error fetching enquiry:", error);
-  //     alert("Failed to load enquiry details. Please try again.");
-  //     setIsEditing(false);
-  //   }
-  // };
-
-
-  // const handleEdit = async (row) => {
-  //   try {
-  //     setIsEditing(true);
-  //     setSelectedItem(row);
-
-  //     // ✅ Call your backend correctly
-  //     const response = await fetch(`https://localhost:5289/sales/api/enquiries/${row.id}`, {
-  //       method: "GET",
-  //       credentials: "include", // ensures cookies/session are sent
-  //     });
-
-  //     if (!response.ok) throw new Error("Failed to fetch enquiry details");
-
-  //     const data = await response.json();
-
-  //     // ✅ Auto-fill all form fields using API response
-  //     setLeadNo(data.id || "");
-  //     setName(data.name || "");
-  //     setMobile(data.phone?.toString() || "");
-  //     setWhatsappNo(data.whatsapp?.toString() || "");
-  //     setEmail(data.email || "");
-  //     setAddress(data.address || "");
-  //     setOccupation(data.occupation || "");
-  //     setCompany(data.company || "");
-  //     setInterestedIn(data.interest || "");
-  //     setBudget(data.budgetInLakh?.toString() || "");
-  //     setPlanningToBuy(data.intendedPurchasePeriodMonths || "");
-  //     setReasonForPurchase(data.remarks || ""); // since remarks describe “Visit done”
-  //     setStatus(data.status || "");
-  //     setSource(data.source || "");
-  //     setSalesExec(data.lastUpdatedBy || ""); // or whoever updated last
-
-  //   } catch (error) {
-  //     console.error("Error fetching enquiry:", error);
-  //     alert("Failed to load enquiry details. Please try again.");
-  //     setIsEditing(false);
-  //   }
-  // };
-
-  // const getActualEnquiryId = (rawId, data) => {
-  //   if (!Array.isArray(data)) return null;
-
-  //   // 1) Match actual enquiry id
-  //   const byEnquiryId = data.find(e => e.id === rawId);
-  //   if (byEnquiryId) return byEnquiryId.id;
-
-  //   // 2) Match leadId
-  //   const byLeadId = data.find(e => e.leadId === rawId);
-  //   if (byLeadId) return byLeadId.id;
-
-  //   return null;
-  // };
 
   const getActualEnquiryId = (rawId, data) => {
     if (!rawId || !Array.isArray(data)) return null;
@@ -246,139 +160,7 @@ const DisplayEnquiryTable = ({ data, fetchEnquiries }) => {
   };
 
 
-  //  const handleEdit = async (row) => {
-  //   try {
-  //     console.log("ROW:", row);
 
-  //     // This is the raw ID coming from table
-  //     const rawId =
-  //       row.id ||
-  //       row.enquiryId ||
-  //       row.leadId ||
-  //       row.enquiryNo ||
-  //       (row.leadEnagagements?.[0]?.enquiryId ?? undefined);
-
-  //     console.log("RAW ID FROM ROW:", rawId);
-
-  //     if (!rawId) {
-  //       alert("❌ No valid ID found in row");
-  //       return;
-  //     }
-
-  //     // 🔥 FIX: Convert LeadId → EnquiryId
-  //     const enquiryId = getActualEnquiryId(rawId, data);
-
-  //     console.log("🎯 FINAL ENQUIRY ID USED:", enquiryId);
-
-  //     if (!enquiryId) {
-  //       alert("❌ Could not find matching enquiry for this Lead No / ID");
-  //       return;
-  //     }
-
-  //     // Now safe to call your API
-  //     const response = await fetch(
-  //       `https://localhost:5289/sales/api/enquiries/${enquiryId}`,
-  //       { method: "GET", credentials: "include" }
-  //     );
-
-  //     if (!response.ok) throw new Error("Failed to fetch enquiry details");
-
-  //     const data = await response.json();
-
-  //     // Now populate form with `data`
-  //     setLeadNo(data.leadId || "");
-  //     setName(data.name || "");
-  //     setMobile(data.phone?.toString() || "");
-  //     setWhatsappNo(data.whatsapp?.toString() || "");
-  //     setEmail(data.email || "");
-  //     setAddress(data.address || "");
-  //     setOccupation(data.occupation || "");
-  //     setCompany(data.company || "");
-  //     setInterestedIn(data.interest || "");
-  //     setBudget(data.budgetInLakh?.toString() || "");
-  //     setPlanningToBuy(data.intendedPurchasePeriodMonths || "");
-  //     setReasonForPurchase(data.remarks || "");
-  //     setStatus(data.status || "");
-  //     setSource(data.source || "");
-  //     setSalesExec(data.lastUpdatedBy || "");
-
-  //     setIsEditing(true);
-  //   } catch (error) {
-  //     console.error("Error fetching enquiry:", error);
-  //     alert("Failed to load enquiry details.");
-  //     setIsEditing(false);
-  //   }
-  // };
-
-
-  // const handleEdit = async (item) => {
-  //   try {
-  //     console.log("🟢 Edit Clicked → ITEM:", item);
-
-  //     // 1️⃣ EXTRACT POSSIBLE IDs FROM ROW
-  //     const rawId =
-  //       item.id ||
-  //       item.enquiryId ||
-  //       item.leadId ||
-  //       item.enquiryNo ||
-  //       (item.leadEnagagements?.[0]?.enquiryId ?? undefined);
-
-  //     console.log("🟡 Raw ID From Row:", rawId);
-
-  //     if (!rawId) {
-  //       alert("❌ No valid ID found in selected row");
-  //       return;
-  //     }
-
-  //     // 2️⃣ CONVERT rawId → REAL enquiryId FROM LIST
-  //     const enquiryId = getActualEnquiryId(rawId, data); // <== using your state "loans"
-
-  //     console.log("🟢 FINAL ENQUIRY ID:", enquiryId);
-
-  //     if (!enquiryId) {
-  //       alert("❌ Could not match this Lead / ID with any enquiry");
-  //       return;
-  //     }
-
-  //     // 3️⃣ OPEN EDIT MODE
-  //     setSelectedItem({ ...item, id: enquiryId });
-  //     setIsEditing(true);
-
-  //     // 4️⃣ FETCH FULL ENQUIRY DETAILS
-  //     console.log("📡 Fetching enquiry:", enquiryId);
-
-  //     const response = await fetch(
-  //       `https://localhost:5289/sales/api/enquiries/${enquiryId}`,
-  //       { method: "GET", credentials: "include" }
-  //     );
-
-  //     if (!response.ok) throw new Error("Failed to load enquiry details");
-
-  //     const res = await response.json();
-  //     console.log("🟢 Fetched Enquiry:", res);
-
-  //     // 5️⃣ UPDATE EDIT FORM FIELDS
-  //     setLeadNo(res.leadId || "");
-  //     setName(res.name || "");
-  //     setMobile(res.phone?.toString() || "");
-  //     setWhatsappNo(res.whatsapp?.toString() || "");
-  //     setEmail(res.email || "");
-  //     setAddress(res.address || "");
-  //     setOccupation(res.occupation || "");
-  //     setCompany(res.company || "");
-  //     setInterestedIn(res.interest || "");
-  //     setBudget(res.budgetInLakh?.toString() || "");
-  //     setPlanningToBuy(res.intendedPurchasePeriodMonths || "");
-  //     setReasonForPurchase(res.remarks || "");
-  //     setStatus(res.status || "");
-  //     setSource(res.source || "");
-  //     setSalesExec(res.lastUpdatedBy || "");
-
-  //   } catch (err) {
-  //     console.error("❌ handleEdit ERROR:", err);
-  //     alert("Failed to load enquiry details");
-  //   }
-  // };
 
   const handleEdit = async (item) => {
     try {
@@ -498,181 +280,111 @@ const DisplayEnquiryTable = ({ data, fetchEnquiries }) => {
   // };
 
 
-  // const handleUpdate = async () => {
-  //   if (!selectedItem || !selectedItem.id) {
-  //     alert("No enquiry selected to update");
-  //     return;
-  //   }
 
-  //   try {
-  //     console.log("🟡 Updating enquiry details...");
-
-  //     // Build payload correctly
-  //     const updatedPayload = {
-  //       id: selectedItem.id,
-  //       name,
-  //       phone: Number(mobile),
-  //       whatsapp: Number(whatsappNo),
-  //       email,
-  //       address,
-  //       occupation,
-  //       company,
-  //       interest: interestedIn,
-  //       budgetInLakh: Number(budget),
-  //       intendedPurchasePeriodMonths: Number(planningToBuy),
-  //       lastSiteVisit: new Date().toISOString(),
-  //       source,
-  //       remarks: reasonForPurchase,
-  //       status,
-  //       leadId: Number(leadNo) || null,
-
-  //       SalesEngagement: {
-  //         assignedTo,
-  //         assignedDate: new Date().toISOString(),
-  //         assignedBy,
-  //         enquiryId: selectedItem.id,
-  //         nextFollowUp: nextFollowUpDate || new Date().toISOString(),
-  //         status: engagementStatus,
-  //         remarks: engagementRemarks
-  //       }
-  //     };
-
-
-
-  //     const response = await fetch(
-  //       `https://localhost:5289/sales/api/enquiries/${selectedItem.id}`,
-  //       {
-  //         method: "PATCH",
-  //         headers: { "Content-Type": "application/json" },
-  //         credentials: "include",
-  //         body: JSON.stringify(updatedPayload)
-  //       }
-  //     );
-
-  //     if (!response.ok) throw new Error("Failed to update enquiry");
-
-  //     //  Read updated enquiry returned by backend
-  //     const updatedServerData = await response.json();
-  //     console.log(" Server Updated Enquiry:", updatedServerData);
-
-  //     //  Re-fetch fresh enquiry list from server
-  //     const refreshed = await fetchEnquiries(); // ensure you have this function
-  //     console.log(" Refresh List:", refreshed);
-  //     // setData(refreshed);
-
-  //     //  Find updated record in list
-  //     const updatedEnquiry = refreshed.find(
-  //       e => Number(e.id) === Number(selectedItem.id)
-  //     );
-  //     console.log("🎯 Updated Found:", updatedEnquiry);
-
-  //     // Update table state
-  //     // setLoans(refreshed);
-
-  //     // Update edit form fields
-  //     if (updatedEnquiry) {
-  //       setLeadNo(updatedEnquiry.leadId || "");
-  //       setName(updatedEnquiry.name || "");
-  //       setMobile(updatedEnquiry.phone?.toString() || "");
-  //       setWhatsappNo(updatedEnquiry.whatsapp?.toString() || "");
-  //       setEmail(updatedEnquiry.email || "");
-  //       setAddress(updatedEnquiry.address || "");
-  //       setOccupation(updatedEnquiry.occupation || "");
-  //       setCompany(updatedEnquiry.company || "");
-  //       setInterestedIn(updatedEnquiry.interest || "");
-  //       setBudget(updatedEnquiry.budgetInLakh?.toString() || "");
-  //       setPlanningToBuy(updatedEnquiry.intendedPurchasePeriodMonths || "");
-  //       setReasonForPurchase(updatedEnquiry.remarks || "");
-  //       setStatus(updatedEnquiry.status || "");
-  //       setSource(updatedEnquiry.source || "");
-  //     }
-
-  //     // 6️⃣ Close modal
-  //     alert("✅ Enquiry updated successfully!");
-  //     setIsEditing(false);
-  //     setSelectedItem(null);
-
-  //   } catch (error) {
-  //     console.error("❌ Error updating enquiry:", error);
-  //     alert("Failed to update enquiry details. Please try again.");
-  //   }
-  // };
-
- const handleUpdate = async () => {
-  if (!selectedItem?.id) {
-    alert("No enquiry ID found for update.");
-    return;
-  }
-
-  const payload = {
-    id: selectedItem.id,
-    name,
-    phone: mobile,
-    whatsapp: whatsappNo,
-    email,
-    address,
-    occupation,
-    company,
-    interest: interestedIn,
-    budgetInLakh: budget,
-    intendedPurchasePeriodMonths: planningToBuy,
-    remarks: reasonForPurchase,
-    status,
-    source,
-    lastUpdatedBy: salesExec,
-
-    //  FIX: include existing sales engagements
-  SalesEngagement: selectedItem.salesEngagements?.length
-  ? {
-      assignedTo: selectedItem.salesEngagements[0].assignedTo,
-      assignedDate: selectedItem.salesEngagements[0].assignedDate,
-      assignedBy: selectedItem.salesEngagements[0].assignedBy,
-      enquiryId: selectedItem.salesEngagements[0].enquiryId,
-      nextFollowUp: selectedItem.salesEngagements[0].nextFollowUp,
-      status: selectedItem.salesEngagements[0].status,
-      remarks: selectedItem.salesEngagements[0].remarks
-    }
-  : {
-      assignedTo: salesExec || "",      // REQUIRED
-      assignedDate: new Date(),         // REQUIRED
-      assignedBy: salesExec || "",      // REQUIRED
-      enquiryId: selectedItem.id,       // REQUIRED
-      nextFollowUp: null,               // OPTIONAL
-      status: status || "Open",         // REQUIRED
-      // remarks: remarks || ""            // OPTIONAL
+  const handleUpdate = async () => {
+    if (!selectedItem?.id) {
+      alert("No enquiry ID found for update.");
+      return;
     }
 
+    // const payload = {
+    //   id: selectedItem.id,
+    //   name,
+    //   phone: mobile,
+    //   whatsapp: whatsappNo,
+    //   email,
+    //   address,
+    //   occupation,
+    //   company,
+    //   interest: interestedIn,
+    //   budgetInLakh: budget,
+    //   intendedPurchasePeriodMonths: planningToBuy,
+    //   remarks: reasonForPurchase,
+    //   status,
+    //   source,
+    //   lastUpdatedBy: salesExec,
 
-  };
+    //   //  FIX: include existing sales engagements
+    // SalesEngagement: selectedItem.salesEngagements?.length
+    // ? {
+    //     assignedTo: selectedItem.salesEngagements[0].assignedTo,
+    //     assignedDate: selectedItem.salesEngagements[0].assignedDate,
+    //     assignedBy: selectedItem.salesEngagements[0].assignedBy,
+    //     enquiryId: selectedItem.salesEngagements[0].enquiryId,
+    //     nextFollowUp: selectedItem.salesEngagements[0].nextFollowUp,
+    //     status: selectedItem.salesEngagements[0].status,
+    //     remarks: selectedItem.salesEngagements[0].remarks
+    //   }
+    // : {
+    //     assignedTo: salesExec || "",      // REQUIRED
+    //     assignedDate: new Date(),         // REQUIRED
+    //     assignedBy: salesExec || "",      // REQUIRED
+    //     enquiryId: selectedItem.id,       // REQUIRED
+    //     nextFollowUp: null,               // OPTIONAL
+    //     status: status || "Open",         // REQUIRED
+    //     // remarks: remarks || ""            // OPTIONAL
+    //   }
 
-  console.log("🔄 UPDATE PAYLOAD:", payload);
 
-  try {
-    const response = await fetch(
-      `https://localhost:5289/sales/api/enquiries/${selectedItem.id}`,
-      {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify(payload),
+    // };
+
+    const payload = {
+      id: selectedItem.id,
+      leadId: leadNo,
+      name,
+      phone: mobile,
+      whatsapp: whatsappNo,
+      email,
+      address,
+      occupation,
+      company,
+      interest: interestedIn,
+      budgetInLakh: budget,
+      intendedPurchasePeriodMonths: planningToBuy,
+      remarks: reasonForPurchase,
+      status,
+      source,
+
+      salesEngagement: {
+        assignedTo: assignedTo || salesExec,
+        assignedBy: assignedBy || salesExec,
+        assignedDate: selectedItem.salesEngagement?.assignedDate || new Date().toISOString(),
+        nextFollowUp: nextFollowUpDate || null,
+        status: engagementStatus || status,
+        remarks: engagementRemarks || ""
       }
-    );
+    };
 
-    if (!response.ok) throw new Error("Failed to update enquiry");
 
-    const updated = await response.json();
-    console.log("✅ UPDATED ENQUIRY:", updated);
 
-    alert("Enquiry updated successfully!");
-    setIsEditing(false);
-    setSelectedItem(null);
-    fetchEnquiries();
+    console.log("🔄 UPDATE PAYLOAD:", payload);
 
-  } catch (err) {
-    console.error("❌ Update Error:", err);
-    alert("Failed to update enquiry.");
-  }
-};
+    try {
+      const response = await fetch(
+        `https://localhost:5289/sales/api/enquiries/${selectedItem.id}`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify(payload),
+        }
+      );
+
+      if (!response.ok) throw new Error("Failed to update enquiry");
+
+      const updated = await response.json();
+      console.log("✅ UPDATED ENQUIRY:", updated);
+
+      alert("Enquiry updated successfully!");
+      setIsEditing(false);
+      setSelectedItem(null);
+      fetchEnquiries();
+
+    } catch (err) {
+      console.error("❌ Update Error:", err);
+      alert("Failed to update enquiry.");
+    }
+  };
 
 
 
@@ -765,128 +477,243 @@ const DisplayEnquiryTable = ({ data, fetchEnquiries }) => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const handleEditSubmit = () => {
-    if (editingItem && onUpdate) {
-      const updatedItem = {
-        ...editingItem,
-        ...editFormData,
-      };
+  // const handleEditSubmit = () => {
+  //   if (editingItem && onUpdate) {
+  //     const updatedItem = {
+  //       ...editingItem,
+  //       ...editFormData,
+  //     };
 
-      onUpdate(updatedItem, editingItem.index);
-      setEditModalOpen(false);
-    }
-  };
-
-  const handlefollowupClick = (item, index) => {
-    setEditingItem({ ...item, index });
-    setEditFormData({
-      enquiryNo: item.enquiryNo || "",
-      remark: item.remark || "",
-      name: item.name || "",
-      nextFollowUp: item.nextFollowUp || "",
-      visitType: item.visitType || "",
-      status: item.status || "",
-      visitScheduledDate: item.visitScheduledDate || "",
-    });
-
-    // Set visibility for date fields based on status
-    const statusesThatRequireNextFollowUp = [
-      "Callback request",
-      "Unreachable",
-      "Not answered",
-      "Follow up",
-    ];
-
-    const statusesThatRequireVisitScheduledDate = [
-      "Re-visit",
-      "Visit postponed",
-    ];
-
-    setShowNextFollowUpEdit(
-      statusesThatRequireNextFollowUp.includes(item.status)
-    );
-    setShowVisitScheduledDateEdit(
-      statusesThatRequireVisitScheduledDate.includes(item.status)
-    );
-
-    setEditModalOpen(true);
-  };
-
-  // const handlefollowupClick = async (item, index) => {
+  //     onUpdate(updatedItem, editingItem.index);
+  //     setEditModalOpen(false);
+  //   }
+  // };
+  // const handleEditSubmit = async () => {
   //   try {
-  //     setEditingItem({ ...item, index });
-  //       console.log("ITEM CLICKED:", item);
+  //     if (!editingItem?.id) {
+  //       alert("❌ No enquiry ID found!");
+  //       return;
+  //     }
 
-  //       const enquiryId =
-  //   item.id ||
-  //   item.enquiryId ||
-  //   item.enquiryNo ||
-  //   item.leadId ||
-  //   (item.leadEnagagements?.[0]?.leadId ?? undefined);
+  //     const payload = {
+  //       id: editingItem.id,
+  //       status: editFormData.status,
+  //       remarks: editFormData.remark,
+  //       salesEnagagements: [
+  //         {
+  //           visitType: editFormData.visitType || "",
+  //           nextFollowUp: editFormData.nextFollowUp || null,
+  //           visitScheduledDate: editFormData.visitScheduledDate || null
+  //         }
+  //       ]
+  //     };
 
-  // console.log("RESOLVED ENQUIRY ID:", enquiryId);
+  //     console.log("PATCH Payload:", payload);
 
-  // if (!enquiryId) {
-  //   console.error("❌ No Enquiry ID found in item:", item);
-  //   toast.error("No enquiry ID available");
-  //   return;
-  // }
-  //     // 🔥 1) CALL API WITH CREDENTIALS INCLUDED
   //     const res = await fetch(
-  //       `https://localhost:5289/api/enquiries/${enquiryId}`,
+  //       `https://localhost:5289/sales/api/enquiries/${editingItem.id}`,
   //       {
-  //         method: "GET",
-  //         credentials: "include",   // <-- HERE
+  //         method: "PATCH",
+  //         headers: { "Content-Type": "application/json" },
+  //         credentials: "include",
+  //         body: JSON.stringify(payload),
   //       }
   //     );
 
-  //     if (!res.ok) {
-  //       throw new Error("API returned error: " + res.status);
-  //     }
+  //     if (!res.ok) throw new Error("Failed to update enquiry");
 
-  //     const enquiry = await res.json();
+  //     const updated = await res.json();
+  //     console.log("🟢 Updated enquiry:", updated);
 
-  //     // 🔥 2) AUTO POPULATE FORM
-  //     setEditFormData({
-  //       enquiryNo: enquiry.enquiryNo || "",
-  //       remark: enquiry.remark || "",
-  //       name: enquiry.name || "",
-  //       nextFollowUp: enquiry.nextFollowUp || "",
-  //       visitType: enquiry.visitType || "",
-  //       status: enquiry.status || "",
-  //       visitScheduledDate: enquiry.visitScheduledDate || "",
-  //     });
+  //     setEditModalOpen(false);
+  //     fetchEnquiries(); // refresh list if needed
 
-  //     // 🔥 3) Set visibility based on status
-  //     const statusesThatRequireNextFollowUp = [
-  //       "Callback request",
-  //       "Unreachable",
-  //       "Not answered",
-  //       "Follow up",
-  //     ];
-
-  //     const statusesThatRequireVisitScheduledDate = [
-  //       "Re-visit",
-  //       "Visit postponed",
-  //     ];
-
-  //     setShowNextFollowUpEdit(
-  //       statusesThatRequireNextFollowUp.includes(enquiry.status)
-  //     );
-
-  //     setShowVisitScheduledDateEdit(
-  //       statusesThatRequireVisitScheduledDate.includes(enquiry.status)
-  //     );
-
-  //     // 🔥 4) Open modal
-
-
-  //     setEditModalOpen(true);
-  //   } catch (error) {
-  //     console.error("❌ Fetch Error:", error);
-  //     toast.error("Failed to load enquiry details");
+  //   } catch (err) {
+  //     console.error("❌ Update Error:", err);
+  //     alert("Failed to update enquiry");
   //   }
   // };
+
+  // Createing the new entry in salesEnaggamenets - for every follow up :
+  // const handleEditSubmit = async () => {
+  //   try {
+  //     if (!editingItem?.id) {
+  //       alert("❌ No enquiry ID found!");
+  //       return;
+  //     }
+
+
+
+  //     const payload = {
+  //       id: editingItem.id,
+  //       name: editFormData.name || editingItem.name,
+  //       source: editingItem.source,  // keep from DB, not from form
+  //       status: editFormData.status,
+  //       remarks: editFormData.remark,
+
+  //       salesEngagement: {
+  //         assignedTo: assignedTo,
+  //         assignedDate: new Date().toISOString(),
+  //         assignedBy: assignedBy,
+  //         // enquiryId: selectedItem.id,
+  //         enquiryId: editingItem.id,
+  //         // nextFollowUp: NextFollowUp,
+  //         nextFollowUp: editFormData.nextFollowUp,
+
+  //         status: status,
+  //         // remarks: followupRemarks
+  //         remarks: editFormData.remark
+
+  //       }
+
+
+  //     };
+
+
+  //     console.log("PATCH Payload:", payload);
+
+  //     const res = await fetch(
+  //       `https://localhost:5289/sales/api/enquiries/${editingItem.id}`,
+  //       {
+  //         method: "PATCH",
+  //         headers: { "Content-Type": "application/json" },
+  //         credentials: "include",
+  //         body: JSON.stringify(payload),
+  //       }
+  //     );
+
+  //     if (!res.ok) throw new Error("Failed to update enquiry");
+
+  //     const updated = await res.json();
+  //     console.log("🟢 Updated enquiry:", updated);
+
+  //     setEditModalOpen(false);
+  //     fetchEnquiries();
+
+  //   } catch (err) {
+  //     console.error("❌ Update Error:", err);
+  //     alert("Failed to update enquiry");
+  //   }
+  // };
+
+  // To update that same record :
+  const handleEditSubmit = async () => {
+    try {
+      if (!editingItem?.id) {
+        alert("❌ No enquiry ID found!");
+        return;
+      }
+
+      const payload = {
+        id: editingItem.id,
+        name: editFormData.name || editingItem.name,
+        source: editingItem.source,
+        status: editFormData.status,
+        remarks: editFormData.remark,
+
+        salesEngagement: {
+          // id: editingItem.salesEngagements?.[0]?.id,  // 🟢 REQUIRED FOR UPDATE
+          id: editingItem.salesEngagements?.[0]?.EnquiryId,
+          assignedTo: assignedTo,
+          assignedDate: new Date().toISOString(),
+          assignedBy: assignedBy,
+          enquiryId: editingItem.id,
+          nextFollowUp: editFormData.nextFollowUp,
+          status: status,
+          remarks: editFormData.remark
+        }
+      };
+
+      console.log("PATCH Payload:", payload);
+
+      const res = await fetch(
+        `https://localhost:5289/sales/api/enquiries/${editingItem.id}`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify(payload),
+        }
+      );
+
+      if (!res.ok) throw new Error("Failed to update enquiry");
+
+      const updated = await res.json();
+      console.log("🟢 Updated enquiry:", updated);
+
+      setEditModalOpen(false);
+      fetchEnquiries();
+    } catch (err) {
+      console.error("❌ Update Error:", err);
+      alert("Failed to update enquiry");
+    }
+  };
+
+
+  const handlefollowupClick = async (item, index) => {
+    try {
+      console.log("🟢 Follow-up Clicked:", item);
+
+      // 1️⃣ Resolve Correct Enquiry ID
+      const enquiryId =
+        item.id ||
+        item.enquiryId ||
+        item.enquiryNo ||
+        item.leadId ||
+        (item.leadEnagagements?.[0]?.enquiryId ?? undefined);
+
+      if (!enquiryId) {
+        alert("❌ No valid enquiry ID found!");
+        return;
+      }
+
+      // 2️⃣ Fetch Full Enquiry Details
+      const res = await fetch(
+        `https://localhost:5289/sales/api/enquiries/${enquiryId}`,
+        { method: "GET", credentials: "include" }
+      );
+
+      if (!res.ok) throw new Error("Failed to fetch enquiry");
+
+      const enquiry = await res.json();
+      console.log("🟢 Full Enquiry for Follow-Up:", enquiry);
+
+
+      const eng = enquiry.salesEnagagements?.[0] || {};
+
+
+
+      setEditFormData({
+        enquiryNo: enquiry.id || "",
+        remark: enquiry.remarks || "",
+        name: enquiry.name || "",
+        status: enquiry.status
+          || "",
+
+        visitType: eng.visitType || "",
+        nextFollowUp: eng.nextFollowUp || "",
+        visitScheduledDate: eng.visitScheduledDate || "",
+      });
+
+
+      // 4️⃣ Show proper fields
+      const nextFollowUpStatus = ["Follow up", "Unreachable", "Not answered", "Callback request"];
+      const visitScheduleStatus = ["Re-visit", "Visit postponed"];
+
+      setShowNextFollowUpEdit(nextFollowUpStatus.includes(enquiry.status));
+      setShowVisitScheduledDateEdit(visitScheduleStatus.includes(enquiry.status));
+
+      // 5️⃣ Store selected item for PATCH
+      setEditingItem({ ...item, id: enquiry.id });
+
+      // 6️⃣ Open Modal
+      setEditModalOpen(true);
+
+    } catch (err) {
+      console.error("❌ Follow-Up Load Error:", err);
+      alert("Failed to load follow-up details");
+    }
+  };
 
 
   const handleEditChange = (field, value) => {

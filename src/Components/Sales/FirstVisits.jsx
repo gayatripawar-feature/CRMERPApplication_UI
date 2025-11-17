@@ -165,7 +165,7 @@ const FirstVisits = () => {
   const [selectedLead, setSelectedLead] = useState(null);
   const [showProjectForm, setShowProjectForm] = useState(false);
   const [showFlatForm, setShowFlatForm] = useState(false);
-const [enquiries, setEnquiries] = useState([]);
+  const [enquiries, setEnquiries] = useState([]);
 
 
   useEffect(() => {
@@ -389,8 +389,8 @@ const [enquiries, setEnquiries] = useState([]);
       const data = await response.json();
       setFirms(data);
       // If not set belwo line then it wont shows the submitted enquiries.
-      setEnquiries(data); 
-      return data;   
+      setEnquiries(data);
+      return data;
     } catch (err) {
       console.error(err);
     }
@@ -477,7 +477,7 @@ const [enquiries, setEnquiries] = useState([]);
           }
         );
         const saved = await response.json();        // <── GET NEW ENQUIRY
-      setEnquiries(prev => [...prev, saved]); 
+        setEnquiries(prev => [...prev, saved]);
 
         toast.success("Enquiry added successfully!");
       }
@@ -801,114 +801,114 @@ const [enquiries, setEnquiries] = useState([]);
   // };
 
 
-// const handleLeadNoChange = (e) => {
-//   const selectedLeadNo = e.target.value;
-//   setLeadNo(selectedLeadNo);
+  // const handleLeadNoChange = (e) => {
+  //   const selectedLeadNo = e.target.value;
+  //   setLeadNo(selectedLeadNo);
 
-//   // 1️⃣ Check enquiry using the NEW value directly
-//   const existingEnquiry = firms.find(
-//     f => Number(f.leadId) === Number(selectedLeadNo)
-//   );
+  //   // 1️⃣ Check enquiry using the NEW value directly
+  //   const existingEnquiry = firms.find(
+  //     f => Number(f.leadId) === Number(selectedLeadNo)
+  //   );
 
-//   if (existingEnquiry) {
-//     console.log("🟢 FOUND existing enquiry:", existingEnquiry);
-//     setName(existingEnquiry.name);
-//     setMobile(existingEnquiry.phone);
-//     setWhatsappNo(existingEnquiry.whatsapp);
-//     setEmail(existingEnquiry.email);
-//     setAddress(existingEnquiry.address);
-//     setCompany(existingEnquiry.company);
-//     setInterestedIn(existingEnquiry.interest);
-//     setBudget(existingEnquiry.budgetInLakh);
-//     setOccupation(existingEnquiry.occupation);
-//     setReferenceBySource(existingEnquiry.source);
-//     setPlanningToBuy(existingEnquiry.intendedPurchasePeriodMonths);
-//     setRemarks(existingEnquiry.remarks);
-//     return;
-//   }
+  //   if (existingEnquiry) {
+  //     console.log("🟢 FOUND existing enquiry:", existingEnquiry);
+  //     setName(existingEnquiry.name);
+  //     setMobile(existingEnquiry.phone);
+  //     setWhatsappNo(existingEnquiry.whatsapp);
+  //     setEmail(existingEnquiry.email);
+  //     setAddress(existingEnquiry.address);
+  //     setCompany(existingEnquiry.company);
+  //     setInterestedIn(existingEnquiry.interest);
+  //     setBudget(existingEnquiry.budgetInLakh);
+  //     setOccupation(existingEnquiry.occupation);
+  //     setReferenceBySource(existingEnquiry.source);
+  //     setPlanningToBuy(existingEnquiry.intendedPurchasePeriodMonths);
+  //     setRemarks(existingEnquiry.remarks);
+  //     return;
+  //   }
 
-//   // 2️⃣ If no enquiry found → load scheduled lead
-//   const lead = leads.scheduled.find(
-//     (l) => Number(l.id) === Number(selectedLeadNo)
-//   );
+  //   // 2️⃣ If no enquiry found → load scheduled lead
+  //   const lead = leads.scheduled.find(
+  //     (l) => Number(l.id) === Number(selectedLeadNo)
+  //   );
 
-//   console.log("🆕 No enquiry found, loading lead:", lead);
+  //   console.log("🆕 No enquiry found, loading lead:", lead);
 
-//   setSelectedLead(lead);
+  //   setSelectedLead(lead);
 
-//   setName(lead?.name || "");
-//   setMobile(lead?.phone || "");
-//   setWhatsappNo(lead?.whatsapp || "");
-//   setEmail(lead?.email || "");
-//   setAddress(lead?.address || "");
-//   setCompany(lead?.company || "");
-//   setInterestedIn(lead?.interest || "");
-//   setBudget(lead?.budgetInLakh || "");
-//   setOccupation(lead?.occupation || "");
-//   setReferenceBySource(lead?.source || "");
-//   setPlanningToBuy(lead?.intendedPurchasePeriodMonths || "");
-//   setRemarks("");
-// };
+  //   setName(lead?.name || "");
+  //   setMobile(lead?.phone || "");
+  //   setWhatsappNo(lead?.whatsapp || "");
+  //   setEmail(lead?.email || "");
+  //   setAddress(lead?.address || "");
+  //   setCompany(lead?.company || "");
+  //   setInterestedIn(lead?.interest || "");
+  //   setBudget(lead?.budgetInLakh || "");
+  //   setOccupation(lead?.occupation || "");
+  //   setReferenceBySource(lead?.source || "");
+  //   setPlanningToBuy(lead?.intendedPurchasePeriodMonths || "");
+  //   setRemarks("");
+  // };
 
 
 
-const handleLeadNoChange = (e) => {
-  const selectedLeadNo = e.target.value;
+  const handleLeadNoChange = (e) => {
+    const selectedLeadNo = e.target.value;
 
-  console.log("🟡 DROPDOWN CHANGED — Selected Lead No:", selectedLeadNo);
-  console.log("📌 firms loaded (Enquiries count):", firms.length, firms);
+    console.log("🟡 DROPDOWN CHANGED — Selected Lead No:", selectedLeadNo);
+    console.log("📌 firms loaded (Enquiries count):", firms.length, firms);
 
-  setLeadNo(selectedLeadNo);
+    setLeadNo(selectedLeadNo);
 
-  // 1️⃣ Check enquiry using the NEW value directly
-  console.log("🔍 Searching enquiry for LeadNo:", selectedLeadNo);
+    // 1️⃣ Check enquiry using the NEW value directly
+    console.log("🔍 Searching enquiry for LeadNo:", selectedLeadNo);
 
-  const existingEnquiry = firms.find(
-    (f) => Number(f.leadId) === Number(selectedLeadNo)
-  );
+    const existingEnquiry = firms.find(
+      (f) => Number(f.leadId) === Number(selectedLeadNo)
+    );
 
-  console.log("🧾 Matched enquiry:", existingEnquiry);
+    console.log("🧾 Matched enquiry:", existingEnquiry);
 
-  if (existingEnquiry) {
-    console.log("🟢 FOUND existing enquiry → loading enquiry data");
+    if (existingEnquiry) {
+      console.log("🟢 FOUND existing enquiry → loading enquiry data");
 
-    setName(existingEnquiry.name);
-    setMobile(existingEnquiry.phone);
-    setWhatsappNo(existingEnquiry.whatsapp);
-    setEmail(existingEnquiry.email);
-    setAddress(existingEnquiry.address);
-    setCompany(existingEnquiry.company);
-    setInterestedIn(existingEnquiry.interest);
-    setBudget(existingEnquiry.budgetInLakh);
-    setOccupation(existingEnquiry.occupation);
-    setReferenceBySource(existingEnquiry.source);
-    setPlanningToBuy(existingEnquiry.intendedPurchasePeriodMonths);
-    setRemarks(existingEnquiry.remarks);
-    return;
-  }
+      setName(existingEnquiry.name);
+      setMobile(existingEnquiry.phone);
+      setWhatsappNo(existingEnquiry.whatsapp);
+      setEmail(existingEnquiry.email);
+      setAddress(existingEnquiry.address);
+      setCompany(existingEnquiry.company);
+      setInterestedIn(existingEnquiry.interest);
+      setBudget(existingEnquiry.budgetInLakh);
+      setOccupation(existingEnquiry.occupation);
+      setReferenceBySource(existingEnquiry.source);
+      setPlanningToBuy(existingEnquiry.intendedPurchasePeriodMonths);
+      setRemarks(existingEnquiry.remarks);
+      return;
+    }
 
-  // 2️⃣ If no enquiry found → load scheduled lead
-  const lead = leads.scheduled.find(
-    (l) => Number(l.id) === Number(selectedLeadNo)
-  );
+    // 2️⃣ If no enquiry found → load scheduled lead
+    const lead = leads.scheduled.find(
+      (l) => Number(l.id) === Number(selectedLeadNo)
+    );
 
-  console.log("🔴 NO ENQUIRY FOUND → loading scheduled lead:", lead);
+    console.log("🔴 NO ENQUIRY FOUND → loading scheduled lead:", lead);
 
-  setSelectedLead(lead);
+    setSelectedLead(lead);
 
-  setName(lead?.name || "");
-  setMobile(lead?.phone || "");
-  setWhatsappNo(lead?.whatsapp || "");
-  setEmail(lead?.email || "");
-  setAddress(lead?.address || "");
-  setCompany(lead?.company || "");
-  setInterestedIn(lead?.interest || "");
-  setBudget(lead?.budgetInLakh || "");
-  setOccupation(lead?.occupation || "");
-  setReferenceBySource(lead?.source || "");
-  setPlanningToBuy(lead?.intendedPurchasePeriodMonths || "");
-  setRemarks("");
-};
+    setName(lead?.name || "");
+    setMobile(lead?.phone || "");
+    setWhatsappNo(lead?.whatsapp || "");
+    setEmail(lead?.email || "");
+    setAddress(lead?.address || "");
+    setCompany(lead?.company || "");
+    setInterestedIn(lead?.interest || "");
+    setBudget(lead?.budgetInLakh || "");
+    setOccupation(lead?.occupation || "");
+    setReferenceBySource(lead?.source || "");
+    setPlanningToBuy(lead?.intendedPurchasePeriodMonths || "");
+    setRemarks("");
+  };
 
 
   const handleDeleteFirm = (firmToDelete, index) => {
@@ -1001,6 +1001,171 @@ const handleLeadNoChange = (e) => {
   };
 
 
+
+  //  Fetch ONLY follow-up history entries for a given enquiryId
+  // const fetchVisitFollowUpHistory = async (enquiryId) => {
+  //   try {
+  //     const res = await fetch(
+  //       `https://localhost:5289/sales/api/enquiries/${enquiryId}`,
+  //       { credentials: "include" }
+  //     );
+
+  //     if (!res.ok) throw new Error("Failed to load history");
+
+  //     const data = await res.json();
+  //     console.log("folow up clicked", data);
+  //     // Extract history from enquiry response
+  //     return data.salesEngagements || [];
+
+  //   } catch (err) {
+  //     console.error("❌ Error loading history:", err);
+  //     return [];
+  //   }
+  // };
+
+
+
+const fetchVisitFollowupHistory = async () => {
+  try {
+    const response = await fetch("https://localhost:5289/sales/api/enquiries", {
+      credentials: "include",
+    });
+
+    if (!response.ok) throw new Error("Network response not ok");
+
+    const data = await response.json();
+
+    // Format date
+    const formatDate = (dateStr) => {
+      if (!dateStr || dateStr === "0001-01-01T00:00:00") return "";
+      const d = new Date(dateStr);
+      return isNaN(d)
+        ? ""
+        : d.toLocaleString("en-IN", {
+            dateStyle: "short",
+            timeStyle: "short",
+          });
+    };
+
+    // Roman number helper
+    const toRoman = (num) => {
+      const romans = ["i","ii","iii","iv","v","vi","vii","viii","ix","x"];
+      return romans[num - 1] || num;
+    };
+
+    // Clean value
+    const sanitize = (val) => {
+      if (!val || val.trim() === "" || val.trim() === "-" || val.trim() === "---")
+        return "";
+      return val.trim();
+    };
+
+    const formattedData = data.map((enquiry) => {
+      const leadBase = {
+        leadNo: enquiry.id || "-",
+        enquiryId: enquiry.id || "-",  // ✅ FIXED (was empty)
+        name: enquiry.name || "-",
+        phone: enquiry.phone || "-",
+        email: enquiry.email || "-",
+        source: enquiry.source || "-",
+        leadDays: enquiry.createdDate
+          ? Math.ceil(
+              (new Date() - new Date(enquiry.createdDate)) /
+                (1000 * 60 * 60 * 24)
+            )
+          : "-",
+      };
+
+      const allHistory = [];
+
+      // 🔹 Current (top-level) enquiry info
+      if (
+        sanitize(enquiry.status) ||
+        sanitize(enquiry.remarks) ||
+        sanitize(enquiry.lastUpdatedBy)
+      ) {
+        allHistory.push({
+          date: enquiry.lastUpdatedDate || enquiry.createdDate,
+          status: enquiry.status || "",
+          remark: enquiry.remarks || "",
+          assignedTo: enquiry.lastUpdatedBy || "",
+        });
+      }
+
+      // 🔹 Enquiry engagements (visit follow-up)
+      const engagements =
+        enquiry.salesEngagements ||
+        enquiry.leadEngagements ||
+        enquiry.leadEnagagements ||
+        [];
+
+      engagements.forEach((eng) => {
+        const engDate =
+          eng.timestamp ||
+          eng.updatedDate ||
+          eng.assignedDate ||
+          enquiry.lastUpdatedDate ||
+          enquiry.createdDate;
+
+        if (
+          sanitize(eng.status) ||
+          sanitize(eng.remarks) ||
+          sanitize(eng.assignedToName || eng.assignedTo)
+        ) {
+          allHistory.push({
+            date: engDate,
+            status: eng.status || "",
+            remark: eng.remarks || "",
+            assignedTo: eng.assignedToName || eng.assignedTo || "",
+          });
+        } else {
+          allHistory.push({
+            date: engDate,
+            status: "No change",
+            remark: "No change",
+            assignedTo: "No change",
+          });
+        }
+      });
+
+      // Sort newest → oldest
+      allHistory.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+      // Helper to build line
+      const buildHistoryLine = (h, i, value) => {
+        const date = formatDate(h.date);
+        const text = sanitize(value);
+
+        if (!date && !text) return null;
+        if (!text) return `${toRoman(i + 1)}. ${date} - No change`;
+        if (!date) return `${toRoman(i + 1)}. ${text}`;
+        return `${toRoman(i + 1)}. ${date} - ${text}`;
+      };
+
+      return {
+        ...leadBase,
+        time: formatDate(enquiry.lastUpdatedDate || enquiry.createdDate),
+        statusHistory: allHistory
+          .map((h, i) => buildHistoryLine(h, i, h.status))
+          .filter(Boolean)
+          .join("<br/>"),
+        remarkHistory: allHistory
+          .map((h, i) => buildHistoryLine(h, i, h.remark))
+          .filter(Boolean)
+          .join("<br/>"),
+        assignToHistory: allHistory
+          .map((h, i) => buildHistoryLine(h, i, h.assignedTo))
+          .filter(Boolean)
+          .join("<br/>"),
+      };
+    });
+
+    setFilteredLeads(formattedData);
+    setLeads(formattedData);
+  } catch (error) {
+    console.error("Error fetching follow-up history:", error);
+  }
+};
 
 
   return (
@@ -1531,9 +1696,12 @@ const handleLeadNoChange = (e) => {
                 {/* Table Section */}
                 <div className="mt-3">
                   <FirstVisitFollowupHistoryTable
-                    data={projectData}
+                    data={filteredLeads}
+                    fetchVisitFollowUpHistory={fetchVisitFollowupHistory}
+                    // data={projectData}
                     isMobile={isMobile}
                     isTablet={isTablet}
+              
                   />
                 </div>
               </>
