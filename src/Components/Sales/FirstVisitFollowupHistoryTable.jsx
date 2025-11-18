@@ -16,35 +16,50 @@ import {
 } from "@mui/material";
 import Constants from "../Constants";
 
-export const FirstVisitFollowupHistoryTable = ({ data = [],fetchVisitFollowUpHistory}) => {
+export const FirstVisitFollowupHistoryTable = ({ data,fetchVisitFollowUpHistory}) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const isTablet = useMediaQuery(theme.breakpoints.down("md"));
+const [visitFollowupHistory, setVisitFollowupHistory] = useState([]);
+const [filteredVisitFollowupHistory, setFilteredVisitFollowupHistory] = useState([]);
 
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  // const [page, setPage] = useState(0);
+  // const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
+  // const handleChangePage = (event, newPage) => {
+  //   setPage(newPage);
+  // };
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
+  // const handleChangeRowsPerPage = (event) => {
+  //   setRowsPerPage(parseInt(event.target.value, 10));
+  //   setPage(0);
+  // };
 
-  const paginatedData = data.slice(
-    page * rowsPerPage,
-    page * rowsPerPage + rowsPerPage
-  );
+  // const paginatedData = data.slice(
+  //   page * rowsPerPage,
+  //   page * rowsPerPage + rowsPerPage
+  // );
 
 
-  useEffect(() => {
-     console.log("Child component mounted");
-    
   
-});
+  useEffect(() => {
+  console.log("🟦 Child Mounted - FollowUp Table");
+}, []);
 
+
+
+
+useEffect(() => {
+  console.log(" Data received in Table:", data);
+  if (data && data.length > 0) {
+    setVisitFollowupHistory(data);
+    setFilteredVisitFollowupHistory(data);  
+  }
+}, [data]);
+
+useEffect(() => {
+  console.log("🟧 fetchVisitFollowUpHistory function received:", fetchVisitFollowUpHistory);
+}, [fetchVisitFollowUpHistory]);
 
   return (
     <>
@@ -300,20 +315,22 @@ export const FirstVisitFollowupHistoryTable = ({ data = [],fetchVisitFollowUpHis
                 </TableCell>
               </TableRow>
             ) : (
-              paginatedData.map((row, index) => (
+              // paginatedData.map((row, index) => (
+                filteredVisitFollowupHistory.map((row,index) =>(
                 <TableRow key={index} hover>
                   <TableCell>{row.statusHistory || "N/A"}</TableCell>
                   <TableCell>{row.remarkHistory || "N/A"}</TableCell>
                   <TableCell>{row.assignToHistory || "N/A"}</TableCell>
                   <TableCell>{row.leadDays || "N/A"}</TableCell>
                   <TableCell>{row.timestamp || "N/A"}</TableCell>
-                  <TableCell>{row.enquiryNo || "N/A"}</TableCell>
+                 
+                  <TableCell>{row.id || "N/A"}</TableCell>
                   <TableCell>{row.leadNo || "N/A"}</TableCell>
                   <TableCell>{row.salesExecutiveName || "N/A"}</TableCell>
                   <TableCell>{row.name || "N/A"}</TableCell>
-                  <TableCell>{row.mobileNo || "N/A"}</TableCell>
+                  <TableCell>{row.phone || "N/A"}</TableCell>
                   <TableCell>{row.alternateContactNo || "N/A"}</TableCell>
-                  <TableCell>{row.whatsappNo || "N/A"}</TableCell>
+                  <TableCell>{row.phone || "N/A"}</TableCell>
                   <TableCell>{row.email || "N/A"}</TableCell>
                   <TableCell>{row.address || "N/A"}</TableCell>
                   <TableCell>{row.occupation || "N/A"}</TableCell>
@@ -329,7 +346,7 @@ export const FirstVisitFollowupHistoryTable = ({ data = [],fetchVisitFollowUpHis
               ))
             )}
           </TableBody>
-          <TableFooter>
+          {/* <TableFooter>
             <TableRow>
               <TableCell colSpan={23} sx={{ p: 0, border: "none" }}>
                 <Box
@@ -340,7 +357,7 @@ export const FirstVisitFollowupHistoryTable = ({ data = [],fetchVisitFollowUpHis
                     backgroundColor: "background.paper",
                   }}
                 >
-                  <TablePagination
+                 <TablePagination
                     rowsPerPageOptions={[5, 10, 25]}
                     component="div"
                     count={data.length}
@@ -369,10 +386,11 @@ export const FirstVisitFollowupHistoryTable = ({ data = [],fetchVisitFollowUpHis
                         },
                     }}
                   />
+
                 </Box>
               </TableCell>
             </TableRow>
-          </TableFooter>
+          </TableFooter> */}
         </Table>
       </TableContainer>
     </>

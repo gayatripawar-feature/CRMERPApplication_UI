@@ -1,144 +1,26 @@
-// import React ,{useState} from "react";
-// import { TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Paper, Typography ,TablePagination,Box} from "@mui/material";
-// import Constants from "../Constants";
-
-// const FirstvisitfollowupbookedTable = ({ data }) => {
-
-//   const [page, setPage] = useState(0);
-//     const [rowsPerPage, setRowsPerPage] = useState(5);
-  
-//     const handleChangePage = (event, newPage) => {
-//       setPage(newPage);
-//     };
-  
-//     const handleChangeRowsPerPage = (event) => {
-//       setRowsPerPage(parseInt(event.target.value, 10));
-//       setPage(0);
-//     };
-  
-//     // Slice data for pagination
-//     const paginatedData = data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
-//   return (
-//     <>
-     
-//       <TableContainer component={Paper}>
-//         <Box sx={{ maxHeight: 400, overflowY: 'auto' }}>
-//         <Table>
-//           <TableHead>
-//             <TableRow sx={{ background: Constants.primaryColor}}>
-//               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>ENQUIRY NO.</TableCell>
-//               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>LEAD NO.</TableCell>
-//               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>NAME</TableCell>
-//               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>MOBILE</TableCell>
-//               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>WHATSAPP NO.</TableCell>
-//               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>ALTERNATE CONTACT NO.</TableCell>
-//               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>EMAIL</TableCell>
-//               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>ADDRESS</TableCell>
-//               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>OCCUPATION</TableCell>
-//               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>COMPANY</TableCell>
-//               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>INTERESTED IN</TableCell>
-//               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>BUDGET (APPROX.)</TableCell>
-//               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>REASON FOR PURCHASE</TableCell>
-//               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>REFERENCE BY / SOURCE</TableCell>
-//               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>NAME OF CP (IF CHANNEL PARTNER)</TableCell>
-//               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>PLANNING TO BUY WITHIN?</TableCell>
-//               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>CUSTOMER FEEDBACK & COMPLETE FOLLOWUP DETAILS</TableCell>
-//             </TableRow>
-//           </TableHead>
-//           <TableBody>
-//             {paginatedData.map((item, index) => (
-//               <TableRow key={index}>
-//                 <TableCell>{item.enquiryNo}</TableCell>
-//                 <TableCell>{item.leadNo}</TableCell>
-//                 <TableCell>{item.name}</TableCell>
-//                 <TableCell>{item.mobile}</TableCell>
-//                 <TableCell>{item.whatsappNo}</TableCell>
-//                 <TableCell>{item.alternateContactNo}</TableCell>
-//                 <TableCell>{item.email}</TableCell>
-//                 <TableCell>{item.address}</TableCell>
-//                 <TableCell>{item.occupation}</TableCell>
-//                 <TableCell>{item.company}</TableCell>
-//                 <TableCell>{item.interestedIn}</TableCell>
-//                 <TableCell>{item.budget}</TableCell>
-//                 <TableCell>{item.reasonForPurchase}</TableCell>
-//                 <TableCell>{item.referenceSource}</TableCell>
-//                 <TableCell>{item.cpName}</TableCell>
-//                 <TableCell>{item.planningToBuy}</TableCell>
-//                 <TableCell>{item.customerFeedback}</TableCell>
-//               </TableRow>
-//             ))}
-//           </TableBody>
-//         </Table>
-//         </Box>
-
-
-        
-// <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 1,p:1 }}>
-
-// <TablePagination
-//     rowsPerPageOptions={[5, 10, 25]}
-//     component="div"
-//     count={data.length}
-//     rowsPerPage={rowsPerPage}
-//     page={page}
-//     onPageChange={handleChangePage}
-//     onRowsPerPageChange={handleChangeRowsPerPage}
-//   />
-
-// </Box>
-//       </TableContainer>
-//     </>
-//   );
-// };
-
-// export default FirstvisitfollowupbookedTable;
-
-
-
 import React, { useState } from "react";
-import {
-  TableContainer,
-  Table,
-  TableHead,
-  TableBody,
-  TableRow,
-  TableCell,
-  Paper,
-  Typography,
-  Box,
-  TablePagination,
-  TableFooter,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
+import { TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Paper, Typography, Box, TablePagination, TableFooter, useMediaQuery, useTheme, } from "@mui/material";
 import Constants from "../Constants";
-
 const FirstvisitfollowupbookedTable = ({ data }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const isTablet = useMediaQuery(theme.breakpoints.down("md"));
-
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
-
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-
   const paginatedData = data.slice(
     page * rowsPerPage,
     page * rowsPerPage + rowsPerPage
   );
-
   return (
     <>
-      <TableContainer
-        component={Paper}
+      <TableContainer component={Paper}
         sx={{
           maxHeight: isMobile ? 400 : 600,
           width: "100%",
@@ -156,78 +38,17 @@ const FirstvisitfollowupbookedTable = ({ data }) => {
           "&::-webkit-scrollbar-thumb:hover": {
             background: Constants.primaryColor,
           },
-        }}
-      >
-        <Table
-          aria-label="first visit followup booked table"
-          size={isMobile ? "small" : "medium"}
-        >
+        }}>
+        <Table aria-label="first visit followup booked table" size={isMobile ? "small" : "medium"}  >
           <TableHead>
             <TableRow sx={{ background: Constants.primaryColor }}>
-              <TableCell
-                sx={{
-                  color: "white",
-                  fontWeight: "bold",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                ENQUIRY NO.
-              </TableCell>
-              <TableCell
-                sx={{
-                  color: "white",
-                  fontWeight: "bold",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                LEAD NO.
-              </TableCell>
-              <TableCell
-                sx={{
-                  color: "white",
-                  fontWeight: "bold",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                NAME
-              </TableCell>
-              <TableCell
-                sx={{
-                  color: "white",
-                  fontWeight: "bold",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                MOBILE
-              </TableCell>
-              <TableCell
-                sx={{
-                  color: "white",
-                  fontWeight: "bold",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                ALTERNATE CONTACT NO.
-              </TableCell>
-              <TableCell
-                sx={{
-                  color: "white",
-                  fontWeight: "bold",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                WHATSAPP NO.
-              </TableCell>
-
-              <TableCell
-                sx={{
-                  color: "white",
-                  fontWeight: "bold",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                EMAIL
-              </TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>ENQUIRY NO </TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}> LEAD NO</TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>  NAME</TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }} >MOBILE</TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }} > ALTERNATE CONTACT NO  </TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }} >WHATSAPP NO </TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }} > EMAIL  </TableCell>
               <TableCell
                 sx={{
                   color: "white",
@@ -394,9 +215,9 @@ const FirstvisitfollowupbookedTable = ({ data }) => {
                         marginLeft: isMobile ? 0 : "auto",
                       },
                       "& .MuiTablePagination-selectLabel, & .MuiTablePagination-displayedRows":
-                        {
-                          fontSize: isMobile ? "12px" : "14px",
-                        },
+                      {
+                        fontSize: isMobile ? "12px" : "14px",
+                      },
                     }}
                   />
                 </Box>

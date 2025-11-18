@@ -132,7 +132,7 @@ const FirstVisits = () => {
   const [expandedSection, setExpandedSection] = useState(0);
   const [showFirmForm, setShowFirmForm] = useState(false);
   const [partners, setPartners] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
+  // const [currentPage, setCurrentPage] = useState(1);
   const [name, setName] = useState("");
   const [error, setError] = useState("");
   const [showFileInput, setShowFileInput] = useState(false);
@@ -166,6 +166,9 @@ const FirstVisits = () => {
   const [showProjectForm, setShowProjectForm] = useState(false);
   const [showFlatForm, setShowFlatForm] = useState(false);
   const [enquiries, setEnquiries] = useState([]);
+  const [visitFollowupHistory, setVisitFollowupHistory] = useState([]);
+  const [filteredVisitFollowupHistory, setFilteredVisitFollowupHistory] = useState([]);
+  const [undefinedData, setUndefinedData] = useState([]);
 
 
   useEffect(() => {
@@ -233,6 +236,10 @@ const FirstVisits = () => {
   const handleToggleSection = (index) => {
     setExpandedSection(index);
     setShowFileInput(false);
+
+    if (index === 1) {
+      fetchVisitFollowupHistory();
+    }
   };
 
   const handleChange = (e) => {
@@ -667,37 +674,6 @@ const FirstVisits = () => {
     });
   };
 
-  // const handleLeadNoChange = (e) => {
-  //   setLeadNo(e.target.value);
-  // };
-
-  // const handleLeadNoChange = (e) => {
-  //   const selectedId = e.target.value;
-  //   console.log("🔹 Selected Lead ID from dropdown:", selectedId);
-  //   setLeadNo(selectedId);
-
-  //   // find selected lead details from leads.scheduled
-  //   const selectedLead = leads.scheduled.find((lead) => lead.id === selectedId);
-
-  //   if (selectedLead) {
-  //     setSelectedLead(selectedLead);
-  //     setName(selectedLead.name || "");
-
-  //     setMobile(selectedLead.phone?.toString() || "");
-  //     setWhatsappNo(selectedLead.phone?.toString() || "");
-  //     setEmail(selectedLead.email || "");
-  //     setAddress(selectedLead.address || "");
-  //     setCompany(selectedLead.company || "");
-  //     setInterestedIn(selectedLead.interest || "");
-  //     setBudget(selectedLead.budget || "");
-  //     setOccupation(selectedLead.occupation || "");
-  //     setReferenceBySource(selectedLead.source || "");
-  //     setNameOfCp(selectedLead.nameOfCp || "");
-  //     setPlanningToBuy(selectedLead.planningToBuyWithin || "");
-  //     setRemarks(selectedLead.remarks || "");
-
-  //   }
-  // };
 
 
   const scheduledLeads =
@@ -749,109 +725,6 @@ const FirstVisits = () => {
   // };
 
 
-  // const handleLeadNoChange = (e) => {
-  //   const selectedLeadNo = e.target.value;
-  //   setLeadNo(selectedLeadNo);
-
-  //   const normalize = (val) => Number(String(val).replace(/\D/g, ""));
-
-  //   // const existingEnquiry = firms.find(
-  //   //   f => Number(f.leadId) === Number(selectedLead?.id)
-  //   // );
-
-  //   const existingEnquiry = firms.find(
-  //     f => Number(f.leadId) === Number(leadNo)
-  //   );
-
-
-  //   if (existingEnquiry) {
-  //     console.log("🟢 FOUND existing enquiry:", existingEnquiry);
-  //     setName(existingEnquiry.name);
-  //     setMobile(existingEnquiry.phone);
-  //     setWhatsappNo(existingEnquiry.whatsapp);
-  //     setEmail(existingEnquiry.email);
-  //     setAddress(existingEnquiry.address);
-  //     setCompany(existingEnquiry.company);
-  //     setInterestedIn(existingEnquiry.interest);
-  //     setBudget(existingEnquiry.budgetInLakh);
-  //     setOccupation(existingEnquiry.occupation);
-  //     setReferenceBySource(existingEnquiry.source);
-  //     setPlanningToBuy(existingEnquiry.intendedPurchasePeriodMonths);
-  //     setRemarks(existingEnquiry.remarks);
-  //     return;
-  //   }
-
-  //   // Otherwise load LEAD data
-  //   const lead = leads.scheduled.find(l => Number(l.id) === Number(selectedLeadNo));
-
-  //   console.log("🆕 No enquiry found, loading lead:", lead);
-  //   setSelectedLead(lead);
-  //   setName(lead?.name || "");
-  //   setMobile(lead?.phone || "");
-  //   setWhatsappNo(lead?.whatsapp || "");
-  //   setEmail(lead?.email || "");
-  //   setAddress(lead?.address || "");
-  //   setCompany(lead?.company || "");
-  //   setInterestedIn(lead?.interest || "");
-  //   setBudget(lead?.budgetInLakh || "");
-  //   setOccupation(lead?.occupation || "");
-  //   setReferenceBySource(lead?.source || "");
-  //   setPlanningToBuy(lead?.intendedPurchasePeriodMonths || "");
-  //   setRemarks("");
-  // };
-
-
-  // const handleLeadNoChange = (e) => {
-  //   const selectedLeadNo = e.target.value;
-  //   setLeadNo(selectedLeadNo);
-
-  //   // 1️⃣ Check enquiry using the NEW value directly
-  //   const existingEnquiry = firms.find(
-  //     f => Number(f.leadId) === Number(selectedLeadNo)
-  //   );
-
-  //   if (existingEnquiry) {
-  //     console.log("🟢 FOUND existing enquiry:", existingEnquiry);
-  //     setName(existingEnquiry.name);
-  //     setMobile(existingEnquiry.phone);
-  //     setWhatsappNo(existingEnquiry.whatsapp);
-  //     setEmail(existingEnquiry.email);
-  //     setAddress(existingEnquiry.address);
-  //     setCompany(existingEnquiry.company);
-  //     setInterestedIn(existingEnquiry.interest);
-  //     setBudget(existingEnquiry.budgetInLakh);
-  //     setOccupation(existingEnquiry.occupation);
-  //     setReferenceBySource(existingEnquiry.source);
-  //     setPlanningToBuy(existingEnquiry.intendedPurchasePeriodMonths);
-  //     setRemarks(existingEnquiry.remarks);
-  //     return;
-  //   }
-
-  //   // 2️⃣ If no enquiry found → load scheduled lead
-  //   const lead = leads.scheduled.find(
-  //     (l) => Number(l.id) === Number(selectedLeadNo)
-  //   );
-
-  //   console.log("🆕 No enquiry found, loading lead:", lead);
-
-  //   setSelectedLead(lead);
-
-  //   setName(lead?.name || "");
-  //   setMobile(lead?.phone || "");
-  //   setWhatsappNo(lead?.whatsapp || "");
-  //   setEmail(lead?.email || "");
-  //   setAddress(lead?.address || "");
-  //   setCompany(lead?.company || "");
-  //   setInterestedIn(lead?.interest || "");
-  //   setBudget(lead?.budgetInLakh || "");
-  //   setOccupation(lead?.occupation || "");
-  //   setReferenceBySource(lead?.source || "");
-  //   setPlanningToBuy(lead?.intendedPurchasePeriodMonths || "");
-  //   setRemarks("");
-  // };
-
-
-
   const handleLeadNoChange = (e) => {
     const selectedLeadNo = e.target.value;
 
@@ -892,7 +765,7 @@ const FirstVisits = () => {
       (l) => Number(l.id) === Number(selectedLeadNo)
     );
 
-    console.log("🔴 NO ENQUIRY FOUND → loading scheduled lead:", lead);
+    console.log(" NO ENQUIRY FOUND → loading scheduled lead:", lead);
 
     setSelectedLead(lead);
 
@@ -1024,148 +897,243 @@ const FirstVisits = () => {
   // };
 
 
+  const fetchVisitFollowupHistory = async () => {
+    try {
+      const response = await fetch("https://localhost:5289/sales/api/enquiries", {
+        credentials: "include",
+      });
 
-const fetchVisitFollowupHistory = async () => {
-  try {
-    const response = await fetch("https://localhost:5289/sales/api/enquiries", {
-      credentials: "include",
-    });
+      if (!response.ok) throw new Error("Network response not ok");
 
-    if (!response.ok) throw new Error("Network response not ok");
+      const data = await response.json();
 
-    const data = await response.json();
-
-    // Format date
-    const formatDate = (dateStr) => {
-      if (!dateStr || dateStr === "0001-01-01T00:00:00") return "";
-      const d = new Date(dateStr);
-      return isNaN(d)
-        ? ""
-        : d.toLocaleString("en-IN", {
+      // Format date
+      const formatDate = (dateStr) => {
+        if (!dateStr || dateStr === "0001-01-01T00:00:00") return "";
+        const d = new Date(dateStr);
+        return isNaN(d)
+          ? ""
+          : d.toLocaleString("en-IN", {
             dateStyle: "short",
             timeStyle: "short",
           });
-    };
-
-    // Roman number helper
-    const toRoman = (num) => {
-      const romans = ["i","ii","iii","iv","v","vi","vii","viii","ix","x"];
-      return romans[num - 1] || num;
-    };
-
-    // Clean value
-    const sanitize = (val) => {
-      if (!val || val.trim() === "" || val.trim() === "-" || val.trim() === "---")
-        return "";
-      return val.trim();
-    };
-
-    const formattedData = data.map((enquiry) => {
-      const leadBase = {
-        leadNo: enquiry.id || "-",
-        enquiryId: enquiry.id || "-",  // ✅ FIXED (was empty)
-        name: enquiry.name || "-",
-        phone: enquiry.phone || "-",
-        email: enquiry.email || "-",
-        source: enquiry.source || "-",
-        leadDays: enquiry.createdDate
-          ? Math.ceil(
-              (new Date() - new Date(enquiry.createdDate)) /
-                (1000 * 60 * 60 * 24)
-            )
-          : "-",
       };
 
-      const allHistory = [];
+      // Roman number helper
+      const toRoman = (num) => {
+        const romans = ["i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix", "x"];
+        return romans[num - 1] || num;
+      };
 
-      // 🔹 Current (top-level) enquiry info
-      if (
-        sanitize(enquiry.status) ||
-        sanitize(enquiry.remarks) ||
-        sanitize(enquiry.lastUpdatedBy)
-      ) {
-        allHistory.push({
-          date: enquiry.lastUpdatedDate || enquiry.createdDate,
-          status: enquiry.status || "",
-          remark: enquiry.remarks || "",
-          assignedTo: enquiry.lastUpdatedBy || "",
-        });
-      }
+      // Clean value
+      const sanitize = (val) => {
+        if (!val || val.trim() === "" || val.trim() === "-" || val.trim() === "---")
+          return "";
+        return val.trim();
+      };
 
-      // 🔹 Enquiry engagements (visit follow-up)
-      const engagements =
-        enquiry.salesEngagements ||
-        enquiry.leadEngagements ||
-        enquiry.leadEnagagements ||
-        [];
+      const formattedData = data.map((enquiry) => {
+        const leadBase = {
+          leadNo: enquiry.id || "-",
+          enquiryId: enquiry.id || "-",
+          name: enquiry.name || "-",
+          phone: enquiry.phone || "-",
+          email: enquiry.email || "-",
+          source: enquiry.source || "-",
+          leadDays: enquiry.createdDate
+            ? Math.ceil(
+              (new Date() - new Date(enquiry.createdDate)) /
+              (1000 * 60 * 60 * 24)
+            )
+            : "-",
+        };
 
-      engagements.forEach((eng) => {
-        const engDate =
-          eng.timestamp ||
-          eng.updatedDate ||
-          eng.assignedDate ||
-          enquiry.lastUpdatedDate ||
-          enquiry.createdDate;
+        const allHistory = [];
 
+        // 🔹 Current (top-level)
         if (
-          sanitize(eng.status) ||
-          sanitize(eng.remarks) ||
-          sanitize(eng.assignedToName || eng.assignedTo)
+          sanitize(enquiry.status) ||
+          sanitize(enquiry.remarks) ||
+          sanitize(enquiry.lastUpdatedBy)
         ) {
           allHistory.push({
-            date: engDate,
-            status: eng.status || "",
-            remark: eng.remarks || "",
-            assignedTo: eng.assignedToName || eng.assignedTo || "",
-          });
-        } else {
-          allHistory.push({
-            date: engDate,
-            status: "No change",
-            remark: "No change",
-            assignedTo: "No change",
+            date: enquiry.lastUpdatedDate || enquiry.createdDate,
+            status: enquiry.status || "",
+            remark: enquiry.remarks || "",
+            assignedTo: enquiry.lastUpdatedBy || "",
           });
         }
+
+        // 🔹 Engagements
+        const engagements =
+          enquiry.salesEngagements ||
+          enquiry.leadEngagements ||
+          enquiry.leadEnagagements ||
+          [];
+
+        engagements.forEach((eng) => {
+          const engDate =
+            eng.timestamp ||
+            eng.updatedDate ||
+            eng.assignedDate ||
+            enquiry.lastUpdatedDate ||
+            enquiry.createdDate;
+
+          if (
+            sanitize(eng.status) ||
+            sanitize(eng.remarks) ||
+            sanitize(eng.assignedToName || eng.assignedTo)
+          ) {
+            allHistory.push({
+              date: engDate,
+              status: eng.status || "",
+              remark: eng.remarks || "",
+              assignedTo: eng.assignedToName || eng.assignedTo || "",
+            });
+          } else {
+            allHistory.push({
+              date: engDate,
+              status: "No change",
+              remark: "No change",
+              assignedTo: "No change",
+            });
+          }
+        });
+
+        // Sort
+        allHistory.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+        const buildHistoryLine = (h, i, value) => {
+          const date = formatDate(h.date);
+          const text = sanitize(value);
+
+          if (!date && !text) return null;
+          if (!text) return `${toRoman(i + 1)}. ${date} - No change`;
+          if (!date) return `${toRoman(i + 1)}. ${text}`;
+          return `${toRoman(i + 1)}. ${date} - ${text}`;
+        };
+
+        return {
+          ...leadBase,
+          time: formatDate(enquiry.lastUpdatedDate || enquiry.createdDate),
+          statusHistory: allHistory
+            .map((h, i) => buildHistoryLine(h, i, h.status))
+            .filter(Boolean)
+            .join("<br/>"),
+          remarkHistory: allHistory
+            .map((h, i) => buildHistoryLine(h, i, h.remark))
+            .filter(Boolean)
+            .join("<br/>"),
+          assignToHistory: allHistory
+            .map((h, i) => buildHistoryLine(h, i, h.assignedTo))
+            .filter(Boolean)
+            .join("<br/>"),
+        };
       });
 
-      // Sort newest → oldest
-      allHistory.sort((a, b) => new Date(b.date) - new Date(a.date));
+      // 🔥 store in separate state (NOT mixed with main leads)
+      setFilteredVisitFollowupHistory(formattedData);
+      setVisitFollowupHistory(formattedData);
 
-      // Helper to build line
-      const buildHistoryLine = (h, i, value) => {
-        const date = formatDate(h.date);
-        const text = sanitize(value);
+    } catch (error) {
+      console.error("Error fetching follow-up history:", error);
+    }
+  };
 
-        if (!date && !text) return null;
-        if (!text) return `${toRoman(i + 1)}. ${date} - No change`;
-        if (!date) return `${toRoman(i + 1)}. ${text}`;
-        return `${toRoman(i + 1)}. ${date} - ${text}`;
-      };
+  const fetchUndefinedEnquiries = async () => {
+    try {
+      const response = await fetch("https://localhost:5289/sales/api/enquiries",{
+          method: "GET",
+      credentials: "include",   
+      });
 
-      return {
-        ...leadBase,
-        time: formatDate(enquiry.lastUpdatedDate || enquiry.createdDate),
-        statusHistory: allHistory
-          .map((h, i) => buildHistoryLine(h, i, h.status))
-          .filter(Boolean)
-          .join("<br/>"),
-        remarkHistory: allHistory
-          .map((h, i) => buildHistoryLine(h, i, h.remark))
-          .filter(Boolean)
-          .join("<br/>"),
-        assignToHistory: allHistory
-          .map((h, i) => buildHistoryLine(h, i, h.assignedTo))
-          .filter(Boolean)
-          .join("<br/>"),
-      };
-    });
+      if (!response.ok) {
+        console.error("Failed to fetch enquiries");
+        return;
+      }
 
-    setFilteredLeads(formattedData);
-    setLeads(formattedData);
-  } catch (error) {
-    console.error("Error fetching follow-up history:", error);
-  }
-};
+      const data = await response.json();
+
+      // FILTER ONLY NOT INTERESTED
+      const filtered = data.filter(
+        (item) =>
+          item.status === "Not interested" ||
+          item.enquiryStatus?.toLowerCase() === "not interested"
+      );
+
+      setUndefinedData(filtered);  
+      console.log("undefined data ",filtered);
+    } catch (error) {
+      console.error("API Error:", error);
+     
+    }
+  };
+
+  useEffect(() => {
+    fetchUndefinedEnquiries();
+  }, []);
+
+
+  // Searching and pagination states for Display Enquiries
+  const [searchName, setSearchName] = useState("");
+  const [currentPage, setCurrentPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  // Search handler function for Display Enquiries
+  const handleSearchChange = (e) => {
+    setSearchName(e.target.value);
+    setCurrentPage(0); // Reset to first page when searching
+  };
+
+  // Handle rows per page change for Display Enquiries
+  const handleRowsPerPageChange = (e) => {
+    setRowsPerPage(parseInt(e.target.value, 10));
+    setCurrentPage(0); // Reset to first page when changing rows per page 
+  };
+
+  // Handle page navigation for Display Enquiries
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
+
+  // Filter enquiries based on search term for Display Enquiries
+  const filteredEnquiries = enquiries.filter((enquiry) => {
+    const searchTerm = searchName.toLowerCase();
+
+    return (
+      enquiry.name?.toLowerCase().includes(searchTerm) ||
+      enquiry.id?.toString().includes(searchTerm) || // Enquiry No
+      enquiry.leadId?.toString().includes(searchTerm) || // Lead No
+      enquiry.leadNo?.toString().includes(searchTerm) // Alternative lead number field 
+    );
+  });
+
+  // Filter leads based on search term for Display Enquiries
+  const filteredLeads = leads.done.filter((lead) => {
+    const searchTerm = searchName.toLowerCase();
+
+    return (
+      lead.name?.toLowerCase().includes(searchTerm) ||
+      lead.id?.toString().includes(searchTerm) || // Lead ID
+      lead.leadNo?.toString().includes(searchTerm) // Lead No
+    );
+  });
+
+  // Combine filtered data for Display Enquiries
+  const combinedFilteredData = [...filteredEnquiries, ...filteredLeads];
+
+  // Calculate pagination values for Display Enquiries
+  const totalEntries = combinedFilteredData.length;
+  const startEntry = totalEntries === 0 ? 0 : currentPage * rowsPerPage + 1;
+  const endEntry = Math.min((currentPage + 1) * rowsPerPage, totalEntries);
+  const totalPages = Math.ceil(totalEntries / rowsPerPage);
+
+  // Get current page data for Display Enquiries
+  const currentPageData = combinedFilteredData.slice(
+    currentPage * rowsPerPage,
+    (currentPage + 1) * rowsPerPage
+  );
+
 
 
   return (
@@ -1292,6 +1260,105 @@ const fetchVisitFollowupHistory = async () => {
                     {isMobile ? "PDF" : "Download PDF"}
                   </Button>
                 </div>
+                {/* Right Side - Search and Pagination */}
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "10px",
+                    flexWrap: isMobile ? "wrap" : "nowrap",
+                    marginTop: isMobile ? "8px" : "0",
+                  }}
+                >
+                  {/* Search Box */}
+                  <TextField
+                    size="small"
+                    placeholder="Search"
+                    value={searchName}
+                    onChange={handleSearchChange}
+                    sx={{
+                      width: "180px",
+                      "& .MuiInputBase-root": { padding: "0px 8px" },
+                      border: Constants.formInputBorderColor,
+                    }}
+                  />
+
+                  {/* Pagination Controls */}
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "8px",
+                      fontSize: "14px",
+                      color: "#800000",
+                      justifyContent: "flex-end",
+                    }}
+                  >
+                    <span style={{ fontWeight: "500" }}>Rows per page:</span>
+
+                    <select
+                      value={rowsPerPage}
+                      onChange={handleRowsPerPageChange}
+                      style={{
+                        border: "1px solid #800000",
+                        borderRadius: "4px",
+                        padding: "2px 6px",
+                        outline: "none",
+                        color: "#800000",
+                      }}
+                    >
+                      <option value={5}>5</option>
+                      <option value={10}>10</option>
+                      <option value={25}>25</option>
+                    </select>
+
+                    <span>
+                      {totalEntries === 0 ? "0–0" : `${startEntry}–${endEntry}`}{" "}
+                      of {totalEntries}
+                    </span>
+
+                    {/* Navigation arrows */}
+                    <button
+                      onClick={() =>
+                        handlePageChange(Math.max(0, currentPage - 1))
+                      }
+                      disabled={currentPage === 0}
+                      style={{
+                        border: "none",
+                        background: "transparent",
+                        cursor: currentPage === 0 ? "not-allowed" : "pointer",
+                        color: currentPage === 0 ? "gray" : "#800000",
+                        fontSize: "18px",
+                        padding: "0 4px",
+                      }}
+                    >
+                      &#8249;
+                    </button>
+                    <button
+                      onClick={() =>
+                        handlePageChange(
+                          Math.min(totalPages - 1, currentPage + 1)
+                        )
+                      }
+                      disabled={currentPage >= totalPages - 1}
+                      style={{
+                        border: "none",
+                        background: "transparent",
+                        cursor:
+                          currentPage >= totalPages - 1
+                            ? "not-allowed"
+                            : "pointer",
+                        color:
+                          currentPage >= totalPages - 1 ? "gray" : "#800000",
+                        fontSize: "18px",
+                        padding: "0 4px",
+                      }}
+                    >
+                      &#8250;
+                    </button>
+                  </div>
+
+                </div>
               </div>
               <div className="mt-3">
                 <DisplayEnquiryTable
@@ -1314,6 +1381,7 @@ const fetchVisitFollowupHistory = async () => {
                   onUpdate={handleUpdateFirm}
                 />
               </div>
+
             </>
           ) : (
             <Dialog
@@ -1652,56 +1720,152 @@ const fetchVisitFollowupHistory = async () => {
           <div className="content-container mt-3">
             {!showProjectForm ? (
               <>
-                {/* Top Row: Title + Download PDF Button */}
-                <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3 gap-2">
-
-                  {/* Section Title */}
+                <div className="d-flex flex-column mb-3 gap-2">
+                  {/* First Row - Section Title */}
                   <Typography
                     variant={isMobile ? "h6" : "h5"}
                     component="h2"
                     sx={{
                       fontWeight: "bold",
-                      paddingTop: "6px",
-                      width: isMobile ? "100%" : "auto",
+                      paddingTop: "8px",
+                      width: "100%",
                     }}
                   >
                     Enquiry History
                   </Typography>
 
-                  {/* Download PDF Button */}
-                  <Button
-                    variant="contained"
-                    sx={{
-                      background: Constants.primaryColor,
-                      color: "white",
-                      fontWeight: "bold",
-                      textTransform: "none",
-                      padding: isMobile ? "6px 12px" : "8px 16px",
-                      borderRadius: "8px",
+                  {/* Second Row - Download PDF button on left, search and pagination on right */}
+                  <div
+                    style={{
                       display: "flex",
+                      justifyContent: "space-between",
                       alignItems: "center",
-                      justifyContent: "center",
-                      gap: "8px",
-                      "&:hover": { background: Constants.primaryColor },
-                      marginTop: isMobile ? 8 : 0,
+                      flexWrap: "wrap",
+                      gap: "10px",
+                      width: "100%",
                     }}
-                    // onClick={handleDownloadPDFFollowup}
-                    size={isMobile ? "small" : "medium"}
                   >
-                    <FaFileDownload size={isMobile ? 16 : 18} />
-                    {isMobile ? "PDF" : "Download PDF"}
-                  </Button>
+                    {/* Download PDF Button - Left Side */}
+                    <Button
+                      variant="contained"
+                      sx={{
+                        background: Constants.primaryColor,
+                        color: "white",
+                        fontWeight: "bold",
+                        textTransform: "none",
+                        padding: isMobile ? "6px 12px" : "8px 16px",
+                        borderRadius: "8px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        gap: "8px",
+                        "&:hover": { background: Constants.primaryColor },
+                      }}
+                      // onClick={handleDownloadPDFBooked}
+                      size={isMobile ? "small" : "medium"}
+                    >
+                      <FaFileDownload size={isMobile ? 16 : 18} />
+                      {isMobile ? "PDF" : "Download PDF"}
+                    </Button>
+
+                    {/* Search and Pagination - Right Side */}
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "10px",
+                        flexWrap: "wrap",
+                        justifyContent: "flex-end",
+                      }}
+                    >
+                      <TextField
+                        size="small"
+                        placeholder="Search"
+                        sx={{
+                          width: "180px",
+                          "& .MuiInputBase-root": { padding: "0px 8px" },
+                          border: Constants.formInputBorderColor,
+                        }}
+                      />
+
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "8px",
+                          fontSize: "14px",
+                          color: "#800000",
+                          justifyContent: "flex-end",
+                        }}
+                      >
+                        <span style={{ fontWeight: "500" }}>
+                          Rows per page:
+                        </span>
+
+                        <select
+                          style={{
+                            border: "1px solid #800000",
+                            borderRadius: "4px",
+                            padding: "2px 6px",
+                            outline: "none",
+                            color: "#800000",
+                          }}
+                        // defaultValue={5}
+                        >
+                          <option value={5}>5</option>
+                          <option value={10}>10</option>
+                          <option value={25}>25</option>
+                        </select>
+
+                        <span>0–0 of 0 entries</span>
+
+                        {/* Navigation arrows */}
+                        <button
+                          style={{
+                            border: "none",
+                            background: "transparent",
+                            cursor: "pointer",
+                            color: "gray",
+                            fontSize: "18px",
+                            padding: "0 4px",
+                          }}
+                        >
+                          &#8249;
+                        </button>
+                        <button
+                          style={{
+                            border: "none",
+                            background: "transparent",
+                            cursor: "pointer",
+                            color: "gray",
+                            fontSize: "18px",
+                            padding: "0 4px",
+                          }}
+                        >
+                          &#8250;
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Table Section */}
+                {/* <div className="mt-3">
+                       <FirstVisitFollowupHistoryTable
+                         data={projectData}
+                         isMobile={isMobile}
+                         isTablet={isTablet}
+                       />
+                     </div> */}
                 <div className="mt-3">
                   <FirstVisitFollowupHistoryTable
-                    data={filteredLeads}
-                    fetchVisitFollowUpHistory={fetchVisitFollowupHistory}
+                    // data={filteredLeads}
+                    // fetchVisitFollowUpHistory={fetchVisitFollowupHistory}
+                    data={visitFollowupHistory}
                     // data={projectData}
                     isMobile={isMobile}
                     isTablet={isTablet}
-              
+
                   />
                 </div>
               </>
@@ -1712,14 +1876,13 @@ const fetchVisitFollowupHistory = async () => {
         </>
       )}
 
-      {expandedSection === 2 && (
+      {/* {expandedSection === 2 && (
         <div className="content-container mt-3">
           {!showLandownerForm ? (
             <>
-              {/* Top Row: Title + Download PDF Button */}
+             
               <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3 gap-2">
 
-                {/* Section Title */}
                 <Typography
                   variant={isMobile ? "h6" : "h5"}
                   component="h2"
@@ -1732,7 +1895,7 @@ const fetchVisitFollowupHistory = async () => {
                   Booked Enquiries
                 </Typography>
 
-                {/* Download PDF Button */}
+              
                 <Button
                   variant="contained"
                   sx={{
@@ -1757,6 +1920,151 @@ const fetchVisitFollowupHistory = async () => {
                 </Button>
               </div>
 
+              <div className="mt-3">
+                <FirstvisitfollowupbookedTable
+                  data={projectData}
+                  isMobile={isMobile}
+                  isTablet={isTablet}
+                />
+              </div>
+            </>
+          ) : (
+            <div></div>
+          )}
+        </div>
+      )} */}
+
+      {expandedSection === 2 && (
+        <div className="content-container mt-3">
+          {!showLandownerForm ? (
+            <>
+              <div className="d-flex flex-column mb-3 gap-2">
+                {/* First Row - Section Title */}
+                <Typography
+                  variant={isMobile ? "h6" : "h5"}
+                  component="h2"
+                  sx={{
+                    fontWeight: "bold",
+                    paddingTop: "8px",
+                    width: "100%",
+                  }}
+                >
+                  Booked Enquiries
+                </Typography>
+
+                {/* Second Row - Download PDF button on left, search and pagination on right */}
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    flexWrap: "wrap",
+                    gap: "10px",
+                    width: "100%",
+                  }}
+                >
+                  {/* Download PDF Button - Left Side */}
+                  <Button
+                    variant="contained"
+                    sx={{
+                      background: Constants.primaryColor,
+                      color: "white",
+                      fontWeight: "bold",
+                      textTransform: "none",
+                      padding: isMobile ? "6px 12px" : "8px 16px",
+                      borderRadius: "8px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: "8px",
+                      "&:hover": { background: Constants.primaryColor },
+                    }}
+                    // onClick={handleDownloadPDFBooked}
+                    size={isMobile ? "small" : "medium"}
+                  >
+                    <FaFileDownload size={isMobile ? 16 : 18} />
+                    {isMobile ? "PDF" : "Download PDF"}
+                  </Button>
+
+                  {/* Search and Pagination - Right Side */}
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "10px",
+                      flexWrap: "wrap",
+                      justifyContent: "flex-end",
+                    }}
+                  >
+                    <TextField
+                      size="small"
+                      placeholder="Search"
+                      sx={{
+                        width: "180px",
+                        "& .MuiInputBase-root": { padding: "0px 8px" },
+                        border: Constants.formInputBorderColor,
+                      }}
+                    />
+
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "8px",
+                        fontSize: "14px",
+                        color: "#800000",
+                        justifyContent: "flex-end",
+                      }}
+                    >
+                      <span style={{ fontWeight: "500" }}>Rows per page:</span>
+
+                      <select
+                        style={{
+                          border: "1px solid #800000",
+                          borderRadius: "4px",
+                          padding: "2px 6px",
+                          outline: "none",
+                          color: "#800000",
+                        }}
+                      // defaultValue={5}
+                      >
+                        <option value={5}>5</option>
+                        <option value={10}>10</option>
+                        <option value={25}>25</option>
+                      </select>
+
+                      <span>0–0 of 0 entries</span>
+
+                      {/* Navigation arrows */}
+                      <button
+                        style={{
+                          border: "none",
+                          background: "transparent",
+                          cursor: "pointer",
+                          color: "gray",
+                          fontSize: "18px",
+                          padding: "0 4px",
+                        }}
+                      >
+                        &#8249;
+                      </button>
+                      <button
+                        style={{
+                          border: "none",
+                          background: "transparent",
+                          cursor: "pointer",
+                          color: "gray",
+                          fontSize: "18px",
+                          padding: "0 4px",
+                        }}
+                      >
+                        &#8250;
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               {/* Table Section */}
               <div className="mt-3">
                 <FirstvisitfollowupbookedTable
@@ -1772,14 +2080,14 @@ const fetchVisitFollowupHistory = async () => {
         </div>
       )}
 
-      {expandedSection === 3 && (
+      {/* {expandedSection === 3 && (
         <div className="content-container mt-3">
           {!showFlatForm ? (
             <>
-              {/* Top Row: Title + Download PDF Button */}
+             
               <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3 gap-2">
 
-                {/* Section Title */}
+                
                 <Typography
                   variant={isMobile ? "h6" : "h5"}
                   component="h2"
@@ -1792,7 +2100,7 @@ const fetchVisitFollowupHistory = async () => {
                   Lost Enquiries
                 </Typography>
 
-                {/* Download PDF Button */}
+              
                 <Button
                   variant="contained"
                   sx={{
@@ -1809,7 +2117,7 @@ const fetchVisitFollowupHistory = async () => {
                     "&:hover": { background: Constants.primaryColor },
                     marginTop: isMobile ? 8 : 0,
                   }}
-                  // onClick={handleDownloadPDFUndefined}
+                  
                   size={isMobile ? "small" : "medium"}
                 >
                   <FaFileDownload size={isMobile ? 16 : 18} />
@@ -1817,10 +2125,156 @@ const fetchVisitFollowupHistory = async () => {
                 </Button>
               </div>
 
-              {/* Table Section */}
               <div className="mt-3">
                 <FirstvisitfollowupUndefinedTable
                   data={projectData}
+                  isMobile={isMobile}
+                  isTablet={isTablet}
+                />
+              </div>
+            </>
+          ) : (
+            <div></div>
+          )}
+        </div>
+      )} */}
+
+      {expandedSection === 3 && (
+        <div className="content-container mt-3">
+          {!showFlatForm ? (
+            <>
+              <div className="d-flex flex-column mb-3 gap-2">
+                {/* First Row - Section Title */}
+                <Typography
+                  variant={isMobile ? "h6" : "h5"}
+                  component="h2"
+                  sx={{
+                    fontWeight: "bold",
+                    paddingTop: "8px",
+                    width: "100%",
+                  }}
+                >
+                  Lost Enquiries
+                </Typography>
+
+                {/* Second Row - Download PDF button on left, search and pagination on right */}
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    flexWrap: "wrap",
+                    gap: "10px",
+                    width: "100%",
+                  }}
+                >
+                  {/* Download PDF Button - Left Side */}
+                  <Button
+                    variant="contained"
+                    sx={{
+                      background: Constants.primaryColor,
+                      color: "white",
+                      fontWeight: "bold",
+                      textTransform: "none",
+                      padding: isMobile ? "6px 12px" : "8px 16px",
+                      borderRadius: "8px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: "8px",
+                      "&:hover": { background: Constants.primaryColor },
+                    }}
+                    // onClick={handleDownloadPDFBooked}
+                    size={isMobile ? "small" : "medium"}
+                  >
+                    <FaFileDownload size={isMobile ? 16 : 18} />
+                    {isMobile ? "PDF" : "Download PDF"}
+                  </Button>
+
+                  {/* Search and Pagination - Right Side */}
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "10px",
+                      flexWrap: "wrap",
+                      justifyContent: "flex-end",
+                    }}
+                  >
+                    <TextField
+                      size="small"
+                      placeholder="Search"
+                      sx={{
+                        width: "180px",
+                        "& .MuiInputBase-root": { padding: "0px 8px" },
+                        border: Constants.formInputBorderColor,
+                      }}
+                    />
+
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "8px",
+                        fontSize: "14px",
+                        color: "#800000",
+                        justifyContent: "flex-end",
+                      }}
+                    >
+                      <span style={{ fontWeight: "500" }}>Rows per page:</span>
+
+                      <select
+                        style={{
+                          border: "1px solid #800000",
+                          borderRadius: "4px",
+                          padding: "2px 6px",
+                          outline: "none",
+                          color: "#800000",
+                        }}
+                      // defaultValue={5}
+                      >
+                        <option value={5}>5</option>
+                        <option value={10}>10</option>
+                        <option value={25}>25</option>
+                      </select>
+
+                      <span>0–0 of 0 entries</span>
+
+                      {/* Navigation arrows */}
+                      <button
+                        style={{
+                          border: "none",
+                          background: "transparent",
+                          cursor: "pointer",
+                          color: "gray",
+                          fontSize: "18px",
+                          padding: "0 4px",
+                        }}
+                      >
+                        &#8249;
+                      </button>
+                      <button
+                        style={{
+                          border: "none",
+                          background: "transparent",
+                          cursor: "pointer",
+                          color: "gray",
+                          fontSize: "18px",
+                          padding: "0 4px",
+                        }}
+                      >
+                        &#8250;
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Table Section */}
+              <div className="mt-3">
+                <FirstvisitfollowupUndefinedTable
+                  // data={projectData}
+                  data={undefinedData}
                   isMobile={isMobile}
                   isTablet={isTablet}
                 />
@@ -1845,6 +2299,7 @@ const fetchVisitFollowupHistory = async () => {
         pauseOnHover
       />
     </div>
+
   );
 };
 

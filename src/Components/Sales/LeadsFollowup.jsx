@@ -44,6 +44,9 @@ const LeadsFollowUp = () => {
   const [filteredLeads, setFilteredLeads] = useState([]);
   const [selectedLead, setSelectedLead] = useState(null);
 
+
+  
+
   const { id: userId, name: userName, authenticated } = useSession() || {};
   const handleToggleSection = (index) => {
     if (sections[index].label === "Download PDF") {

@@ -138,6 +138,8 @@ const FirstvisitfollowupUndefinedTable = ({ data }) => {
     page * rowsPerPage + rowsPerPage
   );
 
+
+  
   return (
     <>
       <TableContainer
@@ -368,31 +370,31 @@ const FirstvisitfollowupUndefinedTable = ({ data }) => {
             ) : (
               paginatedData.map((row, index) => (
                 <TableRow key={index} hover>
-                  <TableCell>{row.statusHistory || "N/A"}</TableCell>
-                  <TableCell>{row.remarkHistory || "N/A"}</TableCell>
-                  <TableCell>{row.assignToHistory || "N/A"}</TableCell>
-                  <TableCell>{row.enquiryNo || "N/A"}</TableCell>
+                  <TableCell>{row.status || "N/A"}</TableCell>
+                  <TableCell>{row.remarks || "N/A"}</TableCell>
+                  <TableCell>{row.assignTo || "N/A"}</TableCell>
+                  <TableCell>{row.id || "N/A"}</TableCell>
                   <TableCell>{row.leadNo || "N/A"}</TableCell>
                   <TableCell>{row.name || "N/A"}</TableCell>
-                  <TableCell>{row.mobile || "N/A"}</TableCell>
+                  <TableCell>{row.phone || "N/A"}</TableCell>
                   <TableCell>{row.alternateContactNo || "N/A"}</TableCell>
-                  <TableCell>{row.whatsappNo || "N/A"}</TableCell>
+                  <TableCell>{row.phone || "N/A"}</TableCell>
                   <TableCell>{row.email || "N/A"}</TableCell>
                   <TableCell>{row.address || "N/A"}</TableCell>
                   <TableCell>{row.occupation || "N/A"}</TableCell>
                   <TableCell>{row.company || "N/A"}</TableCell>
-                  <TableCell>{row.interestedIn || "N/A"}</TableCell>
-                  <TableCell>{row.budget || "N/A"}</TableCell>
-                  <TableCell>{row.reasonForPurchase || "N/A"}</TableCell>
-                  <TableCell>{row.referenceBy || "N/A"}</TableCell>
-                  <TableCell>{row.nameOfCP || "N/A"}</TableCell>
-                  <TableCell>{row.planningToBuyWithin || "N/A"}</TableCell>
-                  <TableCell>{row.customerFeedback || "N/A"}</TableCell>
+                  <TableCell>{row.interest || "N/A"}</TableCell>
+                  <TableCell>{row.budgetInLakh || "N/A"}</TableCell>
+                  <TableCell>{row.reason || "N/A"}</TableCell>
+                  <TableCell>{row.source || "N/A"}</TableCell>
+                  <TableCell>{row.cpName|| "N/A"}</TableCell>
+                  <TableCell>{row.intendedPurchasePeriodMonths || "N/A"}</TableCell>
+                  <TableCell>{row.feedback || "N/A"}</TableCell>
                 </TableRow>
               ))
             )}
           </TableBody>
-          <TableFooter>
+          {/* <TableFooter>
             <TableRow>
               <TableCell colSpan={20} sx={{ p: 0, border: "none" }}>
                 <Box
@@ -435,7 +437,7 @@ const FirstvisitfollowupUndefinedTable = ({ data }) => {
                 </Box>
               </TableCell>
             </TableRow>
-          </TableFooter>
+          </TableFooter> */}
         </Table>
       </TableContainer>
     </>
