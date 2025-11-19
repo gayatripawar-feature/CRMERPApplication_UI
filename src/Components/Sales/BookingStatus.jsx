@@ -394,7 +394,7 @@ const BookingStatus = ({ data }) => {
                     backgroundColor: "background.paper",
                   }}
                 >
-                  <TablePagination
+                  {/* <TablePagination
                     rowsPerPageOptions={[5, 10, 25]}
                     component="div"
                     count={data.length}
@@ -422,7 +422,7 @@ const BookingStatus = ({ data }) => {
                           fontSize: isMobile ? "12px" : "14px",
                         },
                     }}
-                  />
+                  /> */}
                 </Box>
               </TableCell>
             </TableRow>

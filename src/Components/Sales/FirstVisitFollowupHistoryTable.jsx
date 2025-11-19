@@ -1,4 +1,4 @@
-import React, { useState ,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import {
   TableContainer,
   Table,
@@ -16,50 +16,29 @@ import {
 } from "@mui/material";
 import Constants from "../Constants";
 
-export const FirstVisitFollowupHistoryTable = ({ data,fetchVisitFollowUpHistory}) => {
+export const FirstVisitFollowupHistoryTable = ({ data, fetchVisitFollowUpHistory }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const isTablet = useMediaQuery(theme.breakpoints.down("md"));
-const [visitFollowupHistory, setVisitFollowupHistory] = useState([]);
-const [filteredVisitFollowupHistory, setFilteredVisitFollowupHistory] = useState([]);
+  const [visitFollowupHistory, setVisitFollowupHistory] = useState([]);
+  const [filteredVisitFollowupHistory, setFilteredVisitFollowupHistory] = useState([]);
+  useEffect(() => {
+    console.log(" Child Mounted - FollowUp Table");
+  }, []);
+  // Receive data from parent
+  useEffect(() => {
+    console.log(" Data received in Table:", data);
+    if (data && data.length > 0) {
+      setVisitFollowupHistory(data);
+      setFilteredVisitFollowupHistory(data);
+    }
+  }, [data]);
 
-  // const [page, setPage] = useState(0);
-  // const [rowsPerPage, setRowsPerPage] = useState(5);
-
-  // const handleChangePage = (event, newPage) => {
-  //   setPage(newPage);
-  // };
-
-  // const handleChangeRowsPerPage = (event) => {
-  //   setRowsPerPage(parseInt(event.target.value, 10));
-  //   setPage(0);
-  // };
-
-  // const paginatedData = data.slice(
-  //   page * rowsPerPage,
-  //   page * rowsPerPage + rowsPerPage
-  // );
-
+  useEffect(() => {
+    console.log(" fetchVisitFollowUpHistory function received:", fetchVisitFollowUpHistory);
+  }, [fetchVisitFollowUpHistory]);
 
   
-  useEffect(() => {
-  console.log("🟦 Child Mounted - FollowUp Table");
-}, []);
-
-
-
-
-useEffect(() => {
-  console.log(" Data received in Table:", data);
-  if (data && data.length > 0) {
-    setVisitFollowupHistory(data);
-    setFilteredVisitFollowupHistory(data);  
-  }
-}, [data]);
-
-useEffect(() => {
-  console.log("🟧 fetchVisitFollowUpHistory function received:", fetchVisitFollowUpHistory);
-}, [fetchVisitFollowUpHistory]);
 
   return (
     <>
@@ -70,7 +49,7 @@ useEffect(() => {
           width: "100%",
           overflow: "auto",
           "&::-webkit-scrollbar": {
-             width: "8px", 
+            width: "8px",
             height: isMobile ? "4px" : "6px",
           },
           "&::-webkit-scrollbar-track": {
@@ -91,87 +70,15 @@ useEffect(() => {
         >
           <TableHead>
             <TableRow sx={{ background: Constants.primaryColor }}>
-              <TableCell
-                sx={{
-                  color: "white",
-                  fontWeight: "bold",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                STATUS HISTORY
-              </TableCell>
-              <TableCell
-                sx={{
-                  color: "white",
-                  fontWeight: "bold",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                REMARK HISTORY
-              </TableCell>
-              <TableCell
-                sx={{
-                  color: "white",
-                  fontWeight: "bold",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                ASSIGN TO HISTORY
-              </TableCell>
-              <TableCell
-                sx={{
-                  color: "white",
-                  fontWeight: "bold",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                LEAD DAYS
-              </TableCell>
-              <TableCell
-                sx={{
-                  color: "white",
-                  fontWeight: "bold",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                TIMESTAMP
-              </TableCell>
-              <TableCell
-                sx={{
-                  color: "white",
-                  fontWeight: "bold",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                ENQUIRY NO
-              </TableCell>
-              <TableCell
-                sx={{
-                  color: "white",
-                  fontWeight: "bold",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                LEAD NO.
-              </TableCell>
-              <TableCell
-                sx={{
-                  color: "white",
-                  fontWeight: "bold",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                SALES EXECUTIVE NAME
-              </TableCell>
-              <TableCell
-                sx={{
-                  color: "white",
-                  fontWeight: "bold",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                NAME
-              </TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }} > STATUS HISTORY  </TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}> REMARK HISTORY </TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }} > ASSIGN TO HISTORY  </TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }} >LEAD DAYS   </TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }} >  TIMESTAMP   </TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>  ENQUIRY NO  </TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}  > LEAD NO  </TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>   SALES EXECUTIVE NAME   </TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}> NAME   </TableCell>
               <TableCell
                 sx={{
                   color: "white",
@@ -317,14 +224,14 @@ useEffect(() => {
               </TableRow>
             ) : (
               // paginatedData.map((row, index) => (
-                filteredVisitFollowupHistory.map((row,index) =>(
+              filteredVisitFollowupHistory.map((row, index) => (
                 <TableRow key={index} hover>
                   <TableCell>{row.statusHistory || "N/A"}</TableCell>
                   <TableCell>{row.remarkHistory || "N/A"}</TableCell>
                   <TableCell>{row.assignToHistory || "N/A"}</TableCell>
                   <TableCell>{row.leadDays || "N/A"}</TableCell>
                   <TableCell>{row.timestamp || "N/A"}</TableCell>
-                 
+
                   <TableCell>{row.id || "N/A"}</TableCell>
                   <TableCell>{row.leadNo || "N/A"}</TableCell>
                   <TableCell>{row.salesExecutiveName || "N/A"}</TableCell>

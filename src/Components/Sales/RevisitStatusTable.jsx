@@ -397,7 +397,7 @@ const RevisitStatusTable = ({ data }) => {
                     backgroundColor: "background.paper",
                   }}
                 >
-                  <TablePagination
+                  {/* <TablePagination
                     rowsPerPageOptions={[5, 10, 25]}
                     component="div"
                     count={data.length}
@@ -425,7 +425,7 @@ const RevisitStatusTable = ({ data }) => {
                           fontSize: isMobile ? "12px" : "14px",
                         },
                     }}
-                  />
+                  /> */}
                 </Box>
               </TableCell>
             </TableRow>

@@ -1,39 +1,8 @@
-
 import React, { useState, useRef, useEffect } from "react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Button,
-  TextField,
-  Grid,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Box,
-  Tooltip,
-  IconButton,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Typography,
-  useMediaQuery,
-  useTheme,
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, TextField, Grid, FormControl, InputLabel,
+  Select,  MenuItem,  Box,  Tooltip, IconButton, Dialog, DialogTitle, DialogContent, DialogActions, Typography, useMediaQuery, useTheme,
 } from "@mui/material";
-import {
-  FaEye,
-  FaFileCsv,
-  FaUpload,
-  FaPlus,
-  FaTrash,
-  FaFileDownload,
-} from "react-icons/fa";
+import {FaEye,FaFileCsv,FaUpload,FaPlus,FaTrash,FaFileDownload} from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import DisplayEnquiryTable from "./DisplayEnquiryTable";
 import { FaHourglassStart, FaHistory, FaUserCheck, FaQuestionCircle } from 'react-icons/fa';
@@ -46,46 +15,11 @@ import FirstvisitfollowupUndefinedTable from "./FirstvisitfollowupUndefinedTable
 import FirstvisitfollowupbookedTable from "./FirstvisitFollowupbookedTable";
 import { FirstVisitFollowupHistoryTable } from "./FirstVisitFollowupHistoryTable";
 
-// API Call Function
-// const fetchLoansData = async () => {
-//   const response = await fetch("/api/getOCRCollection");
-//   return response.json();
-// };
-
-
-// Dropdown Options
 const statusOptions = ["Approved", "Unapproved"];
 const owners = ["Landowner", "Developer", "Investor"];
-const configurations = [
-  "1 BHK",
-  "1.5 BHK",
-  "2 BHK",
-  "2.5 BHK",
-  "3 BHK",
-  "3.5 BHK",
-  "4 BHK",
-  "4.5 BHK",
-  "Flat",
-  "Shop",
-];
-const unitTypes = [
-  "Actual Site",
-  "Hoarding",
-  "Facebook",
-  "Instagram",
-  "Website",
-  "Print Media",
-  "Radio",
-  "Google add",
-  "Exhibition",
-  "Online Portal",
-  "Direct call",
-  "Pamphlet",
-  "Channel Partner",
-  "References",
-  "Other",
-];
-
+const configurations = [ "1 BHK", "1.5 BHK", "2 BHK", "2.5 BHK","3 BHK", "3.5 BHK", "4 BHK","4.5 BHK", "Flat","Shop"];
+const unitTypes = [ "Actual Site","Hoarding", "Facebook", "Instagram","Website","Print Media","Radio","Google add","Exhibition",
+  "Online Portal", "Direct call", "Pamphlet","Channel Partner", "References","Other"];
 const sections = [
   {
     label: "Display Enquiries",
@@ -128,12 +62,10 @@ const FirstVisits = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const isTablet = useMediaQuery(theme.breakpoints.between("sm", "md"));
-
-  const [loans, setLoans] = useState([]);
+   const [loans, setLoans] = useState([]);
   const [expandedSection, setExpandedSection] = useState(0);
   const [showFirmForm, setShowFirmForm] = useState(false);
   const [partners, setPartners] = useState([]);
-  // const [currentPage, setCurrentPage] = useState(1);
   const [name, setName] = useState("");
   const [error, setError] = useState("");
   const [showFileInput, setShowFileInput] = useState(false);
@@ -170,231 +102,49 @@ const FirstVisits = () => {
   const [visitFollowupHistory, setVisitFollowupHistory] = useState([]);
   const [filteredVisitFollowupHistory, setFilteredVisitFollowupHistory] = useState([]);
   const [undefinedData, setUndefinedData] = useState([]);
-
-
+  
   useEffect(() => {
     console.log("fetching visit Scheduled leads ");
     fetchVisitScheduledLeads();
     fetchEnquiries();
   }, []);
-
-
-
   const fileInputRef = useRef(null);
-
   const [data, setData] = useState([]);
-
-  const loadLoansData = async () => {
-    const data = await fetchLoansData();
-    setLoans(data);
-  };
-
   const handleInterestedInChange = (event) => {
     setInterestedIn(event.target.value);
   };
-
-  const handleBudgetChange = (event) => {
+   const handleBudgetChange = (event) => {
     setBudget(event.target.value);
   };
-
   const handlePlanningToBuyChange = (event) => {
     setPlanningToBuy(event.target.value);
   };
-
-  const handleOccupationChange = (event) => {
+ const handleOccupationChange = (event) => {
     setOccupation(event.target.value);
   };
-
-  // const handleToggleSection = (index) => {
-  //   if (index === 1) {
-  //     // downloadSampleCsv();
-  //   } else if (index === 2) {
-  //     // if (fileInputRef.current) {
-  //     //   fileInputRef.current.click();
-  //     // }
-  //   } else {
-  //     setExpandedSection(index);
-  //     setShowFileInput(false);
-  //   }
-  // };
-
-  // const downloadSampleCsv = () => {
-  //   const sampleData = `Sales Exp.,Name,Mobile,Alternate Mobile Number,WhatsApp No.,Email,Address,Occupation,Company,Interested In,Budget,Reason,Reference,Name of CP,Planning to Buy,Follow Up Details\n`;
-
-  //   const blob = new Blob([sampleData], { type: "text/csv" });
-  //   const url = URL.createObjectURL(blob);
-
-  //   const a = document.createElement("a");
-  //   a.href = url;
-  //   a.download = "lead_template.csv";
-  //   document.body.appendChild(a);
-  //   a.click();
-  //   document.body.removeChild(a);
-  // };
-
-
-
   const handleToggleSection = (index) => {
     setExpandedSection(index);
     setShowFileInput(false);
-
-    if (index === 1) {
+     if (index === 1) {
       fetchVisitFollowupHistory();
     }
   };
-
-  const handleChange = (e) => {
+const handleChange = (e) => {
     const value = e.target.value;
     const regex = /[\d\s]/;
-
-    if (regex.test(value)) {
+   if (regex.test(value)) {
       setError("Name should not contain digits or spaces");
     } else {
       setError("");
     }
   };
-
-
-  // const fetchEnquiries = async () => {
-  //   try {
-  //     const response = await fetch("https://localhost:5289/sales/api/enquiries", {
-  //       credentials: "include",
-  //     });
-  //     if (!response.ok) throw new Error("Failed to fetch enquiries");
-
-  //     const data = await response.json();
-  //     // console.log("📥 Enquiries fetched from backend:", data);
-  //     // Debug each enquiry
-  //     data.forEach((enq, index) => {
-  //       // console.log(
-  //       //   `➡️ Enquiry[${index}] - id: ${enq.id}, leadNo: ${enq.leadNo}, name: ${enq.name}, status: ${enq.status}`
-  //       // );
-  //     });
-  //     setFirms(data); // Update your table state
-  //   } catch (error) {
-  //     console.error(" Error fetching enquiries:", error);
-  //   }
-  // };
-
-
-  //   const handleSubmit = async () => {
-  //     if (!leadNo) return toast.error("Lead No. is required");
-  //     if (!interestedIn) return toast.error("Interested In is required");
-  //     if (!occupation) return toast.error("Occupation is required");
-  //     if (!referenceBySource) return toast.error("Reference by/Source is required");
-
-  //     const now = new Date().toISOString();
-
-
-
-
-  //     const payload = {
-
-  //       id: 0,
-  //        leadNo: selectedLead?.id || "-",
-  //       name: name || "",
-  //       phone: mobile ? parseInt(mobile) : 0,
-  //       whatsapp: whatsappNo ? parseInt(whatsappNo) : 0,
-  //       email: email || "unknown@example.com",
-  //       address: address || "N/A",
-  //       occupation: occupation || "N/A",
-  //       company: company || "N/A",
-  //       interest: interestedIn || "N/A",
-  //       budgetInLakh: budget ? parseFloat(budget) : 0,
-  //       intendedPurchasePeriodMonths: planningToBuy ? parseInt(planningToBuy) : 0,
-  //       lastSiteVisit: new Date().toISOString(),
-  //       source: referenceBySource || "Walk-in",
-  //       remarks: remarks || "Visit done",
-  //       status: "Visit Done",
-  //       lastUpdatedBy: "system",
-  //       lastUpdatedDate: new Date().toISOString(),
-
-  //       // ✅ The backend expects a list of SalesEnagagement objects
-  //       // ✅ correct
-  //       SalesEngagement: {
-  //         id: 0,
-  //         assignedTo: "b",
-  //         assignedDate: new Date().toISOString(),
-  //         assignedBy: "system",
-  //         enquiryId: 0,
-  //         nextFollowUp: new Date().toISOString(),
-  //         status: "Visit Done",
-  //         remarks: remarks || "Visit completed"
-  //       }
-
-  //     };
-
-  //     console.log("📤 Sending Enquiry POST Request:", payload);
-
-  //     try {
-  //       const response = await fetch("https://localhost:5289/sales/api/enquiries", {
-  //         method: "POST",
-  //         headers: { "Content-Type": "application/json" },
-  //         credentials: "include",
-  //         body: JSON.stringify(payload),
-  //       });
-
-  //       if (!response.ok) {
-  //         const errorText = await response.text();
-  //         throw new Error(`Server responded with ${response.status}: ${errorText}`);
-  //       }
-
-  //       const newLead = await response.json();
-  //       console.log(" Enquiry saved successfully:", newLead);
-
-
-  //       // setLeads((prev) => ({
-  //       //   ...prev,
-  //       //   done: [...(prev.done || []), newLead],
-  //       // }));
-
-  //       // const enrichedLead = { ...newLead, id};
-  //       // setFirms((prev) => [newLead, ...prev]);
-  //       // setFirms((prev) => [enrichedLead, ...prev]);
-  //       console.log("✅ Saving data into table (firms):", newLead);
-  //       console.log("🧾 Updated firms list:", firms);
-
-  // // console.log("Fetched enquiries:", enquiries.map(e => ({
-  // //   id: e.id,
-  // //   leadNo: e.leadNo
-  // // })));
-  //       toast.success("Enquiry submitted successfully!");
-
-  //       // Reset
-  //       setLeadNo("");
-  //       setName("");
-  //       setMobile("");
-  //       setWhatsappNo("");
-  //       setEmail("");
-  //       setInterestedIn("");
-  //       setBudget("");
-  //       setPlanningToBuy("");
-  //       setOccupation("");
-  //       setReasonForPurchase("");
-  //       setAddress("");
-  //       setCompany("");
-  //       setReferenceBySource("");
-  //       setNameOfCp("");
-  //       setRemarks("");
-  //       setShowFirmForm(false);
-
-  //       // fetchVisitScheduledLeads();
-  //       fetchEnquiries();
-  //     } catch (error) {
-  //       console.error("❌ Error submitting enquiry:", error);
-  //       toast.error("Failed to submit enquiry. Please try again.");
-  //     }
-  //   };
-
-
-  const fetchEnquiries = async () => {
+ const fetchEnquiries = async () => {
     try {
       const response = await fetch("https://localhost:5289/sales/api/enquiries", {
         credentials: "include",
       });
       if (!response.ok) throw new Error("Failed");
-
-      const data = await response.json();
+       const data = await response.json();
       setFirms(data);
       // If not set belwo line then it wont shows the submitted enquiries.
       setEnquiries(data);
@@ -406,24 +156,15 @@ const FirstVisits = () => {
 
   const handleSubmit = async () => {
     if (!leadNo) return toast.error("Lead No. is required");
-
-    // 1️⃣ Check if enquiry for this lead already exists
+    //  Check if enquiry for this lead already exists
     // const existingEnquiry = firms.find(f => f.leadNo === leadNo);
     const existingEnquiry = firms.find(
       f => String(f.leadNo) === String(leadNo)
     );
-
-
-    // Prepare payload
+ // Prepare payload
     const payload = {
-      // id: existingEnquiry ? existingEnquiry.id : 0,
-      // leadNo: leadNo,
-      // leadId: selectedLead?.id || null,
-
-      // leadNo: selectedLead?.id || "-",
       leadId: Number(leadNo),
-
-      name: name || "",
+       name: name || "",
       phone: mobile ? parseInt(mobile) : 0,
       whatsapp: whatsappNo ? parseInt(whatsappNo) : 0,
       email: email || "",
@@ -450,16 +191,13 @@ const FirstVisits = () => {
         remarks: remarks || ""
       }
     };
-
-    console.log("lead no is", leadNo);
+   console.log("lead no is", leadNo);
     try {
       let response;
-
-      if (existingEnquiry) {
-        // 2️⃣ UPDATE existing enquiry
-        console.log("🔄 Updating existing enquiry:", existingEnquiry.id);
-
-        response = await fetch(
+     if (existingEnquiry) {
+        //  UPDATE existing enquiry
+        console.log(" Updating existing enquiry:", existingEnquiry.id);
+    response = await fetch(
           `https://localhost:5289/sales/api/enquiries/${existingEnquiry.id}`,
           {
             method: "PATCH",
@@ -468,14 +206,11 @@ const FirstVisits = () => {
             body: JSON.stringify(payload),
           }
         );
-
-        toast.success("Enquiry updated successfully!");
-
-      } else {
-        // 3️⃣ CREATE new enquiry
-        console.log("🆕 Creating new enquiry");
-
-        response = await fetch(
+         toast.success("Enquiry updated successfully!");
+          } else {
+        //  CREATE new enquiry
+        console.log(" Creating new enquiry");
+response = await fetch(
           "https://localhost:5289/sales/api/enquiries",
           {
             method: "POST",
@@ -484,10 +219,9 @@ const FirstVisits = () => {
             body: JSON.stringify(payload),
           }
         );
-        const saved = await response.json();        // <── GET NEW ENQUIRY
+        const saved = await response.json();        //  GET NEW ENQUIRY
         setEnquiries(prev => [...prev, saved]);
-
-        toast.success("Enquiry added successfully!");
+         toast.success("Enquiry added successfully!");
       }
 
       if (!response.ok) throw new Error(await response.text());
@@ -498,15 +232,11 @@ const FirstVisits = () => {
       const updatedEnquiry = updated.find(
         f => Number(f.leadId) === Number(selectedLead?.id)
       );
-
-
-      console.log("🔥 Fresh enquiry from server:", updatedEnquiry);
-
-      console.log("leadNo:", leadNo);
+    console.log(" Fresh enquiry from server:", updatedEnquiry);
+    console.log("leadNo:", leadNo);
       console.log("existingEnquiry.leadNo:", existingEnquiry?.leadNo);
       console.log("existingEnquiry.leadNo:", updatedEnquiry?.leadNo);
-
-      // Reset form
+    // Reset form
       setLeadNo("");
       setName("");
       setMobile("");
@@ -521,22 +251,15 @@ const FirstVisits = () => {
       setPlanningToBuy("");
       setRemarks("");
       setShowFirmForm(false);
-
-      fetchEnquiries(); // refresh table
-
-    } catch (err) {
-      console.error("❌ Error:", err);
+       fetchEnquiries(); // refresh table
+ } catch (err) {
+      console.error(" Error:", err);
       toast.error("Failed to submit enquiry");
     }
   };
   const availableLeads = (leads.scheduled || []).filter(
     lead => !firms.some(enq => Number(enq.leadId) === Number(lead.id))
   );
-
-
-
-
-
   const validateMobile = (value) => {
     const regex = /^[0-9]{10}$/;
     if (!regex.test(value)) {
@@ -545,12 +268,10 @@ const FirstVisits = () => {
       setMobileError("");
     }
   };
-
-  const handleNameChange = (e) => {
+const handleNameChange = (e) => {
     const value = e.target.value;
     const regex = /^[A-Za-z\s]*$/;
-
-    if (regex.test(value)) {
+  if (regex.test(value)) {
       setName(value);
       setNameError(false);
     } else {
@@ -558,8 +279,7 @@ const FirstVisits = () => {
       setNameError(true);
     }
   };
-
-  const validateEmail = (value) => {
+const validateEmail = (value) => {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
     if (!regex.test(value)) {
       setEmailError("Please enter a valid email address");
@@ -567,21 +287,16 @@ const FirstVisits = () => {
       setEmailError("");
     }
   };
-
-  const handleMobileChange = (e) => {
+ const handleMobileChange = (e) => {
     const value = e.target.value;
     setMobile(value);
     validateMobile(value);
   };
-
-  const handleEmailChange = (e) => {
+const handleEmailChange = (e) => {
     const value = e.target.value;
     setEmail(value);
     validateEmail(value);
   };
-
-
-
  const handleDownloadPDF_Enquiries = () => {
   if (firms.length === 0) {
     toast.info("No data available to download", {
@@ -590,12 +305,9 @@ const FirstVisits = () => {
     });
     return;
   }
-
-  const doc = new jsPDF("landscape");
+const doc = new jsPDF("landscape");
   doc.setFontSize(14);
   doc.text("First Visit Report", 14, 15);
-
-  
   const firstPageColumns = [
     "Timestamp",
     "Enquiry No",
@@ -606,9 +318,7 @@ const FirstVisits = () => {
     "Email",
     "Address",
   ];
-
- 
-  const secondPageColumns = [
+const secondPageColumns = [
     "Occupation",
     "Company",
     "Interested In",
@@ -618,8 +328,7 @@ const FirstVisits = () => {
     "Planning To Buy",
     "FollowUp Details",
   ];
-
-  const firstPageRows = firms.map((row) => [
+const firstPageRows = firms.map((row) => [
     row.timestamp || "-",              
     row.enquiryNo || "-",              
     row.leadNo || "-",                 
@@ -1379,7 +1088,7 @@ const FirstVisits = () => {
         className="d-flex flex-md-row flex-column justify-content-between align-items-center mb-3"
         style={{ width: "100%" }}
       >
-        <div className="d-flex flex-column flex-md-row align-items-start align-items-md-center mb-3">
+        <div className="d-flex flex-column flex-md-row align-items-start align-items-md-center mb-1">
           {sections.map((section, index) => (
             <Tooltip key={index} title={section.label} arrow>
               <div
@@ -1453,30 +1162,7 @@ const FirstVisits = () => {
             }}
           />
         </div>
-        {/* <Button
-    variant="contained"
-    sx={{
-      background: Constants.primaryColor,
-      color: "white",
-      fontWeight: "bold",
-      textTransform: "none",
-      padding: "8px 16px",
-      borderRadius: "8px",
-      display: "flex",
-      alignItems: "center",
-      gap: "8px",
-      "&:hover": {
-        background: Constants.primaryColor,
-      },
-      marginTop: isMobile ? "10px" : "0px",
-    }}
-    onClick={handleDownloadPDFLeads}
-  >
-    <FaFileDownload size={18} />
-    {isMobile ? "PDF" : "Download PDF"}
-  </Button> */}
-
-        <Button
+         <Button
           variant="contained"
           sx={{
             background: Constants.primaryColor,
@@ -1526,29 +1212,6 @@ const FirstVisits = () => {
                   >
                     + New Enquiry
                   </Button>
-
-                  {/* <Button
-                    variant="contained"
-                    sx={{
-                      background: Constants.primaryColor,
-                      color: "white",
-                      fontWeight: "bold",
-                      textTransform: "none",
-                      padding: "8px 16px",
-                      borderRadius: "8px",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "8px",
-                      "&:hover": {
-                        background: Constants.primaryColor,
-                      },
-                      width: isMobile ? "100%" : "auto",
-                    }}
-                    onClick={handleDownloadPDFLeads}
-                  >
-                    <FaFileDownload size={18} />
-                    {isMobile ? "PDF" : "Download PDF"}
-                  </Button> */}
                 </div>
                 {/* Right Side - Search and Pagination */}
                 <div
@@ -1663,6 +1326,8 @@ const FirstVisits = () => {
                   // data={leads.done}
 
                   data={[...enquiries, ...leads.done]}
+
+                  // data={currentPageData} 
                   fetchEnquiries={fetchEnquiries}
 
 
@@ -2011,153 +1676,11 @@ const FirstVisits = () => {
           <div className="content-container mt-3">
             {!showProjectForm ? (
               <>
-                {/* <div className="d-flex flex-column mb-3 gap-2">
-                 
-                  <Typography
-                    variant={isMobile ? "h6" : "h5"}
-                    component="h2"
-                    sx={{
-                      fontWeight: "bold",
-                      paddingTop: "8px",
-                      width: "100%",
-                    }}
-                  >
-                    Enquiry History
-                  </Typography>
-
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                      flexWrap: "wrap",
-                      gap: "10px",
-                      width: "100%",
-                    }}
-                  >
-                   
-                    <Button
-                      variant="contained"
-                      sx={{
-                        background: Constants.primaryColor,
-                        color: "white",
-                        fontWeight: "bold",
-                        textTransform: "none",
-                        padding: isMobile ? "6px 12px" : "8px 16px",
-                        borderRadius: "8px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        gap: "8px",
-                        "&:hover": { background: Constants.primaryColor },
-                      }}
-                      // onClick={handleDownloadPDFBooked}
-                      size={isMobile ? "small" : "medium"}
-                    >
-                      <FaFileDownload size={isMobile ? 16 : 18} />
-                      {isMobile ? "PDF" : "Download PDF"}
-                    </Button>
-
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "10px",
-                        flexWrap: "wrap",
-                        justifyContent: "flex-end",
-                      }}
-                    >
-                      <TextField
-                        size="small"
-                        placeholder="Search"
-                        sx={{
-                          width: "180px",
-                          "& .MuiInputBase-root": { padding: "0px 8px" },
-                          border: Constants.formInputBorderColor,
-                        }}
-                      />
-
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "8px",
-                          fontSize: "14px",
-                          color: "#800000",
-                          justifyContent: "flex-end",
-                        }}
-                      >
-                        <span style={{ fontWeight: "500" }}>
-                          Rows per page:
-                        </span>
-
-                        <select
-                          style={{
-                            border: "1px solid #800000",
-                            borderRadius: "4px",
-                            padding: "2px 6px",
-                            outline: "none",
-                            color: "#800000",
-                          }}
-                        // defaultValue={5}
-                        >
-                          <option value={5}>5</option>
-                          <option value={10}>10</option>
-                          <option value={25}>25</option>
-                        </select>
-
-                        <span>0–0 of 0 </span>
-
-                      
-                        <button
-                          style={{
-                            border: "none",
-                            background: "transparent",
-                            cursor: "pointer",
-                            color: "gray",
-                            fontSize: "18px",
-                            padding: "0 4px",
-                          }}
-                        >
-                          &#8249;
-                        </button>
-                        <button
-                          style={{
-                            border: "none",
-                            background: "transparent",
-                            cursor: "pointer",
-                            color: "gray",
-                            fontSize: "18px",
-                            padding: "0 4px",
-                          }}
-                        >
-                          &#8250;
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div> */}
-                <div className="d-flex flex-column mb-3 gap-2">
-
-  {/* First Row — Title on Left, Search + Pagination on Right */}
-  <div
-    style={{
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center",
-      flexWrap: "wrap",
-      width: "100%",
-    }}
-  >
+      <div className="d-flex flex-column mb-3 gap-2">
+{/* First Row — Title on Left, Search + Pagination on Right */}
+  <div style={{  display: "flex",  justifyContent: "space-between",  alignItems: "center",  flexWrap: "wrap",  width: "100%"  }}>
     {/* LEFT SIDE — TITLE */}
-    <Typography
-      variant={isMobile ? "h6" : "h5"}
-      component="h2"
-      sx={{
-        fontWeight: "bold",
-        paddingTop: "8px",
-      }}
-    >
+    <Typography variant={isMobile ? "h6" : "h5"} component="h2" sx={{  fontWeight: "bold",  paddingTop: "8px",  }} >
       Enquiry History
     </Typography>
 
@@ -2239,16 +1762,6 @@ const FirstVisits = () => {
     </div>
   </div>
 </div>
-
-
-                {/* Table Section */}
-                {/* <div className="mt-3">
-                       <FirstVisitFollowupHistoryTable
-                         data={projectData}
-                         isMobile={isMobile}
-                         isTablet={isTablet}
-                       />
-                     </div> */}
                 <div className="mt-3">
                   <FirstVisitFollowupHistoryTable
                     // data={filteredLeads}
@@ -2256,7 +1769,7 @@ const FirstVisits = () => {
                     // data={projectData}
 
                     data={visitFollowupHistory}          //working 
-
+                  
                     isMobile={isMobile}
                     isTablet={isTablet}
 
@@ -2270,163 +1783,16 @@ const FirstVisits = () => {
         </>
       )}
 
-
-
       {expandedSection === 2 && (
         <div className="content-container mt-3">
           {!showLandownerForm ? (
             <>
-              {/* <div className="d-flex flex-column mb-3 gap-2">
-                
-                <Typography
-                  variant={isMobile ? "h6" : "h5"}
-                  component="h2"
-                  sx={{
-                    fontWeight: "bold",
-                    paddingTop: "8px",
-                    width: "100%",
-                  }}
-                >
-                  Booked Enquiries
-                </Typography>
-
-                
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    flexWrap: "wrap",
-                    gap: "10px",
-                    width: "100%",
-                  }}
-                >
-                
-                  <Button
-                    variant="contained"
-                    sx={{
-                      background: Constants.primaryColor,
-                      color: "white",
-                      fontWeight: "bold",
-                      textTransform: "none",
-                      padding: isMobile ? "6px 12px" : "8px 16px",
-                      borderRadius: "8px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      gap: "8px",
-                      "&:hover": { background: Constants.primaryColor },
-                    }}
-                    // onClick={handleDownloadPDFBooked}
-                    size={isMobile ? "small" : "medium"}
-                  >
-                    <FaFileDownload size={isMobile ? 16 : 18} />
-                    {isMobile ? "PDF" : "Download PDF"}
-                  </Button>
-
-                  
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "10px",
-                      flexWrap: "wrap",
-                      justifyContent: "flex-end",
-                    }}
-                  >
-                    <TextField
-                      size="small"
-                      placeholder="Search"
-                      sx={{
-                        width: "180px",
-                        "& .MuiInputBase-root": { padding: "0px 8px" },
-                        border: Constants.formInputBorderColor,
-                      }}
-                    />
-
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "8px",
-                        fontSize: "14px",
-                        color: "#800000",
-                        justifyContent: "flex-end",
-                      }}
-                    >
-                      <span style={{ fontWeight: "500" }}>Rows per page:</span>
-
-                      <select
-                        style={{
-                          border: "1px solid #800000",
-                          borderRadius: "4px",
-                          padding: "2px 6px",
-                          outline: "none",
-                          color: "#800000",
-                        }}
-                      // defaultValue={5}
-                      >
-                        <option value={5}>5</option>
-                        <option value={10}>10</option>
-                        <option value={25}>25</option>
-                      </select>
-
-                      <span>0–0 of 0</span>
-
-                   
-                      <button
-                        style={{
-                          border: "none",
-                          background: "transparent",
-                          cursor: "pointer",
-                          color: "gray",
-                          fontSize: "18px",
-                          padding: "0 4px",
-                        }}
-                      >
-                        &#8249;
-                      </button>
-                      <button
-                        style={{
-                          border: "none",
-                          background: "transparent",
-                          cursor: "pointer",
-                          color: "gray",
-                          fontSize: "18px",
-                          padding: "0 4px",
-                        }}
-                      >
-                        &#8250;
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div> */}
-
-<div className="d-flex flex-column mb-3 gap-2">
-
-  {/* First Row — Title on Left, Search + Pagination on Right */}
-  <div
-    style={{
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center",
-      flexWrap: "wrap",
-      width: "100%",
-    }}
-  >
+            <div className="d-flex flex-column mb-3 gap-2">
+  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", width: "100%",}}>
     {/* LEFT SIDE — TITLE */}
-    <Typography
-      variant={isMobile ? "h6" : "h5"}
-      component="h2"
-      sx={{
-        fontWeight: "bold",
-        paddingTop: "8px",
-      }}
-    >
+    <Typography  variant={isMobile ? "h6" : "h5"}  component="h2"  sx={{ fontWeight: "bold",  paddingTop: "8px",  }} >
       Booked Enquiries
     </Typography>
-
     {/* RIGHT SIDE — SEARCH + PAGINATION */}
     <div
       style={{
@@ -2527,130 +1893,7 @@ const FirstVisits = () => {
         <div className="content-container mt-3">
           {!showFlatForm ? (
             <>
-              {/* <div className="d-flex flex-column mb-3 gap-2">
-                
-                <Typography
-                  variant={isMobile ? "h6" : "h5"}
-                  component="h2"
-                  sx={{
-                    fontWeight: "bold",
-                    paddingTop: "8px",
-                    width: "100%",
-                  }}
-                >
-                  Lost Enquiries
-                </Typography>
-
             
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    flexWrap: "wrap",
-                    gap: "10px",
-                    width: "100%",
-                  }}
-                >
-               
-                  <Button
-                    variant="contained"
-                    sx={{
-                      background: Constants.primaryColor,
-                      color: "white",
-                      fontWeight: "bold",
-                      textTransform: "none",
-                      padding: isMobile ? "6px 12px" : "8px 16px",
-                      borderRadius: "8px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      gap: "8px",
-                      "&:hover": { background: Constants.primaryColor },
-                    }}
-                    // onClick={handleDownloadPDFBooked}
-                    size={isMobile ? "small" : "medium"}
-                  >
-                    <FaFileDownload size={isMobile ? 16 : 18} />
-                    {isMobile ? "PDF" : "Download PDF"}
-                  </Button>
-
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "10px",
-                      flexWrap: "wrap",
-                      justifyContent: "flex-end",
-                    }}
-                  >
-                    <TextField
-                      size="small"
-                      placeholder="Search"
-                      sx={{
-                        width: "180px",
-                        "& .MuiInputBase-root": { padding: "0px 8px" },
-                        border: Constants.formInputBorderColor,
-                      }}
-                    />
-
-                    <div
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "8px",
-                        fontSize: "14px",
-                        color: "#800000",
-                        justifyContent: "flex-end",
-                      }}
-                    >
-                      <span style={{ fontWeight: "500" }}>Rows per page:</span>
-
-                      <select
-                        style={{
-                          border: "1px solid #800000",
-                          borderRadius: "4px",
-                          padding: "2px 6px",
-                          outline: "none",
-                          color: "#800000",
-                        }}
-                      // defaultValue={5}
-                      >
-                        <option value={5}>5</option>
-                        <option value={10}>10</option>
-                        <option value={25}>25</option>
-                      </select>
-
-                      <span>0–0 of 0</span>
-
-                      <button
-                        style={{
-                          border: "none",
-                          background: "transparent",
-                          cursor: "pointer",
-                          color: "gray",
-                          fontSize: "18px",
-                          padding: "0 4px",
-                        }}
-                      >
-                        &#8249;
-                      </button>
-                      <button
-                        style={{
-                          border: "none",
-                          background: "transparent",
-                          cursor: "pointer",
-                          color: "gray",
-                          fontSize: "18px",
-                          padding: "0 4px",
-                        }}
-                      >
-                        &#8250;
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div> */}
               <div className="d-flex flex-column mb-3 gap-2">
   {/* First Row - Section Title */}
   <div
