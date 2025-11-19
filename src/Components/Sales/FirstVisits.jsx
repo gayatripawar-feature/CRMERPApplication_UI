@@ -42,14 +42,15 @@ import autoTable from "jspdf-autotable";
 import FormHelperText from "@mui/material/FormHelperText";
 import Constants from "../Constants";
 import FirstvisitfollowupUndefinedTable from "./FirstvisitfollowupUndefinedTable";
-import FirstvisitfollowupbookedTable from "./FirstvisitfollowupbookedTable";
+// import FirstvisitfollowupbookedTable from "./FirstvisitfollowupbookedTable";
+import FirstvisitfollowupbookedTable from "./FirstvisitFollowupbookedTable";
 import { FirstVisitFollowupHistoryTable } from "./FirstVisitFollowupHistoryTable";
 
 // API Call Function
-const fetchLoansData = async () => {
-  const response = await fetch("/api/getOCRCollection");
-  return response.json();
-};
+// const fetchLoansData = async () => {
+//   const response = await fetch("/api/getOCRCollection");
+//   return response.json();
+// };
 
 
 // Dropdown Options
@@ -579,7 +580,9 @@ const FirstVisits = () => {
     validateEmail(value);
   };
 
-  const handleDownloadPDFLeads = () => {
+
+
+  const handleDownloadPDF_Enquiries = () => {
     if (firms.length === 0) {
       toast.info("No data available to download", {
         position: "top-right",
@@ -590,14 +593,14 @@ const FirstVisits = () => {
 
     const doc = new jsPDF("landscape");
     doc.setFontSize(14);
-    doc.text("Leads Report", 14, 15);
+    doc.text("First Visit Report", 14, 15);
 
     // Columns for the first page
     const firstPageColumns = [
       "Timestamp",
       "Enquiry No",
       "LEAD NO.",
-      "Assign To",
+
       "NAME",
       "MOBILE",
       "WHATSAPP",
@@ -622,7 +625,7 @@ const FirstVisits = () => {
       row.remarkHistory || "-",
       row.enquiryNo || "-",
       row.leadNo || "-",
-      row.assignToHistory || "-",
+
       row.name || "-",
       row.mobile || "-",
       row.whatsappNo || "-",
@@ -654,7 +657,7 @@ const FirstVisits = () => {
 
     // Add a new page for the remaining columns
     doc.addPage("landscape");
-    doc.text("Leads Report (Continued)", 14, 15);
+    doc.text("Visits Report (Continued)", 14, 15);
 
     // Generate the second page
     autoTable(doc, {
@@ -666,7 +669,7 @@ const FirstVisits = () => {
       margin: { top: 20 },
     });
 
-    doc.save("Leads_Report.pdf");
+    doc.save("FirstVisit_Enquiries_Report.pdf");
 
     toast.success("PDF downloaded successfully!", {
       position: "top-right",
@@ -675,65 +678,304 @@ const FirstVisits = () => {
   };
 
 
+  const handleDownloadPDF_History = () => {
+    if (firms.length === 0) {
+      toast.info("No data available to download", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      return;
+    }
+
+    const doc = new jsPDF("landscape");
+    doc.setFontSize(14);
+    doc.text("First Visit Pending Follow Up Report", 14, 15);
+
+    // Columns for the first page
+    const firstPageColumns = [
+      "Status History",
+      "Remark History",
+      "Assign To History",
+
+      "Timestamp",
+      "Enquiry No",
+      "Lead No",
+      "Sales Executive Name",
+      "Name",
+    ];
+
+    // Columns for the second page
+    const secondPageColumns = [
+      "Mobile",
+      "Whatsapp No",
+      "Address",
+      "Occupation",
+      "Company",
+      "Intersted In",
+      "Budget",
+      "Reason For Purchase",
+      "Customer Feedback",
+    ];
+
+    // Mapping data for the first page
+    const firstPageRows = firms.map((row) => [
+      row.remarkHistory || "-",
+      row.enquiryNo || "-",
+      row.leadNo || "-",
+
+      row.name || "-",
+      row.mobile || "-",
+      row.whatsappNo || "-",
+      row.email || "-",
+      row.address || "-",
+    ]);
+
+    // Mapping data for the second page
+    const secondPageRows = firms.map((row) => [
+      row.occupation || "-",
+      row.company || "-",
+      row.interestedIn || "-",
+      row.budget || "-",
+      row.referenceBySource || "-",
+      row.nameOfCp || "-",
+      row.planningToBuyWithin || "-",
+      "-",
+    ]);
+
+    // Generate the first page
+    autoTable(doc, {
+      startY: 25,
+      head: [firstPageColumns],
+      body: firstPageRows,
+      styles: { fontSize: 10, cellPadding: 3 },
+      headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+      margin: { top: 20 },
+    });
+
+    // Add a new page for the remaining columns
+    doc.addPage("landscape");
+    doc.text("Visits Report (Continued)", 14, 15);
+
+    // Generate the second page
+    autoTable(doc, {
+      startY: 25,
+      head: [secondPageColumns],
+      body: secondPageRows,
+      styles: { fontSize: 10, cellPadding: 3 },
+      headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+      margin: { top: 20 },
+    });
+
+    doc.save("FirstVisit_Followup_Report.pdf");
+
+    toast.success("PDF downloaded successfully!", {
+      position: "top-right",
+      autoClose: 3000,
+    });
+  };
+
+   const handleDownloadPDF_Booked = () => {
+    if (firms.length === 0) {
+      toast.info("No data available to download", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      return;
+    }
+
+    const doc = new jsPDF("landscape");
+    doc.setFontSize(14);
+    doc.text("First Visit Booked Report", 14, 15);
+
+    // Columns for the first page
+    const firstPageColumns = [
+      "Enquiry No",
+      "Name",
+      "Mobile",
+
+      "Alternate Contact No",
+      "Email",
+      "Address",
+      "Occupation",
+      "Company",
+    ];
+
+    // Columns for the second page
+    const secondPageColumns = [
+      "Interested In",
+      "Budget",
+      "Reason For Purchase",
+      "Reference BY",
+      "Planning To Buy Within",
+      "Customer Feedback",
+      
+    ];
+
+    // Mapping data for the first page
+    const firstPageRows = firms.map((row) => [
+      row.remarkHistory || "-",
+      row.enquiryNo || "-",
+      row.leadNo || "-",
+
+      row.name || "-",
+      row.mobile || "-",
+      row.whatsappNo || "-",
+      row.email || "-",
+      row.address || "-",
+    ]);
+
+    // Mapping data for the second page
+    const secondPageRows = firms.map((row) => [
+      row.occupation || "-",
+      row.company || "-",
+      row.interestedIn || "-",
+      row.budget || "-",
+      row.referenceBySource || "-",
+      row.nameOfCp || "-",
+      row.planningToBuyWithin || "-",
+      "-",
+    ]);
+
+    // Generate the first page
+    autoTable(doc, {
+      startY: 25,
+      head: [firstPageColumns],
+      body: firstPageRows,
+      styles: { fontSize: 10, cellPadding: 3 },
+      headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+      margin: { top: 20 },
+    });
+
+    // Add a new page for the remaining columns
+    doc.addPage("landscape");
+    doc.text("Visits Report (Continued)", 14, 15);
+
+    // Generate the second page
+    autoTable(doc, {
+      startY: 25,
+      head: [secondPageColumns],
+      body: secondPageRows,
+      styles: { fontSize: 10, cellPadding: 3 },
+      headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+      margin: { top: 20 },
+    });
+
+    doc.save("FirstVisit_Booked_Report.pdf");
+
+    toast.success("PDF downloaded successfully!", {
+      position: "top-right",
+      autoClose: 3000,
+    });
+  };
+
+   const handleDownloadPDF_Undefined = () => {
+    if (firms.length === 0) {
+      toast.info("No data available to download", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      return;
+    }
+
+    const doc = new jsPDF("landscape");
+    doc.setFontSize(14);
+    doc.text("First Visit Undefined Report", 14, 15);
+
+    // Columns for the first page
+    const firstPageColumns = [
+      "Status History",
+      "Remark History",
+      "Assign To History",
+
+      "Enquiry No",
+      "Lead No",
+      "Name",
+      "Mobile No",
+      "Email",
+    ];
+
+    // Columns for the second page
+    const secondPageColumns = [
+      "Address",
+      "Occupation",
+      "Company",
+      "Interested In",
+      "Budget",
+      "Reason For Purchase",
+       "Planning to Buy within",
+       "Customer Feedback"
+      
+    ];
+
+    // Mapping data for the first page
+    const firstPageRows = firms.map((row) => [
+      row.remarkHistory || "-",
+      row.enquiryNo || "-",
+      row.leadNo || "-",
+
+      row.name || "-",
+      row.mobile || "-",
+      row.whatsappNo || "-",
+      row.email || "-",
+      row.address || "-",
+    ]);
+
+    // Mapping data for the second page
+    const secondPageRows = firms.map((row) => [
+      row.occupation || "-",
+      row.company || "-",
+      row.interestedIn || "-",
+      row.budget || "-",
+      row.referenceBySource || "-",
+      row.nameOfCp || "-",
+      row.planningToBuyWithin || "-",
+      "-",
+    ]);
+
+    // Generate the first page
+    autoTable(doc, {
+      startY: 25,
+      head: [firstPageColumns],
+      body: firstPageRows,
+      styles: { fontSize: 10, cellPadding: 3 },
+      headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+      margin: { top: 20 },
+    });
+
+    // Add a new page for the remaining columns
+    doc.addPage("landscape");
+    doc.text("Visits Report (Continued)", 14, 15);
+
+    // Generate the second page
+    autoTable(doc, {
+      startY: 25,
+      head: [secondPageColumns],
+      body: secondPageRows,
+      styles: { fontSize: 10, cellPadding: 3 },
+      headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+      margin: { top: 20 },
+    });
+
+    doc.save("FirstVisit_Undefined_Report.pdf");
+
+    toast.success("PDF downloaded successfully!", {
+      position: "top-right",
+      autoClose: 3000,
+    });
+  };
 
   const scheduledLeads =
     Array.isArray(leads.scheduled) ? leads.scheduled : [];
 
-  // When user selects a lead number
-  // const handleLeadNoChange = (e) => {
-  //   const selectedLeadNo = e.target.value;
-  //   setLeadNo(selectedLeadNo);
-
-  //   const existingEnquiry = firms.find(f => f.leadNo === selectedLeadNo);
-
-  //   // ✅ Always define before use
-  //   const scheduledLeads = leads.scheduled || [];
-
-  //   if (existingEnquiry) {
-  //     setName(existingEnquiry.name);
-  //     setMobile(existingEnquiry.phone);
-  //     setWhatsappNo(existingEnquiry.whatsapp);
-  //     setEmail(existingEnquiry.email);
-  //     setAddress(existingEnquiry.address);
-  //     setCompany(existingEnquiry.company);
-  //     setInterestedIn(existingEnquiry.interest);
-  //     setBudget(existingEnquiry.budgetInLakh);
-  //     setOccupation(existingEnquiry.occupation);
-  //     setReferenceBySource(existingEnquiry.source);
-  //     setPlanningToBuy(existingEnquiry.intendedPurchasePeriodMonths);
-  //     setRemarks(existingEnquiry.remarks);
-  //   } else {
-  //     const lead = scheduledLeads.find(l => l.id === selectedLeadNo);
-
-  //     setName(lead?.name || "");
-  //     setMobile(lead?.phone || "");
-  //     setWhatsappNo(lead?.whatsapp || "");
-  //     setEmail(lead?.email || "");
-  //     setAddress(lead?.address || "");
-  //     setCompany(lead?.company || "");
-  //     setInterestedIn(lead?.interest || "");
-  //     setBudget(lead?.budgetInLakh || "");
-  //     setOccupation(lead?.occupation || "");
-  //     setReferenceBySource(lead?.source || "");
-  //     setPlanningToBuy(lead?.intendedPurchasePeriodMonths || "");
-  //     setRemarks("");
-  //   }
-  //   console.log("firms:", firms);
-  // console.log("selectedLeadNo:", selectedLeadNo);
-  // console.log("existingEnquiry:", firms.find(f => f.leadNo === selectedLeadNo));
-
-  // };
-
-
   const handleLeadNoChange = (e) => {
     const selectedLeadNo = e.target.value;
 
-    console.log("🟡 DROPDOWN CHANGED — Selected Lead No:", selectedLeadNo);
-    console.log("📌 firms loaded (Enquiries count):", firms.length, firms);
+    console.log(" DROPDOWN CHANGED — Selected Lead No:", selectedLeadNo);
+    console.log(" firms loaded (Enquiries count):", firms.length, firms);
 
     setLeadNo(selectedLeadNo);
 
-    // 1️⃣ Check enquiry using the NEW value directly
+    //  Check enquiry using the NEW value directly
     console.log("🔍 Searching enquiry for LeadNo:", selectedLeadNo);
 
     const existingEnquiry = firms.find(
@@ -760,7 +1002,7 @@ const FirstVisits = () => {
       return;
     }
 
-    // 2️⃣ If no enquiry found → load scheduled lead
+    //  If no enquiry found → load scheduled lead
     const lead = leads.scheduled.find(
       (l) => Number(l.id) === Number(selectedLeadNo)
     );
@@ -1042,9 +1284,9 @@ const FirstVisits = () => {
 
   const fetchUndefinedEnquiries = async () => {
     try {
-      const response = await fetch("https://localhost:5289/sales/api/enquiries",{
-          method: "GET",
-      credentials: "include",   
+      const response = await fetch("https://localhost:5289/sales/api/enquiries", {
+        method: "GET",
+        credentials: "include",
       });
 
       if (!response.ok) {
@@ -1061,11 +1303,11 @@ const FirstVisits = () => {
           item.enquiryStatus?.toLowerCase() === "not interested"
       );
 
-      setUndefinedData(filtered);  
-      console.log("undefined data ",filtered);
+      setUndefinedData(filtered);
+      console.log("undefined data ", filtered);
     } catch (error) {
       console.error("API Error:", error);
-     
+
     }
   };
 
@@ -1140,81 +1382,135 @@ const FirstVisits = () => {
     <div className="container my-2">
       <h6 className="mb-2 fs-6">Sales Module / Enquiry Management</h6>
 
-      <div className="d-flex flex-column flex-md-row align-items-start align-items-md-center mb-3">
-        {sections.map((section, index) => (
-          <Tooltip key={index} title={section.label} arrow>
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "flex-start",
-                backgroundColor: Constants.primaryColor,
-                padding: isMobile ? "8px" : "10px",
-                marginRight: isMobile ? "5px" : "10px",
-                marginTop: "10px",
-                borderRadius: "20px",
-                color: "white",
-                fontSize: isMobile ? "14px" : "16px",
-                width:
-                  expandedSection === index
-                    ? isMobile
-                      ? "180px"
-                      : "200px"
-                    : isMobile
-                      ? "40px"
-                      : "50px",
-                height: isMobile ? "40px" : "50px",
-                transition: "width 0.3s ease",
-                background: Constants.primaryColor,
-                boxShadow:
-                  "inset 2px 2px 2px 0px rgba(255,255,255,.5), 7px 7px 20px 0px rgba(0,0,0,.1), 4px 4px 5px 0px rgba(0,0,0,.1)",
-              }}
-            >
-              <IconButton
-                color="primary"
-                onClick={() => handleToggleSection(index)}
-                sx={{
-                  padding: 0,
-                  marginRight: isMobile ? "4px" : "8px",
-                  fontSize: isMobile ? "20px" : "24px",
-                  color: "white",
-                }}
-              >
-                {section.icon}
-              </IconButton>
-
-              <span
-                className="text-white fw-bold"
+      <div
+        className="d-flex flex-md-row flex-column justify-content-between align-items-center mb-3"
+        style={{ width: "100%" }}
+      >
+        <div className="d-flex flex-column flex-md-row align-items-start align-items-md-center mb-3">
+          {sections.map((section, index) => (
+            <Tooltip key={index} title={section.label} arrow>
+              <div
                 style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "flex-start",
+                  backgroundColor: Constants.primaryColor,
+                  padding: isMobile ? "8px" : "10px",
+                  marginRight: isMobile ? "5px" : "10px",
+                  marginTop: "10px",
+                  borderRadius: "20px",
                   color: "white",
                   fontSize: isMobile ? "14px" : "16px",
-                  display: expandedSection === index ? "inline" : "none",
-                  marginLeft: isMobile ? "4px" : "8px",
+                  width:
+                    expandedSection === index
+                      ? isMobile
+                        ? "180px"
+                        : "200px"
+                      : isMobile
+                        ? "40px"
+                        : "50px",
+                  height: isMobile ? "40px" : "50px",
+                  transition: "width 0.3s ease",
+                  background: Constants.primaryColor,
+                  boxShadow:
+                    "inset 2px 2px 2px 0px rgba(255,255,255,.5), 7px 7px 20px 0px rgba(0,0,0,.1), 4px 4px 5px 0px rgba(0,0,0,.1)",
                 }}
               >
-                {section.label}
-              </span>
+                <IconButton
+                  color="primary"
+                  onClick={() => handleToggleSection(index)}
+                  sx={{
+                    padding: 0,
+                    marginRight: isMobile ? "4px" : "8px",
+                    fontSize: isMobile ? "20px" : "24px",
+                    color: "white",
+                  }}
+                >
+                  {section.icon}
+                </IconButton>
+
+                <span
+                  className="text-white fw-bold"
+                  style={{
+                    color: "white",
+                    fontSize: isMobile ? "14px" : "16px",
+                    display: expandedSection === index ? "inline" : "none",
+                    marginLeft: isMobile ? "4px" : "8px",
+                  }}
+                >
+                  {section.label}
+                </span>
+              </div>
+            </Tooltip>
+          ))}
+
+          {showFileInput && (
+            <div className="m-3">
+              <input type="file" accept=".csv, .xlsx" />
             </div>
-          </Tooltip>
-        ))}
+          )}
 
-        {showFileInput && (
-          <div className="m-3">
-            <input type="file" accept=".csv, .xlsx" />
-          </div>
-        )}
+          <input
+            type="file"
+            accept=".csv, .xlsx"
+            ref={fileInputRef}
+            style={{ display: "none" }}
+            onChange={(e) => {
+              console.log("File selected:", e.target.files[0]);
+            }}
+          />
+        </div>
+        {/* <Button
+    variant="contained"
+    sx={{
+      background: Constants.primaryColor,
+      color: "white",
+      fontWeight: "bold",
+      textTransform: "none",
+      padding: "8px 16px",
+      borderRadius: "8px",
+      display: "flex",
+      alignItems: "center",
+      gap: "8px",
+      "&:hover": {
+        background: Constants.primaryColor,
+      },
+      marginTop: isMobile ? "10px" : "0px",
+    }}
+    onClick={handleDownloadPDFLeads}
+  >
+    <FaFileDownload size={18} />
+    {isMobile ? "PDF" : "Download PDF"}
+  </Button> */}
 
-        <input
-          type="file"
-          accept=".csv, .xlsx"
-          ref={fileInputRef}
-          style={{ display: "none" }}
-          onChange={(e) => {
-            console.log("File selected:", e.target.files[0]);
+        <Button
+          variant="contained"
+          sx={{
+            background: Constants.primaryColor,
+            color: "white",
+            fontWeight: "bold",
+            textTransform: "none",
+            padding: "8px 16px",
+            borderRadius: "8px",
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+            "&:hover": {
+              background: Constants.primaryColor,
+            },
+            marginTop: isMobile ? "10px" : "0px",
           }}
-        />
-      </div>
+          onClick={() => {
+            if (expandedSection === 0) handleDownloadPDF_Enquiries();
+            if (expandedSection === 1) handleDownloadPDF_History();
+            if (expandedSection === 2) handleDownloadPDF_Booked();
+            if (expandedSection === 3) handleDownloadPDF_Undefined();
+          }}
+        >
+          Download PDF
+        </Button>
 
+      </div>
       {expandedSection === 0 && (
         <div className="content-container mt-0">
           {!showFirmForm ? (
@@ -1222,7 +1518,8 @@ const FirstVisits = () => {
               <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3 gap-2">
                 <div
                   className={`d-flex ${isMobile ? "flex-column" : "flex-row"
-                    } gap-2 w-100`}
+                    } gap-2 `}
+                //here is removed that w-100 =>w-100
                 >
                   <Button
                     variant="contained"
@@ -1237,7 +1534,7 @@ const FirstVisits = () => {
                     + New Enquiry
                   </Button>
 
-                  <Button
+                  {/* <Button
                     variant="contained"
                     sx={{
                       background: Constants.primaryColor,
@@ -1258,7 +1555,7 @@ const FirstVisits = () => {
                   >
                     <FaFileDownload size={18} />
                     {isMobile ? "PDF" : "Download PDF"}
-                  </Button>
+                  </Button> */}
                 </div>
                 {/* Right Side - Search and Pagination */}
                 <div
@@ -1267,6 +1564,7 @@ const FirstVisits = () => {
                     alignItems: "center",
                     gap: "10px",
                     flexWrap: isMobile ? "wrap" : "nowrap",
+                    // flexWrap: "nowrap",
                     marginTop: isMobile ? "8px" : "0",
                   }}
                 >
@@ -1817,7 +2115,7 @@ const FirstVisits = () => {
                           <option value={25}>25</option>
                         </select>
 
-                        <span>0–0 of 0 entries</span>
+                        <span>0–0 of 0 </span>
 
                         {/* Navigation arrows */}
                         <button
@@ -1861,8 +2159,10 @@ const FirstVisits = () => {
                   <FirstVisitFollowupHistoryTable
                     // data={filteredLeads}
                     // fetchVisitFollowUpHistory={fetchVisitFollowupHistory}
-                    data={visitFollowupHistory}
                     // data={projectData}
+
+                    data={visitFollowupHistory}          //working 
+
                     isMobile={isMobile}
                     isTablet={isTablet}
 
@@ -1876,63 +2176,7 @@ const FirstVisits = () => {
         </>
       )}
 
-      {/* {expandedSection === 2 && (
-        <div className="content-container mt-3">
-          {!showLandownerForm ? (
-            <>
-             
-              <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3 gap-2">
 
-                <Typography
-                  variant={isMobile ? "h6" : "h5"}
-                  component="h2"
-                  sx={{
-                    fontWeight: "bold",
-                    paddingTop: "8px",
-                    width: isMobile ? "100%" : "auto",
-                  }}
-                >
-                  Booked Enquiries
-                </Typography>
-
-              
-                <Button
-                  variant="contained"
-                  sx={{
-                    background: Constants.primaryColor,
-                    color: "white",
-                    fontWeight: "bold",
-                    textTransform: "none",
-                    padding: isMobile ? "6px 12px" : "8px 16px",
-                    borderRadius: "8px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    gap: "8px",
-                    "&:hover": { background: Constants.primaryColor },
-                    marginTop: isMobile ? 8 : 0,
-                  }}
-                  // onClick={handleDownloadPDFBooked}
-                  size={isMobile ? "small" : "medium"}
-                >
-                  <FaFileDownload size={isMobile ? 16 : 18} />
-                  {isMobile ? "PDF" : "Download PDF"}
-                </Button>
-              </div>
-
-              <div className="mt-3">
-                <FirstvisitfollowupbookedTable
-                  data={projectData}
-                  isMobile={isMobile}
-                  isTablet={isTablet}
-                />
-              </div>
-            </>
-          ) : (
-            <div></div>
-          )}
-        </div>
-      )} */}
 
       {expandedSection === 2 && (
         <div className="content-container mt-3">
@@ -2033,7 +2277,7 @@ const FirstVisits = () => {
                         <option value={25}>25</option>
                       </select>
 
-                      <span>0–0 of 0 entries</span>
+                      <span>0–0 of 0</span>
 
                       {/* Navigation arrows */}
                       <button
@@ -2080,64 +2324,7 @@ const FirstVisits = () => {
         </div>
       )}
 
-      {/* {expandedSection === 3 && (
-        <div className="content-container mt-3">
-          {!showFlatForm ? (
-            <>
-             
-              <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3 gap-2">
 
-                
-                <Typography
-                  variant={isMobile ? "h6" : "h5"}
-                  component="h2"
-                  sx={{
-                    fontWeight: "bold",
-                    paddingTop: "6px",
-                    width: isMobile ? "100%" : "auto",
-                  }}
-                >
-                  Lost Enquiries
-                </Typography>
-
-              
-                <Button
-                  variant="contained"
-                  sx={{
-                    background: Constants.primaryColor,
-                    color: "white",
-                    fontWeight: "bold",
-                    textTransform: "none",
-                    padding: isMobile ? "6px 12px" : "8px 16px",
-                    borderRadius: "8px",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    gap: "8px",
-                    "&:hover": { background: Constants.primaryColor },
-                    marginTop: isMobile ? 8 : 0,
-                  }}
-                  
-                  size={isMobile ? "small" : "medium"}
-                >
-                  <FaFileDownload size={isMobile ? 16 : 18} />
-                  {isMobile ? "PDF" : "Download PDF"}
-                </Button>
-              </div>
-
-              <div className="mt-3">
-                <FirstvisitfollowupUndefinedTable
-                  data={projectData}
-                  isMobile={isMobile}
-                  isTablet={isTablet}
-                />
-              </div>
-            </>
-          ) : (
-            <div></div>
-          )}
-        </div>
-      )} */}
 
       {expandedSection === 3 && (
         <div className="content-container mt-3">
@@ -2238,7 +2425,7 @@ const FirstVisits = () => {
                         <option value={25}>25</option>
                       </select>
 
-                      <span>0–0 of 0 entries</span>
+                      <span>0–0 of 0</span>
 
                       {/* Navigation arrows */}
                       <button
@@ -2274,7 +2461,7 @@ const FirstVisits = () => {
               <div className="mt-3">
                 <FirstvisitfollowupUndefinedTable
                   // data={projectData}
-                  data={undefinedData}
+                  data={undefinedData}            // working
                   isMobile={isMobile}
                   isTablet={isTablet}
                 />

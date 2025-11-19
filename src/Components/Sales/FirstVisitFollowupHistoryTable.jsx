@@ -70,6 +70,7 @@ useEffect(() => {
           width: "100%",
           overflow: "auto",
           "&::-webkit-scrollbar": {
+             width: "8px", 
             height: isMobile ? "4px" : "6px",
           },
           "&::-webkit-scrollbar-track": {

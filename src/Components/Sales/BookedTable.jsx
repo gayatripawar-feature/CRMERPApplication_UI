@@ -4,7 +4,7 @@ import Constants from "../Constants";
 const BookedTable = ({ data }) => {
   return (
     <>
-      <TableContainer component={Paper}>
+      <TableContainer component={Paper} sx={{maxHeight: 400,overflowY: "auto"}}>
         <Table>
           <TableHead>
             <TableRow sx={{ background: Constants.primaryColor }}>

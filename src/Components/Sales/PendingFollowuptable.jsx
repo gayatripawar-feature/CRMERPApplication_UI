@@ -787,7 +787,9 @@ const PendingFollowuptable = ({ data, onSelectLead, fetchUserLeads }) => {
             <TableBody>
 
               {/* {data.map((firm, index) => { */}
-              {filteredLeads.map((firm, index) => {
+              {/* {filteredLeads.map((firm, index) => { */}
+
+{data.map((firm,index) => {
 
                 console.group(`🧩 Lead Row [${index}]`);
                 console.log("➡️ Full firm object:", firm);

@@ -1199,7 +1199,7 @@ const DisplayEnquiryTable = ({ data, fetchEnquiries }) => {
               </TableBody>
             </Table>
           </Box>
-          <Box display="flex" justifyContent="flex-end" mt={2}>
+          {/* <Box display="flex" justifyContent="flex-end" mt={2}>
             <TablePagination
               rowsPerPageOptions={[5, 10, 25]}
               component="div"
@@ -1212,7 +1212,7 @@ const DisplayEnquiryTable = ({ data, fetchEnquiries }) => {
                 setPage(0);
               }}
             />
-          </Box>
+          </Box> */}
 
 
           <Dialog
