@@ -582,291 +582,283 @@ const FirstVisits = () => {
 
 
 
-  const handleDownloadPDF_Enquiries = () => {
-    if (firms.length === 0) {
-      toast.info("No data available to download", {
-        position: "top-right",
-        autoClose: 3000,
-      });
-      return;
-    }
-
-    const doc = new jsPDF("landscape");
-    doc.setFontSize(14);
-    doc.text("First Visit Report", 14, 15);
-
-    // Columns for the first page
-    const firstPageColumns = [
-      "Timestamp",
-      "Enquiry No",
-      "LEAD NO.",
-
-      "NAME",
-      "MOBILE",
-      "WHATSAPP",
-      "EMAIL",
-      "ADDRESS",
-    ];
-
-    // Columns for the second page
-    const secondPageColumns = [
-      "OCCUPATION",
-      "COMPANY",
-      "INTERESTED IN",
-      "BUDGET",
-      "REFERENCE",
-      "NAME OF CP",
-      "PLANNING TO BUY",
-      "FollowUp Details",
-    ];
-
-    // Mapping data for the first page
-    const firstPageRows = firms.map((row) => [
-      row.remarkHistory || "-",
-      row.enquiryNo || "-",
-      row.leadNo || "-",
-
-      row.name || "-",
-      row.mobile || "-",
-      row.whatsappNo || "-",
-      row.email || "-",
-      row.address || "-",
-    ]);
-
-    // Mapping data for the second page
-    const secondPageRows = firms.map((row) => [
-      row.occupation || "-",
-      row.company || "-",
-      row.interestedIn || "-",
-      row.budget || "-",
-      row.referenceBySource || "-",
-      row.nameOfCp || "-",
-      row.planningToBuyWithin || "-",
-      "-",
-    ]);
-
-    // Generate the first page
-    autoTable(doc, {
-      startY: 25,
-      head: [firstPageColumns],
-      body: firstPageRows,
-      styles: { fontSize: 10, cellPadding: 3 },
-      headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
-      margin: { top: 20 },
-    });
-
-    // Add a new page for the remaining columns
-    doc.addPage("landscape");
-    doc.text("Visits Report (Continued)", 14, 15);
-
-    // Generate the second page
-    autoTable(doc, {
-      startY: 25,
-      head: [secondPageColumns],
-      body: secondPageRows,
-      styles: { fontSize: 10, cellPadding: 3 },
-      headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
-      margin: { top: 20 },
-    });
-
-    doc.save("FirstVisit_Enquiries_Report.pdf");
-
-    toast.success("PDF downloaded successfully!", {
+ const handleDownloadPDF_Enquiries = () => {
+  if (firms.length === 0) {
+    toast.info("No data available to download", {
       position: "top-right",
       autoClose: 3000,
     });
-  };
+    return;
+  }
+
+  const doc = new jsPDF("landscape");
+  doc.setFontSize(14);
+  doc.text("First Visit Report", 14, 15);
+
+  
+  const firstPageColumns = [
+    "Timestamp",
+    "Enquiry No",
+    "Lead No",
+    "Name",
+    "Mobile",
+    "Whatsapp",
+    "Email",
+    "Address",
+  ];
+
+ 
+  const secondPageColumns = [
+    "Occupation",
+    "Company",
+    "Interested In",
+    "Budget",
+    "Reference",
+    "Name Of CP",
+    "Planning To Buy",
+    "FollowUp Details",
+  ];
+
+  const firstPageRows = firms.map((row) => [
+    row.timestamp || "-",              
+    row.enquiryNo || "-",              
+    row.leadNo || "-",                 
+    row.name || "-",                  
+    row.mobile || "-",                 
+    row.whatsappNo || "-",             
+    row.email || "-",                  
+    row.address || "-",                
+  ]);
 
 
-  const handleDownloadPDF_History = () => {
-    if (firms.length === 0) {
-      toast.info("No data available to download", {
-        position: "top-right",
-        autoClose: 3000,
-      });
-      return;
-    }
+  const secondPageRows = firms.map((row) => [
+    row.occupation || "-",             
+    row.company || "-",                
+    row.interestedIn || "-",         
+    row.budget || "-",                 
+    row.referenceBySource || "-",      
+    row.nameOfCp || "-",              
+    row.planningToBuyWithin || "-",    
+    row.followupDetails || "-",        
+  ]);
 
-    const doc = new jsPDF("landscape");
-    doc.setFontSize(14);
-    doc.text("First Visit Pending Follow Up Report", 14, 15);
+ 
+  autoTable(doc, {
+    startY: 25,
+    head: [firstPageColumns],
+    body: firstPageRows,
+    styles: { fontSize: 10, cellPadding: 3 },
+    headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+    margin: { top: 20 },
+  });
 
-    // Columns for the first page
-    const firstPageColumns = [
-      "Status History",
-      "Remark History",
-      "Assign To History",
+ 
+  doc.addPage("landscape");
+  doc.text("First Visit Report (Continued)", 14, 15);
 
-      "Timestamp",
-      "Enquiry No",
-      "Lead No",
-      "Sales Executive Name",
-      "Name",
-    ];
+  autoTable(doc, {
+    startY: 25,
+    head: [secondPageColumns],
+    body: secondPageRows,
+    styles: { fontSize: 10, cellPadding: 3 },
+    headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+    margin: { top: 20 },
+  });
 
-    // Columns for the second page
-    const secondPageColumns = [
-      "Mobile",
-      "Whatsapp No",
-      "Address",
-      "Occupation",
-      "Company",
-      "Intersted In",
-      "Budget",
-      "Reason For Purchase",
-      "Customer Feedback",
-    ];
 
-    // Mapping data for the first page
-    const firstPageRows = firms.map((row) => [
-      row.remarkHistory || "-",
-      row.enquiryNo || "-",
-      row.leadNo || "-",
+  doc.save("FirstVisit_Enquiries_Report.pdf");
 
-      row.name || "-",
-      row.mobile || "-",
-      row.whatsappNo || "-",
-      row.email || "-",
-      row.address || "-",
-    ]);
+  toast.success("PDF downloaded successfully!", {
+    position: "top-right",
+    autoClose: 3000,
+  });
+};
 
-    // Mapping data for the second page
-    const secondPageRows = firms.map((row) => [
-      row.occupation || "-",
-      row.company || "-",
-      row.interestedIn || "-",
-      row.budget || "-",
-      row.referenceBySource || "-",
-      row.nameOfCp || "-",
-      row.planningToBuyWithin || "-",
-      "-",
-    ]);
 
-    // Generate the first page
-    autoTable(doc, {
-      startY: 25,
-      head: [firstPageColumns],
-      body: firstPageRows,
-      styles: { fontSize: 10, cellPadding: 3 },
-      headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
-      margin: { top: 20 },
-    });
 
-    // Add a new page for the remaining columns
-    doc.addPage("landscape");
-    doc.text("Visits Report (Continued)", 14, 15);
-
-    // Generate the second page
-    autoTable(doc, {
-      startY: 25,
-      head: [secondPageColumns],
-      body: secondPageRows,
-      styles: { fontSize: 10, cellPadding: 3 },
-      headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
-      margin: { top: 20 },
-    });
-
-    doc.save("FirstVisit_Followup_Report.pdf");
-
-    toast.success("PDF downloaded successfully!", {
+ const handleDownloadPDF_History = () => {
+  if (firms.length === 0) {
+    toast.info("No data available to download", {
       position: "top-right",
       autoClose: 3000,
     });
-  };
+    return;
+  }
 
-   const handleDownloadPDF_Booked = () => {
-    if (firms.length === 0) {
-      toast.info("No data available to download", {
-        position: "top-right",
-        autoClose: 3000,
-      });
-      return;
-    }
+  const doc = new jsPDF("landscape");
+  doc.setFontSize(14);
+  doc.text("First Visit Pending Follow Up Report", 14, 15);
 
-    const doc = new jsPDF("landscape");
-    doc.setFontSize(14);
-    doc.text("First Visit Booked Report", 14, 15);
+  const firstPageColumns = [
+    "Status History",
+    "Remark History",
+    "Assign To History",
+    "Timestamp",
+    "Enquiry No",
+    "Lead No",
+    "Sales Executive Name",
+    "Name",
+  ];
 
-    // Columns for the first page
-    const firstPageColumns = [
-      "Enquiry No",
-      "Name",
-      "Mobile",
+ 
+  const secondPageColumns = [
+    "Mobile",
+    "Whatsapp No",
+    "Address",
+    "Occupation",
+    "Company",
+    "Interested In",
+    "Budget",
+    "Reason For Purchase",
+    "Customer Feedback",
+  ];
 
-      "Alternate Contact No",
-      "Email",
-      "Address",
-      "Occupation",
-      "Company",
-    ];
+  
+  const firstPageRows = firms.map((row) => [
+    row.statusHistory || "-",
+    row.remarkHistory || "-",
+    row.assignToHistory || "-",
+    row.timestamp || "-",
+    row.enquiryNo || "-",
+    row.leadNo || "-",
+    row.salesExecutiveName || "-",
+    row.name || "-",
+  ]);
 
-    // Columns for the second page
-    const secondPageColumns = [
-      "Interested In",
-      "Budget",
-      "Reason For Purchase",
-      "Reference BY",
-      "Planning To Buy Within",
-      "Customer Feedback",
-      
-    ];
 
-    // Mapping data for the first page
-    const firstPageRows = firms.map((row) => [
-      row.remarkHistory || "-",
-      row.enquiryNo || "-",
-      row.leadNo || "-",
+  const secondPageRows = firms.map((row) => [
+    row.mobile || "-",
+    row.whatsappNo || "-",
+    row.address || "-",
+    row.occupation || "-",
+    row.company || "-",
+    row.interestedIn || "-",
+    row.budget || "-",
+    row.reasonForPurchase || "-",
+    row.customerFeedback || "-",
+  ]);
 
-      row.name || "-",
-      row.mobile || "-",
-      row.whatsappNo || "-",
-      row.email || "-",
-      row.address || "-",
-    ]);
+ 
+  autoTable(doc, {
+    startY: 25,
+    head: [firstPageColumns],
+    body: firstPageRows,
+    styles: { fontSize: 10, cellPadding: 3 },
+    headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+    margin: { top: 20 },
+  });
 
-    // Mapping data for the second page
-    const secondPageRows = firms.map((row) => [
-      row.occupation || "-",
-      row.company || "-",
-      row.interestedIn || "-",
-      row.budget || "-",
-      row.referenceBySource || "-",
-      row.nameOfCp || "-",
-      row.planningToBuyWithin || "-",
-      "-",
-    ]);
+ 
+  doc.addPage("landscape");
+  doc.text("First Visit Pending Follow Up Report (Continued)", 14, 15);
 
-    // Generate the first page
-    autoTable(doc, {
-      startY: 25,
-      head: [firstPageColumns],
-      body: firstPageRows,
-      styles: { fontSize: 10, cellPadding: 3 },
-      headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
-      margin: { top: 20 },
-    });
+  autoTable(doc, {
+    startY: 25,
+    head: [secondPageColumns],
+    body: secondPageRows,
+    styles: { fontSize: 10, cellPadding: 3 },
+    headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+    margin: { top: 20 },
+  });
 
-    // Add a new page for the remaining columns
-    doc.addPage("landscape");
-    doc.text("Visits Report (Continued)", 14, 15);
+ 
+  doc.save("FirstVisit_Followup_Report.pdf");
 
-    // Generate the second page
-    autoTable(doc, {
-      startY: 25,
-      head: [secondPageColumns],
-      body: secondPageRows,
-      styles: { fontSize: 10, cellPadding: 3 },
-      headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
-      margin: { top: 20 },
-    });
+  toast.success("PDF downloaded successfully!", {
+    position: "top-right",
+    autoClose: 3000,
+  });
+};
 
-    doc.save("FirstVisit_Booked_Report.pdf");
 
-    toast.success("PDF downloaded successfully!", {
+  const handleDownloadPDF_Booked = () => {
+  if (firms.length === 0) {
+    toast.info("No data available to download", {
       position: "top-right",
       autoClose: 3000,
     });
-  };
+    return;
+  }
+
+  const doc = new jsPDF("landscape");
+  doc.setFontSize(14);
+  doc.text("First Visit Booked Report", 14, 15);
+
+  
+  const firstPageColumns = [
+    "Enquiry No",
+    "Name",
+    "Mobile",
+    "Alternate Contact No",
+    "Email",
+    "Address",
+    "Occupation",
+    "Company",
+  ];
+
+ 
+  const secondPageColumns = [
+    "Interested In",
+    "Budget",
+    "Reason For Purchase",
+    "Reference By",
+    "Planning To Buy Within",
+    "Customer Feedback",
+  ];
+
+  
+  const firstPageRows = firms.map((row) => [
+    row.enquiryNo || "-",
+    row.name || "-",
+    row.mobile || "-",
+    row.whatsappNo || "-",              
+    row.email || "-",
+    row.address || "-",
+    row.occupation || "-",
+    row.company || "-",
+  ]);
+
+ 
+  const secondPageRows = firms.map((row) => [
+    row.interestedIn || "-",
+    row.budget || "-",
+    row.reasonForPurchase || "-",
+    row.referenceBySource || "-",        
+    row.planningToBuyWithin || "-",
+    row.customerFeedback || "-",
+  ]);
+
+ 
+  autoTable(doc, {
+    startY: 25,
+    head: [firstPageColumns],
+    body: firstPageRows,
+    styles: { fontSize: 10, cellPadding: 3 },
+    headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+    margin: { top: 20 },
+  });
+
+  doc.addPage("landscape");
+  doc.text("First Visit Booked Report (Continued)", 14, 15);
+
+  autoTable(doc, {
+    startY: 25,
+    head: [secondPageColumns],
+    body: secondPageRows,
+    styles: { fontSize: 10, cellPadding: 3 },
+    headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+    margin: { top: 20 },
+  });
+
+  
+  doc.save("FirstVisit_Booked_Report.pdf");
+
+  toast.success("PDF downloaded successfully!", {
+    position: "top-right",
+    autoClose: 3000,
+  });
+};
+
 
    const handleDownloadPDF_Undefined = () => {
     if (firms.length === 0) {
@@ -908,29 +900,30 @@ const FirstVisits = () => {
     ];
 
     // Mapping data for the first page
-    const firstPageRows = firms.map((row) => [
-      row.remarkHistory || "-",
-      row.enquiryNo || "-",
-      row.leadNo || "-",
-
-      row.name || "-",
-      row.mobile || "-",
-      row.whatsappNo || "-",
-      row.email || "-",
-      row.address || "-",
-    ]);
+  const firstPageRows = firms.map((row) => [
+  row.statusHistory || "-",       
+  row.remarkHistory || "-",       
+  row.assignToHistory || "-",     
+  
+  row.enquiryNo || "-",           
+  row.leadNo || "-",              
+  row.name || "-",                
+  row.mobile || "-",              
+  row.email || "-",               
+]);
 
     // Mapping data for the second page
-    const secondPageRows = firms.map((row) => [
-      row.occupation || "-",
-      row.company || "-",
-      row.interestedIn || "-",
-      row.budget || "-",
-      row.referenceBySource || "-",
-      row.nameOfCp || "-",
-      row.planningToBuyWithin || "-",
-      "-",
-    ]);
+   const secondPageRows = firms.map((row) => [
+  row.address || "-",                 
+  row.occupation || "-",              
+  row.company || "-",                 
+  row.interestedIn || "-",            
+  row.budget || "-",                  
+  row.reasonForPurchase || "-",       
+  row.planningToBuyWithin || "-",    
+  row.customerFeedback || "-",        
+]);
+
 
     // Generate the first page
     autoTable(doc, {
@@ -2018,8 +2011,8 @@ const FirstVisits = () => {
           <div className="content-container mt-3">
             {!showProjectForm ? (
               <>
-                <div className="d-flex flex-column mb-3 gap-2">
-                  {/* First Row - Section Title */}
+                {/* <div className="d-flex flex-column mb-3 gap-2">
+                 
                   <Typography
                     variant={isMobile ? "h6" : "h5"}
                     component="h2"
@@ -2032,7 +2025,6 @@ const FirstVisits = () => {
                     Enquiry History
                   </Typography>
 
-                  {/* Second Row - Download PDF button on left, search and pagination on right */}
                   <div
                     style={{
                       display: "flex",
@@ -2043,7 +2035,7 @@ const FirstVisits = () => {
                       width: "100%",
                     }}
                   >
-                    {/* Download PDF Button - Left Side */}
+                   
                     <Button
                       variant="contained"
                       sx={{
@@ -2066,7 +2058,6 @@ const FirstVisits = () => {
                       {isMobile ? "PDF" : "Download PDF"}
                     </Button>
 
-                    {/* Search and Pagination - Right Side */}
                     <div
                       style={{
                         display: "flex",
@@ -2117,7 +2108,7 @@ const FirstVisits = () => {
 
                         <span>0–0 of 0 </span>
 
-                        {/* Navigation arrows */}
+                      
                         <button
                           style={{
                             border: "none",
@@ -2145,7 +2136,110 @@ const FirstVisits = () => {
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> */}
+                <div className="d-flex flex-column mb-3 gap-2">
+
+  {/* First Row — Title on Left, Search + Pagination on Right */}
+  <div
+    style={{
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      flexWrap: "wrap",
+      width: "100%",
+    }}
+  >
+    {/* LEFT SIDE — TITLE */}
+    <Typography
+      variant={isMobile ? "h6" : "h5"}
+      component="h2"
+      sx={{
+        fontWeight: "bold",
+        paddingTop: "8px",
+      }}
+    >
+      Enquiry History
+    </Typography>
+
+    {/* RIGHT SIDE — SEARCH + PAGINATION */}
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: "10px",
+        flexWrap: "wrap",
+        justifyContent: "flex-end",
+      }}
+    >
+      {/* Search Bar */}
+      <TextField
+        size="small"
+        placeholder="Search"
+        sx={{
+          width: "180px",
+          "& .MuiInputBase-root": { padding: "0px 8px" },
+          border: Constants.formInputBorderColor,
+        }}
+      />
+
+      {/* Pagination */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "8px",
+          fontSize: "14px",
+          color: "#800000",
+        }}
+      >
+        <span style={{ fontWeight: "500" }}>Rows per page:</span>
+
+        <select
+          style={{
+            border: "1px solid #800000",
+            borderRadius: "4px",
+            padding: "2px 6px",
+            outline: "none",
+            color: "#800000",
+          }}
+        >
+          <option value={5}>5</option>
+          <option value={10}>10</option>
+          <option value={25}>25</option>
+        </select>
+
+        <span>0–0 of 0</span>
+
+        {/* Navigation arrows */}
+        <button
+          style={{
+            border: "none",
+            background: "transparent",
+            cursor: "pointer",
+            color: "gray",
+            fontSize: "18px",
+            padding: "0 4px",
+          }}
+        >
+          &#8249;
+        </button>
+        <button
+          style={{
+            border: "none",
+            background: "transparent",
+            cursor: "pointer",
+            color: "gray",
+            fontSize: "18px",
+            padding: "0 4px",
+          }}
+        >
+          &#8250;
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
                 {/* Table Section */}
                 {/* <div className="mt-3">
@@ -2182,8 +2276,8 @@ const FirstVisits = () => {
         <div className="content-container mt-3">
           {!showLandownerForm ? (
             <>
-              <div className="d-flex flex-column mb-3 gap-2">
-                {/* First Row - Section Title */}
+              {/* <div className="d-flex flex-column mb-3 gap-2">
+                
                 <Typography
                   variant={isMobile ? "h6" : "h5"}
                   component="h2"
@@ -2196,7 +2290,7 @@ const FirstVisits = () => {
                   Booked Enquiries
                 </Typography>
 
-                {/* Second Row - Download PDF button on left, search and pagination on right */}
+                
                 <div
                   style={{
                     display: "flex",
@@ -2207,7 +2301,7 @@ const FirstVisits = () => {
                     width: "100%",
                   }}
                 >
-                  {/* Download PDF Button - Left Side */}
+                
                   <Button
                     variant="contained"
                     sx={{
@@ -2230,7 +2324,7 @@ const FirstVisits = () => {
                     {isMobile ? "PDF" : "Download PDF"}
                   </Button>
 
-                  {/* Search and Pagination - Right Side */}
+                  
                   <div
                     style={{
                       display: "flex",
@@ -2279,7 +2373,7 @@ const FirstVisits = () => {
 
                       <span>0–0 of 0</span>
 
-                      {/* Navigation arrows */}
+                   
                       <button
                         style={{
                           border: "none",
@@ -2307,7 +2401,110 @@ const FirstVisits = () => {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
+
+<div className="d-flex flex-column mb-3 gap-2">
+
+  {/* First Row — Title on Left, Search + Pagination on Right */}
+  <div
+    style={{
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      flexWrap: "wrap",
+      width: "100%",
+    }}
+  >
+    {/* LEFT SIDE — TITLE */}
+    <Typography
+      variant={isMobile ? "h6" : "h5"}
+      component="h2"
+      sx={{
+        fontWeight: "bold",
+        paddingTop: "8px",
+      }}
+    >
+      Booked Enquiries
+    </Typography>
+
+    {/* RIGHT SIDE — SEARCH + PAGINATION */}
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: "10px",
+        flexWrap: "wrap",
+        justifyContent: "flex-end",
+      }}
+    >
+      {/* Search Bar */}
+      <TextField
+        size="small"
+        placeholder="Search"
+        sx={{
+          width: "180px",
+          "& .MuiInputBase-root": { padding: "0px 8px" },
+          border: Constants.formInputBorderColor,
+        }}
+      />
+
+      {/* Pagination */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "8px",
+          fontSize: "14px",
+          color: "#800000",
+        }}
+      >
+        <span style={{ fontWeight: "500" }}>Rows per page:</span>
+
+        <select
+          style={{
+            border: "1px solid #800000",
+            borderRadius: "4px",
+            padding: "2px 6px",
+            outline: "none",
+            color: "#800000",
+          }}
+        >
+          <option value={5}>5</option>
+          <option value={10}>10</option>
+          <option value={25}>25</option>
+        </select>
+
+        <span>0–0 of 0</span>
+
+        {/* Navigation arrows */}
+        <button
+          style={{
+            border: "none",
+            background: "transparent",
+            cursor: "pointer",
+            color: "gray",
+            fontSize: "18px",
+            padding: "0 4px",
+          }}
+        >
+          &#8249;
+        </button>
+        <button
+          style={{
+            border: "none",
+            background: "transparent",
+            cursor: "pointer",
+            color: "gray",
+            fontSize: "18px",
+            padding: "0 4px",
+          }}
+        >
+          &#8250;
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 
               {/* Table Section */}
               <div className="mt-3">
@@ -2330,8 +2527,8 @@ const FirstVisits = () => {
         <div className="content-container mt-3">
           {!showFlatForm ? (
             <>
-              <div className="d-flex flex-column mb-3 gap-2">
-                {/* First Row - Section Title */}
+              {/* <div className="d-flex flex-column mb-3 gap-2">
+                
                 <Typography
                   variant={isMobile ? "h6" : "h5"}
                   component="h2"
@@ -2344,7 +2541,7 @@ const FirstVisits = () => {
                   Lost Enquiries
                 </Typography>
 
-                {/* Second Row - Download PDF button on left, search and pagination on right */}
+            
                 <div
                   style={{
                     display: "flex",
@@ -2355,7 +2552,7 @@ const FirstVisits = () => {
                     width: "100%",
                   }}
                 >
-                  {/* Download PDF Button - Left Side */}
+               
                   <Button
                     variant="contained"
                     sx={{
@@ -2378,7 +2575,6 @@ const FirstVisits = () => {
                     {isMobile ? "PDF" : "Download PDF"}
                   </Button>
 
-                  {/* Search and Pagination - Right Side */}
                   <div
                     style={{
                       display: "flex",
@@ -2427,7 +2623,6 @@ const FirstVisits = () => {
 
                       <span>0–0 of 0</span>
 
-                      {/* Navigation arrows */}
                       <button
                         style={{
                           border: "none",
@@ -2455,7 +2650,110 @@ const FirstVisits = () => {
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
+              <div className="d-flex flex-column mb-3 gap-2">
+  {/* First Row - Section Title */}
+  <div
+    style={{
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+      width: "100%",
+      flexWrap: "wrap",
+      gap: "10px",
+    }}
+  >
+    {/* Left Side – Title */}
+    <Typography
+      variant={isMobile ? "h6" : "h5"}
+      component="h2"
+      sx={{
+        fontWeight: "bold",
+        paddingTop: "8px",
+      }}
+    >
+      Lost Enquiries
+    </Typography>
+
+    {/* Right Side – Search + Pagination */}
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: "10px",
+        flexWrap: "wrap",
+        justifyContent: "flex-end",
+      }}
+    >
+      <TextField
+        size="small"
+        placeholder="Search"
+        sx={{
+          width: "180px",
+          "& .MuiInputBase-root": { padding: "0px 8px" },
+          border: Constants.formInputBorderColor,
+        }}
+      />
+
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "8px",
+          fontSize: "14px",
+          color: "#800000",
+          justifyContent: "flex-end",
+        }}
+      >
+        <span style={{ fontWeight: "500" }}>Rows per page:</span>
+
+        <select
+          style={{
+            border: "1px solid #800000",
+            borderRadius: "4px",
+            padding: "2px 6px",
+            outline: "none",
+            color: "#800000",
+          }}
+        >
+          <option value={5}>5</option>
+          <option value={10}>10</option>
+          <option value={25}>25</option>
+        </select>
+
+        <span>0–0 of 0</span>
+
+        {/* Navigation Arrows */}
+        <button
+          style={{
+            border: "none",
+            background: "transparent",
+            cursor: "pointer",
+            color: "gray",
+            fontSize: "18px",
+            padding: "0 4px",
+          }}
+        >
+          &#8249;
+        </button>
+
+        <button
+          style={{
+            border: "none",
+            background: "transparent",
+            cursor: "pointer",
+            color: "gray",
+            fontSize: "18px",
+            padding: "0 4px",
+          }}
+        >
+          &#8250;
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 
               {/* Table Section */}
               <div className="mt-3">
