@@ -1637,13 +1637,30 @@ const Dashboard = () => {
     });
   }, [authenticated, groups, userRole, sections, roleMenus]);
 
+
+
+  const getUserInitials = (fullName) => {
+  if (!fullName) return "";
+
+  const parts = fullName.trim().split(" ");
+  let initials = parts[0][0]; // First letter of first name
+
+  if (parts.length > 1) {
+    initials += parts[parts.length - 1][0]; // Last letter of last name
+  }
+
+  return initials.toUpperCase();
+};
+
+
+
   return (
     <div className="d-flex flex-column vh-100 ">
-      <nav
+      {/* <nav
         className="navbar  px-3"
         style={{ background: Constants.primaryColor }}
       >
-        {/* <div className="d-flex align-items-center">
+       <div className="d-flex align-items-center">
           <div
             className="btn  me-3 "
             onClick={toggleSidebar}
@@ -1657,58 +1674,7 @@ const Dashboard = () => {
           </div>
           <span className="navbar-brand mb-0 h1 text-white">CRM ERP</span>
         </div>
-        <div className=" position-relative">
-          <div className="mx-auto w-100 d-none d-md-block">
-            <input
-              type="text"
-              className="form-control ps-5"
-              placeholder="Search..."
-              onChange={handleSearch}
-              value={query}
-            />
-            <FaMicrophone
-              size={30}
-              className={`position-absolute top-50 end-0 translate-middle-y p-1 ${
-                listening ? "text-success" : "text-secondary"
-              }`}
-              style={{ cursor: "pointer", marginRight: "10px" }}
-              onClick={startListening}
-            />
-          </div>
-          {results.length > 0 && (
-            <ul
-              className="list-group mt-2 position-absolute bg-white w-100 shadow"
-              style={{ zIndex: 1050, maxHeight: "200px", overflowY: "auto" }}
-            >
-              {results.map((item, index) => (
-                <li
-                  key={index}
-                  className="list-group-item cursor-pointer"
-                  onClick={() => handleRedirect(item.value)}
-                  style={{ cursor: "pointer" }}
-                >
-                  {item.label}
-                </li>
-              ))}
-            </ul>
-          )}
-        </div> */}
-
-        <div className="d-flex align-items-center">
-          <div
-            className="btn  me-3 "
-            onClick={toggleSidebar}
-            style={{ cursor: "pointer" }}
-          >
-            <img
-              src="/unnamed.png"
-              alt="Profile"
-              className="rounded-circle profile"
-            />
-          </div>
-          <span className="navbar-brand mb-0 h1 text-white">CRM ERP</span>
-        </div>
-        <div className=" position-relative">
+      <div className=" position-relative">
           <div className="mx-auto w-100 d-none d-md-block">
             <input
               type="text"
@@ -1741,16 +1707,95 @@ const Dashboard = () => {
               ))}
             </ul>
           )}
+           <div className="ms-auto d-flex align-items-center text-white fw-bold">
+    {name && <span>Welcome, {name}</span>}
+  </div>
         </div>
+ <div className="d-flex align-items-center"> </div> </nav> */}
+      <nav
+  className="navbar px-3 d-flex align-items-center"
+  style={{ background: Constants.primaryColor }}
+>
 
-        <div className="d-flex align-items-center">
-          {/* <img
-      src="/unnamed.png"
-      alt="Profile"
-      className="rounded-circle profile"
-    /> */}
-        </div>
-      </nav>
+  {/* LEFT SECTION */}
+  <div className="d-flex align-items-center">
+    <div
+      className="btn me-3"
+      onClick={toggleSidebar}
+      style={{ cursor: "pointer" }}
+    >
+      <img
+        src="/unnamed.png"
+        alt="Profile"
+        className="rounded-circle profile"
+      />
+    </div>
+    <span className="navbar-brand mb-0 h1 text-white">CRM ERP</span>
+  </div>
+
+  {/* CENTER SECTION - SEARCH BAR */}
+<div className="mx-auto position-relative d-none d-md-block " style={{ width: "20%" }}>
+  <input
+    type="text"
+    className="form-control ps-5"
+    placeholder="Search..."
+    onChange={handleSearch}
+  />
+  <FaMicrophone
+    size={30}
+    className={`position-absolute top-50 end-0 translate-middle-y p-1 ${
+      listening ? "text-success" : "text-secondary"
+    }`}
+    style={{ cursor: "pointer", marginRight: "10px" }}
+    onClick={startListening}
+  />
+
+  {results.length > 0 && (
+    <ul
+      className="list-group mt-2 position-absolute bg-white w-100 shadow"
+      style={{ zIndex: 1050, maxHeight: "200px", overflowY: "auto" }}
+    >
+      {results.map((item, index) => (
+        <li
+          key={index}
+          className="list-group-item"
+          onClick={() => handleRedirect(item.value)}
+          style={{ cursor: "pointer" }}
+        >
+          {item.label}
+        </li>
+      ))}
+    </ul>
+  )}
+</div>
+
+  {/* RIGHT SECTION - USER NAME */}
+  <div className="d-flex align-items-center text-white fw-bold">
+    {name && <span>{name}</span>}
+  </div>
+    <div
+    className="ms-3"
+    onClick={() => console.log("Profile clicked")}
+    style={{
+      width: "40px",
+      height: "40px",
+      borderRadius: "50%",
+      background: "#ffffff22",
+      
+      color: "white",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      fontWeight: "bold",
+      fontSize: "16px",
+      cursor: "pointer",
+      border: "2px solid #fff"
+    }}
+  >
+    {getUserInitials(name)}
+  </div>
+</nav>
+
       <div className="d-flex w-100">
         <div
           className=" text-white p-3 d-flex flex-column"

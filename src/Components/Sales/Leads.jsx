@@ -123,7 +123,7 @@ const createLead = async (leadData) => {
       headers: {
         'Content-Type': 'application/json',
       },
-       credentials: 'include',
+      credentials: 'include',
       body: JSON.stringify(leadData),
     });
     if (!response.ok) {
@@ -150,6 +150,7 @@ const Leads = () => {
   const [showFileInput, setShowFileInput] = useState(false);
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
+  const [emailTouched, setEmailTouched] = useState(false);
   const [mobileError, setMobileError] = useState('');
   const [emailError, setEmailError] = useState('');
   const [searchQuery, setSearchQuery] = useState("");
@@ -258,11 +259,48 @@ const Leads = () => {
     validateMobile(value);
     setFormData({ ...formData, phone: e.target.value });
   };
+  // const handleEmailChange = (e) => {
+  //   const value = e.target.value;
+  //   setEmail(value);
+  //   setFormData({ ...formData, email: e.target.value });
+  // };
+
   const handleEmailChange = (e) => {
     const value = e.target.value;
+
     setEmail(value);
-    setFormData({ ...formData, email: e.target.value });
+    setFormData({ ...formData, email: value });
+
+    // Mark field as touched
+    setEmailTouched(true);
+
+    // General email structure check
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailRegex.test(value)) {
+      setEmailError("Please enter a valid email address");
+      return;
+    }
+
+    // Allowed endings
+    const allowedEndings = ["gmail.com", ".in", ".org"];
+
+    const domain = value.split("@")[1]?.toLowerCase();
+
+    // Check domain validity
+    const isAllowed =
+      allowedEndings.some((end) => domain.endsWith(end)) ||
+      domain.includes("."); // custom domain allowed
+
+    if (!isAllowed) {
+      setEmailError(
+        "Email domain must end with gmail.com, .in, .org, or a custom domain"
+      );
+    } else {
+      setEmailError("");
+    }
   };
+
   const handleDownloadPDFLeads = () => {
     console.log("Inventory data before mapping:", inventoryData);
     if (inventoryData.length === 0) {
@@ -385,6 +423,15 @@ const Leads = () => {
         } catch (err) {
           console.error("Error uploading lead:", err);
         }
+      }
+
+      //   REFETCH UPDATED DATA
+      try {
+        const freshData = await fetchLeadsData();
+        setInventoryData(freshData);
+        console.log("Refreshed data after excel upload:", freshData);
+      } catch (error) {
+        console.error("Error refreshing data:", error);
       }
       // Show duplicate modal if any duplicates were found
       if (duplicatesFromFile.length > 0) {
@@ -535,7 +582,7 @@ const Leads = () => {
   const deleteLeadApi = async (id) => {
     try {
       // const response = await fetch(`/api/leads/${id}`, {
-      const response =  await fetch(`https://localhost:5289/sales/api/leads/${id}`,{
+      const response = await fetch(`https://localhost:5289/sales/api/leads/${id}`, {
         method: "DELETE",
         credentials: "include",
       });
@@ -1178,7 +1225,12 @@ const Leads = () => {
           ) : (
             <Dialog
               open={showFirmForm}
-              onClose={() => setShowFirmForm(false)}
+              onClose={(event, reason) => {
+                if (reason === "backdropClick") return; //  Prevent closing on outside click
+                if (reason === "escapeKeyDown") return; //  Prevent closing on ESC key
+                setShowFirmForm(false);
+              }}
+              disableEscapeKeyDown
               fullWidth
               maxWidth="md"
               fullScreen={isMobile}>
@@ -1213,7 +1265,7 @@ const Leads = () => {
                     />
                   </Grid>
 
-                  <Grid item xs={12} sm={6}>
+                  {/* <Grid item xs={12} sm={6}>
                     <TextField
                       label="You Are Looking For?"
                       fullWidth
@@ -1222,7 +1274,27 @@ const Leads = () => {
                       onChange={(e) => setFormData({ ...formData, lookingFor: e.target.value })}
                       size={isMobile ? "small" : "medium"}
                       sx={{ border: Constants.formInputBorderColor }} />
+                  </Grid> */}
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      select
+                      label="You Are Looking For?"
+                      fullWidth
+                      required
+                      value={formData.lookingFor}
+                      onChange={(e) =>
+                        setFormData({ ...formData, lookingFor: e.target.value })
+                      }
+                      size={isMobile ? "small" : "medium"}
+                      sx={{ border: Constants.formInputBorderColor }}
+                    >
+                      <MenuItem value="1 BHK">1 BHK</MenuItem>
+                      <MenuItem value="2 BHK">2 BHK</MenuItem>
+                      <MenuItem value="3 BHK">3 BHK</MenuItem>
+                      <MenuItem value="Other">Other</MenuItem>
+                    </TextField>
                   </Grid>
+
                   <Grid item xs={12} sm={6}>
                     <TextField
                       label="Mobile No. / WhatsApp No."
@@ -1239,7 +1311,7 @@ const Leads = () => {
                       sx={{ border: Constants.formInputBorderColor }}
                     />
                   </Grid>
-                  <Grid item xs={12} sm={6}>
+                  {/* <Grid item xs={12} sm={6}>
                     <TextField
                       label="Email"
                       fullWidth
@@ -1247,7 +1319,22 @@ const Leads = () => {
                       onChange={handleEmailChange}
                       size={isMobile ? "small" : "medium"}
                       sx={{ border: Constants.formInputBorderColor }} />
+                  </Grid> */}
+
+                  <Grid item xs={12} sm={6}>
+                    <TextField
+                      label="Email"
+                      fullWidth
+                      value={email}
+                      onChange={handleEmailChange}
+                      onBlur={() => setEmailTouched(true)}
+                      error={emailTouched && Boolean(emailError)} //  MUI red border
+                      helperText={emailTouched ? emailError : ""} //  Show message below
+                      size={isMobile ? "small" : "medium"}
+                      sx={{ border: Constants.formInputBorderColor }}
+                    />
                   </Grid>
+
                   <Grid item xs={12} sm={6}>
                     <TextField
                       type="text"
@@ -1339,6 +1426,20 @@ const Leads = () => {
                       />
                     </Grid>
                   )}
+                  {formData.lookingFor === "Other" && (
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        label="Specify Other Looking For"
+                        fullWidth
+                        value={formData.otherLookingFor || ""}
+                        onChange={(e) =>
+                          setFormData({ ...formData, otherLookingFor: e.target.value })
+                        }
+                        size={isMobile ? "small" : "medium"}
+                      />
+                    </Grid>
+                  )}
+
 
                 </Grid>
               </DialogContent>
@@ -1376,7 +1477,15 @@ const Leads = () => {
                   <div><strong>Lead ID:</strong> {lead.id || "-"}</div>
                   <div><strong>Name:</strong> {lead.name || "-"}</div>
                   <div><strong>Source :</strong> {lead.source || "-"}</div>
-                  <div><strong>Source Details:</strong> {lead.sourceDetails || "-"}</div>
+                  {lead.sourceDetails &&
+                    lead.sourceDetails !== "-" &&
+                    lead.sourceDetails !== "null" &&
+                    lead.sourceDetails !== "undefined" &&
+                    lead.sourceDetails.trim() !== "" && (
+                      <div><strong>Source Details:</strong> {lead.sourceDetails}</div>
+                    )}
+
+
                 </Box>
               );
             })}

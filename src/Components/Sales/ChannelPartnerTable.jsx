@@ -19,6 +19,9 @@ const ChannelPartnerTable = ({ data}) => {
   const [tableData, setTableData] = useState([]);
   const [openForm, setOpenForm] = useState(false);
   const [scheduledDate, setScheduledDate] = useState("");
+  const [files, setFiles] = useState([]);
+
+
   const handleStatusChange = (id, newStatus) => {
     const updatedData = data.map((item) =>
       item.id === id ? { ...item, status: newStatus } : item
@@ -242,7 +245,7 @@ const ChannelPartnerTable = ({ data}) => {
           <Tooltip title="Edit" arrow>
             <IconButton
               sx={{
-                background: "#1976D2",
+                background: Constants.primaryColor,
                 color: "white",
                 borderRadius: "50%",
                 width: 32,
@@ -260,7 +263,7 @@ const ChannelPartnerTable = ({ data}) => {
           <Tooltip title="Track Progress" arrow>
             <IconButton
               sx={{
-                background: "#1976D2",
+                background: Constants.primaryColor,
                 color: "white",
                 borderRadius: "50%",
                 width: 32,
@@ -278,7 +281,7 @@ const ChannelPartnerTable = ({ data}) => {
           <Tooltip title="Roadmap" arrow>
             <IconButton
               sx={{
-                background: "#9C27B0",
+                background: Constants.primaryColor,
                 color: "white",
                 borderRadius: "50%",
                 width: 32,
@@ -303,7 +306,7 @@ const ChannelPartnerTable = ({ data}) => {
           <Tooltip title="View Document" arrow>
             <IconButton
               sx={{
-                background: "#1976D2",
+                background: Constants.primaryColor,
                 color: "white",
                 borderRadius: "50%",
                 width: 32,
@@ -332,6 +335,7 @@ const ChannelPartnerTable = ({ data}) => {
             variant={item.status === "Active" ? "contained" : "outlined"}
             color="primary"
             onClick={() => handleStatusChange(index, "Active")}
+            sx={{background:Constants.primaryColor,color:"white"}}
           >
             Active
           </Button>
@@ -340,6 +344,7 @@ const ChannelPartnerTable = ({ data}) => {
             variant={item.status === "Inactive" ? "contained" : "outlined"}
             color="secondary"
             onClick={() => handleStatusChange(index, "Inactive")}
+            sx={{background:Constants.primaryColor,color:"white"}}
           >
             Inactive
           </Button>
@@ -456,7 +461,7 @@ const ChannelPartnerTable = ({ data}) => {
         <DialogContent>
         {action === "edit" && (
   <Dialog open={true} onClose={handleClose} maxWidth="md" fullWidth>
-  
+  {/* <DialogHeader>Update Channel Partner</DialogHeader> */}
     <DialogContent dividers>
       <Box className="firm-form mt-4 p-3" sx={{ maxHeight: "500px", overflowY: "auto", paddingRight: "10px" }}>
                  <Paper elevation={4} sx={{ borderRadius: "12px", padding: 3 }}>
@@ -616,9 +621,9 @@ const ChannelPartnerTable = ({ data}) => {
 
 {action === "track" && (
   <Dialog open={true} onClose={() => setAction("")} fullWidth maxWidth="sm">
-    <DialogTitle>Channel Partner Tracking</DialogTitle>
+    <DialogTitle sx={{background:Constants.primaryColor,color:"white",mb:5}}>Channel Partner Tracking</DialogTitle>
     <DialogContent>
-      <FormControl fullWidth>
+      <FormControl fullWidth  variant="outlined" sx={{border:Constants.formInputBorderColor,mt:1}}>
         <InputLabel>Select Step</InputLabel>
         <Select
           value={selectedStep}
@@ -642,7 +647,7 @@ const ChannelPartnerTable = ({ data}) => {
       <Button onClick={() => setAction("")} color="error">
         Cancel
       </Button>
-      <Button onClick={handleSubmitTrack} variant="contained">
+      <Button onClick={handleSubmitTrack} variant="contained" sx={{background:Constants.primaryColor}}>
      
         Save
       </Button>
@@ -655,17 +660,19 @@ const ChannelPartnerTable = ({ data}) => {
 
       
       <Dialog open={openForm} onClose={handleCancelForm} fullWidth maxWidth="sm">
-  <DialogTitle>Tracking Form</DialogTitle>
+  <DialogTitle sx={{background:Constants.primaryColor,color:"white"}}> Tracking Form</DialogTitle>
   <DialogContent>
   
-    <div className="pb-5">{selectedStep ? `Selected Step: ${selectedStep}` : "No Step Selected"}</div>
+    <div className="pb-4 pt-3">{selectedStep ? `Selected Step: ${selectedStep}` : "No Step Selected"}</div>
 
-    <FormControl fullWidth>
+    <FormControl fullWidth sx={{border:Constants.formInputBorderColor}} >
       <InputLabel>Select Step</InputLabel>
       <Select
         value={selectedStep}
         onChange={(e) => setSelectedStep(e.target.value)}
         label="Select Step"
+        
+        
       >
         <MenuItem value="Call to CP">Call to CP - 1</MenuItem>
         <MenuItem value="Schedule Visit to CP Office">Schedule Visit to CP Office - 2</MenuItem>
@@ -691,9 +698,10 @@ const ChannelPartnerTable = ({ data}) => {
       InputLabelProps={{
         shrink: true,
       }}
+      sx={{border:Constants.formInputBorderColor}}
     />
 
-    <FormControl fullWidth margin="normal">
+    <FormControl fullWidth margin="normal" sx={{border:Constants.formInputBorderColor}}>
       <InputLabel>Status</InputLabel>
       <Select
         value={status}
@@ -705,13 +713,82 @@ const ChannelPartnerTable = ({ data}) => {
         <MenuItem value="In Progress">In Progress</MenuItem>
       </Select>
     </FormControl>
-<div className="pt-3">
-    <input
+{/* <div className="pt-3">
+   <TextField
   type="file"
-  class="form-control bg-white text-dark custom-file-input-bootstrap"
-  accept="application/pdf, image/*"
+  fullWidth
+  InputLabelProps={{ shrink: true }}
+  inputProps={{ accept: "application/pdf, image/*" }}
+  sx={{ border: `1px solid ${Constants.formInputBorderColor}`, p: 0 }}
 />
-</div>
+
+</div> */}
+{/* <Box sx={{ border: `1px solid ${Constants.formInputBorderColor}`, p: 1, borderRadius: "4px" }}>
+  <Button
+    variant="contained"
+    component="label"
+    sx={{ background: Constants.primaryColor }}
+  >
+    Choose File
+    <input
+      type="file"
+      hidden
+      accept="application/pdf, image/*"
+      onChange={(e) => console.log(e.target.files[0])}
+    />
+  </Button>
+</Box> */}
+<Box sx={{ border: `1px solid ${Constants.formInputBorderColor}`, p: 2, borderRadius: "4px" }}>
+  <Button
+    variant="contained"
+    component="label"
+    sx={{ background: Constants.primaryColor }}
+  >
+    Choose Files
+    <input
+      type="file"
+      hidden
+      multiple
+      accept="application/pdf, image/*"
+      onChange={(e) => {
+        const selectedFiles = Array.from(e.target.files);
+        setFiles((prev) => [...prev, ...selectedFiles]); // append files
+      }}
+    />
+  </Button>
+
+  {/* Show list of selected files */}
+  <Box sx={{ mt: 2 }}>
+    {files.map((file, index) => (
+      <Box
+        key={index}
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          background: "#f5f5f5",
+          p: 1,
+          borderRadius: "4px",
+          mb: 1
+        }}
+      >
+        <Typography sx={{ flexGrow: 1 }}>{file.name}</Typography>
+
+        {/* Delete icon */}
+        <Button
+          color="error"
+          onClick={() => {
+            setFiles(files.filter((_, i) => i !== index));
+          }}
+          sx={{ minWidth: "auto", fontSize: "16px" }}
+        >
+          ❌
+        </Button>
+      </Box>
+    ))}
+  </Box>
+</Box>
+
+
 
   </DialogContent>
 
@@ -719,7 +796,7 @@ const ChannelPartnerTable = ({ data}) => {
     <Button onClick={handleCancelForm} color="error">
       Cancel
     </Button>
-    <Button onClick={handleSaveTrackingData} variant="contained">
+    <Button onClick={handleSaveTrackingData} variant="contained" sx={{background:Constants.primaryColor,color:"white"}}>
       Save
     </Button>
   </DialogActions>
