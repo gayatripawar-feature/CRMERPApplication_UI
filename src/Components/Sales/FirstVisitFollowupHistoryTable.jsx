@@ -39,6 +39,7 @@ export const FirstVisitFollowupHistoryTable = ({ data, fetchVisitFollowUpHistory
   }, [fetchVisitFollowUpHistory]);
 
   
+  
 
   return (
     <>
@@ -209,6 +210,7 @@ export const FirstVisitFollowupHistoryTable = ({ data, fetchVisitFollowUpHistory
           </TableHead>
           <TableBody>
             {data.length === 0 ? (
+            
               <TableRow>
                 <TableCell
                   colSpan={23}
@@ -226,15 +228,44 @@ export const FirstVisitFollowupHistoryTable = ({ data, fetchVisitFollowUpHistory
               // paginatedData.map((row, index) => (
               filteredVisitFollowupHistory.map((row, index) => (
                 <TableRow key={index} hover>
-                  <TableCell>{row.statusHistory || "N/A"}</TableCell>
-                  <TableCell>{row.remarkHistory || "N/A"}</TableCell>
-                  <TableCell>{row.assignToHistory || "N/A"}</TableCell>
-                  <TableCell>{row.leadDays || "N/A"}</TableCell>
-                  <TableCell>{row.timestamp || "N/A"}</TableCell>
+                  {/* <TableCell>{row.status || "N/A"}</TableCell> */}
+                 <TableCell sx={{ whiteSpace: "nowrap" }}>
+  <div
+    dangerouslySetInnerHTML={{
+      __html: (row.statusHistory || row.status || "N/A")
+    }}
+  />
+</TableCell>
 
-                  <TableCell>{row.id || "N/A"}</TableCell>
-                  <TableCell>{row.leadNo || "N/A"}</TableCell>
-                  <TableCell>{row.salesExecutiveName || "N/A"}</TableCell>
+
+
+                  {/* <TableCell>{row.remarks || "N/A"}</TableCell> */}
+                 <TableCell sx={{ whiteSpace: "nowrap" }}>
+  <div
+    dangerouslySetInnerHTML={{
+      __html: (row.remarkHistory || row.remarks || "N/A")
+    }}
+  />
+</TableCell>
+
+
+                  {/* <TableCell>{row.assignToHistory || "N/A"}</TableCell> */}
+                 <TableCell sx={{ whiteSpace: "nowrap" }}>
+  <div
+    dangerouslySetInnerHTML={{
+      __html: (row.assignToHistory || "N/A")
+    }}
+  />
+</TableCell>
+
+
+
+                  <TableCell>{row.leadDays || "N/A"}</TableCell>
+                  <TableCell>{row.lastUpdatedDate || "N/A"}</TableCell>
+
+                  <TableCell>{row.enquiryId || "N/A"}</TableCell>
+                  <TableCell>{row.leadId || "N/A"}</TableCell>
+                  <TableCell>{row.assignedTo || "N/A"}</TableCell>
                   <TableCell>{row.name || "N/A"}</TableCell>
                   <TableCell>{row.phone || "N/A"}</TableCell>
                   <TableCell>{row.alternateContactNo || "N/A"}</TableCell>
@@ -243,12 +274,12 @@ export const FirstVisitFollowupHistoryTable = ({ data, fetchVisitFollowUpHistory
                   <TableCell>{row.address || "N/A"}</TableCell>
                   <TableCell>{row.occupation || "N/A"}</TableCell>
                   <TableCell>{row.company || "N/A"}</TableCell>
-                  <TableCell>{row.interestedIn || "N/A"}</TableCell>
-                  <TableCell>{row.budget || "N/A"}</TableCell>
-                  <TableCell>{row.reasonForPurchase || "N/A"}</TableCell>
-                  <TableCell>{row.referenceBY || "N/A"}</TableCell>
+                  <TableCell>{row.interest || "N/A"}</TableCell>
+                  <TableCell>{row.budgetInLakh|| "N/A"}</TableCell>
+                  <TableCell>{row.purchaseReason || "N/A"}</TableCell>
+                  <TableCell>{row.source || "N/A"}</TableCell>
                   <TableCell>{row.nameofCP || "N/A"}</TableCell>
-                  <TableCell>{row.planningToBuyWithin || "N/A"}</TableCell>
+                  <TableCell>{row.intendedPurchasePeriod || "N/A"}</TableCell>
                   <TableCell>{row.customerFeedback || "N/A"}</TableCell>
                 </TableRow>
               ))

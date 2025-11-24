@@ -1,8 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, TextField, Grid, FormControl, InputLabel,
-  Select,  MenuItem,  Box,  Tooltip, IconButton, Dialog, DialogTitle, DialogContent, DialogActions, Typography, useMediaQuery, useTheme,
+import {
+  Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, TextField, Grid, FormControl, InputLabel,
+  Select, MenuItem, Box, Tooltip, IconButton, Dialog, DialogTitle, DialogContent, DialogActions, Typography, useMediaQuery, useTheme,
 } from "@mui/material";
-import {FaEye,FaFileCsv,FaUpload,FaPlus,FaTrash,FaFileDownload} from "react-icons/fa";
+import { FaEye, FaFileCsv, FaUpload, FaPlus, FaTrash, FaFileDownload } from "react-icons/fa";
 import { ToastContainer, toast } from "react-toastify";
 import DisplayEnquiryTable from "./DisplayEnquiryTable";
 import { FaHourglassStart, FaHistory, FaUserCheck, FaQuestionCircle } from 'react-icons/fa';
@@ -17,9 +18,9 @@ import { FirstVisitFollowupHistoryTable } from "./FirstVisitFollowupHistoryTable
 
 const statusOptions = ["Approved", "Unapproved"];
 const owners = ["Landowner", "Developer", "Investor"];
-const configurations = [ "1 BHK", "1.5 BHK", "2 BHK", "2.5 BHK","3 BHK", "3.5 BHK", "4 BHK","4.5 BHK", "Flat","Shop"];
-const unitTypes = [ "Actual Site","Hoarding", "Facebook", "Instagram","Website","Print Media","Radio","Google add","Exhibition",
-  "Online Portal", "Direct call", "Pamphlet","Channel Partner", "References","Other"];
+const configurations = ["1 BHK", "1.5 BHK", "2 BHK", "2.5 BHK", "3 BHK", "3.5 BHK", "4 BHK", "4.5 BHK", "Flat", "Shop"];
+const unitTypes = ["Actual Site", "Hoarding", "Facebook", "Instagram", "Website", "Print Media", "Radio", "Google add", "Exhibition",
+  "Online Portal", "Direct call", "Pamphlet", "Channel Partner", "References", "Other"];
 const sections = [
   {
     label: "Display Enquiries",
@@ -62,7 +63,7 @@ const FirstVisits = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const isTablet = useMediaQuery(theme.breakpoints.between("sm", "md"));
-   const [loans, setLoans] = useState([]);
+  const [loans, setLoans] = useState([]);
   const [expandedSection, setExpandedSection] = useState(0);
   const [showFirmForm, setShowFirmForm] = useState(false);
   const [partners, setPartners] = useState([]);
@@ -102,9 +103,11 @@ const FirstVisits = () => {
   const [visitFollowupHistory, setVisitFollowupHistory] = useState([]);
   const [filteredVisitFollowupHistory, setFilteredVisitFollowupHistory] = useState([]);
   const [undefinedData, setUndefinedData] = useState([]);
-  
+
   useEffect(() => {
     console.log("fetching visit Scheduled leads ");
+    console.log(" FIRMS VALUE RIGHT NOW =", firms, "TYPE =", typeof firms);
+
     fetchVisitScheduledLeads();
     fetchEnquiries();
   }, []);
@@ -113,58 +116,138 @@ const FirstVisits = () => {
   const handleInterestedInChange = (event) => {
     setInterestedIn(event.target.value);
   };
-   const handleBudgetChange = (event) => {
+  const handleBudgetChange = (event) => {
     setBudget(event.target.value);
   };
   const handlePlanningToBuyChange = (event) => {
     setPlanningToBuy(event.target.value);
   };
- const handleOccupationChange = (event) => {
+  const handleOccupationChange = (event) => {
     setOccupation(event.target.value);
   };
   const handleToggleSection = (index) => {
     setExpandedSection(index);
     setShowFileInput(false);
-     if (index === 1) {
-      fetchVisitFollowupHistory();
+    // if (index === 1) {
+    //   fetchVisitFollowupHistory();
+    // }
+    if (index === 1) {
+      fetchVisitFollowupHistory().then((data) => {
+        console.log("SETTING visitFollowupHistory:", data);
+        setVisitFollowupHistory(data);
+        if (index === 2) {
+          console.log("booked clicked");
+          fetchBookedEnquiries();
+        }
+      });
     }
+
   };
-const handleChange = (e) => {
+  const handleChange = (e) => {
     const value = e.target.value;
     const regex = /[\d\s]/;
-   if (regex.test(value)) {
+    if (regex.test(value)) {
       setError("Name should not contain digits or spaces");
     } else {
       setError("");
     }
   };
- const fetchEnquiries = async () => {
+  //correct
+  //  const fetchEnquiries = async () => {
+  //     try {
+  //       const response = await fetch("https://localhost:5289/sales/api/enquiries", {
+  //         credentials: "include",
+  //       });
+  //       if (!response.ok) throw new Error("Failed");
+  //        const data = await response.json();
+  //       setFirms(data);
+  //       // If not set belwo line then it wont shows the submitted enquiries.
+  //       setEnquiries(data);
+  //       return data;
+  //     } catch (err) {
+  //       console.error(err);
+  //     }
+  //   };
+
+  //after project fixing :
+  // const fetchEnquiries = async () => {
+  //   try {
+  //     const response = await fetch("https://localhost:5289/sales/api/enquiries", {
+  //       credentials: "include",
+  //     });
+
+  //     if (!response.ok) throw new Error("Failed");
+
+  //     const data = await response.json();
+
+  //     // 🔥 FIX: Convert single object → array
+  //     const arr = Array.isArray(data) ? data : [data];
+
+  //     setFirms(arr);      // always an array
+  //     setEnquiries(arr);  // always an array
+
+  //     return arr;
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
+
+
+  const fetchEnquiries = async () => {
     try {
       const response = await fetch("https://localhost:5289/sales/api/enquiries", {
         credentials: "include",
       });
+
       if (!response.ok) throw new Error("Failed");
-       const data = await response.json();
-      setFirms(data);
-      // If not set belwo line then it wont shows the submitted enquiries.
-      setEnquiries(data);
-      return data;
+
+      const data = await response.json();
+
+      console.log("🔥 RAW API RESPONSE:", data);
+
+      // FINAL NORMALIZATION
+      const arr = Array.isArray(data.pagedRecords)
+        ? data.pagedRecords
+        : [];
+
+      console.log("💚 Normalized enquiries:", arr);
+
+      setFirms(arr);
+      setEnquiries(arr);
+
+      return arr;
+
     } catch (err) {
       console.error(err);
     }
   };
 
+
+  const normalizeBudget = (value) => {
+    if (!value) return 0;
+    const num = parseInt(value); // takes "45 L - 50 L" → 45
+    return isNaN(num) ? 0 : num;
+  };
+
   const handleSubmit = async () => {
+
+
     if (!leadNo) return toast.error("Lead No. is required");
     //  Check if enquiry for this lead already exists
     // const existingEnquiry = firms.find(f => f.leadNo === leadNo);
+    // const existingEnquiry = firms.find(
+    //   f => String(f.leadNo) === String(leadNo)
+    // );
+
+    //after:
     const existingEnquiry = firms.find(
-      f => String(f.leadNo) === String(leadNo)
+      f => String(f.leadId) === String(leadNo)
     );
- // Prepare payload
+
+    // Prepare payload
     const payload = {
       leadId: Number(leadNo),
-       name: name || "",
+      name: name || "",
       phone: mobile ? parseInt(mobile) : 0,
       whatsapp: whatsappNo ? parseInt(whatsappNo) : 0,
       email: email || "",
@@ -172,56 +255,187 @@ const handleChange = (e) => {
       occupation: occupation || "",
       company: company || "",
       interest: interestedIn || "",
-      budgetInLakh: budget ? parseFloat(budget) : 0,
-      intendedPurchasePeriodMonths: planningToBuy ? parseInt(planningToBuy) : 0,
+      // budgetInLakh: budget ? parseFloat(budget) : 0,
+      budgetInLakh: budget ? Number(budget) : 0,
+      // intendedPurchasePeriodMonths: planningToBuy ? parseInt(planningToBuy) : 0,
+      intendedPurchasePeriod: planningToBuy || "",
+      purchaseReason: "",
       lastSiteVisit: new Date().toISOString(),
       source: referenceBySource || "",
       remarks: remarks || "",
       status: "New Enquiry",
-      lastUpdatedBy: "system",
-      lastUpdatedDate: new Date().toISOString(),
-      SalesEngagement: {
+      // lastUpdatedBy: "system",
+      // lastUpdatedDate: new Date().toISOString(),
+      enquiryRequest: {
         id: 0,
         assignedTo: "system",
         assignedBy: "system",
         assignedDate: new Date().toISOString(),
         enquiryId: 0,
-        nextFollowUp: new Date().toISOString(),
+        // nextFollowUp: new Date().toISOString(),
+        nextFollowUpDate: new Date().toISOString(),
+        lastVisitDate: new Date().toISOString(),
+        nextVisitScheduledDate: new Date().toISOString(),
         status: "New Enquiry",
-        remarks: remarks || ""
+        remarks: remarks || "",
+        lastUpdatedDate: new Date().toISOString(),
+
       }
     };
-   console.log("lead no is", leadNo);
+    console.log("lead no is", leadNo);
     try {
       let response;
-     if (existingEnquiry) {
+      if (existingEnquiry) {
+
+        // const updatePayload = {
+        //   id: existingEnquiry.id,
+        //   leadId: Number(leadNo),
+        //   name: name || existingEnquiry.name,
+        //   phone: mobile ? Number(mobile) : existingEnquiry.phone,
+        //   whatsapp: whatsappNo ? Number(whatsappNo) : existingEnquiry.whatsapp,
+        //   email: email || existingEnquiry.email,
+        //   address: address || existingEnquiry.address,
+        //   occupation: occupation || existingEnquiry.occupation,
+        //   company: company || existingEnquiry.company,
+        //   interest: interestedIn || existingEnquiry.interest,
+
+        //   // REQUIRED numeric field
+        //   budgetInLakh: budget
+        //     ? Number(budget)
+        //     : Number(existingEnquiry.budgetInLakh) || 0,
+
+        //   // REQUIRED fields
+        //   intendedPurchasePeriod:
+        //     planningToBuy || existingEnquiry.intendedPurchasePeriod || "",
+        //   purchaseReason:
+        //     existingEnquiry.purchaseReason || "",
+
+        //   lastSiteVisit: existingEnquiry.lastSiteVisit,
+        //   source: referenceBySource || existingEnquiry.source,
+        //   remarks: remarks || existingEnquiry.remarks,
+        //   status: existingEnquiry.status,
+
+        //   enquiryRequest: {
+        //     id: existingEnquiry.enquiryRequest?.id || 0,
+        //     assignedTo: existingEnquiry.enquiryRequest?.assignedTo || "system",
+        //     assignedBy: existingEnquiry.enquiryRequest?.assignedBy || "system",
+        //     assignedDate:
+        //       existingEnquiry.enquiryRequest?.assignedDate ||
+        //       new Date().toISOString(),
+        //     enquiryId: existingEnquiry.id,
+
+        //     nextFollowUpDate:
+        //       existingEnquiry.enquiryRequest?.nextFollowUpDate ||
+        //       new Date().toISOString(),
+        //     lastVisitDate:
+        //       existingEnquiry.enquiryRequest?.lastVisitDate ||
+        //       new Date().toISOString(),
+        //     nextVisitScheduledDate:
+        //       existingEnquiry.enquiryRequest?.nextVisitScheduledDate ||
+        //       new Date().toISOString(),
+
+        //     status: existingEnquiry.enquiryRequest?.status || "New Enquiry",
+        //     remarks: remarks || existingEnquiry.enquiryRequest?.remarks || "",
+
+        //     purchaseReason:
+        //       existingEnquiry.enquiryRequest?.purchaseReason || "",
+        //     intendedPurchasePeriod:
+        //       planningToBuy ||
+        //       existingEnquiry.enquiryRequest?.intendedPurchasePeriod ||
+        //       "",
+
+        //     lastUpdatedDate: new Date().toISOString(),
+        //   }
+        // };
+
+        const updatePayload = {
+          id: existingEnquiry.id,
+          leadId: Number(leadNo),
+
+          name: name || existingEnquiry.name,
+          phone: mobile ? Number(mobile) : Number(existingEnquiry.phone) || 0,
+          whatsapp: whatsappNo ? Number(whatsappNo) : Number(existingEnquiry.whatsapp) || 0,
+          email: email || existingEnquiry.email,
+          address: address || existingEnquiry.address,
+          occupation: occupation || existingEnquiry.occupation,
+          company: company || existingEnquiry.company,
+          interest: interestedIn || existingEnquiry.interest,
+
+          budgetInLakh: normalizeBudget(budget || existingEnquiry.budgetInLakh),
+
+          intendedPurchasePeriod:
+            planningToBuy || existingEnquiry.intendedPurchasePeriod || "",
+
+          purchaseReason: existingEnquiry.purchaseReason || "",
+          lastSiteVisit: existingEnquiry.lastSiteVisit,
+          source: referenceBySource || existingEnquiry.source,
+          remarks: remarks || existingEnquiry.remarks,
+          status: existingEnquiry.status,
+
+          enquiryRequest: {
+            id: existingEnquiry.enquiryRequest?.id || 0,
+            assignedTo: existingEnquiry.enquiryRequest?.assignedTo || "system",
+            assignedBy: existingEnquiry.enquiryRequest?.assignedBy || "system",
+            assignedDate:
+              existingEnquiry.enquiryRequest?.assignedDate ||
+              new Date().toISOString(),
+
+            enquiryId: existingEnquiry.id,
+
+            nextFollowUpDate:
+              existingEnquiry.enquiryRequest?.nextFollowUpDate ||
+              new Date().toISOString(),
+
+            lastVisitDate:
+              existingEnquiry.enquiryRequest?.lastVisitDate ||
+              new Date().toISOString(),
+
+            nextVisitScheduledDate:
+              existingEnquiry.enquiryRequest?.nextVisitScheduledDate ||
+              new Date().toISOString(),
+
+            status: existingEnquiry.enquiryRequest?.status || "New Enquiry",
+            remarks: remarks || existingEnquiry.enquiryRequest?.remarks || "",
+
+            intendedPurchasePeriod:
+              planningToBuy ||
+              existingEnquiry.enquiryRequest?.intendedPurchasePeriod ||
+              "",
+
+            lastUpdatedDate: new Date().toISOString(),
+          }
+        };
+        console.log("FINAL PAYLOAD SENT TO API:", updatePayload);
+
         //  UPDATE existing enquiry
         console.log(" Updating existing enquiry:", existingEnquiry.id);
-    response = await fetch(
+        response = await fetch(
           `https://localhost:5289/sales/api/enquiries/${existingEnquiry.id}`,
           {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
-            body: JSON.stringify(payload),
+            // body: JSON.stringify(payload),
+            body: JSON.stringify(updatePayload),
           }
         );
-         toast.success("Enquiry updated successfully!");
-          } else {
+        toast.success("Enquiry updated successfully!");
+      } else {
         //  CREATE new enquiry
         console.log(" Creating new enquiry");
-response = await fetch(
+        response = await fetch(
           "https://localhost:5289/sales/api/enquiries",
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
             body: JSON.stringify(payload),
+
           }
         );
         const saved = await response.json();        //  GET NEW ENQUIRY
         setEnquiries(prev => [...prev, saved]);
-         toast.success("Enquiry added successfully!");
+        toast.success("Enquiry added successfully!");
       }
 
       if (!response.ok) throw new Error(await response.text());
@@ -232,11 +446,11 @@ response = await fetch(
       const updatedEnquiry = updated.find(
         f => Number(f.leadId) === Number(selectedLead?.id)
       );
-    console.log(" Fresh enquiry from server:", updatedEnquiry);
-    console.log("leadNo:", leadNo);
+      console.log(" Fresh enquiry from server:", updatedEnquiry);
+      console.log("leadNo:", leadNo);
       console.log("existingEnquiry.leadNo:", existingEnquiry?.leadNo);
       console.log("existingEnquiry.leadNo:", updatedEnquiry?.leadNo);
-    // Reset form
+      // Reset form
       setLeadNo("");
       setName("");
       setMobile("");
@@ -251,12 +465,13 @@ response = await fetch(
       setPlanningToBuy("");
       setRemarks("");
       setShowFirmForm(false);
-       fetchEnquiries(); // refresh table
- } catch (err) {
+      fetchEnquiries(); // refresh table
+    } catch (err) {
       console.error(" Error:", err);
       toast.error("Failed to submit enquiry");
     }
   };
+
   const availableLeads = (leads.scheduled || []).filter(
     lead => !firms.some(enq => Number(enq.leadId) === Number(lead.id))
   );
@@ -268,10 +483,10 @@ response = await fetch(
       setMobileError("");
     }
   };
-const handleNameChange = (e) => {
+  const handleNameChange = (e) => {
     const value = e.target.value;
     const regex = /^[A-Za-z\s]*$/;
-  if (regex.test(value)) {
+    if (regex.test(value)) {
       setName(value);
       setNameError(false);
     } else {
@@ -279,7 +494,7 @@ const handleNameChange = (e) => {
       setNameError(true);
     }
   };
-const validateEmail = (value) => {
+  const validateEmail = (value) => {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
     if (!regex.test(value)) {
       setEmailError("Please enter a valid email address");
@@ -287,289 +502,289 @@ const validateEmail = (value) => {
       setEmailError("");
     }
   };
- const handleMobileChange = (e) => {
+  const handleMobileChange = (e) => {
     const value = e.target.value;
     setMobile(value);
     validateMobile(value);
   };
-const handleEmailChange = (e) => {
+  const handleEmailChange = (e) => {
     const value = e.target.value;
     setEmail(value);
     validateEmail(value);
   };
- const handleDownloadPDF_Enquiries = () => {
-  if (firms.length === 0) {
-    toast.info("No data available to download", {
+  const handleDownloadPDF_Enquiries = () => {
+    if (firms.length === 0) {
+      toast.info("No data available to download", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      return;
+    }
+    const doc = new jsPDF("landscape");
+    doc.setFontSize(14);
+    doc.text("First Visit Report", 14, 15);
+    const firstPageColumns = [
+      "Timestamp",
+      "Enquiry No",
+      "Lead No",
+      "Name",
+      "Mobile",
+      "Whatsapp",
+      "Email",
+      "Address",
+    ];
+    const secondPageColumns = [
+      "Occupation",
+      "Company",
+      "Interested In",
+      "Budget",
+      "Reference",
+      "Name Of CP",
+      "Planning To Buy",
+      "FollowUp Details",
+    ];
+    const firstPageRows = firms.map((row) => [
+      row.timestamp || "-",
+      row.enquiryNo || "-",
+      row.leadNo || "-",
+      row.name || "-",
+      row.mobile || "-",
+      row.whatsappNo || "-",
+      row.email || "-",
+      row.address || "-",
+    ]);
+
+
+    const secondPageRows = firms.map((row) => [
+      row.occupation || "-",
+      row.company || "-",
+      row.interestedIn || "-",
+      row.budget || "-",
+      row.referenceBySource || "-",
+      row.nameOfCp || "-",
+      row.planningToBuyWithin || "-",
+      row.followupDetails || "-",
+    ]);
+
+
+    autoTable(doc, {
+      startY: 25,
+      head: [firstPageColumns],
+      body: firstPageRows,
+      styles: { fontSize: 10, cellPadding: 3 },
+      headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+      margin: { top: 20 },
+    });
+
+
+    doc.addPage("landscape");
+    doc.text("First Visit Report (Continued)", 14, 15);
+
+    autoTable(doc, {
+      startY: 25,
+      head: [secondPageColumns],
+      body: secondPageRows,
+      styles: { fontSize: 10, cellPadding: 3 },
+      headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+      margin: { top: 20 },
+    });
+
+
+    doc.save("FirstVisit_Enquiries_Report.pdf");
+
+    toast.success("PDF downloaded successfully!", {
       position: "top-right",
       autoClose: 3000,
     });
-    return;
-  }
-const doc = new jsPDF("landscape");
-  doc.setFontSize(14);
-  doc.text("First Visit Report", 14, 15);
-  const firstPageColumns = [
-    "Timestamp",
-    "Enquiry No",
-    "Lead No",
-    "Name",
-    "Mobile",
-    "Whatsapp",
-    "Email",
-    "Address",
-  ];
-const secondPageColumns = [
-    "Occupation",
-    "Company",
-    "Interested In",
-    "Budget",
-    "Reference",
-    "Name Of CP",
-    "Planning To Buy",
-    "FollowUp Details",
-  ];
-const firstPageRows = firms.map((row) => [
-    row.timestamp || "-",              
-    row.enquiryNo || "-",              
-    row.leadNo || "-",                 
-    row.name || "-",                  
-    row.mobile || "-",                 
-    row.whatsappNo || "-",             
-    row.email || "-",                  
-    row.address || "-",                
-  ]);
-
-
-  const secondPageRows = firms.map((row) => [
-    row.occupation || "-",             
-    row.company || "-",                
-    row.interestedIn || "-",         
-    row.budget || "-",                 
-    row.referenceBySource || "-",      
-    row.nameOfCp || "-",              
-    row.planningToBuyWithin || "-",    
-    row.followupDetails || "-",        
-  ]);
-
- 
-  autoTable(doc, {
-    startY: 25,
-    head: [firstPageColumns],
-    body: firstPageRows,
-    styles: { fontSize: 10, cellPadding: 3 },
-    headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
-    margin: { top: 20 },
-  });
-
- 
-  doc.addPage("landscape");
-  doc.text("First Visit Report (Continued)", 14, 15);
-
-  autoTable(doc, {
-    startY: 25,
-    head: [secondPageColumns],
-    body: secondPageRows,
-    styles: { fontSize: 10, cellPadding: 3 },
-    headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
-    margin: { top: 20 },
-  });
-
-
-  doc.save("FirstVisit_Enquiries_Report.pdf");
-
-  toast.success("PDF downloaded successfully!", {
-    position: "top-right",
-    autoClose: 3000,
-  });
-};
+  };
 
 
 
- const handleDownloadPDF_History = () => {
-  if (firms.length === 0) {
-    toast.info("No data available to download", {
+  const handleDownloadPDF_History = () => {
+    if (firms.length === 0) {
+      toast.info("No data available to download", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      return;
+    }
+
+    const doc = new jsPDF("landscape");
+    doc.setFontSize(14);
+    doc.text("First Visit Pending Follow Up Report", 14, 15);
+
+    const firstPageColumns = [
+      "Status History",
+      "Remark History",
+      "Assign To History",
+      "Timestamp",
+      "Enquiry No",
+      "Lead No",
+      "Sales Executive Name",
+      "Name",
+    ];
+
+
+    const secondPageColumns = [
+      "Mobile",
+      "Whatsapp No",
+      "Address",
+      "Occupation",
+      "Company",
+      "Interested In",
+      "Budget",
+      "Reason For Purchase",
+      "Customer Feedback",
+    ];
+
+
+    const firstPageRows = firms.map((row) => [
+      row.statusHistory || "-",
+      row.remarkHistory || "-",
+      row.assignToHistory || "-",
+      row.timestamp || "-",
+      row.enquiryNo || "-",
+      row.leadNo || "-",
+      row.salesExecutiveName || "-",
+      row.name || "-",
+    ]);
+
+
+    const secondPageRows = firms.map((row) => [
+      row.mobile || "-",
+      row.whatsappNo || "-",
+      row.address || "-",
+      row.occupation || "-",
+      row.company || "-",
+      row.interestedIn || "-",
+      row.budget || "-",
+      row.reasonForPurchase || "-",
+      row.customerFeedback || "-",
+    ]);
+
+
+    autoTable(doc, {
+      startY: 25,
+      head: [firstPageColumns],
+      body: firstPageRows,
+      styles: { fontSize: 10, cellPadding: 3 },
+      headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+      margin: { top: 20 },
+    });
+
+
+    doc.addPage("landscape");
+    doc.text("First Visit Pending Follow Up Report (Continued)", 14, 15);
+
+    autoTable(doc, {
+      startY: 25,
+      head: [secondPageColumns],
+      body: secondPageRows,
+      styles: { fontSize: 10, cellPadding: 3 },
+      headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+      margin: { top: 20 },
+    });
+
+
+    doc.save("FirstVisit_Followup_Report.pdf");
+
+    toast.success("PDF downloaded successfully!", {
       position: "top-right",
       autoClose: 3000,
     });
-    return;
-  }
-
-  const doc = new jsPDF("landscape");
-  doc.setFontSize(14);
-  doc.text("First Visit Pending Follow Up Report", 14, 15);
-
-  const firstPageColumns = [
-    "Status History",
-    "Remark History",
-    "Assign To History",
-    "Timestamp",
-    "Enquiry No",
-    "Lead No",
-    "Sales Executive Name",
-    "Name",
-  ];
-
- 
-  const secondPageColumns = [
-    "Mobile",
-    "Whatsapp No",
-    "Address",
-    "Occupation",
-    "Company",
-    "Interested In",
-    "Budget",
-    "Reason For Purchase",
-    "Customer Feedback",
-  ];
-
-  
-  const firstPageRows = firms.map((row) => [
-    row.statusHistory || "-",
-    row.remarkHistory || "-",
-    row.assignToHistory || "-",
-    row.timestamp || "-",
-    row.enquiryNo || "-",
-    row.leadNo || "-",
-    row.salesExecutiveName || "-",
-    row.name || "-",
-  ]);
-
-
-  const secondPageRows = firms.map((row) => [
-    row.mobile || "-",
-    row.whatsappNo || "-",
-    row.address || "-",
-    row.occupation || "-",
-    row.company || "-",
-    row.interestedIn || "-",
-    row.budget || "-",
-    row.reasonForPurchase || "-",
-    row.customerFeedback || "-",
-  ]);
-
- 
-  autoTable(doc, {
-    startY: 25,
-    head: [firstPageColumns],
-    body: firstPageRows,
-    styles: { fontSize: 10, cellPadding: 3 },
-    headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
-    margin: { top: 20 },
-  });
-
- 
-  doc.addPage("landscape");
-  doc.text("First Visit Pending Follow Up Report (Continued)", 14, 15);
-
-  autoTable(doc, {
-    startY: 25,
-    head: [secondPageColumns],
-    body: secondPageRows,
-    styles: { fontSize: 10, cellPadding: 3 },
-    headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
-    margin: { top: 20 },
-  });
-
- 
-  doc.save("FirstVisit_Followup_Report.pdf");
-
-  toast.success("PDF downloaded successfully!", {
-    position: "top-right",
-    autoClose: 3000,
-  });
-};
+  };
 
 
   const handleDownloadPDF_Booked = () => {
-  if (firms.length === 0) {
-    toast.info("No data available to download", {
+    if (firms.length === 0) {
+      toast.info("No data available to download", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      return;
+    }
+
+    const doc = new jsPDF("landscape");
+    doc.setFontSize(14);
+    doc.text("First Visit Booked Report", 14, 15);
+
+
+    const firstPageColumns = [
+      "Enquiry No",
+      "Name",
+      "Mobile",
+      "Alternate Contact No",
+      "Email",
+      "Address",
+      "Occupation",
+      "Company",
+    ];
+
+
+    const secondPageColumns = [
+      "Interested In",
+      "Budget",
+      "Reason For Purchase",
+      "Reference By",
+      "Planning To Buy Within",
+      "Customer Feedback",
+    ];
+
+
+    const firstPageRows = firms.map((row) => [
+      row.enquiryNo || "-",
+      row.name || "-",
+      row.mobile || "-",
+      row.whatsappNo || "-",
+      row.email || "-",
+      row.address || "-",
+      row.occupation || "-",
+      row.company || "-",
+    ]);
+
+
+    const secondPageRows = firms.map((row) => [
+      row.interestedIn || "-",
+      row.budget || "-",
+      row.reasonForPurchase || "-",
+      row.referenceBySource || "-",
+      row.planningToBuyWithin || "-",
+      row.customerFeedback || "-",
+    ]);
+
+
+    autoTable(doc, {
+      startY: 25,
+      head: [firstPageColumns],
+      body: firstPageRows,
+      styles: { fontSize: 10, cellPadding: 3 },
+      headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+      margin: { top: 20 },
+    });
+
+    doc.addPage("landscape");
+    doc.text("First Visit Booked Report (Continued)", 14, 15);
+
+    autoTable(doc, {
+      startY: 25,
+      head: [secondPageColumns],
+      body: secondPageRows,
+      styles: { fontSize: 10, cellPadding: 3 },
+      headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
+      margin: { top: 20 },
+    });
+
+
+    doc.save("FirstVisit_Booked_Report.pdf");
+
+    toast.success("PDF downloaded successfully!", {
       position: "top-right",
       autoClose: 3000,
     });
-    return;
-  }
-
-  const doc = new jsPDF("landscape");
-  doc.setFontSize(14);
-  doc.text("First Visit Booked Report", 14, 15);
-
-  
-  const firstPageColumns = [
-    "Enquiry No",
-    "Name",
-    "Mobile",
-    "Alternate Contact No",
-    "Email",
-    "Address",
-    "Occupation",
-    "Company",
-  ];
-
- 
-  const secondPageColumns = [
-    "Interested In",
-    "Budget",
-    "Reason For Purchase",
-    "Reference By",
-    "Planning To Buy Within",
-    "Customer Feedback",
-  ];
-
-  
-  const firstPageRows = firms.map((row) => [
-    row.enquiryNo || "-",
-    row.name || "-",
-    row.mobile || "-",
-    row.whatsappNo || "-",              
-    row.email || "-",
-    row.address || "-",
-    row.occupation || "-",
-    row.company || "-",
-  ]);
-
- 
-  const secondPageRows = firms.map((row) => [
-    row.interestedIn || "-",
-    row.budget || "-",
-    row.reasonForPurchase || "-",
-    row.referenceBySource || "-",        
-    row.planningToBuyWithin || "-",
-    row.customerFeedback || "-",
-  ]);
-
- 
-  autoTable(doc, {
-    startY: 25,
-    head: [firstPageColumns],
-    body: firstPageRows,
-    styles: { fontSize: 10, cellPadding: 3 },
-    headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
-    margin: { top: 20 },
-  });
-
-  doc.addPage("landscape");
-  doc.text("First Visit Booked Report (Continued)", 14, 15);
-
-  autoTable(doc, {
-    startY: 25,
-    head: [secondPageColumns],
-    body: secondPageRows,
-    styles: { fontSize: 10, cellPadding: 3 },
-    headStyles: { fillColor: [139, 107, 255], textColor: [255, 255, 255] },
-    margin: { top: 20 },
-  });
-
-  
-  doc.save("FirstVisit_Booked_Report.pdf");
-
-  toast.success("PDF downloaded successfully!", {
-    position: "top-right",
-    autoClose: 3000,
-  });
-};
+  };
 
 
-   const handleDownloadPDF_Undefined = () => {
+  const handleDownloadPDF_Undefined = () => {
     if (firms.length === 0) {
       toast.info("No data available to download", {
         position: "top-right",
@@ -603,35 +818,35 @@ const firstPageRows = firms.map((row) => [
       "Interested In",
       "Budget",
       "Reason For Purchase",
-       "Planning to Buy within",
-       "Customer Feedback"
-      
+      "Planning to Buy within",
+      "Customer Feedback"
+
     ];
 
     // Mapping data for the first page
-  const firstPageRows = firms.map((row) => [
-  row.statusHistory || "-",       
-  row.remarkHistory || "-",       
-  row.assignToHistory || "-",     
-  
-  row.enquiryNo || "-",           
-  row.leadNo || "-",              
-  row.name || "-",                
-  row.mobile || "-",              
-  row.email || "-",               
-]);
+    const firstPageRows = firms.map((row) => [
+      row.statusHistory || "-",
+      row.remarkHistory || "-",
+      row.assignToHistory || "-",
+
+      row.enquiryNo || "-",
+      row.leadNo || "-",
+      row.name || "-",
+      row.mobile || "-",
+      row.email || "-",
+    ]);
 
     // Mapping data for the second page
-   const secondPageRows = firms.map((row) => [
-  row.address || "-",                 
-  row.occupation || "-",              
-  row.company || "-",                 
-  row.interestedIn || "-",            
-  row.budget || "-",                  
-  row.reasonForPurchase || "-",       
-  row.planningToBuyWithin || "-",    
-  row.customerFeedback || "-",        
-]);
+    const secondPageRows = firms.map((row) => [
+      row.address || "-",
+      row.occupation || "-",
+      row.company || "-",
+      row.interestedIn || "-",
+      row.budget || "-",
+      row.reasonForPurchase || "-",
+      row.planningToBuyWithin || "-",
+      row.customerFeedback || "-",
+    ]);
 
 
     // Generate the first page
@@ -841,148 +1056,109 @@ const firstPageRows = firms.map((row) => [
   // };
 
 
+
+  // const fetchVisitFollowupHistory = async () => {
+  //   try {
+  //     console.log("follow up");
+
+  //     const response = await fetch(
+  //       "https://localhost:5289/sales/api/enquiries",
+  //       { credentials: "include" }
+  //     );
+
+  //     const data = await response.json();
+
+  //     // Extract all engagements from all enquiries
+  //     const allEngagements = data.pagedRecords.flatMap(enq =>
+  //       enq.enquiryEnagagements.map(e => ({
+  //         enquiryId: enq.id,
+  //         name: enq.name,
+  //         phone: enq.phone,
+  //         source: enq.source,
+  //         status: enq.status,
+
+  //         // engagement fields
+  //         assignedDate: e.assignedDate,
+  //         assignedTo: e.assignedTo,
+  //         nextFollowUpDate: e.nextFollowUpDate,
+  //         remarks: e.remarks,
+  //         type: e.type
+  //       }))
+  //     );
+
+  //     console.log("Flattened Engagements:", allEngagements);
+
+  //     return allEngagements;
+
+  //   } catch (err) {
+  //     console.error("Error fetching follow-up history:", err);
+  //     return [];
+  //   }
+  // };
+
+
   const fetchVisitFollowupHistory = async () => {
     try {
-      const response = await fetch("https://localhost:5289/sales/api/enquiries", {
-        credentials: "include",
-      });
+      console.log("follow up");
 
-      if (!response.ok) throw new Error("Network response not ok");
+      const response = await fetch(
+        "https://localhost:5289/sales/api/enquiries",
+        { credentials: "include" }
+      );
 
       const data = await response.json();
 
-      // Format date
-      const formatDate = (dateStr) => {
-        if (!dateStr || dateStr === "0001-01-01T00:00:00") return "";
-        const d = new Date(dateStr);
-        return isNaN(d)
-          ? ""
-          : d.toLocaleString("en-IN", {
-            dateStyle: "short",
-            timeStyle: "short",
-          });
-      };
+      const grouped = {};
 
-      // Roman number helper
-      const toRoman = (num) => {
-        const romans = ["i", "ii", "iii", "iv", "v", "vi", "vii", "viii", "ix", "x"];
-        return romans[num - 1] || num;
-      };
+      data.pagedRecords.forEach((enq) => {
+        const engagements = enq.enquiryEnagagements || [];
 
-      // Clean value
-      const sanitize = (val) => {
-        if (!val || val.trim() === "" || val.trim() === "-" || val.trim() === "---")
-          return "";
-        return val.trim();
-      };
+        if (!grouped[enq.id]) {
+          grouped[enq.id] = {
+            enquiryId: enq.id,
+            leadId: enq.leadId,
+            name: enq.name,
+            phone: enq.phone,
+            source: enq.source,
+            status: enq.status,
 
-      const formattedData = data.map((enquiry) => {
-        const leadBase = {
-          leadNo: enquiry.id || "-",
-          enquiryId: enquiry.id || "-",
-          name: enquiry.name || "-",
-          phone: enquiry.phone || "-",
-          email: enquiry.email || "-",
-          source: enquiry.source || "-",
-          leadDays: enquiry.createdDate
-            ? Math.ceil(
-              (new Date() - new Date(enquiry.createdDate)) /
-              (1000 * 60 * 60 * 24)
-            )
-            : "-",
-        };
-
-        const allHistory = [];
-
-        // 🔹 Current (top-level)
-        if (
-          sanitize(enquiry.status) ||
-          sanitize(enquiry.remarks) ||
-          sanitize(enquiry.lastUpdatedBy)
-        ) {
-          allHistory.push({
-            date: enquiry.lastUpdatedDate || enquiry.createdDate,
-            status: enquiry.status || "",
-            remark: enquiry.remarks || "",
-            assignedTo: enquiry.lastUpdatedBy || "",
-          });
+            statusHistory: "",
+            remarkHistory: "",
+            assignToHistory: "",
+          };
         }
 
-        // 🔹 Engagements
-        const engagements =
-          enquiry.salesEngagements ||
-          enquiry.leadEngagements ||
-          enquiry.leadEnagagements ||
-          [];
+        engagements.forEach((e) => {
+          const date = e.assignedDate
+            ? new Date(e.assignedDate).toLocaleString("en-GB")
+            : "-";
 
-        engagements.forEach((eng) => {
-          const engDate =
-            eng.timestamp ||
-            eng.updatedDate ||
-            eng.assignedDate ||
-            enquiry.lastUpdatedDate ||
-            enquiry.createdDate;
+          grouped[enq.id].statusHistory =
+            `${date} - ${e.type}<br/>` + grouped[enq.id].statusHistory;
 
-          if (
-            sanitize(eng.status) ||
-            sanitize(eng.remarks) ||
-            sanitize(eng.assignedToName || eng.assignedTo)
-          ) {
-            allHistory.push({
-              date: engDate,
-              status: eng.status || "",
-              remark: eng.remarks || "",
-              assignedTo: eng.assignedToName || eng.assignedTo || "",
-            });
-          } else {
-            allHistory.push({
-              date: engDate,
-              status: "No change",
-              remark: "No change",
-              assignedTo: "No change",
-            });
-          }
+          grouped[enq.id].remarkHistory =
+            `${date} - ${e.remarks || "No remarks"}<br/>` +
+            grouped[enq.id].remarkHistory;
+
+          grouped[enq.id].assignToHistory =
+            `${date} - ${e.assignedTo || "No change"}<br/>` +
+            grouped[enq.id].assignToHistory;
         });
-
-        // Sort
-        allHistory.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-        const buildHistoryLine = (h, i, value) => {
-          const date = formatDate(h.date);
-          const text = sanitize(value);
-
-          if (!date && !text) return null;
-          if (!text) return `${toRoman(i + 1)}. ${date} - No change`;
-          if (!date) return `${toRoman(i + 1)}. ${text}`;
-          return `${toRoman(i + 1)}. ${date} - ${text}`;
-        };
-
-        return {
-          ...leadBase,
-          time: formatDate(enquiry.lastUpdatedDate || enquiry.createdDate),
-          statusHistory: allHistory
-            .map((h, i) => buildHistoryLine(h, i, h.status))
-            .filter(Boolean)
-            .join("<br/>"),
-          remarkHistory: allHistory
-            .map((h, i) => buildHistoryLine(h, i, h.remark))
-            .filter(Boolean)
-            .join("<br/>"),
-          assignToHistory: allHistory
-            .map((h, i) => buildHistoryLine(h, i, h.assignedTo))
-            .filter(Boolean)
-            .join("<br/>"),
-        };
       });
 
-      // 🔥 store in separate state (NOT mixed with main leads)
-      setFilteredVisitFollowupHistory(formattedData);
-      setVisitFollowupHistory(formattedData);
+      // ⬅️ SORT ENQUIRIES BY LATEST FIRST
+      const finalData = Object.values(grouped).sort((a, b) => b.enquiryId - a.enquiryId);
 
-    } catch (error) {
-      console.error("Error fetching follow-up history:", error);
+      console.log("FINAL GROUPED ENQUIRY HISTORY:", finalData);
+      return finalData;
+
+    } catch (err) {
+      console.error("Error fetching follow-up history:", err);
+      return [];
     }
   };
+
+
 
   const fetchUndefinedEnquiries = async () => {
     try {
@@ -999,12 +1175,12 @@ const firstPageRows = firms.map((row) => [
       const data = await response.json();
 
       // FILTER ONLY NOT INTERESTED
-      const filtered = data.filter(
-        (item) =>
-          item.status === "Not interested" ||
-          item.enquiryStatus?.toLowerCase() === "not interested"
-      );
 
+      const filtered = data.pagedRecords.filter((item) =>
+        item.enquiryEnagagements?.some(
+          (eng) => eng.status?.toLowerCase() === "not interested"
+        )
+      );
       setUndefinedData(filtered);
       console.log("undefined data ", filtered);
     } catch (error) {
@@ -1012,6 +1188,44 @@ const firstPageRows = firms.map((row) => [
 
     }
   };
+
+
+  // 🔥 SINGLE FUNCTION — CALL API + FILTER BOOKED ENQUIRIES
+  const fetchBookedEnquiries = async () => {
+    try {
+      const response = await fetch("https://localhost:5289/sales/api/enquiries", {
+        credentials: "include",
+      });
+
+      if (!response.ok) throw new Error("Failed to fetch enquiries");
+
+      const data = await response.json();
+
+      console.log("🔥 RAW API RESPONSE:", data);
+
+      const allEnquiries = Array.isArray(data.pagedRecords)
+        ? data.pagedRecords
+        : [];
+
+      console.log("💚 Normalized enquiries:", allEnquiries);
+
+      const booked = allEnquiries.filter(
+        (item) => String(item.type)?.toLowerCase().trim() === "booked"
+      );
+
+      console.log("📘 FINAL BOOKED ENQUIRIES:", booked);
+
+      // update state
+      setEnquiries(booked);
+      setFirms(booked);
+      setProjectData(booked);
+
+      return booked;
+    } catch (err) {
+      console.error(" Error fetching booked enquiries:", err);
+    }
+  };
+
 
   useEffect(() => {
     fetchUndefinedEnquiries();
@@ -1162,7 +1376,7 @@ const firstPageRows = firms.map((row) => [
             }}
           />
         </div>
-         <Button
+        <Button
           variant="contained"
           sx={{
             background: Constants.primaryColor,
@@ -1676,100 +1890,100 @@ const firstPageRows = firms.map((row) => [
           <div className="content-container mt-3">
             {!showProjectForm ? (
               <>
-      <div className="d-flex flex-column mb-3 gap-2">
-{/* First Row — Title on Left, Search + Pagination on Right */}
-  <div style={{  display: "flex",  justifyContent: "space-between",  alignItems: "center",  flexWrap: "wrap",  width: "100%"  }}>
-    {/* LEFT SIDE — TITLE */}
-    <Typography variant={isMobile ? "h6" : "h5"} component="h2" sx={{  fontWeight: "bold",  paddingTop: "8px",  }} >
-      Enquiry History
-    </Typography>
+                <div className="d-flex flex-column mb-3 gap-2">
+                  {/* First Row — Title on Left, Search + Pagination on Right */}
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", width: "100%" }}>
+                    {/* LEFT SIDE — TITLE */}
+                    <Typography variant={isMobile ? "h6" : "h5"} component="h2" sx={{ fontWeight: "bold", paddingTop: "8px", }} >
+                      Enquiry History
+                    </Typography>
 
-    {/* RIGHT SIDE — SEARCH + PAGINATION */}
-    <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        gap: "10px",
-        flexWrap: "wrap",
-        justifyContent: "flex-end",
-      }}
-    >
-      {/* Search Bar */}
-      <TextField
-        size="small"
-        placeholder="Search"
-        sx={{
-          width: "180px",
-          "& .MuiInputBase-root": { padding: "0px 8px" },
-          border: Constants.formInputBorderColor,
-        }}
-      />
+                    {/* RIGHT SIDE — SEARCH + PAGINATION */}
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "10px",
+                        flexWrap: "wrap",
+                        justifyContent: "flex-end",
+                      }}
+                    >
+                      {/* Search Bar */}
+                      <TextField
+                        size="small"
+                        placeholder="Search"
+                        sx={{
+                          width: "180px",
+                          "& .MuiInputBase-root": { padding: "0px 8px" },
+                          border: Constants.formInputBorderColor,
+                        }}
+                      />
 
-      {/* Pagination */}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "8px",
-          fontSize: "14px",
-          color: "#800000",
-        }}
-      >
-        <span style={{ fontWeight: "500" }}>Rows per page:</span>
+                      {/* Pagination */}
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "8px",
+                          fontSize: "14px",
+                          color: "#800000",
+                        }}
+                      >
+                        <span style={{ fontWeight: "500" }}>Rows per page:</span>
 
-        <select
-          style={{
-            border: "1px solid #800000",
-            borderRadius: "4px",
-            padding: "2px 6px",
-            outline: "none",
-            color: "#800000",
-          }}
-        >
-          <option value={5}>5</option>
-          <option value={10}>10</option>
-          <option value={25}>25</option>
-        </select>
+                        <select
+                          style={{
+                            border: "1px solid #800000",
+                            borderRadius: "4px",
+                            padding: "2px 6px",
+                            outline: "none",
+                            color: "#800000",
+                          }}
+                        >
+                          <option value={5}>5</option>
+                          <option value={10}>10</option>
+                          <option value={25}>25</option>
+                        </select>
 
-        <span>0–0 of 0</span>
+                        <span>0–0 of 0</span>
 
-        {/* Navigation arrows */}
-        <button
-          style={{
-            border: "none",
-            background: "transparent",
-            cursor: "pointer",
-            color: "gray",
-            fontSize: "18px",
-            padding: "0 4px",
-          }}
-        >
-          &#8249;
-        </button>
-        <button
-          style={{
-            border: "none",
-            background: "transparent",
-            cursor: "pointer",
-            color: "gray",
-            fontSize: "18px",
-            padding: "0 4px",
-          }}
-        >
-          &#8250;
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
+                        {/* Navigation arrows */}
+                        <button
+                          style={{
+                            border: "none",
+                            background: "transparent",
+                            cursor: "pointer",
+                            color: "gray",
+                            fontSize: "18px",
+                            padding: "0 4px",
+                          }}
+                        >
+                          &#8249;
+                        </button>
+                        <button
+                          style={{
+                            border: "none",
+                            background: "transparent",
+                            cursor: "pointer",
+                            color: "gray",
+                            fontSize: "18px",
+                            padding: "0 4px",
+                          }}
+                        >
+                          &#8250;
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 <div className="mt-3">
                   <FirstVisitFollowupHistoryTable
                     // data={filteredLeads}
-                    // fetchVisitFollowUpHistory={fetchVisitFollowupHistory}
+                    fetchVisitFollowUpHistory={fetchVisitFollowupHistory}
                     // data={projectData}
 
                     data={visitFollowupHistory}          //working 
-                  
+
                     isMobile={isMobile}
                     isTablet={isTablet}
 
@@ -1787,90 +2001,90 @@ const firstPageRows = firms.map((row) => [
         <div className="content-container mt-3">
           {!showLandownerForm ? (
             <>
-            <div className="d-flex flex-column mb-3 gap-2">
-  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", width: "100%",}}>
-    {/* LEFT SIDE — TITLE */}
-    <Typography  variant={isMobile ? "h6" : "h5"}  component="h2"  sx={{ fontWeight: "bold",  paddingTop: "8px",  }} >
-      Booked Enquiries
-    </Typography>
-    {/* RIGHT SIDE — SEARCH + PAGINATION */}
-    <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        gap: "10px",
-        flexWrap: "wrap",
-        justifyContent: "flex-end",
-      }}
-    >
-      {/* Search Bar */}
-      <TextField
-        size="small"
-        placeholder="Search"
-        sx={{
-          width: "180px",
-          "& .MuiInputBase-root": { padding: "0px 8px" },
-          border: Constants.formInputBorderColor,
-        }}
-      />
+              <div className="d-flex flex-column mb-3 gap-2">
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", width: "100%", }}>
+                  {/* LEFT SIDE — TITLE */}
+                  <Typography variant={isMobile ? "h6" : "h5"} component="h2" sx={{ fontWeight: "bold", paddingTop: "8px", }} >
+                    Booked Enquiries
+                  </Typography>
+                  {/* RIGHT SIDE — SEARCH + PAGINATION */}
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "10px",
+                      flexWrap: "wrap",
+                      justifyContent: "flex-end",
+                    }}
+                  >
+                    {/* Search Bar */}
+                    <TextField
+                      size="small"
+                      placeholder="Search"
+                      sx={{
+                        width: "180px",
+                        "& .MuiInputBase-root": { padding: "0px 8px" },
+                        border: Constants.formInputBorderColor,
+                      }}
+                    />
 
-      {/* Pagination */}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "8px",
-          fontSize: "14px",
-          color: "#800000",
-        }}
-      >
-        <span style={{ fontWeight: "500" }}>Rows per page:</span>
+                    {/* Pagination */}
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "8px",
+                        fontSize: "14px",
+                        color: "#800000",
+                      }}
+                    >
+                      <span style={{ fontWeight: "500" }}>Rows per page:</span>
 
-        <select
-          style={{
-            border: "1px solid #800000",
-            borderRadius: "4px",
-            padding: "2px 6px",
-            outline: "none",
-            color: "#800000",
-          }}
-        >
-          <option value={5}>5</option>
-          <option value={10}>10</option>
-          <option value={25}>25</option>
-        </select>
+                      <select
+                        style={{
+                          border: "1px solid #800000",
+                          borderRadius: "4px",
+                          padding: "2px 6px",
+                          outline: "none",
+                          color: "#800000",
+                        }}
+                      >
+                        <option value={5}>5</option>
+                        <option value={10}>10</option>
+                        <option value={25}>25</option>
+                      </select>
 
-        <span>0–0 of 0</span>
+                      <span>0–0 of 0</span>
 
-        {/* Navigation arrows */}
-        <button
-          style={{
-            border: "none",
-            background: "transparent",
-            cursor: "pointer",
-            color: "gray",
-            fontSize: "18px",
-            padding: "0 4px",
-          }}
-        >
-          &#8249;
-        </button>
-        <button
-          style={{
-            border: "none",
-            background: "transparent",
-            cursor: "pointer",
-            color: "gray",
-            fontSize: "18px",
-            padding: "0 4px",
-          }}
-        >
-          &#8250;
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
+                      {/* Navigation arrows */}
+                      <button
+                        style={{
+                          border: "none",
+                          background: "transparent",
+                          cursor: "pointer",
+                          color: "gray",
+                          fontSize: "18px",
+                          padding: "0 4px",
+                        }}
+                      >
+                        &#8249;
+                      </button>
+                      <button
+                        style={{
+                          border: "none",
+                          background: "transparent",
+                          cursor: "pointer",
+                          color: "gray",
+                          fontSize: "18px",
+                          padding: "0 4px",
+                        }}
+                      >
+                        &#8250;
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
               {/* Table Section */}
               <div className="mt-3">
@@ -1893,109 +2107,109 @@ const firstPageRows = firms.map((row) => [
         <div className="content-container mt-3">
           {!showFlatForm ? (
             <>
-            
+
               <div className="d-flex flex-column mb-3 gap-2">
-  {/* First Row - Section Title */}
-  <div
-    style={{
-      display: "flex",
-      justifyContent: "space-between",
-      alignItems: "center",
-      width: "100%",
-      flexWrap: "wrap",
-      gap: "10px",
-    }}
-  >
-    {/* Left Side – Title */}
-    <Typography
-      variant={isMobile ? "h6" : "h5"}
-      component="h2"
-      sx={{
-        fontWeight: "bold",
-        paddingTop: "8px",
-      }}
-    >
-      Lost Enquiries
-    </Typography>
+                {/* First Row - Section Title */}
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    width: "100%",
+                    flexWrap: "wrap",
+                    gap: "10px",
+                  }}
+                >
+                  {/* Left Side – Title */}
+                  <Typography
+                    variant={isMobile ? "h6" : "h5"}
+                    component="h2"
+                    sx={{
+                      fontWeight: "bold",
+                      paddingTop: "8px",
+                    }}
+                  >
+                    Lost Enquiries
+                  </Typography>
 
-    {/* Right Side – Search + Pagination */}
-    <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        gap: "10px",
-        flexWrap: "wrap",
-        justifyContent: "flex-end",
-      }}
-    >
-      <TextField
-        size="small"
-        placeholder="Search"
-        sx={{
-          width: "180px",
-          "& .MuiInputBase-root": { padding: "0px 8px" },
-          border: Constants.formInputBorderColor,
-        }}
-      />
+                  {/* Right Side – Search + Pagination */}
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "10px",
+                      flexWrap: "wrap",
+                      justifyContent: "flex-end",
+                    }}
+                  >
+                    <TextField
+                      size="small"
+                      placeholder="Search"
+                      sx={{
+                        width: "180px",
+                        "& .MuiInputBase-root": { padding: "0px 8px" },
+                        border: Constants.formInputBorderColor,
+                      }}
+                    />
 
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "8px",
-          fontSize: "14px",
-          color: "#800000",
-          justifyContent: "flex-end",
-        }}
-      >
-        <span style={{ fontWeight: "500" }}>Rows per page:</span>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "8px",
+                        fontSize: "14px",
+                        color: "#800000",
+                        justifyContent: "flex-end",
+                      }}
+                    >
+                      <span style={{ fontWeight: "500" }}>Rows per page:</span>
 
-        <select
-          style={{
-            border: "1px solid #800000",
-            borderRadius: "4px",
-            padding: "2px 6px",
-            outline: "none",
-            color: "#800000",
-          }}
-        >
-          <option value={5}>5</option>
-          <option value={10}>10</option>
-          <option value={25}>25</option>
-        </select>
+                      <select
+                        style={{
+                          border: "1px solid #800000",
+                          borderRadius: "4px",
+                          padding: "2px 6px",
+                          outline: "none",
+                          color: "#800000",
+                        }}
+                      >
+                        <option value={5}>5</option>
+                        <option value={10}>10</option>
+                        <option value={25}>25</option>
+                      </select>
 
-        <span>0–0 of 0</span>
+                      <span>0–0 of 0</span>
 
-        {/* Navigation Arrows */}
-        <button
-          style={{
-            border: "none",
-            background: "transparent",
-            cursor: "pointer",
-            color: "gray",
-            fontSize: "18px",
-            padding: "0 4px",
-          }}
-        >
-          &#8249;
-        </button>
+                      {/* Navigation Arrows */}
+                      <button
+                        style={{
+                          border: "none",
+                          background: "transparent",
+                          cursor: "pointer",
+                          color: "gray",
+                          fontSize: "18px",
+                          padding: "0 4px",
+                        }}
+                      >
+                        &#8249;
+                      </button>
 
-        <button
-          style={{
-            border: "none",
-            background: "transparent",
-            cursor: "pointer",
-            color: "gray",
-            fontSize: "18px",
-            padding: "0 4px",
-          }}
-        >
-          &#8250;
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
+                      <button
+                        style={{
+                          border: "none",
+                          background: "transparent",
+                          cursor: "pointer",
+                          color: "gray",
+                          fontSize: "18px",
+                          padding: "0 4px",
+                        }}
+                      >
+                        &#8250;
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
 
               {/* Table Section */}

@@ -52,29 +52,40 @@ const PendingFollowuptable = ({ data, onSelectLead, fetchUserLeads }) => {
 
   const handleEditClick = (firm) => {
     // console.group("🟢 HANDLE EDIT CLICK");
-    // console.log("➡️ firm received from table:", firm);
+    console.log(" firm received from table:", firm);
     // console.log("🧩 Checking firm before opening modal:", JSON.stringify(firm, null, 2));
     if (!firm) {
       console.warn("⚠️ No firm data passed to handleEditClick");
       return;
     }
-    // Check if DB data fields exist
-    // console.log("🧩 firm fields check:", {
-    //   id: firm.id,
-    //   name: firm.name,
-    //   remark: firm.remark,
-    //   leadType: firm.leadType,
-    //   status: firm.status,
-    //   nextFollowUp: firm.nextFollowUp,
-    //   // leadEngagements: firm.leadEnagagements,
-    //   leadEngagements: firm.leadEngagements || firm.leadEnagagements,
 
-    // });
+console.log("API keys:", Object.keys(data[0]));
+console.log("Engagements:", data[0].leadEnagagements);
+
+    console.log("API Response (full):", data);
+console.log("nextFollowUpDate FROM API:", data.nextFollowUp);
+
+    // Check if DB data fields exist
+    console.log("🧩 db firm fields check:", {
+      id: firm.id,
+      name: firm.name,
+      remark: firm.remark,
+      leadType: firm.leadType,
+      status: firm.status,
+      nextFollowUp: firm.nextFollowUp,
+      leadEngagements: firm.leadEngagements || firm.leadEnagagements,
+
+    });
 
     setEditingItem(firm);
     // Extract engagement info from backend response 
     const engagements = firm.leadEngagements || firm.leadEnagagements;
-    const latestEng = engagements?.[engagements.length - 1] || null;
+    const latestEng = engagements
+      ?.slice()
+      .sort((a, b) => b.id - a.id)[0] || null;
+
+    console.log("Last engagement:", firm.leadEnagagements?.[firm.leadEnagagements.length - 1]);
+
     // console.log("🧾 latestEng from firm:", latestEng);
     // console.log("🔍 Keys in latestEng:", Object.keys(latestEng));
     // console.log("🧩 Checking Type value:", latestEng?.type || latestEng?.Type);
@@ -97,12 +108,22 @@ const PendingFollowuptable = ({ data, onSelectLead, fetchUserLeads }) => {
     setEditFormData({
       id: firm.id || latestEng?.leadId || "",
       name: firm.name || "",
-      remark: firm.remark || latestEng?.remarks || "",
-      // leadType: latestEng?.type || '', 
+      // remark: firm.remark || latestEng?.remarks || "",
+      remark: latestEng?.remarks || "",
       leadType: normalizeLeadType(latestEng?.type),
       status: normalizeStatus(firm.status || latestEng?.status),
-      nextFollowUpDate: formatDateForInput(latestEng?.nextFollowUp || firm.nextFollowUp),
-      // visitScheduledDate: latestEng?.visitScheduledDate || "",
+      // status: normalizeStatus(latestEng?.status || firm.status),
+      // nextFollowUpDate: formatDateForInput(latestEng?.nextFollowUp || firm.nextFollowUp),
+      nextFollowUpDate: formatDateForInput(
+        latestEng?.nextFollowUpDate ||
+        firm.nextFollowUpDate ||
+        ""
+      ),
+
+
+
+      //  nextFollowUpDate: formatDateForInput(latestEng?.nextFollowUpDate),
+
       visitScheduledDate: formatDateForInput(latestEng?.visitScheduledDate || ""),
     });
     // console.log("📋 Final editFormData set to:", {
@@ -122,6 +143,11 @@ const PendingFollowuptable = ({ data, onSelectLead, fetchUserLeads }) => {
     setModalOpen(true);
     console.groupEnd();
   };
+
+
+
+
+
   const handleSelectItem = (item) => {
     setSelectedItem(item);
   };
@@ -164,190 +190,11 @@ const PendingFollowuptable = ({ data, onSelectLead, fetchUserLeads }) => {
     return "";
   };
 
-//   const handleSave = async () => {
-//     // console.group("🔍 HANDLE SAVE TRIGGERED");
-
-//     // console.log(" editFormData:", editFormData);
-//     // console.log(" userId:", userId, " | userName:", userName);
-//     // console.log("🧩 Constants.baseURL:", Constants?.baseURL);
-
-//     // ✅ Basic validation
-//     if (
-//       !editFormData.status ||
-//       !editFormData.leadType ||
-//       (editFormData.status === "Follow Up" && !editFormData.nextFollowUpDate) ||
-//       (editFormData.status === "Visit Scheduled" && !editFormData.visitScheduledDate)
-//     ) {
-//       console.warn("⚠️ Validation failed:", editFormData);
-//       toast.error("Please fill all required fields!", {
-//         position: "top-right",
-//         autoClose: 3000,
-//       });
-//       return;
-//     }
-
-//     try {
-//       //  Prepare payload (matches backend DTO: LeadEngagementRequest)
-//       const payload = {
-//         id: editFormData.id, // Engagement ID
-//         leadId: editFormData.leadId || editFormData.id, // Lead ID 
-//         // status: editFormData.status.trim().replace(/\s+/g, "_").toUpperCase(),
-//         status:
-//           editFormData.status === "Booked property In Other Project"
-//             ? "BOOKED_ANOTHER_PROPERTY"
-//             : editFormData.status.trim().replace(/\s+/g, "_").toUpperCase(),
-
-//         type: editFormData.leadType.trim().toUpperCase(),
-//         remarks: editFormData.remark?.trim() || "",
-//         nextFollowUp: editFormData.nextFollowUpDate || null,
-//         visitScheduledDate: editFormData.visitScheduledDate || null,
-//         updatedBy: userName || "System",
-//       };
-
-//       console.log("🧾 Sending payload:", payload);
-//       console.log("📤 JSON body being sent to API:", JSON.stringify(payload, null, 2));
-
-//       // 
-//       const response = await fetch(
-//         `https://localhost:5289/sales/api/leads/${payload.leadId}/engagements`,
-//         {
-//           method: "POST",
-//           headers: {
-//             "Content-Type": "application/json",
-//           },
-//           credentials: "include",
-//           body: JSON.stringify(payload),
-//         }
-//       );
-
-//       console.log("📡 Response Status:", response.status);
-//       if (!response.ok) {
-//         const errorText = await response.text();
-//         console.error("❌ Update failed. Response:", errorText);
-//         throw new Error("Update failed");
-//       }
-
-//       //  If update successful — parse response
-//       const updatedLead = await response.json();
-//       console.log(" Updated Lead:", updatedLead);
 
 
-//       if (editFormData.status === "Visit Done") {
-//   console.log("🟢 Lead marked as Visit Done – adding to Enquiries table...");
 
-//   const enquiryPayload = {
-//     id: editingItem?.id,
-//     name: editingItem?.name,
-//     phone: editingItem?.phone,
-//     whatsapp: editingItem?.whatsapp,
-//     email: editingItem?.email,
-//     address: editingItem?.address,
-//     occupation: visitDoneData?.occupation || editingItem?.occupation || "N/A",
-//     company: editingItem?.company,
-//     interest: visitDoneData?.interestedIn || editingItem?.interest || "",
-//     budgetInLakh: editingItem?.budgetInLakh || 0,
-//     intendedPurchasePeriodMonths: editingItem?.intendedPurchasePeriodMonths || 0,
-//     lastSiteVisit: new Date().toISOString(),
-//     source: editingItem?.source || "N/A",
-//     remarks: editFormData.remark || editingItem?.remarks || "",
-//     status: "Visit Done",
-//     salesEngagement: {
-//       assignedTo: userName || "system",
-//       assignedBy: userName || "system",
-//       assignedDate: new Date().toISOString(),
-//       nextFollowUp: new Date().toISOString(),
-//       enquiryId: editingItem?.id,
-//       status: "Active",
-//       remarks: "Auto-created from Visit Done lead",
-//     },
-//   };
+  const handleSave = async () => {
 
-//   console.log("📤 Sending Enquiry POST Request:", enquiryPayload);
-
-//   try {
-//     const enquiryResponse = await fetch(
-//       "https://localhost:5289/sales/api/enquiries",
-//       {
-//         method: "POST",
-//         headers: {
-//           Accept: "application/json",
-//           "Content-Type": "application/json",
-//         },
-//         credentials: "include",
-//         body: JSON.stringify(enquiryPayload),
-//       }
-//     );
-
-//     if (!enquiryResponse.ok) {
-//       const errText = await enquiryResponse.text();
-//       console.error("❌ Failed to save enquiry:", errText);
-//       toast.error("Failed to add lead to Enquiry table!");
-//     } else {
-//       const enquiryResult = await enquiryResponse.json();
-//       console.log("✅ Enquiry saved successfully:", enquiryResult);
-//       toast.success("Lead added to Enquiry table!");
-//     }
-//   } catch (err) {
-//     console.error("🚨 Error saving enquiry:", err);
-//     toast.error("Error while saving enquiry!");
-//   }
-// }
-
-
-//       // . Update local form state immediately (instant UI feedback)
-//       setEditFormData((prev) => ({
-//         ...prev,
-//         status: normalizeStatus(payload.status || prev.status),
-//         remark: payload.remarks || prev.remark,
-//         nextFollowUpDate: payload.nextFollowUp,
-//         visitScheduledDate: payload.visitScheduledDate,
-//         leadType: payload.type, //  make sure type updates in the form instantly
-//       }));
-//       toast.success("Follow-up updated successfully!", {
-//         position: "top-right",
-//         autoClose: 3000,
-//       });
-
-//       //  Refresh table after saving
-//       if (fetchUserLeads) {
-//         console.log("🔄 Refetching latest leads...");
-//         console.log("🔄 Refetching latest leads...");
-//         const refreshed = await fetchUserLeads();
-//         console.log("✅ Refetched Data:", refreshed);
-//       }
-
-//       setEditFormData((prev) => ({
-//         ...prev,
-//         // status: payload.status,
-//         // remark: payload.remarks,
-//         // status: normalizeStatus(payload.status || latestEng?.status),
-//         status: normalizeStatus(payload.status || editingItem?.status),
-//         // remark: payload.remark || latestEng?.remarks || "",
-//         remark: payload.remark || editingItem?.remarks || "",
-//         nextFollowUpDate: payload.nextFollowUp,
-//         visitScheduledDate: payload.visitScheduledDate
-//       }));
-//       setModalOpen(false);
-//     } catch (error) {
-//       console.error("🚨 Error updating follow-up:", error);
-//       toast.error("Failed to update follow-up", {
-//         position: "top-right",
-//         autoClose: 3000,
-//       });
-//     } finally {
-//       console.groupEnd();
-//     }
-//   };
-
-
- const handleSave = async () => {
-    // console.group("🔍 HANDLE SAVE TRIGGERED");
-
-    // console.log(" editFormData:", editFormData);
-    // console.log(" userId:", userId, " | userName:", userName);
-    // console.log("🧩 Constants.baseURL:", Constants?.baseURL);
-
-    // ✅ Basic validation
     if (
       !editFormData.status ||
       !editFormData.leadType ||
@@ -375,13 +222,21 @@ const PendingFollowuptable = ({ data, onSelectLead, fetchUserLeads }) => {
 
         type: editFormData.leadType.trim().toUpperCase(),
         remarks: editFormData.remark?.trim() || "",
-        nextFollowUp: editFormData.nextFollowUpDate || null,
+        // nextFollowUp: editFormData.nextFollowUpDate || null,
+        nextFollowUpDate: editFormData.nextFollowUpDate || null,
         visitScheduledDate: editFormData.visitScheduledDate || null,
-        updatedBy: userName || "System",
+        // updatedBy: userName || "System",
+        // assignedTo: userName,
+        assignedTo: userId,
+        assignedBy: userId,
+        assignedDate: new Date().toISOString(),
+
+        updatedBy: userName,
+        lastUpdatedDate: new Date().toISOString()
       };
 
-      console.log("🧾 Sending payload:", payload);
-      console.log("📤 JSON body being sent to API:", JSON.stringify(payload, null, 2));
+      console.log(" Sending payload:", payload);
+      console.log(" JSON body being sent to API:", JSON.stringify(payload, null, 2));
 
       // 
       const response = await fetch(
@@ -399,7 +254,7 @@ const PendingFollowuptable = ({ data, onSelectLead, fetchUserLeads }) => {
       console.log("📡 Response Status:", response.status);
       if (!response.ok) {
         const errorText = await response.text();
-        console.error("❌ Update failed. Response:", errorText);
+        console.error(" Update failed. Response:", errorText);
         throw new Error("Update failed");
       }
 
@@ -409,159 +264,159 @@ const PendingFollowuptable = ({ data, onSelectLead, fetchUserLeads }) => {
 
 
       if (editFormData.status === "Visit Done") {
-  console.log("🟢 Lead marked as Visit Done – adding to Enquiries table...");
+        console.log(" Lead marked as Visit Done – adding to Enquiries table...");
 
-  const enquiryPayload = {
-    id: editingItem?.id,
-    name: editingItem?.name,
-    phone: editingItem?.phone,
-    whatsapp: editingItem?.whatsapp,
-    email: editingItem?.email,
-    address: editingItem?.address,
-    occupation: visitDoneData?.occupation || editingItem?.occupation || "N/A",
-    company: editingItem?.company,
-    interest: visitDoneData?.interestedIn || editingItem?.interest || "",
-    budgetInLakh: editingItem?.budgetInLakh || 0,
-    intendedPurchasePeriodMonths: editingItem?.intendedPurchasePeriodMonths || 0,
-    lastSiteVisit: new Date().toISOString(),
-    source: editingItem?.source || "N/A",
-    remarks: editFormData.remark || editingItem?.remarks || "",
-    status: "Visit Done",
-    salesEngagement: {
-      assignedTo: userName || "system",
-      assignedBy: userName || "system",
-      assignedDate: new Date().toISOString(),
-      nextFollowUp: new Date().toISOString(),
-      enquiryId: editingItem?.id,
-      status: "Active",
-      remarks: "Auto-created from Visit Done lead",
-    },
-  };
+        const enquiryPayload = {
+          id: editingItem?.id,
+          name: editingItem?.name,
+          phone: editingItem?.phone,
+          whatsapp: editingItem?.whatsapp,
+          email: editingItem?.email,
+          address: editingItem?.address,
+          occupation: visitDoneData?.occupation || editingItem?.occupation || "N/A",
+          company: editingItem?.company,
+          interest: visitDoneData?.interestedIn || editingItem?.interest || "",
+          budgetInLakh: editingItem?.budgetInLakh || 0,
+          intendedPurchasePeriodMonths: editingItem?.intendedPurchasePeriodMonths || 0,
+          lastSiteVisit: new Date().toISOString(),
+          source: editingItem?.source || "N/A",
+          remarks: editFormData.remark || editingItem?.remarks || "",
+          status: "Visit Done",
+          salesEngagement: {
+            assignedTo: userName || "system",
+            assignedBy: userName || "system",
+            assignedDate: new Date().toISOString(),
+            nextFollowUp: new Date().toISOString(),
+            enquiryId: editingItem?.id,
+            status: "Active",
+            remarks: "Auto-created from Visit Done lead",
+          },
+        };
 
-  console.log("📤 Sending Enquiry POST Request:", enquiryPayload);
+        console.log(" Sending Enquiry POST Request:", enquiryPayload);
 
-  try {
-    const enquiryResponse = await fetch(
-      `https://localhost:5289/sales/api/enquiries/${editingItem?.id}`,
-      {
-        method: "PATCH",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-        body: JSON.stringify(enquiryPayload),
+        try {
+          const enquiryResponse = await fetch(
+            `https://localhost:5289/sales/api/enquiries/${editingItem?.id}`,
+            {
+              method: "PATCH",
+              headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+              },
+              credentials: "include",
+              body: JSON.stringify(enquiryPayload),
+            }
+          );
+
+          if (!enquiryResponse.ok) {
+            const errText = await enquiryResponse.text();
+            console.error(" Failed to save enquiry:", errText);
+            toast.error("Failed to add lead to Enquiry table!");
+          } else {
+            const enquiryResult = await enquiryResponse.json();
+            console.log(" Enquiry saved successfully:", enquiryResult);
+            toast.success("Lead added to Enquiry table!");
+          }
+        } catch (err) {
+          console.error("🚨 Error saving enquiry:", err);
+          toast.error("Error while saving enquiry!");
+        }
       }
-    );
 
-    if (!enquiryResponse.ok) {
-      const errText = await enquiryResponse.text();
-      console.error("❌ Failed to save enquiry:", errText);
-      toast.error("Failed to add lead to Enquiry table!");
-    } else {
-      const enquiryResult = await enquiryResponse.json();
-      console.log("✅ Enquiry saved successfully:", enquiryResult);
-      toast.success("Lead added to Enquiry table!");
-    }
-  } catch (err) {
-    console.error("🚨 Error saving enquiry:", err);
-    toast.error("Error while saving enquiry!");
-  }
-}
+      // if (editFormData.status === "Visit Done") {
+      //   console.log("🟢 Lead marked as Visit Done – syncing with Enquiries table...");
 
-// if (editFormData.status === "Visit Done") {
-//   console.log("🟢 Lead marked as Visit Done – syncing with Enquiries table...");
+      //   const enquiryPayload = {
+      //     id: editingItem?.id,
+      //     name: editingItem?.name,
+      //     phone: editingItem?.phone,
+      //     whatsapp: editingItem?.whatsapp,
+      //     email: editingItem?.email,
+      //     address: editingItem?.address,
+      //     occupation: visitDoneData?.occupation || editingItem?.occupation || "N/A",
+      //     company: editingItem?.company,
+      //     interest: visitDoneData?.interestedIn || editingItem?.interest || "",
+      //     budgetInLakh: editingItem?.budgetInLakh || 0,
+      //     intendedPurchasePeriodMonths: editingItem?.intendedPurchasePeriodMonths || 0,
+      //     lastSiteVisit: new Date().toISOString(),
+      //     source: editingItem?.source || "N/A",
+      //     remarks: editFormData.remark || editingItem?.remarks || "",
+      //     status: "Visit Done",
+      //     salesEngagement: {
+      //       assignedTo: userName || "system",
+      //       assignedBy: userName || "system",
+      //       assignedDate: new Date().toISOString(),
+      //       nextFollowUp: new Date().toISOString(),
+      //       enquiryId: editingItem?.id,
+      //       status: "Active",
+      //       remarks: "Auto-created from Visit Done lead",
+      //     },
+      //   };
 
-//   const enquiryPayload = {
-//     id: editingItem?.id,
-//     name: editingItem?.name,
-//     phone: editingItem?.phone,
-//     whatsapp: editingItem?.whatsapp,
-//     email: editingItem?.email,
-//     address: editingItem?.address,
-//     occupation: visitDoneData?.occupation || editingItem?.occupation || "N/A",
-//     company: editingItem?.company,
-//     interest: visitDoneData?.interestedIn || editingItem?.interest || "",
-//     budgetInLakh: editingItem?.budgetInLakh || 0,
-//     intendedPurchasePeriodMonths: editingItem?.intendedPurchasePeriodMonths || 0,
-//     lastSiteVisit: new Date().toISOString(),
-//     source: editingItem?.source || "N/A",
-//     remarks: editFormData.remark || editingItem?.remarks || "",
-//     status: "Visit Done",
-//     salesEngagement: {
-//       assignedTo: userName || "system",
-//       assignedBy: userName || "system",
-//       assignedDate: new Date().toISOString(),
-//       nextFollowUp: new Date().toISOString(),
-//       enquiryId: editingItem?.id,
-//       status: "Active",
-//       remarks: "Auto-created from Visit Done lead",
-//     },
-//   };
+      //   console.log("📤 Sending Enquiry Sync Request:", enquiryPayload);
 
-//   console.log("📤 Sending Enquiry Sync Request:", enquiryPayload);
+      //   try {
+      //     // Step 1️⃣ Check if enquiry exists
+      //     const checkResponse = await fetch(
+      //       `https://localhost:5289/sales/api/enquiries/${editingItem?.id}`,
+      //       { method: "GET", credentials: "include" }
+      //     );
 
-//   try {
-//     // Step 1️⃣ Check if enquiry exists
-//     const checkResponse = await fetch(
-//       `https://localhost:5289/sales/api/enquiries/${editingItem?.id}`,
-//       { method: "GET", credentials: "include" }
-//     );
+      //     let enquiryResponse;
+      //     if (checkResponse.ok) {
+      //       // 2️⃣ Exists → Update with PATCH
+      //       console.log("🟡 Enquiry found. Updating existing record...");
+      //       enquiryResponse = await fetch(
+      //         `https://localhost:5289/sales/api/enquiries/${editingItem?.id}`,
+      //         {
+      //           method: "PATCH",
+      //           headers: {
+      //             Accept: "application/json",
+      //             "Content-Type": "application/json",
+      //           },
+      //           credentials: "include",
+      //           body: JSON.stringify(enquiryPayload),
+      //         }
+      //       );
+      //     } else {
+      //       // 3️⃣ Not found → Create new with POST
+      //       console.log("🟢 No enquiry found. Creating a new one...");
+      //       enquiryResponse = await fetch(
+      //         "https://localhost:5289/sales/api/enquiries",
+      //         {
+      //           method: "POST",
+      //           headers: {
+      //             Accept: "application/json",
+      //             "Content-Type": "application/json",
+      //           },
+      //           credentials: "include",
+      //           body: JSON.stringify(enquiryPayload),
+      //         }
+      //       );
+      //     }
 
-//     let enquiryResponse;
-//     if (checkResponse.ok) {
-//       // 2️⃣ Exists → Update with PATCH
-//       console.log("🟡 Enquiry found. Updating existing record...");
-//       enquiryResponse = await fetch(
-//         `https://localhost:5289/sales/api/enquiries/${editingItem?.id}`,
-//         {
-//           method: "PATCH",
-//           headers: {
-//             Accept: "application/json",
-//             "Content-Type": "application/json",
-//           },
-//           credentials: "include",
-//           body: JSON.stringify(enquiryPayload),
-//         }
-//       );
-//     } else {
-//       // 3️⃣ Not found → Create new with POST
-//       console.log("🟢 No enquiry found. Creating a new one...");
-//       enquiryResponse = await fetch(
-//         "https://localhost:5289/sales/api/enquiries",
-//         {
-//           method: "POST",
-//           headers: {
-//             Accept: "application/json",
-//             "Content-Type": "application/json",
-//           },
-//           credentials: "include",
-//           body: JSON.stringify(enquiryPayload),
-//         }
-//       );
-//     }
-
-//    if (!enquiryResponse.ok) {
-//   const errText = await enquiryResponse.text();
-//   console.error("❌ Enquiry save failed:", errText);
-//   toast.error("Failed to sync lead with Enquiry table!");
-//     } else {
-//    let enquiryResult = null;
-//   try {
-//     // Safely read text, in case backend returns empty body
-//     const text = await enquiryResponse.text();
-//     enquiryResult = text ? JSON.parse(text) : {};
-//   } catch (err) {
-//     enquiryResult = {};
-//     console.warn("⚠️ Empty or non-JSON response from enquiry API");
-//   }
-//       toast.success("Lead successfully added/updated in Enquiry table!");
-//     }
-//   } catch (err) {
-//     console.error("🚨 Error saving enquiry:", err);
-//     toast.error("Error while syncing enquiry!");
-//   }
-// }
+      //    if (!enquiryResponse.ok) {
+      //   const errText = await enquiryResponse.text();
+      //   console.error("❌ Enquiry save failed:", errText);
+      //   toast.error("Failed to sync lead with Enquiry table!");
+      //     } else {
+      //    let enquiryResult = null;
+      //   try {
+      //     // Safely read text, in case backend returns empty body
+      //     const text = await enquiryResponse.text();
+      //     enquiryResult = text ? JSON.parse(text) : {};
+      //   } catch (err) {
+      //     enquiryResult = {};
+      //     console.warn("⚠️ Empty or non-JSON response from enquiry API");
+      //   }
+      //       toast.success("Lead successfully added/updated in Enquiry table!");
+      //     }
+      //   } catch (err) {
+      //     console.error("🚨 Error saving enquiry:", err);
+      //     toast.error("Error while syncing enquiry!");
+      //   }
+      // }
 
       // . Update local form state immediately (instant UI feedback)
       setEditFormData((prev) => ({
@@ -612,155 +467,10 @@ const PendingFollowuptable = ({ data, onSelectLead, fetchUserLeads }) => {
     (lead) => lead.status?.toUpperCase() !== "VISIT_SCHEDULED"
   );
 
- 
 
 
-//   const handleUpdateEnquiry = async () => {
-//   try {
-//   const payload = {
-//   id: editingItem.id,
-//   name: editingItem.name,
-//   phone: editingItem.phone,
-//   whatsapp: editingItem.whatsapp,
-//   email: editingItem.email,
-//   address: editingItem.address,
-//   occupation: visitDoneData.occupation,
-//   company: editingItem.company,
-//   interest: visitDoneData.interestedIn,
-//   budgetInLakh: editingItem.budgetInLakh || 0,
-//   intendedPurchasePeriodMonths: editingItem.intendedPurchasePeriodMonths || 0,
-//   lastSiteVisit: editingItem.lastSiteVisit || new Date().toISOString(),
-//   source: editingItem.source || "N/A",
-//   remarks: editingItem.remarks || "",
-//   status: editingItem.status || "Visit Done",
-//   salesEngagement: {
-//     assignedTo: editingItem.salesEngagement?.assignedTo || "system",
-//     assignedBy: editingItem.salesEngagement?.assignedBy || "system",
-//     assignedDate: editingItem.salesEngagement?.assignedDate || new Date().toISOString(),
-//     nextFollowUp: editingItem.salesEngagement?.nextFollowUp || new Date().toISOString(),
-//     enquiryId: editingItem.id,
-//     status: editingItem.salesEngagement?.status || "Active",
-//     remarks: editingItem.salesEngagement?.remarks || "Updated from Visit Done modal",
-//   },
-// };
 
 
-//     const response = await fetch(
-//       `https://localhost:5289/sales/api/enquiries/${editingItem.id}`,
-//       {
-//         method: "PATCH",
-//         headers: {
-//           "Accept": "application/json",
-//           "Content-Type": "application/json",
-//         },
-//         credentials: "include",
-//         body: JSON.stringify(payload),
-//       }
-//     );
-
-//     if (!response.ok) {
-//       const errText = await response.text();
-//       console.error("❌ Backend error text:", errText);
-//       throw new Error(`Failed to update enquiry (status ${response.status})`);
-//     }
-
-//     const updated = await response.json();
-//     console.log("✅ Enquiry updated successfully:", updated);
-//     toast.success("Enquiry updated successfully!");
-//     setVisitDoneModalOpen(false);
-//     fetchUserLeads && fetchUserLeads();
-//   } catch (error) {
-//     console.error("❌ Error updating enquiry:", error);
-//     toast.error("Failed to update enquiry");
-//   }
-// };
-
-
-// const handleUpdateEnquiry = async () => {
-//   try {
-//      console.group("🟢 handleUpdateEnquiry Triggered");
-//     console.log("✳️ Editing Item:", editingItem);
-//     console.log("✳️ Visit Done Data:", visitDoneData);
-
-//     const payload = {
-//       id: editingItem.id,
-//       name: editingItem.name,
-//       phone: editingItem.phone,
-//       whatsapp: editingItem.whatsapp,
-//       email: editingItem.email,
-//       address: editingItem.address,
-//       occupation: visitDoneData.occupation,
-//       company: editingItem.company,
-//       interest: visitDoneData.interestedIn,
-//       budgetInLakh: editingItem.budgetInLakh || 0,
-//       intendedPurchasePeriodMonths: editingItem.intendedPurchasePeriodMonths || 0,
-//       lastSiteVisit: editingItem.lastSiteVisit || new Date().toISOString(),
-//       source: editingItem.source || "N/A",
-//       remarks: editingItem.remarks || "",
-//       status: editingItem.status || "Visit Done",
-//       salesEngagement: {
-//         assignedTo: editingItem.salesEngagement?.assignedTo || "system",
-//         assignedBy: editingItem.salesEngagement?.assignedBy || "system",
-//         assignedDate:
-//           editingItem.salesEngagement?.assignedDate || new Date().toISOString(),
-//         nextFollowUp:
-//           editingItem.salesEngagement?.nextFollowUp || new Date().toISOString(),
-//         enquiryId: editingItem.id,
-//         status: editingItem.salesEngagement?.status || "Active",
-//         remarks:
-//           editingItem.salesEngagement?.remarks ||
-//           "Updated from Visit Done modal",
-//       },
-//     };
-
-//     console.log("📤 Sending PATCH request:", payload);
-     
-
-//     const response = await fetch(
-//       `https://localhost:5289/sales/api/enquiries/${editingItem.id}`,
-//       {
-//         method: "PATCH",
-//         headers: {
-//           Accept: "application/json",
-//           "Content-Type": "application/json",
-//         },
-//         credentials: "include",
-//         body: JSON.stringify(payload),
-//       }
-//     );
-
-//       console.log("📡 Response Status:", response.status);
-
-//     if (!response.ok) {
-//       const errText = await response.text();
-//       console.error("❌ Backend error text:", errText);
-//       throw new Error(`Failed to update enquiry (status ${response.status})`);
-//     }
-
-//     // ✅ Handle empty or non-JSON responses safely
-//     const text = await response.text();
-//     let updated = null;
-//     if (text) {
-//       try {
-//         updated = JSON.parse(text);
-//       } catch (err) {
-//         console.warn("⚠️ Response is not valid JSON, ignoring parse error.");
-//       }
-//     }
-
-//     console.log("✅ Enquiry updated successfully:", updated);
-//     toast.success("Enquiry updated successfully!");
-
-//     // Close modal and refresh list
-//     setVisitDoneModalOpen(false);
-//     if (fetchUserLeads) {
-//       fetchUserLeads();
-//     }
-//   } catch (error) {
-//     console.error("❌ Error updating enquiry:", error);
-//     toast.error("Failed to update enquiry");
-//   }
-// };
 
   return (
     <>
@@ -789,10 +499,10 @@ const PendingFollowuptable = ({ data, onSelectLead, fetchUserLeads }) => {
               {/* {data.map((firm, index) => { */}
               {/* {filteredLeads.map((firm, index) => { */}
 
-{data.map((firm,index) => {
+              {data.map((firm, index) => {
 
-                console.group(`🧩 Lead Row [${index}]`);
-                console.log("➡️ Full firm object:", firm);
+                // console.group(`🧩 Lead Row [${index}]`);
+                // console.log("➡️ Full firm object:", firm);
                 // console.log("🔑 Keys in firm:", Object.keys(firm));
                 // console.log("📎 leadEnagagements:", firm.leadEnagagements);
                 // console.log("📎 leadEngagements:", firm.leadEngagements);
@@ -841,23 +551,14 @@ const PendingFollowuptable = ({ data, onSelectLead, fetchUserLeads }) => {
                     </TableCell>
 
 
-                    {/* <TableCell>{firm.id || '-'}</TableCell> */}
+
                     <TableCell sx={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '120px' }}>{firm.id ? `Lead - ${firm.id}` : '-'}</TableCell>
 
                     <TableCell>{firm.name || '-'}</TableCell>
                     <TableCell>{firm.phone || '-'}</TableCell>
                     <TableCell>{firm.email || '-'}</TableCell>
 
-                    {/* <TableCell>{firm.lastFollowUp || '-'}</TableCell>
-                  <TableCell>{firm.nextFollowUp || '-'}</TableCell> */}
 
-
-                    {/* <TableCell>
-  {firm.leadEnagagements?.[0]?.visitScheduledDate
-    ? new Date(firm.leadEnagagements[0].visitScheduledDate).toLocaleDateString()
-    : "-"}
-</TableCell> */}
-                    {/* 🕓 Last Follow Up - only previous follow up date */}
                     <TableCell>
                       {firm.leadEnagagements?.length > 1
                         ? new Date(
@@ -866,11 +567,7 @@ const PendingFollowuptable = ({ data, onSelectLead, fetchUserLeads }) => {
                         : "-"}
                     </TableCell>
 
-                    {/* <TableCell>
-  {firm.leadEnagagements?.[0]?.nextFollowUp
-    ? new Date(firm.leadEnagagements[0].nextFollowUp).toLocaleDateString()
-    : "-"}
-</TableCell> */}
+
                     {/* 🗓️ Next Follow Up - show nextFollowUp or visitScheduledDate */}
                     <TableCell>
                       {firm.leadEnagagements?.[firm.leadEnagagements.length - 1]?.nextFollowUp
@@ -885,6 +582,7 @@ const PendingFollowuptable = ({ data, onSelectLead, fetchUserLeads }) => {
                           ).toLocaleDateString()
                           : "-"}
                     </TableCell>
+
 
                     {/* <TableCell>{firm.status || '-'}</TableCell> */}
                     {/* <TableCell>{firm.remark || '-'}</TableCell> */}

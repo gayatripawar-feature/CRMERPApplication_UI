@@ -1,103 +1,3 @@
-// import React,{useState} from "react";
-// import { TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Paper,Typography,TablePagination,Box } from "@mui/material";
-// import Constants from "../Constants";
-
-// const FirstvisitfollowupUndefinedTable = ({ data }) => {
-//   const [page, setPage] = useState(0);
-//   const [rowsPerPage, setRowsPerPage] = useState(5);
-
-//   const handleChangePage = (event, newPage) => {
-//     setPage(newPage);
-//   };
-
-//   const handleChangeRowsPerPage = (event) => {
-//     setRowsPerPage(parseInt(event.target.value, 10));
-//     setPage(0);
-//   };
-
-//   // Slice data for pagination
-//   const paginatedData = data.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
-
-//   return (
-//     <>
-     
-//       <TableContainer component={Paper}>
-       
-//         <Table>
-//           <TableHead>
-//             <TableRow sx={{ background: Constants.primaryColor }}>
-//               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>
-//               STATUS HISTORY</TableCell>
-//               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>REMARK HISTORY</TableCell>
-//               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>ASSIGN TO HISTORY</TableCell>
-//               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>ENQUIRY NO.</TableCell>
-//               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>LEAD NO.</TableCell>
-//               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>NAME</TableCell>
-//               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>MOBILE</TableCell>
-//               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>WHATSAPP NO.</TableCell>
-//               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>ALTERNATE CONTACT NO.</TableCell>
-
-//               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>EMAIL</TableCell>
-//               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>ADDRESS</TableCell>
-//               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>OCCUPATION</TableCell>
-//               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>COMPANY</TableCell>
-
-//               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>INTERESTED IN</TableCell>
-//               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>BUDGET (APPROX.)</TableCell>
-//               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>REASON FOR PURCHASE</TableCell>
-//               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>REFERENCE BY / SOURCE</TableCell>
-//               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>NAME OF CP (IF CHANNEL PARTNER)</TableCell>
-
-//               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>PLANNING TO BY WITHIN ?</TableCell>
-
-//               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>CUSTOMER FEEDBACK & COMPLETE FOLLOWUP DETAILS
-														
-// </TableCell>
-
-
-
-
-//             </TableRow>
-//           </TableHead>
-//           <TableBody>
-//             {paginatedData.map((item, index) => (
-//               <TableRow key={index}>
-//                 <TableCell>{item.timestamp}</TableCell>
-//                 <TableCell>{item.leadNo}</TableCell>
-//                 <TableCell>{item.name}</TableCell>
-//                 <TableCell>{item.mobile}</TableCell>
-//                 <TableCell>{item.whatsappNo}</TableCell>
-//                 <TableCell>{item.youAreLookingFor}</TableCell>
-//                 <TableCell>{item.email}</TableCell>
-//                 <TableCell>{item.sourceName}</TableCell>
-//                 <TableCell>{item.location}</TableCell>
-//               </TableRow>
-//             ))}
-//           </TableBody>
-//         </Table>
-//   </TableContainer>
-
-
-// <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 1 }}>
-//   <TablePagination
-//     rowsPerPageOptions={[5, 10, 25]}
-//     component="div"
-//     count={data.length}
-//     rowsPerPage={rowsPerPage}
-//     page={page}
-//     onPageChange={handleChangePage}
-//     onRowsPerPageChange={handleChangeRowsPerPage}
-//   />
-// </Box>
-
-//     </>
-//   );
-// };
-
-// export default FirstvisitfollowupUndefinedTable;
-
-
-
 import React, { useState } from "react";
 import {
   TableContainer,
@@ -372,9 +272,9 @@ const FirstvisitfollowupUndefinedTable = ({ data }) => {
                 <TableRow key={index} hover>
                   <TableCell>{row.status || "N/A"}</TableCell>
                   <TableCell>{row.remarks || "N/A"}</TableCell>
-                  <TableCell>{row.assignTo || "N/A"}</TableCell>
+                  <TableCell>{row.assignedTo|| "N/A"}</TableCell>
                   <TableCell>{row.id || "N/A"}</TableCell>
-                  <TableCell>{row.leadNo || "N/A"}</TableCell>
+                  <TableCell>{row.leadId || "N/A"}</TableCell>
                   <TableCell>{row.name || "N/A"}</TableCell>
                   <TableCell>{row.phone || "N/A"}</TableCell>
                   <TableCell>{row.alternateContactNo || "N/A"}</TableCell>

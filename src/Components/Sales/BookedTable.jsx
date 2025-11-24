@@ -1,7 +1,21 @@
 import React from "react";
 import { TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Paper } from "@mui/material";
 import Constants from "../Constants";
+import { useSession } from "../SessionContext";
 const BookedTable = ({ data }) => {
+   const { id: userId, name: userName, authenticated } = useSession() || {};
+
+   const getAssignedToName = (assignedId) => {
+    if (!assignedId) return "-";
+
+    // Match ID with logged-in user
+    if (String(assignedId).trim() === String(userId).trim()) {
+      return userName;
+    }
+
+    return assignedId; // no user table, return id
+  };
+
   return (
     <>
       <TableContainer component={Paper} sx={{maxHeight: 400,overflowY: "auto"}}>
@@ -30,12 +44,20 @@ const BookedTable = ({ data }) => {
                 <TableCell>{item.email}</TableCell>
                 <TableCell>{item.source}</TableCell>
                 <TableCell>{item.address || "-"}</TableCell>
-                {/* <TableCell>{item.assignedTo}</TableCell> */}
-                <TableCell>
+               
+                {/* <TableCell>
         {item.leadEnagagements?.length > 0
           ? item.leadEnagagements[0].assignedTo
           : "-"}
-      </TableCell>
+      </TableCell> */}
+      <TableCell>
+  {getAssignedToName(
+    item.leadEnagagements?.length > 0
+      ? item.leadEnagagements[0].assignedTo
+      : ""
+  )}
+</TableCell>
+
               </TableRow>
             ))}
           </TableBody>
