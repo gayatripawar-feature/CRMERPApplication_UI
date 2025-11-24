@@ -159,22 +159,22 @@ const FirstvisitfollowupbookedTable = ({ data }) => {
             ) : (
               paginatedData.map((item, index) => (
                 <TableRow key={index} hover>
-                  <TableCell>{item.enquiryNo || "N/A"}</TableCell>
-                  <TableCell>{item.leadNo || "N/A"}</TableCell>
+                  <TableCell>{item.id || "N/A"}</TableCell>
+                  <TableCell>{item.leadId || "N/A"}</TableCell>
                   <TableCell>{item.name || "N/A"}</TableCell>
-                  <TableCell>{item.mobile || "N/A"}</TableCell>
+                  <TableCell>{item.phone || "N/A"}</TableCell>
                   <TableCell>{item.alternateContactNo || "N/A"}</TableCell>
-                  <TableCell>{item.whatsappNo || "N/A"}</TableCell>
+                  <TableCell>{item.phone || "N/A"}</TableCell>
                   <TableCell>{item.email || "N/A"}</TableCell>
                   <TableCell>{item.address || "N/A"}</TableCell>
                   <TableCell>{item.occupation || "N/A"}</TableCell>
                   <TableCell>{item.company || "N/A"}</TableCell>
-                  <TableCell>{item.interestedIn || "N/A"}</TableCell>
-                  <TableCell>{item.budget || "N/A"}</TableCell>
-                  <TableCell>{item.reasonForPurchase || "N/A"}</TableCell>
-                  <TableCell>{item.referenceSource || "N/A"}</TableCell>
+                  <TableCell>{item.interest || "N/A"}</TableCell>
+                  <TableCell>{item.budgetInLakh || "N/A"}</TableCell>
+                  <TableCell>{item.purchaseReason || "N/A"}</TableCell>
+                  <TableCell>{item.source || "N/A"}</TableCell>
                   <TableCell>{item.cpName || "N/A"}</TableCell>
-                  <TableCell>{item.planningToBuy || "N/A"}</TableCell>
+                  <TableCell>{item.intendedPurchasePeriod || "N/A"}</TableCell>
                   <TableCell>{item.customerFeedback || "N/A"}</TableCell>
                 </TableRow>
               ))
@@ -191,7 +191,7 @@ const FirstvisitfollowupbookedTable = ({ data }) => {
                     backgroundColor: "background.paper",
                   }}
                 >
-                  <TablePagination
+                  {/* <TablePagination
                     rowsPerPageOptions={[5, 10, 25]}
                     component="div"
                     count={data.length}
@@ -219,7 +219,7 @@ const FirstvisitfollowupbookedTable = ({ data }) => {
                         fontSize: isMobile ? "12px" : "14px",
                       },
                     }}
-                  />
+                  /> */}
                 </Box>
               </TableCell>
             </TableRow>

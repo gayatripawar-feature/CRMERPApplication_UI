@@ -419,286 +419,7 @@ const DisplayEnquiryTable = ({ data, fetchEnquiries }) => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  // const handleEditSubmit = () => {
-  //   if (editingItem && onUpdate) {
-  //     const updatedItem = {
-  //       ...editingItem,
-  //       ...editFormData,
-  //     };
-
-  //     onUpdate(updatedItem, editingItem.index);
-  //     setEditModalOpen(false);
-  //   }
-  // };
-  // const handleEditSubmit = async () => {
-  //   try {
-  //     if (!editingItem?.id) {
-  //       alert("❌ No enquiry ID found!");
-  //       return;
-  //     }
-
-  //     const payload = {
-  //       id: editingItem.id,
-  //       status: editFormData.status,
-  //       remarks: editFormData.remark,
-  //       salesEnagagements: [
-  //         {
-  //           visitType: editFormData.visitType || "",
-  //           nextFollowUp: editFormData.nextFollowUp || null,
-  //           visitScheduledDate: editFormData.visitScheduledDate || null
-  //         }
-  //       ]
-  //     };
-
-  //     console.log("PATCH Payload:", payload);
-
-  //     const res = await fetch(
-  //       `https://localhost:5289/sales/api/enquiries/${editingItem.id}`,
-  //       {
-  //         method: "PATCH",
-  //         headers: { "Content-Type": "application/json" },
-  //         credentials: "include",
-  //         body: JSON.stringify(payload),
-  //       }
-  //     );
-
-  //     if (!res.ok) throw new Error("Failed to update enquiry");
-
-  //     const updated = await res.json();
-  //     console.log("🟢 Updated enquiry:", updated);
-
-  //     setEditModalOpen(false);
-  //     fetchEnquiries(); // refresh list if needed
-
-  //   } catch (err) {
-  //     console.error("❌ Update Error:", err);
-  //     alert("Failed to update enquiry");
-  //   }
-  // };
-
-  // Createing the new entry in salesEnaggamenets - for every follow up :
-  // const handleEditSubmit = async () => {
-  //   try {
-  //     if (!editingItem?.id) {
-  //       alert("❌ No enquiry ID found!");
-  //       return;
-  //     }
-
-
-
-  //     const payload = {
-  //       id: editingItem.id,
-  //       name: editFormData.name || editingItem.name,
-  //       source: editingItem.source,  // keep from DB, not from form
-  //       status: editFormData.status,
-  //       remarks: editFormData.remark,
-
-  //       salesEngagement: {
-  //         assignedTo: assignedTo,
-  //         assignedDate: new Date().toISOString(),
-  //         assignedBy: assignedBy,
-  //         // enquiryId: selectedItem.id,
-  //         enquiryId: editingItem.id,
-  //         // nextFollowUp: NextFollowUp,
-  //         nextFollowUp: editFormData.nextFollowUp,
-
-  //         status: status,
-  //         // remarks: followupRemarks
-  //         remarks: editFormData.remark
-
-  //       }
-
-
-  //     };
-
-
-  //     console.log("PATCH Payload:", payload);
-
-  //     const res = await fetch(
-  //       `https://localhost:5289/sales/api/enquiries/${editingItem.id}`,
-  //       {
-  //         method: "PATCH",
-  //         headers: { "Content-Type": "application/json" },
-  //         credentials: "include",
-  //         body: JSON.stringify(payload),
-  //       }
-  //     );
-
-  //     if (!res.ok) throw new Error("Failed to update enquiry");
-
-  //     const updated = await res.json();
-  //     console.log("🟢 Updated enquiry:", updated);
-
-  //     setEditModalOpen(false);
-  //     fetchEnquiries();
-
-  //   } catch (err) {
-  //     console.error("❌ Update Error:", err);
-  //     alert("Failed to update enquiry");
-  //   }
-  // };
-
-  // To update that same record :
-  // const handleEditSubmit = async () => {
-  //   try {
-  //     if (!editingItem?.id) {
-  //       alert("❌ No enquiry ID found!");
-  //       return;
-  //     }
-
-  //     const payload = {
-  //       id: editingItem.id,
-  //       name: editFormData.name || editingItem.name,
-  //       source: editingItem.source,
-  //       status: editFormData.status,
-  //       remarks: editFormData.remark,
-
-  //       salesEngagement: {
-  //         // id: editingItem.salesEngagements?.[0]?.id,  // 🟢 REQUIRED FOR UPDATE
-  //         id: editingItem.salesEngagements?.[0]?.EnquiryId,
-  //         assignedTo: assignedTo,
-  //         assignedDate: new Date().toISOString(),
-  //         assignedBy: assignedBy,
-  //         enquiryId: editingItem.id,
-  //         nextFollowUp: editFormData.nextFollowUp,
-  //         status: status,
-  //         remarks: editFormData.remark
-  //       }
-  //     };
-
-  //     console.log("PATCH Payload:", payload);
-
-  //     const res = await fetch(
-  //       `https://localhost:5289/sales/api/enquiries/${editingItem.id}`,
-  //       {
-  //         method: "PATCH",
-  //         headers: { "Content-Type": "application/json" },
-  //         credentials: "include",
-  //         body: JSON.stringify(payload),
-  //       }
-  //     );
-
-  //     if (!res.ok) throw new Error("Failed to update enquiry");
-
-  //     const updated = await res.json();
-  //     console.log("🟢 Updated enquiry:", updated);
-
-  //     setEditModalOpen(false);
-  //     fetchEnquiries();
-  //   } catch (err) {
-  //     console.error("❌ Update Error:", err);
-  //     alert("Failed to update enquiry");
-  //   }
-  // };
-  // const handleEditSubmit = async () => {
-  //   try {
-  //     if (!editingItem?.id) {
-  //       alert("❌ No enquiry ID found!");
-  //       return;
-  //     }
-
-  //     const payload = {
-  //       id: editingItem.id,
-  //       name: editFormData.name || editingItem.name,
-  //       source: editingItem.source,
-  //       status: editFormData.status,
-  //       remarks: editFormData.remark,
-  //  intendedPurchasePeriod: editingItem.intendedPurchasePeriod,   // REQUIRED
-  //   purchaseReason: editingItem.purchaseReason,                    // REQUIRED
-  //       enquiryEnagagement: {
-  //         id: editingItem.enquiryEnagagements?.[0]?.id || 0,  
-  //         assignedTo: assignedTo,
-  //         assignedDate: new Date().toISOString(),
-  //         assignedBy: assignedBy,
-  //         enquiryId: editingItem.id,
-  //         nextFollowUpDate: editFormData.nextFollowUp,
-  //         status: editFormData.status,
-  //         remarks: editFormData.remark
-  //       }
-  //     };
-
-  //     console.log("PATCH Payload:", payload);
-
-  //     const res = await fetch(
-  //       `https://localhost:5289/sales/api/enquiries/${editingItem.id}`,
-  //       {
-  //         method: "PATCH",
-  //         headers: { "Content-Type": "application/json" },
-  //         credentials: "include",
-  //         body: JSON.stringify(payload),
-  //       }
-  //     );
-
-  //     if (!res.ok) throw new Error("Failed to update enquiry");
-
-  //     const updated = await res.json();
-  //     console.log("🟢 Updated enquiry:", updated);
-
-  //     setEditModalOpen(false);
-  //     fetchEnquiries();
-  //   } catch (err) {
-  //     console.error("❌ Update Error:", err);
-  //     alert("Failed to update enquiry");
-  //   }
-  // };
-
-
-  // const handleEditSubmit = async () => {
-  //   try {
-  //     if (!editingItem?.id) {
-  //       alert("❌ No enquiry ID found!");
-  //       return;
-  //     }
-
-  //     const payload = {
-  //       id: editingItem.id,
-  //       name: editFormData.name || editingItem.name,
-  //       source: editingItem.source,
-  //       status: editFormData.status,
-  //       remarks: editFormData.remark,
-  //       intendedPurchasePeriod: editingItem.intendedPurchasePeriod,
-  //       purchaseReason: editingItem.purchaseReason,
-
-  //       // ✅ MUST BE ARRAY + EXACT TYPO NAME
-  //       enquiryEnagagements: [
-  //         {
-  //           id: editingItem.enquiryEnagagements?.[0]?.id || 0,
-  //           assignedTo: assignedTo,
-  //           assignedDate: new Date().toISOString(),
-  //           assignedBy: assignedBy,
-  //           enquiryId: editingItem.id,
-  //           nextFollowUpDate: editFormData.nextFollowUp,
-  //           status: editFormData.status,
-  //           remarks: editFormData.remark,
-  //           lastUpdatedDate: new Date().toISOString()
-  //         }
-  //       ]
-  //     };
-
-  //     console.log("PATCH Payload:", payload);
-
-  //     const res = await fetch(
-  //       `https://localhost:5289/sales/api/enquiries/${editingItem.id}`,
-  //       {
-  //         method: "PATCH",
-  //         headers: { "Content-Type": "application/json" },
-  //         credentials: "include",
-  //         body: JSON.stringify(payload),
-  //       }
-  //     );
-
-  //     if (!res.ok) throw new Error("Failed to update enquiry");
-
-  //     const updated = await res.json();
-  //     console.log("🟢 Updated enquiry:", updated);
-
-  //     setEditModalOpen(false);
-  //     fetchEnquiries();
-  //   } catch (err) {
-  //     console.error("❌ Update Error:", err);
-  //     alert("Failed to update enquiry");
-  //   }
-  // };
+  
   const handleEditSubmit = async () => {
     try {
       if (!editingItem?.id) {
@@ -711,7 +432,9 @@ const DisplayEnquiryTable = ({ data, fetchEnquiries }) => {
         assignedTo,
         assignedDate: new Date().toISOString(),
         assignedBy,
-        type: "FollowUp",
+        // type: "FollowUp",
+        type: editFormData.visitType,
+
         status: editFormData.status,
         nextFollowUpDate: editFormData.nextFollowUp,
         remarks: editFormData.remark
@@ -743,83 +466,6 @@ const DisplayEnquiryTable = ({ data, fetchEnquiries }) => {
       alert("Failed to add follow-up");
     }
   };
-
-
-
-  // const handlefollowupClick = async (item, index) => {
-  //   try {
-  //     console.log("Follow-up Clicked:", item);
-
-  //     //  Resolve Correct Enquiry ID
-  //     const enquiryId =
-  //       item.id ||
-  //       item.enquiryId ||
-  //       item.enquiryNo ||
-  //       item.leadId ||
-  //       (item.leadEnagagements?.[0]?.enquiryId ?? undefined);
-
-  //     if (!enquiryId) {
-  //       alert(" No valid enquiry ID found!");
-  //       return;
-  //     }
-
-  //     //  Fetch Full Enquiry Details
-  //     const res = await fetch(
-  //       `https://localhost:5289/sales/api/enquiries/${enquiryId}`,
-  //       { method: "GET", credentials: "include" }
-  //     );
-
-  //     if (!res.ok) throw new Error("Failed to fetch enquiry");
-
-  //     const enquiry = await res.json();
-  //     console.log("Full Enquiry for Follow-Up:", enquiry);
-
-
-  //     // const eng = enquiry.salesEnagagements?.[0] || {};
-
-  //     //  Sort by date and pick latest follow-up
-  //  const engagements = enquiry.enquiryEnagagements || [];
-
-  //     const eng =
-  //       engagements.length > 0
-  //         ? engagements.sort(
-  //           (a, b) => new Date(b.assignedDate) - new Date(a.assignedDate)
-  //         )[0]
-  //         : {};
-
-
-  //     setEditFormData({
-  //       enquiryNo: enquiry.id || "",
-  //       remark: enquiry.remarks || "",
-  //       name: enquiry.name || "",
-  //       status: enquiry.status
-  //         || "",
-
-  //       visitType: eng.visitType || "",
-  //       nextFollowUp: eng.nextFollowUp || "",
-  //       visitScheduledDate: eng.visitScheduledDate || "",
-  //     });
-
-
-  //     // 4️⃣ Show proper fields
-  //     const nextFollowUpStatus = ["Follow up", "Unreachable", "Not answered", "Callback request"];
-  //     const visitScheduleStatus = ["Re-visit", "Visit postponed"];
-
-  //     setShowNextFollowUpEdit(nextFollowUpStatus.includes(enquiry.status));
-  //     setShowVisitScheduledDateEdit(visitScheduleStatus.includes(enquiry.status));
-
-  //     // 5️⃣ Store selected item for PATCH
-  //     setEditingItem({ ...item, id: enquiry.id });
-
-  //     // 6️⃣ Open Modal
-  //     setEditModalOpen(true);
-
-  //   } catch (err) {
-  //     console.error("❌ Follow-Up Load Error:", err);
-  //     alert("Failed to load follow-up details");
-  //   }
-  // };
-
 
   const handlefollowupClick = async (item) => {
     try {
@@ -910,7 +556,10 @@ const DisplayEnquiryTable = ({ data, fetchEnquiries }) => {
         status: eng.status || enquiry.status || "",
         nextFollowUp: eng.nextFollowUpDate || "",
         // visitType: eng.type || "",
-        visitType: enquiry.status || "",
+        // visitType: enquiry.status || "",
+        visitType: eng.type || "",
+
+
 
         visitScheduledDate: eng.nextVisitScheduledDate || "",
 
@@ -962,16 +611,7 @@ const DisplayEnquiryTable = ({ data, fetchEnquiries }) => {
       {isEditing ? (
 
 
-        //         <div
-        //   className="firm-form mt-4 p-3 border rounded"
-        //   style={{
-        //     maxHeight: "500px",
-        //     overflowY: "auto",
-        //     backgroundColor: "#f8f9fa",
-        //     border: "1px solid #ccc",
-        //   }}
-        // >
-        // <Dialog open={open}
+      
         <Dialog open={isEditing}
           onClose={handleCancel}
           maxWidth="md" fullWidth>
@@ -982,20 +622,7 @@ const DisplayEnquiryTable = ({ data, fetchEnquiries }) => {
               {/* <Grid item xs={4}> */}
               <Grid item xs={12} sm={6} md={4}>
 
-                {/* <FormControl fullWidth error={!!error} sx={{ border: Constants.formInputBorderColor }}>
-                  <InputLabel>Lead No.</InputLabel>
-                  <Select
-                    value={leadNo}
-                    label="Lead No."
-                    onChange={(e) => setLeadNo(e.target.value)}
-                  >
-                    {data.map((lead) => (
-                      <MenuItem key={lead.leadId} value={lead.leadId}>
-                        Lead {lead.leadId}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl> */}
+               
                 <FormControl fullWidth sx={{ border: Constants.formInputBorderColor }}>
                   <InputLabel>Lead No.</InputLabel>
                   <Select
@@ -1006,14 +633,7 @@ const DisplayEnquiryTable = ({ data, fetchEnquiries }) => {
                     <MenuItem value={leadNo}>Lead {leadNo}</MenuItem>
                   </Select>
                 </FormControl>
-                {/* <TextField
-                  label="Lead No."
-                  fullWidth
-                  value={leadNo}
-                  disabled
-                  sx={{ border: Constants.formInputBorderColor }}
-                /> */}
-
+             
 
               </Grid>
 

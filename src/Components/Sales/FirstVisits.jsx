@@ -125,24 +125,45 @@ const FirstVisits = () => {
   const handleOccupationChange = (event) => {
     setOccupation(event.target.value);
   };
+  // const handleToggleSection = (index) => {
+  //   setExpandedSection(index);
+  //   setShowFileInput(false);
+  //   // if (index === 1) {
+  //   //   fetchVisitFollowupHistory();
+  //   // }
+  //   if (index === 1) {
+  //     fetchVisitFollowupHistory().then((data) => {
+  //       console.log("SETTING visitFollowupHistory:", data);
+  //       setVisitFollowupHistory(data);
+  //       if (index === 2) {
+  //         console.log("booked clicked");
+  //         fetchBookedEnquiries();
+  //       }
+  //     });
+  //   }
+
+  // };
+
   const handleToggleSection = (index) => {
     setExpandedSection(index);
     setShowFileInput(false);
-    // if (index === 1) {
-    //   fetchVisitFollowupHistory();
-    // }
+
+    // TAB 1 → Pending Followups
     if (index === 1) {
+      console.log("Pending Followup clicked");
       fetchVisitFollowupHistory().then((data) => {
         console.log("SETTING visitFollowupHistory:", data);
         setVisitFollowupHistory(data);
-        if (index === 2) {
-          console.log("booked clicked");
-          fetchBookedEnquiries();
-        }
       });
     }
 
+
+    if (index === 2) {
+      console.log("Booked clicked");
+      fetchBookedEnquiries();
+    }
   };
+
   const handleChange = (e) => {
     const value = e.target.value;
     const regex = /[\d\s]/;
@@ -1035,67 +1056,6 @@ const FirstVisits = () => {
 
 
   //  Fetch ONLY follow-up history entries for a given enquiryId
-  // const fetchVisitFollowUpHistory = async (enquiryId) => {
-  //   try {
-  //     const res = await fetch(
-  //       `https://localhost:5289/sales/api/enquiries/${enquiryId}`,
-  //       { credentials: "include" }
-  //     );
-
-  //     if (!res.ok) throw new Error("Failed to load history");
-
-  //     const data = await res.json();
-  //     console.log("folow up clicked", data);
-  //     // Extract history from enquiry response
-  //     return data.salesEngagements || [];
-
-  //   } catch (err) {
-  //     console.error("❌ Error loading history:", err);
-  //     return [];
-  //   }
-  // };
-
-
-
-  // const fetchVisitFollowupHistory = async () => {
-  //   try {
-  //     console.log("follow up");
-
-  //     const response = await fetch(
-  //       "https://localhost:5289/sales/api/enquiries",
-  //       { credentials: "include" }
-  //     );
-
-  //     const data = await response.json();
-
-  //     // Extract all engagements from all enquiries
-  //     const allEngagements = data.pagedRecords.flatMap(enq =>
-  //       enq.enquiryEnagagements.map(e => ({
-  //         enquiryId: enq.id,
-  //         name: enq.name,
-  //         phone: enq.phone,
-  //         source: enq.source,
-  //         status: enq.status,
-
-  //         // engagement fields
-  //         assignedDate: e.assignedDate,
-  //         assignedTo: e.assignedTo,
-  //         nextFollowUpDate: e.nextFollowUpDate,
-  //         remarks: e.remarks,
-  //         type: e.type
-  //       }))
-  //     );
-
-  //     console.log("Flattened Engagements:", allEngagements);
-
-  //     return allEngagements;
-
-  //   } catch (err) {
-  //     console.error("Error fetching follow-up history:", err);
-  //     return [];
-  //   }
-  // };
-
 
   const fetchVisitFollowupHistory = async () => {
     try {
@@ -1190,41 +1150,99 @@ const FirstVisits = () => {
   };
 
 
-  // 🔥 SINGLE FUNCTION — CALL API + FILTER BOOKED ENQUIRIES
-  const fetchBookedEnquiries = async () => {
-    try {
-      const response = await fetch("https://localhost:5289/sales/api/enquiries", {
-        credentials: "include",
-      });
+  // FILTER BOOKED ENQUIRIES
+  // const fetchBookedEnquiries = async () => {
+  //   try {
+  //     const response = await fetch("https://localhost:5289/sales/api/enquiries", {
+  //       credentials: "include",
+  //     });
 
-      if (!response.ok) throw new Error("Failed to fetch enquiries");
+  //     if (!response.ok) throw new Error("Failed to fetch enquiries");
 
-      const data = await response.json();
+  //     const data = await response.json();
 
-      console.log("🔥 RAW API RESPONSE:", data);
+  //     console.log(" RAW API RESPONSE:", data);
 
-      const allEnquiries = Array.isArray(data.pagedRecords)
-        ? data.pagedRecords
-        : [];
+  //     const allEnquiries = Array.isArray(data.pagedRecords)
+  //       ? data.pagedRecords
+  //       : [];
 
-      console.log("💚 Normalized enquiries:", allEnquiries);
+  //     console.log(" Normalized enquiries:", allEnquiries);
 
-      const booked = allEnquiries.filter(
-        (item) => String(item.type)?.toLowerCase().trim() === "booked"
+  //     // ✅ FIX: Filter using engagements, NOT enquiry.type
+  //     const booked = allEnquiries.filter((item) => {
+  //       // const engagements = item.engagements || item.enquiryEngagements || [];
+  //       const engagements = item.enquiryEnagagements || [];
+
+  //       // return engagements.some(
+  //       //   (eg) => String(eg.type)?.toLowerCase().trim() === "booked"
+  //       // );
+  //       return engagements.some(
+  //         (eng) => String(eng.type)?.toLowerCase().trim() === "booked"
+  //       );
+  //     });
+
+  //     console.log(" FINAL BOOKED ENQUIRIES:", booked);
+
+  //     // update state
+  //     setEnquiries(booked);
+  //     setFirms(booked);
+  //     setProjectData(booked);
+
+  //     return booked;
+  //   } catch (err) {
+  //     console.error(" Error fetching booked enquiries:", err);
+  //   }
+  // };
+const fetchBookedEnquiries = async () => {
+  try {
+    const response = await fetch("https://localhost:5289/sales/api/enquiries", {
+      credentials: "include",
+    });
+
+    if (!response.ok) throw new Error("Failed to fetch enquiries");
+
+    const data = await response.json();
+
+    console.log(" RAW API RESPONSE:", data);
+
+    const allEnquiries = Array.isArray(data.pagedRecords)
+      ? data.pagedRecords
+      : [];
+
+    console.log(" Normalized enquiries:", allEnquiries);
+
+    // 🔥 Correct filtering using engagement.type
+    const bookedRecords = allEnquiries.filter((item) => {
+      const engagements = item.enquiryEnagagements || [];
+      return engagements.some(
+        (eng) => String(eng.type)?.toLowerCase().trim() === "booked"
       );
+    });
 
-      console.log("📘 FINAL BOOKED ENQUIRIES:", booked);
+    console.log(" FINAL BOOKED ENQUIRIES:", bookedRecords);
 
-      // update state
-      setEnquiries(booked);
-      setFirms(booked);
-      setProjectData(booked);
+    // ⭐ IMPORTANT: Keep pagination structure
+    const result = {
+      ...data,
+      pagedRecords: bookedRecords,
+      totalRecords: bookedRecords.length,
+    };
 
-      return booked;
-    } catch (err) {
-      console.error(" Error fetching booked enquiries:", err);
-    }
-  };
+    // update state correctly
+    setEnquiries(bookedRecords);
+setFirms(bookedRecords);
+setProjectData(bookedRecords);
+
+   
+
+    return result;
+
+  } catch (err) {
+    console.error(" Error fetching booked enquiries:", err);
+  }
+};
+
 
 
   useEffect(() => {
@@ -1945,7 +1963,11 @@ const FirstVisits = () => {
                           <option value={25}>25</option>
                         </select>
 
-                        <span>0–0 of 0</span>
+                        {/* <span>0–0 of 0</span> */}
+  <span>
+                      {totalEntries === 0 ? "0–0" : `${startEntry}–${endEntry}`}{" "}
+                      of {totalEntries}
+                    </span>
 
                         {/* Navigation arrows */}
                         <button
@@ -2054,7 +2076,11 @@ const FirstVisits = () => {
                         <option value={25}>25</option>
                       </select>
 
-                      <span>0–0 of 0</span>
+                      {/* <span>0–0 of 0</span> */}
+                       <span>
+                      {totalEntries === 0 ? "0–0" : `${startEntry}–${endEntry}`}{" "}
+                      of {totalEntries}
+                    </span>
 
                       {/* Navigation arrows */}
                       <button
@@ -2178,7 +2204,11 @@ const FirstVisits = () => {
                         <option value={25}>25</option>
                       </select>
 
-                      <span>0–0 of 0</span>
+                      {/* <span>0–0 of 0</span> */}
+                       <span>
+                      {totalEntries === 0 ? "0–0" : `${startEntry}–${endEntry}`}{" "}
+                      of {totalEntries}
+                    </span>
 
                       {/* Navigation Arrows */}
                       <button
