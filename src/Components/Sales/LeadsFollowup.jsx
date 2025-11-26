@@ -521,170 +521,284 @@ const LeadsFollowUp = () => {
 
 
 
+
   // const fetchUserLeads = async () => {
   //   try {
   //     if (!authenticated || !userId) {
-  //       console.warn(" No active session or user ID found");
+  //       console.warn("No active session or user ID found");
   //       setFilteredLeads([]);
-  //       return []; // return empty array for consistency
+  //       return [];
   //     }
-  //     //  Fetch all leads from backend
+
   //     const response = await fetch("https://localhost:5289/sales/api/leads", {
   //       credentials: "include",
   //     });
 
-  //     if (!response.ok) {
-  //       throw new Error("Failed to fetch leads");
-  //     }
+  //     if (!response.ok) throw new Error("Failed to fetch leads");
 
   //     const data = await response.json();
-      
+
+  //     // Helper to normalize any text value
+  //     const normalize = (val) =>
+  //       val?.toString().toLowerCase().replace(/[_\s-]/g, "") || "";
+
   //     const userLeads = data?.filter((lead) => {
   //       const engagements = lead.leadEnagagements || lead.leadEngagements;
 
-  //       if (!engagements || engagements.length === 0) return false;
 
-
+  //       //  Remove leads with lead.status = VISIT_SCHEDULED
+  //       const leadStatus = normalize(lead.status);
+  //       if (leadStatus === "visitscheduled") return false;
+  //     //  If no engagements, skip
+  //     if (!engagements || engagements.length === 0) return false;
   //       const latest = engagements.at(-1);
-
   //       if (!latest) return false;
 
-  // const isVisitScheduled =
-  //         latest.status?.toLowerCase().trim() === "VISIT_SCHEDULED";
 
-  //       if (isVisitScheduled) return false;
+  //       //  Remove if latest engagement is Visit Scheduled
+
+  //       const latestStatus = normalize(latest.status);
+  //       const latestType = normalize(latest.type);
+
+  //       if (latestStatus === "visitscheduled" || latestType === "visitscheduled") {
+  //         return false;
+  //       }
 
 
   //       return latest.assignedTo === userId;
   //     });
 
   //     setFilteredLeads(userLeads);
-
   //     return userLeads;
   //   } catch (error) {
-  //     console.error(" Error fetching user leads:", error);
-  //     return null; // return something so it never stays undefined
+  //     console.error("Error fetching user leads:", error);
+  //     return null;
   //   }
   // };
 
+
   const fetchUserLeads = async () => {
-  try {
-    if (!authenticated || !userId) {
-      console.warn("No active session or user ID found");
-      setFilteredLeads([]);
-      return [];
-    }
-
-    const response = await fetch("https://localhost:5289/sales/api/leads", {
-      credentials: "include",
-    });
-
-    if (!response.ok) throw new Error("Failed to fetch leads");
-
-    const data = await response.json();
-
-    // Helper to normalize any text value
-    const normalize = (val) =>
-      val?.toString().toLowerCase().replace(/[_\s-]/g, "") || "";
-
-    const userLeads = data?.filter((lead) => {
-      const engagements = lead.leadEnagagements || lead.leadEngagements;
-
-      // -------------------------
-      // 1️⃣ Remove leads with lead.status = VISIT_SCHEDULED
-      // -------------------------
-      const leadStatus = normalize(lead.status);
-      if (leadStatus === "visitscheduled") return false;
-
-      // -------------------------
-      // 2️⃣ If no engagements, skip
-      // -------------------------
-      if (!engagements || engagements.length === 0) return false;
-
-      const latest = engagements.at(-1);
-      if (!latest) return false;
-
-      // -------------------------
-      // 3️⃣ Remove if latest engagement is Visit Scheduled
-      // -------------------------
-      const latestStatus = normalize(latest.status);
-      const latestType = normalize(latest.type);
-
-      if (latestStatus === "visitscheduled" || latestType === "visitscheduled") {
-        return false;
+    try {
+      if (!authenticated || !userId) {
+        console.warn("No active session or user ID found");
+        setFilteredLeads([]);
+        return [];
       }
 
-      // -------------------------
-      // 4️⃣ Finally match assignedTo
-      // -------------------------
-      return latest.assignedTo === userId;
-    });
+      const response = await fetch("https://localhost:5289/sales/api/leads", {
+        credentials: "include",
+      });
 
-    setFilteredLeads(userLeads);
-    return userLeads;
-  } catch (error) {
-    console.error("Error fetching user leads:", error);
-    return null;
-  }
-};
+      if (!response.ok) throw new Error("Failed to fetch leads");
+      const data = await response.json();
+
+      const normalize = (val) =>
+        val?.toString().toLowerCase().replace(/[_\s-]/g, "") || "";
+
+      const userLeads = data?.filter((lead) => {
+        const engagements = lead.leadEnagagements || lead.leadEngagements;
+
+        const leadStatus = normalize(lead.status);
+
+        //  EXCLUDE VISIT SCHEDULED
+        if (leadStatus === "visitscheduled") return false;
+
+        //  EXCLUDE UNDEFINED (invalid number)
+        const isUndefined =
+          leadStatus === "invalidnumber" ||
+          leadStatus === "invalidno" ||
+          leadStatus === "invalid";
+        if (isUndefined) return false;
+
+        //  EXCLUDE LOST leads
+        const isLost =
+          leadStatus === "lost" ||
+          leadStatus === "bookedanotherproperty" ||
+          leadStatus === "booked" ||
+          leadStatus === "bookedpropertyinotherproject";
+        if (isLost) return false;
+
+        //  If no engagements → skip
+        if (!engagements || engagements.length === 0) return false;
+
+        const latest = engagements.at(-1);
+        if (!latest) return false;
+
+        //  EXCLUDE Visit Scheduled from engagement
+        const latestStatus = normalize(latest.status);
+        const latestType = normalize(latest.type);
+
+        if (latestStatus === "visitscheduled" || latestType === "visitscheduled") {
+          return false;
+        }
+
+        //  Include only logged-in user's leads
+        return latest.assignedTo === userId;
+      });
+
+      setFilteredLeads(userLeads);
+      return userLeads;
+
+    } catch (error) {
+      console.error("Error fetching user leads:", error);
+      return null;
+    }
+  };
 
   useEffect(() => {
     fetchUserLeads();
   }, [userId, authenticated]);
 
+  // const fetchVisitScheduledLeads = async () => {
+  //   try {
+  //     const response = await fetch("https://localhost:5289/sales/api/leads", {
+  //       credentials: "include",
+  //     });
+  //     if (!response.ok) throw new Error("Failed to fetch leads");
+
+  //     const data = await response.json();
+  //     // console.log("🎯 All Leads:", data);
+
+  //     // ✅ Filter for only visit scheduled
+  //     const visitScheduled = data.filter(
+  //       (lead) =>
+  //         lead.status?.toLowerCase() === "visit_scheduled" ||
+  //         lead.status?.toLowerCase() === "visit scheduled"
+  //     );
+
+  //     // console.log("📅 Visit Scheduled Leads:", visitScheduled);
+  //     setFilteredLeads(visitScheduled);
+  //     setLeads(visitScheduled);
+  //   } catch (error) {
+  //     console.error("❌ Error fetching Visit Scheduled leads:", error);
+  //   }
+  // };
+
+  // const fetchUndefinedLeads = async () => {
+  //   try {
+  //     const response = await fetch("https://localhost:5289/sales/api/leads", {
+  //       credentials: "include",
+  //     });
+  //     if (!response.ok) throw new Error("Failed to fetch leads");
+
+  //     const data = await response.json();
+  //     // console.log(" All Leads:", data);
+
+  //     //  Filter for only undefined
+  //     const undefinedLeads = data.filter(
+  //       (lead) =>
+  //         lead.status?.toLowerCase() === "invalid number" ||
+  //         lead.status?.toLowerCase() === "invalid_number" ||
+  //         lead.status?.toLowerCase() === "invalidnumber"
+  //     );
+
+  //     // Show only leads assigned to logged-in user
+  //     return latest.assignedTo === userId;
+
+  //     setFilteredLeads(undefinedLeads);
+  //     setLeads(undefinedLeads);
+  //   } catch (error) {
+  //     console.error(" Error fetching Visit Scheduled leads:", error);
+  //   }
+  // };
+
+
   const fetchVisitScheduledLeads = async () => {
     try {
+      if (!authenticated || !userId) {
+        setFilteredLeads([]);
+        return;
+      }
+
       const response = await fetch("https://localhost:5289/sales/api/leads", {
         credentials: "include",
       });
+
       if (!response.ok) throw new Error("Failed to fetch leads");
 
       const data = await response.json();
-      // console.log("🎯 All Leads:", data);
 
-      // ✅ Filter for only visit scheduled
-      const visitScheduled = data.filter(
-        (lead) =>
-          lead.status?.toLowerCase() === "visit_scheduled" ||
-          lead.status?.toLowerCase() === "visit scheduled"
-      );
+      const normalize = (v) =>
+        v?.toString().toLowerCase().replace(/[_\s-]/g, "") || "";
 
-      // console.log("📅 Visit Scheduled Leads:", visitScheduled);
-      setFilteredLeads(visitScheduled);
-      setLeads(visitScheduled);
-    } catch (error) {
-      console.error("❌ Error fetching Visit Scheduled leads:", error);
-    }
-  };
+      const visitScheduledLeads = data.filter((lead) => {
+        const status = normalize(lead.status);
 
-  const fetchUndefinedLeads = async () => {
-    try {
-      const response = await fetch("https://localhost:5289/sales/api/leads", {
-        credentials: "include",
+        //  Only leads with Visit Scheduled status
+        const isVisitScheduled =
+          status === "visitscheduled" ||
+          status === "visitschedule";
+
+        if (!isVisitScheduled) return false;
+
+        //  Check engagements
+        const engagements = lead.leadEnagagements || lead.leadEngagements;
+        if (!engagements?.length) return false;
+
+        //  Latest engagement
+        const latest = engagements.at(-1);
+        if (!latest) return false;
+
+        //  Only show leads assigned to logged-in user
+        return latest.assignedTo === userId;
       });
-      if (!response.ok) throw new Error("Failed to fetch leads");
 
-      const data = await response.json();
-      // console.log("🎯 All Leads:", data);
+      setFilteredLeads(visitScheduledLeads);
+      setLeads(visitScheduledLeads);
 
-      // ✅ Filter for only undefined
-      const undefinedLeads = data.filter(
-        (lead) =>
-          lead.status?.toLowerCase() === "invalid number" ||
-          lead.status?.toLowerCase() === "invalid_number" ||
-          lead.status?.toLowerCase() === "invalidnumber"
-      );
-
-      // console.log("📅 Visit Scheduled Leads:", visitScheduled);
-      // setFilteredLeads(visitScheduled);
-      setFilteredLeads(undefinedLeads);
-      // setLeads(visitScheduled);
-      setLeads(undefinedLeads);
     } catch (error) {
       console.error(" Error fetching Visit Scheduled leads:", error);
     }
   };
 
+
+  const fetchUndefinedLeads = async () => {
+    try {
+      if (!authenticated || !userId) {
+        setFilteredLeads([]);
+        return;
+      }
+
+      const response = await fetch("https://localhost:5289/sales/api/leads", {
+        credentials: "include",
+      });
+
+      if (!response.ok) throw new Error("Failed to fetch leads");
+
+      const data = await response.json();
+
+      const normalize = (v) =>
+        v?.toString().toLowerCase().replace(/[_\s-]/g, "") || "";
+
+      const undefinedLeads = data.filter((lead) => {
+        const status = normalize(lead.status);
+
+        // Only show undefined/invalid leads
+        const isUndefined =
+          status === "invalidnumber" ||
+          status === "invalidno" ||
+          status === "invalid";
+
+        if (!isUndefined) return false;
+
+        // Must check engagement
+        const engagements = lead.leadEnagagements || lead.leadEngagements;
+        if (!engagements?.length) return false;
+
+        const latest = engagements.at(-1);
+        if (!latest) return false;
+
+        // Only show logged-in user's leads
+        return latest.assignedTo === userId;
+      });
+
+      setFilteredLeads(undefinedLeads);
+      setLeads(undefinedLeads);
+
+    } catch (error) {
+      console.error(" Error fetching undefined leads:", error);
+    }
+  };
 
   const fetchFollowupHistoryLeads = async () => {
     try {
@@ -854,45 +968,101 @@ const LeadsFollowUp = () => {
     }
   };
 
-  const fetchLostleads = async () => {
-    try {
-      const response = await fetch("https://localhost:5289/sales/api/leads", {
-        credentials: "include",
-      });
-      if (!response.ok) throw new Error("Failed to fetch leads");
+  // const fetchLostleads = async () => {
+  //   try {
+  //     const response = await fetch("https://localhost:5289/sales/api/leads", {
+  //       credentials: "include",
+  //     });
+  //     if (!response.ok) throw new Error("Failed to fetch leads");
 
-      const data = await response.json();
+  //     const data = await response.json();
 
-      const lostLeads = data.filter((lead) => {
-        const status = lead.status?.toLowerCase().trim();
+  //     const lostLeads = data.filter((lead) => {
+  //       const status = lead.status?.toLowerCase().trim();
 
-        return (
-          status === "lost" ||
-          status === "booked_another_property" ||
-          status === "booked another property" ||
-          status === "booked in another project" ||
-          status === "booked_in_another_project" ||
-          status === "booked property in other project"
-        );
-      });
+  //       return (
+  //         status === "lost" ||
+  //         status === "booked_another_property" ||
+  //         status === "booked another property" ||
+  //         status === "booked in another project" ||
+  //         status === "booked_in_another_project" ||
+  //         status === "booked property in other project"
+  //       );
+  //     });
 
-      console.log(
-        "📉 Lost Leads (including booked in another project):",
-        lostLeads
-      );
+  //     console.log(
+  //       "📉 Lost Leads (including booked in another project):",
+  //       lostLeads
+  //     );
 
-      setFilteredLeads(lostLeads);
-      setLeads(lostLeads);
-    } catch (error) {
-      console.error("❌ Error fetching Lost Leads:", error);
-    }
-  };
+  //     setFilteredLeads(lostLeads);
+  //     setLeads(lostLeads);
+  //   } catch (error) {
+  //     console.error("❌ Error fetching Lost Leads:", error);
+  //   }
+  // };
   // console.log("13. Component rendering - current state:");
   // console.log("  - expandedSection:", expandedSection);
   // console.log("  - selectedTab:", selectedTab);
   // console.log("  - filteredLeads:", filteredLeads);
   // console.log("  - filteredRecords:", filteredRecords);
   // console.log("  - searchTerm:", searchTerm);
+
+
+  const fetchLostleads = async () => {
+    try {
+      if (!authenticated || !userId) {
+        setFilteredLeads([]);
+        return;
+      }
+
+      const response = await fetch("https://localhost:5289/sales/api/leads", {
+        credentials: "include",
+      });
+
+      if (!response.ok) throw new Error("Failed to fetch leads");
+
+      const data = await response.json();
+
+      // Normalizer
+      const normalize = (v) =>
+        v?.toString().toLowerCase().replace(/[_\s-]/g, "") || "";
+
+      const lostLeads = data.filter((lead) => {
+
+        const status = normalize(lead.status);
+
+        //  Status must be Lost OR Booked in Another Project
+        const isLost =
+          status === "lost" ||
+          status === "booked" ||
+          status === "bookedinanotherproject" ||
+          status === "bookedpropertyinotherproject";
+
+        if (!isLost) return false;
+
+        //  Must have engagements
+        const engagements = lead.leadEnagagements || lead.leadEngagements;
+        if (!engagements?.length) return false;
+
+        //  Latest engagement
+        const latest = engagements.at(-1);
+        if (!latest) return false;
+
+        //  Only show leads assigned to logged-in user
+        return latest.assignedTo === userId;
+      });
+
+      console.log(" Lost Leads for logged in user:", lostLeads);
+
+      setFilteredLeads(lostLeads);
+      setLeads(lostLeads);
+
+    } catch (error) {
+      console.error(" Error fetching Lost Leads:", error);
+    }
+  };
+
 
   return (
     <div className="container my-2">

@@ -161,7 +161,7 @@ const FirstvisitfollowupbookedTable = ({ data }) => {
                 <TableRow key={index} hover>
                   <TableCell>{item.id || "N/A"}</TableCell>
                   <TableCell>{item.leadId || "N/A"}</TableCell>
-                  <TableCell>{item.name || "N/A"}</TableCell>
+                  <TableCell style={{ whiteSpace: "nowrap"}}>{item.name || "N/A"}</TableCell>
                   <TableCell>{item.phone || "N/A"}</TableCell>
                   <TableCell>{item.alternateContactNo || "N/A"}</TableCell>
                   <TableCell>{item.phone || "N/A"}</TableCell>

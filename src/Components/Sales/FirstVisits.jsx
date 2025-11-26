@@ -104,6 +104,29 @@ const FirstVisits = () => {
   const [filteredVisitFollowupHistory, setFilteredVisitFollowupHistory] = useState([]);
   const [undefinedData, setUndefinedData] = useState([]);
 
+
+  // pagination for 2,3,4 tab:
+  const [pendingPagination, setPendingPagination] = useState({ page: 1, rowsPerPage: 5 });
+  const [bookedPagination, setBookedPagination] = useState({ page: 1, rowsPerPage: 5 });
+  const [undefinedPagination, setUndefinedPagination] = useState({ page: 1, rowsPerPage: 5 });
+
+  // computing pagination :
+  //pending
+  const totalPending = visitFollowupHistory.length;
+  const startPending = (pendingPagination.page - 1) * pendingPagination.rowsPerPage + 1;
+  const endPending = Math.min(startPending + pendingPagination.rowsPerPage - 1, totalPending);
+
+  // booked:
+  const totalBooked = projectData.length;
+  const startBooked = (bookedPagination.page - 1) * bookedPagination.rowsPerPage + 1;
+  const endBooked = Math.min(startBooked + bookedPagination.rowsPerPage - 1, totalBooked);
+
+  // undefined :
+  const totalUndefined = undefinedData.length;
+  const startUndefined = (undefinedPagination.page - 1) * undefinedPagination.rowsPerPage + 1;
+  const endUndefined = Math.min(startUndefined + undefinedPagination.rowsPerPage - 1, totalUndefined);
+
+
   useEffect(() => {
     console.log("fetching visit Scheduled leads ");
     console.log(" FIRMS VALUE RIGHT NOW =", firms, "TYPE =", typeof firms);
@@ -144,25 +167,59 @@ const FirstVisits = () => {
 
   // };
 
-  const handleToggleSection = (index) => {
+  // const handleToggleSection = (index) => {
+  //   setExpandedSection(index);
+  //   setShowFileInput(false);
+
+
+  //   // TAB 1 → Pending Followups
+  //   if (index === 1) {
+  //     console.log("Pending Followup clicked");
+  //     fetchVisitFollowupHistory().then((data) => {
+  //       console.log("SETTING visitFollowupHistory:", data);
+  //       setVisitFollowupHistory(data);
+  //     });
+  //   }
+
+
+  //   if (index === 2) {
+  //     console.log("Booked clicked");
+  //     fetchBookedEnquiries();
+  //   }
+  // };
+
+
+  const handleToggleSection = async (index) => {
     setExpandedSection(index);
     setShowFileInput(false);
 
-    // TAB 1 → Pending Followups
-    if (index === 1) {
-      console.log("Pending Followup clicked");
-      fetchVisitFollowupHistory().then((data) => {
-        console.log("SETTING visitFollowupHistory:", data);
-        setVisitFollowupHistory(data);
-      });
+    // 1️⃣ Clear old data first
+    setFirms([]);
+    setEnquiries([]);
+    setVisitFollowupHistory([]);
+
+    // 2️⃣ Call correct API based on tab
+    if (index === 0) {
+      await fetchEnquiries();
     }
 
+    if (index === 1) {
+      console.log("Pending Followup clicked");
+      const history = await fetchVisitFollowupHistory();
+      setVisitFollowupHistory(history);
+    }
 
     if (index === 2) {
       console.log("Booked clicked");
-      fetchBookedEnquiries();
+      await fetchBookedEnquiries();
+    }
+
+    if (index === 3) {
+      console.log("Undefined Followups clicked");
+      await fetchUndefinedEnquiries();
     }
   };
+
 
   const handleChange = (e) => {
     const value = e.target.value;
@@ -1194,54 +1251,54 @@ const FirstVisits = () => {
   //     console.error(" Error fetching booked enquiries:", err);
   //   }
   // };
-const fetchBookedEnquiries = async () => {
-  try {
-    const response = await fetch("https://localhost:5289/sales/api/enquiries", {
-      credentials: "include",
-    });
+  const fetchBookedEnquiries = async () => {
+    try {
+      const response = await fetch("https://localhost:5289/sales/api/enquiries", {
+        credentials: "include",
+      });
 
-    if (!response.ok) throw new Error("Failed to fetch enquiries");
+      if (!response.ok) throw new Error("Failed to fetch enquiries");
 
-    const data = await response.json();
+      const data = await response.json();
 
-    console.log(" RAW API RESPONSE:", data);
+      console.log(" RAW API RESPONSE:", data);
 
-    const allEnquiries = Array.isArray(data.pagedRecords)
-      ? data.pagedRecords
-      : [];
+      const allEnquiries = Array.isArray(data.pagedRecords)
+        ? data.pagedRecords
+        : [];
 
-    console.log(" Normalized enquiries:", allEnquiries);
+      console.log(" Normalized enquiries:", allEnquiries);
 
-    // 🔥 Correct filtering using engagement.type
-    const bookedRecords = allEnquiries.filter((item) => {
-      const engagements = item.enquiryEnagagements || [];
-      return engagements.some(
-        (eng) => String(eng.type)?.toLowerCase().trim() === "booked"
-      );
-    });
+      // 🔥 Correct filtering using engagement.type
+      const bookedRecords = allEnquiries.filter((item) => {
+        const engagements = item.enquiryEnagagements || [];
+        return engagements.some(
+          (eng) => String(eng.type)?.toLowerCase().trim() === "booked"
+        );
+      });
 
-    console.log(" FINAL BOOKED ENQUIRIES:", bookedRecords);
+      console.log(" FINAL BOOKED ENQUIRIES:", bookedRecords);
 
-    // ⭐ IMPORTANT: Keep pagination structure
-    const result = {
-      ...data,
-      pagedRecords: bookedRecords,
-      totalRecords: bookedRecords.length,
-    };
+      // ⭐ IMPORTANT: Keep pagination structure
+      const result = {
+        ...data,
+        pagedRecords: bookedRecords,
+        totalRecords: bookedRecords.length,
+      };
 
-    // update state correctly
-    setEnquiries(bookedRecords);
-setFirms(bookedRecords);
-setProjectData(bookedRecords);
+      // update state correctly
+      setEnquiries(bookedRecords);
+      setFirms(bookedRecords);
+      setProjectData(bookedRecords);
 
-   
 
-    return result;
 
-  } catch (err) {
-    console.error(" Error fetching booked enquiries:", err);
-  }
-};
+      return result;
+
+    } catch (err) {
+      console.error(" Error fetching booked enquiries:", err);
+    }
+  };
 
 
 
@@ -1262,10 +1319,16 @@ setProjectData(bookedRecords);
   };
 
   // Handle rows per page change for Display Enquiries
+  // const handleRowsPerPageChange = (e) => {
+  //   setRowsPerPage(parseInt(e.target.value, 10));
+  //   setCurrentPage(0); // Reset to first page when changing rows per page 
+  // };
+
   const handleRowsPerPageChange = (e) => {
-    setRowsPerPage(parseInt(e.target.value, 10));
-    setCurrentPage(0); // Reset to first page when changing rows per page 
+    const value = parseInt(e.target.value, 10);
+    setRowsPerPage(value);
   };
+
 
   // Handle page navigation for Display Enquiries
   const handlePageChange = (newPage) => {
@@ -1302,7 +1365,9 @@ setProjectData(bookedRecords);
   const totalEntries = combinedFilteredData.length;
   const startEntry = totalEntries === 0 ? 0 : currentPage * rowsPerPage + 1;
   const endEntry = Math.min((currentPage + 1) * rowsPerPage, totalEntries);
-  const totalPages = Math.ceil(totalEntries / rowsPerPage);
+  // const totalPages = Math.ceil(totalEntries / rowsPerPage);
+  const totalPages = Math.max(1, Math.ceil(totalEntries / rowsPerPage));
+
 
   // Get current page data for Display Enquiries
   const currentPageData = combinedFilteredData.slice(
@@ -1557,9 +1622,9 @@ setProjectData(bookedRecords);
 
                   // data={leads.done}
 
-                  data={[...enquiries, ...leads.done]}
+                  // data={[...enquiries, ...leads.done]}
 
-                  // data={currentPageData} 
+                  data={currentPageData}
                   fetchEnquiries={fetchEnquiries}
 
 
@@ -1574,13 +1639,18 @@ setProjectData(bookedRecords);
           ) : (
             <Dialog
               open={showFirmForm}
-              onClose={() => setShowFirmForm(false)}
+
+              onClose={(event, reason) => {
+                if (reason === "backdropClick") return;  //  Do NOT close on outside click
+                if (reason === "escapeKeyDown") return;  //  Do NOT close on ESC key
+                setShowFirmForm(false);                  //  Allow close only by Cancel button
+              }}
               fullWidth
               maxWidth="md"
               fullScreen={isMobile}
               scroll="paper"
             >
-              <DialogTitle>New Enquiry</DialogTitle>
+              <DialogTitle sx={{ backgroundColor: Constants.primaryColor, color: "#fff" }}>New Enquiry</DialogTitle>
 
               <DialogContent>
                 <Grid container spacing={2} sx={{ mt: 1 }}>
@@ -1949,7 +2019,28 @@ setProjectData(bookedRecords);
                       >
                         <span style={{ fontWeight: "500" }}>Rows per page:</span>
 
+                        {/* <select
+                          style={{
+                            border: "1px solid #800000",
+                            borderRadius: "4px",
+                            padding: "2px 6px",
+                            outline: "none",
+                            color: "#800000",
+                          }}
+                        >
+                          <option value={5}>5</option>
+                          <option value={10}>10</option>
+                          <option value={25}>25</option>
+                        </select> */}
                         <select
+                          value={pendingPagination.rowsPerPage}
+                          onChange={(e) =>
+                            setPendingPagination((prev) => ({
+                              ...prev,
+                              rowsPerPage: parseInt(e.target.value),
+                              page: 1, // reset to page 1 when rows change
+                            }))
+                          }
                           style={{
                             border: "1px solid #800000",
                             borderRadius: "4px",
@@ -1963,14 +2054,13 @@ setProjectData(bookedRecords);
                           <option value={25}>25</option>
                         </select>
 
-                        {/* <span>0–0 of 0</span> */}
-  <span>
-                      {totalEntries === 0 ? "0–0" : `${startEntry}–${endEntry}`}{" "}
-                      of {totalEntries}
-                    </span>
+
+                        <span>
+                          {totalPending === 0 ? "0–0" : `${startPending}–${endPending}`} of {totalPending}</span>
+
 
                         {/* Navigation arrows */}
-                        <button
+                        {/* <button
                           style={{
                             border: "none",
                             background: "transparent",
@@ -1993,18 +2083,60 @@ setProjectData(bookedRecords);
                           }}
                         >
                           &#8250;
+                        </button> */}
+
+                        <button
+                          disabled={pendingPagination.page === 1}
+                          onClick={() =>
+                            setPendingPagination((prev) => ({
+                              ...prev,
+                              page: Math.max(prev.page - 1, 1),
+                            }))
+                          }
+                          style={{
+                            border: "none",
+                            background: "transparent",
+                            cursor: "pointer",
+                            color: pendingPagination.page === 1 ? "#ccc" : "gray",
+                            fontSize: "18px",
+                            padding: "0 4px",
+                          }}
+                        >
+                          &#8249;
                         </button>
+
+                        <button
+                          disabled={endPending >= totalPending}
+                          onClick={() =>
+                            setPendingPagination((prev) => ({
+                              ...prev,
+                              page: prev.page + 1,
+                            }))
+                          }
+                          style={{
+                            border: "none",
+                            background: "transparent",
+                            cursor: "pointer",
+                            color: endPending >= totalPending ? "#ccc" : "gray",
+                            fontSize: "18px",
+                            padding: "0 4px",
+                          }}
+                        >
+                          &#8250;
+                        </button>
+
                       </div>
                     </div>
                   </div>
                 </div>
                 <div className="mt-3">
                   <FirstVisitFollowupHistoryTable
-                    // data={filteredLeads}
                     fetchVisitFollowUpHistory={fetchVisitFollowupHistory}
-                    // data={projectData}
-
-                    data={visitFollowupHistory}          //working 
+                    //  data={visitFollowupHistory}          //working 
+                    data={visitFollowupHistory.slice(
+                      (pendingPagination.page - 1) * pendingPagination.rowsPerPage,
+                      pendingPagination.page * pendingPagination.rowsPerPage
+                    )}
 
                     isMobile={isMobile}
                     isTablet={isTablet}
@@ -2062,7 +2194,28 @@ setProjectData(bookedRecords);
                     >
                       <span style={{ fontWeight: "500" }}>Rows per page:</span>
 
+                      {/* <select
+                        style={{
+                          border: "1px solid #800000",
+                          borderRadius: "4px",
+                          padding: "2px 6px",
+                          outline: "none",
+                          color: "#800000",
+                        }}
+                      >
+                        <option value={5}>5</option>
+                        <option value={10}>10</option>
+                        <option value={25}>25</option>
+                      </select> */}
                       <select
+                        value={bookedPagination.rowsPerPage}
+                        onChange={(e) =>
+                          setBookedPagination((prev) => ({
+                            ...prev,
+                            rowsPerPage: parseInt(e.target.value),
+                            page: 1, // reset to page 1 when rows change
+                          }))
+                        }
                         style={{
                           border: "1px solid #800000",
                           borderRadius: "4px",
@@ -2076,14 +2229,15 @@ setProjectData(bookedRecords);
                         <option value={25}>25</option>
                       </select>
 
+
                       {/* <span>0–0 of 0</span> */}
-                       <span>
-                      {totalEntries === 0 ? "0–0" : `${startEntry}–${endEntry}`}{" "}
-                      of {totalEntries}
-                    </span>
+                      <span>
+                        {totalBooked === 0 ? "0–0" : `${startBooked}–${endBooked}`} of {totalBooked}
+
+                      </span>
 
                       {/* Navigation arrows */}
-                      <button
+                      {/* <button
                         style={{
                           border: "none",
                           background: "transparent",
@@ -2106,7 +2260,47 @@ setProjectData(bookedRecords);
                         }}
                       >
                         &#8250;
+                      </button> */}
+                      <button
+                        disabled={bookedPagination.page === 1}
+                        onClick={() =>
+                          setBookedPagination((prev) => ({
+                            ...prev,
+                            page: Math.max(prev.page - 1, 1),
+                          }))
+                        }
+                        style={{
+                          border: "none",
+                          background: "transparent",
+                          cursor: "pointer",
+                          color: bookedPagination.page === 1 ? "#ccc" : "gray",
+                          fontSize: "18px",
+                          padding: "0 4px",
+                        }}
+                      >
+                        &#8249;
                       </button>
+
+                      <button
+                        disabled={endBooked >= totalBooked}
+                        onClick={() =>
+                          setBookedPagination((prev) => ({
+                            ...prev,
+                            page: prev.page + 1,
+                          }))
+                        }
+                        style={{
+                          border: "none",
+                          background: "transparent",
+                          cursor: "pointer",
+                          color: endBooked >= totalBooked ? "#ccc" : "gray",
+                          fontSize: "18px",
+                          padding: "0 4px",
+                        }}
+                      >
+                        &#8250;
+                      </button>
+
                     </div>
                   </div>
                 </div>
@@ -2115,7 +2309,12 @@ setProjectData(bookedRecords);
               {/* Table Section */}
               <div className="mt-3">
                 <FirstvisitfollowupbookedTable
-                  data={projectData}
+                  // data={projectData}
+                  data={projectData.slice(
+                    (bookedPagination.page - 1) * bookedPagination.rowsPerPage,
+                    bookedPagination.page * bookedPagination.rowsPerPage
+                  )}
+
                   isMobile={isMobile}
                   isTablet={isTablet}
                 />
@@ -2190,7 +2389,28 @@ setProjectData(bookedRecords);
                     >
                       <span style={{ fontWeight: "500" }}>Rows per page:</span>
 
+                      {/* <select
+                        style={{
+                          border: "1px solid #800000",
+                          borderRadius: "4px",
+                          padding: "2px 6px",
+                          outline: "none",
+                          color: "#800000",
+                        }}
+                      >
+                        <option value={5}>5</option>
+                        <option value={10}>10</option>
+                        <option value={25}>25</option>
+                      </select> */}
                       <select
+                        value={undefinedPagination.rowsPerPage}
+                        onChange={(e) =>
+                          setUndefinedPagination((prev) => ({
+                            ...prev,
+                            rowsPerPage: parseInt(e.target.value),
+                            page: 1, // reset page to 1
+                          }))
+                        }
                         style={{
                           border: "1px solid #800000",
                           borderRadius: "4px",
@@ -2204,14 +2424,15 @@ setProjectData(bookedRecords);
                         <option value={25}>25</option>
                       </select>
 
+
                       {/* <span>0–0 of 0</span> */}
-                       <span>
-                      {totalEntries === 0 ? "0–0" : `${startEntry}–${endEntry}`}{" "}
-                      of {totalEntries}
-                    </span>
+                      <span>
+                        {totalUndefined === 0 ? "0–0" : `${startUndefined}–${endUndefined}`} of {totalUndefined}
+
+                      </span>
 
                       {/* Navigation Arrows */}
-                      <button
+                      {/* <button
                         style={{
                           border: "none",
                           background: "transparent",
@@ -2235,7 +2456,47 @@ setProjectData(bookedRecords);
                         }}
                       >
                         &#8250;
+                      </button> */}
+                      <button
+                        disabled={undefinedPagination.page === 1}
+                        onClick={() =>
+                          setUndefinedPagination((prev) => ({
+                            ...prev,
+                            page: Math.max(prev.page - 1, 1),
+                          }))
+                        }
+                        style={{
+                          border: "none",
+                          background: "transparent",
+                          cursor: "pointer",
+                          color: undefinedPagination.page === 1 ? "#ccc" : "gray",
+                          fontSize: "18px",
+                          padding: "0 4px",
+                        }}
+                      >
+                        &#8249;
                       </button>
+
+                      <button
+                        disabled={endUndefined >= totalUndefined}
+                        onClick={() =>
+                          setUndefinedPagination((prev) => ({
+                            ...prev,
+                            page: prev.page + 1,
+                          }))
+                        }
+                        style={{
+                          border: "none",
+                          background: "transparent",
+                          cursor: "pointer",
+                          color: endUndefined >= totalUndefined ? "#ccc" : "gray",
+                          fontSize: "18px",
+                          padding: "0 4px",
+                        }}
+                      >
+                        &#8250;
+                      </button>
+
                     </div>
                   </div>
                 </div>
@@ -2245,8 +2506,12 @@ setProjectData(bookedRecords);
               {/* Table Section */}
               <div className="mt-3">
                 <FirstvisitfollowupUndefinedTable
-                  // data={projectData}
-                  data={undefinedData}            // working
+                  data={undefinedData.slice(
+                    (undefinedPagination.page - 1) * undefinedPagination.rowsPerPage,
+                    undefinedPagination.page * undefinedPagination.rowsPerPage
+                  )}
+
+                  // data={undefinedData}            // working
                   isMobile={isMobile}
                   isTablet={isTablet}
                 />

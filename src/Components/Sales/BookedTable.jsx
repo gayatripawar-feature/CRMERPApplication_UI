@@ -36,13 +36,13 @@ const BookedTable = ({ data }) => {
           <TableBody>
             {data.map((item, index) => (
               <TableRow key={index}>
-                <TableCell>{item.lastUpdatedDate}</TableCell>
+                <TableCell style={{ whiteSpace: "nowrap"}}>{item.lastUpdatedDate}</TableCell>
                 <TableCell>{item.id}</TableCell>
-                <TableCell>{item.name}</TableCell>
+                <TableCell style={{ whiteSpace: "nowrap"}}>{item.name}</TableCell>
                 <TableCell>{item.phone}</TableCell>
                  <TableCell>{item.interest}</TableCell>
                 <TableCell>{item.email}</TableCell>
-                <TableCell>{item.source}</TableCell>
+                <TableCell style={{ whiteSpace: "nowrap"}}>{item.source}</TableCell>
                 <TableCell>{item.address || "-"}</TableCell>
                
                 {/* <TableCell>
@@ -50,7 +50,7 @@ const BookedTable = ({ data }) => {
           ? item.leadEnagagements[0].assignedTo
           : "-"}
       </TableCell> */}
-      <TableCell>
+      <TableCell style={{ whiteSpace: "nowrap"}}>
   {getAssignedToName(
     item.leadEnagagements?.length > 0
       ? item.leadEnagagements[0].assignedTo

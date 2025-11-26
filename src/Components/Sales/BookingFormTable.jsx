@@ -1,1422 +1,3 @@
-// import React ,{useState} from "react";
-// import { TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Paper ,IconButton,Tooltip, } from "@mui/material";
-// import { Edit, WhatsApp, Email } from "@mui/icons-material";
-// import { Visibility } from "@mui/icons-material";
-
-// import { Modal } from '@mui/material';
-// import { Box } from '@mui/material';
-// import { Typography } from '@mui/material';
-
-// import { TextField } from "@mui/material";
-// import { Button } from "@mui/material";
-// import { Grid } from "@mui/material";
-// import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
-// import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-// import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-// import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-// import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-// import { toast } from 'react-toastify';
-// import Constants from "../Constants";
-
-// const openDocument = (url) => {
-//   if (!url) return; 
-
-//   window.open(url, "_blank");
-// };
-
-
-// const handleEditClick = (item) => {
-//   setSelectedItem(item);
-//   setOpenEditModal(true);
-// };
-
-//   const handleUpdate = () => {
-//     console.log("Updated Data:", selectedItem);
-//     // setOpenEditModal(false);
-//     setTimeout(() => {
-//       setOpenEditModal(false); // Close modal after 3 seconds
-//     }, 3000);
-//   };
-
-// const BookingFormTable= ({ data }) => {
-
-//   const [openEditModal, setOpenEditModal] = useState(false);
-// const [selectedItem, setSelectedItem] = useState(null);
-//  const [firmName, setFirmName] = useState("");
-//     const [firmNameError, setFirmNameError] = useState("");
-//     const [dateOfFlatBooking, setDateOfFlatBooking] = useState(null);
-//       const [closingExecutive, setClosingExecutive] = useState('');
-//    const [firmPan, setFirmPan] = useState("");
-//     const [firmPanError, setFirmPanError] = useState("");
-//   const [leadType, setLeadType] = useState("");
-//   const [panNumber, setPanNumber] = useState('');
-//   const [selectedBank, setSelectedBank] = useState('');
-//     const [error, setError] = useState('');
-//     const [name, setName] = useState('');
-//     const [mobileNo, setMobileNo] = useState('');
-//     const [nameError, setNameError] = useState('');
-//     const [mobileNoError, setMobileNoError] = useState('');
-//     const [panError, setPanError] = useState("");
-//     const [aadharNo, setAadharNo] = useState('');
-//     const[aadhaar,setAadhar] =useState(false);
-//     const [aadharNo2, setAadharNo2] = useState('');
-//     const [aadharNo2Error, setAadharNo2Error] = useState('');
-//       const [alternateMobileNo, setAlternateMobileNo] = useState('');  // Define state for alternate mobile number
-//       const [alternateMobileError, setAlternateMobileError] = useState('');
-// const [aadharNumber, setAadharNumber] = useState('');
-// const [whatsAppNo, setWhatsAppNo] = useState('');
-// const [whatsAppError, setWhatsAppError] = useState('');
-
-//    const [email, setEmail] = useState('');
-//   const [emailError, setEmailError] = useState("");
-//   const [emailId1, setEmailId1] = useState("");
-// const [aadharError, setAadharError] = useState('');
-//     const [panCardFiles, setPanCardFiles] = useState([]); 
-//     const [address, setAddress] = useState('');
-//     const [coAllotteeName, setCoAllotteeName] = useState('');
-//     const [coAllotteeDob, setCoAllotteeDob] = useState('');
-//     const [coAllotteeOccupation, setCoAllotteeOccupation] = useState('');
-//     const [coAllotteePan, setCoAllotteePan] = useState(""); 
-//     const [coAllotteeAadhar, setCoAllotteeAadhar] = useState("");
-//     const [coAllotteeAadharError, setCoAllotteeAadharError] = useState("");
-//   const [mobileEmail, setMobileEmail] = useState('');
-  
-//       const [carpetArea, setCarpetArea] = useState('');
-//         const [showFirmForm, setShowFirmForm] = useState(false);
-//         const [wing, setWing] = useState('');
-//         const [flatNo, setFlatNo] = useState('');
-//           const [type, setType] = useState('');
-//           const [soldRate, setSoldRate] = useState('');
-//           const [enclosedBalcony, setEnclosedBalcony] = useState('');
-//           const [openBalcony, setOpenBalcony] = useState('');
-//           const [terrace, setTerrace] = useState('');
-//           const [parking, setParking] = useState('');
-//           const [floor, setFloor] = useState('');
-//           const [bookingAmount, setBookingAmount] = useState('');
-//             const [totalConsideration, setTotalConsideration] = useState('');
-//             const [stampDuty, setStampDuty] = useState('');
-//             const [registrationFee, setRegistrationFee] = useState('');
-//             const [gstAmount, setGstAmount] = useState('');
-          
-//             // State for Section 4: Documents
-//             const [panCard, setPanCard] = useState('');
-//             const [aadhaarCard, setAadhaarCard] = useState('');
-//             const [marriageCertificate, setMarriageCertificate] = useState('');
-//             const [passportPhoto, setPassportPhoto] = useState('');
-//             const [otherDocuments, setOtherDocuments] = useState('');
-           
-//             // State for Section 5: Booking Payment Mode
-//             const [paymentMode, setPaymentMode] = useState('');
-//             const [chequeNo, setChequeNo] = useState('');
-//             const [chequeDate, setChequeDate] = useState('');
-//             const [bankName, setBankName] = useState('');
-//             const [bankDetails, setBankDetails] = useState('');
-           
-//   const handlePanCardChange = (e) => {
-//     const files = Array.from(e.target.files);  // Convert FileList to Array
-//     // setPanCardFiles(files);
-//     setPanCardFiles((prev) => [...prev, ...files]);
-
-//   };
-
-
-//   const handleWhatsAppChange = (e) => {
-//     const value = e.target.value;
-//     if (value.length > 10) {
-//       setWhatsAppNoError('WhatsApp No. cannot exceed 10 digits');
-//     } else {
-//       setWhatsAppNoError('');
-//     }
-//     setWhatsAppNo(value);
-//   };
- 
-
-//   const handleEmailChange = (e, index) => {
-//     const value = e.target.value;
-//     const partnerCopy = [...partners];
-  
-    
-//     const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
-  
-//     if (value && !emailRegex.test(value)) {
-//       setEmailError("Invalid Gmail address");
-//       console.log("invalid email");
-//     } else {
-//       setEmailError(""); 
-//     }
-  
-//     partnerCopy[index] = { ...partnerCopy[index], email: value };
-//     setPartners(partnerCopy);
-//   };
-
-//   const handleEmailChange1 = (event) => {
-//     const value = event.target.value;
-  
-//     // Email Regex for all domain validation
-//     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  
-//     if (!emailRegex.test(value)) {
-//       setEmailError('Please enter a valid Email ID');
-//     } else {
-//       setEmailError('');
-//     }
-  
-//     setEmailId1(value);
-//   };
-    
-//   const handlePanChange = (e) => {
-//     const value = e.target.value.toUpperCase(); 
-  
-
-//     const panRegex = /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/;
-  
-//     if (value.length > 10) {
-//       setPanError("PAN No. must be exactly 10 characters");
-//     } else if (value.length === 10 && !panRegex.test(value)) {
-//       setPanError("Invalid PAN No. format");
-//     } else {
-//       setPanError(""); 
-//     }
-  
-//     setPanNumber(value);
-//   };
-
-//    // For second PAN field (Co-Allottee PAN)
-// const handleCoAllotteePanChange = (e) => {
-//   setCoAllotteePan(e.target.value);
-// };
-
-// const handleCoAllotteeAadharChange = (e) => {
-//   const value = e.target.value;
-//   if (value.length > 12) {
-//     setCoAllotteeAadharError("AADHAR No. cannot exceed 12 digits");
-//   } else {
-//     setCoAllotteeAadharError("");
-//   }
-//   setCoAllotteeAadhar(value);
-// };
-  
-//     const handleOccupationChange = (e, index) => {
-//       const value = e.target.value;
-//       const updatedPartners = [...partners];
-//       updatedPartners[index].occupation = value; 
-//       setPartners(updatedPartners); 
-//     };
-  
-
-//   const handleAadharChange = (e) => {
-//     const value = e.target.value;
-  
-//     if (!/^\d*$/.test(value)) {
-//       // If non-numeric value is entered
-//       setAadharError('Only numbers are allowed');
-//     } else if (value.length < 12) {
-//       setAadharError('Aadhar number must be 12 digits');
-//     } else {
-//       setAadharError('');
-//     }
-  
-//     setAadharNo(value);
-//   };
-  
-//   const handleAadharNo2Change = (e) => {
-//     const value = e.target.value;
-  
-//     if (!/^\d*$/.test(value)) {
-//       setAadharNo2Error('Only numbers are allowed');
-//     } else if (value.length < 12) {
-//       setAadharNo2Error('Aadhar number must be 12 digits');
-//     } else {
-//       setAadharNo2Error('');
-//     }
-  
-//     setAadharNo2(value);
-//   };
-  
-
-//   const handlePartnerNameChange = (e, index) => {
-//     const value = e.target.value;
-//     const partnerCopy = [...partners];
-    
-   
-//     if (/\d/.test(value)) {
-//       setNameError("Name should only contain letters"); 
-//     } else {
-//       setNameError(""); 
-//     }
-
-//     partnerCopy[index] = { ...partnerCopy[index], name: value };
-//     setPartners(partnerCopy);
-//   };
-
-
- 
-
-//   // const handleEmailChange1 = (e) => {
-//   //   setEmailId1(e.target.value); // Update email state correctly
-//   // };
-
-//   const validateFirmName = () => {
-//     if (!firmName.trim()) {
-//       setFirmNameError("Firm Name is required.");
-//       return false;
-//     }
-//     setFirmNameError("");
-//     return true;
-//   };
-
-
-
-
-//     const handleNameChange = (e) => {
-//       const value = e.target.value;
-    
-//       // Check if input contains only alphabets and spaces
-//       if (/[^a-zA-Z\s]/.test(value)) {
-//         setFirmPanError('Name should only contain letters and spaces.');
-//       } else {
-//         setFirmPanError('');
-//       }
-    
-//       setFirmPan(value);
-//     };
-
-
-//     const handleFirmNameChange = (e) => {
-//       const value = e.target.value;
-  
-    
-//       if (/\d/.test(value)) {
-//         setFirmNameError("Firm Name should only contain letters"); 
-//       } else {
-//         setFirmNameError("");
-//       }
-  
-    
-//       setFirmName(value);
-//     };
-
-//     const handleClosingExecutiveChange = (event) => {
-//       setClosingExecutive(event.target.value);
-//     };
-
-
-   
-//   return (
-//     <>
-//     <TableContainer component={Paper}>
-//       <Table>
-//         <TableHead>
-//           {/* <TableRow sx={{ bgcolor: "primary.main" }}> */}
-//            <TableRow sx={{background:Constants.primaryColor}}>
-//             <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>ACTION</TableCell>
-//             <TableCell  sx={{ color: "white", fontWeight: "bold",whiteSpace: "nowrap" }}>TIMESTAMP</TableCell>
-//             <TableCell  sx={{ color: "white", fontWeight: "bold",whiteSpace: "nowrap" }}>ENQUIRY NO.</TableCell>
-//             <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>PROJECT NAME</TableCell>
-//             <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap" }}>DATE OF FLAT BOOKING</TableCell>
-//             <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>NAME OF ALLOTEE</TableCell>
-//             <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>SOURCE NAME</TableCell>
-//             <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>DATE OF BIRTH</TableCell>
-//             <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>OCCUPATION</TableCell>
-//             <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>PAN NO.</TableCell>
-//             <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>AADHAR NO.</TableCell>
-//             <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>MOBILE NO.</TableCell>
-//             <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>ALTERNATE MOBILE NO</TableCell>
-//             <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>WHATSAPP NO.</TableCell>
-//             <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>EMAIL ID</TableCell>
-//             <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>ADDRESS</TableCell>
-//             <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>NAME OF CO-ALLOTEE</TableCell>
-//             <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>DATE OF BIRTH (CO-ALLOTEE)</TableCell>
-//             <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>OCCUPATION (CO-ALLOTEE)</TableCell>
-//             <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>PAN NO. (CO-ALLOTEE)</TableCell>
-//             <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>AADHAR NO. (CO-ALLOTEE)</TableCell>
-
-//             <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>MOBILE NO. & EMAIL (CO-ALLOTEE)</TableCell>
-//             <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>FLAT NO.</TableCell>
-//             <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>TYPE</TableCell>
-//             <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>WING</TableCell>
-//             <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>SOLD RATE</TableCell>
-//             <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>CARPET AREA IN (SQ. MTR.)</TableCell>
-
-
-//             <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>ENCLOSED BALCONY IN (SQ. MTR.)</TableCell>
-//             <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>OPEN BALCONY IN (SQ. MTR.)</TableCell>
-//             <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>TERRACE IN (SQ. MTR.)</TableCell>
-//             <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>PARKING</TableCell>
-//             <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>FLOOR</TableCell>
-//             <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>TOTAL CONSIDERATION /AGREEMENT VALUE	</TableCell>
-
-//             <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>BOOKING AMOUNT / ADVANCE PAYMENT</TableCell>
-//             <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>STAMP DUTY (7% OF AGREEMENT COST)</TableCell>
-//             <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>REGISTRATION FEE(1% OF AGREEMENT COST)</TableCell>
-//             <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>GST AMOUNT</TableCell>
-//             <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>PAN CARD(OF BOTH)</TableCell>
-//             <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>AADHAR CARD(OF BOTH)</TableCell>
-
-
-//             <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>MARRIAGE CERTIFICATE (IF AVAILABLE)</TableCell>
-//             <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>PASSPORT SIZE PHOTO (OF BOTH)</TableCell>
-//             <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>ANY OTHER</TableCell>
-//             <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>BOOKING AMOUNT</TableCell>
-//             <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>PAYMENT MODE</TableCell>
-//             <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>CHEQUE/TRN NO.</TableCell>
-
-//             <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>CHEQUE/TRN DATE</TableCell>
-//             <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>BANK NAME</TableCell>
-//             <TableCell  sx={{ color: "white", fontWeight: "bold" ,whiteSpace: "nowrap"}}>BANK DETAILS</TableCell>
-
-//           </TableRow>
-//         </TableHead>
-//         <TableBody>
-//           {data.map((item, index) => (
-//             <TableRow key={index}>
-           
-          
-
-// <TableCell sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-//   <Tooltip title="Edit" arrow>
-//   <IconButton 
-//   sx={{ background: "#1976D2", color: "white", borderRadius: "50%", width: 32, height: 32, p: 0.5 }}
-//   onClick={() => {
-//     setSelectedItem(item);    // set clicked row data
-//     setOpenEditModal(true);   // open modal
-//   }}
-// >
-//   <Edit sx={{ fontSize: 18 }} />
-// </IconButton>
-
-//   </Tooltip>
-
-//   <Tooltip title="WhatsApp" arrow>
-//     <IconButton 
-//       sx={{ background: "#25D366", color: "white", borderRadius: "50%", width: 32, height: 32, p: 0.5 }}
-//       onClick={() => handleWhatsAppClick(item)}
-//     >
-//       <WhatsApp sx={{ fontSize: 18 }} />
-//     </IconButton>
-//   </Tooltip>
-
-//   <Tooltip title="Email" arrow>
-//     <IconButton 
-//       sx={{ background: "#D44638", color: "white", borderRadius: "50%", width: 32, height: 32, p: 0.5 }}
-//       onClick={() => handleEmailClick(item)}
-//     >
-//       <Email sx={{ fontSize: 18 }} />
-//     </IconButton>
-//   </Tooltip>
-// </TableCell>
-
-
-// <TableCell>{item.timestamp}</TableCell>
-// <TableCell>{item.enquiryNo}</TableCell>
-// <TableCell>{item.projectName}</TableCell>
-// <TableCell>{item.dateOfFlatBooking}</TableCell>
-// <TableCell>{item.nameOfAllotee}</TableCell>
-// <TableCell>{item.sourceName}</TableCell>
-// <TableCell>{item.dateOfBirth}</TableCell>
-// <TableCell>{item.occupation}</TableCell>
-// <TableCell>{item.panNo}</TableCell>
-// <TableCell>{item.aadharNo}</TableCell>
-// <TableCell>{item.mobileNo}</TableCell>
-// <TableCell>{item.alternateMobileNo}</TableCell>
-// <TableCell>{item.whatsappNo}</TableCell>
-// <TableCell>{item.emailId}</TableCell>
-// <TableCell>{item.address}</TableCell>
-// <TableCell>{item.nameOfCoAllotee}</TableCell>
-// <TableCell>{item.dateOfBirthCoAllotee}</TableCell>
-// <TableCell>{item.occupationCoAllotee}</TableCell>
-// <TableCell>{item.panNoCoAllotee}</TableCell>
-// <TableCell>{item.aadharNoCoAllotee}</TableCell>
-// <TableCell>{item.mobileEmailCoAllotee}</TableCell>
-// <TableCell>{item.flatNo}</TableCell>
-// <TableCell>{item.type}</TableCell>
-// <TableCell>{item.wing}</TableCell>
-// <TableCell>{item.soldRate}</TableCell>
-// <TableCell>{item.carpetAreaSqMtr}</TableCell>
-// <TableCell>{item.enclosedBalconySqMtr}</TableCell>
-// <TableCell>{item.openBalconySqMtr}</TableCell>
-// <TableCell>{item.terraceSqMtr}</TableCell>
-// <TableCell>{item.parking}</TableCell>
-// <TableCell>{item.floor}</TableCell>
-// <TableCell>{item.totalConsideration}</TableCell>
-// <TableCell>{item.bookingAmount}</TableCell>
-// <TableCell>{item.stampDuty}</TableCell>
-// <TableCell>{item.registrationFee}</TableCell>
-// <TableCell>{item.gstAmount}</TableCell>
-
-//  <TableCell>
-//   <IconButton 
-//     sx={{ color: "#1976D2" }} 
-//     onClick={() => openDocument(item.panCardBoth)}
-//   >
-//     <Visibility />
-//   </IconButton>
-// </TableCell> 
-
-
-// <TableCell>
-//   <IconButton 
-//     sx={{ color: "#1976D2" }} 
-//     onClick={() => openDocument(item.aadharCardBoth)}
-//   >
-//     <Visibility />
-//   </IconButton>
-// </TableCell>
-
-
-// <TableCell>
-//   <IconButton 
-//     sx={{ color: "#1976D2" }} 
-//     onClick={() => openDocument(item.marriageCertificate)}
-//   >
-//     <Visibility />
-//   </IconButton>
-// </TableCell>
-
-// <TableCell>
-//   <IconButton 
-//     sx={{ color: "#1976D2" }} 
-//     onClick={() => openDocument(item.passportSizePhotoBoth)}
-//   >
-//     <Visibility />
-//   </IconButton>
-// </TableCell>
-
-// <TableCell>
-//   <IconButton 
-//     sx={{ color: "#1976D2" }} 
-//     onClick={() => openDocument(item.anyOther)}
-//   >
-//     <Visibility />
-//   </IconButton>
-// </TableCell>
-// <TableCell>{item.bookingAmount}</TableCell>
-// <TableCell>{item.paymentMode}</TableCell>
-// <TableCell>{item.chequeTrnNo}</TableCell>
-// <TableCell>{item.chequeTrnDate}</TableCell>
-// <TableCell>{item.bankName}</TableCell>
-// <TableCell>{item.bankDetails}</TableCell>
-
-//             </TableRow>
-//           ))}
-//         </TableBody>
-//       </Table>
-//     </TableContainer>
-
-
-
-// <Modal
-//   open={openEditModal}
-//   onClose={() => setOpenEditModal(false)}
-// >
-// <div className="firm-form mt-4 p-5" style={{ maxHeight: "700px", overflowY: "auto", paddingRight: "10px" }}>
-//       <Paper className="p-4" elevation={4} style={{ borderRadius: "12px", paddingBottom: "20px" }}>
-//         <Typography variant="h5" gutterBottom sx={{ paddingTop: 3 }}>
-//         Section 1: Personal Information
-//         </Typography>
-  
-       
-        
-//         <Grid container spacing={2}>
-//     <Grid item xs={6}>
-//       <TextField
-//         label="Enquiry No."
-//         fullWidth
-//         variant="outlined"
-//         value={firmName}
-//         onChange={handleFirmNameChange} 
-//         error={!!firmNameError} 
-//         helperText={firmNameError} 
-//         required 
-//       />
-//     </Grid>
-   
-//       <Grid item xs={6}>
-//         <FormControl fullWidth variant="outlined">
-//           <InputLabel id="closing-executive-label">Project Name</InputLabel>
-//           <Select
-//             labelId="closing-executive-label"
-//             id="closing-executive"
-//             value={closingExecutive}
-//             onChange={handleClosingExecutiveChange}
-//             label="Select Sales Person"
-//           >
-//             {/* Sales Person options */}
-//             <MenuItem value="Shilpha Mewada 1">Project Name</MenuItem>
-//             <MenuItem value="Tic Tac Toe Sohan">Project Name</MenuItem>
-//             <MenuItem value="Shilpha Mewada">Sohan Enterprised</MenuItem>
-           
-//           </Select>
-//         </FormControl>
-//       </Grid>
-   
-
-  
-    
-
-// <Grid item xs={6}>
-//   <LocalizationProvider dateAdapter={AdapterDateFns}>
-//     <DatePicker
-//       label="Date Of Flat Booking"
-//       value={dateOfFlatBooking}
-//       onChange={(newValue) => setDateOfFlatBooking(newValue)}
-//       renderInput={(params) => (
-//         <TextField 
-//           {...params} 
-//           fullWidth 
-//           variant="outlined" 
-//         />
-//       )}
-//     />
-//   </LocalizationProvider>
-// </Grid>
-// <Grid item xs={6}>
-//   <TextField
-//     label="NAME OF ALOTEE"
-//     fullWidth
-//     variant="outlined"
-//     value={firmPan}
-//     onChange={handleNameChange}   // Replaced Function Name
-//     error={!!firmPanError}        // Show error if there is an error
-//     helperText={firmPanError}
-//     required
-//   />
-// </Grid>
-
-    
-    
-//     <Grid item xs={6}>
-//   <TextField
-//     type="datetime-local" 
-//     label="Source Name"
-//     fullWidth
-//     variant="outlined"
-//     required 
-//     InputLabelProps={{
-//       shrink: true, 
-//     }}
-//   />
-// </Grid>
-
-
-// <Grid item xs={6}>
-//   <LocalizationProvider dateAdapter={AdapterDateFns}>
-//     <DatePicker
-//       label="Date Of Birth"
-//       value={dateOfFlatBooking}
-//       onChange={(newValue) => setDateOfFlatBooking(newValue)}
-//       renderInput={(params) => (
-//         <TextField 
-//           {...params} 
-//           fullWidth 
-//           variant="outlined" 
-//         />
-//       )}
-//     />
-//   </LocalizationProvider>
-// </Grid>
-
-// <Grid item xs={6}>
-//   <FormControl fullWidth variant="outlined">
-//     <InputLabel htmlFor="occupation">Occupation</InputLabel>
-//     <TextField
-//       id="occupation"
-//       label="Occupation"
-//       variant="outlined"
-//       value={leadType} // Bind to state for the occupation value
-//       onChange={(e) => setLeadType(e.target.value)} // Update the state on change
-//       required
-//     />
-//   </FormControl>
-// </Grid>
-
-
-// <Grid item xs={6}>
-//   <FormControl fullWidth variant="outlined">
-//     <TextField
-//       label="PAN No."
-//       variant="outlined"
-//       value={panNumber}
-//       onChange={handlePanChange}  // Validation Function
-//       error={!!panError}         // Show error if invalid
-//       helperText={panError}      // Show error message
-//       inputProps={{ maxLength: 10 }}  // PAN has 10 characters
-//     />
-//   </FormControl>
-// </Grid>
-
-// <Grid item xs={6}>
-//   <FormControl fullWidth variant="outlined">
-//     <TextField
-//       label="AADHAR No."
-//       variant="outlined"
-//       value={aadharNo2}
-//       onChange={handleAadharNo2Change}
-//       error={!!aadharNo2Error}
-//       helperText={aadharNo2Error}
-//       inputProps={{ maxLength: 12 }} 
-//     />
-//   </FormControl>
-// </Grid>
-
-
-
-// <Grid item xs={6}>
-//   <TextField
-//     label="Mobile No"
-//     fullWidth
-//     variant="outlined"
-//     value={alternateMobileNo}
-//     onChange={(e) => {
-//       const value = e.target.value;
-
-      
-//       if (value.length <= 10) {
-//         setAlternateMobileNo(value); 
-//         setAlternateMobileError(""); 
-//       } else {
-//         setAlternateMobileError("Mobile number cannot exceed 10 digits"); 
-//       }
-//     }}
-//     error={!!alternateMobileError} 
-//     helperText={alternateMobileError} 
-//     inputProps={{
-//       maxLength: 10, 
-//     }}
-//   />
-// </Grid>
-// <Grid item xs={6}>
-//   <TextField
-//     label="Alternate Mobile No"
-//     fullWidth
-//     variant="outlined"
-//     value={alternateMobileNo}
-//     onChange={(e) => {
-//       const value = e.target.value;
-
-     
-//       if (value.length <= 10) {
-//         setAlternateMobileNo(value);
-//         setAlternateMobileError(""); 
-//       } else {
-//         setAlternateMobileError("Mobile number cannot exceed 10 digits"); 
-//       }
-//     }}
-//     error={!!alternateMobileError} 
-//     helperText={alternateMobileError} 
-//     inputProps={{
-//       maxLength: 10, 
-//     }}
-//   />
-// </Grid>
-
-// <Grid item xs={6}>
-//   <TextField
-//     label="WhatsApp No."
-//     fullWidth
-//     variant="outlined"
-//     value={whatsAppNo}
-//     onChange={handleWhatsAppChange}
-//     error={!!whatsAppError} 
-//     helperText={whatsAppError} 
-//     inputProps={{
-//       maxLength: 10, 
-//     }}
-//   />
-// </Grid>
-
-
-// <Grid item xs={6}>
-//   <TextField
-//     label="Email ID"
-//     fullWidth
-//     variant="outlined"
-//     value={emailId1} 
-//     onChange={handleEmailChange1} 
-//     error={!!emailError}
-//     helperText={emailError}
-//   />
-// </Grid>
-
-
-
-// <Grid item xs={6}>
-//   <TextField
-//     label="AADHAR No."
-//     fullWidth
-//     variant="outlined"
-//     value={aadharNo}
-//     onChange={handleAadharChange}  // Handle the change
-//     error={!!aadharError}          // Show error if there's a validation error
-//     helperText={aadharError}       // Display the error message
-//     inputProps={{
-//       maxLength: 12,               // Limit to 12 digits
-//       inputMode: 'numeric',        // Mobile-friendly number keyboard
-//     }}
-//   />
-// </Grid>
-
-
-// <Grid item xs={6}>
-//   <TextField
-//     label="Address"
-//     fullWidth
-//     variant="outlined"
-//     value={address}
-//     onChange={(e) => setAddress(e.target.value)} // Update state with entered value
-//   />
-// </Grid>
-
-
-// <Grid item xs={6}>
-//   <TextField
-//     label="Name of Co-Allottee"
-//     fullWidth
-//     variant="outlined"
-//     value={coAllotteeName}
-//     onChange={(e) => setCoAllotteeName(e.target.value)} // Update state with entered value
-//   />
-// </Grid>
-
-
-// <Grid item xs={6}>
-//   <TextField
-//     label="Date Of Birth (Co-Allottee)"
-//     fullWidth
-//     variant="outlined"
-//     type="date"
-//     value={coAllotteeDob} // Make sure to define this state in your component
-//     onChange={(e) => setCoAllotteeDob(e.target.value)} // Updates state with the entered value
-//     InputLabelProps={{
-//       shrink: true, // Ensures the label stays above the field when a date is selected
-//     }}
-//   />
-// </Grid>
-
-
-// <Grid item xs={6}>
-//   <TextField
-//     label="Occupation (Co-Allottee)"
-//     fullWidth
-//     variant="outlined"
-//     value={coAllotteeOccupation} // Make sure to define this state in your component
-//     onChange={(e) => setCoAllotteeOccupation(e.target.value)} // Updates state with the entered value
-//   />
-// </Grid>
-
-// <Grid item xs={6}>
-//   <TextField
-//     label="PAN No. (Co-Allottee)"
-//     fullWidth
-//     variant="outlined"
-//     value={coAllotteePan} // Uses second PAN-specific state
-//     onChange={handleCoAllotteePanChange} // Second PAN handler
-//   />
-// </Grid>
-
-// <Grid item xs={6}>
-//   <TextField
-//     label="AADHAR No. (Co-Allottee)"
-//     fullWidth
-//     variant="outlined"
-//     value={coAllotteeAadhar} // Uses second AADHAR-specific state
-//     onChange={handleCoAllotteeAadharChange} // Second AADHAR handler
-//     error={!!coAllotteeAadharError} // Shows error if validation fails
-//     helperText={coAllotteeAadharError} // Displays error message
-//     inputProps={{ maxLength: 12 }} // Ensures AADHAR No. can't exceed 12 digits
-//   />
-// </Grid>
-
-
-// <Grid item xs={6}>
-//   <FormControl fullWidth variant="outlined">
-//     <InputLabel id="status-label"></InputLabel>
-//     <TextField
-//       id="mobile-email"
-//       label="MOBILE No. & EMAIL (Co-Alotee)"
-//       variant="outlined"
-//       value={mobileEmail}
-//       onChange={(e) => setMobileEmail(e.target.value)} // Update the state with the input value
-//     />
-//   </FormControl>
-// </Grid>
-// </Grid>
-// <hr/>
-
-// <Typography variant="h5" gutterBottom sx={{ paddingTop: 3 }}>
-// Section 2: Particulars of Flat
-//         </Typography>
-
-//         <Grid container spacing={2}>
-//   {/* Carpet Area (Sq. Mtr.) */}
-//   <Grid item xs={6}>
-//     <FormControl fullWidth variant="outlined">
-//       <InputLabel id="carpet-area-label">Carpet Area in (Sq. Mtr.)</InputLabel>
-//       <Select
-//         labelId="carpet-area-label"
-//         id="carpet-area"
-//         value={carpetArea}
-//         onChange={(e) => setCarpetArea(e.target.value)}
-//         label="Carpet Area in (Sq. Mtr.)"
-//       >
-//         <MenuItem value="100">100</MenuItem>
-//         <MenuItem value="150">150</MenuItem>
-//         <MenuItem value="200">200</MenuItem>
-//         <MenuItem value="250">250</MenuItem>
-//       </Select>
-//     </FormControl>
-//   </Grid>
-
-//   {/* Wing */}
-//   <Grid item xs={6}>
-//     <FormControl fullWidth variant="outlined">
-//       <InputLabel id="wing-label">Wing</InputLabel>
-//       <Select
-//         labelId="wing-label"
-//         id="wing"
-//         value={wing}
-//         onChange={(e) => setWing(e.target.value)}
-//         label="Wing"
-//       >
-//         <MenuItem value="A">A</MenuItem>
-//         <MenuItem value="B">B</MenuItem>
-//         <MenuItem value="C">C</MenuItem>
-//       </Select>
-//     </FormControl>
-//   </Grid>
-
-//   {/* Flat No. */}
-//   <Grid item xs={6}>
-//     <FormControl fullWidth variant="outlined">
-//       <InputLabel id="flat-no-label">FLAT No.</InputLabel>
-//       <Select
-//         labelId="flat-no-label"
-//         id="flat-no"
-//         value={flatNo}
-//         onChange={(e) => setFlatNo(e.target.value)}
-//         label="FLAT No."
-//       >
-//         <MenuItem value="101">101</MenuItem>
-//         <MenuItem value="102">102</MenuItem>
-//         <MenuItem value="103">103</MenuItem>
-//       </Select>
-//     </FormControl>
-//   </Grid>
-
-//   {/* Type */}
-//   <Grid item xs={6}>
-//     <FormControl fullWidth variant="outlined">
-//       <InputLabel id="type-label">Type</InputLabel>
-//       <Select
-//         labelId="type-label"
-//         id="type"
-//         value={type}
-//         onChange={(e) => setType(e.target.value)}
-//         label="Type"
-//       >
-//         <MenuItem value="2BHK">2BHK</MenuItem>
-//         <MenuItem value="3BHK">3BHK</MenuItem>
-//         <MenuItem value="4BHK">4BHK</MenuItem>
-//       </Select>
-//     </FormControl>
-//   </Grid>
-
-//   {/* Sold Rate */}
-//   <Grid item xs={6}>
-//     <TextField
-//       label="Sold Rate"
-//       fullWidth
-//       variant="outlined"
-//       value={soldRate}
-//       onChange={(e) => setSoldRate(e.target.value)}
-//       type="number"
-//     />
-//   </Grid>
-
-//   {/* Enclosed Balcony (Sq. Mtr.) */}
-//   <Grid item xs={6}>
-//     <FormControl fullWidth variant="outlined">
-//       <InputLabel id="enclosed-balcony-label">Enclosed Balcony in (Sq. Mtr.)</InputLabel>
-//       <Select
-//         labelId="enclosed-balcony-label"
-//         id="enclosed-balcony"
-//         value={enclosedBalcony}
-//         onChange={(e) => setEnclosedBalcony(e.target.value)}
-//         label="Enclosed Balcony in (Sq. Mtr.)"
-//       >
-//         <MenuItem value="10">10</MenuItem>
-//         <MenuItem value="15">15</MenuItem>
-//         <MenuItem value="20">20</MenuItem>
-//       </Select>
-//     </FormControl>
-//   </Grid>
-
-//   {/* Open Balcony (Sq. Mtr.) */}
-//   <Grid item xs={6}>
-//     <FormControl fullWidth variant="outlined">
-//       <InputLabel id="open-balcony-label">Open Balcony in (Sq. Mtr.)</InputLabel>
-//       <Select
-//         labelId="open-balcony-label"
-//         id="open-balcony"
-//         value={openBalcony}
-//         onChange={(e) => setOpenBalcony(e.target.value)}
-//         label="Open Balcony in (Sq. Mtr.)"
-//       >
-//         <MenuItem value="5">5</MenuItem>
-//         <MenuItem value="10">10</MenuItem>
-//         <MenuItem value="15">15</MenuItem>
-//       </Select>
-//     </FormControl>
-//   </Grid>
-
-//   {/* Terrace (Sq. Mtr.) */}
-//   <Grid item xs={6}>
-//     <FormControl fullWidth variant="outlined">
-//       <InputLabel id="terrace-label">Terrace in (Sq. Mtr.)</InputLabel>
-//       <Select
-//         labelId="terrace-label"
-//         id="terrace"
-//         value={terrace}
-//         onChange={(e) => setTerrace(e.target.value)}
-//         label="Terrace in (Sq. Mtr.)"
-//       >
-//         <MenuItem value="30">30</MenuItem>
-//         <MenuItem value="40">40</MenuItem>
-//         <MenuItem value="50">50</MenuItem>
-//       </Select>
-//     </FormControl>
-//   </Grid>
-
-//   {/* Parking */}
-//   <Grid item xs={6}>
-//     <FormControl fullWidth variant="outlined">
-//       <InputLabel id="parking-label">Parking</InputLabel>
-//       <Select
-//         labelId="parking-label"
-//         id="parking"
-//         value={parking}
-//         onChange={(e) => setParking(e.target.value)}
-//         label="Parking"
-//       >
-//         <MenuItem value="Stack Parking">Stack Parking</MenuItem>
-//         <MenuItem value="Open car parking">Open car parking</MenuItem>
-//         <MenuItem value="Covered car parking">Covered car parking</MenuItem>
-//         <MenuItem value="Basement car parking">Basement car parking</MenuItem>
-//         <MenuItem value="Other">Other</MenuItem>
-//       </Select>
-//     </FormControl>
-//   </Grid>
-
-//   {/* Floor */}
-//   <Grid item xs={6}>
-//     <FormControl fullWidth variant="outlined">
-//       <InputLabel id="floor-label">Floor</InputLabel>
-//       <Select
-//         labelId="floor-label"
-//         id="floor"
-//         value={floor}
-//         onChange={(e) => setFloor(e.target.value)}
-//         label="Floor"
-//       >
-//         <MenuItem value="1st">1st</MenuItem>
-//         <MenuItem value="2nd">2nd</MenuItem>
-//         <MenuItem value="3rd">3rd</MenuItem>
-//         <MenuItem value="4th">4th</MenuItem>
-//         <MenuItem value="5th">5th</MenuItem>
-//         <MenuItem value="6th">6th</MenuItem>
-//         <MenuItem value="7th">7th</MenuItem>
-//         <MenuItem value="8th">8th</MenuItem>
-//         <MenuItem value="9th">9th</MenuItem>
-//         <MenuItem value="10th">10th</MenuItem>
-//       </Select>
-//     </FormControl>
-//   </Grid>
-// </Grid>
-
-// <hr/>
-  
-  
-
-// <Typography variant="h5" gutterBottom sx={{ paddingTop: 3 }}>
-//         Section 3: Consideration
-//       </Typography>
-
-//       <Grid container spacing={2}>
-      
-//         <Grid item xs={6}>
-//           <TextField
-//             label="Total Consideration / Agreement Value"
-//             fullWidth
-//             variant="outlined"
-//             value={totalConsideration}
-//             onChange={(e) => setTotalConsideration(e.target.value)}
-//             type="number"
-//           />
-//         </Grid>
-
-//         {/* Booking Amount / Advance Payment */}
-//         <Grid item xs={6}>
-//           <TextField
-//             label="Booking Amount / Advance Payment"
-//             fullWidth
-//             variant="outlined"
-//             value={bookingAmount}
-//             onChange={(e) => setBookingAmount(e.target.value)}
-//             type="number"
-//           />
-//         </Grid>
-
-//         <Grid item xs={6}>
-//   <TextField
-//     label="Stamp Duty (7% of Agreement Cost)"
-//     fullWidth
-//     variant="outlined"
-//     value={stampDuty} // Bind state to allow manual input
-//     onChange={(e) => setStampDuty(e.target.value)} // Update state on input
-//   />
-// </Grid>
-
-
-         
-//   <Grid item xs={6}>
-//     <TextField
-//       label="Registration Fee (Auto Calculated)"
-//       fullWidth
-//       variant="outlined"
-//       value={registrationFee}
-//       onChange={(e) => setRegistrationFee(e.target.value)}
-//     />
-//   </Grid>
-
-  
-//   <Grid item xs={6}>
-//     <TextField
-//       label="GST Amount (Auto Calculated)"
-//       fullWidth
-//       variant="outlined"
-//       value={gstAmount}
-//       onChange={(e) => setGstAmount(e.target.value)}
-//     />
-//   </Grid>
-     
-//       </Grid>
-
-//       {/* Section 4: Documents */}
-//       <Typography variant="h5" gutterBottom sx={{ paddingTop: 3 }}>
-//         Section 4: Documents
-//       </Typography>
-
-//       <Grid container spacing={2}>
- 
-//   <Grid item xs={6}>
-//   <Typography variant="body1">PAN Card (of both)</Typography>
-
-//   <Button
-//     variant="contained"
-//     component="label"
-//     sx={{
-//       backgroundColor: "white",
-//       color: "black",
-//       "&:hover": { backgroundColor: "#f0f0f0" },
-//     }}
-//   >
-//     Choose File
-//     <input
-//       type="file"
-//       multiple
-//       hidden
-//       onChange={handlePanCardChange}
-//     />
-//   </Button>
-
-//   {panCardFiles.length > 0 && (
-//   <div>
-//     <Typography variant="body2">Selected Files:</Typography>
-
-//     {panCardFiles.map((file, index) => (
-//       <Typography key={index} variant="body2">
-//         {file.name}
-//       </Typography>
-//     ))}
-//   </div>
-// )}
-
-// </Grid>
-
-
-
-// <Grid item xs={6}>
-//   <Typography variant="body1">AADHAR Card (of both)</Typography>
-
-//   <Button
-//     variant="contained"
-//     component="label"
-//     sx={{
-//       backgroundColor: "white",
-//       color: "black",
-//       "&:hover": { backgroundColor: "#f0f0f0" },
-//     }}
-//   >
-//     Choose File
-//     <input
-//       type="file"
-//       multiple
-//       hidden
-    
-//       onChange={(e) =>
-//         setAadhaarCard((prev) => [...prev, ...Array.from(e.target.files)])
-//       }
-      
-//     />
-//   </Button>
-
-//   {aadhaarCard.length > 0 && (
-//     <div>
-//       <Typography variant="body2">Selected Files:</Typography>
-
-//       {aadhaarCard.map((file, index) => (
-//         <Typography key={index} variant="body2">
-//           {file.name}
-//         </Typography>
-//       ))}
-//     </div>
-//   )}
-// </Grid>
-
-
-//   <Grid item xs={6}>
-//   <Typography variant="body1">MARRIAGE CERTIFICATE (If Available)</Typography>
-//   <Button
-//     variant="contained"
-//     component="label"
-//     sx={{ backgroundColor: "white", color: "black", "&:hover": { backgroundColor: "#f0f0f0" } }}
-//   >
-//     Choose Files
-//     <input
-//       type="file"
-//       multiple
-//       hidden
-     
-//       onChange={(e) => setMarriageCertificate(prev => [...prev, ...Array.from(e.target.files)])}
-
-
-//     />
-//   </Button>
-
-//   {marriageCertificate?.length > 0 &&
-//     marriageCertificate.map((file, index) => (
-//       <Typography key={index} variant="body2">
-//         {file.name}
-//       </Typography>
-//     ))}
-// </Grid>
-
-
-// <Grid item xs={6}>
-//   <Typography variant="body1">PASSPORT SIZE PHOTO (of both)</Typography>
-
-//   <Button 
-//     variant="contained" 
-//     component="label"
-//     sx={{ backgroundColor: "white", color: "black", "&:hover": { backgroundColor: "#f0f0f0" } }}
-//   >
-//     Choose Files
-//     <input 
-//       type="file" 
-//       multiple
-//       hidden 
-//       onChange={(e) => setPassportPhoto((prev) => [...prev, ...Array.from(e.target.files)])}
-
-//     />
-//   </Button>
-
-//   {passportPhoto.length > 0 && (
-//     <>
-//       {passportPhoto.map((file, index) => (
-//         <Typography key={index} variant="body2">
-//           {file.name}
-//         </Typography>
-//       ))}
-//     </>
-//   )}
-// </Grid>
-
- 
-//   <Grid item xs={6}>
-//   <Typography variant="body1">Any Other</Typography>
-
-//   <Button 
-//     variant="contained" 
-//     component="label"
-//     sx={{ backgroundColor: "white", color: "black", "&:hover": { backgroundColor: "#f0f0f0" } }}
-//   >
-//     Choose Files
-//     <input 
-//       type="file" 
-//       multiple 
-//       hidden 
-//       onChange={(e) => setOtherDocuments((prev) => [...prev, ...Array.from(e.target.files)])} 
-//     />
-//   </Button>
-
-//   {otherDocuments.length > 0 && (
-//     <>
-//       {otherDocuments.map((file, index) => (
-//         <Typography key={index} variant="body2">
-//           {file.name}
-//         </Typography>
-//       ))}
-//     </>
-//   )}
-// </Grid>
-// </Grid>
-
-
-//       {/* Section 5: Booking Payment Mode */}
-//       <Typography variant="h5" gutterBottom sx={{ paddingTop: 3 }}>
-//         Section 5: Booking Payment Mode
-//       </Typography>
-
-//       <Grid container spacing={2}>
-//         {/* Booking Amount */}
-//         <Grid item xs={6}>
-//           <TextField
-//             label="Booking Amount"
-//             fullWidth
-//             variant="outlined"
-//             value={bookingAmount}
-//             onChange={(e) => setBookingAmount(e.target.value)}
-//             type="number"
-            
-//           />
-//         </Grid>
-
-//         {/* Payment Mode */}
-//         <Grid item xs={6}>
-//           <FormControl fullWidth variant="outlined">
-//             <InputLabel id="payment-mode-label">Payment Mode</InputLabel>
-//             <Select
-//               labelId="payment-mode-label"
-//               id="payment-mode"
-//               value={paymentMode}
-//               onChange={(e) => setPaymentMode(e.target.value)}
-//               label="Payment Mode"
-//             >
-//               <MenuItem value="Cheque">Cheque</MenuItem>
-//               <MenuItem value="Bank Transfer">Bank Transfer</MenuItem>
-//               <MenuItem value="Cash">Cash</MenuItem>
-//             </Select>
-//           </FormControl>
-//         </Grid>
-
-//         {/* Cheque/TRN No. */}
-//         <Grid item xs={6}>
-//           <TextField
-//             label="Cheque/TRN No."
-//             fullWidth
-//             variant="outlined"
-//             value={chequeNo}
-//             onChange={(e) => setChequeNo(e.target.value)}
-//           />
-//         </Grid>
-
-      
-       
-// <LocalizationProvider dateAdapter={AdapterDateFns}>
-//   <Grid item xs={6}>
-//     <DatePicker
-//       label="Cheque/TRN Date"
-//       value={chequeDate}
-//       onChange={(newValue) => setChequeDate(newValue)} 
-//       renderInput={(params) => (
-//         <TextField 
-//           {...params} 
-//           fullWidth 
-//           variant="outlined" 
-//           sx={{ width: '100%' }} 
-//         />
-//       )}
-//     />
-//   </Grid>
-// </LocalizationProvider>
-
-       
-//         <Grid item xs={6}>
-//   <FormControl fullWidth variant="outlined">
-//     <InputLabel id="bank-name-label">Bank Name</InputLabel>
-//     <Select
-//       labelId="bank-name-label"
-//       id="bank-name"
-//       value={bankName}
-//       onChange={(e) => setBankName(e.target.value)}
-//       label="Bank Name"
-//     >
-//       <MenuItem value="State Bank of India (SBI)">State Bank of India (SBI)</MenuItem>
-//       <MenuItem value="HDFC">HDFC Bank</MenuItem>
-//       <MenuItem value="ICICI Bank">ICICI Bank</MenuItem>
-//       <MenuItem value="Punjab National Bank">Punjab National Bank</MenuItem>
-//       <MenuItem value="Bank of Baroda">Bank of Baroda</MenuItem>
-//       <MenuItem value="Axis Bank">Axis Bank</MenuItem>
-//       <MenuItem value="Canara Bank">Canara Bank</MenuItem>
-//       <MenuItem value="Union Bank of India">Union Bank of India</MenuItem>
-//       <MenuItem value="Bank of India">Bank of India</MenuItem>
-//       <MenuItem value="Kotak Mahindra Bank">Kotak Mahindra Bank</MenuItem>
-//       <MenuItem value="IndusInd Bank">IndusInd Bank</MenuItem>
-//       <MenuItem value="Yes Bank">Yes Bank</MenuItem>
-//       <MenuItem value="IDBI Bank">IDBI Bank</MenuItem>
-//       <MenuItem value="Indian Bank">Indian Bank</MenuItem>
-//       <MenuItem value="Central Bank of India">Central Bank of India</MenuItem>
-//       <MenuItem value="Indian Overseas Bank">Indian Overseas Bank</MenuItem>
-//       <MenuItem value="Federal Bank">Federal Bank</MenuItem>
-//       <MenuItem value="UCO Bank">UCO Bank</MenuItem>
-//       <MenuItem value="Bandhan Bank">Bandhan Bank</MenuItem>
-//     </Select>
-//   </FormControl>
-// </Grid>
-
-
-//         {/* Bank Details */}
-//         <Grid item xs={6}>
-//           <TextField
-//             label="Bank Details"
-//             fullWidth
-//             variant="outlined"
-//             value={bankDetails}
-//             onChange={(e) => setBankDetails(e.target.value)}
-//           />
-//         </Grid>
-//         </Grid>
-      
-  
-  
-  
-  
-//         <Button
-//           variant="contained"
-//           className="m-3"
-//           color="success"
-//           onClick={() => {
-//             // Simply show the toast message without calling validation functions
-//             toast.success("Details are submitted!", { position: "top-right", autoClose: 3000 });
-            
-//             // If you want to close the form (or any other logic), you can add it here
-//             setOpenEditModal(false); // Example of hiding the form after submission
-//           }}
-//         >
-//         Update
-//         </Button>
-//       </Paper>
-//     </div>
-// </Modal>
-
-// </>
-
-//   );
-// };
-
-// export default BookingFormTable;
-
-
 
 import React, { useState } from "react";
 import {
@@ -1425,80 +6,45 @@ import {
   Typography, TextField, Button, Grid, FormControl, InputLabel, Select, MenuItem, Box
 } from "@mui/material";
 import { Edit, WhatsApp, Email, Visibility, Close } from "@mui/icons-material";
+import { FaUpload, FaTrash } from "react-icons/fa";
 import { toast } from 'react-toastify';
 import Constants from "../Constants";
-
-// Document Preview Component
-const DocumentPreviewModal = ({ open, onClose, documents, title }) => {
-  return (
-    <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
-      <DialogTitle>
-        {title}
-        <IconButton
-          aria-label="close"
-          onClick={onClose}
-          sx={{ position: 'absolute', right: 8, top: 8 }}
-        >
-          <Close />
-        </IconButton>
-      </DialogTitle>
-      <DialogContent>
-        {documents.length === 0 ? (
-          <Typography>No documents available</Typography>
-        ) : (
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            {documents.map((doc, index) => (
-              <Box key={index} sx={{ border: '1px solid #e0e0e0', borderRadius: 1, p: 2 }}>
-                <Typography variant="subtitle1" gutterBottom>
-                  Document {index + 1}: {doc.name}
-                </Typography>
-                <Typography variant="body2" color="textSecondary">
-                  Type: {doc.type || 'Unknown'} | Size: {(doc.size / 1024).toFixed(2)} KB
-                </Typography>
-                <Button
-                  variant="outlined"
-                  size="small"
-                  onClick={() => {
-                    const url = URL.createObjectURL(doc);
-                    window.open(url, '_blank');
-                    setTimeout(() => URL.revokeObjectURL(url), 1000);
-                  }}
-                  sx={{ mt: 1 }}
-                >
-                  View Document
-                </Button>
-              </Box>
-            ))}
-          </Box>
-        )}
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose}>Close</Button>
-      </DialogActions>
-    </Dialog>
-  );
-};
 
 // Helper function to get all documents of a specific type
 const getAllDocumentsByType = (item, documentType) => {
   const documents = [];
 
   // Add main allottee documents
-  if (item[`allottee${documentType.charAt(0).toUpperCase() + documentType.slice(1)}`]) {
-    const mainDocs = item[`allottee${documentType.charAt(0).toUpperCase() + documentType.slice(1)}`];
-    if (Array.isArray(mainDocs)) {
-      documents.push(...mainDocs.map(doc => ({ ...doc, source: 'Main Allottee' })));
-    }
+  const mainDocKey = `allottee${documentType.charAt(0).toUpperCase() + documentType.slice(1)}`;
+  if (item[mainDocKey] && Array.isArray(item[mainDocKey])) {
+    item[mainDocKey].forEach(doc => {
+      if (doc && typeof doc === 'object' && !(doc instanceof File)) {
+        // Convert plain object back to File if needed
+        const file = new File([], doc.name || 'document', {
+          type: doc.type || 'application/octet-stream'
+        });
+        documents.push(file);
+      } else if (doc instanceof File) {
+        documents.push(doc);
+      }
+    });
   }
 
   // Add co-allottee documents
   if (item.coAllottees && Array.isArray(item.coAllottees)) {
     item.coAllottees.forEach((coAllottee, index) => {
       if (coAllottee[documentType] && Array.isArray(coAllottee[documentType])) {
-        documents.push(...coAllottee[documentType].map(doc => ({
-          ...doc,
-          source: `Co-Allottee ${index + 1}`
-        })));
+        coAllottee[documentType].forEach(doc => {
+          if (doc && typeof doc === 'object' && !(doc instanceof File)) {
+            // Convert plain object back to File if needed
+            const file = new File([], doc.name || 'document', {
+              type: doc.type || 'application/octet-stream'
+            });
+            documents.push(file);
+          } else if (doc instanceof File) {
+            documents.push(doc);
+          }
+        });
       }
     });
   }
@@ -1509,19 +55,47 @@ const getAllDocumentsByType = (item, documentType) => {
 const BookingFormTable = ({ data, onUpdate }) => {
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
-  const [documentPreview, setDocumentPreview] = useState({
-    open: false,
-    documents: [],
-    title: ''
-  });
 
-  // Function to handle document preview
+  // Document Preview Handler - Opens each document in new tab
   const handleDocumentPreview = (item, documentType, documentLabel) => {
     const documents = getAllDocumentsByType(item, documentType);
-    setDocumentPreview({
-      open: true,
-      documents,
-      title: `${documentLabel} (${documents.length} documents)`
+
+    if (documents.length === 0) {
+      toast.info(`No ${documentLabel} documents available`, { position: "top-right" });
+      return;
+    }
+
+    // Open each document in a new tab
+    documents.forEach((doc, index) => {
+      try {
+        // Create object URL for the file
+        const url = URL.createObjectURL(doc);
+
+        // Open in new tab
+        const newTab = window.open(url, `_${documentType}_${index}`);
+
+        // Revoke the object URL after the tab is loaded (with a delay to ensure it loads)
+        if (newTab) {
+          newTab.onload = () => {
+            setTimeout(() => URL.revokeObjectURL(url), 1000);
+          };
+        } else {
+          // If popup blocked, revoke immediately and show message
+          URL.revokeObjectURL(url);
+          toast.error("Popup blocked! Please allow popups for this site to view documents.", {
+            position: "top-right"
+          });
+        }
+      } catch (error) {
+        console.error(`Error opening document ${index + 1}:`, error);
+        toast.error(`Error opening document ${index + 1}`, { position: "top-right" });
+      }
+    });
+
+    // Show success message
+    toast.success(`Opening ${documents.length} ${documentLabel} in new tabs`, {
+      position: "top-right",
+      autoClose: 3000
     });
   };
 
@@ -1554,7 +128,23 @@ const BookingFormTable = ({ data, onUpdate }) => {
 
   // Edit functionality - Using Dialog instead of Modal
   const handleEditClick = (item) => {
-    setSelectedItem({ ...item });
+    setSelectedItem({
+      ...item,
+      // Initialize document arrays if they don't exist
+      allotteePanCard: item.allotteePanCard || [],
+      allotteeAadhaarCard: item.allotteeAadhaarCard || [],
+      allotteeMarriageCertificate: item.allotteeMarriageCertificate || [],
+      allotteePassportPhoto: item.allotteePassportPhoto || [],
+      allotteeOtherDocuments: item.allotteeOtherDocuments || [],
+      coAllottees: item.coAllottees?.map(coAllottee => ({
+        ...coAllottee,
+        panCard: coAllottee.panCard || [],
+        aadhaarCard: coAllottee.aadhaarCard || [],
+        marriageCertificate: coAllottee.marriageCertificate || [],
+        passportPhoto: coAllottee.passportPhoto || [],
+        otherDocuments: coAllottee.otherDocuments || []
+      })) || []
+    });
     setOpenEditDialog(true);
   };
 
@@ -1583,6 +173,48 @@ const BookingFormTable = ({ data, onUpdate }) => {
     }));
   };
 
+  // Handle main allottee document changes
+  const handleAllotteeDocumentChange = (documentType, files) => {
+    setSelectedItem(prev => ({
+      ...prev,
+      [documentType]: [...(prev[documentType] || []), ...files]
+    }));
+  };
+
+  // Handle co-allottee document changes
+  const handleCoAllotteeDocumentChange = (index, documentType, files) => {
+    const updatedCoAllottees = [...selectedItem.coAllottees];
+    updatedCoAllottees[index] = {
+      ...updatedCoAllottees[index],
+      [documentType]: [...(updatedCoAllottees[index][documentType] || []), ...files]
+    };
+    setSelectedItem(prev => ({
+      ...prev,
+      coAllottees: updatedCoAllottees
+    }));
+  };
+
+  // Remove document from main allottee
+  const handleRemoveAllotteeDocument = (documentType, fileIndex) => {
+    setSelectedItem(prev => ({
+      ...prev,
+      [documentType]: prev[documentType].filter((_, index) => index !== fileIndex)
+    }));
+  };
+
+  // Remove document from co-allottee
+  const handleRemoveCoAllotteeDocument = (coAllotteeIndex, documentType, fileIndex) => {
+    const updatedCoAllottees = [...selectedItem.coAllottees];
+    updatedCoAllottees[coAllotteeIndex] = {
+      ...updatedCoAllottees[coAllotteeIndex],
+      [documentType]: updatedCoAllottees[coAllotteeIndex][documentType].filter((_, index) => index !== fileIndex)
+    };
+    setSelectedItem(prev => ({
+      ...prev,
+      coAllottees: updatedCoAllottees
+    }));
+  };
+
   const handleCoAllotteeChange = (index, field, value) => {
     const updatedCoAllottees = [...selectedItem.coAllottees];
     updatedCoAllottees[index] = {
@@ -1602,7 +234,12 @@ const BookingFormTable = ({ data, onUpdate }) => {
       occupation: "",
       pan: "",
       aadhar: "",
-      mobileEmail: ""
+      mobileEmail: "",
+      panCard: [],
+      aadhaarCard: [],
+      marriageCertificate: [],
+      passportPhoto: [],
+      otherDocuments: []
     };
     setSelectedItem(prev => ({
       ...prev,
@@ -1657,6 +294,15 @@ const BookingFormTable = ({ data, onUpdate }) => {
       </div>
     );
   };
+
+  // Document types for rendering
+  const documentTypes = [
+    { type: "panCard", label: "PAN Card" },
+    { type: "aadhaarCard", label: "AADHAR Card" },
+    { type: "marriageCertificate", label: "MARRIAGE CERTIFICATE (If Available)" },
+    { type: "passportPhoto", label: "PASSPORT SIZE PHOTO" },
+    { type: "otherDocuments", label: "Any Other" }
+  ];
 
   return (
     <>
@@ -1719,159 +365,151 @@ const BookingFormTable = ({ data, onUpdate }) => {
           </TableHead>
           <TableBody>
             {data && data.length > 0 ? (
-    data.map((item, index) => (
-              <TableRow key={index}>
-                <TableCell>
-                 <Box sx={{
-    display: "flex",
-    alignItems: "center",
-    gap: 0.5,
-    minHeight: "40px"
-  }}>
+              data.map((item, index) => (
+                <TableRow key={index}>
+                  <TableCell>
+                    <Box sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 0.5,
+                      minHeight: "40px"
+                    }}>
 
-                  <Tooltip title="Edit" arrow>
-                    <IconButton
-                      sx={{ background: "#1976D2", color: "white", borderRadius: "50%", width: 32, height: 32, p: 0.5 }}
-                      onClick={() => handleEditClick(item)}
-                    >
-                      <Edit sx={{ fontSize: 18 }} />
-                    </IconButton>
-                  </Tooltip>
+                      <Tooltip title="Edit" arrow>
+                        <IconButton
+                          sx={{ background: "#1976D2", color: "white", borderRadius: "50%", width: 32, height: 32, p: 0.5 }}
+                          onClick={() => handleEditClick(item)}
+                        >
+                          <Edit sx={{ fontSize: 18 }} />
+                        </IconButton>
+                      </Tooltip>
 
-                  <Tooltip title="WhatsApp" arrow>
-                    <IconButton
-                      sx={{ background: "#25D366", color: "white", borderRadius: "50%", width: 32, height: 32, p: 0.5 }}
-                      onClick={() => handleWhatsAppClick(item)}
-                    >
-                      <WhatsApp sx={{ fontSize: 18 }} />
-                    </IconButton>
-                  </Tooltip>
+                      <Tooltip title="WhatsApp" arrow>
+                        <IconButton
+                          sx={{ background: "#25D366", color: "white", borderRadius: "50%", width: 32, height: 32, p: 0.5 }}
+                          onClick={() => handleWhatsAppClick(item)}
+                        >
+                          <WhatsApp sx={{ fontSize: 18 }} />
+                        </IconButton>
+                      </Tooltip>
 
-                  <Tooltip title="Email" arrow>
-                    <IconButton
-                      sx={{ background: "#D44638", color: "white", borderRadius: "50%", width: 32, height: 32, p: 0.5 }}
-                      onClick={() => handleEmailClick(item)}
-                    >
-                      <Email sx={{ fontSize: 18 }} />
-                    </IconButton>
-                  </Tooltip>
-                  </Box>
-                </TableCell>
+                      <Tooltip title="Email" arrow>
+                        <IconButton
+                          sx={{ background: "#D44638", color: "white", borderRadius: "50%", width: 32, height: 32, p: 0.5 }}
+                          onClick={() => handleEmailClick(item)}
+                        >
+                          <Email sx={{ fontSize: 18 }} />
+                        </IconButton>
+                      </Tooltip>
+                    </Box>
+                  </TableCell>
 
-                <TableCell>{item.timestamp || '-'}</TableCell>
-                <TableCell>{item.enquiryNo || '-'}</TableCell>
-                <TableCell>{item.projectName || '-'}</TableCell>
-                <TableCell>{item.dateOfFlatBooking ? new Date(item.dateOfFlatBooking).toLocaleDateString() : '-'}</TableCell>
-                <TableCell>{item.nameOfAllottee || '-'}</TableCell>
-                <TableCell>{item.sourceName || '-'}</TableCell>
-                <TableCell>{item.dateOfBirth ? new Date(item.dateOfBirth).toLocaleDateString() : '-'}</TableCell>
-                <TableCell>{item.occupation || '-'}</TableCell>
-                <TableCell>{item.panNo || '-'}</TableCell>
-                <TableCell>{item.aadharNo || '-'}</TableCell>
-                <TableCell>{item.mobileNo || '-'}</TableCell>
-                <TableCell>{item.alternateMobileNo || '-'}</TableCell>
-                <TableCell>{item.whatsappNo || '-'}</TableCell>
-                <TableCell>{item.emailId || '-'}</TableCell>
-                <TableCell>{item.address || '-'}</TableCell>
+                  <TableCell>{item.timestamp || '-'}</TableCell>
+                  <TableCell>{item.enquiryNo || '-'}</TableCell>
+                  <TableCell>{item.projectName || '-'}</TableCell>
+                  <TableCell>{item.dateOfFlatBooking ? new Date(item.dateOfFlatBooking).toLocaleDateString() : '-'}</TableCell>
+                  <TableCell>{item.nameOfAllottee || '-'}</TableCell>
+                  <TableCell>{item.sourceName || '-'}</TableCell>
+                  <TableCell>{item.dateOfBirth ? new Date(item.dateOfBirth).toLocaleDateString() : '-'}</TableCell>
+                  <TableCell>{item.occupation || '-'}</TableCell>
+                  <TableCell>{item.panNo || '-'}</TableCell>
+                  <TableCell>{item.aadharNo || '-'}</TableCell>
+                  <TableCell>{item.mobileNo || '-'}</TableCell>
+                  <TableCell>{item.alternateMobileNo || '-'}</TableCell>
+                  <TableCell>{item.whatsappNo || '-'}</TableCell>
+                  <TableCell>{item.emailId || '-'}</TableCell>
+                  <TableCell>{item.address || '-'}</TableCell>
 
-                <TableCell>
-                  {renderMultipleCoAllottees(item.coAllottees, 'name')}
-                </TableCell>
-                <TableCell>
-                  {item.coAllottees && Array.isArray(item.coAllottees) ? (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                      {item.coAllottees.map((coAllottee, idx) => (
-                        <div key={idx} style={{
-                          padding: '2px 4px',
-                          borderBottom: idx < item.coAllottees.length - 1 ? '1px solid #e0e0e0' : 'none'
-                        }}>
-                          {coAllottee.dob ? new Date(coAllottee.dob).toLocaleDateString() : '-'}
-                        </div>
-                      ))}
-                    </div>
-                  ) : '-'}
-                </TableCell>
-                <TableCell>
-                  {renderMultipleCoAllottees(item.coAllottees, 'occupation')}
-                </TableCell>
-                <TableCell>
-                  {renderMultipleCoAllottees(item.coAllottees, 'pan')}
-                </TableCell>
-                <TableCell>
-                  {renderMultipleCoAllottees(item.coAllottees, 'aadhar')}
-                </TableCell>
-                <TableCell>
-                  {renderMultipleCoAllottees(item.coAllottees, 'mobileEmail')}
-                </TableCell>
+                  <TableCell>
+                    {renderMultipleCoAllottees(item.coAllottees, 'name')}
+                  </TableCell>
+                  <TableCell>
+                    {item.coAllottees && Array.isArray(item.coAllottees) ? (
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                        {item.coAllottees.map((coAllottee, idx) => (
+                          <div key={idx} style={{
+                            padding: '2px 4px',
+                            borderBottom: idx < item.coAllottees.length - 1 ? '1px solid #e0e0e0' : 'none'
+                          }}>
+                            {coAllottee.dob ? new Date(coAllottee.dob).toLocaleDateString() : '-'}
+                          </div>
+                        ))}
+                      </div>
+                    ) : '-'}
+                  </TableCell>
+                  <TableCell>
+                    {renderMultipleCoAllottees(item.coAllottees, 'occupation')}
+                  </TableCell>
+                  <TableCell>
+                    {renderMultipleCoAllottees(item.coAllottees, 'pan')}
+                  </TableCell>
+                  <TableCell>
+                    {renderMultipleCoAllottees(item.coAllottees, 'aadhar')}
+                  </TableCell>
+                  <TableCell>
+                    {renderMultipleCoAllottees(item.coAllottees, 'mobileEmail')}
+                  </TableCell>
 
-                <TableCell>{item.flatNo || '-'}</TableCell>
-                <TableCell>{item.type || '-'}</TableCell>
-                <TableCell>{item.wing || '-'}</TableCell>
-                <TableCell>{item.soldRate || '-'}</TableCell>
-                <TableCell>{item.carpetAreaSqMtr || '-'}</TableCell>
-                <TableCell>{item.enclosedBalconySqMtr || '-'}</TableCell>
-                <TableCell>{item.openBalconySqMtr || '-'}</TableCell>
-                <TableCell>{item.terraceSqMtr || '-'}</TableCell>
-                <TableCell>{item.parking || '-'}</TableCell>
-                <TableCell>{item.floor || '-'}</TableCell>
-                <TableCell>{item.totalConsideration || '-'}</TableCell>
-                <TableCell>{item.bookingAmount || '-'}</TableCell>
-                <TableCell>{item.stampDuty || '-'}</TableCell>
-                <TableCell>{item.registrationFee || '-'}</TableCell>
-                <TableCell>{item.gstAmount || '-'}</TableCell>
+                  <TableCell>{item.flatNo || '-'}</TableCell>
+                  <TableCell>{item.type || '-'}</TableCell>
+                  <TableCell>{item.wing || '-'}</TableCell>
+                  <TableCell>{item.soldRate || '-'}</TableCell>
+                  <TableCell>{item.carpetAreaSqMtr || '-'}</TableCell>
+                  <TableCell>{item.enclosedBalconySqMtr || '-'}</TableCell>
+                  <TableCell>{item.openBalconySqMtr || '-'}</TableCell>
+                  <TableCell>{item.terraceSqMtr || '-'}</TableCell>
+                  <TableCell>{item.parking || '-'}</TableCell>
+                  <TableCell>{item.floor || '-'}</TableCell>
+                  <TableCell>{item.totalConsideration || '-'}</TableCell>
+                  <TableCell>{item.bookingAmount || '-'}</TableCell>
+                  <TableCell>{item.stampDuty || '-'}</TableCell>
+                  <TableCell>{item.registrationFee || '-'}</TableCell>
+                  <TableCell>{item.gstAmount || '-'}</TableCell>
 
-                <TableCell align="center">
-                  {renderDocumentCell(item, 'panCard', 'PAN Card')}
+                  <TableCell align="center">
+                    {renderDocumentCell(item, 'panCard', 'PAN Card')}
+                  </TableCell>
+                  <TableCell align="center">
+                    {renderDocumentCell(item, 'aadhaarCard', 'Aadhar Card')}
+                  </TableCell>
+                  <TableCell align="center">
+                    {renderDocumentCell(item, 'marriageCertificate', 'Marriage Certificate')}
+                  </TableCell>
+                  <TableCell align="center">
+                    {renderDocumentCell(item, 'passportPhoto', 'Passport Photo')}
+                  </TableCell>
+                  <TableCell align="center">
+                    {renderDocumentCell(item, 'otherDocuments', 'Other Documents')}
+                  </TableCell>
+                  <TableCell>{item.bookingAmount || '-'}</TableCell>
+                  <TableCell>{item.paymentMode || '-'}</TableCell>
+                  <TableCell>{item.chequeTrnNo || '-'}</TableCell>
+                  <TableCell>{item.chequeTrnDate ? new Date(item.chequeTrnDate).toLocaleDateString() : '-'}</TableCell>
+                  <TableCell>{item.bankName || '-'}</TableCell>
+                  <TableCell>{item.bankDetails || '-'}</TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={52}
+                  align="left"
+                  sx={{
+                    py: 4,
+                    fontSize: '16px',
+                    color: 'text.secondary',
+                    fontStyle: 'italic'
+                  }}
+                >
+                  No data available
                 </TableCell>
-                <TableCell align="center">
-                  {renderDocumentCell(item, 'aadhaarCard', 'Aadhar Card')}
-                </TableCell>
-                <TableCell align="center">
-                  {renderDocumentCell(item, 'marriageCertificate', 'Marriage Certificate')}
-                </TableCell>
-                <TableCell align="center">
-                  {renderDocumentCell(item, 'passportPhoto', 'Passport Photo')}
-                </TableCell>
-                <TableCell align="center">
-                  {renderDocumentCell(item, 'otherDocuments', 'Other Documents')}
-                </TableCell>
-                <TableCell>{item.bookingAmount || '-'}</TableCell>
-                <TableCell>{item.paymentMode || '-'}</TableCell>
-                <TableCell>{item.chequeTrnNo || '-'}</TableCell>
-                <TableCell>{item.chequeTrnDate ? new Date(item.chequeTrnDate).toLocaleDateString() : '-'}</TableCell>
-                <TableCell>{item.bankName || '-'}</TableCell>
-                <TableCell>{item.bankDetails || '-'}</TableCell>
               </TableRow>
-               ))
-  ) : (
-     <TableRow>
-      <TableCell
-        colSpan={52}
-        align="left"
-        sx={{
-          py: 4,
-          fontSize: '16px',
-          color: 'text.secondary',
-          fontStyle: 'italic'
-        }}
-      >
-        No data available
-      </TableCell>
-    </TableRow>
-  )}
+            )}
           </TableBody>
         </Table>
       </TableContainer>
 
-      {/* Document Preview Modal */}
-      <DocumentPreviewModal
-        open={documentPreview.open}
-        onClose={() => setDocumentPreview({ open: false, documents: [], title: '' })}
-        documents={documentPreview.documents}
-        title={documentPreview.title}
-      />
-
-      {/* Edit Dialog - Using the same approach as BookingForm.jsx */}
+      {/* Edit Dialog */}
       <Dialog
         open={openEditDialog}
         onClose={() => setOpenEditDialog(false)}
@@ -1910,17 +548,20 @@ const BookingFormTable = ({ data, onUpdate }) => {
                 value={selectedItem?.enquiryNo || ''}
                 onChange={(e) => handleInputChange("enquiryNo", e.target.value)}
                 required
+                 sx={{ border: Constants.formInputBorderColor }}
               />
             </Grid>
 
             <Grid item xs={12} sm={6}>
-              <FormControl fullWidth variant="outlined">
+              <FormControl fullWidth variant="outlined"  sx={{ border: Constants.formInputBorderColor }}>
                 <InputLabel id="project-name-label">Project Name</InputLabel>
                 <Select
                   labelId="project-name-label"
                   value={selectedItem?.projectName || ''}
                   onChange={(e) => handleSelectChange("projectName", e.target.value)}
                   label="Project Name"
+                   sx={{'& .MuiSelect-icon': {color: Constants.primaryColor}}}
+
                 >
                   <MenuItem value="Project A">Project A</MenuItem>
                   <MenuItem value="Project B">Project B</MenuItem>
@@ -1939,6 +580,7 @@ const BookingFormTable = ({ data, onUpdate }) => {
                 onChange={(e) => handleInputChange("dateOfFlatBooking", e.target.value)}
                 InputLabelProps={{ shrink: true }}
                 required
+                sx={{ border: Constants.formInputBorderColor }}
               />
             </Grid>
 
@@ -1950,6 +592,7 @@ const BookingFormTable = ({ data, onUpdate }) => {
                 value={selectedItem?.nameOfAllottee || ''}
                 onChange={(e) => handleInputChange("nameOfAllottee", e.target.value)}
                 required
+                sx={{ border: Constants.formInputBorderColor }}
               />
             </Grid>
 
@@ -1962,6 +605,7 @@ const BookingFormTable = ({ data, onUpdate }) => {
                 value={selectedItem?.sourceName || ''}
                 onChange={(e) => handleInputChange("sourceName", e.target.value)}
                 InputLabelProps={{ shrink: true }}
+                sx={{ border: Constants.formInputBorderColor }}
               />
             </Grid>
 
@@ -1974,17 +618,20 @@ const BookingFormTable = ({ data, onUpdate }) => {
                 value={selectedItem?.dateOfBirth ? new Date(selectedItem.dateOfBirth).toISOString().split('T')[0] : ''}
                 onChange={(e) => handleInputChange("dateOfBirth", e.target.value)}
                 InputLabelProps={{ shrink: true }}
+                sx={{ border: Constants.formInputBorderColor }}
               />
             </Grid>
 
             <Grid item xs={12} sm={6}>
-              <FormControl fullWidth variant="outlined">
+              <FormControl fullWidth variant="outlined" sx={{ border: Constants.formInputBorderColor }}>
                 <InputLabel id="occupation-label">Occupation</InputLabel>
                 <Select
                   labelId="occupation-label"
                   value={selectedItem?.occupation || ''}
                   onChange={(e) => handleSelectChange("occupation", e.target.value)}
                   label="Occupation"
+                  sx={{'& .MuiSelect-icon': {color: Constants.primaryColor}}}
+
                 >
                   <MenuItem value="Business">Business</MenuItem>
                   <MenuItem value="Service">Service</MenuItem>
@@ -2002,6 +649,7 @@ const BookingFormTable = ({ data, onUpdate }) => {
                 value={selectedItem?.panNo || ''}
                 onChange={(e) => handleInputChange("panNo", e.target.value.toUpperCase())}
                 inputProps={{ maxLength: 10 }}
+                sx={{ border: Constants.formInputBorderColor }}
               />
             </Grid>
 
@@ -2013,6 +661,7 @@ const BookingFormTable = ({ data, onUpdate }) => {
                 value={selectedItem?.aadharNo || ''}
                 onChange={(e) => handleInputChange("aadharNo", e.target.value)}
                 inputProps={{ maxLength: 12 }}
+                sx={{ border: Constants.formInputBorderColor }}
               />
             </Grid>
 
@@ -2025,6 +674,7 @@ const BookingFormTable = ({ data, onUpdate }) => {
                 onChange={(e) => handleInputChange("mobileNo", e.target.value)}
                 inputProps={{ maxLength: 10 }}
                 required
+                sx={{ border: Constants.formInputBorderColor }}
               />
             </Grid>
 
@@ -2036,6 +686,7 @@ const BookingFormTable = ({ data, onUpdate }) => {
                 value={selectedItem?.alternateMobileNo || ''}
                 onChange={(e) => handleInputChange("alternateMobileNo", e.target.value)}
                 inputProps={{ maxLength: 10 }}
+                sx={{ border: Constants.formInputBorderColor }}
               />
             </Grid>
 
@@ -2047,6 +698,7 @@ const BookingFormTable = ({ data, onUpdate }) => {
                 value={selectedItem?.whatsappNo || ''}
                 onChange={(e) => handleInputChange("whatsappNo", e.target.value)}
                 inputProps={{ maxLength: 10 }}
+                sx={{ border: Constants.formInputBorderColor }}
               />
             </Grid>
 
@@ -2058,10 +710,11 @@ const BookingFormTable = ({ data, onUpdate }) => {
                 value={selectedItem?.emailId || ''}
                 onChange={(e) => handleInputChange("emailId", e.target.value)}
                 type="email"
+                sx={{ border: Constants.formInputBorderColor }}
               />
             </Grid>
 
-            <Grid item xs={12}>
+            <Grid item xs={12} sm={6}>
               <TextField
                 label="Address"
                 fullWidth
@@ -2069,9 +722,54 @@ const BookingFormTable = ({ data, onUpdate }) => {
                 value={selectedItem?.address || ''}
                 onChange={(e) => handleInputChange("address", e.target.value)}
                 multiline
-                rows={2}
+                sx={{ border: Constants.formInputBorderColor }}
               />
             </Grid>
+          </Grid>
+
+          {/* Documents for Main Allottee */}
+          <Typography variant="h6" gutterBottom sx={{ paddingTop: 4, color: Constants.primaryColor }}>
+            Main Allottee Documents
+          </Typography>
+
+          <Grid container spacing={2}>
+            {documentTypes.map((doc, index) => (
+              <Grid item xs={12} sm={6} key={index}>
+                <Typography variant="body2" gutterBottom>{doc.label}</Typography>
+                <Button
+                  variant="outlined"
+                  component="label"
+                  fullWidth
+                  startIcon={<FaUpload />}
+                >
+                  Add Files
+                  <input
+                    type="file"
+                    multiple
+                    hidden
+                    onChange={(e) => handleAllotteeDocumentChange(`allottee${doc.type.charAt(0).toUpperCase() + doc.type.slice(1)}`, Array.from(e.target.files))}
+                  />
+                </Button>
+                {selectedItem?.[`allottee${doc.type.charAt(0).toUpperCase() + doc.type.slice(1)}`]?.length > 0 && (
+                  <Box sx={{ mt: 1 }}>
+                    {selectedItem[`allottee${doc.type.charAt(0).toUpperCase() + doc.type.slice(1)}`].map((file, fileIndex) => (
+                      <Box key={fileIndex} sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+                        <Typography variant="body2" sx={{ fontSize: '0.75rem', flex: 1 }}>
+                          {file.name}
+                        </Typography>
+                        <IconButton
+                          size="small"
+                          color="error"
+                          onClick={() => handleRemoveAllotteeDocument(`allottee${doc.type.charAt(0).toUpperCase() + doc.type.slice(1)}`, fileIndex)}
+                        >
+                          <FaTrash size={12} />
+                        </IconButton>
+                      </Box>
+                    ))}
+                  </Box>
+                )}
+              </Grid>
+            ))}
           </Grid>
 
           {/* Section 2: Co-Allottees */}
@@ -2105,6 +803,7 @@ const BookingFormTable = ({ data, onUpdate }) => {
                     variant="outlined"
                     value={coAllottee.name || ''}
                     onChange={(e) => handleCoAllotteeChange(index, "name", e.target.value)}
+                    sx={{ border: Constants.formInputBorderColor }}
                   />
                 </Grid>
 
@@ -2117,6 +816,7 @@ const BookingFormTable = ({ data, onUpdate }) => {
                     value={coAllottee.dob ? new Date(coAllottee.dob).toISOString().split('T')[0] : ''}
                     onChange={(e) => handleCoAllotteeChange(index, "dob", e.target.value)}
                     InputLabelProps={{ shrink: true }}
+                    sx={{ border: Constants.formInputBorderColor }}
                   />
                 </Grid>
 
@@ -2127,6 +827,7 @@ const BookingFormTable = ({ data, onUpdate }) => {
                     variant="outlined"
                     value={coAllottee.occupation || ''}
                     onChange={(e) => handleCoAllotteeChange(index, "occupation", e.target.value)}
+                     sx={{ border: Constants.formInputBorderColor }}
                   />
                 </Grid>
 
@@ -2138,6 +839,7 @@ const BookingFormTable = ({ data, onUpdate }) => {
                     value={coAllottee.pan || ''}
                     onChange={(e) => handleCoAllotteeChange(index, "pan", e.target.value.toUpperCase())}
                     inputProps={{ maxLength: 10 }}
+                     sx={{ border: Constants.formInputBorderColor }}
                   />
                 </Grid>
 
@@ -2149,6 +851,7 @@ const BookingFormTable = ({ data, onUpdate }) => {
                     value={coAllottee.aadhar || ''}
                     onChange={(e) => handleCoAllotteeChange(index, "aadhar", e.target.value)}
                     inputProps={{ maxLength: 12 }}
+                     sx={{ border: Constants.formInputBorderColor }}
                   />
                 </Grid>
 
@@ -2159,8 +862,53 @@ const BookingFormTable = ({ data, onUpdate }) => {
                     variant="outlined"
                     value={coAllottee.mobileEmail || ''}
                     onChange={(e) => handleCoAllotteeChange(index, "mobileEmail", e.target.value)}
+                     sx={{ border: Constants.formInputBorderColor }}
                   />
                 </Grid>
+
+                {/* Documents for each Co-Allottee */}
+                <Grid item xs={12}>
+                  <Typography variant="subtitle2" gutterBottom sx={{ color: Constants.primaryColor, mt: 2 }}>
+                    Documents for Co-Allottee {index + 1}
+                  </Typography>
+                </Grid>
+                {documentTypes.map((doc, docIndex) => (
+                  <Grid item xs={12} sm={6} key={docIndex}>
+                    <Typography variant="body2" gutterBottom>{doc.label}</Typography>
+                    <Button
+                      variant="outlined"
+                      component="label"
+                      fullWidth
+                      startIcon={<FaUpload />}
+                    >
+                      Add Files
+                      <input
+                        type="file"
+                        multiple
+                        hidden
+                        onChange={(e) => handleCoAllotteeDocumentChange(index, doc.type, Array.from(e.target.files))}
+                      />
+                    </Button>
+                    {coAllottee[doc.type]?.length > 0 && (
+                      <Box sx={{ mt: 1 }}>
+                        {coAllottee[doc.type].map((file, fileIndex) => (
+                          <Box key={fileIndex} sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
+                            <Typography variant="body2" sx={{ fontSize: '0.75rem', flex: 1 }}>
+                              {file.name}
+                            </Typography>
+                            <IconButton
+                              size="small"
+                              color="error"
+                              onClick={() => handleRemoveCoAllotteeDocument(index, doc.type, fileIndex)}
+                            >
+                              <FaTrash size={12} />
+                            </IconButton>
+                          </Box>
+                        ))}
+                      </Box>
+                    )}
+                  </Grid>
+                ))}
               </Grid>
             </Box>
           ))}
@@ -2195,12 +943,13 @@ const BookingFormTable = ({ data, onUpdate }) => {
             ].map((item, index) => (
               <Grid item xs={12} sm={6} key={index}>
                 {item.type === "select" ? (
-                  <FormControl fullWidth variant="outlined">
+                  <FormControl fullWidth variant="outlined"  sx={{ border: Constants.formInputBorderColor }}>
                     <InputLabel>{item.label}</InputLabel>
                     <Select
                       value={selectedItem?.[item.field] || ''}
                       onChange={(e) => handleSelectChange(item.field, e.target.value)}
                       label={item.label}
+                      sx={{'& .MuiSelect-icon': {color: Constants.primaryColor}}}
                     >
                       {item.options.map(option => (
                         <MenuItem key={option} value={option}>{option}</MenuItem>
@@ -2215,6 +964,7 @@ const BookingFormTable = ({ data, onUpdate }) => {
                     value={selectedItem?.[item.field] || ''}
                     onChange={(e) => handleInputChange(item.field, e.target.value)}
                     type={item.type}
+                     sx={{ border: Constants.formInputBorderColor }}
                   />
                 )}
               </Grid>
@@ -2242,6 +992,7 @@ const BookingFormTable = ({ data, onUpdate }) => {
                   value={selectedItem?.[item.field] || ''}
                   onChange={(e) => handleInputChange(item.field, e.target.value)}
                   type={item.type}
+                   sx={{ border: Constants.formInputBorderColor }}
                 />
               </Grid>
             ))}
@@ -2261,17 +1012,20 @@ const BookingFormTable = ({ data, onUpdate }) => {
                 value={selectedItem?.bookingAmount || ''}
                 onChange={(e) => handleInputChange("bookingAmount", e.target.value)}
                 type="number"
+                 sx={{ border: Constants.formInputBorderColor }}
               />
             </Grid>
 
             <Grid item xs={12} sm={6}>
-              <FormControl fullWidth variant="outlined">
-                <InputLabel id="payment-mode-label">Payment Mode</InputLabel>
+              <FormControl fullWidth variant="outlined"  sx={{ border: Constants.formInputBorderColor }}>
+                <InputLabel id="payment-mode-label">Payment Mode</InputLabel >
                 <Select
                   labelId="payment-mode-label"
                   value={selectedItem?.paymentMode || ''}
                   onChange={(e) => handleSelectChange("paymentMode", e.target.value)}
                   label="Payment Mode"
+                  sx={{'& .MuiSelect-icon': {color: Constants.primaryColor}}}
+
                 >
                   <MenuItem value="Cheque">Cheque</MenuItem>
                   <MenuItem value="Bank Transfer">Bank Transfer</MenuItem>
@@ -2287,6 +1041,8 @@ const BookingFormTable = ({ data, onUpdate }) => {
                 variant="outlined"
                 value={selectedItem?.chequeTrnNo || ''}
                 onChange={(e) => handleInputChange("chequeTrnNo", e.target.value)}
+                sx={{ border: Constants.formInputBorderColor }}
+
               />
             </Grid>
 
@@ -2299,17 +1055,19 @@ const BookingFormTable = ({ data, onUpdate }) => {
                 value={selectedItem?.chequeTrnDate ? new Date(selectedItem.chequeTrnDate).toISOString().split('T')[0] : ''}
                 onChange={(e) => handleInputChange("chequeTrnDate", e.target.value)}
                 InputLabelProps={{ shrink: true }}
+                sx={{ border: Constants.formInputBorderColor }}
               />
             </Grid>
 
             <Grid item xs={12} sm={6}>
-              <FormControl fullWidth variant="outlined">
+              <FormControl fullWidth variant="outlined" sx={{ border: Constants.formInputBorderColor }}>
                 <InputLabel id="bank-name-label">Bank Name</InputLabel>
                 <Select
                   labelId="bank-name-label"
                   value={selectedItem?.bankName || ''}
                   onChange={(e) => handleSelectChange("bankName", e.target.value)}
                   label="Bank Name"
+                  sx={{'& .MuiSelect-icon': {color: Constants.primaryColor}}}
                 >
                   <MenuItem value="State Bank of India (SBI)">State Bank of India (SBI)</MenuItem>
                   <MenuItem value="HDFC Bank">HDFC Bank</MenuItem>
@@ -2326,6 +1084,7 @@ const BookingFormTable = ({ data, onUpdate }) => {
                 variant="outlined"
                 value={selectedItem?.bankDetails || ''}
                 onChange={(e) => handleInputChange("bankDetails", e.target.value)}
+                sx={{ border: Constants.formInputBorderColor }}
               />
             </Grid>
           </Grid>
@@ -2352,6 +1111,4 @@ const BookingFormTable = ({ data, onUpdate }) => {
 };
 
 export default BookingFormTable;
-
-
 

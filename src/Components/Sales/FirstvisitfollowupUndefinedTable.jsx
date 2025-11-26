@@ -275,7 +275,7 @@ const FirstvisitfollowupUndefinedTable = ({ data }) => {
                   <TableCell>{row.assignedTo|| "N/A"}</TableCell>
                   <TableCell>{row.id || "N/A"}</TableCell>
                   <TableCell>{row.leadId || "N/A"}</TableCell>
-                  <TableCell>{row.name || "N/A"}</TableCell>
+                  <TableCell style={{ whiteSpace: "nowrap"}}>{row.name || "N/A"}</TableCell>
                   <TableCell>{row.phone || "N/A"}</TableCell>
                   <TableCell>{row.alternateContactNo || "N/A"}</TableCell>
                   <TableCell>{row.phone || "N/A"}</TableCell>

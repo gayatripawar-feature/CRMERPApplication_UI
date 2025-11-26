@@ -26,7 +26,7 @@ const UndefinedTable = ({ data }) => {
                 <TableCell>{item.statushistory}</TableCell>
                 <TableCell>{item.remarkhistory}</TableCell>
                 <TableCell>{item.id}</TableCell>
-                <TableCell>{item.name}</TableCell>
+                <TableCell style={{ whiteSpace: "nowrap"}}>{item.name}</TableCell>
                 <TableCell>{item.phone}</TableCell>
                 <TableCell>{item.interest}</TableCell>
                 <TableCell>{item.email || '-'}</TableCell>

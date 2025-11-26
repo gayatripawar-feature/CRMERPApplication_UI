@@ -612,9 +612,17 @@ const DisplayEnquiryTable = ({ data, fetchEnquiries }) => {
 
 
       
-        <Dialog open={isEditing}
-          onClose={handleCancel}
-          maxWidth="md" fullWidth>
+       <Dialog
+  open={isEditing}
+  onClose={(event, reason) => {
+    if (reason === "backdropClick") return;      //  prevent closing on outside click
+    if (reason === "escapeKeyDown") return;      //  prevent closing on ESC
+    handleCancel();                               //  close only through Cancel button
+  }}
+  maxWidth="md"
+  fullWidth
+>
+
           <DialogTitle sx={{ background: Constants.primaryColor, color: "#fff" }}>Edit Enquiry</DialogTitle>
           <DialogContent dividers sx={{ maxHeight: "70vh" }}>
             <Grid container spacing={2}>
@@ -924,9 +932,13 @@ const DisplayEnquiryTable = ({ data, fetchEnquiries }) => {
               </TableHead>
               <TableBody>
                 {/* {data.map((item, index) => ( */}
-                {data
+                {/* {data
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((item, index) => (
+                  .map((item, index) => ( */}
+                  {/* {currentPageData.map((item, index) => ( */}
+                  {data.map((item, index) => (
+
+
                     <TableRow key={index}>
                       <TableCell>
                         <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
@@ -985,7 +997,7 @@ const DisplayEnquiryTable = ({ data, fetchEnquiries }) => {
                       </TableCell>
 
                       {/* Other table cells */}
-                      <TableCell>{item.lastUpdatedDate}</TableCell>
+                      <TableCell style={{ whiteSpace: "nowrap"}}>{item.lastUpdatedDate}</TableCell>
 
                       <TableCell>
                         {item.id || "-"}
@@ -998,7 +1010,7 @@ const DisplayEnquiryTable = ({ data, fetchEnquiries }) => {
 
                       {/* <TableCell>{item.assignedTo}</TableCell>
                       <TableCell>{item.salesExecutiveName}</TableCell> */}
-                      <TableCell>{item.name}</TableCell>
+                      <TableCell style={{ whiteSpace: "nowrap"}}>{item.name}</TableCell>
                       <TableCell>{item.phone}</TableCell>
                       <TableCell>{item.alternateContactNo}</TableCell>
                       <TableCell>{item.whatsappNo}</TableCell>
@@ -1023,12 +1035,17 @@ const DisplayEnquiryTable = ({ data, fetchEnquiries }) => {
 
           <Dialog
             open={editModalOpen}
-            onClose={handleEditClose}
+            // onClose={handleEditClose}
+            onClose={(event, reason) => {
+    if (reason === "backdropClick") return;     //  stop outside click close
+    if (reason === "escapeKeyDown") return;     //  stop ESC close
+    handleEditClose();                          //  only close manually
+  }}
             fullWidth
             maxWidth="md"
             fullScreen={fullScreen}
           >
-            <DialogTitle>Edit Follow Up</DialogTitle>
+            <DialogTitle sx={{backgroundColor:Constants.primaryColor,color:"#fff"}}>Edit Follow Up</DialogTitle>
             <DialogContent>
               <Grid container spacing={2} sx={{ mt: 1 }}>
                 <Grid item xs={12} sm={6}>

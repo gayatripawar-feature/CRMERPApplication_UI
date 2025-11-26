@@ -550,7 +550,9 @@ const NewLeads = ({ inventoryData, setInventoryData, isMobile, isTablet, handleD
 
       <Dialog
         open={modalOpen}
-        onClose={() => {
+        onClose={(event, reason) => {
+          if (reason === "backdropClick") return;
+          if (reason === "escapeKeyDown") return;
           setModalOpen(false);
           setEditMode(false);
           setEditedLead(null);
@@ -781,6 +783,7 @@ const NewLeads = ({ inventoryData, setInventoryData, isMobile, isTablet, handleD
                 fullWidth
                 displayEmpty
                 size={isMobile ? "small" : "medium"}
+                
               >
                 <MenuItem value="" disabled>
                   Select Sales Executive

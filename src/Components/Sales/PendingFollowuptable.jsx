@@ -59,11 +59,11 @@ const PendingFollowuptable = ({ data, onSelectLead, fetchUserLeads }) => {
       return;
     }
 
-console.log("API keys:", Object.keys(data[0]));
-console.log("Engagements:", data[0].leadEnagagements);
+    console.log("API keys:", Object.keys(data[0]));
+    console.log("Engagements:", data[0].leadEnagagements);
 
     console.log("API Response (full):", data);
-console.log("nextFollowUpDate FROM API:", data.nextFollowUp);
+    console.log("nextFollowUpDate FROM API:", data.nextFollowUp);
 
     // Check if DB data fields exist
     console.log("🧩 db firm fields check:", {
@@ -176,6 +176,7 @@ console.log("nextFollowUpDate FROM API:", data.nextFollowUp);
     return "undefined";
   };
 
+
   const normalizeStatus = (status) => {
     if (!status) return "";
     const s = status.toUpperCase().replace(/_/g, " ");
@@ -215,11 +216,16 @@ console.log("nextFollowUpDate FROM API:", data.nextFollowUp);
         id: editFormData.id, // Engagement ID
         leadId: editFormData.leadId || editFormData.id, // Lead ID 
         // status: editFormData.status.trim().replace(/\s+/g, "_").toUpperCase(),
+        // status:
+        //   editFormData.status === "Booked property In Other Project"
+        //     ? "BOOKED_ANOTHER_PROPERTY"
+        //     : editFormData.status.trim().replace(/\s+/g, "_").toUpperCase(),
+
+
         status:
           editFormData.status === "Booked property In Other Project"
-            ? "BOOKED_ANOTHER_PROPERTY"
+            ? "BOOKED"
             : editFormData.status.trim().replace(/\s+/g, "_").toUpperCase(),
-
         type: editFormData.leadType.trim().toUpperCase(),
         remarks: editFormData.remark?.trim() || "",
         // nextFollowUp: editFormData.nextFollowUpDate || null,
@@ -467,6 +473,7 @@ console.log("nextFollowUpDate FROM API:", data.nextFollowUp);
     (lead) => lead.status?.toUpperCase() !== "VISIT_SCHEDULED"
   );
 
+ 
 
 
 
@@ -481,7 +488,7 @@ console.log("nextFollowUpDate FROM API:", data.nextFollowUp);
               <TableRow sx={{ background: Constants.primaryColor }}>
                 <TableCell sx={{ color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap' }}>ACTION</TableCell>
                 <TableCell sx={{ color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap' }}>LEAD NO</TableCell>
-                <TableCell sx={{ color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap' }}>NAME</TableCell>
+                <TableCell sx={{ color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap' }} >NAME</TableCell>
                 <TableCell sx={{ color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap' }}>MOBILE NO / WHATSAPP NO</TableCell>
                 <TableCell sx={{ color: 'white', fontWeight: 'bold', whiteSpace: 'nowrap' }}>EMAIL</TableCell>
 
@@ -554,9 +561,9 @@ console.log("nextFollowUpDate FROM API:", data.nextFollowUp);
 
                     <TableCell sx={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '120px' }}>{firm.id ? `Lead - ${firm.id}` : '-'}</TableCell>
 
-                    <TableCell>{firm.name || '-'}</TableCell>
-                    <TableCell>{firm.phone || '-'}</TableCell>
-                    <TableCell>{firm.email || '-'}</TableCell>
+                    <TableCell style={{ whiteSpace: "nowrap"}}>{firm.name || '-'}</TableCell>
+                    <TableCell style={{ whiteSpace: "nowrap"}}>{firm.phone || '-'}</TableCell>
+                    <TableCell style={{ whiteSpace: "nowrap"}}>{firm.email || '-'}</TableCell>
 
 
                     <TableCell>
@@ -586,11 +593,11 @@ console.log("nextFollowUpDate FROM API:", data.nextFollowUp);
 
                     {/* <TableCell>{firm.status || '-'}</TableCell> */}
                     {/* <TableCell>{firm.remark || '-'}</TableCell> */}
-                    <TableCell>{firm.leadEnagagements?.[0]?.remarks || "-"}</TableCell>
+                    <TableCell style={{ whiteSpace: "nowrap"}}>{firm.leadEnagagements?.[0]?.remarks || "-"}</TableCell>
                     {/* <TableCell>{firm.assignTo || '-'}</TableCell> */}
                     {/* <TableCell>{firm.leadEnagagements?.[0]?.assignedTo || "-"}</TableCell> */}
                     <TableCell>{firm.interest || '-'}</TableCell>
-                    <TableCell>{firm.source || '-'}</TableCell>
+                    <TableCell style={{ whiteSpace: "nowrap"}}>{firm.source || '-'}</TableCell>
                   </TableRow>
                 );
               })}

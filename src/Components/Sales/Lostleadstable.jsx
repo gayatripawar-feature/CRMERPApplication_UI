@@ -152,6 +152,22 @@ const [editData, setEditData] = useState({
     // Slice the array for pagination
   const displayedFirms = firms.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
+
+
+   const displayStatus = (status) => {
+    if (!status) return "";
+
+    const s = status.toLowerCase();
+
+    if (s === "booked" || s === "bookedanotherproperty" || s === "booked_property_in_other_project") {
+      return "Booked property in other project";
+    }
+
+    return status; // fallback
+  };
+
+
+  
   return (
     <>
     <TableContainer component={Paper}>
@@ -463,12 +479,14 @@ const [editData, setEditData] = useState({
                 </TableCell>
 
                 <TableCell>{firm.lastFollowUp}</TableCell> {/* Last Follow Up */}
-                <TableCell>{firm.status}</TableCell> {/* Status */}
+                {/* <TableCell>{firm.status}</TableCell>  */}
+                <TableCell style={{ whiteSpace: "nowrap" }}>{displayStatus(firm.status)}</TableCell>
+
                 <TableCell>{firm.remarks}</TableCell> {/* Remark */}
                 <TableCell>{firm.nextFollowUp}</TableCell> {/* Next Follow Up */}
                 <TableCell>{firm.assignedTo}</TableCell> {/* Assign To */}
                 <TableCell>{firm.id}</TableCell> {/* Lead No */}
-                <TableCell>{firm.name}</TableCell> {/* Name */}
+                <TableCell style={{ whiteSpace: "nowrap"}}>{firm.name}</TableCell> {/* Name */}
                 <TableCell>{firm.phone}</TableCell> {/* Mobile No / WhatsApp No */}
                 <TableCell>{firm.interest}</TableCell> {/* You Are Looking For? */}
                 <TableCell>{firm.email}</TableCell> {/* Email */}

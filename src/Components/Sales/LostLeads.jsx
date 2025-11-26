@@ -517,7 +517,7 @@
 
 
 //       {/* <div className="d-flex align-items-center mb-3">
-        
+
 // {sections.map((section, index) => (
 //   <Button
 //     key={index}
@@ -625,7 +625,7 @@
 //       InputLabelProps={{ shrink: true }}
 //       sx={{border:Constants.formInputBorderColor}}
 //     />
-   
+
 //     </Grid> 
 //   </div> */}
 //                 {/* <div
@@ -636,7 +636,7 @@
 //                               flexWrap: "wrap",
 //                             }}
 //                           >
-                            
+
 //                             <div
 //                               style={{
 //                                 display: "flex",
@@ -680,7 +680,7 @@
 //                                     },
 //                                   }}
 //                                 />
-          
+
 //                                 <DatePicker
 //                                   label="End Date"
 //                                   value={endDate}
@@ -711,8 +711,8 @@
 //                                 />
 //                               </LocalizationProvider>
 //                             </div>
-          
-                          
+
+
 //                             <TextField
 //                               size="small"
 //                               placeholder="Search"
@@ -736,7 +736,7 @@
 //                               }}
 //                             >
 //                               <span style={{ fontWeight: "500" }}>Rows per page:</span>
-          
+
 //                               <select
 //                                 style={{
 //                                   border: "1px solid #800000",
@@ -751,10 +751,10 @@
 //                                 <option value={10}>10</option>
 //                                 <option value={25}>25</option>
 //                               </select>
-          
+
 //                               <span>0–0 of 0 entries</span>
-          
-                             
+
+
 //                               <button
 //                                 style={{
 //                                   border: "none",
@@ -2280,12 +2280,12 @@ const LostLeads = ({ data, isMobile, isTablet }) => {
   });
 
 
- // ADD THIS FUNCTION - Clear date filters
-const handleClearFilters = () => {
-  setStartDate(null);
-  setEndDate(null);
-  toast.success("Filters cleared!", { position: "top-right", autoClose: 2000 });
-};
+  // ADD THIS FUNCTION - Clear date filters
+  const handleClearFilters = () => {
+    setStartDate(null);
+    setEndDate(null);
+    toast.success("Filters cleared!", { position: "top-right", autoClose: 2000 });
+  };
 
 
   // Filter data based on date range and search term
@@ -2332,13 +2332,13 @@ const handleClearFilters = () => {
 
       const matchesSearch = searchTerm
         ? (lead.name &&
-            lead.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
-          ((lead.leadNo || lead.id) &&
-            (lead.leadNo || lead.id)
-              .toString()
-              .toLowerCase()
-              .replace(/\s+/g, "")
-              .includes(searchTerm.toLowerCase().replace(/\s+/g, "")))
+          lead.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        ((lead.leadNo || lead.id) &&
+          (lead.leadNo || lead.id)
+            .toString()
+            .toLowerCase()
+            .replace(/\s+/g, "")
+            .includes(searchTerm.toLowerCase().replace(/\s+/g, "")))
         : true;
 
       return isWithinDateRange && matchesSearch;
@@ -2740,7 +2740,7 @@ const handleClearFilters = () => {
     setPartners(partnerCopy);
   };
 
-  const validateForm = () => {};
+  const validateForm = () => { };
 
   const handleClosingExecutiveChange = (event) => {
     setClosingExecutive(event.target.value);
@@ -2799,6 +2799,9 @@ const handleClearFilters = () => {
   //   doc.save("FollowUP_Report.pdf");
   // };
 
+
+ 
+
   return (
     <div>
       {expandedSection === 0 && selectedTab === "firm" && (
@@ -2828,7 +2831,7 @@ const handleClearFilters = () => {
                     + New Follow UP
                   </Button>
 
-                   {/* Date Range */}
+                  {/* Date Range */}
                   <div
                     style={{
                       display: "flex",
@@ -2859,9 +2862,9 @@ const handleClearFilters = () => {
                                 borderColor: Constants.primaryColor,
                               },
                               "&.Mui-focused .MuiOutlinedInput-notchedOutline":
-                                {
-                                  borderColor: Constants.primaryColor,
-                                },
+                              {
+                                borderColor: Constants.primaryColor,
+                              },
                               "& .MuiInputLabel-root": {
                                 color: Constants.primaryColor,
                               },
@@ -2894,9 +2897,9 @@ const handleClearFilters = () => {
                                 borderColor: Constants.primaryColor,
                               },
                               "&.Mui-focused .MuiOutlinedInput-notchedOutline":
-                                {
-                                  borderColor: Constants.primaryColor,
-                                },
+                              {
+                                borderColor: Constants.primaryColor,
+                              },
 
                             },
                           },
@@ -2904,19 +2907,19 @@ const handleClearFilters = () => {
                       />
                     </LocalizationProvider>
                   </div>
-                     <Button
-                      variant="contained"
-                      color="primary"
-                      style={{
-                        background: Constants.primaryColor,
-                        width: isMobile ? "100%" : "auto",
-                      }}
-                      className="fw-bold"
-                      size={isMobile ? "small" : "medium"}
-                       onClick={handleClearFilters}
-                    >
-                      Clear
-                    </Button>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    style={{
+                      background: Constants.primaryColor,
+                      width: isMobile ? "100%" : "auto",
+                    }}
+                    className="fw-bold"
+                    size={isMobile ? "small" : "medium"}
+                    onClick={handleClearFilters}
+                  >
+                    Clear
+                  </Button>
                 </div>
 
                 <div
