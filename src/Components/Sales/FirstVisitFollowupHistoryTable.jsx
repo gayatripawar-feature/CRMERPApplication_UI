@@ -1,27 +1,18 @@
 import React, { useState, useEffect } from "react";
-import {
-  TableContainer,
-  Table,
-  TableHead,
-  TableBody,
-  TableRow,
-  TableCell,
-  Paper,
-  Typography,
-  Box,
-  TablePagination,
-  TableFooter,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material";
+import {TableContainer,Table,TableHead, TableBody, TableRow, TableCell, Paper, 
+  Button,useMediaQuery,useTheme} from "@mui/material";
 import Constants from "../Constants";
-
 export const FirstVisitFollowupHistoryTable = ({ data, fetchVisitFollowUpHistory }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const isTablet = useMediaQuery(theme.breakpoints.down("md"));
   const [visitFollowupHistory, setVisitFollowupHistory] = useState([]);
   const [filteredVisitFollowupHistory, setFilteredVisitFollowupHistory] = useState([]);
+const [expandedRows, setExpandedRows] = useState({});
+const [showAllRows, setShowAllRows] = useState(false);
+const displayedRows = showAllRows ? visitFollowupHistory : visitFollowupHistory.slice(0, 3);
+
+
   useEffect(() => {
     console.log(" Child Mounted - FollowUp Table");
   }, []);
@@ -43,10 +34,9 @@ export const FirstVisitFollowupHistoryTable = ({ data, fetchVisitFollowUpHistory
 
   return (
     <>
-      <TableContainer
-        component={Paper}
-        sx={{
-          maxHeight: isMobile ? 400 : 600,
+      <TableContainer  component={Paper}
+           sx={{
+              maxHeight: isMobile ? 400 : 600,
           width: "100%",
           overflow: "auto",
           "&::-webkit-scrollbar": {
@@ -63,13 +53,9 @@ export const FirstVisitFollowupHistoryTable = ({ data, fetchVisitFollowUpHistory
           "&::-webkit-scrollbar-thumb:hover": {
             background: Constants.primaryColor,
           },
-        }}
-      >
-        <Table
-          aria-label="followup history table"
-          size={isMobile ? "small" : "medium"}
-        >
-          <TableHead>
+        }}>
+      <Table  aria-label="followup history table" size={isMobile ? "small" : "medium"} >
+       <TableHead>
             <TableRow sx={{ background: Constants.primaryColor }}>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }} > STATUS HISTORY  </TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}> REMARK HISTORY </TableCell>
@@ -80,133 +66,21 @@ export const FirstVisitFollowupHistoryTable = ({ data, fetchVisitFollowUpHistory
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}  > LEAD NO  </TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>   SALES EXECUTIVE NAME   </TableCell>
               <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}> NAME   </TableCell>
-              <TableCell
-                sx={{
-                  color: "white",
-                  fontWeight: "bold",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                MOBILE
-              </TableCell>
-              <TableCell
-                sx={{
-                  color: "white",
-                  fontWeight: "bold",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                ALTERNATE CONTACT NO.
-              </TableCell>
-              <TableCell
-                sx={{
-                  color: "white",
-                  fontWeight: "bold",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                WHATSAPP NO.
-              </TableCell>
-              <TableCell
-                sx={{
-                  color: "white",
-                  fontWeight: "bold",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                EMAIL
-              </TableCell>
-              <TableCell
-                sx={{
-                  color: "white",
-                  fontWeight: "bold",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                ADDRESS
-              </TableCell>
-              <TableCell
-                sx={{
-                  color: "white",
-                  fontWeight: "bold",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                OCCUPATION
-              </TableCell>
-              <TableCell
-                sx={{
-                  color: "white",
-                  fontWeight: "bold",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                COMPANY
-              </TableCell>
-              <TableCell
-                sx={{
-                  color: "white",
-                  fontWeight: "bold",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                INTERESTED IN
-              </TableCell>
-              <TableCell
-                sx={{
-                  color: "white",
-                  fontWeight: "bold",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                BUDGET(APPROX.)
-              </TableCell>
-              <TableCell
-                sx={{
-                  color: "white",
-                  fontWeight: "bold",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                REASON FOR PURCHASE
-              </TableCell>
-              <TableCell
-                sx={{
-                  color: "white",
-                  fontWeight: "bold",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                REFERENCE BY/SOURCE
-              </TableCell>
-              <TableCell
-                sx={{
-                  color: "white",
-                  fontWeight: "bold",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                NAME OF CP(IF CHANNEL PARTNER)
-              </TableCell>
-              <TableCell
-                sx={{
-                  color: "white",
-                  fontWeight: "bold",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                PLANNING TO BUY WITHIN?
-              </TableCell>
-              <TableCell
-                sx={{
-                  color: "white",
-                  fontWeight: "bold",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                CUSTOMER FEEDBACK & COMPLETE FOLLOWUP DETAILS
-              </TableCell>
-            </TableRow>
+              <TableCell sx={{color: "white",fontWeight: "bold",  whiteSpace: "nowrap" }}>   MOBILE   </TableCell>
+             <TableCell  sx={{ color: "white",  fontWeight: "bold",  whiteSpace: "nowrap" }}>    ALTERNATE CONTACT NO.  </TableCell>
+               <TableCell sx={{ color: "white", fontWeight: "bold",whiteSpace: "nowrap"   }}>   WHATSAPP NO.   </TableCell>
+           <TableCell   sx={{ color: "white",   fontWeight: "bold", whiteSpace: "nowrap" }}>   EMAIL    </TableCell>
+              <TableCell   sx={{color: "white",   fontWeight: "bold", whiteSpace: "nowrap" }}>    ADDRESS </TableCell>
+     <TableCell  sx={{color: "white", fontWeight: "bold",whiteSpace: "nowrap"}}>  OCCUPATION  </TableCell>
+      <TableCell  sx={{color: "white", fontWeight: "bold", whiteSpace: "nowrap"  }}> COMPANY  </TableCell>
+       <TableCell sx={{ color: "white", fontWeight: "bold",  whiteSpace: "nowrap" }}  >  INTERESTED IN </TableCell>
+      <TableCell   sx={{ color: "white",fontWeight: "bold", whiteSpace: "nowrap"   }}>  BUDGET(APPROX.)  </TableCell>
+       <TableCell  sx={{color: "white", fontWeight: "bold", whiteSpace: "nowrap"  }}>  REASON FOR PURCHASE   </TableCell>
+      <TableCell   sx={{color: "white",fontWeight: "bold",whiteSpace: "nowrap" }}>REFERENCE BY/SOURCE </TableCell>
+      <TableCell  sx={{ color: "white",fontWeight: "bold",whiteSpace: "nowrap" }} >  NAME OF CP(IF CHANNEL PARTNER)   </TableCell>
+     <TableCell  sx={{ color: "white",  fontWeight: "bold",  whiteSpace: "nowrap"  }}>    PLANNING TO BUY WITHIN?   </TableCell>
+    <TableCell  sx={{ color: "white",fontWeight: "bold", whiteSpace: "nowrap" }} > CUSTOMER FEEDBACK & COMPLETE FOLLOWUP DETAILS </TableCell>
+     </TableRow>
           </TableHead>
           <TableBody>
             {data.length === 0 ? (
@@ -228,7 +102,7 @@ export const FirstVisitFollowupHistoryTable = ({ data, fetchVisitFollowUpHistory
               // paginatedData.map((row, index) => (
               filteredVisitFollowupHistory.map((row, index) => (
                 <TableRow key={index} hover>
-                  {/* <TableCell>{row.status || "N/A"}</TableCell> */}
+                  
                  <TableCell sx={{ whiteSpace: "nowrap" }}>
   <div
     dangerouslySetInnerHTML={{
@@ -239,7 +113,7 @@ export const FirstVisitFollowupHistoryTable = ({ data, fetchVisitFollowUpHistory
 
 
 
-                  {/* <TableCell>{row.remarks || "N/A"}</TableCell> */}
+                
                  <TableCell sx={{ whiteSpace: "nowrap" }}>
   <div
     dangerouslySetInnerHTML={{
@@ -249,7 +123,7 @@ export const FirstVisitFollowupHistoryTable = ({ data, fetchVisitFollowUpHistory
 </TableCell>
 
 
-                  {/* <TableCell>{row.assignToHistory || "N/A"}</TableCell> */}
+                 
                  <TableCell sx={{ whiteSpace: "nowrap" }}>
   <div
     dangerouslySetInnerHTML={{
@@ -285,52 +159,12 @@ export const FirstVisitFollowupHistoryTable = ({ data, fetchVisitFollowUpHistory
               ))
             )}
           </TableBody>
-          {/* <TableFooter>
-            <TableRow>
-              <TableCell colSpan={23} sx={{ p: 0, border: "none" }}>
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "flex-end",
-                    width: "100%",
-                    backgroundColor: "background.paper",
-                  }}
-                >
-                 <TablePagination
-                    rowsPerPageOptions={[5, 10, 25]}
-                    component="div"
-                    count={data.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                    sx={{
-                      width: "auto",
-                      "& .MuiTablePagination-toolbar": {
-                        flexDirection: isMobile ? "column" : "row",
-                        alignItems: isMobile ? "flex-start" : "center",
-                        gap: isMobile ? 2 : 0,
-                        padding: isMobile ? "8px 0" : "16px 0",
-                      },
-                      "& .MuiTablePagination-spacer": {
-                        display: isMobile ? "none" : "block",
-                        flex: "none",
-                      },
-                      "& .MuiTablePagination-actions": {
-                        marginLeft: isMobile ? 0 : "auto",
-                      },
-                      "& .MuiTablePagination-selectLabel, & .MuiTablePagination-displayedRows":
-                        {
-                          fontSize: isMobile ? "12px" : "14px",
-                        },
-                    }}
-                  />
 
-                </Box>
-              </TableCell>
-            </TableRow>
-          </TableFooter> */}
+
+
         </Table>
+
+       
       </TableContainer>
     </>
   );

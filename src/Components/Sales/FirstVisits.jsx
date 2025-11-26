@@ -1176,7 +1176,39 @@ const FirstVisits = () => {
   };
 
 
+  //Only For not intersted:
+  // const fetchUndefinedEnquiries = async () => {
+  //   try {
+  //     const response = await fetch("https://localhost:5289/sales/api/enquiries", {
+  //       method: "GET",
+  //       credentials: "include",
+  //     });
 
+  //     if (!response.ok) {
+  //       console.error("Failed to fetch enquiries");
+  //       return;
+  //     }
+
+  //     const data = await response.json();
+
+  //     // FILTER ONLY NOT INTERESTED
+
+  //     const filtered = data.pagedRecords.filter((item) =>
+  //       item.enquiryEnagagements?.some(
+  //         (eng) => eng.status?.toLowerCase() === "not interested"
+  //       )
+  //     );
+  //     setUndefinedData(filtered);
+  //     console.log("undefined data ", filtered);
+  //   } catch (error) {
+  //     console.error("API Error:", error);
+
+  //   }
+  // };
+
+
+
+  // For assign to ,remark , status history :
   const fetchUndefinedEnquiries = async () => {
     try {
       const response = await fetch("https://localhost:5289/sales/api/enquiries", {
@@ -1191,18 +1223,42 @@ const FirstVisits = () => {
 
       const data = await response.json();
 
-      // FILTER ONLY NOT INTERESTED
-
+      // Filter only NOT INTERESTED (your condition)
       const filtered = data.pagedRecords.filter((item) =>
         item.enquiryEnagagements?.some(
           (eng) => eng.status?.toLowerCase() === "not interested"
         )
       );
-      setUndefinedData(filtered);
-      console.log("undefined data ", filtered);
+
+      // Build follow-up history — SAME LOGIC AS YOUR FOLLOW-UP TAB
+      const final = filtered.map((enq) => {
+        let statusHistory = "";
+        let remarkHistory = "";
+        let assignToHistory = "";
+
+        (enq.enquiryEnagagements || []).forEach((e) => {
+          const date = e.assignedDate
+            ? new Date(e.assignedDate).toLocaleString("en-GB")
+            : "-";
+
+          statusHistory = `${date} - ${e.type}<br/>` + statusHistory;
+          remarkHistory = `${date} - ${e.remarks || "No remarks"}<br/>` + remarkHistory;
+          assignToHistory = `${date} - ${e.assignedTo || "No change"}<br/>` + assignToHistory;
+        });
+
+        return {
+          ...enq,
+          statusHistory,
+          remarkHistory,
+          assignToHistory,
+        };
+      });
+
+      setUndefinedData(final);
+      console.log("undefined data with history", final);
+
     } catch (error) {
       console.error("API Error:", error);
-
     }
   };
 
@@ -1251,6 +1307,9 @@ const FirstVisits = () => {
   //     console.error(" Error fetching booked enquiries:", err);
   //   }
   // };
+
+
+
   const fetchBookedEnquiries = async () => {
     try {
       const response = await fetch("https://localhost:5289/sales/api/enquiries", {
@@ -1269,7 +1328,7 @@ const FirstVisits = () => {
 
       console.log(" Normalized enquiries:", allEnquiries);
 
-      // 🔥 Correct filtering using engagement.type
+      //  Correct filtering using engagement.type
       const bookedRecords = allEnquiries.filter((item) => {
         const engagements = item.enquiryEnagagements || [];
         return engagements.some(
@@ -1279,7 +1338,7 @@ const FirstVisits = () => {
 
       console.log(" FINAL BOOKED ENQUIRIES:", bookedRecords);
 
-      // ⭐ IMPORTANT: Keep pagination structure
+      //  IMPORTANT: Keep pagination structure
       const result = {
         ...data,
         pagedRecords: bookedRecords,
@@ -1664,41 +1723,7 @@ const FirstVisits = () => {
                       required
                     >
                       <InputLabel>Lead No.</InputLabel>
-                      {/* <Select
-                        value={leadNo}
-                        onChange={handleLeadNoChange}
-                        label="Lead No."
-                        sx={{
-                          "& .MuiSelect-icon": {
-                            color: Constants.primaryColor,
-                          },
-                        }}
-                      >
-                        <MenuItem value="Lead 9">Lead 9</MenuItem>
-                        <MenuItem value="Lead 16">Lead 16</MenuItem>
-                        <MenuItem value="Lead 25">Lead 25</MenuItem>
-                        
-                      </Select> */}
-                      {/* <Select
-                        value={leadNo}
-                        onChange={handleLeadNoChange}
-                        label="Lead No."
-                        sx={{
-                          "& .MuiSelect-icon": {
-                            color: Constants.primaryColor,
-                          },
-                        }}
-                      >
-                        {leads.scheduled.length > 0 ? (
-                          leads.scheduled.map((lead) => (
-                            <MenuItem key={lead.id} value={lead.id}>
-                              {lead.leadNo || lead.id}
-                            </MenuItem>
-                          ))
-                        ) : (
-                          <MenuItem disabled>No Visit Scheduled Leads</MenuItem>
-                        )}
-                      </Select> */}
+
                       <Select
                         value={leadNo}
                         onChange={handleLeadNoChange}
@@ -2019,19 +2044,7 @@ const FirstVisits = () => {
                       >
                         <span style={{ fontWeight: "500" }}>Rows per page:</span>
 
-                        {/* <select
-                          style={{
-                            border: "1px solid #800000",
-                            borderRadius: "4px",
-                            padding: "2px 6px",
-                            outline: "none",
-                            color: "#800000",
-                          }}
-                        >
-                          <option value={5}>5</option>
-                          <option value={10}>10</option>
-                          <option value={25}>25</option>
-                        </select> */}
+
                         <select
                           value={pendingPagination.rowsPerPage}
                           onChange={(e) =>
@@ -2194,19 +2207,7 @@ const FirstVisits = () => {
                     >
                       <span style={{ fontWeight: "500" }}>Rows per page:</span>
 
-                      {/* <select
-                        style={{
-                          border: "1px solid #800000",
-                          borderRadius: "4px",
-                          padding: "2px 6px",
-                          outline: "none",
-                          color: "#800000",
-                        }}
-                      >
-                        <option value={5}>5</option>
-                        <option value={10}>10</option>
-                        <option value={25}>25</option>
-                      </select> */}
+
                       <select
                         value={bookedPagination.rowsPerPage}
                         onChange={(e) =>
@@ -2236,31 +2237,7 @@ const FirstVisits = () => {
 
                       </span>
 
-                      {/* Navigation arrows */}
-                      {/* <button
-                        style={{
-                          border: "none",
-                          background: "transparent",
-                          cursor: "pointer",
-                          color: "gray",
-                          fontSize: "18px",
-                          padding: "0 4px",
-                        }}
-                      >
-                        &#8249;
-                      </button>
-                      <button
-                        style={{
-                          border: "none",
-                          background: "transparent",
-                          cursor: "pointer",
-                          color: "gray",
-                          fontSize: "18px",
-                          padding: "0 4px",
-                        }}
-                      >
-                        &#8250;
-                      </button> */}
+
                       <button
                         disabled={bookedPagination.page === 1}
                         onClick={() =>
@@ -2389,19 +2366,7 @@ const FirstVisits = () => {
                     >
                       <span style={{ fontWeight: "500" }}>Rows per page:</span>
 
-                      {/* <select
-                        style={{
-                          border: "1px solid #800000",
-                          borderRadius: "4px",
-                          padding: "2px 6px",
-                          outline: "none",
-                          color: "#800000",
-                        }}
-                      >
-                        <option value={5}>5</option>
-                        <option value={10}>10</option>
-                        <option value={25}>25</option>
-                      </select> */}
+
                       <select
                         value={undefinedPagination.rowsPerPage}
                         onChange={(e) =>

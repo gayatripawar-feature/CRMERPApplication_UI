@@ -176,49 +176,10 @@ const SalesCalendar = () => {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [viewMode, setViewMode] = useState('month');
+  const [showAllUpcoming, setShowAllUpcoming] = useState(false);
 
   const [events, setEvents] = useState([]);
-
-  // const selectedDateFormatted = selectedDate.toISOString().split('T')[0];
-
-  // const todayEvents = events.filter(event => event.date === selectedDateFormatted);
-  // const upcomingEvents = events.filter(event => event.date > selectedDateFormatted);
-
-
-  //   const selectedDateFormatted = selectedDate.toISOString().split('T')[0];
-  // const selected = new Date(selectedDateFormatted);
-
-  // // Events for selected date
-  // const todayEvents = events.filter(event => {
-  //   return new Date(event.date).toDateString() === selected.toDateString();
-  // });
-
-  // // Events after selected date
-  // const upcomingEvents = events.filter(event => {
-  //   return new Date(event.date) > selected;
-  // });
-
-  // const selectedDateFormatted = selectedDate.toISOString().split('T')[0];
-  // const selected = new Date(selectedDateFormatted);
-
-  // // Events for selected date
-  // const todayEvents = events.filter(event => {
-  //   return new Date(event.date).toDateString() === selected.toDateString();
-  // });
-
-  // // Events after selected date
-  // const upcomingEvents = events.filter(event => {
-  //   return new Date(event.date) > selected;
-  // });
-
-
-  // const selectedDateFormatted = selectedDate.toISOString().split("T")[0];
-  const selectedDateFormatted =
-    selectedDate.getFullYear() +
-    "-" +
-    String(selectedDate.getMonth() + 1).padStart(2, "0") +
-    "-" +
-    String(selectedDate.getDate()).padStart(2, "0");
+  const selectedDateFormatted = selectedDate.getFullYear() + "-" + String(selectedDate.getMonth() + 1).padStart(2, "0") + "-" + String(selectedDate.getDate()).padStart(2, "0");
   const selected = new Date(selectedDateFormatted + "T00:00:00");
 
   // Events for selected date
@@ -233,11 +194,18 @@ const SalesCalendar = () => {
     return eventDate > selected;
   });
 
+  const displayedUpcoming = showAllUpcoming ? upcomingEvents : upcomingEvents.slice(0, 3);
 
   //  FETCH BOTH APIs AND MERGE EVENTS
   useEffect(() => {
     fetchEvents();
   }, []);
+
+  // To get the First dat of month:
+  useEffect(() => {
+    // Whenever month changes, auto-select first day of that month
+    setSelectedDate(new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1));
+  }, [currentMonth]);
 
 
   const fetchEvents = async () => {
@@ -262,11 +230,11 @@ const SalesCalendar = () => {
 
       let finalEvents = [];
 
-      // ✅ ENQUIRY FOLLOW-UPS & VISITS ONLY
+      // ENQUIRY FOLLOW-UPS & VISITS ONLY
       if (enquiryData && Array.isArray(enquiryData.pagedRecords)) {
         enquiryData.pagedRecords.forEach((enq) => {
           enq.enquiryEnagagements?.forEach((e) => {
-            // ⭐ FOLLOW-UP
+            //FOLLOW-UP
             if (e.nextFollowUpDate) {
               console.log("ADDING ENQUIRY FOLLOW-UP:", e.nextFollowUpDate);
               finalEvents.push({
@@ -275,7 +243,7 @@ const SalesCalendar = () => {
               });
             }
 
-            // ⭐ VISIT SCHEDULED
+            //  VISIT SCHEDULED
             if (e.nextVisitScheduledDate) {
               console.log("ADDING ENQUIRY VISIT:", e.nextVisitScheduledDate);
               finalEvents.push({
@@ -287,12 +255,12 @@ const SalesCalendar = () => {
         });
       }
 
-      // 🔥 Final clean result (unique events)
+      //  Final clean result (unique events)
       const uniqueEvents = Array.from(
         new Map(finalEvents.map((e) => [`${e.title}-${e.date}`, e])).values()
       );
 
-      console.log("🎉 FINAL ENQUIRY EVENTS:", uniqueEvents);
+      console.log(" FINAL ENQUIRY EVENTS:", uniqueEvents);
 
       setEvents(uniqueEvents);
     } catch (err) {
@@ -389,7 +357,7 @@ const SalesCalendar = () => {
 
 
   return (
-    <div className="container mt-4">
+    <div className="container">
 
       {/* Header */}
       <div className="d-flex justify-content-between align-items-center mb-4 bg-success text-white p-3 rounded">
@@ -426,15 +394,31 @@ const SalesCalendar = () => {
         </div>
 
         <div className="col-md-5">
+
           <div className="p-3 bg-light shadow rounded">
 
-            <h4 className="text-primary">📅 Upcoming Events</h4>
-            <ul className="list-group">
-              {upcomingEvents.length > 0
-                ? upcomingEvents.map((event, i) => (
-                  <li key={i} className="list-group-item">{event.title} - {event.date}</li>
+            {/* Upcoming Events Header with Show More / Show Less button */}
+            <div className="d-flex justify-content-between align-items-center">
+              <h4 className="text-primary mb-0">📅 Upcoming Events</h4>
+              {upcomingEvents.length > 3 && (
+                <button
+                  className="btn btn-sm btn-link"
+                  onClick={() => setShowAllUpcoming(prev => !prev)}
+                >
+                  {showAllUpcoming ? 'Show Less ▲' : 'Show More ▼'}
+                </button>
+              )}
+            </div>
+
+            <ul className="list-group mt-2">
+              {displayedUpcoming.length > 0
+                ? displayedUpcoming.map((event, i) => (
+                  <li key={i} className="list-group-item">
+                    {event.title} - {event.date}
+                  </li>
                 ))
-                : <li className="list-group-item text-muted">No upcoming events</li>}
+                : <li className="list-group-item text-muted">No upcoming events</li>
+              }
             </ul>
 
             <h4 className="text-danger mt-3">🔥 Events for {selectedDate.toDateString()}</h4>
@@ -447,6 +431,7 @@ const SalesCalendar = () => {
             </ul>
 
           </div>
+
         </div>
       </div>
     </div>
