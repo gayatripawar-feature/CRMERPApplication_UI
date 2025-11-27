@@ -2,55 +2,20 @@
 
 import React, { useState, useEffect } from "react";
 import {
-  TableContainer,
-  Table,
-  TableHead,
-  TableBody,
-  TableRow,
-  TableCell,
-  Paper,
-  TablePagination,
-  useMediaQuery,
-  useTheme,
-  Box,
-  Typography,
-  IconButton,
-  Tooltip,
-  TableFooter,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Button,
-  Modal,
-  TextField,
-  Grid,
-  InputAdornment,
+  TableContainer, Table, TableHead, TableBody, TableRow, TableCell, Paper, TablePagination, useMediaQuery, useTheme, Box, Typography,
+  IconButton, Tooltip, TableFooter, Dialog, DialogTitle, DialogContent, DialogActions, FormControl, InputLabel, Select,
+  MenuItem, Button, Modal, TextField, Grid
 } from "@mui/material";
-import {
-  Visibility as VisibilityIcon,
-  Edit as EditIcon,
-  Email as EmailIcon,
-  Assignment as AssignmentIcon,
-  Delete as DeleteIcon,
-  FilterList as FilterListIcon,
-} from "@mui/icons-material";
+import { Visibility as VisibilityIcon, Edit as EditIcon, Email as EmailIcon, Assignment as AssignmentIcon, Delete as DeleteIcon, FilterList as FilterListIcon, } from "@mui/icons-material";
 import { FaWhatsapp } from "react-icons/fa";
 import Constants from "../Constants";
-
 const handleOpenDocument = (url) => {
   if (url) {
     window.open(url, "_blank");
   }
 };
-
 const formatDateTime = (dateString) => {
   if (!dateString) return "-";
-
   try {
     const date = new Date(dateString);
     const day = String(date.getDate()).padStart(2, "0");
@@ -59,7 +24,6 @@ const formatDateTime = (dateString) => {
     const hours = String(date.getHours()).padStart(2, "0");
     const minutes = String(date.getMinutes()).padStart(2, "0");
     const seconds = String(date.getSeconds()).padStart(2, "0");
-
     return `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
   } catch (error) {
     console.error("Error formatting date:", error);
@@ -76,14 +40,11 @@ export const FirstVisitsPendingfollowup = ({
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
-
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(isMobile ? 5 : 10);
-
   // Delete confirmation
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
-
   // Edit functionality states
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
@@ -99,11 +60,9 @@ export const FirstVisitsPendingfollowup = ({
   const [showNextFollowUpEdit, setShowNextFollowUpEdit] = useState(false);
   const [showVisitScheduledDateEdit, setShowVisitScheduledDateEdit] =
     useState(false);
-
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
-
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
@@ -239,8 +198,7 @@ export const FirstVisitsPendingfollowup = ({
 
   return (
     <>
-      <TableContainer
-        component={Paper}
+      <TableContainer component={Paper}
         sx={{
           maxHeight: isMobile ? 400 : 400,
           width: "100%",
@@ -260,32 +218,13 @@ export const FirstVisitsPendingfollowup = ({
           },
         }}
       >
-        <Table
-          aria-label="followup pending table"
-          size={isMobile ? "small" : "medium"}
-          sx={{ minWidth: 2400 }}
-        >
+        <Table aria-label="followup pending table"
+          size={isMobile ? "small" : "medium"} sx={{ minWidth: 2400 }}>
           <TableHead>
             <TableRow sx={{ background: Constants.primaryColor }}>
-              <TableCell
-                sx={{
-                  color: "white",
-                  fontWeight: "bold",
-                  whiteSpace: "nowrap",
-                  minWidth: isMobile ? "150px" : "auto",
-                }}
-              >
-                ACTION
-              </TableCell>
-              <TableCell
-                sx={{
-                  color: "white",
-                  fontWeight: "bold",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                LAST FOLLOW UP
-              </TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap", minWidth: isMobile ? "150px" : "auto" }}>   ACTION   </TableCell>
+              <TableCell sx={{ color: "white", fontWeight: "bold", whiteSpace: "nowrap" }}>  LAST FOLLOW UP    </TableCell>
+
               <TableCell
                 sx={{
                   color: "white",

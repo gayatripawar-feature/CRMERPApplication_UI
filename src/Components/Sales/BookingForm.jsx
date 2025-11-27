@@ -35,7 +35,7 @@ const BookingForm = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const isTablet = useMediaQuery(theme.breakpoints.between("sm", "md"));
-const [enquiries, setEnquiries] = useState([]);
+  const [enquiries, setEnquiries] = useState([]);
   // Main state management
   const [expandedSection, setExpandedSection] = useState(0);
   const [showFirmForm, setShowFirmForm] = useState(false);
@@ -90,36 +90,36 @@ const [enquiries, setEnquiries] = useState([]);
 
 
   //  State variables for documents of main allottee
-const [allotteeDocuments, setAllotteeDocuments] = useState({
-  panCard: [],
-  aadhaarCard: [],
-  marriageCertificate: [],
-  passportPhoto: [],
-  otherDocuments: []
-});
-
- //  State variables for documents of co-allottees
-const [coAllotteesDocuments, setCoAllotteesDocuments] = useState([
-  {
+  const [allotteeDocuments, setAllotteeDocuments] = useState({
     panCard: [],
     aadhaarCard: [],
     marriageCertificate: [],
     passportPhoto: [],
     otherDocuments: []
-  }
-]);
+  });
+
+  //  State variables for documents of co-allottees
+  const [coAllotteesDocuments, setCoAllotteesDocuments] = useState([
+    {
+      panCard: [],
+      aadhaarCard: [],
+      marriageCertificate: [],
+      passportPhoto: [],
+      otherDocuments: []
+    }
+  ]);
 
   // State for managing multiple co-allottees
   const [coAllottees, setCoAllottees] = useState([
-  {
-    name: "",
-    dob: "",
-    occupation: "",
-    pan: "",
-    aadhar: "",
-    mobileEmail: ""
-  }
-]);
+    {
+      name: "",
+      dob: "",
+      occupation: "",
+      pan: "",
+      aadhar: "",
+      mobileEmail: ""
+    }
+  ]);
 
 
   // File states
@@ -199,43 +199,43 @@ const [coAllotteesDocuments, setCoAllotteesDocuments] = useState([
   //   setCurrentPage(0);
   // }, [fromDate, toDate, searchTerm, submittedData]);
   useEffect(() => {
-  let filtered = submittedData;
+    let filtered = submittedData;
 
-  // Apply date filters first
-  if (fromDate || toDate) {
-    filtered = filtered.filter(item => {
-      const itemDate = item.dateOfFlatBooking ? new Date(item.dateOfFlatBooking) : null;
-      if (!itemDate) return false;
+    // Apply date filters first
+    if (fromDate || toDate) {
+      filtered = filtered.filter(item => {
+        const itemDate = item.dateOfFlatBooking ? new Date(item.dateOfFlatBooking) : null;
+        if (!itemDate) return false;
 
-      const from = fromDate ? new Date(fromDate) : null;
-      const to = toDate ? new Date(toDate) : null;
+        const from = fromDate ? new Date(fromDate) : null;
+        const to = toDate ? new Date(toDate) : null;
 
-      let valid = true;
-      if (from) valid = valid && itemDate >= from;
-      if (to) {
-        const toDateEnd = new Date(to);
-        toDateEnd.setHours(23, 59, 59, 999);
-        valid = valid && itemDate <= toDateEnd;
-      }
-      return valid;
-    });
-  }
+        let valid = true;
+        if (from) valid = valid && itemDate >= from;
+        if (to) {
+          const toDateEnd = new Date(to);
+          toDateEnd.setHours(23, 59, 59, 999);
+          valid = valid && itemDate <= toDateEnd;
+        }
+        return valid;
+      });
+    }
 
-  // Apply search filter on the date-filtered data
-  if (searchTerm.trim()) {
-    const lowercasedTerm = searchTerm.toLowerCase();
-    filtered = filtered.filter(item =>
-      (item.enquiryNo && item.enquiryNo.toString().toLowerCase().includes(lowercasedTerm)) ||
-      (item.nameOfAllottee && item.nameOfAllottee.toLowerCase().includes(lowercasedTerm)) ||
-      (item.mobileNo && item.mobileNo.toString().toLowerCase().includes(lowercasedTerm)) ||
-      (item.emailId && item.emailId.toLowerCase().includes(lowercasedTerm)) ||
-      (item.flatNo && item.flatNo.toString().toLowerCase().includes(lowercasedTerm))
-    );
-  }
+    // Apply search filter on the date-filtered data
+    if (searchTerm.trim()) {
+      const lowercasedTerm = searchTerm.toLowerCase();
+      filtered = filtered.filter(item =>
+        (item.enquiryNo && item.enquiryNo.toString().toLowerCase().includes(lowercasedTerm)) ||
+        (item.nameOfAllottee && item.nameOfAllottee.toLowerCase().includes(lowercasedTerm)) ||
+        (item.mobileNo && item.mobileNo.toString().toLowerCase().includes(lowercasedTerm)) ||
+        (item.emailId && item.emailId.toLowerCase().includes(lowercasedTerm)) ||
+        (item.flatNo && item.flatNo.toString().toLowerCase().includes(lowercasedTerm))
+      );
+    }
 
-  setFilteredData(filtered);
-  setCurrentPage(0);
-}, [fromDate, toDate, searchTerm, submittedData]);
+    setFilteredData(filtered);
+    setCurrentPage(0);
+  }, [fromDate, toDate, searchTerm, submittedData]);
 
   // Pagination calculations
   const totalEntries = filteredData.length;
@@ -265,97 +265,97 @@ const [coAllotteesDocuments, setCoAllotteesDocuments] = useState([
 
 
   //  Handlers for co-allottees
-// const handleAddCoAllottee = () => {
-//   setCoAllottees([
-//     ...coAllottees,
-//     {
-//       name: "",
-//       dob: "",
-//       occupation: "",
-//       pan: "",
-//       aadhar: "",
-//       mobileEmail: ""
-//     }
-//   ]);
-// };
-const handleAddCoAllottee = () => {
-  setCoAllottees([
-    ...coAllottees,
-    {
-      name: "",
-      dob: "",
-      occupation: "",
-      pan: "",
-      aadhar: "",
-      mobileEmail: ""
-    }
-  ]);
+  // const handleAddCoAllottee = () => {
+  //   setCoAllottees([
+  //     ...coAllottees,
+  //     {
+  //       name: "",
+  //       dob: "",
+  //       occupation: "",
+  //       pan: "",
+  //       aadhar: "",
+  //       mobileEmail: ""
+  //     }
+  //   ]);
+  // };
+  const handleAddCoAllottee = () => {
+    setCoAllottees([
+      ...coAllottees,
+      {
+        name: "",
+        dob: "",
+        occupation: "",
+        pan: "",
+        aadhar: "",
+        mobileEmail: ""
+      }
+    ]);
 
-  setCoAllotteesDocuments([
-    ...coAllotteesDocuments,
-    {
-      panCard: [],
-      aadhaarCard: [],
-      marriageCertificate: [],
-      passportPhoto: [],
-      otherDocuments: []
-    }
-  ]);
-};
-
-
-// Handler for  main allottee documents
-const handleAllotteeDocumentChange = (documentType, files) => {
-  setAllotteeDocuments(prev => ({
-    ...prev,
-    [documentType]: [...prev[documentType], ...files]
-  }));
-};
-
-// Handler for  co-allottee documents
-const handleCoAllotteeDocumentChange = (index, documentType, files) => {
-  const updatedCoAllotteesDocuments = [...coAllotteesDocuments];
-  updatedCoAllotteesDocuments[index] = {
-    ...updatedCoAllotteesDocuments[index],
-    [documentType]: [...updatedCoAllotteesDocuments[index][documentType], ...files]
+    setCoAllotteesDocuments([
+      ...coAllotteesDocuments,
+      {
+        panCard: [],
+        aadhaarCard: [],
+        marriageCertificate: [],
+        passportPhoto: [],
+        otherDocuments: []
+      }
+    ]);
   };
-  setCoAllotteesDocuments(updatedCoAllotteesDocuments);
-};
 
 
-// const handleRemoveCoAllottee = (index) => {
-//   if (coAllottees.length > 1) {
-//     setCoAllottees(coAllottees.filter((_, i) => i !== index));
-//   }
-// };
-const handleRemoveCoAllottee = (index) => {
-  if (coAllottees.length > 1) {
-    setCoAllottees(coAllottees.filter((_, i) => i !== index));
-    setCoAllotteesDocuments(coAllotteesDocuments.filter((_, i) => i !== index));
-  }
-};
-
-const handleCoAllotteeChange = (index, field, value) => {
-  const updatedCoAllottees = [...coAllottees];
-  updatedCoAllottees[index][field] = value;
-  setCoAllottees(updatedCoAllottees);
-
-  // Clear error when user starts typing
-  if (errors[`coAllottee${field}${index}`]) {
-    setErrors(prev => ({
+  // Handler for  main allottee documents
+  const handleAllotteeDocumentChange = (documentType, files) => {
+    setAllotteeDocuments(prev => ({
       ...prev,
-      [`coAllottee${field}${index}`]: ""
+      [documentType]: [...prev[documentType], ...files]
     }));
-  }
+  };
 
-  // Validation for specific fields
-  if (field === "aadhar" && value.length > 12) {
-    setErrors(prev => ({
-      ...prev,
-      [`coAllotteeAadhar${index}`]: "Aadhar number cannot exceed 12 digits."
-    }));
-  }
-};
+  // Handler for  co-allottee documents
+  const handleCoAllotteeDocumentChange = (index, documentType, files) => {
+    const updatedCoAllotteesDocuments = [...coAllotteesDocuments];
+    updatedCoAllotteesDocuments[index] = {
+      ...updatedCoAllotteesDocuments[index],
+      [documentType]: [...updatedCoAllotteesDocuments[index][documentType], ...files]
+    };
+    setCoAllotteesDocuments(updatedCoAllotteesDocuments);
+  };
+
+
+  // const handleRemoveCoAllottee = (index) => {
+  //   if (coAllottees.length > 1) {
+  //     setCoAllottees(coAllottees.filter((_, i) => i !== index));
+  //   }
+  // };
+  const handleRemoveCoAllottee = (index) => {
+    if (coAllottees.length > 1) {
+      setCoAllottees(coAllottees.filter((_, i) => i !== index));
+      setCoAllotteesDocuments(coAllotteesDocuments.filter((_, i) => i !== index));
+    }
+  };
+
+  const handleCoAllotteeChange = (index, field, value) => {
+    const updatedCoAllottees = [...coAllottees];
+    updatedCoAllottees[index][field] = value;
+    setCoAllottees(updatedCoAllottees);
+
+    // Clear error when user starts typing
+    if (errors[`coAllottee${field}${index}`]) {
+      setErrors(prev => ({
+        ...prev,
+        [`coAllottee${field}${index}`]: ""
+      }));
+    }
+
+    // Validation for specific fields
+    if (field === "aadhar" && value.length > 12) {
+      setErrors(prev => ({
+        ...prev,
+        [`coAllotteeAadhar${index}`]: "Aadhar number cannot exceed 12 digits."
+      }));
+    }
+  };
 
 
   // Handle form input changes
@@ -475,395 +475,395 @@ const handleCoAllotteeChange = (index, field, value) => {
   // };
 
   // Helper: safely trim any value
-const safeTrim = (value) => (value ?? "").toString().trim();
+  const safeTrim = (value) => (value ?? "").toString().trim();
 
-const validateForm = () => {
-  const newErrors = {};
+  const validateForm = () => {
+    const newErrors = {};
 
-  // Required field validations using safeTrim
-  if (safeTrim(formData.enquiryNo) === "")
-    newErrors.enquiryNo = "Enquiry number is required";
+    // Required field validations using safeTrim
+    if (safeTrim(formData.enquiryNo) === "")
+      newErrors.enquiryNo = "Enquiry number is required";
 
-  if (safeTrim(formData.projectName) === "")
-    newErrors.projectName = "Project name is required";
+    if (safeTrim(formData.projectName) === "")
+      newErrors.projectName = "Project name is required";
 
-  if (safeTrim(formData.nameOfAllottee) === "")
-    newErrors.nameOfAllottee = "Name of allottee is required";
+    if (safeTrim(formData.nameOfAllottee) === "")
+      newErrors.nameOfAllottee = "Name of allottee is required";
 
-  if (safeTrim(formData.mobileNo) === "")
-    newErrors.mobileNo = "Mobile number is required";
+    if (safeTrim(formData.mobileNo) === "")
+      newErrors.mobileNo = "Mobile number is required";
 
-  if (!formData.dateOfFlatBooking)
-    newErrors.dateOfFlatBooking = "Date of flat booking is required";
-
-
-  setErrors(newErrors);
-  return Object.keys(newErrors).length === 0;
-};
+    if (!formData.dateOfFlatBooking)
+      newErrors.dateOfFlatBooking = "Date of flat booking is required";
 
 
-
-
-const resetForm = () => {
-  setFormData({
-    enquiryNo: "",
-    projectName: "",
-    dateOfFlatBooking: "",
-    nameOfAllottee: "",
-    sourceName: "",
-    dateOfBirth: "",
-    occupation: "",
-    panNo: "",
-    aadharNo: "",
-    mobileNo: "",
-    alternateMobileNo: "",
-    whatsAppNo: "",
-    emailId: "",
-    address: "",
-    carpetArea: "",
-    wing: "",
-    flatNo: "",
-    type: "",
-    soldRate: "",
-    enclosedBalcony: "",
-    openBalcony: "",
-    terrace: "",
-    parking: "",
-    floor: "",
-    totalConsideration: "",
-    bookingAmount: "",
-    stampDuty: "",
-    registrationFee: "",
-    gstAmount: "",
-    paymentMode: "",
-    chequeNo: "",
-    chequeDate: "",
-    bankName: "",
-    bankDetails: ""
-  });
-
-  setCoAllottees([{
-    name: "",
-    dob: "",
-    occupation: "",
-    pan: "",
-    aadhar: "",
-    mobileEmail: ""
-  }]);
-
-  setAllotteeDocuments({
-    panCard: [],
-    aadhaarCard: [],
-    marriageCertificate: [],
-    passportPhoto: [],
-    otherDocuments: []
-  });
-
-  setCoAllotteesDocuments([{
-    panCard: [],
-    aadhaarCard: [],
-    marriageCertificate: [],
-    passportPhoto: [],
-    otherDocuments: []
-  }]);
-
-  setErrors({});
-};
-
-
-
-
-
-// const handleSubmit = () => {
-//   if (!validateForm()) {
-//     toast.error("Please fill all required fields!", { position: "top-right" });
-//     return;
-//   }
-
-//   const newRecord = {
-//     id: Date.now(),
-//     timestamp: new Date().toLocaleString(),
-//     enquiryNo: formData.enquiryNo,
-//     projectName: formData.projectName,
-//     dateOfFlatBooking: formData.dateOfFlatBooking,
-//     nameOfAllottee: formData.nameOfAllottee,
-//     sourceName: formData.sourceName,
-//     dateOfBirth: formData.dateOfBirth,
-//     occupation: formData.occupation,
-//     panNo: formData.panNo,
-//     aadharNo: formData.aadharNo,
-//     mobileNo: formData.mobileNo,
-//     alternateMobileNo: formData.alternateMobileNo,
-//     whatsappNo: formData.whatsAppNo,
-//     emailId: formData.emailId,
-//     address: formData.address,
-//     // Multiple co-allottees
-//     coAllottees: coAllottees,
-//     flatNo: formData.flatNo,
-//     type: formData.type,
-//     wing: formData.wing,
-//     soldRate: formData.soldRate,
-//     carpetAreaSqMtr: formData.carpetArea,
-//     enclosedBalconySqMtr: formData.enclosedBalcony,
-//     openBalconySqMtr: formData.openBalcony,
-//     terraceSqMtr: formData.terrace,
-//     parking: formData.parking,
-//     floor: formData.floor,
-//     totalConsideration: formData.totalConsideration,
-//     bookingAmount: formData.bookingAmount,
-//     stampDuty: formData.stampDuty,
-//     registrationFee: formData.registrationFee,
-//     gstAmount: formData.gstAmount,
-//     paymentMode: formData.paymentMode,
-//     chequeTrnNo: formData.chequeNo,
-//     chequeTrnDate: formData.chequeDate,
-//     bankName: formData.bankName,
-//     bankDetails: formData.bankDetails,
-//     // File references
-//     panCardBoth: panCardFiles.map(file => file.name).join(', '),
-//     aadharCardBoth: aadhaarCard.map(file => file.name).join(', '),
-//     marriageCertificate: marriageCertificate.map(file => file.name).join(', '),
-//     passportSizePhotoBoth: passportPhoto.map(file => file.name).join(', '),
-//     anyOther: otherDocuments.map(file => file.name).join(', ')
-//   };
-
-//   setSubmittedData(prev => [...prev, newRecord]);
-
-//   toast.success("Booking details submitted successfully!", {
-//     position: "top-right",
-//     autoClose: 3000,
-//   });
-
-//   resetForm();
-//   setShowFirmForm(false);
-// };
-
-// const handleSubmit = () => {
-//   if (!validateForm()) {
-//     toast.error("Please fill all required fields!", { position: "top-right" });
-//     return;
-//   }
-
-//   const newRecord = {
-//     id: Date.now(),
-//     timestamp: new Date().toLocaleString(),
-//     enquiryNo: formData.enquiryNo,
-//     projectName: formData.projectName,
-//     dateOfFlatBooking: formData.dateOfFlatBooking,
-//     nameOfAllottee: formData.nameOfAllottee,
-//     sourceName: formData.sourceName,
-//     dateOfBirth: formData.dateOfBirth,
-//     occupation: formData.occupation,
-//     panNo: formData.panNo,
-//     aadharNo: formData.aadharNo,
-//     mobileNo: formData.mobileNo,
-//     alternateMobileNo: formData.alternateMobileNo,
-//     whatsappNo: formData.whatsAppNo,
-//     emailId: formData.emailId,
-//     address: formData.address,
-
-//     // Allottee documents
-//     allotteePanCard: allotteeDocuments.panCard.map(file => file.name).join(', '),
-//     allotteeAadhaarCard: allotteeDocuments.aadhaarCard.map(file => file.name).join(', '),
-//     allotteeMarriageCertificate: allotteeDocuments.marriageCertificate.map(file => file.name).join(', '),
-//     allotteePassportPhoto: allotteeDocuments.passportPhoto.map(file => file.name).join(', '),
-//     allotteeOtherDocuments: allotteeDocuments.otherDocuments.map(file => file.name).join(', '),
-
-//     // Co-allottees with their documents
-//     coAllottees: coAllottees.map((coAllottee, index) => ({
-//       ...coAllottee,
-//       panCard: coAllotteesDocuments[index]?.panCard.map(file => file.name).join(', ') || '',
-//       aadhaarCard: coAllotteesDocuments[index]?.aadhaarCard.map(file => file.name).join(', ') || '',
-//       marriageCertificate: coAllotteesDocuments[index]?.marriageCertificate.map(file => file.name).join(', ') || '',
-//       passportPhoto: coAllotteesDocuments[index]?.passportPhoto.map(file => file.name).join(', ') || '',
-//       otherDocuments: coAllotteesDocuments[index]?.otherDocuments.map(file => file.name).join(', ') || ''
-//     })),
-
-//     flatNo: formData.flatNo,
-//     type: formData.type,
-//     wing: formData.wing,
-//     soldRate: formData.soldRate,
-//     carpetAreaSqMtr: formData.carpetArea,
-//     enclosedBalconySqMtr: formData.enclosedBalcony,
-//     openBalconySqMtr: formData.openBalcony,
-//     terraceSqMtr: formData.terrace,
-//     parking: formData.parking,
-//     floor: formData.floor,
-//     totalConsideration: formData.totalConsideration,
-//     bookingAmount: formData.bookingAmount,
-//     stampDuty: formData.stampDuty,
-//     registrationFee: formData.registrationFee,
-//     gstAmount: formData.gstAmount,
-//     paymentMode: formData.paymentMode,
-//     chequeTrnNo: formData.chequeNo,
-//     chequeTrnDate: formData.chequeDate,
-//     bankName: formData.bankName,
-//     bankDetails: formData.bankDetails
-//   };
-
-//   setSubmittedData(prev => [...prev, newRecord]);
-
-//   toast.success("Booking details submitted successfully!", {
-//     position: "top-right",
-//     autoClose: 3000,
-//   });
-
-//   resetForm();
-//   setShowFirmForm(false);
-// };
-// const handleSubmit = () => {
-//   if (!validateForm()) {
-//     toast.error("Please fill all required fields!", { position: "top-right" });
-//     return;
-//   }
-
-//   const newRecord = {
-//     id: Date.now(),
-//     timestamp: new Date().toLocaleString(),
-//     enquiryNo: formData.enquiryNo,
-//     projectName: formData.projectName,
-//     dateOfFlatBooking: formData.dateOfFlatBooking,
-//     nameOfAllottee: formData.nameOfAllottee,
-//     sourceName: formData.sourceName,
-//     dateOfBirth: formData.dateOfBirth,
-//     occupation: formData.occupation,
-//     panNo: formData.panNo,
-//     aadharNo: formData.aadharNo,
-//     mobileNo: formData.mobileNo,
-//     alternateMobileNo: formData.alternateMobileNo,
-//     whatsappNo: formData.whatsAppNo,
-//     emailId: formData.emailId,
-//     address: formData.address,
-
-//     // Allottee documents with file objects for preview
-//     allotteePanCard: allotteeDocuments.panCard,
-//     allotteeAadhaarCard: allotteeDocuments.aadhaarCard,
-//     allotteeMarriageCertificate: allotteeDocuments.marriageCertificate,
-//     allotteePassportPhoto: allotteeDocuments.passportPhoto,
-//     allotteeOtherDocuments: allotteeDocuments.otherDocuments,
-
-//     // Co-allottees with their documents
-//     coAllottees: coAllottees.map((coAllottee, index) => ({
-//       ...coAllottee,
-//       panCard: coAllotteesDocuments[index]?.panCard || [],
-//       aadhaarCard: coAllotteesDocuments[index]?.aadhaarCard || [],
-//       marriageCertificate: coAllotteesDocuments[index]?.marriageCertificate || [],
-//       passportPhoto: coAllotteesDocuments[index]?.passportPhoto || [],
-//       otherDocuments: coAllotteesDocuments[index]?.otherDocuments || []
-//     })),
-
-//     flatNo: formData.flatNo,
-//     type: formData.type,
-//     wing: formData.wing,
-//     soldRate: formData.soldRate,
-//     carpetAreaSqMtr: formData.carpetArea,
-//     enclosedBalconySqMtr: formData.enclosedBalcony,
-//     openBalconySqMtr: formData.openBalcony,
-//     terraceSqMtr: formData.terrace,
-//     parking: formData.parking,
-//     floor: formData.floor,
-//     totalConsideration: formData.totalConsideration,
-//     bookingAmount: formData.bookingAmount,
-//     stampDuty: formData.stampDuty,
-//     registrationFee: formData.registrationFee,
-//     gstAmount: formData.gstAmount,
-//     paymentMode: formData.paymentMode,
-//     chequeTrnNo: formData.chequeNo,
-//     chequeTrnDate: formData.chequeDate,
-//     bankName: formData.bankName,
-//     bankDetails: formData.bankDetails
-//   };
-
-//   setSubmittedData(prev => [...prev, newRecord]);
-
-//   toast.success("Booking details submitted successfully!", {
-//     position: "top-right",
-//     autoClose: 3000,
-//   });
-
-//   resetForm();
-//   setShowFirmForm(false);
-// };
-const handleSubmit = () => {
-  if (!validateForm()) {
-    toast.error("Please fill all required fields!", { position: "top-right" });
-    return;
-  }
-
-  const newRecord = {
-    id: Date.now(),
-    timestamp: new Date().toLocaleString(),
-    enquiryNo: formData.enquiryNo,
-    projectName: formData.projectName,
-    dateOfFlatBooking: formData.dateOfFlatBooking,
-    nameOfAllottee: formData.nameOfAllottee,
-    sourceName: formData.sourceName,
-    dateOfBirth: formData.dateOfBirth,
-    occupation: formData.occupation,
-    panNo: formData.panNo,
-    aadharNo: formData.aadharNo,
-    mobileNo: formData.mobileNo,
-    alternateMobileNo: formData.alternateMobileNo,
-    whatsappNo: formData.whatsAppNo,
-    emailId: formData.emailId,
-    address: formData.address,
-
-    // Allottee documents - store File objects directly
-    allotteePanCard: [...allotteeDocuments.panCard],
-    allotteeAadhaarCard: [...allotteeDocuments.aadhaarCard],
-    allotteeMarriageCertificate: [...allotteeDocuments.marriageCertificate],
-    allotteePassportPhoto: [...allotteeDocuments.passportPhoto],
-    allotteeOtherDocuments: [...allotteeDocuments.otherDocuments],
-
-    // Co-allottees with their documents
-    coAllottees: coAllottees.map((coAllottee, index) => ({
-      ...coAllottee,
-      panCard: [...(coAllotteesDocuments[index]?.panCard || [])],
-      aadhaarCard: [...(coAllotteesDocuments[index]?.aadhaarCard || [])],
-      marriageCertificate: [...(coAllotteesDocuments[index]?.marriageCertificate || [])],
-      passportPhoto: [...(coAllotteesDocuments[index]?.passportPhoto || [])],
-      otherDocuments: [...(coAllotteesDocuments[index]?.otherDocuments || [])]
-    })),
-
-    flatNo: formData.flatNo,
-    type: formData.type,
-    wing: formData.wing,
-    soldRate: formData.soldRate,
-    carpetAreaSqMtr: formData.carpetArea,
-    enclosedBalconySqMtr: formData.enclosedBalcony,
-    openBalconySqMtr: formData.openBalcony,
-    terraceSqMtr: formData.terrace,
-    parking: formData.parking,
-    floor: formData.floor,
-    totalConsideration: formData.totalConsideration,
-    bookingAmount: formData.bookingAmount,
-    stampDuty: formData.stampDuty,
-    registrationFee: formData.registrationFee,
-    gstAmount: formData.gstAmount,
-    paymentMode: formData.paymentMode,
-    chequeTrnNo: formData.chequeNo,
-    chequeTrnDate: formData.chequeDate,
-    bankName: formData.bankName,
-    bankDetails: formData.bankDetails
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
-  setSubmittedData(prev => [...prev, newRecord]);
-
-  toast.success("Booking details submitted successfully!", {
-    position: "top-right",
-    autoClose: 3000,
-  });
-
-  resetForm();
-  setShowFirmForm(false);
-};
 
 
-const handleUpdateData = (updatedItem) => {
-  setSubmittedData(prev =>
-    prev.map(item => item.id === updatedItem.id ? updatedItem : item)
-  );
-};
+
+  const resetForm = () => {
+    setFormData({
+      enquiryNo: "",
+      projectName: "",
+      dateOfFlatBooking: "",
+      nameOfAllottee: "",
+      sourceName: "",
+      dateOfBirth: "",
+      occupation: "",
+      panNo: "",
+      aadharNo: "",
+      mobileNo: "",
+      alternateMobileNo: "",
+      whatsAppNo: "",
+      emailId: "",
+      address: "",
+      carpetArea: "",
+      wing: "",
+      flatNo: "",
+      type: "",
+      soldRate: "",
+      enclosedBalcony: "",
+      openBalcony: "",
+      terrace: "",
+      parking: "",
+      floor: "",
+      totalConsideration: "",
+      bookingAmount: "",
+      stampDuty: "",
+      registrationFee: "",
+      gstAmount: "",
+      paymentMode: "",
+      chequeNo: "",
+      chequeDate: "",
+      bankName: "",
+      bankDetails: ""
+    });
+
+    setCoAllottees([{
+      name: "",
+      dob: "",
+      occupation: "",
+      pan: "",
+      aadhar: "",
+      mobileEmail: ""
+    }]);
+
+    setAllotteeDocuments({
+      panCard: [],
+      aadhaarCard: [],
+      marriageCertificate: [],
+      passportPhoto: [],
+      otherDocuments: []
+    });
+
+    setCoAllotteesDocuments([{
+      panCard: [],
+      aadhaarCard: [],
+      marriageCertificate: [],
+      passportPhoto: [],
+      otherDocuments: []
+    }]);
+
+    setErrors({});
+  };
+
+
+
+
+
+  // const handleSubmit = () => {
+  //   if (!validateForm()) {
+  //     toast.error("Please fill all required fields!", { position: "top-right" });
+  //     return;
+  //   }
+
+  //   const newRecord = {
+  //     id: Date.now(),
+  //     timestamp: new Date().toLocaleString(),
+  //     enquiryNo: formData.enquiryNo,
+  //     projectName: formData.projectName,
+  //     dateOfFlatBooking: formData.dateOfFlatBooking,
+  //     nameOfAllottee: formData.nameOfAllottee,
+  //     sourceName: formData.sourceName,
+  //     dateOfBirth: formData.dateOfBirth,
+  //     occupation: formData.occupation,
+  //     panNo: formData.panNo,
+  //     aadharNo: formData.aadharNo,
+  //     mobileNo: formData.mobileNo,
+  //     alternateMobileNo: formData.alternateMobileNo,
+  //     whatsappNo: formData.whatsAppNo,
+  //     emailId: formData.emailId,
+  //     address: formData.address,
+  //     // Multiple co-allottees
+  //     coAllottees: coAllottees,
+  //     flatNo: formData.flatNo,
+  //     type: formData.type,
+  //     wing: formData.wing,
+  //     soldRate: formData.soldRate,
+  //     carpetAreaSqMtr: formData.carpetArea,
+  //     enclosedBalconySqMtr: formData.enclosedBalcony,
+  //     openBalconySqMtr: formData.openBalcony,
+  //     terraceSqMtr: formData.terrace,
+  //     parking: formData.parking,
+  //     floor: formData.floor,
+  //     totalConsideration: formData.totalConsideration,
+  //     bookingAmount: formData.bookingAmount,
+  //     stampDuty: formData.stampDuty,
+  //     registrationFee: formData.registrationFee,
+  //     gstAmount: formData.gstAmount,
+  //     paymentMode: formData.paymentMode,
+  //     chequeTrnNo: formData.chequeNo,
+  //     chequeTrnDate: formData.chequeDate,
+  //     bankName: formData.bankName,
+  //     bankDetails: formData.bankDetails,
+  //     // File references
+  //     panCardBoth: panCardFiles.map(file => file.name).join(', '),
+  //     aadharCardBoth: aadhaarCard.map(file => file.name).join(', '),
+  //     marriageCertificate: marriageCertificate.map(file => file.name).join(', '),
+  //     passportSizePhotoBoth: passportPhoto.map(file => file.name).join(', '),
+  //     anyOther: otherDocuments.map(file => file.name).join(', ')
+  //   };
+
+  //   setSubmittedData(prev => [...prev, newRecord]);
+
+  //   toast.success("Booking details submitted successfully!", {
+  //     position: "top-right",
+  //     autoClose: 3000,
+  //   });
+
+  //   resetForm();
+  //   setShowFirmForm(false);
+  // };
+
+  // const handleSubmit = () => {
+  //   if (!validateForm()) {
+  //     toast.error("Please fill all required fields!", { position: "top-right" });
+  //     return;
+  //   }
+
+  //   const newRecord = {
+  //     id: Date.now(),
+  //     timestamp: new Date().toLocaleString(),
+  //     enquiryNo: formData.enquiryNo,
+  //     projectName: formData.projectName,
+  //     dateOfFlatBooking: formData.dateOfFlatBooking,
+  //     nameOfAllottee: formData.nameOfAllottee,
+  //     sourceName: formData.sourceName,
+  //     dateOfBirth: formData.dateOfBirth,
+  //     occupation: formData.occupation,
+  //     panNo: formData.panNo,
+  //     aadharNo: formData.aadharNo,
+  //     mobileNo: formData.mobileNo,
+  //     alternateMobileNo: formData.alternateMobileNo,
+  //     whatsappNo: formData.whatsAppNo,
+  //     emailId: formData.emailId,
+  //     address: formData.address,
+
+  //     // Allottee documents
+  //     allotteePanCard: allotteeDocuments.panCard.map(file => file.name).join(', '),
+  //     allotteeAadhaarCard: allotteeDocuments.aadhaarCard.map(file => file.name).join(', '),
+  //     allotteeMarriageCertificate: allotteeDocuments.marriageCertificate.map(file => file.name).join(', '),
+  //     allotteePassportPhoto: allotteeDocuments.passportPhoto.map(file => file.name).join(', '),
+  //     allotteeOtherDocuments: allotteeDocuments.otherDocuments.map(file => file.name).join(', '),
+
+  //     // Co-allottees with their documents
+  //     coAllottees: coAllottees.map((coAllottee, index) => ({
+  //       ...coAllottee,
+  //       panCard: coAllotteesDocuments[index]?.panCard.map(file => file.name).join(', ') || '',
+  //       aadhaarCard: coAllotteesDocuments[index]?.aadhaarCard.map(file => file.name).join(', ') || '',
+  //       marriageCertificate: coAllotteesDocuments[index]?.marriageCertificate.map(file => file.name).join(', ') || '',
+  //       passportPhoto: coAllotteesDocuments[index]?.passportPhoto.map(file => file.name).join(', ') || '',
+  //       otherDocuments: coAllotteesDocuments[index]?.otherDocuments.map(file => file.name).join(', ') || ''
+  //     })),
+
+  //     flatNo: formData.flatNo,
+  //     type: formData.type,
+  //     wing: formData.wing,
+  //     soldRate: formData.soldRate,
+  //     carpetAreaSqMtr: formData.carpetArea,
+  //     enclosedBalconySqMtr: formData.enclosedBalcony,
+  //     openBalconySqMtr: formData.openBalcony,
+  //     terraceSqMtr: formData.terrace,
+  //     parking: formData.parking,
+  //     floor: formData.floor,
+  //     totalConsideration: formData.totalConsideration,
+  //     bookingAmount: formData.bookingAmount,
+  //     stampDuty: formData.stampDuty,
+  //     registrationFee: formData.registrationFee,
+  //     gstAmount: formData.gstAmount,
+  //     paymentMode: formData.paymentMode,
+  //     chequeTrnNo: formData.chequeNo,
+  //     chequeTrnDate: formData.chequeDate,
+  //     bankName: formData.bankName,
+  //     bankDetails: formData.bankDetails
+  //   };
+
+  //   setSubmittedData(prev => [...prev, newRecord]);
+
+  //   toast.success("Booking details submitted successfully!", {
+  //     position: "top-right",
+  //     autoClose: 3000,
+  //   });
+
+  //   resetForm();
+  //   setShowFirmForm(false);
+  // };
+  // const handleSubmit = () => {
+  //   if (!validateForm()) {
+  //     toast.error("Please fill all required fields!", { position: "top-right" });
+  //     return;
+  //   }
+
+  //   const newRecord = {
+  //     id: Date.now(),
+  //     timestamp: new Date().toLocaleString(),
+  //     enquiryNo: formData.enquiryNo,
+  //     projectName: formData.projectName,
+  //     dateOfFlatBooking: formData.dateOfFlatBooking,
+  //     nameOfAllottee: formData.nameOfAllottee,
+  //     sourceName: formData.sourceName,
+  //     dateOfBirth: formData.dateOfBirth,
+  //     occupation: formData.occupation,
+  //     panNo: formData.panNo,
+  //     aadharNo: formData.aadharNo,
+  //     mobileNo: formData.mobileNo,
+  //     alternateMobileNo: formData.alternateMobileNo,
+  //     whatsappNo: formData.whatsAppNo,
+  //     emailId: formData.emailId,
+  //     address: formData.address,
+
+  //     // Allottee documents with file objects for preview
+  //     allotteePanCard: allotteeDocuments.panCard,
+  //     allotteeAadhaarCard: allotteeDocuments.aadhaarCard,
+  //     allotteeMarriageCertificate: allotteeDocuments.marriageCertificate,
+  //     allotteePassportPhoto: allotteeDocuments.passportPhoto,
+  //     allotteeOtherDocuments: allotteeDocuments.otherDocuments,
+
+  //     // Co-allottees with their documents
+  //     coAllottees: coAllottees.map((coAllottee, index) => ({
+  //       ...coAllottee,
+  //       panCard: coAllotteesDocuments[index]?.panCard || [],
+  //       aadhaarCard: coAllotteesDocuments[index]?.aadhaarCard || [],
+  //       marriageCertificate: coAllotteesDocuments[index]?.marriageCertificate || [],
+  //       passportPhoto: coAllotteesDocuments[index]?.passportPhoto || [],
+  //       otherDocuments: coAllotteesDocuments[index]?.otherDocuments || []
+  //     })),
+
+  //     flatNo: formData.flatNo,
+  //     type: formData.type,
+  //     wing: formData.wing,
+  //     soldRate: formData.soldRate,
+  //     carpetAreaSqMtr: formData.carpetArea,
+  //     enclosedBalconySqMtr: formData.enclosedBalcony,
+  //     openBalconySqMtr: formData.openBalcony,
+  //     terraceSqMtr: formData.terrace,
+  //     parking: formData.parking,
+  //     floor: formData.floor,
+  //     totalConsideration: formData.totalConsideration,
+  //     bookingAmount: formData.bookingAmount,
+  //     stampDuty: formData.stampDuty,
+  //     registrationFee: formData.registrationFee,
+  //     gstAmount: formData.gstAmount,
+  //     paymentMode: formData.paymentMode,
+  //     chequeTrnNo: formData.chequeNo,
+  //     chequeTrnDate: formData.chequeDate,
+  //     bankName: formData.bankName,
+  //     bankDetails: formData.bankDetails
+  //   };
+
+  //   setSubmittedData(prev => [...prev, newRecord]);
+
+  //   toast.success("Booking details submitted successfully!", {
+  //     position: "top-right",
+  //     autoClose: 3000,
+  //   });
+
+  //   resetForm();
+  //   setShowFirmForm(false);
+  // };
+  const handleSubmit = () => {
+    if (!validateForm()) {
+      toast.error("Please fill all required fields!", { position: "top-right" });
+      return;
+    }
+
+    const newRecord = {
+      id: Date.now(),
+      timestamp: new Date().toLocaleString(),
+      enquiryNo: formData.enquiryNo,
+      projectName: formData.projectName,
+      dateOfFlatBooking: formData.dateOfFlatBooking,
+      nameOfAllottee: formData.nameOfAllottee,
+      sourceName: formData.sourceName,
+      dateOfBirth: formData.dateOfBirth,
+      occupation: formData.occupation,
+      panNo: formData.panNo,
+      aadharNo: formData.aadharNo,
+      mobileNo: formData.mobileNo,
+      alternateMobileNo: formData.alternateMobileNo,
+      whatsappNo: formData.whatsAppNo,
+      emailId: formData.emailId,
+      address: formData.address,
+
+      // Allottee documents - store File objects directly
+      allotteePanCard: [...allotteeDocuments.panCard],
+      allotteeAadhaarCard: [...allotteeDocuments.aadhaarCard],
+      allotteeMarriageCertificate: [...allotteeDocuments.marriageCertificate],
+      allotteePassportPhoto: [...allotteeDocuments.passportPhoto],
+      allotteeOtherDocuments: [...allotteeDocuments.otherDocuments],
+
+      // Co-allottees with their documents
+      coAllottees: coAllottees.map((coAllottee, index) => ({
+        ...coAllottee,
+        panCard: [...(coAllotteesDocuments[index]?.panCard || [])],
+        aadhaarCard: [...(coAllotteesDocuments[index]?.aadhaarCard || [])],
+        marriageCertificate: [...(coAllotteesDocuments[index]?.marriageCertificate || [])],
+        passportPhoto: [...(coAllotteesDocuments[index]?.passportPhoto || [])],
+        otherDocuments: [...(coAllotteesDocuments[index]?.otherDocuments || [])]
+      })),
+
+      flatNo: formData.flatNo,
+      type: formData.type,
+      wing: formData.wing,
+      soldRate: formData.soldRate,
+      carpetAreaSqMtr: formData.carpetArea,
+      enclosedBalconySqMtr: formData.enclosedBalcony,
+      openBalconySqMtr: formData.openBalcony,
+      terraceSqMtr: formData.terrace,
+      parking: formData.parking,
+      floor: formData.floor,
+      totalConsideration: formData.totalConsideration,
+      bookingAmount: formData.bookingAmount,
+      stampDuty: formData.stampDuty,
+      registrationFee: formData.registrationFee,
+      gstAmount: formData.gstAmount,
+      paymentMode: formData.paymentMode,
+      chequeTrnNo: formData.chequeNo,
+      chequeTrnDate: formData.chequeDate,
+      bankName: formData.bankName,
+      bankDetails: formData.bankDetails
+    };
+
+    setSubmittedData(prev => [...prev, newRecord]);
+
+    toast.success("Booking details submitted successfully!", {
+      position: "top-right",
+      autoClose: 3000,
+    });
+
+    resetForm();
+    setShowFirmForm(false);
+  };
+
+
+  const handleUpdateData = (updatedItem) => {
+    setSubmittedData(prev =>
+      prev.map(item => item.id === updatedItem.id ? updatedItem : item)
+    );
+  };
 
   // PDF download functionality
   const handleDownloadPDFBooking = () => {
@@ -1058,11 +1058,11 @@ const handleUpdateData = (updatedItem) => {
                     ? isMobile
                       ? "160px"
                       : isTablet
-                      ? "180px"
-                      : "200px"
+                        ? "180px"
+                        : "200px"
                     : isMobile
-                    ? "40px"
-                    : "50px",
+                      ? "40px"
+                      : "50px",
                 height: isMobile ? "40px" : "auto",
               }}
               startIcon={<FaEye size={isMobile ? 18 : 24} color="white" />}
@@ -1113,18 +1113,16 @@ const handleUpdateData = (updatedItem) => {
           {!showFirmForm ? (
             <>
               <div
-                className={`d-flex ${
-                  isMobile ? "flex-column" : "flex-row"
-                } gap-2 w-100 align-items-${isMobile ? "stretch" : "center"}`}
+                className={`d-flex ${isMobile ? "flex-column" : "flex-row"
+                  } gap-2 w-100 align-items-${isMobile ? "stretch" : "center"}`}
                 style={{
                   flexDirection: isMobile ? "column" : "row",
                   justifyContent: "space-between",
                 }}
               >
                 <div
-                  className={`d-flex ${
-                    isMobile ? "flex-column" : "flex-row"
-                  } gap-2 align-items-center`}
+                  className={`d-flex ${isMobile ? "flex-column" : "flex-row"
+                    } gap-2 align-items-center`}
                   style={{ width: isMobile ? "100%" : "auto", flexWrap: "wrap" }}
                 >
                   {/* New Booking Button */}
@@ -1288,9 +1286,9 @@ const handleUpdateData = (updatedItem) => {
               <div className="mt-3" style={{ overflowX: "auto", width: "100%" }}>
 
                 <BookingFormTable
-  data={paginatedData.length > 0 ? paginatedData : submittedData}
-  onUpdate={handleUpdateData}
-/>
+                  data={paginatedData.length > 0 ? paginatedData : submittedData}
+                  onUpdate={handleUpdateData}
+                />
               </div>
             </>
           ) : (
@@ -1322,10 +1320,10 @@ const handleUpdateData = (updatedItem) => {
 
                   <Grid container spacing={isMobile ? 1 : 2}>
                     <Grid item xs={12} sm={6}>
-                    
-                        <FormControl fullWidth size="small" sx={{ mb: 2,border:Constants.formInputBorderColor  }}>
-                         <InputLabel required>Enquiry No</InputLabel>
-                         <Select
+
+                      <FormControl fullWidth size="small" sx={{ mb: 2, border: Constants.formInputBorderColor }}>
+                        <InputLabel required>Enquiry No</InputLabel>
+                        <Select
                           value={formData.enquiryNo}
                           label="Enquiry No"
                           onChange={(e) => handleEnquirySelect(e.target.value)}
@@ -1340,7 +1338,7 @@ const handleUpdateData = (updatedItem) => {
                     </Grid>
 
                     <Grid item xs={12} sm={6}>
-                      <FormControl fullWidth variant="outlined" size={isMobile ? "small" : "medium"}  sx={{ border: Constants.formInputBorderColor }}>
+                      <FormControl fullWidth variant="outlined" size={isMobile ? "small" : "medium"} sx={{ border: Constants.formInputBorderColor }}>
                         <InputLabel id="project-name-label" required>Project Name</InputLabel>
                         <Select
                           labelId="project-name-label"
@@ -1348,8 +1346,8 @@ const handleUpdateData = (updatedItem) => {
                           onChange={(e) => handleSelectChange("projectName", e.target.value)}
                           label="Project Name"
                           error={!!errors.projectName}
-                           sx={{'& .MuiSelect-icon': {color: Constants.primaryColor}}}
-                           
+                          sx={{ '& .MuiSelect-icon': { color: Constants.primaryColor } }}
+
                         >
                           <MenuItem value="Project A">Project A</MenuItem>
                           <MenuItem value="Project B">Project B</MenuItem>
@@ -1360,23 +1358,23 @@ const handleUpdateData = (updatedItem) => {
 
 
                     <Grid item xs={12} sm={6}>
-  <TextField
-    type="date"
-    label="Date Of Flat Booking"
-    fullWidth
-    variant="outlined"
-    size={isMobile ? "small" : "medium"}
-    required
-    value={formData.dateOfFlatBooking}
-    onChange={(e) =>
-      handleInputChange("dateOfFlatBooking", e.target.value)
-    }
-    InputLabelProps={{ shrink: true }}
-    error={!!errors.dateOfFlatBooking}
-    helperText={errors.dateOfFlatBooking}
-    sx={{border: Constants.formInputBorderColor,}}
-  />
-</Grid>
+                      <TextField
+                        type="date"
+                        label="Date Of Flat Booking"
+                        fullWidth
+                        variant="outlined"
+                        size={isMobile ? "small" : "medium"}
+                        required
+                        value={formData.dateOfFlatBooking}
+                        onChange={(e) =>
+                          handleInputChange("dateOfFlatBooking", e.target.value)
+                        }
+                        InputLabelProps={{ shrink: true }}
+                        error={!!errors.dateOfFlatBooking}
+                        helperText={errors.dateOfFlatBooking}
+                        sx={{ border: Constants.formInputBorderColor, }}
+                      />
+                    </Grid>
 
 
 
@@ -1391,7 +1389,7 @@ const handleUpdateData = (updatedItem) => {
                         error={!!errors.nameOfAllottee}
                         helperText={errors.nameOfAllottee}
                         required
-                        sx={{border: Constants.formInputBorderColor,}}
+                        sx={{ border: Constants.formInputBorderColor, }}
                       />
                     </Grid>
 
@@ -1405,39 +1403,40 @@ const handleUpdateData = (updatedItem) => {
                         value={formData.sourceName}
                         onChange={(e) => handleInputChange("sourceName", e.target.value)}
                         InputLabelProps={{ shrink: true }}
-                        sx={{border: Constants.formInputBorderColor,}}
+                        sx={{ border: Constants.formInputBorderColor, }}
                       />
                     </Grid>
 
 
                     <Grid item xs={12} sm={6}>
-  <TextField
-    type="date"
-    label="Date Of Birth"
-    fullWidth
-    variant="outlined"
-    size={isMobile ? "small" : "medium"}
-    required
-    value={formData.dateOfBirth}
-    onChange={(e) =>
-      handleInputChange("dateOfBirth", e.target.value)
-    }
-    InputLabelProps={{ shrink: true }}
-    error={!!errors?.dateOfBirth}
-    helperText={errors?.dateOfBirth}
-    sx={{border: Constants.formInputBorderColor,}}
-  />
-</Grid>
+                      <TextField
+                        type="date"
+                        label="Date Of Birth"
+                        fullWidth
+                        variant="outlined"
+                        size={isMobile ? "small" : "medium"}
+                        required
+                        value={formData.dateOfBirth}
+                        onChange={(e) =>
+                          handleInputChange("dateOfBirth", e.target.value)
+                        }
+                        InputLabelProps={{ shrink: true }}
+                        error={!!errors?.dateOfBirth}
+                        helperText={errors?.dateOfBirth}
+                        sx={{ border: Constants.formInputBorderColor, }}
+                      />
+                    </Grid>
 
 
                     <Grid item xs={12} sm={6}>
-                      <FormControl fullWidth variant="outlined" size={isMobile ? "small" : "medium"} sx={{border: Constants.formInputBorderColor,}}>
-                        <InputLabel id="occupation-label">Occupation</InputLabel>
+                      <FormControl fullWidth variant="outlined" size={isMobile ? "small" : "medium"} sx={{ border: Constants.formInputBorderColor, }}>
+                        <InputLabel id="occupation-label" required>Occupation</InputLabel>
                         <Select
                           labelId="occupation-label"
                           value={formData.occupation}
                           onChange={(e) => handleSelectChange("occupation", e.target.value)}
                           label="Occupation"
+                        
                         >
                           <MenuItem value="Business">Business</MenuItem>
                           <MenuItem value="Service">Service</MenuItem>
@@ -1458,7 +1457,8 @@ const handleUpdateData = (updatedItem) => {
                         error={!!errors.panNo}
                         helperText={errors.panNo}
                         inputProps={{ maxLength: 10 }}
-                        sx={{border: Constants.formInputBorderColor}}
+                        sx={{ border: Constants.formInputBorderColor }}
+                        required
                       />
                     </Grid>
 
@@ -1473,7 +1473,8 @@ const handleUpdateData = (updatedItem) => {
                         error={!!errors.aadharNo}
                         helperText={errors.aadharNo}
                         inputProps={{ maxLength: 12 }}
-                        sx={{border: Constants.formInputBorderColor,}}
+                        sx={{ border: Constants.formInputBorderColor, }}
+                        required
                       />
                     </Grid>
 
@@ -1489,7 +1490,8 @@ const handleUpdateData = (updatedItem) => {
                         helperText={errors.mobileNo}
                         required
                         inputProps={{ maxLength: 10 }}
-                        sx={{border: Constants.formInputBorderColor,}}
+                        sx={{ border: Constants.formInputBorderColor, }}
+                       
                       />
                     </Grid>
 
@@ -1504,7 +1506,7 @@ const handleUpdateData = (updatedItem) => {
                         error={!!errors.alternateMobileNo}
                         helperText={errors.alternateMobileNo}
                         inputProps={{ maxLength: 10 }}
-                        sx={{border: Constants.formInputBorderColor,}}
+                        sx={{ border: Constants.formInputBorderColor, }}
                       />
                     </Grid>
 
@@ -1519,7 +1521,8 @@ const handleUpdateData = (updatedItem) => {
                         error={!!errors.whatsAppNo}
                         helperText={errors.whatsAppNo}
                         inputProps={{ maxLength: 10 }}
-                        sx={{border: Constants.formInputBorderColor,}}
+                        sx={{ border: Constants.formInputBorderColor, }}
+                        required
                       />
                     </Grid>
 
@@ -1532,7 +1535,8 @@ const handleUpdateData = (updatedItem) => {
                         value={formData.emailId}
                         onChange={(e) => handleInputChange("emailId", e.target.value)}
                         type="email"
-                        sx={{border: Constants.formInputBorderColor,}}
+                        sx={{ border: Constants.formInputBorderColor, }}
+                        required
                       />
                     </Grid>
 
@@ -1545,229 +1549,231 @@ const handleUpdateData = (updatedItem) => {
                         value={formData.address}
                         onChange={(e) => handleInputChange("address", e.target.value)}
                         multiline
-                        sx={{border: Constants.formInputBorderColor,}}
+                        sx={{ border: Constants.formInputBorderColor, }}
+                        required
                       />
                     </Grid>
 
-                                      {/* Documents for Main Allottee */}
+                    {/* Documents for Main Allottee */}
 
-                     {[
-    { type: "panCard", label: "PAN Card" },
-    { type: "aadhaarCard", label: "AADHAR Card" },
-    { type: "marriageCertificate", label: "MARRIAGE CERTIFICATE (If Available)" },
-    { type: "passportPhoto", label: "PASSPORT SIZE PHOTO" },
-    { type: "otherDocuments", label: "Any Other" }
-  ].map((doc, index) => (
-    <Grid item xs={12} sm={6} key={index}>
-      <Typography variant="body2" gutterBottom>{doc.label}</Typography>
-      <Button
-        variant="outlined"
-        component="label"
-        size={isMobile ? "small" : "medium"}
-        fullWidth
-        startIcon={<FaUpload />}
-        sx={{background:Constants.primaryColor,color:"white"}}
-      >
-        Choose Files
-        <input
-          type="file"
-          multiple
-          hidden
-          onChange={(e) => handleAllotteeDocumentChange(doc.type, Array.from(e.target.files))}
-        />
-      </Button>
-      {allotteeDocuments[doc.type].length > 0 && (
-        <Box sx={{ mt: 1 }}>
-          {allotteeDocuments[doc.type].map((file, fileIndex) => (
-            <Typography key={fileIndex} variant="body2" sx={{ fontSize: '0.75rem' }}>
-              {file.name}
-            </Typography>
-          ))}
-        </Box>
-      )}
-    </Grid>
-  ))}
+                    {[
+                      { type: "panCard", label: "PAN Card" },
+                      { type: "aadhaarCard", label: "AADHAR Card" },
+                      { type: "marriageCertificate", label: "MARRIAGE CERTIFICATE (If Available)" },
+                      { type: "passportPhoto", label: "PASSPORT SIZE PHOTO" },
+                      { type: "otherDocuments", label: "Any Other" }
+                    ].map((doc, index) => (
+                      <Grid item xs={12} sm={6} key={index}>
+                        <Typography variant="body2" gutterBottom>{doc.label}</Typography>
+                        <Button
+                          variant="outlined"
+                          component="label"
+                          size={isMobile ? "small" : "medium"}
+                          fullWidth
+                          startIcon={<FaUpload />}
+                          sx={{ background: Constants.primaryColor, color: "white" }}
+                        >
+                          Choose Files
+                          <input
+                            type="file"
+                            multiple
+                            hidden
+                            onChange={(e) => handleAllotteeDocumentChange(doc.type, Array.from(e.target.files))}
+                          />
+                        </Button>
+                        {allotteeDocuments[doc.type].length > 0 && (
+                          <Box sx={{ mt: 1 }}>
+                            {allotteeDocuments[doc.type].map((file, fileIndex) => (
+                              <Typography key={fileIndex} variant="body2" sx={{ fontSize: '0.75rem' }}>
+                                {file.name}
+                              </Typography>
+                            ))}
+                          </Box>
+                        )}
+                      </Grid>
+                    ))}
 
 
                   </Grid>
 
-{/* Section 2: Co-Allottees with Documents */}
-<Typography variant="h6" gutterBottom sx={{ paddingTop: 4, color: Constants.primaryColor }}>
-  Section 2: Co-Allottees
-</Typography>
+                  {/* Section 2: Co-Allottees with Documents */}
+                  <Typography variant="h6" gutterBottom sx={{ paddingTop: 4, color: Constants.primaryColor }}>
+                    Section 2: Co-Allottees
+                  </Typography>
 
-{coAllottees.map((coAllottee, index) => (
-  <Box key={index} sx={{ mb: 3, p: 2, border: '1px solid', borderColor: 'grey.300', borderRadius: 1 }}>
-    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-      <Typography variant="subtitle1" sx={{ color: Constants.primaryColor }}>
-        Co-Allottee {index + 1}
-      </Typography>
-      {coAllottees.length > 1 && (
-        <Button
-          variant="outlined"
-          color="error"
-          size="small"
-          onClick={() => handleRemoveCoAllottee(index)}
-        >
-          Remove
-        </Button>
-      )}
-    </Box>
+                  {coAllottees.map((coAllottee, index) => (
+                    <Box key={index} sx={{ mb: 3, p: 2, border: '1px solid', borderColor: 'grey.300', borderRadius: 1 }}>
+                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+                        <Typography variant="subtitle1" sx={{ color: Constants.primaryColor }}>
+                          Co-Allottee {index + 1}
+                        </Typography>
+                        {coAllottees.length > 1 && (
+                          <Button
+                            variant="outlined"
+                            color="error"
+                            size="small"
+                            onClick={() => handleRemoveCoAllottee(index)}
+                          >
+                            Remove
+                          </Button>
+                        )}
+                      </Box>
 
-    <Grid container spacing={isMobile ? 1 : 2}>
-      <Grid item xs={12} sm={6}>
-        <TextField
-          label="Name of Co-Allottee"
-          fullWidth
-          variant="outlined"
-          size={isMobile ? "small" : "medium"}
-          value={coAllottee.name}
-          onChange={(e) => handleCoAllotteeChange(index, "name", e.target.value)}
-          sx={{border: Constants.formInputBorderColor,}}
-        />
-      </Grid>
+                      <Grid container spacing={isMobile ? 1 : 2}>
+                        <Grid item xs={12} sm={6}>
+                          <TextField
+                            label="Name of Co-Allottee"
+                            fullWidth
+                            variant="outlined"
+                            size={isMobile ? "small" : "medium"}
+                            value={coAllottee.name}
+                            onChange={(e) => handleCoAllotteeChange(index, "name", e.target.value)}
+                            sx={{ border: Constants.formInputBorderColor, }}
+                          />
+                        </Grid>
 
-      <Grid item xs={12} sm={6}>
-        <TextField
-          type="date"
-          label="Date Of Birth (Co-Allottee)"
-          fullWidth
-          variant="outlined"
-          size={isMobile ? "small" : "medium"}
-          value={coAllottee.dob}
-          onChange={(e) => handleCoAllotteeChange(index, "dob", e.target.value)}
-          InputLabelProps={{ shrink: true }}
-          sx={{border: Constants.formInputBorderColor,}}
-        />
-      </Grid>
+                        <Grid item xs={12} sm={6}>
+                          <TextField
+                            type="date"
+                            label="Date Of Birth (Co-Allottee)"
+                            fullWidth
+                            variant="outlined"
+                            size={isMobile ? "small" : "medium"}
+                            value={coAllottee.dob}
+                            onChange={(e) => handleCoAllotteeChange(index, "dob", e.target.value)}
+                            InputLabelProps={{ shrink: true }}
+                            sx={{ border: Constants.formInputBorderColor, }}
+                          />
+                        </Grid>
 
-      <Grid item xs={12} sm={6}>
-        <TextField
-          label="Occupation (Co-Allottee)"
-          fullWidth
-          variant="outlined"
-          size={isMobile ? "small" : "medium"}
-          value={coAllottee.occupation}
-          onChange={(e) => handleCoAllotteeChange(index, "occupation", e.target.value)}
-          sx={{border: Constants.formInputBorderColor,}}
-        />
-      </Grid>
+                        <Grid item xs={12} sm={6}>
+                          <TextField
+                            label="Occupation (Co-Allottee)"
+                            fullWidth
+                            variant="outlined"
+                            size={isMobile ? "small" : "medium"}
+                            value={coAllottee.occupation}
+                            onChange={(e) => handleCoAllotteeChange(index, "occupation", e.target.value)}
+                            sx={{ border: Constants.formInputBorderColor, }}
+                            
+                          />
+                        </Grid>
 
-      <Grid item xs={12} sm={6}>
-        <TextField
-          label="PAN No. (Co-Allottee)"
-          fullWidth
-          variant="outlined"
-          size={isMobile ? "small" : "medium"}
-          value={coAllottee.pan}
-          onChange={(e) => handleCoAllotteeChange(index, "pan", e.target.value.toUpperCase())}
-          inputProps={{ maxLength: 10 }}
-          sx={{border: Constants.formInputBorderColor,}}
-        />
-      </Grid>
+                        <Grid item xs={12} sm={6}>
+                          <TextField
+                            label="PAN No. (Co-Allottee)"
+                            fullWidth
+                            variant="outlined"
+                            size={isMobile ? "small" : "medium"}
+                            value={coAllottee.pan}
+                            onChange={(e) => handleCoAllotteeChange(index, "pan", e.target.value.toUpperCase())}
+                            inputProps={{ maxLength: 10 }}
+                            sx={{ border: Constants.formInputBorderColor, }}
+                          />
+                        </Grid>
 
-      <Grid item xs={12} sm={6}>
-        <TextField
-          label="AADHAR No. (Co-Allottee)"
-          fullWidth
-          variant="outlined"
-          size={isMobile ? "small" : "medium"}
-          value={coAllottee.aadhar}
-          onChange={(e) => handleCoAllotteeChange(index, "aadhar", e.target.value)}
-          error={!!errors[`coAllotteeAadhar${index}`]}
-          helperText={errors[`coAllotteeAadhar${index}`]}
-          inputProps={{ maxLength: 12 }}
-          sx={{border: Constants.formInputBorderColor,}}
-        />
-      </Grid>
+                        <Grid item xs={12} sm={6}>
+                          <TextField
+                            label="AADHAR No. (Co-Allottee)"
+                            fullWidth
+                            variant="outlined"
+                            size={isMobile ? "small" : "medium"}
+                            value={coAllottee.aadhar}
+                            onChange={(e) => handleCoAllotteeChange(index, "aadhar", e.target.value)}
+                            error={!!errors[`coAllotteeAadhar${index}`]}
+                            helperText={errors[`coAllotteeAadhar${index}`]}
+                            inputProps={{ maxLength: 12 }}
+                            sx={{ border: Constants.formInputBorderColor, }}
+                          />
+                        </Grid>
 
-      <Grid item xs={12} sm={6}>
-        <TextField
-          label="MOBILE No. & EMAIL (Co-Allottee)"
-          fullWidth
-          variant="outlined"
-          size={isMobile ? "small" : "medium"}
-          value={coAllottee.mobileEmail}
-          onChange={(e) => handleCoAllotteeChange(index, "mobileEmail", e.target.value)}
-          sx={{border: Constants.formInputBorderColor,}}
-        />
-      </Grid>
+                        <Grid item xs={12} sm={6}>
+                          <TextField
+                            label="MOBILE No. & EMAIL (Co-Allottee)"
+                            fullWidth
+                            variant="outlined"
+                            size={isMobile ? "small" : "medium"}
+                            value={coAllottee.mobileEmail}
+                            onChange={(e) => handleCoAllotteeChange(index, "mobileEmail", e.target.value)}
+                            sx={{ border: Constants.formInputBorderColor, }}
+                          />
+                        </Grid>
 
-      {/* Documents for each Co-Allottee */}
-      {[
-        { type: "panCard", label: "PAN Card" },
-        { type: "aadhaarCard", label: "AADHAR Card" },
-        { type: "marriageCertificate", label: "MARRIAGE CERTIFICATE (If Available)" },
-        { type: "passportPhoto", label: "PASSPORT SIZE PHOTO" },
-        { type: "otherDocuments", label: "Any Other" }
-      ].map((doc, docIndex) => (
-        <Grid item xs={12} sm={6} key={docIndex}>
-          <Typography variant="body2" gutterBottom>{doc.label} (Co-Allottee {index + 1})</Typography>
-          <Button
-            variant="outlined"
-            component="label"
-            size={isMobile ? "small" : "medium"}
-            fullWidth
-            startIcon={<FaUpload />}
-            sx={{background:Constants.primaryColor,color:"white"}}
-          >
-            Choose Files
-            <input
-              type="file"
-              multiple
-              hidden
-              onChange={(e) => handleCoAllotteeDocumentChange(index, doc.type, Array.from(e.target.files))}
-            />
-          </Button>
-          {coAllotteesDocuments[index]?.[doc.type]?.length > 0 && (
-            <Box sx={{ mt: 1 }}>
-              {coAllotteesDocuments[index][doc.type].map((file, fileIndex) => (
-                <Typography key={fileIndex} variant="body2" sx={{ fontSize: '0.75rem' }}>
-                  {file.name}
-                </Typography>
-              ))}
-            </Box>
-          )}
-        </Grid>
-      ))}
-    </Grid>
-  </Box>
-))}
+                        {/* Documents for each Co-Allottee */}
+                        {[
+                          { type: "panCard", label: "PAN Card" },
+                          { type: "aadhaarCard", label: "AADHAR Card" },
+                          { type: "marriageCertificate", label: "MARRIAGE CERTIFICATE (If Available)" },
+                          { type: "passportPhoto", label: "PASSPORT SIZE PHOTO" },
+                          { type: "otherDocuments", label: "Any Other" }
+                        ].map((doc, docIndex) => (
+                          <Grid item xs={12} sm={6} key={docIndex}>
+                            <Typography variant="body2" gutterBottom>{doc.label} (Co-Allottee {index + 1})</Typography>
+                            <Button
+                              variant="outlined"
+                              component="label"
+                              size={isMobile ? "small" : "medium"}
+                              fullWidth
+                              startIcon={<FaUpload />}
+                              sx={{ background: Constants.primaryColor, color: "white" }}
+                            >
+                              Choose Files
+                              <input
+                                type="file"
+                                multiple
+                                hidden
+                                onChange={(e) => handleCoAllotteeDocumentChange(index, doc.type, Array.from(e.target.files))}
+                              />
+                            </Button>
+                            {coAllotteesDocuments[index]?.[doc.type]?.length > 0 && (
+                              <Box sx={{ mt: 1 }}>
+                                {coAllotteesDocuments[index][doc.type].map((file, fileIndex) => (
+                                  <Typography key={fileIndex} variant="body2" sx={{ fontSize: '0.75rem' }}>
+                                    {file.name}
+                                  </Typography>
+                                ))}
+                              </Box>
+                            )}
+                          </Grid>
+                        ))}
+                      </Grid>
+                    </Box>
+                  ))}
 
-<Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
-  <Button
-    variant="outlined"
-    onClick={handleAddCoAllottee}
-    startIcon={<FaPlus />}
-    sx={{ borderColor: Constants.primaryColor, color: Constants.primaryColor }}
-  >
-    Add Another Co-Allottee
-  </Button>
-</Box>
+                  <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+                    <Button
+                      variant="outlined"
+                      onClick={handleAddCoAllottee}
+                      startIcon={<FaPlus />}
+                      sx={{ borderColor: Constants.primaryColor, color: Constants.primaryColor }}
+                    >
+                      Add Another Co-Allottee
+                    </Button>
+                  </Box>
 
 
 
-                    {/* Section 3: Particulars of Flat */}
+                  {/* Section 3: Particulars of Flat */}
                   <Typography variant="h6" gutterBottom sx={{ paddingTop: 4, color: Constants.primaryColor }}>
                     Section 3: Particulars of Flat
                   </Typography>
 
                   <Grid container spacing={isMobile ? 1 : 2}>
                     {[
-                      { field: "carpetArea", label: "Carpet Area in (Sq. Mtr.)", type: "select", options: ["100", "150", "200", "250"] },
+                      { field: "carpetArea", label: "Carpet Area in (Sq.foot)", type: "select", options: ["100", "150", "200", "250"] },
                       { field: "wing", label: "Wing", type: "select", options: ["A", "B", "C"] },
                       { field: "flatNo", label: "FLAT No.", type: "select", options: ["101", "102", "103"] },
                       { field: "type", label: "Type", type: "select", options: ["2BHK", "3BHK", "4BHK"] },
                       { field: "soldRate", label: "Sold Rate", type: "number" },
-                      { field: "enclosedBalcony", label: "Enclosed Balcony in (Sq. Mtr.)", type: "select", options: ["10", "15", "20"] },
-                      { field: "openBalcony", label: "Open Balcony in (Sq. Mtr.)", type: "select", options: ["5", "10", "15"] },
-                      { field: "terrace", label: "Terrace in (Sq. Mtr.)", type: "select", options: ["30", "40", "50"] },
-                      { field: "parking", label: "Parking", type: "select", options: ["Stack Parking", "Open car parking", "Covered car parking", "Basement car parking", "Other"] },
-                      { field: "floor", label: "Floor", type: "select", options: ["1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th"] }
+                      { field: "enclosedBalcony", label: "Enclosed Balcony in (Sq. foot)", type: "select", options: ["10", "15", "20"] },
+                      { field: "openBalcony", label: "Open Balcony in (Sq. foot)", type: "select", options: ["5", "10", "15"] },
+                      { field: "terrace", label: "Terrace in (Sq.foot)", type: "select", options: ["30", "40", "50"] },
+                     
                     ].map((item, index) => (
                       <Grid item xs={12} sm={6} key={index}>
                         {item.type === "select" ? (
-                          <FormControl fullWidth variant="outlined" size={isMobile ? "small" : "medium"} sx={{border: Constants.formInputBorderColor,}}>
+                          <FormControl fullWidth variant="outlined" size={isMobile ? "small" : "medium"} 
+                          sx={{ border: Constants.formInputBorderColor, }} required>
                             <InputLabel>{item.label}</InputLabel>
                             <Select
                               value={formData[item.field]}
@@ -1788,16 +1794,130 @@ const handleUpdateData = (updatedItem) => {
                             value={formData[item.field]}
                             onChange={(e) => handleInputChange(item.field, e.target.value)}
                             type={item.type}
-                            sx={{border: Constants.formInputBorderColor,}}
+                            sx={{ border: Constants.formInputBorderColor, }}
+                            required
                           />
                         )}
                       </Grid>
                     ))}
                   </Grid>
 
+                  <Typography variant="h6" gutterBottom sx={{ paddingTop: 4, color: Constants.primaryColor }}>Section 4 : Parking Details</Typography>
+
+
+
+
+                  <Grid container spacing={isMobile ? 1 : 2}>
+                    {[
+                      { field: "parking", label: "Parking", type: "select", options: ["Stack Parking", "Open car parking", "Covered car parking", "Basement car parking", "Other"] },
+                      { field: "floor", label: "Floor", type: "select", options: ["1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th"] },
+                      { field: "parkingNo", label: "Parking No", type: "text" },
+                    ].map((item, index) => (<Grid item xs={12} sm={6} key={index}>
+                      {item.type === "select" ? (
+                        <TextField
+                          select
+                          label={item.label}
+                          fullWidth
+                          variant="outlined"
+                          size={isMobile ? "small" : "medium"}
+                          value={formData[item.field] || ""}
+                          onChange={(e) => handleInputChange(item.field, e.target.value)}
+                          // sx={{
+                          //   "& .MuiOutlinedInput-root": {
+                          //     "& fieldset": {
+                          //       borderColor: Constants.primaryColor,
+                          //     },
+                          //     "&:hover fieldset": {
+                          //       borderColor: Constants.primaryColor,
+                          //     },
+                          //     "&.Mui-focused fieldset": {
+                          //       borderColor: Constants.primaryColor,
+                          //     },
+                          //   },
+                          // }}
+                          sx={{
+  "& .MuiOutlinedInput-root": {
+    "& fieldset": {
+      borderColor: Constants.primaryColor,
+    },
+    "&:hover fieldset": {
+      borderColor: Constants.primaryColor,
+    },
+    "&.Mui-focused fieldset": {
+      borderColor: Constants.primaryColor,
+    },
+  },
+
+  // Input text color
+  "& .MuiInputBase-input": {
+    color: Constants.primaryColor,
+  },
+
+  // Label color
+  "& .MuiInputLabel-root": {
+    color: Constants.primaryColor,
+  },
+
+  // Label focused color
+  "& .MuiInputLabel-root.Mui-focused": {
+    color: Constants.primaryColor,
+  },
+}}
+
+
+                        >
+                          {item.options.map((option, i) => (<MenuItem value={option} key={i}>
+                            {option} </MenuItem>
+                          ))} </TextField>
+                      ) : (
+                        <TextField
+                          label={item.label}
+                          fullWidth
+                          variant="outlined"
+                          size={isMobile ? "small" : "medium"}
+                          value={formData[item.field] || ""}
+                          onChange={(e) => handleInputChange(item.field, e.target.value)}
+                          type={item.type}
+                       sx={{
+  "& .MuiOutlinedInput-root": {
+    "& fieldset": {
+      borderColor: Constants.primaryColor,
+    },
+    "&:hover fieldset": {
+      borderColor: Constants.primaryColor,
+    },
+    "&.Mui-focused fieldset": {
+      borderColor: Constants.primaryColor,
+    },
+  },
+
+  // Input text color
+  "& .MuiInputBase-input": {
+    color: Constants.primaryColor,
+  },
+
+  // Label color
+  "& .MuiInputLabel-root": {
+    color: Constants.primaryColor,
+  },
+
+  // Label focused color
+  "& .MuiInputLabel-root.Mui-focused": {
+    color: Constants.primaryColor,
+  },
+}}
+
+
+                        />
+                      )} </Grid>
+                    ))}
+                  </Grid>
+
+
+
                   {/* Section 4: Consideration */}
                   <Typography variant="h6" gutterBottom sx={{ paddingTop: 4, color: Constants.primaryColor }}>
-                    Section 4: Consideration
+                    Section 5: Consideration
                   </Typography>
 
                   <Grid container spacing={isMobile ? 1 : 2}>
@@ -1817,16 +1937,16 @@ const handleUpdateData = (updatedItem) => {
                           value={formData[item.field]}
                           onChange={(e) => handleInputChange(item.field, e.target.value)}
                           type={item.type}
-                          sx={{border: Constants.formInputBorderColor,}}
+                          sx={{ border: Constants.formInputBorderColor, }}
                         />
                       </Grid>
                     ))}
                   </Grid>
 
 
-                    {/* Section 5: Booking Payment Mode */}
+                  {/* Section 5: Booking Payment Mode */}
                   <Typography variant="h6" gutterBottom sx={{ paddingTop: 4, color: Constants.primaryColor }}>
-                    Section 5: Booking Payment Mode
+                    Section 6: Booking Payment Mode
                   </Typography>
 
                   <Grid container spacing={isMobile ? 1 : 2}>
@@ -1839,12 +1959,16 @@ const handleUpdateData = (updatedItem) => {
                         value={formData.bookingAmount}
                         onChange={(e) => handleInputChange("bookingAmount", e.target.value)}
                         type="number"
-                        sx={{border: Constants.formInputBorderColor,}}
+                        sx={{ border: Constants.formInputBorderColor, }}
+                        required
                       />
                     </Grid>
 
                     <Grid item xs={12} sm={6}>
-                      <FormControl fullWidth variant="outlined" size={isMobile ? "small" : "medium"} sx={{border: Constants.formInputBorderColor,}}>
+                      <FormControl fullWidth variant="outlined" size={isMobile ? "small" : "medium"}
+                       sx={{ border: Constants.formInputBorderColor, }}
+                       required
+                       >
                         <InputLabel id="payment-mode-label">Payment Mode</InputLabel>
                         <Select
                           labelId="payment-mode-label"
@@ -1859,7 +1983,7 @@ const handleUpdateData = (updatedItem) => {
                       </FormControl>
                     </Grid>
 
-                    <Grid item xs={12} sm={6}>
+                    {/* <Grid item xs={12} sm={6}>
                       <TextField
                         label="Cheque/TRN No."
                         fullWidth
@@ -1867,33 +1991,33 @@ const handleUpdateData = (updatedItem) => {
                         size={isMobile ? "small" : "medium"}
                         value={formData.chequeNo}
                         onChange={(e) => handleInputChange("chequeNo", e.target.value)}
-                        sx={{border: Constants.formInputBorderColor,}}
+                        sx={{ border: Constants.formInputBorderColor, }}
                       />
                     </Grid>
 
 
                     <Grid item xs={12} sm={6}>
-  <TextField
-    type="date"
-    label="Cheque/TRN Date"
-    fullWidth
-    variant="outlined"
-    size={isMobile ? "small" : "medium"}
-    required
-    value={formData.chequeDate}
-    onChange={(e) =>
-      handleInputChange("chequeDate", e.target.value)
-    }
-    InputLabelProps={{ shrink: true }}
-    error={!!errors?.chequeDate}
-    helperText={errors?.chequeDate}
-    sx={{border: Constants.formInputBorderColor,}}
-  />
-</Grid>
+                      <TextField
+                        type="date"
+                        label="Cheque/TRN Date"
+                        fullWidth
+                        variant="outlined"
+                        size={isMobile ? "small" : "medium"}
+                        required
+                        value={formData.chequeDate}
+                        onChange={(e) =>
+                          handleInputChange("chequeDate", e.target.value)
+                        }
+                        InputLabelProps={{ shrink: true }}
+                        error={!!errors?.chequeDate}
+                        helperText={errors?.chequeDate}
+                        sx={{ border: Constants.formInputBorderColor, }}
+                      />
+                    </Grid>
 
 
                     <Grid item xs={12} sm={6}>
-                      <FormControl fullWidth variant="outlined" size={isMobile ? "small" : "medium"} sx={{border: Constants.formInputBorderColor,}}>
+                      <FormControl fullWidth variant="outlined" size={isMobile ? "small" : "medium"} sx={{ border: Constants.formInputBorderColor, }}>
                         <InputLabel id="bank-name-label">Bank Name</InputLabel>
                         <Select
                           labelId="bank-name-label"
@@ -1917,10 +2041,10 @@ const handleUpdateData = (updatedItem) => {
                         size={isMobile ? "small" : "medium"}
                         value={formData.bankDetails}
                         onChange={(e) => handleInputChange("bankDetails", e.target.value)}
-                        sx={{border: Constants.formInputBorderColor,}}
+                        sx={{ border: Constants.formInputBorderColor, }}
 
                       />
-                    </Grid>
+                    </Grid> */}
                   </Grid>
                 </LocalizationProvider>
               </DialogContent>

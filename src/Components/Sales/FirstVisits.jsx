@@ -12,7 +12,6 @@ import autoTable from "jspdf-autotable";
 import FormHelperText from "@mui/material/FormHelperText";
 import Constants from "../Constants";
 import FirstvisitfollowupUndefinedTable from "./FirstvisitfollowupUndefinedTable";
-// import FirstvisitfollowupbookedTable from "./FirstvisitfollowupbookedTable";
 import FirstvisitfollowupbookedTable from "./FirstvisitFollowupbookedTable";
 import { FirstVisitFollowupHistoryTable } from "./FirstVisitFollowupHistoryTable";
 
@@ -148,79 +147,32 @@ const FirstVisits = () => {
   const handleOccupationChange = (event) => {
     setOccupation(event.target.value);
   };
-  // const handleToggleSection = (index) => {
-  //   setExpandedSection(index);
-  //   setShowFileInput(false);
-  //   // if (index === 1) {
-  //   //   fetchVisitFollowupHistory();
-  //   // }
-  //   if (index === 1) {
-  //     fetchVisitFollowupHistory().then((data) => {
-  //       console.log("SETTING visitFollowupHistory:", data);
-  //       setVisitFollowupHistory(data);
-  //       if (index === 2) {
-  //         console.log("booked clicked");
-  //         fetchBookedEnquiries();
-  //       }
-  //     });
-  //   }
-
-  // };
-
-  // const handleToggleSection = (index) => {
-  //   setExpandedSection(index);
-  //   setShowFileInput(false);
-
-
-  //   // TAB 1 → Pending Followups
-  //   if (index === 1) {
-  //     console.log("Pending Followup clicked");
-  //     fetchVisitFollowupHistory().then((data) => {
-  //       console.log("SETTING visitFollowupHistory:", data);
-  //       setVisitFollowupHistory(data);
-  //     });
-  //   }
-
-
-  //   if (index === 2) {
-  //     console.log("Booked clicked");
-  //     fetchBookedEnquiries();
-  //   }
-  // };
-
 
   const handleToggleSection = async (index) => {
     setExpandedSection(index);
     setShowFileInput(false);
-
-    // 1️⃣ Clear old data first
+    // Clear old data first
     setFirms([]);
     setEnquiries([]);
     setVisitFollowupHistory([]);
-
-    // 2️⃣ Call correct API based on tab
+    //  Call correct API based on tab
     if (index === 0) {
       await fetchEnquiries();
     }
-
     if (index === 1) {
       console.log("Pending Followup clicked");
       const history = await fetchVisitFollowupHistory();
       setVisitFollowupHistory(history);
     }
-
     if (index === 2) {
       console.log("Booked clicked");
       await fetchBookedEnquiries();
     }
-
     if (index === 3) {
       console.log("Undefined Followups clicked");
       await fetchUndefinedEnquiries();
     }
   };
-
-
   const handleChange = (e) => {
     const value = e.target.value;
     const regex = /[\d\s]/;
@@ -230,71 +182,24 @@ const FirstVisits = () => {
       setError("");
     }
   };
-  //correct
-  //  const fetchEnquiries = async () => {
-  //     try {
-  //       const response = await fetch("https://localhost:5289/sales/api/enquiries", {
-  //         credentials: "include",
-  //       });
-  //       if (!response.ok) throw new Error("Failed");
-  //        const data = await response.json();
-  //       setFirms(data);
-  //       // If not set belwo line then it wont shows the submitted enquiries.
-  //       setEnquiries(data);
-  //       return data;
-  //     } catch (err) {
-  //       console.error(err);
-  //     }
-  //   };
-
-  //after project fixing :
-  // const fetchEnquiries = async () => {
-  //   try {
-  //     const response = await fetch("https://localhost:5289/sales/api/enquiries", {
-  //       credentials: "include",
-  //     });
-
-  //     if (!response.ok) throw new Error("Failed");
-
-  //     const data = await response.json();
-
-  //     // 🔥 FIX: Convert single object → array
-  //     const arr = Array.isArray(data) ? data : [data];
-
-  //     setFirms(arr);      // always an array
-  //     setEnquiries(arr);  // always an array
-
-  //     return arr;
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // };
-
 
   const fetchEnquiries = async () => {
     try {
       const response = await fetch("https://localhost:5289/sales/api/enquiries", {
         credentials: "include",
       });
-
       if (!response.ok) throw new Error("Failed");
-
       const data = await response.json();
-
-      console.log("🔥 RAW API RESPONSE:", data);
+      console.log(" RAW API RESPONSE:", data);
 
       // FINAL NORMALIZATION
       const arr = Array.isArray(data.pagedRecords)
         ? data.pagedRecords
         : [];
-
-      console.log("💚 Normalized enquiries:", arr);
-
+      console.log(" Normalized enquiries:", arr);
       setFirms(arr);
       setEnquiries(arr);
-
       return arr;
-
     } catch (err) {
       console.error(err);
     }
@@ -311,13 +216,6 @@ const FirstVisits = () => {
 
 
     if (!leadNo) return toast.error("Lead No. is required");
-    //  Check if enquiry for this lead already exists
-    // const existingEnquiry = firms.find(f => f.leadNo === leadNo);
-    // const existingEnquiry = firms.find(
-    //   f => String(f.leadNo) === String(leadNo)
-    // );
-
-    //after:
     const existingEnquiry = firms.find(
       f => String(f.leadId) === String(leadNo)
     );
@@ -333,24 +231,19 @@ const FirstVisits = () => {
       occupation: occupation || "",
       company: company || "",
       interest: interestedIn || "",
-      // budgetInLakh: budget ? parseFloat(budget) : 0,
       budgetInLakh: budget ? Number(budget) : 0,
-      // intendedPurchasePeriodMonths: planningToBuy ? parseInt(planningToBuy) : 0,
       intendedPurchasePeriod: planningToBuy || "",
       purchaseReason: "",
       lastSiteVisit: new Date().toISOString(),
       source: referenceBySource || "",
       remarks: remarks || "",
       status: "New Enquiry",
-      // lastUpdatedBy: "system",
-      // lastUpdatedDate: new Date().toISOString(),
       enquiryRequest: {
         id: 0,
         assignedTo: "system",
         assignedBy: "system",
         assignedDate: new Date().toISOString(),
         enquiryId: 0,
-        // nextFollowUp: new Date().toISOString(),
         nextFollowUpDate: new Date().toISOString(),
         lastVisitDate: new Date().toISOString(),
         nextVisitScheduledDate: new Date().toISOString(),
@@ -364,72 +257,9 @@ const FirstVisits = () => {
     try {
       let response;
       if (existingEnquiry) {
-
-        // const updatePayload = {
-        //   id: existingEnquiry.id,
-        //   leadId: Number(leadNo),
-        //   name: name || existingEnquiry.name,
-        //   phone: mobile ? Number(mobile) : existingEnquiry.phone,
-        //   whatsapp: whatsappNo ? Number(whatsappNo) : existingEnquiry.whatsapp,
-        //   email: email || existingEnquiry.email,
-        //   address: address || existingEnquiry.address,
-        //   occupation: occupation || existingEnquiry.occupation,
-        //   company: company || existingEnquiry.company,
-        //   interest: interestedIn || existingEnquiry.interest,
-
-        //   // REQUIRED numeric field
-        //   budgetInLakh: budget
-        //     ? Number(budget)
-        //     : Number(existingEnquiry.budgetInLakh) || 0,
-
-        //   // REQUIRED fields
-        //   intendedPurchasePeriod:
-        //     planningToBuy || existingEnquiry.intendedPurchasePeriod || "",
-        //   purchaseReason:
-        //     existingEnquiry.purchaseReason || "",
-
-        //   lastSiteVisit: existingEnquiry.lastSiteVisit,
-        //   source: referenceBySource || existingEnquiry.source,
-        //   remarks: remarks || existingEnquiry.remarks,
-        //   status: existingEnquiry.status,
-
-        //   enquiryRequest: {
-        //     id: existingEnquiry.enquiryRequest?.id || 0,
-        //     assignedTo: existingEnquiry.enquiryRequest?.assignedTo || "system",
-        //     assignedBy: existingEnquiry.enquiryRequest?.assignedBy || "system",
-        //     assignedDate:
-        //       existingEnquiry.enquiryRequest?.assignedDate ||
-        //       new Date().toISOString(),
-        //     enquiryId: existingEnquiry.id,
-
-        //     nextFollowUpDate:
-        //       existingEnquiry.enquiryRequest?.nextFollowUpDate ||
-        //       new Date().toISOString(),
-        //     lastVisitDate:
-        //       existingEnquiry.enquiryRequest?.lastVisitDate ||
-        //       new Date().toISOString(),
-        //     nextVisitScheduledDate:
-        //       existingEnquiry.enquiryRequest?.nextVisitScheduledDate ||
-        //       new Date().toISOString(),
-
-        //     status: existingEnquiry.enquiryRequest?.status || "New Enquiry",
-        //     remarks: remarks || existingEnquiry.enquiryRequest?.remarks || "",
-
-        //     purchaseReason:
-        //       existingEnquiry.enquiryRequest?.purchaseReason || "",
-        //     intendedPurchasePeriod:
-        //       planningToBuy ||
-        //       existingEnquiry.enquiryRequest?.intendedPurchasePeriod ||
-        //       "",
-
-        //     lastUpdatedDate: new Date().toISOString(),
-        //   }
-        // };
-
         const updatePayload = {
           id: existingEnquiry.id,
           leadId: Number(leadNo),
-
           name: name || existingEnquiry.name,
           phone: mobile ? Number(mobile) : Number(existingEnquiry.phone) || 0,
           whatsapp: whatsappNo ? Number(whatsappNo) : Number(existingEnquiry.whatsapp) || 0,
@@ -438,18 +268,14 @@ const FirstVisits = () => {
           occupation: occupation || existingEnquiry.occupation,
           company: company || existingEnquiry.company,
           interest: interestedIn || existingEnquiry.interest,
-
           budgetInLakh: normalizeBudget(budget || existingEnquiry.budgetInLakh),
-
           intendedPurchasePeriod:
             planningToBuy || existingEnquiry.intendedPurchasePeriod || "",
-
           purchaseReason: existingEnquiry.purchaseReason || "",
           lastSiteVisit: existingEnquiry.lastSiteVisit,
           source: referenceBySource || existingEnquiry.source,
           remarks: remarks || existingEnquiry.remarks,
           status: existingEnquiry.status,
-
           enquiryRequest: {
             id: existingEnquiry.enquiryRequest?.id || 0,
             assignedTo: existingEnquiry.enquiryRequest?.assignedTo || "system",
@@ -457,13 +283,10 @@ const FirstVisits = () => {
             assignedDate:
               existingEnquiry.enquiryRequest?.assignedDate ||
               new Date().toISOString(),
-
             enquiryId: existingEnquiry.id,
-
             nextFollowUpDate:
               existingEnquiry.enquiryRequest?.nextFollowUpDate ||
               new Date().toISOString(),
-
             lastVisitDate:
               existingEnquiry.enquiryRequest?.lastVisitDate ||
               new Date().toISOString(),
@@ -493,7 +316,7 @@ const FirstVisits = () => {
             method: "PATCH",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
-            // body: JSON.stringify(payload),
+
             body: JSON.stringify(updatePayload),
           }
         );
@@ -517,10 +340,8 @@ const FirstVisits = () => {
       }
 
       if (!response.ok) throw new Error(await response.text());
-      //       fetchEnquiries();          
-      //  fetchVisitScheduledLeads();
+
       const updated = await fetchEnquiries();   // waits for updated data
-      // const updatedEnquiry = updated.find(f => String(f.leadNo) === String(leadNo));
       const updatedEnquiry = updated.find(
         f => Number(f.leadId) === Number(selectedLead?.id)
       );
@@ -1197,7 +1018,7 @@ const FirstVisits = () => {
 
           if (!grouped[enq.id]) {
             grouped[enq.id] = {
-              enquiryId: enq.id, 
+              enquiryId: enq.id,
               leadId: enq.leadId,
               name: enq.name,
               phone: enq.phone,
@@ -1364,15 +1185,8 @@ const FirstVisits = () => {
   // Search handler function for Display Enquiries
   const handleSearchChange = (e) => {
     setSearchName(e.target.value);
-    setCurrentPage(0); // Reset to first page when searching
+    setCurrentPage(0);
   };
-
-  // Handle rows per page change for Display Enquiries
-  // const handleRowsPerPageChange = (e) => {
-  //   setRowsPerPage(parseInt(e.target.value, 10));
-  //   setCurrentPage(0); // Reset to first page when changing rows per page 
-  // };
-
   const handleRowsPerPageChange = (e) => {
     const value = parseInt(e.target.value, 10);
     setRowsPerPage(value);
@@ -1662,21 +1476,13 @@ const FirstVisits = () => {
               </div>
               <div className="mt-3">
                 <DisplayEnquiryTable
-
-                  //  data={loans}
-                  // data={leads}
                   // data={leads.done}
                   // data={[...firms, ...leads.done]}
                   // leads.done means only leads whose status is visist done and 
-
                   // data={leads.done}
-
                   // data={[...enquiries, ...leads.done]}
-
                   data={currentPageData}
                   fetchEnquiries={fetchEnquiries}
-
-
                   isMobile={isMobile}
                   isTablet={isTablet}
                   onDelete={(item, index) => handleDeleteFirm(item, index)} // Pass index
@@ -2056,38 +1862,8 @@ const FirstVisits = () => {
                           <option value={10}>10</option>
                           <option value={25}>25</option>
                         </select>
-
-
-                        <span>
-                          {totalPending === 0 ? "0–0" : `${startPending}–${endPending}`} of {totalPending}</span>
-
-
+                        <span>{totalPending === 0 ? "0–0" : `${startPending}–${endPending}`} of {totalPending}</span>
                         {/* Navigation arrows */}
-                        {/* <button
-                          style={{
-                            border: "none",
-                            background: "transparent",
-                            cursor: "pointer",
-                            color: "gray",
-                            fontSize: "18px",
-                            padding: "0 4px",
-                          }}
-                        >
-                          &#8249;
-                        </button>
-                        <button
-                          style={{
-                            border: "none",
-                            background: "transparent",
-                            cursor: "pointer",
-                            color: "gray",
-                            fontSize: "18px",
-                            padding: "0 4px",
-                          }}
-                        >
-                          &#8250;
-                        </button> */}
-
                         <button
                           disabled={pendingPagination.page === 1}
                           onClick={() =>
@@ -2219,15 +1995,7 @@ const FirstVisits = () => {
                         <option value={10}>10</option>
                         <option value={25}>25</option>
                       </select>
-
-
-                      {/* <span>0–0 of 0</span> */}
-                      <span>
-                        {totalBooked === 0 ? "0–0" : `${startBooked}–${endBooked}`} of {totalBooked}
-
-                      </span>
-
-
+                      <span> {totalBooked === 0 ? "0–0" : `${startBooked}–${endBooked}`} of {totalBooked}  </span>
                       <button
                         disabled={bookedPagination.page === 1}
                         onClick={() =>
@@ -2378,40 +2146,10 @@ const FirstVisits = () => {
                         <option value={10}>10</option>
                         <option value={25}>25</option>
                       </select>
-
-
-                      {/* <span>0–0 of 0</span> */}
-                      <span>
-                        {totalUndefined === 0 ? "0–0" : `${startUndefined}–${endUndefined}`} of {totalUndefined}
-
-                      </span>
+                      <span>  {totalUndefined === 0 ? "0–0" : `${startUndefined}–${endUndefined}`} of {totalUndefined}</span>
 
                       {/* Navigation Arrows */}
-                      {/* <button
-                        style={{
-                          border: "none",
-                          background: "transparent",
-                          cursor: "pointer",
-                          color: "gray",
-                          fontSize: "18px",
-                          padding: "0 4px",
-                        }}
-                      >
-                        &#8249;
-                      </button>
 
-                      <button
-                        style={{
-                          border: "none",
-                          background: "transparent",
-                          cursor: "pointer",
-                          color: "gray",
-                          fontSize: "18px",
-                          padding: "0 4px",
-                        }}
-                      >
-                        &#8250;
-                      </button> */}
                       <button
                         disabled={undefinedPagination.page === 1}
                         onClick={() =>
