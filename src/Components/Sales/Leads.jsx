@@ -237,6 +237,9 @@ const Leads = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     console.log("handleChange:", e.target.name, value, formData);
   };
+
+
+  
   const validateMobile = (value) => {
     const regex = /^[0-9]{10}$/;
     if (!regex.test(value)) {
@@ -259,6 +262,9 @@ const Leads = () => {
     validateMobile(value);
     setFormData({ ...formData, phone: e.target.value });
   };
+
+ 
+
   // const handleEmailChange = (e) => {
   //   const value = e.target.value;
   //   setEmail(value);
@@ -1295,7 +1301,7 @@ const Leads = () => {
                     </TextField>
                   </Grid>
 
-                  <Grid item xs={12} sm={6}>
+                  {/* <Grid item xs={12} sm={6}>
                     <TextField
                       label="Mobile No. / WhatsApp No."
                       fullWidth
@@ -1310,7 +1316,34 @@ const Leads = () => {
                       helperText={mobileError}
                       sx={{ border: Constants.formInputBorderColor }}
                     />
-                  </Grid>
+                  </Grid> */}
+                  <Grid item xs={12} sm={6}>
+  <TextField
+    label="Mobile No. / WhatsApp No."
+    fullWidth
+    required
+    value={formData.phone}
+    onChange={(e) => {
+      let value = e.target.value;
+
+      // Allow only digits
+      value = value.replace(/\D/g, "");
+
+      // Freeze input at 10 digits
+      if (value.length > 10) return;
+
+      // Update state
+      setFormData({ ...formData, phone: value });
+
+      // Validate
+      validateMobile(value);
+    }}
+    error={!!mobileError}
+    helperText={mobileError}
+    sx={{ border: Constants.formInputBorderColor }}
+  />
+</Grid>
+
                   {/* <Grid item xs={12} sm={6}>
                     <TextField
                       label="Email"

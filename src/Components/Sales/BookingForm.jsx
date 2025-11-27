@@ -462,19 +462,44 @@ const handleCoAllotteeChange = (index, field, value) => {
   };
 
   // Validate form
-  const validateForm = () => {
-    const newErrors = {};
+  // const validateForm = () => {
+  //   const newErrors = {};
+  // // Required field validations
+  //   if (!formData.enquiryNo.trim()) newErrors.enquiryNo = "Enquiry number is required";
+  //   if (!formData.projectName.trim()) newErrors.projectName = "Project name is required";
+  //   if (!formData.nameOfAllottee.trim()) newErrors.nameOfAllottee = "Name of allottee is required";
+  //   if (!formData.mobileNo.trim()) newErrors.mobileNo = "Mobile number is required";
+  //   if (!formData.dateOfFlatBooking) newErrors.dateOfFlatBooking = "Date of flat booking is required";
+  //  setErrors(newErrors);
+  //   return Object.keys(newErrors).length === 0;
+  // };
 
-    // Required field validations
-    if (!formData.enquiryNo.trim()) newErrors.enquiryNo = "Enquiry number is required";
-    if (!formData.projectName.trim()) newErrors.projectName = "Project name is required";
-    if (!formData.nameOfAllottee.trim()) newErrors.nameOfAllottee = "Name of allottee is required";
-    if (!formData.mobileNo.trim()) newErrors.mobileNo = "Mobile number is required";
-    if (!formData.dateOfFlatBooking) newErrors.dateOfFlatBooking = "Date of flat booking is required";
+  // Helper: safely trim any value
+const safeTrim = (value) => (value ?? "").toString().trim();
 
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+const validateForm = () => {
+  const newErrors = {};
+
+  // Required field validations using safeTrim
+  if (safeTrim(formData.enquiryNo) === "")
+    newErrors.enquiryNo = "Enquiry number is required";
+
+  if (safeTrim(formData.projectName) === "")
+    newErrors.projectName = "Project name is required";
+
+  if (safeTrim(formData.nameOfAllottee) === "")
+    newErrors.nameOfAllottee = "Name of allottee is required";
+
+  if (safeTrim(formData.mobileNo) === "")
+    newErrors.mobileNo = "Mobile number is required";
+
+  if (!formData.dateOfFlatBooking)
+    newErrors.dateOfFlatBooking = "Date of flat booking is required";
+
+
+  setErrors(newErrors);
+  return Object.keys(newErrors).length === 0;
+};
 
 
 
@@ -1299,7 +1324,7 @@ const handleUpdateData = (updatedItem) => {
                     <Grid item xs={12} sm={6}>
                     
                         <FormControl fullWidth size="small" sx={{ mb: 2,border:Constants.formInputBorderColor  }}>
-                         <InputLabel>Enquiry No</InputLabel>
+                         <InputLabel required>Enquiry No</InputLabel>
                          <Select
                           value={formData.enquiryNo}
                           label="Enquiry No"
@@ -1316,7 +1341,7 @@ const handleUpdateData = (updatedItem) => {
 
                     <Grid item xs={12} sm={6}>
                       <FormControl fullWidth variant="outlined" size={isMobile ? "small" : "medium"}  sx={{ border: Constants.formInputBorderColor }}>
-                        <InputLabel id="project-name-label">Project Name</InputLabel>
+                        <InputLabel id="project-name-label" required>Project Name</InputLabel>
                         <Select
                           labelId="project-name-label"
                           value={formData.projectName}
@@ -1324,6 +1349,7 @@ const handleUpdateData = (updatedItem) => {
                           label="Project Name"
                           error={!!errors.projectName}
                            sx={{'& .MuiSelect-icon': {color: Constants.primaryColor}}}
+                           
                         >
                           <MenuItem value="Project A">Project A</MenuItem>
                           <MenuItem value="Project B">Project B</MenuItem>
@@ -1432,7 +1458,7 @@ const handleUpdateData = (updatedItem) => {
                         error={!!errors.panNo}
                         helperText={errors.panNo}
                         inputProps={{ maxLength: 10 }}
-                        sx={{border: Constants.formInputBorderColor,}}
+                        sx={{border: Constants.formInputBorderColor}}
                       />
                     </Grid>
 
@@ -1540,6 +1566,7 @@ const handleUpdateData = (updatedItem) => {
         size={isMobile ? "small" : "medium"}
         fullWidth
         startIcon={<FaUpload />}
+        sx={{background:Constants.primaryColor,color:"white"}}
       >
         Choose Files
         <input
@@ -1682,6 +1709,7 @@ const handleUpdateData = (updatedItem) => {
             size={isMobile ? "small" : "medium"}
             fullWidth
             startIcon={<FaUpload />}
+            sx={{background:Constants.primaryColor,color:"white"}}
           >
             Choose Files
             <input

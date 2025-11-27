@@ -377,7 +377,7 @@ const BookingFormTable = ({ data, onUpdate }) => {
 
                       <Tooltip title="Edit" arrow>
                         <IconButton
-                          sx={{ background: "#1976D2", color: "white", borderRadius: "50%", width: 32, height: 32, p: 0.5 }}
+                          sx={{ background: Constants.primaryColor, color: "white", borderRadius: "50%", width: 32, height: 32, p: 0.5 }}
                           onClick={() => handleEditClick(item)}
                         >
                           <Edit sx={{ fontSize: 18 }} />
@@ -386,7 +386,7 @@ const BookingFormTable = ({ data, onUpdate }) => {
 
                       <Tooltip title="WhatsApp" arrow>
                         <IconButton
-                          sx={{ background: "#25D366", color: "white", borderRadius: "50%", width: 32, height: 32, p: 0.5 }}
+                          sx={{ background: Constants.primaryColor, color: "white", borderRadius: "50%", width: 32, height: 32, p: 0.5 }}
                           onClick={() => handleWhatsAppClick(item)}
                         >
                           <WhatsApp sx={{ fontSize: 18 }} />
@@ -395,7 +395,7 @@ const BookingFormTable = ({ data, onUpdate }) => {
 
                       <Tooltip title="Email" arrow>
                         <IconButton
-                          sx={{ background: "#D44638", color: "white", borderRadius: "50%", width: 32, height: 32, p: 0.5 }}
+                          sx={{ background: Constants.primaryColor, color: "white", borderRadius: "50%", width: 32, height: 32, p: 0.5 }}
                           onClick={() => handleEmailClick(item)}
                         >
                           <Email sx={{ fontSize: 18 }} />
@@ -741,12 +741,15 @@ const BookingFormTable = ({ data, onUpdate }) => {
                   component="label"
                   fullWidth
                   startIcon={<FaUpload />}
+                  sx={{background:Constants.primaryColor,color:"white"}}
+                 
                 >
                   Add Files
                   <input
                     type="file"
                     multiple
                     hidden
+                  
                     onChange={(e) => handleAllotteeDocumentChange(`allottee${doc.type.charAt(0).toUpperCase() + doc.type.slice(1)}`, Array.from(e.target.files))}
                   />
                 </Button>
@@ -880,6 +883,7 @@ const BookingFormTable = ({ data, onUpdate }) => {
                       component="label"
                       fullWidth
                       startIcon={<FaUpload />}
+                      sx={{background:Constants.primaryColor,color:"white"}}
                     >
                       Add Files
                       <input

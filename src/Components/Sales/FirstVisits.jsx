@@ -1114,6 +1114,68 @@ const FirstVisits = () => {
 
   //  Fetch ONLY follow-up history entries for a given enquiryId
 
+  // const fetchVisitFollowupHistory = async () => {
+  //   try {
+  //     console.log("follow up");
+
+  //     const response = await fetch(
+  //       "https://localhost:5289/sales/api/enquiries",
+  //       { credentials: "include" }
+  //     );
+
+  //     const data = await response.json();
+
+  //     const grouped = {};
+
+  //     data.pagedRecords.forEach((enq) => {
+  //       const engagements = enq.enquiryEnagagements || [];
+
+  //       if (!grouped[enq.id]) {
+  //         grouped[enq.id] = {
+  //           enquiryId: enq.id,
+  //           leadId: enq.leadId,
+  //           name: enq.name,
+  //           phone: enq.phone,
+  //           source: enq.source,
+  //           status: enq.status,
+
+  //           statusHistory: "",
+  //           remarkHistory: "",
+  //           assignToHistory: "",
+  //         };
+  //       }
+
+  //       engagements.forEach((e) => {
+  //         const date = e.assignedDate
+  //           ? new Date(e.assignedDate).toLocaleString("en-GB")
+  //           : "-";
+
+  //         grouped[enq.id].statusHistory =
+  //           `${date} - ${e.type}<br/>` + grouped[enq.id].statusHistory;
+
+  //         grouped[enq.id].remarkHistory =
+  //           `${date} - ${e.remarks || "No remarks"}<br/>` +
+  //           grouped[enq.id].remarkHistory;
+
+  //         grouped[enq.id].assignToHistory =
+  //           `${date} - ${e.assignedTo || "No change"}<br/>` +
+  //           grouped[enq.id].assignToHistory;
+  //       });
+  //     });
+
+  //     // ⬅️ SORT ENQUIRIES BY LATEST FIRST
+  //     const finalData = Object.values(grouped).sort((a, b) => b.enquiryId - a.enquiryId);
+
+  //     console.log("FINAL GROUPED ENQUIRY HISTORY:", finalData);
+  //     return finalData;
+
+  //   } catch (err) {
+  //     console.error("Error fetching follow-up history:", err);
+  //     return [];
+  //   }
+  // };
+
+
   const fetchVisitFollowupHistory = async () => {
     try {
       console.log("follow up");
@@ -1127,48 +1189,52 @@ const FirstVisits = () => {
 
       const grouped = {};
 
-      data.pagedRecords.forEach((enq) => {
-        const engagements = enq.enquiryEnagagements || [];
+      data.pagedRecords
+        .filter((enq) => !(enq.enquiryEnagagements || []).some((eng) => eng.status?.toLowerCase() === "not interested"))
 
-        if (!grouped[enq.id]) {
-          grouped[enq.id] = {
-            enquiryId: enq.id,
-            leadId: enq.leadId,
-            name: enq.name,
-            phone: enq.phone,
-            source: enq.source,
-            status: enq.status,
+        .forEach((enq) => {
+          const engagements = enq.enquiryEnagagements || [];
 
-            statusHistory: "",
-            remarkHistory: "",
-            assignToHistory: "",
-          };
-        }
+          if (!grouped[enq.id]) {
+            grouped[enq.id] = {
+              enquiryId: enq.id, 
+              leadId: enq.leadId,
+              name: enq.name,
+              phone: enq.phone,
+              source: enq.source,
+              status: enq.status,
 
-        engagements.forEach((e) => {
-          const date = e.assignedDate
-            ? new Date(e.assignedDate).toLocaleString("en-GB")
-            : "-";
+              statusHistory: "",
+              remarkHistory: "",
+              assignToHistory: "",
+            };
+          }
 
-          grouped[enq.id].statusHistory =
-            `${date} - ${e.type}<br/>` + grouped[enq.id].statusHistory;
+          engagements.forEach((e) => {
+            const date = e.assignedDate
+              ? new Date(e.assignedDate).toLocaleString("en-GB")
+              : "-";
 
-          grouped[enq.id].remarkHistory =
-            `${date} - ${e.remarks || "No remarks"}<br/>` +
-            grouped[enq.id].remarkHistory;
+            grouped[enq.id].statusHistory =
+              `${date} - ${e.type}<br/>` + grouped[enq.id].statusHistory;
 
-          grouped[enq.id].assignToHistory =
-            `${date} - ${e.assignedTo || "No change"}<br/>` +
-            grouped[enq.id].assignToHistory;
+            grouped[enq.id].remarkHistory =
+              `${date} - ${e.remarks || "No remarks"}<br/>` +
+              grouped[enq.id].remarkHistory;
+
+            grouped[enq.id].assignToHistory =
+              `${date} - ${e.assignedTo || "No change"}<br/>` +
+              grouped[enq.id].assignToHistory;
+          });
         });
-      });
 
-      // ⬅️ SORT ENQUIRIES BY LATEST FIRST
-      const finalData = Object.values(grouped).sort((a, b) => b.enquiryId - a.enquiryId);
+      // Sort latest first
+      const finalData = Object.values(grouped).sort(
+        (a, b) => b.enquiryId - a.enquiryId
+      );
 
       console.log("FINAL GROUPED ENQUIRY HISTORY:", finalData);
       return finalData;
-
     } catch (err) {
       console.error("Error fetching follow-up history:", err);
       return [];
@@ -1176,39 +1242,8 @@ const FirstVisits = () => {
   };
 
 
-  //Only For not intersted:
-  // const fetchUndefinedEnquiries = async () => {
-  //   try {
-  //     const response = await fetch("https://localhost:5289/sales/api/enquiries", {
-  //       method: "GET",
-  //       credentials: "include",
-  //     });
 
-  //     if (!response.ok) {
-  //       console.error("Failed to fetch enquiries");
-  //       return;
-  //     }
-
-  //     const data = await response.json();
-
-  //     // FILTER ONLY NOT INTERESTED
-
-  //     const filtered = data.pagedRecords.filter((item) =>
-  //       item.enquiryEnagagements?.some(
-  //         (eng) => eng.status?.toLowerCase() === "not interested"
-  //       )
-  //     );
-  //     setUndefinedData(filtered);
-  //     console.log("undefined data ", filtered);
-  //   } catch (error) {
-  //     console.error("API Error:", error);
-
-  //   }
-  // };
-
-
-
-  // For assign to ,remark , status history :
+  // undefined api (Not Interested) = For assign to ,remark , status history :
   const fetchUndefinedEnquiries = async () => {
     try {
       const response = await fetch("https://localhost:5289/sales/api/enquiries", {
@@ -1264,51 +1299,6 @@ const FirstVisits = () => {
 
 
   // FILTER BOOKED ENQUIRIES
-  // const fetchBookedEnquiries = async () => {
-  //   try {
-  //     const response = await fetch("https://localhost:5289/sales/api/enquiries", {
-  //       credentials: "include",
-  //     });
-
-  //     if (!response.ok) throw new Error("Failed to fetch enquiries");
-
-  //     const data = await response.json();
-
-  //     console.log(" RAW API RESPONSE:", data);
-
-  //     const allEnquiries = Array.isArray(data.pagedRecords)
-  //       ? data.pagedRecords
-  //       : [];
-
-  //     console.log(" Normalized enquiries:", allEnquiries);
-
-  //     // ✅ FIX: Filter using engagements, NOT enquiry.type
-  //     const booked = allEnquiries.filter((item) => {
-  //       // const engagements = item.engagements || item.enquiryEngagements || [];
-  //       const engagements = item.enquiryEnagagements || [];
-
-  //       // return engagements.some(
-  //       //   (eg) => String(eg.type)?.toLowerCase().trim() === "booked"
-  //       // );
-  //       return engagements.some(
-  //         (eng) => String(eng.type)?.toLowerCase().trim() === "booked"
-  //       );
-  //     });
-
-  //     console.log(" FINAL BOOKED ENQUIRIES:", booked);
-
-  //     // update state
-  //     setEnquiries(booked);
-  //     setFirms(booked);
-  //     setProjectData(booked);
-
-  //     return booked;
-  //   } catch (err) {
-  //     console.error(" Error fetching booked enquiries:", err);
-  //   }
-  // };
-
-
 
   const fetchBookedEnquiries = async () => {
     try {
