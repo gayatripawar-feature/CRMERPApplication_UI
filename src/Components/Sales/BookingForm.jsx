@@ -161,43 +161,6 @@ const BookingForm = () => {
     setCurrentPage(0);
   };
 
-  // Combined filtering effect
-  // useEffect(() => {
-  //   let filtered = submittedData;
-
-  //   // Apply date filters
-  //   if (fromDate || toDate) {
-  //     filtered = filtered.filter(item => {
-  //       const itemDate = item.dateOfFlatBooking ? new Date(item.dateOfFlatBooking) : null;
-  //       if (!itemDate) return false;
-
-  //       const from = fromDate ? new Date(fromDate) : null;
-  //       const to = toDate ? new Date(toDate) : null;
-
-  //       let valid = true;
-  //       if (from) valid = valid && itemDate >= from;
-  //       if (to) {
-  //         const toDateEnd = new Date(to);
-  //         toDateEnd.setHours(23, 59, 59, 999);
-  //         valid = valid && itemDate <= toDateEnd;
-  //       }
-  //       return valid;
-  //     });
-  //   }
-
-  //   // Apply search filter
-  //   if (searchTerm.trim()) {
-  //     const lowercasedTerm = searchTerm.toLowerCase();
-  //     filtered = filtered.filter(item =>
-  //       (item.enquiryNo && item.enquiryNo.toString().toLowerCase().includes(lowercasedTerm)) ||
-  //       (item.nameOfAllottee && item.nameOfAllottee.toLowerCase().includes(lowercasedTerm)) ||
-  //       (item.mobileNo && item.mobileNo.toString().toLowerCase().includes(lowercasedTerm))
-  //     );
-  //   }
-
-  //   setFilteredData(filtered);
-  //   setCurrentPage(0);
-  // }, [fromDate, toDate, searchTerm, submittedData]);
   useEffect(() => {
     let filtered = submittedData;
 
@@ -263,21 +226,6 @@ const BookingForm = () => {
     setShowFirmForm(false);
   };
 
-
-  //  Handlers for co-allottees
-  // const handleAddCoAllottee = () => {
-  //   setCoAllottees([
-  //     ...coAllottees,
-  //     {
-  //       name: "",
-  //       dob: "",
-  //       occupation: "",
-  //       pan: "",
-  //       aadhar: "",
-  //       mobileEmail: ""
-  //     }
-  //   ]);
-  // };
   const handleAddCoAllottee = () => {
     setCoAllottees([
       ...coAllottees,
@@ -322,12 +270,6 @@ const BookingForm = () => {
     setCoAllotteesDocuments(updatedCoAllotteesDocuments);
   };
 
-
-  // const handleRemoveCoAllottee = (index) => {
-  //   if (coAllottees.length > 1) {
-  //     setCoAllottees(coAllottees.filter((_, i) => i !== index));
-  //   }
-  // };
   const handleRemoveCoAllottee = (index) => {
     if (coAllottees.length > 1) {
       setCoAllottees(coAllottees.filter((_, i) => i !== index));
@@ -461,18 +403,6 @@ const BookingForm = () => {
     setOtherDocuments(prev => [...prev, ...files]);
   };
 
-  // Validate form
-  // const validateForm = () => {
-  //   const newErrors = {};
-  // // Required field validations
-  //   if (!formData.enquiryNo.trim()) newErrors.enquiryNo = "Enquiry number is required";
-  //   if (!formData.projectName.trim()) newErrors.projectName = "Project name is required";
-  //   if (!formData.nameOfAllottee.trim()) newErrors.nameOfAllottee = "Name of allottee is required";
-  //   if (!formData.mobileNo.trim()) newErrors.mobileNo = "Mobile number is required";
-  //   if (!formData.dateOfFlatBooking) newErrors.dateOfFlatBooking = "Date of flat booking is required";
-  //  setErrors(newErrors);
-  //   return Object.keys(newErrors).length === 0;
-  // };
 
   // Helper: safely trim any value
   const safeTrim = (value) => (value ?? "").toString().trim();
@@ -574,216 +504,6 @@ const BookingForm = () => {
 
 
 
-  // const handleSubmit = () => {
-  //   if (!validateForm()) {
-  //     toast.error("Please fill all required fields!", { position: "top-right" });
-  //     return;
-  //   }
-
-  //   const newRecord = {
-  //     id: Date.now(),
-  //     timestamp: new Date().toLocaleString(),
-  //     enquiryNo: formData.enquiryNo,
-  //     projectName: formData.projectName,
-  //     dateOfFlatBooking: formData.dateOfFlatBooking,
-  //     nameOfAllottee: formData.nameOfAllottee,
-  //     sourceName: formData.sourceName,
-  //     dateOfBirth: formData.dateOfBirth,
-  //     occupation: formData.occupation,
-  //     panNo: formData.panNo,
-  //     aadharNo: formData.aadharNo,
-  //     mobileNo: formData.mobileNo,
-  //     alternateMobileNo: formData.alternateMobileNo,
-  //     whatsappNo: formData.whatsAppNo,
-  //     emailId: formData.emailId,
-  //     address: formData.address,
-  //     // Multiple co-allottees
-  //     coAllottees: coAllottees,
-  //     flatNo: formData.flatNo,
-  //     type: formData.type,
-  //     wing: formData.wing,
-  //     soldRate: formData.soldRate,
-  //     carpetAreaSqMtr: formData.carpetArea,
-  //     enclosedBalconySqMtr: formData.enclosedBalcony,
-  //     openBalconySqMtr: formData.openBalcony,
-  //     terraceSqMtr: formData.terrace,
-  //     parking: formData.parking,
-  //     floor: formData.floor,
-  //     totalConsideration: formData.totalConsideration,
-  //     bookingAmount: formData.bookingAmount,
-  //     stampDuty: formData.stampDuty,
-  //     registrationFee: formData.registrationFee,
-  //     gstAmount: formData.gstAmount,
-  //     paymentMode: formData.paymentMode,
-  //     chequeTrnNo: formData.chequeNo,
-  //     chequeTrnDate: formData.chequeDate,
-  //     bankName: formData.bankName,
-  //     bankDetails: formData.bankDetails,
-  //     // File references
-  //     panCardBoth: panCardFiles.map(file => file.name).join(', '),
-  //     aadharCardBoth: aadhaarCard.map(file => file.name).join(', '),
-  //     marriageCertificate: marriageCertificate.map(file => file.name).join(', '),
-  //     passportSizePhotoBoth: passportPhoto.map(file => file.name).join(', '),
-  //     anyOther: otherDocuments.map(file => file.name).join(', ')
-  //   };
-
-  //   setSubmittedData(prev => [...prev, newRecord]);
-
-  //   toast.success("Booking details submitted successfully!", {
-  //     position: "top-right",
-  //     autoClose: 3000,
-  //   });
-
-  //   resetForm();
-  //   setShowFirmForm(false);
-  // };
-
-  // const handleSubmit = () => {
-  //   if (!validateForm()) {
-  //     toast.error("Please fill all required fields!", { position: "top-right" });
-  //     return;
-  //   }
-
-  //   const newRecord = {
-  //     id: Date.now(),
-  //     timestamp: new Date().toLocaleString(),
-  //     enquiryNo: formData.enquiryNo,
-  //     projectName: formData.projectName,
-  //     dateOfFlatBooking: formData.dateOfFlatBooking,
-  //     nameOfAllottee: formData.nameOfAllottee,
-  //     sourceName: formData.sourceName,
-  //     dateOfBirth: formData.dateOfBirth,
-  //     occupation: formData.occupation,
-  //     panNo: formData.panNo,
-  //     aadharNo: formData.aadharNo,
-  //     mobileNo: formData.mobileNo,
-  //     alternateMobileNo: formData.alternateMobileNo,
-  //     whatsappNo: formData.whatsAppNo,
-  //     emailId: formData.emailId,
-  //     address: formData.address,
-
-  //     // Allottee documents
-  //     allotteePanCard: allotteeDocuments.panCard.map(file => file.name).join(', '),
-  //     allotteeAadhaarCard: allotteeDocuments.aadhaarCard.map(file => file.name).join(', '),
-  //     allotteeMarriageCertificate: allotteeDocuments.marriageCertificate.map(file => file.name).join(', '),
-  //     allotteePassportPhoto: allotteeDocuments.passportPhoto.map(file => file.name).join(', '),
-  //     allotteeOtherDocuments: allotteeDocuments.otherDocuments.map(file => file.name).join(', '),
-
-  //     // Co-allottees with their documents
-  //     coAllottees: coAllottees.map((coAllottee, index) => ({
-  //       ...coAllottee,
-  //       panCard: coAllotteesDocuments[index]?.panCard.map(file => file.name).join(', ') || '',
-  //       aadhaarCard: coAllotteesDocuments[index]?.aadhaarCard.map(file => file.name).join(', ') || '',
-  //       marriageCertificate: coAllotteesDocuments[index]?.marriageCertificate.map(file => file.name).join(', ') || '',
-  //       passportPhoto: coAllotteesDocuments[index]?.passportPhoto.map(file => file.name).join(', ') || '',
-  //       otherDocuments: coAllotteesDocuments[index]?.otherDocuments.map(file => file.name).join(', ') || ''
-  //     })),
-
-  //     flatNo: formData.flatNo,
-  //     type: formData.type,
-  //     wing: formData.wing,
-  //     soldRate: formData.soldRate,
-  //     carpetAreaSqMtr: formData.carpetArea,
-  //     enclosedBalconySqMtr: formData.enclosedBalcony,
-  //     openBalconySqMtr: formData.openBalcony,
-  //     terraceSqMtr: formData.terrace,
-  //     parking: formData.parking,
-  //     floor: formData.floor,
-  //     totalConsideration: formData.totalConsideration,
-  //     bookingAmount: formData.bookingAmount,
-  //     stampDuty: formData.stampDuty,
-  //     registrationFee: formData.registrationFee,
-  //     gstAmount: formData.gstAmount,
-  //     paymentMode: formData.paymentMode,
-  //     chequeTrnNo: formData.chequeNo,
-  //     chequeTrnDate: formData.chequeDate,
-  //     bankName: formData.bankName,
-  //     bankDetails: formData.bankDetails
-  //   };
-
-  //   setSubmittedData(prev => [...prev, newRecord]);
-
-  //   toast.success("Booking details submitted successfully!", {
-  //     position: "top-right",
-  //     autoClose: 3000,
-  //   });
-
-  //   resetForm();
-  //   setShowFirmForm(false);
-  // };
-  // const handleSubmit = () => {
-  //   if (!validateForm()) {
-  //     toast.error("Please fill all required fields!", { position: "top-right" });
-  //     return;
-  //   }
-
-  //   const newRecord = {
-  //     id: Date.now(),
-  //     timestamp: new Date().toLocaleString(),
-  //     enquiryNo: formData.enquiryNo,
-  //     projectName: formData.projectName,
-  //     dateOfFlatBooking: formData.dateOfFlatBooking,
-  //     nameOfAllottee: formData.nameOfAllottee,
-  //     sourceName: formData.sourceName,
-  //     dateOfBirth: formData.dateOfBirth,
-  //     occupation: formData.occupation,
-  //     panNo: formData.panNo,
-  //     aadharNo: formData.aadharNo,
-  //     mobileNo: formData.mobileNo,
-  //     alternateMobileNo: formData.alternateMobileNo,
-  //     whatsappNo: formData.whatsAppNo,
-  //     emailId: formData.emailId,
-  //     address: formData.address,
-
-  //     // Allottee documents with file objects for preview
-  //     allotteePanCard: allotteeDocuments.panCard,
-  //     allotteeAadhaarCard: allotteeDocuments.aadhaarCard,
-  //     allotteeMarriageCertificate: allotteeDocuments.marriageCertificate,
-  //     allotteePassportPhoto: allotteeDocuments.passportPhoto,
-  //     allotteeOtherDocuments: allotteeDocuments.otherDocuments,
-
-  //     // Co-allottees with their documents
-  //     coAllottees: coAllottees.map((coAllottee, index) => ({
-  //       ...coAllottee,
-  //       panCard: coAllotteesDocuments[index]?.panCard || [],
-  //       aadhaarCard: coAllotteesDocuments[index]?.aadhaarCard || [],
-  //       marriageCertificate: coAllotteesDocuments[index]?.marriageCertificate || [],
-  //       passportPhoto: coAllotteesDocuments[index]?.passportPhoto || [],
-  //       otherDocuments: coAllotteesDocuments[index]?.otherDocuments || []
-  //     })),
-
-  //     flatNo: formData.flatNo,
-  //     type: formData.type,
-  //     wing: formData.wing,
-  //     soldRate: formData.soldRate,
-  //     carpetAreaSqMtr: formData.carpetArea,
-  //     enclosedBalconySqMtr: formData.enclosedBalcony,
-  //     openBalconySqMtr: formData.openBalcony,
-  //     terraceSqMtr: formData.terrace,
-  //     parking: formData.parking,
-  //     floor: formData.floor,
-  //     totalConsideration: formData.totalConsideration,
-  //     bookingAmount: formData.bookingAmount,
-  //     stampDuty: formData.stampDuty,
-  //     registrationFee: formData.registrationFee,
-  //     gstAmount: formData.gstAmount,
-  //     paymentMode: formData.paymentMode,
-  //     chequeTrnNo: formData.chequeNo,
-  //     chequeTrnDate: formData.chequeDate,
-  //     bankName: formData.bankName,
-  //     bankDetails: formData.bankDetails
-  //   };
-
-  //   setSubmittedData(prev => [...prev, newRecord]);
-
-  //   toast.success("Booking details submitted successfully!", {
-  //     position: "top-right",
-  //     autoClose: 3000,
-  //   });
-
-  //   resetForm();
-  //   setShowFirmForm(false);
-  // };
   const handleSubmit = () => {
     if (!validateForm()) {
       toast.error("Please fill all required fields!", { position: "top-right" });
@@ -1436,7 +1156,7 @@ const BookingForm = () => {
                           value={formData.occupation}
                           onChange={(e) => handleSelectChange("occupation", e.target.value)}
                           label="Occupation"
-                        
+
                         >
                           <MenuItem value="Business">Business</MenuItem>
                           <MenuItem value="Service">Service</MenuItem>
@@ -1491,7 +1211,7 @@ const BookingForm = () => {
                         required
                         inputProps={{ maxLength: 10 }}
                         sx={{ border: Constants.formInputBorderColor, }}
-                       
+
                       />
                     </Grid>
 
@@ -1655,7 +1375,7 @@ const BookingForm = () => {
                             value={coAllottee.occupation}
                             onChange={(e) => handleCoAllotteeChange(index, "occupation", e.target.value)}
                             sx={{ border: Constants.formInputBorderColor, }}
-                            
+
                           />
                         </Grid>
 
@@ -1768,12 +1488,12 @@ const BookingForm = () => {
                       { field: "enclosedBalcony", label: "Enclosed Balcony in (Sq. foot)", type: "select", options: ["10", "15", "20"] },
                       { field: "openBalcony", label: "Open Balcony in (Sq. foot)", type: "select", options: ["5", "10", "15"] },
                       { field: "terrace", label: "Terrace in (Sq.foot)", type: "select", options: ["30", "40", "50"] },
-                     
+
                     ].map((item, index) => (
                       <Grid item xs={12} sm={6} key={index}>
                         {item.type === "select" ? (
-                          <FormControl fullWidth variant="outlined" size={isMobile ? "small" : "medium"} 
-                          sx={{ border: Constants.formInputBorderColor, }} required>
+                          <FormControl fullWidth variant="outlined" size={isMobile ? "small" : "medium"}
+                            sx={{ border: Constants.formInputBorderColor, }} required>
                             <InputLabel>{item.label}</InputLabel>
                             <Select
                               value={formData[item.field]}
@@ -1836,33 +1556,33 @@ const BookingForm = () => {
                           //   },
                           // }}
                           sx={{
-  "& .MuiOutlinedInput-root": {
-    "& fieldset": {
-      borderColor: Constants.primaryColor,
-    },
-    "&:hover fieldset": {
-      borderColor: Constants.primaryColor,
-    },
-    "&.Mui-focused fieldset": {
-      borderColor: Constants.primaryColor,
-    },
-  },
+                            "& .MuiOutlinedInput-root": {
+                              "& fieldset": {
+                                borderColor: Constants.primaryColor,
+                              },
+                              "&:hover fieldset": {
+                                borderColor: Constants.primaryColor,
+                              },
+                              "&.Mui-focused fieldset": {
+                                borderColor: Constants.primaryColor,
+                              },
+                            },
 
-  // Input text color
-  "& .MuiInputBase-input": {
-    color: Constants.primaryColor,
-  },
+                            // Input text color
+                            "& .MuiInputBase-input": {
+                              color: Constants.primaryColor,
+                            },
 
-  // Label color
-  "& .MuiInputLabel-root": {
-    color: Constants.primaryColor,
-  },
+                            // Label color
+                            "& .MuiInputLabel-root": {
+                              color: Constants.primaryColor,
+                            },
 
-  // Label focused color
-  "& .MuiInputLabel-root.Mui-focused": {
-    color: Constants.primaryColor,
-  },
-}}
+                            // Label focused color
+                            "& .MuiInputLabel-root.Mui-focused": {
+                              color: Constants.primaryColor,
+                            },
+                          }}
 
 
                         >
@@ -1878,34 +1598,34 @@ const BookingForm = () => {
                           value={formData[item.field] || ""}
                           onChange={(e) => handleInputChange(item.field, e.target.value)}
                           type={item.type}
-                       sx={{
-  "& .MuiOutlinedInput-root": {
-    "& fieldset": {
-      borderColor: Constants.primaryColor,
-    },
-    "&:hover fieldset": {
-      borderColor: Constants.primaryColor,
-    },
-    "&.Mui-focused fieldset": {
-      borderColor: Constants.primaryColor,
-    },
-  },
+                          sx={{
+                            "& .MuiOutlinedInput-root": {
+                              "& fieldset": {
+                                borderColor: Constants.primaryColor,
+                              },
+                              "&:hover fieldset": {
+                                borderColor: Constants.primaryColor,
+                              },
+                              "&.Mui-focused fieldset": {
+                                borderColor: Constants.primaryColor,
+                              },
+                            },
 
-  // Input text color
-  "& .MuiInputBase-input": {
-    color: Constants.primaryColor,
-  },
+                            // Input text color
+                            "& .MuiInputBase-input": {
+                              color: Constants.primaryColor,
+                            },
 
-  // Label color
-  "& .MuiInputLabel-root": {
-    color: Constants.primaryColor,
-  },
+                            // Label color
+                            "& .MuiInputLabel-root": {
+                              color: Constants.primaryColor,
+                            },
 
-  // Label focused color
-  "& .MuiInputLabel-root.Mui-focused": {
-    color: Constants.primaryColor,
-  },
-}}
+                            // Label focused color
+                            "& .MuiInputLabel-root.Mui-focused": {
+                              color: Constants.primaryColor,
+                            },
+                          }}
 
 
                         />
@@ -1966,9 +1686,9 @@ const BookingForm = () => {
 
                     <Grid item xs={12} sm={6}>
                       <FormControl fullWidth variant="outlined" size={isMobile ? "small" : "medium"}
-                       sx={{ border: Constants.formInputBorderColor, }}
-                       required
-                       >
+                        sx={{ border: Constants.formInputBorderColor, }}
+                        required
+                      >
                         <InputLabel id="payment-mode-label">Payment Mode</InputLabel>
                         <Select
                           labelId="payment-mode-label"

@@ -183,28 +183,53 @@ const FirstVisits = () => {
     }
   };
 
-  const fetchEnquiries = async () => {
+  // const fetchEnquiries = async () => {
+  //   try {
+  //     const response = await fetch("https://localhost:5289/sales/api/enquiries", {
+  //       credentials: "include",
+  //     });
+  //     if (!response.ok) throw new Error("Failed");
+  //     const data = await response.json();
+  //     console.log(" RAW API RESPONSE:", data);
+
+  //     // FINAL NORMALIZATION
+  //     const arr = Array.isArray(data.pagedRecords)
+  //       ? data.pagedRecords
+  //       : [];
+  //     console.log(" Normalized enquiries:", arr);
+  //     setFirms(arr);
+  //     setEnquiries(arr);
+  //     return arr;
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
+
+  const fetchEnquiries = async (pageNumber = 1, pageSize = 10) => {
     try {
-      const response = await fetch("https://localhost:5289/sales/api/enquiries", {
+      const url = `https://localhost:5289/sales/api/enquiries?pageNumber=${pageNumber}&pageSize=${pageSize}`;
+
+      const response = await fetch(url, {
         credentials: "include",
       });
+
       if (!response.ok) throw new Error("Failed");
+
       const data = await response.json();
       console.log(" RAW API RESPONSE:", data);
 
-      // FINAL NORMALIZATION
-      const arr = Array.isArray(data.pagedRecords)
-        ? data.pagedRecords
-        : [];
+      const arr = Array.isArray(data.pagedRecords) ? data.pagedRecords : [];
+
       console.log(" Normalized enquiries:", arr);
+
       setFirms(arr);
       setEnquiries(arr);
+
       return arr;
     } catch (err) {
       console.error(err);
     }
   };
-
 
   const normalizeBudget = (value) => {
     if (!value) return 0;

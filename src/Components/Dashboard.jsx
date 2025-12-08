@@ -829,53 +829,23 @@
 import { toast } from "react-toastify";
 import React, { useState, useCallback, useRef, useEffect } from "react";
 import {
-  FaBars,
-  FaTachometerAlt,
-  FaUserShield,
-  FaCode,
-  FaChartLine,
-  FaCogs,
-  FaSignOutAlt,
-  FaUsers,
-  FaUserCheck,
-  FaHome,
-  FaFileAlt,
-  FaFileSignature,
-  FaStamp,
-  FaDraftingCompass,
-  FaBell,
-  FaInfoCircle,
-  FaBuilding,
-  FaFileInvoiceDollar,
-  FaBullhorn,
-  FaUserTie,
-  FaLandmark,
-  FaCalendarAlt,
-  FaPeopleArrows,
+  FaBars, FaTachometerAlt, FaUserShield, FaCode, FaChartLine, FaCogs, FaSignOutAlt, FaUsers, FaUserCheck, FaHome,
+  FaFileAlt, FaFileSignature, FaStamp, FaDraftingCompass, FaBell, FaInfoCircle, FaBuilding, FaFileInvoiceDollar, FaBullhorn, FaUserTie,
+  FaLandmark, FaCalendarAlt, FaPeopleArrows
 } from "react-icons/fa";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Outlet, Link, NavLink } from "react-router-dom";
-import {
-  FaClipboardList,
-  FaCalendarCheck,
-  FaRegHandshake,
-  FaRegClock,
-  FaTasks,
-  FaRegTimesCircle,
-  FaClipboard,
-  FaRegEdit,
-} from "react-icons/fa";
+import { FaClipboardList, FaCalendarCheck, FaRegHandshake, FaRegClock, FaTasks, FaRegTimesCircle, FaClipboard, FaRegEdit } from "react-icons/fa";
 import { FaMicrophone } from "react-icons/fa";
 import VoiceNavigation from "./VoiceNavigation";
 import { FaMoneyBillWave, FaParking, FaChartBar } from "react-icons/fa";
 import Constants from "./Constants";
-import RolePermissions from "./RolePermissions";
+// import RolePermissions from "./RolePermissions";
 import { useSession } from "./SessionContext";
 
 const Dashboard = () => {
   const { authenticated, name, id, groups } = useSession();
   const location = useLocation();
-
   const [searchQuery, setSearchQuery] = useState("");
   const [query, setQuery] = useState("");
   const recognitionRef = useRef(null);
@@ -898,8 +868,8 @@ const Dashboard = () => {
 
   // Log initial section states
   useEffect(() => {
-    console.log("🚀 INITIAL SECTION STATES:", sections);
-    console.log("📍 Current path:", location.pathname);
+    console.log(" INITIAL SECTION STATES:", sections);
+    console.log(" Current path:", location.pathname);
   }, []);
 
   const toggleSidebar = useCallback(() => {
@@ -967,434 +937,127 @@ const Dashboard = () => {
   const allMenus = {
     admin: [
       {
-        label: "Admin Section",
-        icon: <FaUserShield />,
+        label: "Admin Section", icon: <FaUserShield />,
         subItems: [
-          {
-            to: "/dashboard/admin/salesperson",
-            icon: <FaUserTie />,
-            label: "Sales Person",
-          },
-          {
-            to: "/dashboard/admin/banker",
-            icon: <FaLandmark />,
-            label: "Banker Details",
-          },
+          { to: "/dashboard/admin/salesperson", icon: <FaUserTie />, label: "Sales Person" },
+          { to: "/dashboard/admin/banker", icon: <FaLandmark />, label: "Banker Details" },
         ],
       },
       {
-        label: "Developer",
-        icon: <FaCode />,
+        label: "Developer", icon: <FaCode />,
         subItems: [
-          {
-            to: "/dashboard/developer/sharespace",
-            icon: <FaCode />,
-            label: "Share Space",
-          },
-          {
-            to: "/dashboard/developer/basicinfo",
-            icon: <FaInfoCircle />,
-            label: "Basic Information",
-          },
-          {
-            to: "/dashboard/developer/projectinventory",
-            icon: <FaBuilding />,
-            label: "Project Inventory",
-          },
-          {
-            to: "/dashboard/developer/costsheet",
-            icon: <FaFileInvoiceDollar />,
-            label: "Cost Sheet Details",
-          },
-          {
-            to: "/dashboard/developer/salesmis",
-            icon: <FaChartLine />,
-            label: "Sales MIS",
-          },
-          {
-            to: "/dashboard/developer/marketing",
-            icon: <FaBullhorn />,
-            label: "Marketing",
-          },
+          { to: "/dashboard/developer/sharespace", icon: <FaCode />, label: "Share Space" },
+          { to: "/dashboard/developer/basicinfo", icon: <FaInfoCircle />, label: "Basic Information" },
+          { to: "/dashboard/developer/projectinventory", icon: <FaBuilding />, label: "Project Inventory" },
+          { to: "/dashboard/developer/costsheet", icon: <FaFileInvoiceDollar />, label: "Cost Sheet Details" },
+          { to: "/dashboard/developer/salesmis", icon: <FaChartLine />, label: "Sales MIS" },
+          { to: "/dashboard/developer/marketing", icon: <FaBullhorn />, label: "Marketing" },
         ],
       },
       {
-        label: "Sales",
-        icon: <FaChartLine />,
+        label: "Sales", icon: <FaChartLine />,
         subItems: [
-          {
-            to: "/dashboard/sales/salesdashboard",
-            icon: <FaTachometerAlt />,
-            label: "Dashboard",
-          },
-          {
-            to: "/dashboard/sales/salescalander",
-            icon: <FaCalendarAlt />,
-            label: "Calendar",
-          },
-          {
-            to: "/dashboard/sales/sharespace",
-            icon: <FaPeopleArrows />,
-            label: "Share Space",
-          },
-          {
-            to: "/dashboard/sales/sharedbydeveloper",
-            icon: <FaUsers />,
-            label: "Shared By Developer",
-          },
-          {
-            to: "/dashboard/sales/leads",
-            icon: <FaClipboardList />,
-            label: "Leads",
-          },
-          {
-            to: "/dashboard/sales/leadsfollowup",
-            icon: <FaCalendarCheck />,
-            label: "Leads Follow Up",
-          },
-          {
-            to: "/dashboard/sales/firstvisits",
-            icon: <FaRegHandshake />,
-            label: "First Visit",
-          },
-          // {
-          //   to: "/dashboard/sales/firstvisitfollowup",
-          //   icon: <FaRegClock />,
-          //   label: "First Visit Follow Up",
-          // },
-          {
-            to: "/dashboard/sales/firstvisitsteps",
-            icon: <FaTasks />,
-            label: "First Visit Steps",
-          },
-          {
-            to: "/dashboard/sales/saleslostvisits",
-            icon: <FaRegTimesCircle />,
-            label: "Lost Visits",
-          },
-          {
-            to: "/dashboard/sales/salestemplates",
-            icon: <FaClipboard />,
-            label: "Templates",
-          },
-          {
-            to: "/dashboard/sales/bookingform",
-            icon: <FaRegEdit />,
-            label: "Booking Form",
-          },
-          {
-            to: "/dashboard/sales/channelpartner",
-            icon: <FaRegEdit />,
-            label: "Channel Partner",
-          },
+          { to: "/dashboard/sales/salesdashboard", icon: <FaTachometerAlt />, label: "Dashboard" },
+          { to: "/dashboard/sales/salescalander", icon: <FaCalendarAlt />, label: "Calendar" },
+          { to: "/dashboard/sales/sharespace", icon: <FaPeopleArrows />, label: "Share Space" },
+          { to: "/dashboard/sales/sharedbydeveloper", icon: <FaUsers />, label: "Shared By Developer" },
+          { to: "/dashboard/sales/leads", icon: <FaClipboardList />, label: "Leads" },
+          { to: "/dashboard/sales/leadsfollowup", icon: <FaCalendarCheck />, label: "Leads Follow Up" },
+          { to: "/dashboard/sales/firstvisits", icon: <FaRegHandshake />, label: "First Visit" },
+          // { to: "/dashboard/sales/firstvisitfollowup", icon: <FaRegClock />, label: "First Visit Follow Up",  },
+          { to: "/dashboard/sales/firstvisitsteps", icon: <FaTasks />, label: "First Visit Steps" },
+          { to: "/dashboard/sales/saleslostvisits", icon: <FaRegTimesCircle />, label: "Lost Visits" },
+          { to: "/dashboard/sales/salestemplates", icon: <FaClipboard />, label: "Templates" },
+          { to: "/dashboard/sales/bookingform", icon: <FaRegEdit />, label: "Booking Form" },
+          { to: "/dashboard/sales/channelpartner", icon: <FaRegEdit />, label: "Channel Partner" },
         ],
       },
       {
-        label: "CRM",
-        icon: <FaCogs />,
+        label: "CRM", icon: <FaCogs />,
         subItems: [
-          {
-            to: "/dashboard/crm/HomeLoan",
-            icon: <FaHome />,
-            label: "Home Loan Applicability",
-          },
+          { to: "/dashboard/crm/HomeLoan", icon: <FaHome />, label: "Home Loan Applicability" },
           { to: "/dashboard/crm/crm", icon: <FaUserCheck />, label: "CRM" },
-          {
-            to: "/dashboard/crm/OCR",
-            icon: <FaFileAlt />,
-            label: "OCR Collection",
-          },
-          {
-            to: "/dashboard/crm/Agreement",
-            icon: <FaFileSignature />,
-            label: "Agreement",
-          },
-          {
-            to: "/dashboard/crm/registration",
-            icon: <FaStamp />,
-            label: "Registration",
-          },
-          {
-            to: "/dashboard/crm/Architect",
-            icon: <FaDraftingCompass />,
-            label: "Engineer & Architect Letter",
-          },
-          {
-            to: "/dashboard/crm/Demand",
-            icon: <FaBell />,
-            label: "Demand Raised",
-          },
-          {
-            to: "/dashboard/crm/dailycollection",
-            icon: <FaMoneyBillWave />,
-            label: "Daily Collection",
-          },
-          {
-            to: "/dashboard/crm/flatallotmentreport",
-            icon: <FaHome />,
-            label: "Flat Allotement Report",
-          },
-          {
-            to: "/dashboard/crm/parkingreport",
-            icon: <FaParking />,
-            label: "Parking Report",
-          },
-          {
-            to: "/dashboard/crm/misreport",
-            icon: <FaChartBar />,
-            label: "MIS Report",
-          },
+          { to: "/dashboard/crm/OCR", icon: <FaFileAlt />, label: "OCR Collection" },
+          { to: "/dashboard/crm/Agreement", icon: <FaFileSignature />, label: "Agreement" },
+          { to: "/dashboard/crm/registration", icon: <FaStamp />, label: "Registration" },
+          { to: "/dashboard/crm/Architect", icon: <FaDraftingCompass />, label: "Engineer & Architect Letter" },
+          { to: "/dashboard/crm/Demand", icon: <FaBell />, label: "Demand Raised" },
+          { to: "/dashboard/crm/dailycollection", icon: <FaMoneyBillWave />, label: "Daily Collection" },
+          { to: "/dashboard/crm/flatallotmentreport", icon: <FaHome />, label: "Flat Allotement Report" },
+          { to: "/dashboard/crm/parkingreport", icon: <FaParking />, label: "Parking Report" },
+          { to: "/dashboard/crm/misreport", icon: <FaChartBar />, label: "MIS Report" },
         ],
       },
     ],
 
     developer: [
       {
-        label: "Admin Section",
-        icon: <FaUserShield />,
+        label: "Admin Section", icon: <FaUserShield />,
         subItems: [
-          {
-            to: "/dashboard/admin/salesperson",
-            icon: <FaUserTie />,
-            label: "Sales Person",
-          },
-          {
-            to: "/dashboard/admin/banker",
-            icon: <FaLandmark />,
-            label: "Banker Details",
-          },
+          { to: "/dashboard/admin/salesperson", icon: <FaUserTie />, label: "Sales Person" },
+          { to: "/dashboard/admin/banker", icon: <FaLandmark />, label: "Banker Details" },
         ],
       },
       {
-        label: "Developer",
-        icon: <FaCode />,
+        label: "Developer", icon: <FaCode />,
         subItems: [
-          {
-            to: "/dashboard/developer/sharespace",
-            icon: <FaCode />,
-            label: "Share Space",
-          },
-          {
-            to: "/dashboard/developer/basicinfo",
-            icon: <FaInfoCircle />,
-            label: "Basic Information",
-          },
-          {
-            to: "/dashboard/developer/projectinventory",
-            icon: <FaBuilding />,
-            label: "Project Inventory",
-          },
-          {
-            to: "/dashboard/developer/costsheet",
-            icon: <FaFileInvoiceDollar />,
-            label: "Cost Sheet Details",
-          },
-          {
-            to: "/dashboard/developer/salesmis",
-            icon: <FaChartLine />,
-            label: "Sales MIS",
-          },
-          {
-            to: "/dashboard/developer/marketing",
-            icon: <FaBullhorn />,
-            label: "Marketing",
-          },
+          { to: "/dashboard/developer/sharespace", icon: <FaCode />, label: "Share Space" },
+          { to: "/dashboard/developer/basicinfo", icon: <FaInfoCircle />, label: "Basic Information" },
+          { to: "/dashboard/developer/projectinventory", icon: <FaBuilding />, label: "Project Inventory" },
+          { to: "/dashboard/developer/costsheet", icon: <FaFileInvoiceDollar />, label: "Cost Sheet Details" },
+          { to: "/dashboard/developer/salesmis", icon: <FaChartLine />, label: "Sales MIS" },
+          { to: "/dashboard/developer/marketing", icon: <FaBullhorn />, label: "Marketing" },
         ],
       },
       {
-        label: "Sales",
-        icon: <FaChartLine />,
+        label: "Sales", icon: <FaChartLine />,
         subItems: [
-          {
-            to: "/dashboard/sales/salesdashboard",
-            icon: <FaTachometerAlt />,
-            label: "Dashboard",
-          },
-          {
-            to: "/dashboard/sales/salescalander",
-            icon: <FaCalendarAlt />,
-            label: "Calendar",
-          },
-          {
-            to: "/dashboard/sales/sharespace",
-            icon: <FaPeopleArrows />,
-            label: "Share Space",
-          },
-          {
-            to: "/dashboard/sales/sharedbydeveloper",
-            icon: <FaUsers />,
-            label: "Shared By Developer",
-          },
-          {
-            to: "/dashboard/sales/leads",
-            icon: <FaClipboardList />,
-            label: "Leads",
-          },
-          {
-            to: "/dashboard/sales/leadsfollowup",
-            icon: <FaCalendarCheck />,
-            label: "Leads Follow Up",
-          },
-          {
-            to: "/dashboard/sales/firstvisits",
-            icon: <FaRegHandshake />,
-            label: "First Visit",
-          },
-          // {
-          //   to: "/dashboard/sales/firstvisitfollowup",
-          //   icon: <FaRegClock />,
-          //   label: "First Visit Follow Up",
-          // },
-          {
-            to: "/dashboard/sales/firstvisitsteps",
-            icon: <FaTasks />,
-            label: "First Visit Steps",
-          },
-          {
-            to: "/dashboard/sales/saleslostvisits",
-            icon: <FaRegTimesCircle />,
-            label: "Lost Visits",
-          },
-          {
-            to: "/dashboard/sales/salestemplates",
-            icon: <FaClipboard />,
-            label: "Templates",
-          },
-          {
-            to: "/dashboard/sales/bookingform",
-            icon: <FaRegEdit />,
-            label: "Booking Form",
-          },
-          {
-            to: "/dashboard/sales/channelpartner",
-            icon: <FaRegEdit />,
-            label: "Channel Partner",
-          },
+          { to: "/dashboard/sales/salesdashboard", icon: <FaTachometerAlt />, label: "Dashboard" },
+          { to: "/dashboard/sales/salescalander", icon: <FaCalendarAlt />, label: "Calendar" },
+          { to: "/dashboard/sales/sharespace", icon: <FaPeopleArrows />, label: "Share Space" },
+          { to: "/dashboard/sales/sharedbydeveloper", icon: <FaUsers />, label: "Shared By Developer" },
+          { to: "/dashboard/sales/leads", icon: <FaClipboardList />, label: "Leads" },
+          { to: "/dashboard/sales/leadsfollowup", icon: <FaCalendarCheck />, label: "Leads Follow Up" },
+          { to: "/dashboard/sales/firstvisits", icon: <FaRegHandshake />, label: "First Visit"   },
+          // {  to: "/dashboard/sales/firstvisitfollowup",  icon: <FaRegClock />,  label: "First Visit Follow Up",},
+          {  to: "/dashboard/sales/firstvisitsteps",  icon: <FaTasks />,  label: "First Visit Steps"   },
+          {  to: "/dashboard/sales/saleslostvisits",  icon: <FaRegTimesCircle />,  label: "Lost Visits"   },
+          {  to: "/dashboard/sales/salestemplates",  icon: <FaClipboard />,  label: "Templates"  },
+          { to: "/dashboard/sales/bookingform", icon: <FaRegEdit />, label: "Booking Form"  },
+          { to: "/dashboard/sales/channelpartner", icon: <FaRegEdit />, label: "Channel Partner"    },
         ],
       },
-      {
-        label: "CRM",
-        icon: <FaCogs />,
+      {  label: "CRM",  icon: <FaCogs />,
         subItems: [
-          {
-            to: "/dashboard/crm/HomeLoan",
-            icon: <FaHome />,
-            label: "Home Loan Applicability",
-          },
+          {   to: "/dashboard/crm/HomeLoan",  icon: <FaHome />,  label: "Home Loan Applicability"   },
           { to: "/dashboard/crm/crm", icon: <FaUserCheck />, label: "CRM" },
-          {
-            to: "/dashboard/crm/OCR",
-            icon: <FaFileAlt />,
-            label: "OCR Collection",
-          },
-          {
-            to: "/dashboard/crm/Agreement",
-            icon: <FaFileSignature />,
-            label: "Agreement",
-          },
-          {
-            to: "/dashboard/crm/registration",
-            icon: <FaStamp />,
-            label: "Registration",
-          },
-          {
-            to: "/dashboard/crm/Architect",
-            icon: <FaDraftingCompass />,
-            label: "Engineer & Architect Letter",
-          },
-          {
-            to: "/dashboard/crm/Demand",
-            icon: <FaBell />,
-            label: "Demand Raised",
-          },
-          {
-            to: "/dashboard/crm/dailycollection",
-            icon: <FaMoneyBillWave />,
-            label: "Daily Collection",
-          },
-          {
-            to: "/dashboard/crm/flatallotmentreport",
-            icon: <FaHome />,
-            label: "Flat Allotement Report",
-          },
-          {
-            to: "/dashboard/crm/parkingreport",
-            icon: <FaParking />,
-            label: "Parking Report",
-          },
-          {
-            to: "/dashboard/crm/misreport",
-            icon: <FaChartBar />,
-            label: "MIS Report",
-          },
+          {  to: "/dashboard/crm/OCR", icon: <FaFileAlt />, label: "OCR Collection"  },
+          { to: "/dashboard/crm/Agreement", icon: <FaFileSignature />, label: "Agreement"  },
+          {  to: "/dashboard/crm/registration", icon: <FaStamp />, label: "Registration"    },
+          { to: "/dashboard/crm/Architect", icon: <FaDraftingCompass />, label: "Engineer & Architect Letter"  },
+          { to: "/dashboard/crm/Demand", icon: <FaBell />, label: "Demand Raised" },
+          { to: "/dashboard/crm/dailycollection", icon: <FaMoneyBillWave />, label: "Daily Collection" },
+          { to: "/dashboard/crm/flatallotmentreport", icon: <FaHome />, label: "Flat Allotement Report" },
+          { to: "/dashboard/crm/parkingreport", icon: <FaParking />, label: "Parking Report" },
+          { to: "/dashboard/crm/misreport", icon: <FaChartBar />, label: "MIS Report" },
         ],
       },
     ],
     sales: [
-      {
-        label: "Sales Module",
-        icon: <FaChartLine />,
+      {   label: "Sales Module",   icon: <FaChartLine />,
         subItems: [
-          {
-            to: "/dashboard/sales/salesdashboard",
-            icon: <FaTachometerAlt />,
-            label: "Dashboard",
-          },
-          {
-            to: "/dashboard/sales/salescalander",
-            icon: <FaCalendarAlt />,
-            label: "Calendar",
-          },
-          {
-            to: "/dashboard/sales/sharespace",
-            icon: <FaPeopleArrows />,
-            label: "Share Space",
-          },
-          {
-            to: "/dashboard/sales/sharedbydeveloper",
-            icon: <FaUsers />,
-            label: "Shared By Developer",
-          },
-          {
-            to: "/dashboard/sales/leadsfollowup",
-            icon: <FaCalendarCheck />,
-            label: "Leads Follow Up",
-          },
-          {
-            to: "/dashboard/sales/firstvisits",
-            icon: <FaRegHandshake />,
-            label: "First Visit",
-          },
-          // {
-          //   to: "/dashboard/sales/firstvisitfollowup",
-          //   icon: <FaRegClock />,
-          //   label: "First Visit Follow Up",
-          // },
-          {
-            to: "/dashboard/sales/firstvisitsteps",
-            icon: <FaTasks />,
-            label: "First Visit Steps",
-          },
-          {
-            to: "/dashboard/sales/saleslostvisits",
-            icon: <FaRegTimesCircle />,
-            label: "Lost Visits",
-          },
-          {
-            to: "/dashboard/sales/salestemplates",
-            icon: <FaClipboard />,
-            label: "Templates",
-          },
-          {
-            to: "/dashboard/sales/bookingform",
-            icon: <FaRegEdit />,
-            label: "Booking Form",
-          },
-          {
-            to: "/dashboard/sales/channelpartner",
-            icon: <FaRegEdit />,
-            label: "Channel Partner",
-          },
+          { to: "/dashboard/sales/salesdashboard", icon: <FaTachometerAlt />, label: "Dashboard" },
+          { to: "/dashboard/sales/salescalander", icon: <FaCalendarAlt />, label: "Calendar" },
+          { to: "/dashboard/sales/sharespace", icon: <FaPeopleArrows />, label: "Share Space" },
+          { to: "/dashboard/sales/sharedbydeveloper", icon: <FaUsers />, label: "Shared By Developer" },
+          { to: "/dashboard/sales/leadsfollowup", icon: <FaCalendarCheck />, label: "Leads Follow Up" },
+          { to: "/dashboard/sales/firstvisits", icon: <FaRegHandshake />, label: "First Visit" },
+          // { to: "/dashboard/sales/firstvisitfollowup", icon: <FaRegClock />, label: "First Visit Follow Up" },
+          { to: "/dashboard/sales/firstvisitsteps", icon: <FaTasks />, label: "First Visit Steps" },
+          { to: "/dashboard/sales/saleslostvisits", icon: <FaRegTimesCircle />, label: "Lost Visits" },
+          { to: "/dashboard/sales/salestemplates", icon: <FaClipboard />, label: "Templates" },
+          { to: "/dashboard/sales/bookingform", icon: <FaRegEdit />, label: "Booking Form" },
+          { to: "/dashboard/sales/channelpartner", icon: <FaRegEdit />, label: "Channel Partner" },
         ],
       },
     ],
@@ -1403,70 +1066,25 @@ const Dashboard = () => {
         label: "CRM Module",
         icon: <FaCogs />,
         subItems: [
-          {
-            to: "/dashboard/crm/HomeLoan",
-            icon: <FaHome />,
-            label: "Home Loan Applicability",
-          },
+          { to: "/dashboard/crm/HomeLoan", icon: <FaHome />, label: "Home Loan Applicability" },
           { to: "/dashboard/crm/crm", icon: <FaUserCheck />, label: "CRM" },
-          {
-            to: "/dashboard/crm/OCR",
-            icon: <FaFileAlt />,
-            label: "OCR Collection",
-          },
-          {
-            to: "/dashboard/crm/Agreement",
-            icon: <FaFileSignature />,
-            label: "Agreement",
-          },
-          {
-            to: "/dashboard/crm/registration",
-            icon: <FaStamp />,
-            label: "Registration",
-          },
-          {
-            to: "/dashboard/crm/Architect",
-            icon: <FaDraftingCompass />,
-            label: "Engineer & Architect Letter",
-          },
-          {
-            to: "/dashboard/crm/Demand",
-            icon: <FaBell />,
-            label: "Demand Raised",
-          },
-          {
-            to: "/dashboard/crm/dailycollection",
-            icon: <FaMoneyBillWave />,
-            label: "Daily Collection",
-          },
-          {
-            to: "/dashboard/crm/flatallotmentreport",
-            icon: <FaHome />,
-            label: "Flat Allotement Report",
-          },
-          {
-            to: "/dashboard/crm/parkingreport",
-            icon: <FaParking />,
-            label: "Parking Report",
-          },
-          {
-            to: "/dashboard/crm/misreport",
-            icon: <FaChartBar />,
-            label: "MIS Report",
-          },
+          { to: "/dashboard/crm/OCR", icon: <FaFileAlt />, label: "OCR Collection" },
+          { to: "/dashboard/crm/Agreement", icon: <FaFileSignature />, label: "Agreement" },
+          { to: "/dashboard/crm/registration", icon: <FaStamp />, label: "Registration" },
+          { to: "/dashboard/crm/Architect", icon: <FaDraftingCompass />, label: "Engineer & Architect Letter" },
+          { to: "/dashboard/crm/Demand", icon: <FaBell />, label: "Demand Raised" },
+          { to: "/dashboard/crm/dailycollection", icon: <FaMoneyBillWave />, label: "Daily Collection" },
+          { to: "/dashboard/crm/flatallotmentreport", icon: <FaHome />, label: "Flat Allotement Report" },
+          { to: "/dashboard/crm/parkingreport", icon: <FaParking />, label: "Parking Report" },
+          { to: "/dashboard/crm/misreport", icon: <FaChartBar />, label: "MIS Report" },
         ],
       },
     ],
     receiptionist: [
       {
-        label: "Sales Module",
-        icon: <FaChartLine />,
+        label: "Sales Module", icon: <FaChartLine />,
         subItems: [
-          {
-            to: "/dashboard/sales/leads",
-            icon: <FaClipboardList />,
-            label: "Leads",
-          },
+          { to: "/dashboard/sales/leads", icon: <FaClipboardList />, label: "Leads" },
         ],
       },
     ],
@@ -1487,8 +1105,8 @@ const Dashboard = () => {
   // Toggle section - allow users to collapse/expand
   const toggleSection = useCallback(
     (section) => {
-      console.log(`🔄 TOGGLING SECTION: ${section}`);
-      console.log(`📊 Before toggle - ${section}:`, sections[section]);
+      console.log(` TOGGLING SECTION: ${section}`);
+      console.log(` Before toggle - ${section}:`, sections[section]);
 
       setSections((prev) => ({
         ...prev,
@@ -1497,8 +1115,8 @@ const Dashboard = () => {
 
       // Log after state update (using setTimeout to ensure state is updated)
       setTimeout(() => {
-        console.log(`📊 After toggle - ${section}:`, !sections[section]);
-        console.log("📋 ALL SECTION STATES:", sections);
+        console.log(` After toggle - ${section}:`, !sections[section]);
+        console.log(" ALL SECTION STATES:", sections);
       }, 0);
     },
     [sections, userRole]
@@ -1615,7 +1233,7 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    console.log("✅ Dashboard Mounted");
+    console.log(" Dashboard Mounted");
     console.log("Session Data:", { authenticated, name, id, groups });
     console.log("Detected user groups:", groups);
     console.log("Mapped user role:", userRole);
@@ -1630,7 +1248,7 @@ const Dashboard = () => {
         menu.label === "Sales Module" ||
         menu.label === "CRM Module";
       console.log(
-        `📁 Module: ${menu.label
+        ` Module: ${menu.label
         } | Always Open: ${isAlwaysOpen} | Current State: ${sections[menu.label]
         }`
       );
@@ -1640,17 +1258,17 @@ const Dashboard = () => {
 
 
   const getUserInitials = (fullName) => {
-  if (!fullName) return "";
+    if (!fullName) return "";
 
-  const parts = fullName.trim().split(" ");
-  let initials = parts[0][0]; // First letter of first name
+    const parts = fullName.trim().split(" ");
+    let initials = parts[0][0]; // First letter of first name
 
-  if (parts.length > 1) {
-    initials += parts[parts.length - 1][0]; // Last letter of last name
-  }
+    if (parts.length > 1) {
+      initials += parts[parts.length - 1][0]; // Last letter of last name
+    }
 
-  return initials.toUpperCase();
-};
+    return initials.toUpperCase();
+  };
 
 
 
@@ -1713,88 +1331,87 @@ const Dashboard = () => {
         </div>
  <div className="d-flex align-items-center"> </div> </nav> */}
       <nav
-  className="navbar px-3 d-flex align-items-center"
-  style={{ background: Constants.primaryColor }}
->
+        className="navbar px-3 d-flex align-items-center"
+        style={{ background: Constants.primaryColor }}
+      >
 
-  {/* LEFT SECTION */}
-  <div className="d-flex align-items-center">
-    <div
-      className="btn me-3"
-      onClick={toggleSidebar}
-      style={{ cursor: "pointer" }}
-    >
-      <img
-        src="/unnamed.png"
-        alt="Profile"
-        className="rounded-circle profile"
-      />
-    </div>
-    <span className="navbar-brand mb-0 h1 text-white">CRM ERP</span>
-  </div>
+        {/* LEFT SECTION */}
+        <div className="d-flex align-items-center">
+          <div
+            className="btn me-3"
+            onClick={toggleSidebar}
+            style={{ cursor: "pointer" }}
+          >
+            <img
+              src="/unnamed.png"
+              alt="Profile"
+              className="rounded-circle profile"
+            />
+          </div>
+          <span className="navbar-brand mb-0 h1 text-white">CRM ERP</span>
+        </div>
 
-  {/* CENTER SECTION - SEARCH BAR */}
-<div className="mx-auto position-relative d-none d-md-block " style={{ width: "20%" }}>
-  <input
-    type="text"
-    className="form-control ps-5"
-    placeholder="Search..."
-    onChange={handleSearch}
-  />
-  <FaMicrophone
-    size={30}
-    className={`position-absolute top-50 end-0 translate-middle-y p-1 ${
-      listening ? "text-success" : "text-secondary"
-    }`}
-    style={{ cursor: "pointer", marginRight: "10px" }}
-    onClick={startListening}
-  />
+        {/* CENTER SECTION - SEARCH BAR */}
+        <div className="mx-auto position-relative d-none d-md-block " style={{ width: "20%" }}>
+          <input
+            type="text"
+            className="form-control ps-5"
+            placeholder="Search..."
+            onChange={handleSearch}
+          />
+          <FaMicrophone
+            size={30}
+            className={`position-absolute top-50 end-0 translate-middle-y p-1 ${listening ? "text-success" : "text-secondary"
+              }`}
+            style={{ cursor: "pointer", marginRight: "10px" }}
+            onClick={startListening}
+          />
 
-  {results.length > 0 && (
-    <ul
-      className="list-group mt-2 position-absolute bg-white w-100 shadow"
-      style={{ zIndex: 1050, maxHeight: "200px", overflowY: "auto" }}
-    >
-      {results.map((item, index) => (
-        <li
-          key={index}
-          className="list-group-item"
-          onClick={() => handleRedirect(item.value)}
-          style={{ cursor: "pointer" }}
+          {results.length > 0 && (
+            <ul
+              className="list-group mt-2 position-absolute bg-white w-100 shadow"
+              style={{ zIndex: 1050, maxHeight: "200px", overflowY: "auto" }}
+            >
+              {results.map((item, index) => (
+                <li
+                  key={index}
+                  className="list-group-item"
+                  onClick={() => handleRedirect(item.value)}
+                  style={{ cursor: "pointer" }}
+                >
+                  {item.label}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
+        {/* RIGHT SECTION - USER NAME */}
+        <div className="d-flex align-items-center text-white fw-bold">
+          {name && <span>{name}</span>}
+        </div>
+        <div
+          className="ms-3"
+          onClick={() => console.log("Profile clicked")}
+          style={{
+            width: "40px",
+            height: "40px",
+            borderRadius: "50%",
+            background: "#ffffff22",
+
+            color: "white",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            fontWeight: "bold",
+            fontSize: "16px",
+            cursor: "pointer",
+            border: "2px solid #fff"
+          }}
         >
-          {item.label}
-        </li>
-      ))}
-    </ul>
-  )}
-</div>
-
-  {/* RIGHT SECTION - USER NAME */}
-  <div className="d-flex align-items-center text-white fw-bold">
-    {name && <span>{name}</span>}
-  </div>
-    <div
-    className="ms-3"
-    onClick={() => console.log("Profile clicked")}
-    style={{
-      width: "40px",
-      height: "40px",
-      borderRadius: "50%",
-      background: "#ffffff22",
-      
-      color: "white",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      fontWeight: "bold",
-      fontSize: "16px",
-      cursor: "pointer",
-      border: "2px solid #fff"
-    }}
-  >
-    {getUserInitials(name)}
-  </div>
-</nav>
+          {getUserInitials(name)}
+        </div>
+      </nav>
 
       <div className="d-flex w-100">
         <div

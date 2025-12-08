@@ -239,7 +239,7 @@ const Leads = () => {
   };
 
 
-  
+
   const validateMobile = (value) => {
     const regex = /^[0-9]{10}$/;
     if (!regex.test(value)) {
@@ -263,7 +263,7 @@ const Leads = () => {
     setFormData({ ...formData, phone: e.target.value });
   };
 
- 
+
 
   // const handleEmailChange = (e) => {
   //   const value = e.target.value;
@@ -369,7 +369,7 @@ const Leads = () => {
   useEffect(() => {
     console.log("Table data updated:", inventoryData);
     console.log("inventoryData length:", inventoryData.length);
-    console.log("inventoryData IDs:", inventoryData.map(l => l.id || l._id));
+    // console.log("inventoryData IDs:", inventoryData.map(l => l.id || l._id));
   }, [inventoryData]);
   const handleFileUpload = async (e) => {
     const file = e.target.files[0];
@@ -434,7 +434,8 @@ const Leads = () => {
       //   REFETCH UPDATED DATA
       try {
         const freshData = await fetchLeadsData();
-        setInventoryData(freshData);
+        // setInventoryData(freshData);
+        setInventoryData(freshData.pagedRecords || []);
         console.log("Refreshed data after excel upload:", freshData);
       } catch (error) {
         console.error("Error refreshing data:", error);
@@ -531,7 +532,9 @@ const Leads = () => {
       // REFETCH latest leads from backend
       const latestData = await fetchLeadsData();
       // alert(JSON.stringify(latestData, null, 2));
-      setInventoryData(latestData);
+      // setInventoryData(latestData);
+      setInventoryData(latestData.pagedRecords || []);
+
       console.log(latestData[1]);
       //  Clear form
       setFormData({
@@ -559,7 +562,8 @@ const Leads = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
-  const filteredData = inventoryData.filter((item) => {
+  // const filteredData = inventoryData.filter((item) => {
+  const filteredData = (inventoryData?.pagedRecords ?? []).filter(item => {
     const query = searchQuery.trim().toLowerCase();
     if (!query) return true;
     const channelPartnerName = item.personName?.toLowerCase() || "";
@@ -1318,31 +1322,31 @@ const Leads = () => {
                     />
                   </Grid> */}
                   <Grid item xs={12} sm={6}>
-  <TextField
-    label="Mobile No. / WhatsApp No."
-    fullWidth
-    required
-    value={formData.phone}
-    onChange={(e) => {
-      let value = e.target.value;
+                    <TextField
+                      label="Mobile No. / WhatsApp No."
+                      fullWidth
+                      required
+                      value={formData.phone}
+                      onChange={(e) => {
+                        let value = e.target.value;
 
-      // Allow only digits
-      value = value.replace(/\D/g, "");
+                        // Allow only digits
+                        value = value.replace(/\D/g, "");
 
-      // Freeze input at 10 digits
-      if (value.length > 10) return;
+                        // Freeze input at 10 digits
+                        if (value.length > 10) return;
 
-      // Update state
-      setFormData({ ...formData, phone: value });
+                        // Update state
+                        setFormData({ ...formData, phone: value });
 
-      // Validate
-      validateMobile(value);
-    }}
-    error={!!mobileError}
-    helperText={mobileError}
-    sx={{ border: Constants.formInputBorderColor }}
-  />
-</Grid>
+                        // Validate
+                        validateMobile(value);
+                      }}
+                      error={!!mobileError}
+                      helperText={mobileError}
+                      sx={{ border: Constants.formInputBorderColor }}
+                    />
+                  </Grid>
 
                   {/* <Grid item xs={12} sm={6}>
                     <TextField
